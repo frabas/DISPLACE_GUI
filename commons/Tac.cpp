@@ -35,6 +35,8 @@ Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,doub
 	relative_stability_key=_relative_stability_key;
 	ts_tac.push_back(init_tac);
 	current_tac=init_tac;
+
+    is_tac_exhausted=0;
 }
 
 
@@ -80,15 +82,27 @@ double Tac:: get_current_tac() const
 	return(current_tac);
 }
 
+int Tac::get_is_tac_exhausted() const
+{
+    return(is_tac_exhausted);
+}
+
 
 void Tac:: add_tac_y_plus_1(double a_tac)
 {
-	current_tac=ts_tac.at(ts_tac.size()-1);
-	ts_tac.push_back(a_tac);
+    //current_tac=ts_tac.at(ts_tac.size()-1);
+    current_tac=a_tac;
+    ts_tac.push_back(a_tac);
     dout(cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl);
     for(unsigned int i=0; i<ts_tac.size(); i++)
 	{
         dout(cout << "tac: " << ts_tac.at(i) << endl);
 	}
+
+}
+
+void Tac:: set_is_tac_exhausted(int val)
+{
+    is_tac_exhausted=val;
 
 }

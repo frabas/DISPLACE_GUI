@@ -1,8 +1,6 @@
 #include "fishfarmsstatsplot.h"
-
-
+#include <storage/sqliteoutputstorage.h>
 #include <displacemodel.h>
-
 #include <qcustomplot.h>
 
 #include <QPen>
@@ -12,14 +10,52 @@ using namespace displace::plot;
 FishfarmsStatsPlot::FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     : mPlot(plot),
       mTimeline(timeline),
-      pen(QColor(0,0,255,200))
+      pen(QColor(0,0,255,200)),
+      textLabel(new QCPItemText(mPlot))
+
 {
+    textLabel->setVisible(false);
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat, QCustomPlot *theplot)
 {
-    mPlot->clearGraphs();
+    checkUpdate(theplot,
+    [&, model, stat]() {
+        return (model != lastModel || stat != lastStat);
+    },
+    [&, model, stat]() {
+        lastModel = model;
+        lastStat = stat;
+    });
+}
+
+void FishfarmsStatsPlot::update(QCustomPlot *plot)
+{
+    try {
+        if (plot == nullptr)
+            plot = mPlot;
+
+        qDebug() << "Fishfarm plot UPDATE";
+        textLabel->setVisible(false);
+        plot->clearGraphs();
+        displayPlot(lastModel, lastStat);
+    } catch (std::exception &x ) {
+        textLabel->setVisible(true);
+        // add the text label at the top:
+        textLabel->setPositionAlignment(Qt::AlignTop|Qt::AlignHCenter);
+        textLabel->position->setType(QCPItemPosition::ptAxisRectRatio);
+        textLabel->position->setCoords(0.5, 0.5); // place position at center/top of axis rect
+        textLabel->setText(QString("Error: %1").arg(x.what()));
+        textLabel->setFont(QFont(mPlot->font().family(), 16)); // make font a bit larger
+        textLabel->setPen(QPen(Qt::black)); // show black border around text
+    }
+    plot->rescaleAxes();
+    plot->replot();
+}
+
+void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+{
     double val;
 
     QList<int>  interFishfarmsIDsList= model->getInterestingFishfarms();
@@ -34,8 +70,8 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     bool showmax =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
     /* If no farm type is selected, but aggregate is selected, select all farms */
-    if (interFishfarmsTypesList.size() != 0) {
-        for(int i = 0; i < model->getNumFishfarmsTypes(); ++i) {
+    if (interFishfarmsIDsList.size() != 0) {
+        for(int i = 0; i < model->getFishfarmList().size(); ++i) {
             if (!farmsTypeGroups->has(i))
                 continue;
 
@@ -49,7 +85,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
                 graphList.push_back(1000 + i);
         }
     } else {
-        interFishfarmsTypesList.push_back(999);
+        interFishfarmsIDsList.push_back(999);
         if (showmax)
             graphList.push_back(4999);
         if (showmin)
@@ -60,12 +96,16 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
             graphList.push_back(1999);
     }
 
-    /* If no fishfarms is selected, select all fishfarms type */
-    if (interFishfarmsIDsList.size() == 0) {
-        for (int i = 0; i < model->getFishfarmsCount(); ++i) {
-            interFishfarmsIDsList.push_back(i+1);
+    /* If no fishfarmsTypes is selected, select all fishfarms type */
+    if (interFishfarmsTypesList.size() == 0) {
+        for (int i = 0; i < model->getFishfarmsTypesList()->count(); ++i) {
+            interFishfarmsTypesList.push_back(i+1);
         }
     }
+
+    std::vector<int> ftypes;
+    for (auto i : interFishfarmsTypesList)
+        ftypes.push_back(i);
 
     int graphNum = graphList.size();
 
@@ -98,156 +138,31 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
             group = QString("Type %1").arg(grp);
         }
 
+        AggregationType aggtype = AggregationType::None;
+
         switch (graphList[igraph] / 1000) {
         case 4:
             graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
+                aggtype = AggregationType::Max;
             break;
         case 3:
             graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
+                aggtype = AggregationType::Min;
             break;
         case 2:
             graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
+            aggtype = AggregationType::Avg;
             break;
         case 1:
             graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
+            aggtype = AggregationType::Sum;
             break;
         }
 
+        auto v = getData(model, stat, aggtype, grp, ftypes);
+
+        graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
-        keyData.push_back(QVector<double>());
-        valueData.push_back(QVector<double>());
-    }
-
-    int nsteps = model->getFishfarmsStatistics().getUniqueValuesCount();
-
-    //qDebug() << "**** Plotting " << nsteps << interFishfarmsTypesList.size();
-    auto it = model->getFishfarmsStatistics().getFirst();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterFishfarmsIDs = interFishfarmsIDsList.size();
-
-        //qDebug() << "Step: " <<istep << it.key();
-        for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-            //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
-            int gidx = iGraph;
-
-            auto group = graphList[iGraph] % 1000;
-
-            //qDebug() << "Graph:" << iGraph << group;
-             // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-            for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
-                for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
-
-                    auto fmtype = model->getFishfarmList()[iInterFishfarmsIDs]->mFishfarm->get_farmtype();
-                    if (group != 999 && group != fmtype)
-                        continue;
-
-                    val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], fmtype, stat);
-
-                    //qDebug() << iInterFishfarmsIDs << iInterFishfarmTypes << val;
-
-                    if (nsam == 0) {
-                        mMin = val;
-                        mMax = val;
-                        mAvg = val;
-                        mTot = val;
-                    } else {
-                        mMin = std::min (mMin, val);
-                        mMax = std::max (mMax, val);
-                        mAvg += val;
-                        mTot += val;
-                    }
-                    ++nsam;
-                }
-            }
-            if (nsam > 0)
-                mAvg /= nsam;
-
-            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
-
-            keyData[gidx] << it.key();
-            switch (graphList[iGraph] / 1000) {
-            case 4:
-                val = mMax;
-                break;
-            case 3:
-                val = mMin;
-                break;
-            case 2:
-                val = mAvg;
-                break;
-            case 1:
-                val = mTot;
-                break;
-            }
-
-            valueData[gidx] << val;
-        }
-        ++it;
-    }
-
-    if (!mSaveFilename.isEmpty()) {
-        QFile f(mSaveFilename);
-        if (f.open(QIODevice::WriteOnly)) {
-            QTextStream strm(&f);
-
-
-            strm << "interFishfarmsIDsList: ";
-            for (auto x : interFishfarmsIDsList)
-                strm << x << " ";
-            strm << "\n\n";
-
-            for (int i = 0; i < graphs.size(); ++i) {
-                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
-
-                auto const& k = keyData.at(i);
-                auto const& v = valueData.at(i);
-                for (int j = 0; j < k.size(); ++j) {
-                    strm << "," << k.at(j) << "," << v.at(j);
-                }
-                strm << "\n";
-            }
-
-            strm << "\n------\n\n";
-
-            it = model->getFishfarmsStatistics().getFirst();
-            for (int istep = 0; istep <nsteps; ++istep) {
-                int nInterFishfarmsIDs = interFishfarmsIDsList.size();
-
-                //qDebug() << "Step: " <<istep << it.key();
-                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-                    //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
-                    int gidx = iGraph;
-
-                    auto group = graphList[iGraph] % 1000;
-
-                    //qDebug() << "Graph:" << iGraph << group;
-                     // calculate transversal values...
-                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-                    for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
-                        for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
-
-                            auto fmtype = model->getFishfarmList()[iInterFishfarmsIDs]->mFishfarm->get_farmtype();
-                            if (group != 999 && iInterFishfarmTypes != fmtype)
-                                continue;
-
-                            val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
-
-                            strm << it.key() << ", " << iInterFishfarmsIDs << ", " << iInterFishfarmTypes << ", " << group
-                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
-                        }
-                    }
-                }
-                ++it;
-            }
-            f.close();
-        }
-
-        mSaveFilename.clear();
-    }
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
 
     switch (stat) {
@@ -284,9 +199,6 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge P (kg)"));
         break;
     }
-
-    mPlot->rescaleAxes();
-    mPlot->replot();
 }
 
 void FishfarmsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
@@ -324,3 +236,19 @@ double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int far
 
     return 0;
 }
+
+std::tuple<QVector<double>, QVector<double> > FishfarmsStatsPlot::getData(DisplaceModel *model,
+                                                                           displace::plot::FishfarmsStat stattype,
+                                                                           displace::plot::AggregationType aggtype,
+                                                                           int ffid, vector<int> fftypes)
+{
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
+
+    auto dt = db->getFishFarmStatData(stattype, aggtype, ffid, fftypes);
+
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    return std::make_tuple(kd, vd);
+}
+

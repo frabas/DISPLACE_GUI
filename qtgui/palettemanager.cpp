@@ -28,10 +28,19 @@ PaletteManager *PaletteManager::mInstance = 0;
 
 const QString PaletteManager::defaultPaletteFileNames[] = {
     ":/palettes/heat_colors_12.p2c",
+    ":/palettes/heat_colors_12_0_to_1.p2c",
     ":/palettes/pop_colors.p2c",
     ":/palettes/tariffs_colors.p2c",
     ":/palettes/benthos_colors.p2c",
-    ":/palettes/fishfarms_colors.p2c"
+    ":/palettes/fishfarms_colors.p2c",
+    ":/palettes/bathy_colors.p2c",
+    ":/palettes/salinity_colors.p2c",
+    ":/palettes/sst_colors.p2c",
+    ":/palettes/wind_colors.p2c",
+    ":/palettes/nitrogen_colors.p2c",
+    ":/palettes/phosphorus_colors.p2c",
+    ":/palettes/oxygen_colors.p2c",
+    ":/palettes/dissolvedcarbon_colors.p2c"
 };
 
 Palette::Palette()

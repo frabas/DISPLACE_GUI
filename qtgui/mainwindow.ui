@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>962</width>
+    <width>1002</width>
     <height>692</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>962</width>
+     <width>1002</width>
      <height>26</height>
     </rect>
    </property>
@@ -50,9 +50,22 @@
      <property name="title">
       <string>Palettes</string>
      </property>
+     <property name="icon">
+      <iconset resource="qtgui.qrc">
+       <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+     </property>
      <addaction name="actionPalettes"/>
+     <addaction name="actionPalettes0to1"/>
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
+     <addaction name="actionBathymetry"/>
+     <addaction name="actionSalinity"/>
+     <addaction name="actionSST"/>
+     <addaction name="actionWind"/>
+     <addaction name="actionNitrogen"/>
+     <addaction name="actionPhosphorus"/>
+     <addaction name="actionOxygen"/>
+     <addaction name="actionDissolvedCarbon"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -246,7 +259,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -290,7 +303,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -341,8 +354,14 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -385,12 +404,32 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Fishing mortality</string>
+                  <string>Fishing mortality F</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
                   <string>Spawning Stock Biomass SSB</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Quotas Uptake (if TACs On)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Quotas (if TACs On)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>F/Fmsy</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Proportion of mature fish</string>
                  </property>
                 </item>
                </widget>
@@ -411,7 +450,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotPopulations" native="true"/>
+             <widget class="PlotWidget" name="plotPopulations" native="true"/>
             </item>
            </layout>
           </widget>
@@ -572,7 +611,176 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotNations" native="true"/>
+             <widget class="PlotWidget" name="plotNations" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabStatsVessels">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="accessibleName">
+            <string/>
+           </property>
+           <property name="accessibleDescription">
+            <string/>
+           </property>
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/displace.png</normaloff>:/icons/displace.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Vessels</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="vesselsStatsSelector">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Cum. Catches</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Discards</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Revenues - All</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Revenues - Explicit pops</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Time At Sea</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Gross Value Added - Energy costs only</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fuel Efficiency (Trip Value Per Unit Fuel)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Seabed Swept Area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Revenues Per Swept Area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gross Value Added (GVA)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>GVA to Revenue Ratio</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Labour Surplus</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gross Profit</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Profit (Loss)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Profit Margin</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>GVA Per FTE</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Rate of Return on Fixed Tangible Assests (RoFTA)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Break-Even Revenue (BER)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Revenue to Break Even Revenue Ratio (CR/BER)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Present Value</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Number of Trips</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>293</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="PlotWidget" name="plotVessels" native="true"/>
             </item>
            </layout>
           </widget>
@@ -723,7 +931,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
+             <widget class="PlotWidget" name="plotHarbours" native="true"/>
             </item>
            </layout>
           </widget>
@@ -874,7 +1082,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotMetiers" native="true"/>
+             <widget class="PlotWidget" name="plotMetiers" native="true"/>
             </item>
            </layout>
           </widget>
@@ -955,7 +1163,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotBenthos" native="true"/>
+             <widget class="PlotWidget" name="plotBenthos" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1047,7 +1255,7 @@
              </spacer>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCustomPlot" name="plotFishfarms" native="true"/>
+             <widget class="PlotWidget" name="plotFishfarms" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1142,7 +1350,7 @@
              </spacer>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCustomPlot" name="plotShips" native="true"/>
+             <widget class="PlotWidget" name="plotShips" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1155,6 +1363,21 @@
             <string>Windfarms</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
              <widget class="QComboBox" name="windfarmsStatSelector">
               <property name="sizePolicy">
@@ -1192,7 +1415,7 @@
              </spacer>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCustomPlot" name="plotWindfarms" native="true"/>
+             <widget class="PlotWidget" name="plotWindfarms" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1244,7 +1467,7 @@
         <string>Setup</string>
        </property>
        <property name="icon">
-        <iconset resource="../objeditor/vesseleditor.qrc">
+        <iconset resource="qtgui.qrc">
          <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
        </property>
       </widget>
@@ -1499,7 +1722,7 @@ L3</string>
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1508,7 +1731,7 @@ L3</string>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -1517,7 +1740,7 @@ L3</string>
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1598,7 +1821,7 @@ L3</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1619,7 +1842,7 @@ L3</string>
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1645,7 +1868,7 @@ L3</string>
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1684,7 +1907,7 @@ L3</string>
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1698,7 +1921,7 @@ L3</string>
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1771,7 +1994,7 @@ L3</string>
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1790,7 +2013,7 @@ L3</string>
   </action>
   <action name="actionR_Console">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
    </property>
    <property name="text">
@@ -1911,6 +2134,87 @@ L3</string>
     <string>Assign DissolvedCarbon...</string>
    </property>
   </action>
+  <action name="actionBathymetry">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bathymetry...</string>
+   </property>
+  </action>
+  <action name="actionSalinity">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Salinity...</string>
+   </property>
+  </action>
+  <action name="actionSST">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>SST...</string>
+   </property>
+  </action>
+  <action name="actionWind">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wind...</string>
+   </property>
+  </action>
+  <action name="actionNitrogen">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Nitrogen...</string>
+   </property>
+  </action>
+  <action name="actionPhosphorus">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Phosphorus...</string>
+   </property>
+  </action>
+  <action name="actionOxygen">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Oxygen...</string>
+   </property>
+  </action>
+  <action name="actionDissolvedCarbon">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>DissolvedCarbon...</string>
+   </property>
+  </action>
+  <action name="actionPalettes0to1">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Values 0 to 1</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1920,15 +2224,13 @@ L3</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>PlotWidget</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>PlotWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../dteditor/dteditor.qrc"/>
-  <include location="../objeditor/vesseleditor.qrc"/>
   <include location="../qtcommons/qtcommons.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>

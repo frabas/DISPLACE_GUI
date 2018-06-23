@@ -16,17 +16,42 @@ PopulationsStatPlot::PopulationsStatPlot(QCustomPlot *plt)
     plot = plt;
     timeline = new QCPItemLine(plot);
 
-    plot->addItem(timeline);
-
     mPalette = PaletteManager::instance()->palette(PopulationRole);
 }
 
-void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat)
+void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat, QCustomPlot *theplot)
 {
-    plot->clearGraphs();
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel || stat != lastStat) {
+            // need to properly update
+            lastModel = model;
+            lastStat = stat;
+            invalidate();
+        }
+        if (isVisible())
+            update(nullptr);
+    }
+}
 
-    lastModel = model;
-    lastStat = stat;
+void PopulationsStatPlot::doUpdate()
+{
+    update(nullptr);
+}
+
+void PopulationsStatPlot::update(QCustomPlot *theplot)
+{
+    qDebug() << "PopulationsStatPlot UPDATE";
+
+    if (!theplot) {
+        theplot = plot;
+    }
+    theplot->clearGraphs();
+
+    auto model = lastModel;
+    auto stat = lastStat;
 
     QList<int> interPopList = model->getInterestingPops();
     QList<int> interSizeList = model->getInterestingSizes();
@@ -54,6 +79,10 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
             interSizeList.push_back(i);
     }
 
+    std::vector<int> stype;
+    for (auto i : interSizeList)
+        stype.push_back(i);
+
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -67,7 +96,7 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
-            QCPGraph *graph = plot->addGraph();
+            QCPGraph *graph = theplot->addGraph();
             QColor col = mPalette.colorByIndex(ipop);
 
             graph->setLineStyle(QCPGraph::lsLine);
@@ -101,7 +130,7 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
                 break;
             }
 
-            auto v = getData(model, stat, aggtype, ipop, graphList[igraph]);
+            auto v = getData(model, stat, aggtype, ipop, stype);
             graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
         }
@@ -109,22 +138,38 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
 
     switch (stat) {
     case PopulationStat::Aggregate:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
         break;
     case PopulationStat::Mortality:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("F"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("F"));
         break;
     case PopulationStat::SSB:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("SSB (kg)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("SSB (kg)"));
+        break;
+    case PopulationStat::QuotasUptake:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota Uptake"));
+        break;
+    case PopulationStat::Quotas:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota (kg)"));
+        break;
+    case PopulationStat::FFmsy:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("F/Fmsy"));
+        break;
+    case PopulationStat::PropMature:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Proportion mature fish"));
         break;
     }
 
 
-    plot->rescaleAxes();
-    plot->replot();
+    theplot->rescaleAxes();
+    theplot->replot();
 }
 
 void PopulationsStatPlot::setCurrentTimeStep(double t)
@@ -133,14 +178,16 @@ void PopulationsStatPlot::setCurrentTimeStep(double t)
     timeline->end->setCoords(t, timelineMax);
 }
 
-std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model, displace::plot::PopulationStat stattype, displace::plot::AggregationType aggtype,
-                                                                           int popid, int grpid)
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model,
+                                                                           displace::plot::PopulationStat stattype,
+                                                                           displace::plot::AggregationType aggtype,
+                                                                           int popid, vector<int> szid)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getPopulationStatData(stattype, aggtype, popid, grpid);
+    auto dt = db->getPopulationStatData(stattype, aggtype, popid, szid);
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
@@ -150,12 +197,15 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 void PopulationsStatPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
 {
     if (location == GraphInteractionController::PopupMenuLocation::Plot) {
-        menu->addAction(QObject::tr("Save Data"), std::bind(&PopulationsStatPlot::saveTo, this));
+        // TODO enable this when saveTo() will be implemented
+        menu->addAction(QObject::tr("Save Data"), std::bind(&PopulationsStatPlot::saveTo, this))->setEnabled(false);
     }
 }
 
 void PopulationsStatPlot::saveTo()
 {
+    // TODO enable saveTo(), disabled because query has changed
+#if 0
     if (!lastModel)
         return;
 
@@ -199,4 +249,5 @@ void PopulationsStatPlot::saveTo()
             }
         }
     }
+#endif
 }

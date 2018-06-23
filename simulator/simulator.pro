@@ -62,7 +62,6 @@ CONFIG(profile) {
 
 SOURCES= main.cpp \
     thread_vessels.cpp \
-    biomodule.cpp \
     outputexporter.cpp \
     getRSS.cpp \
     biomodule2.cpp
@@ -88,7 +87,6 @@ HEADERS= \
     ../include/version.h \
     thread_vessels.h \
     values.h \
-    biomodule.h \
     messages/noipc.h \
     outputexporter.h \
     getrss.h \

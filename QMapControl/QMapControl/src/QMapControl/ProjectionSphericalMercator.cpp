@@ -25,12 +25,10 @@
 
 #include "ProjectionSphericalMercator.h"
 
-// STL includes.
-#include <cmath>
-#include <m_constants.h>
-
-// Local include.
+#include "m_constants.h"
 #include "ImageManager.h"
+
+#include <cmath>
 
 namespace qmapcontrol
 {

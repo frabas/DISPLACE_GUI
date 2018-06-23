@@ -9,6 +9,7 @@
 #include "sqlitefielddef.h"
 
 using namespace sqlite;
+using namespace displace::plot;
 
 struct ShipsTable::Impl
 {
@@ -119,45 +120,99 @@ void ShipsTable::exportShipsIndivators(int tstep, Ship *ship)
                 );
 }
 
-TimelineData ShipsTable::getShipsStatData(displace::plot::ShipsStat stattype)
+TimelineData ShipsTable::getShipsStatData(displace::plot::ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
 {
     init();
     TimelineData tl;
 
-    p->allShipsQuery.exec([&stattype,&tl](int tstep, int shipId, double fFueluse_litreperh, double fNOxEmission_gperKWh,
-                          double fSOxEmission_percentpertotalfuelmass, double fGHGEmission_gperKWh, double fPMEEmission_gperKWh,
-                          double fFueluse, double fNOxEmission, double fSOxEmission, double fGHGEmission, double fPMEEmission, int maxtstep){
+    bool filterGrpId = (shipid >= 0 && shipid != 999);
 
-        using SH = displace::plot::ShipsStat;
+    FieldDef<FieldType::Real> f("");
+    FieldDef<FieldType::Real> fld("");
+    switch (stattype) {
+    //case ShipsStat::SH_NbTransportedUnits:
+    case ShipsStat::SH_FuelPerHour:
+        fld = p->fFueluse_litreperh; break;
+    case ShipsStat::SH_NOxEmission_gperkW:
+        fld = p->fNOxEmission_gperKWh; break;
+    case ShipsStat::SH_SOxEmission_PercentPerFuelMass:
+        fld = p->fSOxEmission_percentpertotalfuelmass; break;
+    case ShipsStat::SH_GHGEmission_gperkW:
+        fld = p->fGHGEmission_gperKWh; break;
+    case ShipsStat::SH_PMEEmission_gperkW:
+        fld = p->fPMEEmission_gperKWh; break;
+    case ShipsStat::SH_FuelUseLitre:
+        fld = p->fFueluse_litreperh; break;
+    case ShipsStat::SH_NOxEmission:
+        fld = p->fNOxEmission; break;
+    case ShipsStat::SH_SOxEmission:
+        fld = p->fSOxEmission; break;
+    case ShipsStat::SH_GHGEmission:
+        fld = p->fGHGEmission; break;
+    case ShipsStat::SH_PMEEmission:
+        fld = p->fPMEEmission; break;
+    default:
+        std::cerr << "*** WARNING: Unhandled case Ships Stat: " << static_cast<int>(stattype) << "\n";
+        return tl;
+    }
 
-        switch (stattype) {
-        case SH::SH_NbTransportedUnits:
-            throw std::logic_error("Missing field 'SH_NbTransportedUnits' in table.");
-            break;
-        case SH::SH_FuelPerHour:
-            tl.v.push_back(fFueluse_litreperh); break;
-        case SH::SH_NOxEmission_gperkW:
-            tl.v.push_back(fNOxEmission_gperKWh); break;
-        case SH::SH_SOxEmission_PercentPerFuelMass:
-            tl.v.push_back(fSOxEmission_percentpertotalfuelmass); break;
-        case SH::SH_GHGEmission_gperkW:
-            tl.v.push_back(fGHGEmission_gperKWh); break;
-        case SH::SH_PMEEmission_gperkW:
-            tl.v.push_back(fPMEEmission_gperKWh); break;
-        case SH::SH_FuelUseLitre:
-            tl.v.push_back(fFueluse); break;
-        case SH::SH_NOxEmission:
-            tl.v.push_back(fNOxEmission); break;
-        case SH::SH_SOxEmission:
-            tl.v.push_back(fSOxEmission); break;
-        case SH::SH_GHGEmission:
-            tl.v.push_back(fGHGEmission); break;
-        case SH::SH_PMEEmission:
-            tl.v.push_back(fPMEEmission); break;
-        }
-        tl.t.push_back(tstep);
+    switch (aggtype) {
+    case displace::plot::AggregationType::Avg:
+        f = op::avg(fld); break;
+    case displace::plot::AggregationType::Min:
+        f = op::min(fld); break;
+    case displace::plot::AggregationType::Max:
+        f = op::max(fld); break;
+    case displace::plot::AggregationType::Sum:
+        f = op::sum(fld); break;
+    case displace::plot::AggregationType::None:
+        f = fld;
+        break;
+    }
+
+    auto select = sqlite::statements::Select(name(),
+                                                    p->fTStep,
+                                                    f
+                                                    );
+
+    /*
+    if (shiptypeid.size() > 0) {
+        std::ostringstream ss;
+        if (filterGrpId)
+            ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND ";
+        ss << p->mFuncGroupsTable->fldBType.name() << " IN (?";
+        for (size_t i = 1; i < btype.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        select.where(ss.str());
+    } else {
+        if (filterGrpId)
+            select.where(op::eq(p->mFuncGroupsTable->fldFGroup));
+    }*/
+
+    if (filterGrpId)
+        select.where(op::eq(p->fShipId));
+
+    select.groupBy(p->fTStep);
+
+    //qDebug() << "Ships Select: " << QString::fromStdString(select.string()) << " (" << shipid << "," << shiptypeid<< "): ";
+
+    sqlite::SQLiteStatement stmt(db(),select);
+
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, shipid);
+    /*
+    for (size_t i = 0; i < btype.size(); ++i)
+        stmt.bind(n+i, btype[i]);*/
+
+    stmt.execute([&stmt, &tl](){
+        tl.t.push_back(stmt.getIntValue(0));
+        tl.v.push_back(stmt.getDoubleValue(1));
         return true;
     });
+
+    //qDebug() << "Reslut: " << tl.t.size();
 
     return tl;
 }

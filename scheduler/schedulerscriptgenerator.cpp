@@ -31,10 +31,7 @@ SchedulerScriptGenerator::SchedulerScriptGenerator(const QString &templatename)
 
 }
 
-SchedulerScriptGenerator::~SchedulerScriptGenerator()
-{
-
-}
+SchedulerScriptGenerator::~SchedulerScriptGenerator() noexcept = default;
 
 bool SchedulerScriptGenerator::generate(QString path, SchedulerJob *scheduler, QString *errorMsg)
 {

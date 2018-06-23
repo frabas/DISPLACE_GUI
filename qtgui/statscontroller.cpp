@@ -23,11 +23,13 @@
 #include <QVector>
 #include <QtAlgorithms>
 
+#include "PlotWidget.h"
 #include <plots/benthosstatsplot.h>
 #include <plots/fishfarmsstatsplot.h>
 #include <plots/windfarmsstatsplot.h>
 #include <plots/shipsstatsplot.h>
 #include <plots/nationsstatsplot.h>
+#include <plots/vesselsstatsplot.h>
 #include <plots/populationsstatplot.h>
 #include <plots/harboursstatplot.h>
 #include <plots/metiersstatsplot.h>
@@ -45,7 +47,9 @@ StatsController::StatsController(QObject *parent)
       mSelectedHarboursStat(displace::plot::HarboursStat::H_Catches),
       mPlotHarbours(0),
       mSelectedNationsStat(displace::plot::NationsStat::Catches),
+      mSelectedVesselsStat(displace::plot::VesselsStat::Catches),
       mNatTimeLine(0),
+      mVesTimeLine(0),
       mPlotMetiers(0),
       mSelectedMetiersStat(displace::plot::MetiersStat::M_Catches),
       mLastModel(0)
@@ -55,32 +59,35 @@ StatsController::StatsController(QObject *parent)
     cout << "Stats controller is created" << endl;
 }
 
-void StatsController::setPopulationPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
     if (mPopPlot != nullptr)
         delete mPopPlot;
 
-    plot->legend->setVisible(true);
     mPopPlot = new PopulationsStatPlot(plot);
+    plot->setStatsPlot(mPopPlot);
+    plot->legend->setVisible(true);
 
     controller->setOnPopupMenuBuiltCallback(std::bind(&PopulationsStatPlot::createPopup, mPopPlot, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StatsController::setHarboursPlot(QCustomPlot *plot)
+void StatsController::setHarboursPlot(PlotWidget *plot)
 {
     if (mPlotHarbours != nullptr)
         delete mPlotHarbours;
     mPlotHarbours = new HarboursStatPlot(plot);
+    plot->setStatsPlot(mPlotHarbours);
 }
 
-void StatsController::setMetiersPlot(QCustomPlot *plot)
+void StatsController::setMetiersPlot(PlotWidget *plot)
 {
     if (mPlotMetiers != nullptr)
         delete mPlotMetiers;
-    mPlotMetiers = new MetiersStatsPlot(plot);
+        mPlotMetiers = new MetiersStatsPlot(plot);
+    plot->setStatsPlot(mPlotMetiers);
 }
 
-void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setBenthosPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
     mBenthosFuncGroupsPlot = plot;
     mBenthosFuncGroupsPlot->legend->setVisible(true);
@@ -93,17 +100,14 @@ void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionControll
 
     mBenthosTimeLine = new QCPItemLine(mBenthosFuncGroupsPlot);
     mBenthosPlotController = new BenthosStatsPlot(plot, mBenthosTimeLine);
-
-    mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
+    plot->setStatsPlot(mBenthosPlotController);
 
     controller->setOnPopupMenuBuiltCallback(std::bind(&BenthosStatsPlot::createPopup, mBenthosPlotController, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setFishfarmsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
-   cout << "Set fishfarm plot" << endl;
-
     mfarmTypeGroupsPlot = plot;
     mfarmTypeGroupsPlot->legend->setVisible(true);
 
@@ -116,18 +120,13 @@ void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionContro
     mFishfarmsTimeLine = new QCPItemLine(mfarmTypeGroupsPlot);
     mFishfarmsPlotController = new FishfarmsStatsPlot(plot, mFishfarmsTimeLine);
 
-    mfarmTypeGroupsPlot->addItem(mFishfarmsTimeLine);
-
-    cout << "Set fishfarm plot...ok" << endl;
-
+    plot->setStatsPlot(mFishfarmsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&FishfarmsStatsPlot::createPopup, mFishfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setWindfarmsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
-   cout << "Set windfarm plot" << endl;
-
     mWindfarmTypeGroupsPlot = plot;
     mWindfarmTypeGroupsPlot->legend->setVisible(true);
 
@@ -140,18 +139,13 @@ void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionContro
     mWindfarmsTimeLine = new QCPItemLine(mWindfarmTypeGroupsPlot);
     mWindfarmsPlotController = new WindfarmsStatsPlot(plot, mWindfarmsTimeLine);
 
-    mWindfarmTypeGroupsPlot->addItem(mWindfarmsTimeLine);
-
-    cout << "Set windfarm plot...ok" << endl;
-
+    plot->setStatsPlot(mWindfarmsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&WindfarmsStatsPlot::createPopup, mWindfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setShipsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
-   cout << "Set ships plot" << endl;
-
     mShipTypeGroupsPlot = plot;
     mShipTypeGroupsPlot->legend->setVisible(true);
 
@@ -164,14 +158,11 @@ void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController
     mShipsTimeLine = new QCPItemLine(mShipTypeGroupsPlot);
     mShipsPlotController = new ShipsStatsPlot(plot, mShipsTimeLine);
 
-    mShipTypeGroupsPlot->addItem(mShipsTimeLine);
-
-    cout << "Set windfarm plot...ok" << endl;
-
+    plot->setStatsPlot(mShipsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&ShipsStatsPlot::createPopup, mShipsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setNationsStatsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
     mNationsPlot = plot;
     mNationsPlot->legend->setVisible(true);
@@ -180,8 +171,21 @@ void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionCon
 
     mNatTimeLine = new QCPItemLine(mNationsPlot);
     mNationsStatsPlotController = new NationsStatsPlot(plot, mNatTimeLine);
-    mNationsPlot->addItem(mNatTimeLine);
+    plot->setStatsPlot(mNationsStatsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
+}
+
+void StatsController::setVesselsStatsPlot(PlotWidget *plot, GraphInteractionController *controller)
+{
+    mVesselsPlot = plot;
+    mVesselsPlot->legend->setVisible(true);
+    if (mVesTimeLine != nullptr) delete mVesTimeLine;
+    if (mVesselsStatsPlotController != nullptr) delete mVesselsStatsPlotController;
+
+    mVesTimeLine = new QCPItemLine(mVesselsPlot);
+    mVesselsStatsPlotController = new VesselsStatsPlot(plot, mVesTimeLine);
+    plot->setStatsPlot(mVesselsStatsPlotController);
+    controller->setOnPopupMenuBuiltCallback(std::bind(&VesselsStatsPlot::createPopup, mVesselsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -190,13 +194,16 @@ void StatsController::updateStats(DisplaceModel *model)
     if (!model)
         return;
 
-    updatePopulationStats(model, mSelectedPopStat);
+    updatePopulationStats(model, mSelectedPopStat, nullptr);
     if (mNationsStatsPlotController) {
-        updateNationStats(model, mSelectedNationsStat);
+        updateNationStats(model, mSelectedNationsStat, nullptr);
+    }
+    if (mVesselsStatsPlotController) {
+        updateVesselStats(model, mSelectedVesselsStat, nullptr);
     }
 
-    updateHarboursStats(model);
-    updateMetiersStats(model);
+    updateHarboursStats(model, nullptr);
+    updateMetiersStats(model, nullptr);
 
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
@@ -223,6 +230,12 @@ void StatsController::setPopulationStat(displace::plot::PopulationStat stat)
 void StatsController::setNationsStat(displace::plot::NationsStat stat)
 {
     mSelectedNationsStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setVesselsStat(displace::plot::VesselsStat stat)
+{
+    mSelectedVesselsStat = stat;
     updateStats(mLastModel);
 }
 
@@ -271,75 +284,83 @@ void StatsController::setCurrentTimeStep(double t)
     mNatTimeLine->start->setCoords(t, timelineMin);
     mNatTimeLine->end->setCoords(t, timelineMax);
 
+    mVesTimeLine->start->setCoords(t, timelineMin);
+    mVesTimeLine->end->setCoords(t, timelineMax);
+
 }
 
-void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType st, int subtype, QCustomPlot *plot, QCPItemLine *line)
+void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType st, int subtype, QCustomPlot *plot)
 {
     switch (st) {
     case Populations:
-        updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype));
+        updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype), plot);
         break;
-        /*
     case Nations:
-        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot, line);
-        break;*/
-        /*
+        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot);
+        break;
+    case Vessels:
+        updateVesselStats(model, static_cast<displace::plot::VesselsStat>(subtype), plot);
+        break;
     case Harbours:
-        updateHarboursStats(model);
-        break;*/
-        /*
+        updateHarboursStats(model,plot);
+        break;
     case Metiers:
-        updateMetiersStats(model, static_cast<MetiersStat>(subtype), plot, line);
-        break;*/
+        updateMetiersStats(model,plot);
+        break;
     }
 }
 
-void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat)
+void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat, QCustomPlot *plot)
 {
     if (!mPopPlot)
         return;
 
-    mPopPlot->update(model, popStat);
+    mPopPlot->update(model, popStat, plot);
 }
 
-void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat)
+void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat, QCustomPlot *plot)
 {
-    mNationsStatsPlotController->update(model, nationsStat);
+    mNationsStatsPlotController->update(model, nationsStat, plot);
 }
 
-void StatsController::updateHarboursStats(DisplaceModel *model)
+void StatsController::updateVesselStats(DisplaceModel *model, displace::plot::VesselsStat vesselsStat, QCustomPlot *plot)
+{
+    mVesselsStatsPlotController->update(model, vesselsStat, plot);
+}
+
+void StatsController::updateHarboursStats(DisplaceModel *model, QCustomPlot *plot)
 {
     if (mPlotHarbours) {
         mPlotHarbours->setStat(mSelectedHarboursStat);
-        mPlotHarbours->update(model);
+        mPlotHarbours->update(model, plot);
     }
 }
 
-void StatsController::updateMetiersStats(DisplaceModel *model)
+void StatsController::updateMetiersStats(DisplaceModel *model, QCustomPlot *plot)
 {
     if (mPlotMetiers) {
         mPlotMetiers->setStat (mSelectedMetiersStat);
-        mPlotMetiers->update(model);
+        mPlotMetiers->update(model,plot);
     }
 }
 
 void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat)
 {
-    mBenthosPlotController->update(model, stat);
+    mBenthosPlotController->update(model, stat, nullptr);
 }
 
 void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat)
 {
-    mFishfarmsPlotController->update(model, stat);
+    mFishfarmsPlotController->update(model, stat, nullptr);
 }
 
 void StatsController::updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat)
 {
-    mWindfarmsPlotController->update(model, stat);
+    mWindfarmsPlotController->update(model, stat, nullptr);
 }
 
 void StatsController::updateShipsStats(DisplaceModel *model, displace::plot::ShipsStat stat)
 {
-    mShipsPlotController->update(model, stat);
+    mShipsPlotController->update(model, stat, nullptr);
 }
 

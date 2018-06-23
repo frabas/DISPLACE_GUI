@@ -103,6 +103,8 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_proprecru_at_szgroup() const;
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;
+        double get_proportion_mature_fish() const;
+        const vector<double> &get_FFmsy() const;
         const vector<double>& get_param_sr() const;
 		vector< vector <double> >get_growth_transition_matrix() const;
 		vector< vector <double> >get_percent_szgroup_per_age_matrix() const;
@@ -114,8 +116,13 @@ class COMMONSSHARED_EXPORT Population
         double get_hyperstability_param() const;
         double get_oth_land_multiplier() const;
         Tac* get_tac() const;
-		double get_landings_so_far() const;
-		void set_selected_szgroups(vector<int> selected_szgroups);
+        double get_quota() const;
+        double get_quota_uptake() const;
+        int get_is_choking_fisheries() const;
+        double get_landings_so_far() const;
+        void set_quota(double _quota);
+        void set_quota_uptake(double _quota_uptake);
+        void set_selected_szgroups(vector<int> selected_szgroups);
 		void set_avai0_beta(double _avai0_beta);
 		void set_avai2_beta(double _avai2_beta);
 		void set_avai3_beta(double _avai3_beta);
@@ -146,7 +153,10 @@ class COMMONSSHARED_EXPORT Population
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
-								 // in weight...
+        void set_FFmsy(const vector<double>& _FFmsy);
+        void set_is_choking_fisheries(int is_choking_fisheries);
+        void set_proportion_mature_fish(double _proportion_mature_fish);
+                                 // in weight...
 		void set_landings_so_far(double _landings_so_far);
         void set_param_sr(const vector<double>& _param_sr);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
@@ -162,6 +172,7 @@ class COMMONSSHARED_EXPORT Population
 		void compute_tot_N_and_F_and_M_and_W_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
+        double compute_proportion_mature_fish();
         void compute_TAC(double multiOnTACconstraint, int HCR);
 								 // clear the cumul
 		void clear_tot_F_at_age();
@@ -232,7 +243,10 @@ class COMMONSSHARED_EXPORT Population
 		vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
         double SSB;				 //
-		vector<double> param_sr; //
+        vector<double>  FFmsy;				 //
+        double proportion_mature_fish;				 //
+        int is_choking_fisheries;
+        vector<double> param_sr; //
 								 // area distribution
 		vector<Node* > list_nodes;
 								 // for sharing the total N by node
@@ -246,6 +260,8 @@ class COMMONSSHARED_EXPORT Population
         double hyperstability_param;	 // power curve shape param for cpue~abundance relationship
         vector<double> fbar_ages_min_max;
 		Tac *tac;
+        double quota;
+        double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
 								 // init at 1. Will change according to the next TAC.
 		double oth_land_multiplier;

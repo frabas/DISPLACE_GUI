@@ -1,4 +1,6 @@
 all:
+	(module load gcc/6.3.0)
+	(module load boost/1.64.0-gcc-6.3.0)
 	(cd formats && make -f Makefile.hpc)
 	(cd commons && make -f Makefile.hpc)
 	(cd simulator && make -f Makefile.hpc)

@@ -38,6 +38,7 @@
 #include <QtDebug>
 
 #include "storage/sqliteoutputstorage.h"
+#include "sqlitestorage.h"
 
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
@@ -249,30 +250,35 @@ bool DisplaceModel::loadDatabase(QString path)
 {
     if (mModelType != EmptyModelType)
         return false;
+    try {
+        setSimulationSqlStorage(path);
+        if (mOutSqlite->isOutdated())
+            return false;
 
-    setSimulationSqlStorage(path);
-    if (mOutSqlite->isOutdated())
+        ModelMetadataAccessor accessor (mOutSqlite->metadata());
+        mConfig.setNbpops(accessor.nbPops());
+        mConfig.setSzGroups(accessor.nbSize());
+        mConfig.setNbbenthospops(accessor.nbBenthos());
+        mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
+
+        mLastStep = accessor.lastTStep();
+        auto nl = mOutSqlite->getNationsList();
+        mNations.clear();
+        for (auto n : nl)
+            mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
+
+        mModelType = ModelType::OfflineModelType;
+
+        loadNodesFromDb();
+        loadVesselsFromDb();
+        loadFishfarmsFromDb();
+        initBenthos();
+
+        setCurrentStep(mLastStep);
+    } catch (sqlite::SQLiteException &x) {
+        qWarning() << "Error loading db: " << x.what();
         return false;
-
-    ModelMetadataAccessor accessor (mOutSqlite->metadata());
-    mConfig.setNbpops(mOutSqlite->getNbPops());
-    mConfig.setSzGroups(accessor.nbSize());
-    mConfig.setNbbenthospops(accessor.nbBenthos());
-    mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
-
-    mLastStep = accessor.lastTStep();
-    auto nl = mOutSqlite->getNationsList();
-    mNations.clear();
-    for (auto n : nl)
-        mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
-
-    mModelType = ModelType::OfflineModelType;
-
-    loadNodesFromDb();
-    loadVesselsFromDb();
-    initBenthos();
-
-    setCurrentStep(mLastStep);
+    }
     return true;
 }
 
@@ -593,6 +599,13 @@ void DisplaceModel::collectPopCumdiscards(int step, int node_idx, double cumdisc
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopCumdiscardsratio(int step, int node_idx, double cumdiscardsratio)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_cumdiscardsratio(cumdiscardsratio);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopTariffs(int step, int node_idx, vector<double> tariffs)
 {
     checkStatsCollection(step);
@@ -612,6 +625,62 @@ void DisplaceModel::collectPopCumcatchesPerPop(int step, int node_idx, int popid
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setCumcatchesPerPop(popid, cumcatchesperpop);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectBathymetry(int step, int node_idx,  double bathy)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBathymetry(bathy);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectWind(int step, int node_idx,  double wind)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setWind(wind);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectSalinity(int step, int node_idx,  double salinity)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setSalinity(salinity);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectSST(int step, int node_idx,  double sst)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setSST(sst);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectNitrogen(int step, int node_idx,  double nitrogen)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setNitrogen(nitrogen);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectPhosphorus(int step, int node_idx,  double phosphorus)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setPhosphorus(phosphorus);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectOxygen (int step, int node_idx,  double oxygen)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setOxygen(oxygen);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectDissolvedCarbon (int step, int node_idx,  double dissolvedcarbon)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setDissolvedCarbon(dissolvedcarbon);
     mNodesStatsDirty = true;
 }
 
@@ -2776,6 +2845,7 @@ bool DisplaceModel::loadVessels()
             cumcatch_fgrounds[f] = 0;
             cumdiscard_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] = 0;
+            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] =0;
             cumeffort_fgrounds[f] = 0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
@@ -3297,5 +3367,13 @@ bool DisplaceModel::loadVesselsFromDb()
         return false;
     initNations();
 
+    return true;
+}
+
+bool DisplaceModel::loadFishfarmsFromDb()
+{
+    mFishfarms.clear();
+    if (!mDb->loadFishFarms(mNodes, mFishfarms))
+        return false;
     return true;
 }

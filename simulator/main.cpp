@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
+#include "storage/tables/vesselvmslikefpingsonlytable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
@@ -70,7 +71,6 @@ using namespace sqlite;
 #include <messages/genericconsolestringoutputmessage.h>
 #endif
 
-#include <biomodule.h>
 #include <biomodule2.h>
 
 #include <iomanip>
@@ -209,6 +209,7 @@ bool use_dtrees;
 vector <int> implicit_pops;
 vector <int> implicit_pops_level2;
 vector <int> grouped_tacs;
+vector <double> global_quotas_uptake;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
@@ -427,6 +428,7 @@ void parseCommandLine (int argc, char const *argv[])
             (",e", po::value(&export_vmslike), "Export VMSLike data")
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
+            ("commit-rate", po::value(&numStepTransactions), "Modify the number of loops before committing to sqlite db")
             ("use-gui", "Enable IPC channel to talk to the GUI")
             ("no-gui-move-vessels", "Disable the movement of the vessels/ships in the GUI" )
             ("disable-sqlite", "Disable the SQLite output")
@@ -2028,6 +2030,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
        cout <<"end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()    << endl;
 
+       if (outSqlite)
+           outSqlite->exportFishfarmDef(*fishfarms[i]);
     }
 
     cout << "all fishfarms created...." << endl;
@@ -2283,11 +2287,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, fbar ages
-        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
         cout << "initial tac has been read correctly" << endl;
+
+        global_quotas_uptake.push_back(0.0);
 
         if(dyn_alloc_sce.option(Options::TACs) && tac_this_pop.at(0)==0)
         {
@@ -3894,6 +3900,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popstats.open(filename.c_str());
     std::string popstats_filename = filename;
 
+    ofstream quotasuptake;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/quotasuptake_"+namesimu+".dat";
+    quotasuptake.open(filename.c_str());
+    std::string quotasuptake_filename = filename;
+
     ofstream popdyn_N;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
     popdyn_N.open(filename.c_str());
@@ -3948,6 +3959,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumulcatches_per_pop.open(filename.c_str());
     std::string popnodes_cumulcatches_per_pop_filename = filename;
 
+    ofstream nodes_envt;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/nodes_envt_"+namesimu+".dat";
+    nodes_envt.open(filename.c_str());
+    std::string nodes_envt_filename = filename;
+
     ofstream popnodes_impact_per_szgroup;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
     popnodes_impact_per_szgroup.open(filename.c_str());
@@ -3976,6 +3992,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscards_"+namesimu+".dat";
     popnodes_cumdiscards.open(filename.c_str());
     std::string popnodes_cumdiscards_filename = filename;
+
+    ofstream popnodes_cumdiscardsratio;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscardsratio_"+namesimu+".dat";
+    popnodes_cumdiscardsratio.open(filename.c_str());
+    std::string popnodes_cumdiscardsratio_filename = filename;
 
     ofstream popnodes_tariffs;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
@@ -4092,6 +4113,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         guiSendUpdateCommand(popnodes_start_filename, 0);
     }
 
+
+    // initial export at t=0
+    //if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    //{
+
+        // Flush and updates all statistics for nodes envt
+        if (use_gui)
+        {
+           nodes_envt.flush();
+           for (unsigned int n=0; n<nodes.size(); n++)
+               {
+                  nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+               }
+           guiSendUpdateCommand(nodes_envt_filename, tstep);
+         }
+
+        if (enable_sqlite_out)
+        {
+           for (unsigned int n=0; n<nodes.size(); n++)
+           {
+               outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+           }
+        }
+    //}
+
     //----------------------//
     //----------------------//
     //----------------------//
@@ -4099,6 +4145,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //----------------------//
     //----------------------//
     //----------------------//
+
+    int LastMonth=-1;
+    int CurrentMonth=0;
 
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
@@ -4147,73 +4196,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
- /*       int biocheck = applyBiologicalModule(tstep,
-                                             namesimu,
-                                             namefolderinput,
-                                             namefolderoutput,
-                                             pathoutput,
-                                             popstats,
-                                             popdyn_N,
-                                             popdyn_F,
-                                             popdyn_SSB,
-                                             popdyn_annual_indic,
-                                             popdyn_test2,
-                                             popnodes_inc,
-                                             popnodes_impact,
-                                             popnodes_cumulcatches_per_pop,
-                                             popnodes_cumftime,
-                                             popnodes_cumsweptarea,
-                                             popnodes_cumcatches,
-                                             popnodes_cumcatches_with_threshold,
-                                             popnodes_cumdiscards,
-                                             popnodes_tariffs,
-                                             export_individual_tacs,
-                                             popnodes_end,
-                                             benthosbiomassnodes,
-                                             benthosnumbernodes,
-                                             nbbenthospops,
-                                             path,
-                                             use_gnuplot,
-                                             use_gui,
-                                             popstats_filename,
-                                             popdyn_N_filename,
-                                             popdyn_F_filename,
-                                             popdyn_SSB_filename,
-                                             popnodes_inc_filename,
-                                             popnodes_end_filename,
-                                             popnodes_impact_filename,
-                                             popnodes_cumulcatches_per_pop_filename,
-                                             popnodes_cumftime_filename,
-                                             popnodes_cumsweptarea_filename,
-                                             popnodes_cumcatches_filename,
-                                             popnodes_cumcatches_with_threshold_filename,
-                                             popnodes_cumdiscards_filename,
-                                             popnodes_tariffs_filename,
-                                             popnodes_benthos_biomass_filename,
-                                             popnodes_benthos_number_filename,
-                                             tsteps_quarters,
-                                             tsteps_semesters,
-                                             tsteps_years,
-                                             tsteps_months,
-                                             implicit_pops,
-                                             calib_oth_landings,
-                                             nodes_in_polygons,
-                                             is_tacs,
-                                             export_vmslike,
-                                             freq_do_growth,
-                                             init_weight_per_szgroup,
-                                             species_interactions_mortality_proportion_matrix,
-                                             populations,
-                                             nodes,
-                                             vessels,
-                                             benthoss,
-                                             dyn_pop_sce,
-                                             dyn_alloc_sce,
-                                             Ws_at_szgroup,
-                                             predKernel,
-                                             searchVolMat);
-
-*/
         int biocheck = applyBiologicalModule2(tstep,
                                              namesimu,
                                              namefolderinput,
@@ -4227,11 +4209,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_inc,
                                              popnodes_impact,
                                              popnodes_cumulcatches_per_pop,
+                                             nodes_envt,
                                              popnodes_cumftime,
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
                                              popnodes_cumcatches_with_threshold,
                                              popnodes_cumdiscards,
+                                             popnodes_cumdiscardsratio,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -4247,11 +4231,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
                                              popnodes_cumulcatches_per_pop_filename,
+                                             nodes_envt_filename,
                                              popnodes_cumftime_filename,
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
                                              popnodes_cumcatches_with_threshold_filename,
                                              popnodes_cumdiscards_filename,
+                                             popnodes_cumdiscardsratio_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,
@@ -4300,6 +4286,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
+
+
+
+
         //----------------------------------------//
         //----------------------------------------//
         // READ READ DATA WHEN NEEDED-------------//
@@ -4326,10 +4316,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         dout(cout  << "RE-READ DATA----------" << endl);
 
-
         // RE-READ DATA FOR EVENT => change of month
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
+            CurrentMonth+=1;
 
             count_months+=1;
             a_month_i = count_months % 12;
@@ -4354,32 +4344,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             a_quarter= "quarter" + strg1.str();
             a_semester= "semester" + strg2.str();
 
+               // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+               // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+               //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
             // this month, re-read for vessel-related data
             if(dyn_alloc_sce.option(Options::area_monthly_closure))
             {
                 cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
 
-                // first of all restore initial freq_fgrounds
-                fgrounds      = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-                freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {
-                    spe_fgrounds      = find_entries(fgrounds, vessels.at(v)->get_name());
-                    spe_freq_fgrounds = find_entries(freq_fgrounds, vessels.at(v)->get_name());
-
-                    // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
-                    vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-                    vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
-                    // (caution: always read and set spe_fgrounds and spe_freq_fgrounds both each time....)
-
-                    double sum_probas=0.0;
-                    for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
-                    // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
-
-                    //cout << "Check " << vessels.at(v)->get_name() << endl;
-
-                    // deal with partial closure
                     vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
                 // update the monthly closures
@@ -4426,6 +4401,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // RE-read general vessel features: do not forget to clear the vectors!
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
+
+
             vesselids.clear();
             vid_is_actives.clear();
             vid_is_part_of_ref_fleets.clear();
@@ -4487,6 +4464,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 {
                     double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;
                     vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
+
+                    for (unsigned int pop=0; pop<nbpops; ++pop) vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
@@ -4802,8 +4781,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // aggregate from nodes (caution: do it before changing of list_nodes)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
+
+                    /*
+                    if(sp==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
+                    */
                     // get total N from summing up N over nodes
                     populations.at(sp)->aggregate_N();
+
+                    /*
+                    if(sp==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
+                    */
 
                 }
             }
@@ -4928,6 +4923,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                     // add the current Ns to the vectors of vectors of the concerned nodes
                     vector <double> tot_N_at_szgroup =populations.at(i)->get_tot_N_at_szgroup();
+
+                    /*if( populations.at(i)->get_name()==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                           cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    */
+
+
                     for(unsigned int n=0; n<list_nodes.size(); n++)
                     {
                         list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
@@ -4939,6 +4942,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
                     // divide on nodes according to avai
                     populations.at(i)->distribute_N();
+
+                    //if(populations.at(i)->get_name()==1){
+                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                    //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                    //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    //}
 
                     //...and compute the Ns on nodes at the start of this month!
                     for (unsigned int n=0; n<nodes.size(); n++)
@@ -5597,6 +5606,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                        {
 
+                           if (enable_sqlite_out)
+                               outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+
                            fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
                        }
                    }
@@ -5675,6 +5687,43 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         mVesselLoopProfile.elapsed_ms();
 #endif
 
+        ///------------------------------///
+        ///------------------------------///
+        ///  THE QUOTA UPTAKES           ///
+        ///------------------------------///
+        ///------------------------------///
+
+        if(dyn_alloc_sce.option(Options::TACs))
+        {
+
+            for (unsigned int pop=0; pop<populations.size(); pop++)
+            {
+
+                outc(cout << "...pop " << pop << endl;)
+                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) )
+                {
+
+                   double so_far = populations.at(pop)->get_landings_so_far();
+                   global_quotas_uptake.at(pop) =  (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac());
+
+                   populations.at(pop)->set_quota_uptake(global_quotas_uptake.at(pop));
+                   populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
+
+                   if (enable_sqlite_out)
+                       outSqlite->exportPopQuotas(populations.at(pop),pop,  tstep);
+
+                   //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+
+                   // export in file
+                   quotasuptake << setprecision(6) << fixed;
+                   quotasuptake << tstep << " " <<pop << " " <<
+                                   global_quotas_uptake.at(pop) << " " <<
+                                     populations.at(pop)->get_tac()->get_current_tac() << endl;
+
+                }
+           }
+        }
+
 
 
         ///------------------------------///
@@ -5700,6 +5749,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
 
 
+
                 if (enable_sqlite_out)
                 {
                    for (unsigned int n=0; n<nodes.size(); n++)
@@ -5710,8 +5760,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             }
+          }
 
-        }
+          // Flush and updates all statistics for nodes envt
+          if (use_gui)
+          {
+               if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+               {
+                   nodes_envt.flush();
+                   for (unsigned int n=0; n<nodes.size(); n++)
+                   {
+                      nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+                   }
+                   guiSendUpdateCommand(nodes_envt_filename, tstep);
+               }
+          }
+
+
 
 
 
@@ -5732,6 +5797,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
             {
+               if (LastMonth < CurrentMonth)
+                   {
+                       if (enable_sqlite_out) {
+                          outSqlite->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
+                       }
+                       LastMonth = CurrentMonth;
+                   }
+
                   OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
                   vessels[ listVesselIdForVmsLikeFPingsOnlyToExport.at(idx) ]->clear_ping_catch_pop_at_szgroup();
             }
@@ -5740,7 +5813,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
             {
-                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                  //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                  OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
                  vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
             }

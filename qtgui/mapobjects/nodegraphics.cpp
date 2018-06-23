@@ -251,6 +251,13 @@ void NodeWithCumDiscardsGraphics::drawShape(QPainter &painter, const qmapcontrol
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
+void NodeWithCumDiscardsRatioGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((double)mNode->get_cumdiscardsratio()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
 
 
 void NodeWithTariffs0Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -285,9 +292,10 @@ void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    auto r = getEnvtData();
-    auto salinity = (r != nullptr ? r->salinity : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(salinity));
+    double  salinity =mNode->get_salinity(); // collected
+   // auto r = getEnvtData();
+   // auto salinity = (r != nullptr ? r->salinity : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,SalinityRole).color(salinity));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -297,7 +305,7 @@ void NodeWithSSTGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWo
 
     auto r = getEnvtData();
     auto sst = (r != nullptr ? r->sst : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(sst));
+    painter.setBrush(mController->getPalette(mModelIndex,SSTRole).color(sst));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -307,7 +315,7 @@ void NodeWithWindGraphics::drawShape(QPainter &painter, const qmapcontrol::RectW
 
     auto r = getEnvtData();
     auto wind = (r != nullptr ? r->wind : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(wind));
+    painter.setBrush(mController->getPalette(mModelIndex,WindRole).color(wind));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -315,9 +323,10 @@ void NodeWithNitrogenGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    auto r = getEnvtData();
-    auto ni = (r != nullptr ? r->nitrogen : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(ni));
+    double  ni =mNode->get_Nitrogen(); // collected
+   // auto r = getEnvtData();
+   // auto ni = (r != nullptr ? r->nitrogen : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,NitrogenRole).color(ni));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -327,7 +336,7 @@ void NodeWithPhosphorusGraphics::drawShape(QPainter &painter, const qmapcontrol:
 
     auto r = getEnvtData();
     auto p = (r != nullptr ? r->phosphorus : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(p));
+    painter.setBrush(mController->getPalette(mModelIndex,PhosphorusRole).color(p));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -337,7 +346,7 @@ void NodeWithOxygenGraphics::drawShape(QPainter &painter, const qmapcontrol::Rec
 
     auto r = getEnvtData();
     auto o2 = (r != nullptr ? r->oxygen : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(o2));
+    painter.setBrush(mController->getPalette(mModelIndex,OxygenRole).color(o2));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -347,7 +356,7 @@ void NodeWithDissolvedCarbonGraphics::drawShape(QPainter &painter, const qmapcon
 
     auto r = getEnvtData();
     auto ca = (r != nullptr ? r->dissolvedcarbon : 0);
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(ca));
+    painter.setBrush(mController->getPalette(mModelIndex,DissolvedCarbonRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -355,6 +364,6 @@ void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol:
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_bathymetry()));
+    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }

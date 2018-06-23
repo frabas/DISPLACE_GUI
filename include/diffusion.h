@@ -29,6 +29,8 @@
 
 #include <Node.h>
 
+#include <boost/make_shared.hpp>
+
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>

@@ -87,11 +87,13 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           ofstream &popnodes_inc,
                           ofstream &popnodes_impact,
                           ofstream &popnodes_cumulcatches_per_pop,
+                          ofstream &nodes_envt,
                           ofstream &popnodes_cumftime,
                           ofstream &popnodes_cumsweptarea,
                           ofstream &popnodes_cumcatches,
                           ofstream &popnodes_cumcatches_with_threshold,
-                           ofstream &popnodes_cumdiscards,
+                          ofstream &popnodes_cumdiscards,
+                          ofstream &popnodes_cumdiscardsratio,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
@@ -107,11 +109,13 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           const string & popnodes_end_filename,
                           const string & popnodes_impact_filename,
                           const string & popnodes_cumulcatches_per_pop_filename,
+                          const string & nodes_envt_filename,
                           const string & popnodes_cumftime_filename,
                           const string & popnodes_cumsweptarea_filename,
                           const string & popnodes_cumcatches_filename,
                           const string & popnodes_cumcatches_with_threshold_filename,
-                           const string & popnodes_cumdiscards_filename,
+                          const string & popnodes_cumdiscards_filename,
+                          const string & popnodes_cumdiscardsratio_filename,
                           const string & popnodes_tariffs_filename,
                           const string & popnodes_benthos_biomass_filename,
                           const string & popnodes_benthos_number_filename,
@@ -151,8 +155,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
         // EXPORT POPSTATS FILE
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
-                if (enable_sqlite_out)
-                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
 
                 outc(cout << "...pop " << sp << endl;)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
@@ -183,26 +186,26 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 
                     // ... / SSB_per_szgroup
                     dout(cout  << "write down the SSB...");
-                    vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
-                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
-                    {
-
+                    populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
+                    populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // here in kilos
+                    vector <double> SSB_per_szgroup= populations.at(sp)->get_SSB_at_szgroup();
                     // reminder: tot_N_at_szgroup are in thousand in input file
                     //  but in absolute numbers here because have been multiplied by 1000 when importing
-                    SSB_per_szgroup.at(i) =  populations.at(sp)->get_weight_at_szgroup().at(i) *
-                                     populations.at(sp)->get_tot_N_at_szgroup().at(i) *
-                                     populations.at(sp)->get_maturity_at_szgroup().at(i);
-                    cout << "szgroup is " << i  << " " << endl ;
-                    cout << "tot_N_at_szgroup is " << populations.at(sp)->get_tot_N_at_szgroup().at(i)  << " " << endl ;
-                    cout << "maturity_at_szgroup is " << populations.at(sp)->get_maturity_at_szgroup().at(i)  << " " << endl ;
-                    cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
-
-                    popstats  << SSB_per_szgroup.at(i)  << " " ;
+                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                    {
+                       popstats  << SSB_per_szgroup.at(i)  << " " ;
                     }
 
 
                  popstats << " " <<  endl;
+
+                 // to db
+                 if (enable_sqlite_out)
+                         outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
                 }
+
+
+
             }
 
     }
@@ -227,6 +230,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
+            /*
+            if(sp==1){
+                vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                 cout << "START THIS STEP: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+                vector <double> a_tot_N_at_szgroup_minus1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
+                for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
+                 cout << "START THIS STEP: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
+            }
+            */
 
             auto map_oth           = populations.at(sp)->get_oth_land();
 
@@ -307,17 +321,46 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             // but also adding the previous cumul if suitable!
                             // (needed to impact the availability back)
                             vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                            a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+
+                            /*
+                            if(sp==1){
+                                vector <double> a_tot_N_at_szgroup_before_oth_land = populations.at(sp)->get_tot_N_at_szgroup();
+                                for(int sz=0; sz < a_tot_N_at_szgroup_before_oth_land.size(); sz++)
+                                 cout << "BEFORE OTH: a_tot_N_at_szgroup_before_oth_land[" << sz << "] is "<< a_tot_N_at_szgroup_before_oth_land[sz]  << endl;
+                            }
+                            */
+
+                            if(dyn_alloc_sce.option(Options::TACs))
+                            {
+                                // prevent TAC overshoot from other_landings
+                                if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) {
+                                             oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                }
+                            }
+
+                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+
+
 
                         }
 
                     }
                     else
                     {
+                        if(dyn_alloc_sce.option(Options::TACs))
+                        {
+                            // prevent TAC overshoot from other_landings
+                            if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()){
+                                oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                            }
+
+                        }
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
                     }
@@ -427,6 +470,21 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // remember that at init t=0, N_minus_1 = N...
             // N_minus_1 is updated AT THE VERY END of the pop model of this time step for the next
             dout(cout  << "compute this month the cumulated F_at_age on the whole pop..." << endl);
+
+
+           /*
+             if(populations.at(sp)->get_name()==1){
+                vector <double> a_tot_N_at_szgroup_minus_1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
+                for(int sz=0; sz < a_tot_N_at_szgroup_minus_1_here.size(); sz++)
+                 cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup_minus_1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus_1_here[sz]  << endl;
+
+                vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                 cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+            }
+            */
+
             populations.at(sp)->compute_tot_N_and_F_and_M_and_W_at_age();
 
         }
@@ -528,6 +586,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
+  int do_growth=0;
 
   for (unsigned int sp=0; sp<populations.size(); sp++)
     {
@@ -538,7 +597,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // apply growth consistently with the time frame chosen during the parameterisation because the matrix time specific
 
                 // timing (update at 7 a.m.)
-               int do_growth=0;
                switch(freq_do_growth)
                  {
                    case 0:
@@ -563,11 +621,36 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                   break;
                  }
 
-                if(do_growth)
+
+               if(do_growth)
                 {
-                   outc(cout<< "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
+                   /*
+                   if(sp==1){
+                       vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                       for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                        cout <<"tstep " << tstep << " BEFORE GROWTH: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+                       vector <double> a_tot_N_at_szgroup_minus1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
+                       for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
+                        cout <<"tstep " << tstep << "BEFORE GROWTH: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
+                   }
+                   */
+
+                   outc(cout<<"tstep " << tstep << "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
                     populations[sp]->do_growth();
-                }
+
+                  /*  if(sp==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout <<"tstep " << tstep << "AFTER GROWTH: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+                        vector <double> a_tot_N_at_szgroup_minus1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
+                         cout <<"tstep " << tstep << "AFTER GROWTH: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
+                    }
+                  */
+
+               }
 
             }
             else
@@ -595,13 +678,33 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> a_tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
                populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( a_tot_N_at_szgroup );
 
+               /*
+               if(sp==1){
+                   for(int sz=0; sz < a_tot_N_at_szgroup.size(); sz++)
+                       cout <<"tstep " << tstep << "STORED N HERE:  a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup[sz]  << endl;
+
+                   vector <double> a_tot_N_at_szgroup_minus1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
+                   for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
+                   cout <<"tstep " << tstep << "STORED N MINUS 1:  a_tot_N_at_szgroup_minus1_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
+               }
+               */
+
             // spread out the recruits
             // apply only by semester, to be consistent with the timeframe of survey data
-            if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep))
+            if(do_growth)
             {
                 // at the very end, then re-dispatch over nodes to re-dispatch the recruits over the nodes....
                 populations.at(sp)->distribute_N();
             }
+
+            /*
+            if(sp==1){
+            populations.at(sp)->aggregate_N();
+            vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+            for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                cout <<"tstep " << tstep << "AFTER distribute_N and aggregate_N:  a_tot_N_at_szgroup_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+            }
+            */
 
             //...and compute the Ns on nodes at the start of this month!
             for (unsigned int n=0; n<nodes.size(); n++)
@@ -617,6 +720,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          // ...and F at age
             populations.at(sp)->export_popdyn_F (popdyn_F, tstep);
             populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
+            populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // here in kilos
             populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 
@@ -639,6 +743,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             // output in thousands of individuals
                             popstats  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
                         }
+
+                        /*
+                        if(sp==1){
+                            for(int sz=0; sz < tot_N_at_szgroup.size(); sz++)
+                            cout << "EXPORTED a_tot_N_at_szgroup[" << sz << "]  here  is "<< tot_N_at_szgroup[sz]  << endl;
+                        }
+                        */
 
                         // ... / tot_F_at_age
                         vector <double>tot_F_at_age=populations.at(sp)->get_tot_F_at_age();
@@ -698,6 +809,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                // compute a TAC for y+1 from a short-term forecast (STF)
                                // and a long-term management plan (LTMP)
 
+                                // if more than x% of vessels cheoked then declare this stock as choking fisheries
+                                int nbchoked=0;
+                                for (unsigned int v=0; v<vessels.size(); v++)
+                                {
+                                    nbchoked+=vessels.at(v)->get_is_choked().at(sp);
+                                }
+                                if(nbchoked>ceil(0.5*vessels.size())) populations.at(sp)->set_is_choking_fisheries(1);
 
 
                                double multiOnTACconstraint;
@@ -717,8 +835,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                        populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
                                     } else{
-                                          populations.at(sp)->compute_TAC(multiOnTACconstraint, 3); // statuquo is default
-                                    }
+                                       if(dyn_alloc_sce.option(Options::FMSYrange)){
+                                           populations.at(sp)->compute_TAC(multiOnTACconstraint, 3);
+                                       } else{
+                                         populations.at(sp)->compute_TAC(multiOnTACconstraint, 4); // statuquo is default
+                                       }
+                                   }
                                }
 
                                outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
@@ -738,9 +860,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())
                                       {
-                                      cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
-                                       int ff;
-                                       cin >>ff;
+                                      // likely because the TAC is nan because the stock is collapsed....
+                                       populations.at(sp)->set_oth_land_multiplier (0.0);
+                                      //cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
+                                      // int ff;
+                                      // cin >>ff;
 
                                 }
                                } else{ // if no TAC regime
@@ -817,6 +941,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         }
     }
 
+
+   // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+   // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+   // cout << "tstep " << tstep << " AT THE MIDDLE OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+
+
     // EXPORT: populations statistics - Monthly
 
 #ifdef PROFILE
@@ -830,6 +961,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
+        nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 
@@ -840,7 +972,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     // to get the list of nodes making xx% of the total...
     int athreshold =70; // TO DO: put as arg...
     vector <double> allcumcatches;
-    double sumallcumcatches;
+    double sumallcumcatches=0.0;
     for (unsigned int n=0; n<nodes.size(); n++)
     {
        double acum= nodes.at(n)->get_cumcatches();
@@ -931,6 +1063,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_filename, tstep);
         guiSendUpdateCommand(popnodes_cumdiscards_filename, tstep);
+        guiSendUpdateCommand(popnodes_cumdiscardsratio_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_with_threshold_filename, tstep);
         guiSendUpdateCommand(popnodes_tariffs_filename, tstep);
 
@@ -939,6 +1072,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
         popnodes_cumulcatches_per_pop.flush();
         guiSendUpdateCommand(popnodes_cumulcatches_per_pop_filename, tstep);
+
+        nodes_envt.flush();
+        guiSendUpdateCommand(nodes_envt_filename, tstep);
+
 
         benthosbiomassnodes.flush();
         guiSendUpdateCommand(popnodes_benthos_biomass_filename, tstep);
@@ -969,6 +1106,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 }
 dout(cout  << "END: POP MODEL TASKS----------" << endl);
 
+   // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+   // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+   // cout << "tstep " << tstep << " AT THE END OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
 return 0;
 }

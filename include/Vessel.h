@@ -164,6 +164,8 @@ private:
         std::vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
+        std::vector<double> is_choked;
+
         VesselCalendar calendar;
 
         types::NodeId smartcatch;
@@ -317,6 +319,7 @@ public:
         int read_message() const;
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
+        vector<double> get_is_choked () const;
         int get_individual_tac_per_pop_at_year_start (int sp) const;
         double get_prop_remaining_individual_quotas (int sp) const;
         double get_prop_remaining_global_quotas (int sp) const;
@@ -420,6 +423,7 @@ public:
 		void move_to(double nx, double ny);
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
+        void set_is_choked(int pop, int val);
         void find_next_point_on_the_graph(std::vector<Node* >& nodes);
         void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations,
                       std::vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
@@ -488,7 +492,7 @@ public:
             );
         void which_metier_should_i_go_for(std::vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(int tstep, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
+        int should_i_go_fishing(int tstep, std::vector<Population* >& populations, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
                                 std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,

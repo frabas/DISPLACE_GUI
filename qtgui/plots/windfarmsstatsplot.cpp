@@ -18,19 +18,36 @@ WindfarmsStatsPlot::WindfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsStat stat)
+void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsStat stat, QCustomPlot *plot)
 {
-    mPlot->clearGraphs();
+    checkUpdate(plot,
+                [&, model, stat]() {
+                    return (model != lastModel || stat != lastStat);
+                },
+                [&, model, stat]() {
+                    lastModel = model;
+                    lastStat = stat;
+                });
+}
 
-    auto db = model->getOutputStorage();
+void WindfarmsStatsPlot::update(QCustomPlot *plot)
+{
+    qDebug() << "WindfoarmsStatPlot UPDATE";
+
+    if (plot == nullptr)
+        plot = mPlot;
+
+    plot->clearGraphs();
+
+    auto db = lastModel->getOutputStorage();
     if (db == nullptr)
         return;
 
     auto table = db->getWindfarmTable();
 
-    QList<int>  interWindfarmsIDsList= model->getInterestingWindfarms();
+    QList<int>  interWindfarmsIDsList= lastModel->getInterestingWindfarms();
 
-    auto farmsTypeGroups = model->getWindfarmsTypesList();
+    auto farmsTypeGroups = lastModel->getWindfarmsTypesList();
     QList<int> interWindfarmsTypesList = farmsTypeGroups->list();
 
     QList<int> graphList;
@@ -41,7 +58,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     /* If no farm type is selected, but aggregate is selected, select all farms */
     if (interWindfarmsTypesList.size() != 0) {
-        for(int i = 0; i < model->getNumWindfarmsTypes(); ++i) {
+        for(int i = 0; i < lastModel->getNumWindfarmsTypes(); ++i) {
             if (!farmsTypeGroups->has(i))
                 continue;
 
@@ -68,8 +85,8 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     /* If no Windfarms is selected, select all Windfarms type */
     if (interWindfarmsIDsList.size() == 0) {
-        for (int i = 0; i < model->getWindmillCount(); ++i) {
-            interWindfarmsIDsList.push_back(model->getWindmillId(i).toInt());
+        for (int i = 0; i < lastModel->getWindmillCount(); ++i) {
+            interWindfarmsIDsList.push_back(lastModel->getWindmillId(i).toInt());
         }
     }
 
@@ -77,7 +94,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     QList<QCPGraph *>graphs;
 
-    double t = model->getCurrentStep();
+    double t = lastModel->getCurrentStep();
     if (mTimeline != nullptr) {
         mTimeline->start->setCoords(t, timelineMin);
         mTimeline->end->setCoords(t, timelineMax);
@@ -85,7 +102,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     for (int igraph = 0; igraph < graphNum; ++igraph) {
         // Creates graph. Index in list are: ip * nsz + isz
-        QCPGraph *graph = mPlot->addGraph();
+        QCPGraph *graph = plot->addGraph();
         QColor col = mPalette.colorByIndex(igraph);
 
         graph->setLineStyle(QCPGraph::lsLine);
@@ -105,7 +122,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
         WindfarmsTable::StatType statType = WindfarmsTable::StatType::Kwh;
         WindfarmsTable::Aggreg aggregType = WindfarmsTable::Aggreg::Sum;
 
-        switch (stat) {
+        switch (lastStat) {
         case WindfarmsStat::WF_kWh:
             statType = WindfarmsTable::StatType::Kwh;
             break;
@@ -145,19 +162,19 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
         graphs[igraph]->setData(QVector<double>::fromStdVector(data.t), QVector<double>::fromStdVector(data.v));
     }
 
-    switch (stat) {
+    switch (lastStat) {
     case WindfarmsStat::WF_kWh:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("kWh"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("kWh"));
         break;
     case WindfarmsStat::WF_kWProduction:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("kW Production"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("kW Production"));
         break;
     }
 
-    mPlot->rescaleAxes();
-    mPlot->replot();
+    plot->rescaleAxes();
+    plot->replot();
 }
 
 void WindfarmsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
@@ -171,3 +188,4 @@ void WindfarmsStatsPlot::saveTo()
 {
     mSaveFilename = "Windfarms.txt";
 }
+

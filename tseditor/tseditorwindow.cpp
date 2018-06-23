@@ -297,7 +297,6 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
         th1->start->setCoords(x.at(0), th1v);
         th1->end->setCoords(x.at(x.size()-1), th1v);
         th1->setPen(QPen(Qt::red));
-        ui->plot->addItem(th1);
     }
 
     if (th2v != NAN) {
@@ -305,7 +304,6 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
         th2->start->setCoords(x.at(0), th2v);
         th2->end->setCoords(x.at(x.size()-1), th2v);
         th2->setPen(QPen(Qt::magenta));
-        ui->plot->addItem(th2);
     }
 
     if (th3v != NAN) {
@@ -313,7 +311,6 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
         th3->start->setCoords(x.at(0), th3v);
         th3->end->setCoords(x.at(x.size()-1), th3v);
         th3->setPen(QPen(Qt::darkGreen));
-        ui->plot->addItem(th3);
     }
 
     ui->plot->replot();

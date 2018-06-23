@@ -25,7 +25,7 @@ public:
     void dropAndCreate();
     void exportShipsIndivators(int tstep, Ship* ship);
 
-    TimelineData getShipsStatData(displace::plot::ShipsStat stattype);
+    TimelineData getShipsStatData(displace::plot::ShipsStat stattype, displace::plot::AggregationType aggtype, int shipid, std::vector<int> shiptypeid);
 };
 
 #endif // SHIPSTABLE_H

@@ -112,7 +112,8 @@ Population::Population(int a_name,
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
 	{
 		tot_F_at_age.push_back(0);
-	}
+        FFmsy.push_back(0);
+    }
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
 	{
 		tot_F_at_age_last_quarter.push_back(0);
@@ -277,8 +278,15 @@ Population::Population(int a_name,
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
 	oth_land_multiplier=1.0;
 
+    quota =init_tac[0];
+    quota_uptake=0.0;
+    is_choking_fisheries=0;
+
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
+
+    // other MSFD D3
+    proportion_mature_fish=1.0;
 
     // hyperstability
     this->set_hyperstability_param(hyperstability_param);
@@ -390,6 +398,7 @@ const vector<double>& Population::get_tot_F_at_age() const
 	return(tot_F_at_age);
 }
 
+
 const vector<double>& Population::get_perceived_tot_F_at_age() const
 {
     return(perceived_tot_F_at_age);
@@ -475,6 +484,15 @@ double Population::get_SSB() const
 	return(SSB);
 }
 
+const vector<double>& Population::get_FFmsy() const
+{
+    return(FFmsy);
+}
+
+double Population::get_proportion_mature_fish() const
+{
+    return(proportion_mature_fish);
+}
 
 double Population::get_landings_so_far() const
 {
@@ -546,6 +564,30 @@ Tac* Population::get_tac() const
 	return(tac);
 }
 
+double Population::get_quota() const
+{
+    return(quota);
+}
+
+double Population::get_quota_uptake() const
+{
+    return(quota_uptake);
+}
+
+int Population::get_is_choking_fisheries() const
+{
+    return(is_choking_fisheries);
+}
+
+void Population::set_quota(double _quota)
+{
+    quota=_quota;
+}
+
+void Population::set_quota_uptake(double _quota_uptake)
+{
+    quota_uptake=_quota_uptake;
+}
 
 void Population::set_selected_szgroups(vector<int> _selected_szgroups)
 {
@@ -774,6 +816,21 @@ void Population::set_SSB(double _SSB)
 	SSB=_SSB;
 }
 
+void Population::set_FFmsy(const vector<double> &_FFmsy)
+{
+    FFmsy=_FFmsy;
+}
+
+void Population::set_is_choking_fisheries(int _is_choking_fisheries)
+{
+    is_choking_fisheries=_is_choking_fisheries;
+}
+
+
+void Population::set_proportion_mature_fish(double _proportion_mature_fish)
+{
+    proportion_mature_fish=_proportion_mature_fish;
+}
 
 void Population::set_landings_so_far(double _landings_so_far)
 {
@@ -832,6 +889,7 @@ void Population::distribute_N()
 
     dout (cout<< endl);
     dout(cout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << endl);
+    //vector<double> all_N_at_szgroup(14,0);
 
 	// save for later use i.e. in the erosion of the avai after each catch event
 	this->set_tot_N_at_szgroup_just_after_redistribution(tot_N_at_szgroup);
@@ -878,7 +936,14 @@ void Population::distribute_N()
         dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
         list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
-	}
+       // if(this->get_name()==1) for(int i=0; i<N_at_szgroup.size(); i++)
+       //    all_N_at_szgroup[i]+=N_at_szgroup[i];
+
+    }
+
+     //if(this->get_name()==1)  for(int i=0; i<all_N_at_szgroup.size(); i++)
+     //    cout << "in distribute_N: all_N_at_szgroup["<< i <<"] is " << all_N_at_szgroup[i];
+
     dout(cout<< "END distribute_N()"<< endl);
     dout(cout<< endl);
 
@@ -1169,6 +1234,7 @@ void Population::add_recruits_from_SR()
 
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    dout(cout << "pop is " << this->get_name()  << " " << endl );
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1190,7 +1256,6 @@ void Population::add_recruits_from_SR()
 	{
 		SSB +=  SSB_per_szgroup.at(i);
 	}
-    //SSB= SSB/1000/2;			 // convert in tons for the SSB-R // divide by 2 when assuming sex ratio 50:50
     SSB= SSB/1000;			 //
     cout << "SSB is " << SSB  << " tons" << endl ;
     //dout(cout << "SSB is " << SSB  << " tons" << endl );
@@ -1329,6 +1394,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
     dout(cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl );
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
+    vector <double> FFmsy (tot_F_at_age.size());
     vector <double> perceived_tot_F_at_age = get_tot_F_at_age();
                                  // init
 	vector <double> tot_M_at_age (tot_F_at_age.size());
@@ -1392,7 +1458,8 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
             tot_N_at_age_minus_1[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_month_minus_1[sz] ;
         }
 
-	}
+
+    }
 
 	// apply a weighted mean for weight-at-age and mortality-at-age
     for(int a = 0; a < nbages; a++)
@@ -1428,29 +1495,48 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 
 	// then, compute F from the formula N(t+1)=N(t)*exp(-M-F) => F=-M-ln(N(t+1)/N(t))
 	// with M=0 here because apply_natural_mortality() actually is applied just AFTER this function
-	for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+
+    vector <double> fbar_ages_min_max = this->get_fbar_ages_min_max();
+    double FMSY = 1.0;
+    if(fbar_ages_min_max.size()>5)  FMSY = fbar_ages_min_max.at(6);
+
+    for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
 	{
         if(tot_N_at_age_minus_1.at(a) >0 && tot_N_at_age.at(a)>0)
 		{
             perceived_tot_F_at_age.at(a)+= -log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a)); // used for perceived stock in the management procedure
             tot_F_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a));  // used for outcomes
+            FFmsy.at(a)=tot_F_at_age.at(a)/ FMSY;
         }
 		else
 		{
             perceived_tot_F_at_age.at(a)+= 0;
             tot_F_at_age.at(a)+= 0;
+            FFmsy.at(a)=0;
         }
+
+        // prevent negative Fs in few cases where more N at t+1 than at t e.g. from growth and class change in the older ages...
+        // should not happen if the growth timing is right.
+        if(tot_F_at_age.at(a)<0) tot_F_at_age.at(a)  =0.0;
+
 		// => cumul over months
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
         dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
         dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
 
+        if(this->get_name()==1){
+            cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
+            cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
+            cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
+        }
+
 	}
 
 	// set the tot N and F at age
 	this->set_tot_N_at_age(tot_N_at_age);
     this->set_perceived_tot_N_at_age(perceived_tot_N_at_age);
+    this->set_FFmsy(FFmsy);
     this->set_tot_F_at_age(tot_F_at_age);
     this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
     this->set_tot_M_at_age(tot_M_at_age);
@@ -1503,6 +1589,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    cout << "pop is " << this->get_name()  << " " << endl;
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1518,6 +1605,25 @@ vector<double> Population::compute_SSB()
 
   return(SSB_per_szgroup);
 }
+
+
+double Population::compute_proportion_mature_fish()
+{
+    // first of all, get the N
+    vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
+    vector <double> a_maturity_at_szgroup=this->get_maturity_at_szgroup();
+
+    double totN_mature_fish=0.0;
+    double totN=0.0;
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    {
+       totN_mature_fish+=a_tot_N_at_szgroup.at(i)*a_maturity_at_szgroup.at(i);
+       totN+=a_tot_N_at_szgroup.at(i);
+    }
+
+  return((totN>0) ? totN_mature_fish/totN : 0.0);
+}
+
 
 
 void Population::compute_TAC(double multiOnTACconstraint, int HCR)
@@ -1538,6 +1644,12 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
     dout(cout<< "TACpercent:" << Btrigger << endl);
     double FMSY = fbar_ages_min_max.at(6);
     dout(cout<< "FMSY:" << FMSY << endl);
+    //double FMSYdown = fbar_ages_min_max.at(7);
+    double FMSYdown=FMSY*0.9; // TO BE REMOVED WHEN INPUT DATA
+    dout(cout<< "FMSYdown:" << FMSY << endl);
+    //double FMSYup = fbar_ages_min_max.at(8);
+    double FMSYup=FMSY*1.1; // TO BE REMOVED WHEN INPUT DATA
+    dout(cout<< "FMSYup:" << FMSY << endl);
     // 1. compute previous fbar
 								 // at the end of the last year, then for last year py...
 	double fbar_py= this->compute_fbar();
@@ -1785,7 +1897,126 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
         }
    }
 
-     if(HCR==3){ //  statuquo TAC
+   if(HCR==3){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger) but with flexibility of FMSY range
+
+        // 1. check B trigger
+        cout << "F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << endl;
+        dout(cout << "Biomass computed from N by age at the end of  y is " << endl);
+        double biomass =0.0;
+        vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
+        vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
+        vector <double> maturity_at_age_y_plus_1 = this->get_tot_Mat_at_age();
+        for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
+        {
+            biomass+= tot_N_at_age_end_previous_y.at(i)* tot_W_at_age_y_plus_1.at(i) * maturity_at_age_y_plus_1.at(i); // SSB
+        }
+        biomass= biomass/1000; // SSB in tons
+        cout << "current SSB is " << biomass << "  for this stock... " << endl;
+
+        double fmultiplier=1;
+        // 2. compare with the target
+            fmultiplier = 1.0 *FMSY /fbar_py;
+            if(this->get_is_choking_fisheries()) fmultiplier = 1.0 *FMSYup /fbar_py;
+            if(!this->get_is_choking_fisheries()) fmultiplier = 1.0 *FMSYdown /fbar_py;
+            fmultiplier = 1.0 *FMSY /fbar_py;
+          if(biomass<Btrigger)
+          {
+          fmultiplier = 1.0 *FMSY*(biomass/Btrigger) /fbar_py;
+          cout << "so...Btrigger applies! " << endl;
+          }
+
+         cout << "the fmultiplier for this pop " << this->get_name() <<" is then " << fmultiplier <<
+            " given the target F " <<  FMSY << " in the plan..." << endl;
+
+        // 3. perform a short-term forecast on N with F * fmultipier * fmultiplier
+
+        //a. for year y from y-1
+        dout(cout << "the  N by age at the end of  y is " << endl);
+        for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+        }
+
+        dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                     // init
+        vector <double> forecast_tot_N_at_age_start_y(tot_N_at_age_end_previous_y.size());
+        for (unsigned int i=1; i < tot_N_at_age_end_previous_y.size(); i++)
+        {
+                                     // class change from 31th of Dec to 1st of Jan
+            forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
+        }
+                                     // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
+        forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+        for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
+        }
+
+        //b. for year y+1 from y
+        dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+                                     //init
+        vector <double> forecast_tot_N_at_age_start_y_plus_1 (forecast_tot_N_at_age_start_y.size());
+        vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+                                     //init
+        vector <double> tot_F_at_age_y_plus_1(tot_F_at_age_end_previous_y.size());
+        for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
+        {
+                                     // target for y+1
+            tot_F_at_age_y_plus_1.at(i) = tot_F_at_age_end_previous_y.at(i)*fmultiplier;
+        }
+        for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+        }
+
+        dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+        vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
+        for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+        }
+
+        dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+        for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+        }
+
+        dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+        for (unsigned int i=1; i < forecast_tot_N_at_age_start_y.size(); i++)
+        {
+            forecast_tot_N_at_age_start_y_plus_1.at(i) =
+                forecast_tot_N_at_age_start_y.at(i-1)*
+                exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
+            ;						 // class change and apply mortality F+M
+        }							 // TO DO: add the plusgroup (if necessary)
+        forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
+        // note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+        for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+        {
+            dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl);
+        }
+
+        // 4. compute the TAC (in tons) according to the forecast N (Baronovs equation)
+        // TAC per age and then sum over ages....
+        for (unsigned int i=1; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+        {
+           // cout << "tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
+           // cout << "tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
+           // cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
+           // cout << "forecast_tot_N_at_age_start_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl;
+           if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+
+            tac_y_plus_1+=   (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
+                forecast_tot_N_at_age_start_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
+                                     // convert in tons;
+                (1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
+
+        }
+   }
+
+   if(HCR==4){ //  statuquo TAC
 
              cout << "Statuquo TAC definition for next year... " << endl;
              double fmultiplier=1.0;
@@ -1882,12 +2113,18 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
 
      }
+
+
+
      cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
 
 
 
     this->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
 
+
+    this->set_is_choking_fisheries(0); // reinit
+    this->get_tac()->set_is_tac_exhausted(0); // reinit
 }
 
 

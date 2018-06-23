@@ -44,9 +44,10 @@ static const char *dyn_alloc_options[] = {
     "TACs",
     "discard_ban",
     "groupedTACs",
-    "stopOnFirstStock",
+    "stopGoingFishingOnFirstChokedStock",
     "LTMP",
     "FMSY",
+    "FMSYrange",
     "fishing_credits",
     "envt_variables_diffusion",
 };

@@ -21,10 +21,31 @@ MetiersStatsPlot::MetiersStatsPlot(QCustomPlot *plot_)
     plot->legend->setVisible(true);
 }
 
-void MetiersStatsPlot::update(DisplaceModel *model)
+void MetiersStatsPlot::update(DisplaceModel *model, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel) {
+            // need to properly update
+            lastModel = model;
+            invalidate();
+        }
+        if (isVisible())
+            update((QCustomPlot *)nullptr);
+    }
+}
+
+void MetiersStatsPlot::update(QCustomPlot *theplot)
+{
+    auto model = lastModel;
+
+    if (theplot == nullptr)
+        theplot = plot;
+    
     static const QPen pen(QColor(0,0,255,200));
-    plot->clearGraphs();
+    theplot->clearGraphs();
 
     auto &dl = model->getMetiersList();
 
@@ -33,80 +54,80 @@ void MetiersStatsPlot::update(DisplaceModel *model)
 
     switch (metStat) {
     case MetiersStat::M_Catches:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
     case MetiersStat::M_Discards:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Discards (kg)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Discards (kg)"));
         break;
     case MetiersStat::M_Revenues:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
         break;
     case MetiersStat::M_Gav:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("GAV (Euro)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("GAV (Euro)"));
         break;
     case MetiersStat::M_Vpuf:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
         break;
     case MetiersStat::M_SweptArea:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
         break;
     case MetiersStat::M_RevenuesPerSweptArea:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
         break;
     case MetiersStat::M_GVA:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("euro"));
         break;
     case MetiersStat::M_GVAPerRevenue:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
         break;
     case MetiersStat::M_LabourSurplus:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_GrossProfit:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_NetProfit:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_NetProfitMargin:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("%"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("%"));
         break;
     case MetiersStat::M_GVAPerFTE:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_RoFTA:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_BER:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_CRBER:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Ratio"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Ratio"));
         break;
     case MetiersStat::M_NetPresentValue:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Euro"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case MetiersStat::M_numTrips:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("#"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("#"));
         break;
 
     }
@@ -118,7 +139,7 @@ void MetiersStatsPlot::update(DisplaceModel *model)
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
-        QCPGraph *graph = plot->addGraph();
+        QCPGraph *graph = theplot->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
         QColor col = col_it != mPalette.end() ? *col_it : QColor();
@@ -135,8 +156,8 @@ void MetiersStatsPlot::update(DisplaceModel *model)
         ++col_it;
     }
 
-    plot->rescaleAxes();
-    plot->replot();
+    theplot->rescaleAxes();
+    theplot->replot();
 }
 
 void MetiersStatsPlot::setCurrentTimeStep(double t)
@@ -194,3 +215,7 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
     return std::make_tuple(kd, vd);
 }
 
+void MetiersStatsPlot::doUpdate()
+{
+    update((QCustomPlot *)nullptr);
+}

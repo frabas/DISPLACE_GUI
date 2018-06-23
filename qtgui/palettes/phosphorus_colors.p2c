@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<palette role="12" type="displace" name="PHOSPHORUS_COLORS">
+<color value="0" rgb="0,255,255"/>
+<color value="2" rgb="247,251,255"/>
+<color value="4" rgb="222,235,247"/>
+<color value="6" rgb="198,219,239"/>
+<color value="8" rgb="158,202,225"/>
+<color value="10" rgb="107,174,214"/>
+<color value="12" rgb="66,146,198"/>
+<color value="14" rgb="33,113,181"/>
+<color value="16" rgb="8,81,156"/>
+</palette>

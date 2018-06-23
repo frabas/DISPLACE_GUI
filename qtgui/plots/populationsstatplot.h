@@ -1,6 +1,7 @@
 #ifndef POPULATIONSSTATPLOT_H
 #define POPULATIONSSTATPLOT_H
 
+#include "StatsPlot.h"
 #include "plottypes.h"
 #include <palettemanager.h>
 
@@ -14,7 +15,7 @@ class QCustomPlot;
 class QCPItemLine;
 
 
-class PopulationsStatPlot
+class PopulationsStatPlot : public StatsPlot
 {
     QCustomPlot *plot;
     QCPItemLine *timeline;
@@ -24,19 +25,20 @@ class PopulationsStatPlot
 
     DisplaceModel *lastModel;
     displace::plot::PopulationStat lastStat;
-
 public:
-    PopulationsStatPlot(QCustomPlot *plot);
+    explicit PopulationsStatPlot(QCustomPlot *plot);
 
-    void update(DisplaceModel *model, displace::plot::PopulationStat stat);
+    void doUpdate() override;
+    void update(DisplaceModel *model, displace::plot::PopulationStat stat, QCustomPlot *plot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
     void setCurrentTimeStep(double t);
 private:
+    void update (QCustomPlot *plot);
     void saveTo();
-    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype, displace::plot::AggregationType aggtype, int popid, int grpid);
-
-    double getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, displace::plot::PopulationStat stattype);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype,
+                                                        displace::plot::AggregationType aggtype, int popid,
+                                                        std::vector<int> szid);
 };
 
 #endif // POPULATIONSSTATPLOT_H

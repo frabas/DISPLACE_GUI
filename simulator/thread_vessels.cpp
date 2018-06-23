@@ -253,6 +253,7 @@ static void manage_vessel(int idx_v,
                 // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
                 // ***************make a dtree decision****************************
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
+                                                                         populations,
                                                                          use_dtrees,
                                                                          dyn_alloc_sce,
                                                                          implicit_pops,

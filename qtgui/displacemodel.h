@@ -205,6 +205,11 @@ public:
     const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return *mNations.at(idx); }
 
+    /* Access to Vessels statistics */
+
+    const QList<std::shared_ptr<VesselData> > &getVesselsList() const { return mVessels; }
+    const VesselData &getVessel(int idx) const { return *mVessels.at(idx); }
+
     /* Access to Harbour statistics */
 
     const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
@@ -326,6 +331,7 @@ public:
     /* Interesting Nations */
     const QList<int> &getInterestingNations() const { return mInterestingNations; }
 
+
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingNations(int n) {
         if (!mInterestingNations.contains(n))
@@ -340,6 +346,26 @@ public:
     bool isInterestingNations(int n) {
         return mInterestingNations.contains(n);
     }
+
+
+    /* Interesting Vessels */
+    const QList<int> &getInterestingVessels() const { return mInterestingVessels; }
+
+    void setInterestingVessels(int n) {
+        if (!mInterestingVessels.contains(n))
+            mInterestingVessels.append(n);
+            qSort(mInterestingVessels);
+    }
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingVessels(int n) {
+        mInterestingVessels.removeAll(n);
+    }
+    bool isInterestingVessels(int n) {
+        return mInterestingVessels.contains(n);
+    }
+
+
 
     //
 
@@ -359,11 +385,19 @@ public:
     void collectPopCumcatches(int step, int node_idx, double cumcatches);
     void collectPopCumcatchesWithThreshold(int step, int node_idx, double cumcatches_with_threshold);
     void collectPopCumdiscards(int step, int node_idx, double cumdiscards);
+    void collectPopCumdiscardsratio(int step, int node_idx, double cumdiscardsratio);
     void collectPopTariffs(int step, int node_idx, vector<double> tariffs);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
 
-    void collectSalinity(int step, int node_idx, int popid, double salinity);
+    void collectSalinity(int step, int node_idx, double salinity);
+    void collectWind(int step, int node_idx, double wind);
+    void collectSST(int step, int node_idx, double sst);
+    void collectNitrogen(int step, int node_idx, double nitrogen);
+    void collectPhosphorus(int step, int node_idx, double phosphorus);
+    void collectOxygen(int step, int node_idx, double oxygen);
+    void collectDissolvedCarbon(int step, int node_idx, double dissolvedcarbon);
+    void collectBathymetry(int step, int node_idx, double bathymetry);
 
 
 
@@ -412,11 +446,6 @@ public:
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
     void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
 
-#if 0 // TODO remove me
-    int countPenaltyPolygons(int quarter) const;
-    const QList<int> getPenaltyPolygonsAt (int quarter, int ndx) const ;
-#endif
-
     const QList<displace::NodePenalty> getPenaltyCollection() const { return mPenaltyNodes; }
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
@@ -455,6 +484,7 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
+    bool loadFishfarmsFromDb();
 
     void checkStatsCollection(int tstep);
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
@@ -511,17 +541,18 @@ private:
     QList<int> mInterestingSizes;
     QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
-    InterestingList<int> mInterestingBenthos;  
+    QList<int> mInterestingVessels;
+    InterestingList<int> mInterestingBenthos;
     InterestingList<int> mInterestingFishfarms;
     InterestingList<int> mInterestingWindfarms;
     InterestingList<int> mInterestingShips;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFishfarmsTypes;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mWindfarmsTypes;
+
     std::shared_ptr<InterestingListWithSpecialValues<int>> mShipsTypes;
 
     QList<displace::NodePenalty> mPenaltyNodes;
-
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;
     QList<std::shared_ptr<VesselData> > mVessels;
@@ -531,35 +562,36 @@ private:
     QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<Benthos> > mBenthos;
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
-    QList<std::shared_ptr<NationData> > mNations;
 
+    QList<std::shared_ptr<NationData> > mNations;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;
     FishfarmsStats mStatsFishfarmsCollected;
     ShipsStatsContainer mStatsShips;
-    ShipsStats mStatsShipsCollected;
 
+    ShipsStats mStatsShipsCollected;
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;
+
     QMap<QString, int> mStockNames;
 
     // --- Working objects
-
     OutputFileParser *mOutputFileParser;
+
     QThread *mParserThread;
 
     QString mLastError;
-
     /* Editor stuff */
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
+
     int mNodesLayerIndex;
 
     OGRSpatialReference *mSpatialRef;
-
     QString mShortestPathFolder;
+
     QString mGraphFolder;
 };
 

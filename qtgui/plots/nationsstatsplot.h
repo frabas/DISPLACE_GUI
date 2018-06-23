@@ -1,6 +1,7 @@
 #ifndef NATIONSSTATSPLOT_H
 #define NATIONSSTATSPLOT_H
 
+#include "StatsPlot.h"
 #include "plottypes.h"
 #include <palettemanager.h>
 
@@ -13,7 +14,7 @@ class DisplaceModel;
 class QCustomPlot;
 class QCPItemLine;
 
-class NationsStatsPlot
+class NationsStatsPlot : public StatsPlot
 {
     QCustomPlot *plotNations;
     QCPItemLine *timeline;
@@ -26,11 +27,15 @@ class NationsStatsPlot
 public:
     NationsStatsPlot(QCustomPlot *plotNations, QCPItemLine *timeLine);
 
-    void update(DisplaceModel *model, displace::plot::NationsStat stat);
+    void update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *theplot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
+    void update (QCustomPlot *);
     void saveTo();
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation);
+
+protected:
+    void doUpdate() override;
 };
 
 #endif // NATIONSSTATSPLOT_H

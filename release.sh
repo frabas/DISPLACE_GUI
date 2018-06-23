@@ -35,7 +35,10 @@ SRCPATH=$TEMP/$NAME
 
 rm -rf $SRCPATH
 mkdir -p $SRCPATH
-rsync -rav --progress --exclude .git --exclude .qt.conf --exclude \*~ --exclude \*.tar.gz --exclude build --exclude 3rd-party . $SRCPATH
+rsync -rav --progress \
+    --exclude .git --exclude .qt.conf --exclude \*~ --exclude \*.tar.gz \
+    --exclude build --exclude 3rd-party --exclude cmake-\* \
+    . $SRCPATH
 ( cd $TEMP && tar zcvf $NAME.tar.gz $NAME )
 
 mv $TEMP/$NAME.tar.gz .

@@ -22,6 +22,7 @@
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
+#include <mapobjectscontroller.h>
 
 namespace objecttree {
 
@@ -68,9 +69,37 @@ QVariant VesselEntity::data(const QModelIndex &index, int role) const
             std::shared_ptr<VesselData> v = model->getModel()->getVesselList()[mVesselId];
             return QString("%1 %2").arg(v->mVessel->get_y()).arg(v->mVessel->get_x());
         }
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingVessels(index.row()) ? Qt::Checked : Qt::Unchecked);
+
     }
 
     return QVariant();
 }
+
+
+
+Qt::ItemFlags VesselEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defFlags | Qt::ItemIsUserCheckable;
+}
+
+bool VesselEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            model->getModel()->remInterestingVessels(index.row());
+        } else {
+            model->getModel()->setInterestingVessels(index.row());
+        }
+        model->getStatsController()->updateStats(model->getModel());
+        model->getMapControl()->updateNodes(model->getModelIdx());
+        return true;
+    }
+    return false;
+}
+
+
 
 }

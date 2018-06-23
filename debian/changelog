@@ -1,3 +1,11 @@
+displace (0.9.13) xenial; urgency=medium
+
+  * proportional_mature_fish computation
+  * bug fixes
+  * New version
+
+ -- Jirachi <happycactus@ubuntu>  Tue, 12 Jun 2018 06:03:59 -0700
+
 displace (0.9.11) xenial; urgency=medium
 
   * New data engine for output data/playback/stats calculation using SQLite

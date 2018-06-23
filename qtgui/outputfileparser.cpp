@@ -65,6 +65,8 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopCumcatchesWithThreshold(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumcatches_")) {
         parsePopCumcatches(&file, tstep, mModel, period);
+    } else if (name.startsWith("popnodes_cumdiscardsratio_")) {
+        parsePopCumdiscardsratio(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumdiscards_")) {
         parsePopCumdiscards(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_tariffs_")) {
@@ -73,6 +75,8 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopImpact(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumulcatches_per_pop_")) {
         parsePopCumcatchesPerPop(&file, tstep, mModel, period);
+    } else if (name.startsWith("nodes_envt_")) {
+        parseNodesEnvt(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
         parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {
@@ -235,6 +239,34 @@ void OutputFileParser::parsePopCumdiscards(QFile *file, int tstep, DisplaceModel
         model->commitNodesStatsFromSimu(step);
 }
 
+void OutputFileParser::parsePopCumdiscardsratio(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int id = fields[1].toInt();
+            double cumdiscardsratio = fields[4].toDouble();
+            model->collectPopCumdiscardsratio (step, id, cumdiscardsratio);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
+
 void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
@@ -383,6 +415,49 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step);
 }
+
+void OutputFileParser::parseNodesEnvt(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int nodeid = fields[1].toInt();
+            double salinity = fields[3].toDouble();
+            model->collectSalinity (step, nodeid, salinity);
+            double sst = fields[4].toDouble();
+            model->collectSST (step, nodeid, sst);
+            double wind = fields[5].toDouble();
+            model->collectWind (step, nodeid, wind);
+            double nitrogen = fields[6].toDouble();
+            model->collectNitrogen (step, nodeid, nitrogen);
+            double phosphorus = fields[7].toDouble();
+            model->collectPhosphorus (step, nodeid, phosphorus);
+            double oxygen = fields[8].toDouble();
+            model->collectOxygen (step, nodeid, oxygen);
+            double dissolvedcarbon = fields[9].toDouble();
+            model->collectDissolvedCarbon( step, nodeid, dissolvedcarbon);
+            double bathy = fields[10].toDouble();
+            model->collectBathymetry( step, nodeid, bathy);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
+
 
 void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceModel *model, int period)
 {

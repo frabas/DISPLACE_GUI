@@ -194,6 +194,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         individual_tac_per_pop_at_year_start.push_back(0);
         prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
         prop_remaining_global_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
+        is_choked.push_back(0); // inform when the quota is exhausted by stock
     }
 
     // init at 0 the matrix of catches
@@ -814,6 +815,12 @@ double Vessel::get_prop_remaining_global_quotas (int sp) const
 {
     return(prop_remaining_global_quotas.at(sp));
 }
+
+vector<double> Vessel::get_is_choked () const
+{
+    return(is_choked);
+}
+
 
 double Vessel::get_min_prop_remaining_individual_quotas_on_avoided_stks ()
 {
@@ -1596,6 +1603,11 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+void Vessel::set_is_choked(int pop, int val)
+{
+    is_choked.at(pop)=val;
+}
+
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep)
 {
 
@@ -1758,21 +1770,21 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
     std::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
         if (node->getChildrenCount() == 0) { // is a leaf node
-            //            std::cout << "Node Value= " << node->value() << std::endl;
+                       // std::cout << "Node Value= " << node->value() << std::endl;
             return node->value();
         }
 
         value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
-            //cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
+           // cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
 
         bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));
 
-        //std::cout << "value=" << value << " bin=" << bin << std::endl;
+       // std::cout << "value=" << value << " bin=" << bin << std::endl;
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;
@@ -2289,9 +2301,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
             }
         }
-
          // global TACs
-        if(tstep>8761  && !is_individual_vessel_quotas)
+        //if(tstep>8761  && !is_individual_vessel_quotas)
+        if(!is_individual_vessel_quotas)
         {
             for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
@@ -2681,13 +2693,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
                                 // init
                                 double val=0;
-                                if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                   {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(a_count)=val;
-                                    if(a_count<(selected_szgroups.size()-1)) a_count+=1;
-                                    }
-                                nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
+                               // if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                               //    {
+                               //     val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
+                               //     new_avai_pops_at_selected_szgroup.at(a_count)=val;
+                               //     if(a_count<(selected_szgroups.size()-1)) a_count+=1;
+                               //     }
+                               // nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
 
                                 /*
 
@@ -2869,12 +2881,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             }
                         }
 
-                        // because the first year is the calibration year.
-                        if(tstep>8761  && !is_individual_vessel_quotas)
+                        if(!is_individual_vessel_quotas)
+                        // because the first year is the calibration year:
+                        //if(tstep>8761  && !is_individual_vessel_quotas)
                         {
                             // 4. compare in tons (AT THE GLOBAL SCALE)
                             if( (so_far/1000) > (global_quotas.at(pop)))
                             {
+                                populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
+
                                 prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
 
                                 dout (cout << "prop used " <<
@@ -2883,6 +2898,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
+                                dout(cout  << "...and declare you are choked by " << pop << "!!! " << endl);
+                                this->set_is_choked(pop, 1);
                                 populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
                                 // => back correction (disable if you want to know the discarded part in annual_indic.
                                 // ...i.e. discarded = so_far - current_tac)
@@ -3169,6 +3186,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // contribute to accumulated catches on this node
     this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
     this->get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
+    double discratio =  this->get_loc()->get_cumdiscards() / (this->get_loc()->get_cumdiscards()+this->get_loc()->get_cumcatches());
+    discratio = discratio>0 ? discratio : 0.0;
+    this->get_loc()->set_cumdiscardsratio(discratio);
 
 
     // check the matrix of catches
@@ -4039,9 +4059,11 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                                                  pathshops,
                                                  dyn_alloc_sce
                                                  ); // use ChooseGround dtree along all possible grounds to define the next ground
+
         if(ground==types::special::InvalidNodeId)
         {
             dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
+            //cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << endl;
             return (1); // do_nothing i.e. stay on quayside
         }
     } else{
@@ -4873,7 +4895,7 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep,
+int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& populations,
                                 bool use_the_tree, const DynAllocOptions& dyn_alloc_sce, vector<int>& implicit_pops,
                                 int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing)
 {
@@ -4916,13 +4938,14 @@ int Vessel::should_i_go_fishing(int tstep,
                     dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << endl);
                      // => by default, continue if not all stks quotas are exhausted.....
                 }
-                if(dyn_alloc_sce.option(Options::stopOnFirstStock))
+                if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                 {
                     vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
-                    for(unsigned int i=0; i<trgts.size(); ++i)
+                    for(unsigned int tg=0; tg<trgts.size(); ++tg)
                         {
-                            if(pop==trgts.at(i) && indiv_quota==0)  still_some_quotas=0;
+                            if(pop==trgts.at(tg) && indiv_quota==0)  still_some_quotas=0;
                              // => will stay on quayside because exhausted tac on at least one targeted stock
+                            this->set_is_choked(pop, 1);
                         }
 
                 }
@@ -4940,9 +4963,19 @@ int Vessel::should_i_go_fishing(int tstep,
     }
     else
     {
-        still_some_quotas=1; // init
-    }
-
+         still_some_quotas=1;
+        if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+         {
+             for (int pop=0; pop < populations.size(); pop++)
+             {
+              if (populations.at(pop)->get_tac()->get_is_tac_exhausted())  still_some_quotas=0;
+             }
+         }
+         else
+         {
+            still_some_quotas=1; // init
+         }
+   }
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
 
@@ -5024,6 +5057,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                                 )
 {
     lock();
+
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
@@ -5173,6 +5207,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_fgrounds_in_closed_areas(vector <types::NodeId> ()); // TO DO
                 this->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
                 this->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
             }
             else
             {
@@ -5184,6 +5219,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
             // ...and caution, need for redefining grds.
             grds= this->get_fgrounds();
+            freq_grds= this->get_freq_fgrounds();
             grds_in_closure = this->get_fgrounds_in_closed_areas();
 
         }
@@ -5409,10 +5445,12 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //CHOOSE THAT GROUND!
         if(unif_rand()<the_value) {
             unlock();
+            //cout << "END1 should_i_choose_this_ground for ..." << this->get_name() << endl;
             return(ground);
         }
         //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
     }
+
 
     // if here, then no ground has actually been found within
     // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar.....
@@ -5433,6 +5471,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
          unlock();
+         //cout << "END2 should_i_choose_this_ground for ..." << this->get_name() << endl;
         return (types::special::InvalidNodeId); // do_nothing, likely because all grounds in closed areas and last leaf at 0
     }
 
@@ -5457,7 +5496,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
        {
            freq_grds.at(it)= 1 - freq_grds.at(it);
        }
-    }
+   }
 
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
@@ -5468,7 +5507,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     {
         if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
         {
-            //cout << " allo " << endl;
+           // cout << " allo " << endl;
             freq_grds.at(n)=1e-8; // to avoid removing if nb of grounds outside is 0
             // but potential non-compliance if all grounds are in the closed areas....
             // therefore put 0.0 in the last leaf if this is not the wished behaviour...
@@ -5483,12 +5522,14 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     }
 
     // then sample...
-    auto grounds = do_sample(1, grds.size(), grds, freq_grds);
+    dout(cout << "Possible crash here if grounds.size() " << grds.size() << " is different from freq_grds.size() " << freq_grds.size() << endl);
+    auto grounds = do_sample(1, grds.size(), grds, freq_grds); // caution: will return empty vector if something wrong in input....then make a crash
     ground= types::NodeId(grounds[0]);
 
     //cout << "ground is " << ground.toIndex() << endl;
 
     unlock();
+    // cout << "END3 should_i_choose_this_ground for ..." << this->get_name() << endl;
     return(ground);
 
 }

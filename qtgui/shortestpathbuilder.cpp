@@ -52,6 +52,34 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     strm_prev << " key  value" << endl;
     strm_min << " key  value" << endl;
 
+    if(relevantInterNodesIdx.empty())
+    {
+     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+        vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+
+        while (mPredecessors[nd] != nd) {
+            if (!mGraph[nd].flag) {
+                strm_prev << nd << " " << mPredecessors[nd] << endl;
+               strm_min << nd << " " << mDistances[nd] << endl;
+            }
+
+            mGraph[nd].flag = true;
+            nd = mPredecessors[nd];
+        }
+
+        mGraph[nd].flag = true;
+     }
+
+    }
+    else
+    {
+    vector<int> mem(2, 0);
+
+    vector <int> relevant_nodes;
+    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+       relevant_nodes.push_back(n->get_idx_node().toIndex());
+    }
+
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
@@ -67,6 +95,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
 
         mGraph[nd].flag = true;
     }
+   }
 
     mindist_file.close();
     prev_file.close();

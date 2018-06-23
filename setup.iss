@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.11"
+#define MyAppVersion "0.9.13"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -17,7 +17,9 @@
 #define Build "release"
 #define QT_DEBUG ""
 #define QT_DIR "C:\Qt\5.10.0\msvc2017_64"
+;#define QT_DIR "C:\Qt\5.10.1\msvc2017_64"
 #define QT_PLUGINS_DIR "C:\Qt\5.10.0\msvc2017_64\plugins"
+;#define QT_PLUGINS_DIR "C:\Qt\5.10.1\msvc2017_64\plugins"
 #define SDK_DIR "install\msvc"
 
 [Setup]
@@ -47,16 +49,27 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "build\{#Build}\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\dtreeeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\tsereditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\displacecommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_10_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
@@ -70,6 +83,7 @@ Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_program_options-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -85,15 +99,17 @@ Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
-Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; Languages: 
-Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
+Name: {group}\Decision Tree Editor; Filename: {app}\dteditor.exe; Tasks: ; Languages: 
+Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 
 [Run]
+;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent

@@ -105,9 +105,15 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumCatchesWithThresholdGraphics(mNode.get(), mController, indx));
         break;
+
     case GraphNodeWithCumDiscardsRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumDiscardsGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithCumDiscardsRatioRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumDiscardsRatioGraphics(mNode.get(), mController, indx));
         break;
 
     case GraphNodeWithTariffs0:
@@ -175,14 +181,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
 bool NodeMapObject::showProperties()
 {
-    if (!mWidget) {
-        mWidget = new NodeDetailsWidget(mController->mapWidget());
-        connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
-    }
+    mWidget = new NodeDetailsWidget(mController->mapWidget());
+    connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
 
     updateProperties();
     mController->showDetailsWidget(mGeometry->coord(),mWidget);
-
     return true;
 }
 
@@ -349,6 +352,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithCumDiscardsRole:
         text += QString("<br/><b>Accum. discards:</b> %1<br/>")
                 .arg(mNode->get_cumdiscards());
+        break;
+
+    case GraphNodeWithCumDiscardsRatioRole:
+        text += QString("<br/><b>Discards ratio:</b> %1<br/>")
+                .arg(mNode->get_cumdiscardsratio());
         break;
     }
 

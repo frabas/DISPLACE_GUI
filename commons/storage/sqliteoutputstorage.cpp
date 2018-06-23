@@ -9,6 +9,7 @@
 #include "tables/nodesdeftable.h"
 #include "tables/poptable.h"
 #include "tables/popdyntable.h"
+#include "tables/popquotastable.h"
 #include "tables/nodesstattable.h"
 #include "tables/nodestariffstattable.h"
 #include "tables/funcgroupstable.h"
@@ -16,6 +17,7 @@
 #include "tables/vesselvmslikefpingsonlytable.h"
 #include "tables/vesselsloglikecatchestable.h"
 #include "tables/shipstable.h"
+#include "tables/fishfarmsdeftable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 #include "tables/metadatatable.h"
@@ -28,9 +30,9 @@
 #include <Metier.h>
 #include <Population.h>
 
-#include <QDebug>
 
-const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 2;
+
+const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 4;
 
 using namespace sqlite;
 using namespace displace::plot;
@@ -49,8 +51,10 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<NodesTariffStatTable> mNodesTariffStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
+    std::shared_ptr<PopQuotasTable> mPopQuotasTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FuncGroupsTable> mFuncGroupsTable;
+    std::shared_ptr<FishFarmsDefTable> mFishFarmsDefTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
     std::shared_ptr<MetadataTable> mMetadata;
@@ -79,8 +83,10 @@ void SQLiteOutputStorage::open()
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mNodesTariffStatTable = std::make_shared<NodesTariffStatTable>(p->db, "NodesTariffStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
+    p->mPopQuotasTable = std::make_shared<PopQuotasTable>(p->db, "PopQuotas");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
+    p->mFishFarmsDefTable = std::make_shared<FishFarmsDefTable>(p->db, "FishFarmsDef");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
 
@@ -155,6 +161,11 @@ void SQLiteOutputStorage::exportTariffNodes(int tstep, Node *node)
 void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)
 {
     p->mPopDynTable->insert(tstep, popid, pop);
+}
+
+void SQLiteOutputStorage::exportPopQuotas(Population *pop, int popid, int tstep)
+{
+    p->mPopQuotasTable->insert(tstep, popid, pop);
 }
 
 void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
@@ -332,7 +343,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
-    qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+    //qDebug() << "VesselStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
@@ -348,6 +359,124 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
 
     return data;
 }
+
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat stattype, string vessel, Operation op)
+{
+    bool isAggregate = false;
+    if (stattype == VesselsStat::Catches || stattype == VesselsStat::Discards) {
+        isAggregate = true;
+    }
+
+    FieldDef<FieldType::Real> f("");
+    switch (stattype) {
+    case VesselsStat::Catches:
+        f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+    case VesselsStat::Discards:
+        f = p->mVesselLoglikeCatchesTable->fldDiscards;
+        break;
+    case VesselsStat::Earnings:
+        f = p->mVesselLoglikeTable->fldRevenueAV;
+        break;
+    case VesselsStat::ExEarnings:
+        f = p->mVesselLoglikeTable->revenueExAV;
+        break;
+    case VesselsStat::TimeAtSea:
+        f = p->mVesselLoglikeTable->timeAtSea;
+        break;
+    case VesselsStat::Gav:
+        f = p->mVesselLoglikeTable->gav;
+        break;
+    case VesselsStat::Vpuf:
+        f = p->mVesselLoglikeTable->vpuf;
+        break;
+    case VesselsStat::SweptArea:
+        f = p->mVesselLoglikeTable->sweptArea;
+        break;
+    case VesselsStat::RevenuePerSweptArea:
+        f = p->mVesselLoglikeTable->revenuePerSweptArea;
+        break;
+    case VesselsStat::GVA:
+        f = p->mVesselLoglikeTable->GVA;
+        break;
+    case VesselsStat::GVAPerRevenue:
+        f = p->mVesselLoglikeTable->GVAPerRevenue;
+        break;
+    case VesselsStat::LabourSurplus:
+        f = p->mVesselLoglikeTable->LabourSurplus;
+        break;
+    case VesselsStat::GrossProfit:
+        f = p->mVesselLoglikeTable->GrossProfit;
+        break;
+    case VesselsStat::NetProfit:
+        f = p->mVesselLoglikeTable->NetProfit;
+        break;
+    case VesselsStat::NetProfitMargin:
+        f = p->mVesselLoglikeTable->NetProfitMargin;
+        break;
+    case VesselsStat::GVAPerFTE:
+        f = p->mVesselLoglikeTable->GVAPerFTE;
+        break;
+    case VesselsStat::RoFTA:
+        f = p->mVesselLoglikeTable->RoFTA;
+        break;
+    case VesselsStat::BER:
+        f = p->mVesselLoglikeTable->BER;
+        break;
+    case VesselsStat::CRBER:
+        f = p->mVesselLoglikeTable->CRBER;
+        break;
+    case VesselsStat::NetPresentValue:
+        f = p->mVesselLoglikeTable->NetPresentValue;
+        break;
+    case VesselsStat::numTrips:
+        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+        break;
+    default:
+        throw std::runtime_error("getVesselLoglikeDataByVessel case not handled.");
+    }
+
+    switch (op) {
+    case Operation::Sum:
+        f = sqlite::op::sum(f);
+        break;
+    case Operation::Average:
+        f = sqlite::op::avg(f);
+        break;
+    case Operation::Count:
+        f = sqlite::op::count(f);
+        break;
+    }
+
+    auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
+                                                    p->mVesselLoglikeTable->fldTStep,
+                                                    f
+                                                    );
+    select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
+
+    if (isAggregate)
+        select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+
+    select.where(op::eq(p->mVesselDefTable->fldName));
+    select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    std::cout << "VesselStat: " << select.string() << " : " << vessel;
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(vessel));
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+
+    return data;
+}
+
 
 TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat stattype, int harbourid, Operation op)
 {
@@ -454,7 +583,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         return true;
     });
 
-    qDebug() << "HarbourStat: " << QString::fromStdString(select.string()) << " : " << harbourid << " => "  << data.v.size();
+    //qDebug() << "HarbourStat: " << QString::fromStdString(select.string()) << " : " << harbourid << " => "  << data.v.size();
 
     return data;
 }
@@ -564,24 +693,76 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         return true;
     });
 
-    qDebug() << "MetierStat: " << QString::fromStdString(select.string()) << " : " << metierid << " => "  << data.v.size();
+    //qDebug() << "MetierStat: " << QString::fromStdString(select.string()) << " : " << metierid << " => "  << data.v.size();
 
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid, int grpid)
+
+
+
+TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid,
+                                                        vector<int> szid)
 {
+    bool filterGrpId = (popid >= 0 && popid != 999);
+
     FieldDef<FieldType::Real> f("");
     FieldDef<FieldType::Real> fld("");
+    string name;
+    FieldDef<FieldType::Integer> fldTStep("");
+    FieldDef<FieldType::Integer> fldPopId("");
+    FieldDef<FieldType::Integer> fldGroup("");
+
+
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
         fld = p->mPopDynTable->fldN;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
         break;
     case displace::plot::PopulationStat::Mortality:
         fld = p->mPopDynTable->fldF;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
         break;
     case displace::plot::PopulationStat::SSB:
         fld = p->mPopDynTable->fldSSB;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::QuotasUptake:
+        fld = p->mPopQuotasTable->fldQuotasUptake;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Quotas:
+        fld = p->mPopQuotasTable->fldQuotas;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::FFmsy:
+        fld = p->mPopDynTable->fldFFmsy;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::PropMature:
+        fld = p->mPopDynTable->fldPropMature;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
         break;
     }
 
@@ -599,27 +780,43 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     }
 
-    auto select = sqlite::statements::Select(p->mPopDynTable->name(),
-                                                    p->mPopDynTable->fldTStep,
+    auto select = sqlite::statements::Select(name,
+                                                    fldTStep,
                                                     f
                                                     );
 
-    if (grpid >= 0) {
+    if (szid.size() > 0) {
+        std::ostringstream ss;
+        if (filterGrpId)
+            ss << fldPopId.name() << " == ? AND ";
+        ss << fldGroup.name() << " IN (?";
+        for (size_t i = 1; i < szid.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        ss << " AND " << fld.name() << " <> -1";
+        select.where(ss.str());
+    } else {
+        if (filterGrpId)
+            select.where(op::eq(fldPopId));
+    }
+/*
+    if (szid >= 0) {
         select.where(op::and_(op::and_(op::eq(p->mPopDynTable->fldPopId), op::eq(p->mPopDynTable->fldGroup)), op::ne(fld)));
     } else {
         select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::ne(fld)));
     }
-
-    select.groupBy(p->mPopDynTable->fldTStep);
+*/
+    select.groupBy(fldTStep);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
     TimelineData data;
 
-    stmt.bind(std::make_tuple(popid, -1));
-    if (grpid >= 0) {
-        stmt.bind(std::make_tuple(popid, grpid, -1));
-    }
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, popid);
+    for (size_t i = 0; i < szid.size(); ++i)
+        stmt.bind(n+i, szid[i]);
 
     stmt.execute([&stmt, &data](){
         data.t.push_back(stmt.getIntValue(0));
@@ -627,7 +824,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         return true;
     });
 
-    qDebug() << "PopDyn Select: " << QString::fromStdString(select.string()) << " (" << popid << "," << grpid << ")";
+    //qDebug() << "PopDyn Select: " << QString::fromStdString(select.string()) << " (" << popid << "," << grpid << ")";
 
     return data;
 }
@@ -707,14 +904,101 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
         return true;
     });
 
-    qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
+    //qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
 
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype)
+TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsStat stattype,
+                                                      displace::plot::AggregationType aggtype, int ffid,
+                                                      std::vector<int> ftypes)
 {
-    return p->mShipsTable->getShipsStatData (stattype);
+    bool filterGrpId = (ffid >= 0 && ffid != 999);
+
+    FieldDef<FieldType::Real> f("");
+    FieldDef<FieldType::Real> fld("");
+    switch (stattype) {
+        case displace::plot::FishfarmsStat::FF_FishHarvestedKg:
+            fld = p->mFishfarmsTable->fldFish;
+            break;
+        case displace::plot::FishfarmsStat::FF_EggsHarvestedKg:
+            fld = p->mFishfarmsTable->fldEggs;
+            break;
+        case displace::plot::FishfarmsStat::FF_AnnualProfit:
+            fld = p->mFishfarmsTable->fldProfit;
+            break;
+        case displace::plot::FishfarmsStat::FF_FishMeanWeight:
+        case displace::plot::FishfarmsStat::FF_NetDischargeN:
+        case displace::plot::FishfarmsStat::FF_NetDischargeP:
+        case displace::plot::FishfarmsStat::FF_CumulNetDischargeN:
+        case displace::plot::FishfarmsStat::FF_CumulNetDischargeP:
+            std::ostringstream ss;
+            ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
+            std::cerr << ss.str() << "\n";
+            throw std::logic_error(ss.str());
+    }
+
+    switch (aggtype) {
+        case displace::plot::AggregationType::Avg:
+            f = op::avg(fld); break;
+        case displace::plot::AggregationType::Min:
+            f = op::min(fld); break;
+        case displace::plot::AggregationType::Max:
+            f = op::max(fld); break;
+        case displace::plot::AggregationType::Sum:
+            f = op::sum(fld); break;
+        case displace::plot::AggregationType::None:
+            f = fld;
+            break;
+    }
+
+    auto select = sqlite::statements::Select(p->mFishfarmsTable->name(),
+                                             p->mFishfarmsTable->fldTStep,
+                                             f
+    );
+
+    if (ftypes.size() > 0) {
+        std::ostringstream ss;
+        if (filterGrpId)
+            ss << p->mFishfarmsTable->fldFarmId.name() << " == ? AND ";
+        ss << p->mFishfarmsTable->fldFarmType.name() << " IN (?";
+        for (size_t i = 1; i < ftypes.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        select.where(ss.str());
+    } else {
+        if (filterGrpId)
+            select.where(op::eq(p->mFishfarmsTable->fldFarmId));
+    }
+
+    select.groupBy(p->mFishfarmsTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    std::cout << "FishFarm: " << select.string() << "\n";
+
+    TimelineData data;
+
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, ffid);
+    for (size_t i = 0; i < ftypes.size(); ++i)
+        stmt.bind(n+i, ftypes[i]);
+
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    //qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
+
+    return data;
+}
+
+TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
+{
+    return p->mShipsTable->getShipsStatData (stattype,aggtype, shipid, shiptypeid);
 }
 
 size_t SQLiteOutputStorage::getNbPops()
@@ -739,8 +1023,10 @@ void SQLiteOutputStorage::createAllTables()
     p->mNodesTariffStatTable->dropAndCreate();
     p->mShipsTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
+    p->mPopQuotasTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFuncGroupsTable->dropAndCreate();
+    p->mFishFarmsDefTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
     p->mVesselLoglikeCatchesTable->dropAndCreate();
@@ -814,4 +1100,14 @@ std::shared_ptr<WindfarmsTable> SQLiteOutputStorage::getWindfarmTable() const
 std::shared_ptr<MetadataTable> SQLiteOutputStorage::metadata() const
 {
     return p->mMetadata;
+}
+
+void SQLiteOutputStorage::exportFishfarmDef(const Fishfarm &fishfarm)
+{
+    p->mFishFarmsDefTable->insertDef(fishfarm);
+}
+
+std::shared_ptr<FishFarmsDefTable> SQLiteOutputStorage::getFishfarmDefTable() const
+{
+    return p->mFishFarmsDefTable;
 }

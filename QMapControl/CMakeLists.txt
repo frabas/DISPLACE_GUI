@@ -33,3 +33,6 @@ target_link_libraries(QMapControl
         Qt5::Widgets
         Qt5::Network
         )
+
+# Set target directory
+install(TARGETS QMapControl DESTINATION lib)

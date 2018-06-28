@@ -1,7 +1,7 @@
 How to build under Linux
 ========================
 
-At the time of writing, the following procedure is tested on Ubuntu 15.10 and, with minor adaptations, on Ubuntu 14.04 LTS.
+At the time of writing, the following procedure is tested on Ubuntu 16.04LTS and, with minor adaptations, on Ubuntu 14.04 LTS.
 Any recent linux distribution that satisfies the prerequisites should be able to compile and run Displace without issues.
 
 Note: Since displace needs support for c++14, Qt 5.6 or later is required!
@@ -18,29 +18,41 @@ Gdal library version 1.11
 Boost 1.58 with the following components: Boost::Graph, Boost::RegEx
 GeographicLib 1.44
 
-To install prerequisites under Ubuntu 15.10:
+To install prerequisites under Ubuntu 16.04:
 
+```
 $ sudo apt-get install libcgal11v5 libcgal-dev
 $ sudo apt-get install libgdal1i libgdal-dev
 $ sudo apt-get install libboost-all-dev
 $ sudo apt-get install libgeographic14 libgeographic-dev
+```
 
 
-Building packages under Debian
-------------------------------
+Since 0.9, Displace depends also from sparsepp and mSqliteCpp:
 
-* Prerequisites
+```
+$ git clone git@github.com:studiofuga/mSqliteCpp.git
+$ git clone https://github.com/greg7mdp/sparsepp.git
+```
 
-As a prerequisite, you need Qt5.6 or later. If you want to build deb package, you need a debianized Qt5.6 package.
+Ubuntu 16.04 doesn't provide an official support to Qt5.6, so an external package is required.
 The following instructions installs qt562 for /opt Xenial ( https://launchpad.net/~beineri/+archive/ubuntu/opt-qt562-xenial )
 Add the repository:
 
+```
 sudo add-apt-repository ppa:beineri/opt-qt562-xenial
 sudo apt-get update
+```
 
 Then install the proper package:
 
 sudo apt-get install qt56-meta-full
+
+NOTE: it may happen that the `GL/gl.h` file is missing. In this case, install the proper package:
+
+```
+$ sudo apt-get install mesa-common-dev
+```
 
 * Building
 
@@ -84,8 +96,8 @@ Now the source can be released, just run the release script with
 or tag the git version and run release without arguments (see -h for details).
 
 
-Compilation under linux
------------------------
+Compilation from the command line
+---------------------------------
 
 Using QtCreator is the simplest way: load the project file, configure the build directory and click on Build All.
 From QtCreator you can also run the application without any issue. Just be sure to select qtgui as run object.

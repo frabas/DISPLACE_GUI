@@ -1761,8 +1761,6 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());
-        QVector<int> a_vect(1,0);
-        builder->setRelevantInterNodes(a_vect);
     } else {
         InputFileParser parser;
         InputFileParser parser2;
@@ -3103,7 +3101,7 @@ void MainWindow::on_actionLoadStockNames_triggered()
 
 void MainWindow::on_actionDecision_Trees_Editor_triggered()
 {
-    auto ed = prepareAppExecutableStart("dtreeeditor");
+    auto ed = prepareAppExecutableStart("dteditor");
     ed->start();
 }
 
@@ -3133,7 +3131,7 @@ void MainWindow::on_actionR_Console_triggered()
 
 void MainWindow::on_actionTime_Series_Editor_triggered()
 {
-    auto ed = prepareAppExecutableStart("tsereditor");
+    auto ed = prepareAppExecutableStart("tseditor");
     ed->start();
 }
 

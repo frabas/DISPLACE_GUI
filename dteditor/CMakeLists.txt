@@ -42,3 +42,6 @@ target_link_libraries(dteditor
         ${LIBRARIE}
         Qt5::Widgets
         )
+
+# Set target directory
+install(TARGETS dteditor DESTINATION bin)

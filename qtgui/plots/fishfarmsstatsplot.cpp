@@ -159,11 +159,8 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
             break;
         }
 
-        qDebug() << "FishId = " << grp;
-        qDebug() << "FishfarmsTypes = " << ftypes;
         auto v = getData(model, stat, aggtype, grp, ftypes);
 
-        qDebug() << "Fishfarm Data: " << std::get<0>(v).size();
         graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
     }

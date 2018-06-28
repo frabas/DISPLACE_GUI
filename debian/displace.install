@@ -1,3 +1,2 @@
-displace usr/bin
 debian/displace.desktop usr/share/applications
 qtgui/icons/displace.png usr/share/pixmaps

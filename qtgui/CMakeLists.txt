@@ -103,3 +103,6 @@ target_link_libraries(displacegui
 
         ${EXTRA_LIBRARIES} gmp
         )
+
+# Set target directory
+install(TARGETS displacegui DESTINATION bin)

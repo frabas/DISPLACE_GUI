@@ -48,6 +48,7 @@ public:
         std::weak_ptr<NodeData> source;
         std::weak_ptr<NodeData> target;
         double weight;
+        bool highlighted = false;
     };
 
     typedef QVector<std::shared_ptr<Edge>> AdiacencyList;
@@ -233,9 +234,13 @@ public:
     bool isDeleted() const;
     void setDeleted(bool value = true);
 
+    void setRelevant(bool relevant = true) { mRelevant = relevant; }
+    bool isRelevant() const { return mRelevant; }
+
 private:
     DisplaceModel *mModel;
     bool mDeleted;
+    bool mRelevant;
     int mHarbourId;
     double *mPop;
     double mPopTot;

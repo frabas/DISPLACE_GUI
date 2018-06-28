@@ -65,10 +65,12 @@ class DisplaceModel;
 
 class ShortestPathBuilder
 {
+public:
     struct flag_t {
         typedef boost::edge_property_tag kind;
 
         bool flag;
+        bool isRelevant;
 
         flag_t() : flag(false) {}
     };
@@ -78,6 +80,12 @@ class ShortestPathBuilder
         boost::property < boost::edge_weight_t, double > > graph_t;
     typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_descriptor;
     typedef std::pair<int, int> Edge;
+
+    using PostProcessingFilter = std::function<bool(const QList<std::shared_ptr<NodeData> > &relNodes,
+                                                    graph_t &graph,
+                                                    std::vector<vertex_descriptor> &predecessors,
+                                                    std::vector<double> &dinstances)>;
+
 
     DisplaceModel *mModel;
 
@@ -89,9 +97,11 @@ class ShortestPathBuilder
     std::vector<vertex_descriptor> mPredecessors;
     std::vector<double> mDistances;
 
+    std::list<PostProcessingFilter> postProcessingFilter;
+
 private:
-    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
-    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
+    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
 
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);
@@ -100,8 +110,8 @@ public:
         Binary, Text
     };
 
-    void create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, Format format = Binary);
+    void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format = Binary);
+    void appendPostProcessingFilter(PostProcessingFilter);
 };
 
 #endif // SHORTESTPATHBUILDER_H

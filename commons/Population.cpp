@@ -1497,7 +1497,8 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	// with M=0 here because apply_natural_mortality() actually is applied just AFTER this function
 
     vector <double> fbar_ages_min_max = this->get_fbar_ages_min_max();
-    double FMSY = fbar_ages_min_max.at(6);
+    double FMSY = 1.0;
+    if(fbar_ages_min_max.size()>5)  FMSY = fbar_ages_min_max.at(6);
 
     for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
 	{

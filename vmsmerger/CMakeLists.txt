@@ -9,3 +9,6 @@ add_executable(vmsmerger
 target_link_libraries(vmsmerger
         commons
         )
+
+# Set target directory
+install(TARGETS vmsmerger DESTINATION bin)

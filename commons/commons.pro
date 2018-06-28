@@ -66,6 +66,8 @@ SOURCES= \
     storage/tables/poptable.cpp \
     storage/tables/vesselvmsliketable.cpp \
     storage/tables/fishfarmstable.cpp \
+    storage/tables/fishfarmsdeftable.cpp \
+    storage/tables/popquotastable.cpp \
     storage/tables/windfarmstable.cpp \
     storage/tables/vesselsloglikecatchestable.cpp \
     storage/tables/nodesdeftable.cpp \
@@ -130,6 +132,8 @@ HEADERS= \
     ../mSqliteCpp/include/msqlitecpp.h \
     storage/tables/vesselvmsliketable.h \
     storage/tables/fishfarmstable.h \
+    storage/tables/fishfarmsdeftable.h \
+    storage/tables/popquotastable.h \
     storage/tables/windfarmstable.h \
     storage/tables/vesselsloglikecatchestable.h \
     storage/tables/nodesdeftable.h \

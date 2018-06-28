@@ -9,3 +9,6 @@ add_executable(avaifieldupdater
 target_link_libraries(avaifieldupdater
         commons
         )
+
+# Set target directory
+install(TARGETS avaifieldupdater DESTINATION bin)

@@ -30,6 +30,10 @@
 QPen EdgeGraphics::mNormalPen(Qt::black);
 QPen EdgeGraphics::mSelectedPen (QBrush(Qt::red), 3, Qt::SolidLine);
 
+namespace {
+    QPen HighlightedPen (QBrush(Qt::yellow), 3, Qt::SolidLine);
+}
+
 const double EdgeGraphics::minZoom = 7;
 const double EdgeGraphics::maxZoom = 17;
 const double EdgeGraphics::minTextZoom = 11;
@@ -66,10 +70,17 @@ void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &ba
     if (mEdge->source.expired() || mEdge->target.expired())
         return;
 
-    setPen(selected() ? mSelectedPen : mNormalPen);
+    if (!selected()) {
+        if (mEdge->highlighted) {
+            setPen(HighlightedPen);
+        } else {
+            setPen(mNormalPen);
+        }
+    } else {
+        setPen(mSelectedPen);
+    }
 
     qmapcontrol::GeometryLineString::draw(painter, backbuffer_rect_coord, controller_zoom);
-
     if (controller_zoom >= minTextZoom) {
         QPointF p1 = projection::get().toPointWorldPx(m_points[0], controller_zoom).rawPoint();
         QPointF p2 = projection::get().toPointWorldPx(m_points[1], controller_zoom).rawPoint();

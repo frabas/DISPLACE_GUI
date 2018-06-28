@@ -38,3 +38,6 @@ target_link_libraries(objeditor
         Qt5::Widgets
         QMapControl
         )
+
+# Set target directory
+install(TARGETS objeditor DESTINATION bin)

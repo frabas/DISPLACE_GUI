@@ -9,3 +9,7 @@ add_executable(avaifieldshuffler
 target_link_libraries(avaifieldshuffler
         commons
         )
+
+
+# Set target directory
+install(TARGETS avaifieldshuffler DESTINATION bin)

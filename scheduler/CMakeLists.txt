@@ -36,3 +36,6 @@ target_link_libraries(scheduler
         qtcommons
         Qt5::Widgets
         )
+
+# Set target directory
+install(TARGETS scheduler DESTINATION bin)

@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
+#include <QIntValidator>
 
 CreateShortestPathDialog::CreateShortestPathDialog(QWidget *parent) :
     QDialog(parent),

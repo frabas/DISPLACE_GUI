@@ -8,6 +8,7 @@
 
 #include <qcustomplot.h>
 
+
 #include <QPen>
 
 using namespace displace::plot;
@@ -69,13 +70,47 @@ void NationsStatsPlot::update(QCustomPlot *plot)
         QCPGraph *graph = plot->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
+        QString nationName = model->getNation(ip).getName();
+        // BE,DE,DK,ES,FR,GB,IE,NL,NO,PL,PT
+        if(nationName.toStdString()=="BE" || nationName.toStdString()=="BEL")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/belgium-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="DE" || nationName.toStdString()=="DEU")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/germany-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="ES" || nationName.toStdString()=="SPN")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/spain-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="FR" || nationName.toStdString()=="FRA")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/france-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="GB" || nationName.toStdString()=="UK")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/united-kingdom-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="IE" || nationName.toStdString()=="IRE")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/ireland-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="ND" || nationName.toStdString()=="NLD")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/netherlands-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="NO" || nationName.toStdString()=="NOR")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/norway-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="PL" || nationName.toStdString()=="POL")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/poland-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="PT" || nationName.toStdString()=="POR")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/portugal-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="RO" || nationName.toStdString()=="ROM")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/romania-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="FI" || nationName.toStdString()=="FIN")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/finland-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="EE" || nationName.toStdString()=="EST")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/estonia-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="LT" || nationName.toStdString()=="LTV")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/latvia-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="DNK" || nationName.toStdString()=="DEN")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/denmark-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="SWE")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/sweden-flag-round-icon-16.png")));
         QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
         ++cnt;
 
-        graph->setName(QString(model->getNation(ip).getName()));
+        graph->setName(nationName);
 
         auto v = getData(model, stat, ip);
         graph->setData(std::get<0>(v), std::get<1>(v));

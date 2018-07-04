@@ -410,5 +410,4 @@ icons.files=icons/displace.png
 
 INSTALLS += target icons extra
 
-DISTFILES += \
 

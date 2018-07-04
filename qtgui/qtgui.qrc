@@ -70,5 +70,25 @@
         <file>palettes/wind_colors.p2c</file>
         <file>palettes/sst_colors.p2c</file>
         <file>palettes/heat_colors_12_0_to_1.p2c</file>
+        <file>icons/denmark-flag-round-icon-16.png</file>
+        <file>icons/sweden-flag-round-icon-16.png</file>
+        <file>icons/belgium-flag-round-icon-16.png</file>
+        <file>icons/croatia-flag-round-icon-16.png</file>
+        <file>icons/france-flag-round-icon-16.png</file>
+        <file>icons/germany-flag-round-icon-16.png</file>
+        <file>icons/greece-flag-round-icon-16.png</file>
+        <file>icons/ireland-flag-round-icon-16.png</file>
+        <file>icons/italy-flag-round-icon-16.png</file>
+        <file>icons/netherlands-flag-round-icon-16.png</file>
+        <file>icons/norway-flag-icon-16.png</file>
+        <file>icons/portugal-flag-round-icon-16.png</file>
+        <file>icons/spain-flag-round-icon-16.png</file>
+        <file>icons/united-kingdom-flag-round-icon-16.png</file>
+        <file>icons/romania-flag-round-icon-16.png</file>
+        <file>icons/poland-flag-round-icon-16.png</file>
+        <file>icons/norway-flag-round-icon-16.png</file>
+        <file>icons/latvia-flag-round-icon-16.png</file>
+        <file>icons/estonia-flag-round-icon-16.png</file>
+        <file>icons/finland-flag-round-icon-16.png</file>
     </qresource>
 </RCC>

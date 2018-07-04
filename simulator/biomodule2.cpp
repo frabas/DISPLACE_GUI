@@ -878,6 +878,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 // RE-INIT....
                                 populations.at(sp)->clear_tot_F_at_age();
                                 //=> obviously, F restart from 0 each year...
+                                populations.at(sp)->add_to_landings_at_end_of_years(populations.at(sp)->get_landings_so_far());
                                 populations.at(sp)->set_landings_so_far(0);
 
                             //}

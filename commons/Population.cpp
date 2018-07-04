@@ -499,6 +499,11 @@ double Population::get_landings_so_far() const
 	return(landings_so_far);
 }
 
+const vector<double>& Population::get_landings_at_end_of_years() const
+{
+    return(landings_at_end_of_years);
+}
+
 
 const vector<double>& Population::get_param_sr() const
 {
@@ -835,6 +840,11 @@ void Population::set_proportion_mature_fish(double _proportion_mature_fish)
 void Population::set_landings_so_far(double _landings_so_far)
 {
 	landings_so_far=_landings_so_far;
+}
+
+void Population::add_to_landings_at_end_of_years(double value)
+{
+    landings_at_end_of_years.push_back(value);
 }
 
 

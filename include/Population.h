@@ -120,6 +120,7 @@ class COMMONSSHARED_EXPORT Population
         double get_quota_uptake() const;
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
+        const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
         void set_quota_uptake(double _quota_uptake);
         void set_selected_szgroups(vector<int> selected_szgroups);
@@ -158,6 +159,7 @@ class COMMONSSHARED_EXPORT Population
         void set_proportion_mature_fish(double _proportion_mature_fish);
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
+        void add_to_landings_at_end_of_years(double value);
         void set_param_sr(const vector<double>& _param_sr);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
         void set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId, double> _field_of_coeff_diffusion_this_pop);
@@ -263,8 +265,8 @@ class COMMONSSHARED_EXPORT Population
         double quota;
         double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
-								 // init at 1. Will change according to the next TAC.
-		double oth_land_multiplier;
+        vector <double> landings_at_end_of_years;
+        double oth_land_multiplier; // init at 1. Will change according to the next TAC.
 
 };
 #endif							 // POPULATION_H

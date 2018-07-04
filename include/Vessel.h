@@ -537,7 +537,8 @@ public:
             return numTrips;
         }
 
-        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops, int tstep);
+        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops, int tstep,
+                                   const DynAllocOptions &dyn_alloc_sce);
 
         double traverseDtree (int tstep, dtree::DecisionTree *tree);
 

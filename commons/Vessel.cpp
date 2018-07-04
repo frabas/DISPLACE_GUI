@@ -1608,7 +1608,8 @@ void Vessel::set_is_choked(int pop, int val)
     is_choked.at(pop)=val;
 }
 
-void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep)
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep,
+                                   const DynAllocOptions &dyn_alloc_sce)
 {
 
     outc(cout  << "...updateTripsStatistics()" << endl);
@@ -1623,6 +1624,9 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
         avgRevenues = avgProfit = 0.0;
     }
 
+
+
+
     lastTrip_revenues = 0.0;
     lastTrip_explicit_revenues=0.0;
     lastTrip_profit = 0.0;
@@ -1635,12 +1639,42 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
         outc(cout  << "...for pop " << pop << endl);
 
 
+        // assuming a hardcoded price flexibility at 25% for all stocks
+        // and price equation Pt=Po *  sum(Qt^e)/sum(Qo^e) with e price flexibility rate and Po initial average price
+        double price_multiplier=1.0;
+        if(tstep>8761) // i.e. apply from second y only (also bc no end_of_years reached yet...)
+        {
+           vector <double> amount_fish_per_y;
+           if(dyn_alloc_sce.option(Options::TACs))
+           {
+              amount_fish_per_y = populations[pop]->get_tac()->get_ts_tac();
+           }
+           else
+           {
+              amount_fish_per_y= populations[pop]->get_landings_at_end_of_years();
+           }
+           double amount_to= amount_fish_per_y.at(0);
+           double numerator=0.0;
+           double denominator=0.0;
+           for(int i=0; i<amount_fish_per_y.size();++i)
+           {
+              numerator += pow(amount_fish_per_y.at(i), -0.25);
+              denominator += pow(amount_to, -0.25);
+           }
+           price_multiplier=numerator/denominator;
+           if(price_multiplier!=price_multiplier) price_multiplier=1.0; // debug if nan
+           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
+        }
+
+
+
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
            // outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
-            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size)
-                    * (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
+            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] *
+                                 get_loc()->get_prices_per_cat(pop, comcat_this_size) * price_multiplier *
+                                  (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
         }
 
         int namepop = populations[pop]->get_name();
@@ -1649,7 +1683,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
             for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
             {
                 int comcat_this_size =comcat_at_szgroup.at(sz);
-                lastTrip_explicit_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+                lastTrip_explicit_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size) *price_multiplier;
             }
 
         }
@@ -2924,6 +2958,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                         }			 // end individual TAC management
                     } // end TAC management
+                    else
+                    {
+                        // track the so_far here as well
+                        double so_far=0.0;
+                        so_far = (populations.at(pop)->get_landings_so_far()) +
+                                a_cumul_weight_this_pop_this_vessel;
+                        // "real-time" update, accounting for this last bit of catches
+                        populations.at(pop)->set_landings_so_far(so_far);
+
+                    }
 
 
                     // update dynamic trip-based cumul for this node
@@ -3496,6 +3540,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
 
     outc(cout << "compute expected profit on grounds " << endl);
 //cout << "compute expected profit on grounds " << endl;
+    double price_multiplier=1.0;
 
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
@@ -3551,7 +3596,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
             revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_targts.at(gr).at(a_trgt) * // weighted average of cpues
                     this->get_carrycapacity() *
                     // choose the most valuable cat (but actually currently the first one is returned: to do)
-                    this->get_loc()->get_prices_per_cat(a_trgt, 0);
+                    this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
 
             tot_revenue+=revenue_per_fgrounds.at(gr);
         }
@@ -3565,7 +3610,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
                 revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
                         this->get_carrycapacity() *
                         // choose the most valuable cat (but actually currently the first one is returned: to do)
-                        this->get_loc()->get_prices_per_cat(pop, 0);
+                        this->get_loc()->get_prices_per_cat(pop, 0)* price_multiplier;
 
                 tot_revenue+=revenue_per_fgrounds.at(gr);
             }

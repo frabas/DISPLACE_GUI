@@ -218,7 +218,7 @@ static void manage_vessel(int idx_v,
                 if(!inactive)
                 {
                     outc(cout  << "...just arrived!" << endl);
-                    vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep);
+                    vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep, dyn_alloc_sce);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
 
                     std::unique_lock<std::mutex> m(listVesselMutex);

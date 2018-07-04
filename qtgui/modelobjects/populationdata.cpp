@@ -42,6 +42,16 @@ PopulationData::PopulationData(const PopulationData &p)
 
 }
 
+QString PopulationData::getName() const
+{
+    return mName;
+}
+
+void PopulationData::setName(const QString &value)
+{
+    mName = value;
+}
+
 const QVector<double> &PopulationData::getAggregate() const
 {
     return aggregate;

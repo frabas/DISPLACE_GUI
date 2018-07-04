@@ -199,6 +199,8 @@ public:
     /* Access to Population statistics */
     int getPopulationsCount() const;
     int getBenthosPopulationsCount() const;
+    const QList<std::shared_ptr<PopulationData> > &getPopulationsList() const { return mPops; }
+    const PopulationData &getPop(int idx) const { return *mPops.at(idx); }
 
     /* Access to Nations statistics */
 
@@ -556,6 +558,7 @@ private:
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;
     QList<std::shared_ptr<VesselData> > mVessels;
+    QList<std::shared_ptr<PopulationData> > mPops;
     QList<std::shared_ptr<FishfarmData> > mFishfarms;
     QList<std::shared_ptr<FirmData> > mFirms;
     QList<std::shared_ptr<WindmillData> > mWindmills;

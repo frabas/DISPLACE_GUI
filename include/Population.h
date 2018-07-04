@@ -34,6 +34,7 @@ class COMMONSSHARED_EXPORT Population
 {
 	public:
         Population(int name,
+                   string pop_name,
             double _avai0_beta,
             double _avai2_beta,
             double _avai3_beta,
@@ -71,6 +72,7 @@ class COMMONSSHARED_EXPORT Population
 		virtual ~Population();
 								 // Copy constructor
 		int get_name() const;
+        string get_pop_name() const;
         const vector<Node *> &get_list_nodes() const;
         const vector<int> &get_selected_szgroups() const;
 		double get_avai0_beta() const;
@@ -196,7 +198,8 @@ class COMMONSSHARED_EXPORT Population
 	protected:
 	private:
 		int name;
-		int idx_pop;
+        string pop_name;
+        int idx_pop;
 		int nb_szgroups;
 		vector<int> selected_szgroups;
 		double avai0_beta;		 // actually, only one value here...
@@ -267,6 +270,7 @@ class COMMONSSHARED_EXPORT Population
 		double landings_so_far;	 // global landings, reinit each start of the year...
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
+
 
 };
 #endif							 // POPULATION_H

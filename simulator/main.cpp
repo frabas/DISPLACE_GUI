@@ -2065,6 +2065,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
+    map<int, string> pop_names;
+    read_pop_names_in_string(pop_names, folder_name_parameterization, inputfolder);
 
     // read the pop-specific betas related to the availability
     // szgroup0
@@ -2157,7 +2159,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         dout(cout  << endl);
 
-        outc(cout << "pop_name: " <<  sp << endl);
+        string pop_name = pop_names[sp];
+        cout << "pop_name: " <<  sp << ": " << pop_name << endl;
+
 
 
 
@@ -2324,6 +2328,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << " create pop... "  << endl;
         populations[sp] =   ( new Population(sp,
+                                             pop_name,
                                              avai0_beta,
                                              avai2_beta,
                                              avai3_beta,

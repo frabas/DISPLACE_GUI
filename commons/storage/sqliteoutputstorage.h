@@ -106,6 +106,7 @@ public:
     size_t getNbPops();
 
     std::vector<std::string> getNationsList();
+    std::vector<std::string> getPopulationsList();
 private:
 };
 

@@ -862,6 +862,27 @@ int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, 
     }
 }
 
+void read_pop_names_in_string(map<int, string>& pop_names,
+                                string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/pop_names_"+folder_name_parameterization+".txt";
+    ifstream file_pop_names;
+    file_pop_names.open(filename.c_str());
+    if(file_pop_names.fail())
+    {
+        cout << "fail to read pop_names_.txt" << endl;
+        open_file_error(filename.c_str());
+
+    }
+    else
+    {
+        fill_map_from_specifications_i_s(file_pop_names,  pop_names,  inputfolder);
+        file_pop_names.close();
+
+    }
+}
+
 
 void read_fuel_prices_per_vsize(map<int, double>& fuel_prices_per_vsize,
                                 string folder_name_parameterization, string inputfolder)

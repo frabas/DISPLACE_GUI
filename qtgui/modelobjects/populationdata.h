@@ -26,6 +26,7 @@
 class PopulationData
 {
     int id;
+    QString mName;
     QVector<double> aggregate;
     QVector<double> mortality;
     QVector<double> SSB;
@@ -40,6 +41,8 @@ public:
     PopulationData(const PopulationData&p);
 
     int getId() const;
+    QString getName() const;
+    void setName(const QString &value);
 
     double getAggregateTot() const;
     void setAggregateTot(double value);

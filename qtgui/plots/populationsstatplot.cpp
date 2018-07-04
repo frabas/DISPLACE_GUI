@@ -105,6 +105,7 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
 
+            //QString popName = model->getPop(ipop).getName(); //NOT IMPLEMENTED, BUT WOULD BE USEFUL TO INJECT NAMES INTO GRAPH LEGEND
             AggregationType aggtype = AggregationType::None;
 
             switch (graphList[igraph]) {

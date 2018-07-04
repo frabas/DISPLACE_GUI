@@ -26,6 +26,7 @@
 #include <helpers.h>
 
 Population::Population(int a_name,
+                       string a_pop_name,
                        double _avai0_beta,
                        double _avai2_beta,
                        double _avai3_beta,
@@ -63,6 +64,7 @@ Population::Population(int a_name,
     UNUSED(landings_so_far);
 
     name=a_name;
+    pop_name=a_pop_name;
 
     dout(cout << "create pop " << name << endl);
 
@@ -308,7 +310,12 @@ Population::~Population()
 
 int Population::get_name() const
 {
-	return(name);
+    return(name);
+}
+
+string Population::get_pop_name() const
+{
+    return(pop_name);
 }
 
 

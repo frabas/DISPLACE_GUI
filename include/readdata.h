@@ -219,6 +219,7 @@ int COMMONSSHARED_EXPORT read_prices_per_harbour(types::NodeId i, string a_quart
 int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
 void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
+
 // metier specific
 map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_sel_ogives(string folder_name_parameterization, string inputfolder);
@@ -257,7 +258,7 @@ multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lon(string folder_name
 multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
 
 // pop specific
-// beta per pop fro a given szgroup
+void COMMONSSHARED_EXPORT  read_pop_names_in_string(map<int, string>& pop_names, string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> COMMONSSHARED_EXPORT read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);

@@ -27,8 +27,6 @@ class FishfarmsStatsPlot : public BaseStatsPlotImpl
 
     DisplaceModel *lastModel = nullptr;
     displace::plot::FishfarmsStat lastStat;
-
-    QString mSaveFilename;
 public:
     FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeLine);
 
@@ -49,7 +47,6 @@ private:
                                                                               displace::plot::FishfarmsStat stattype,
                                                                               displace::plot::AggregationType aggtype,
                                                                               int popid, std::vector<int> szid);
-    double getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype);
     void saveTo();
 };
 

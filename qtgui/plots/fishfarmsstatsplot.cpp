@@ -210,31 +210,53 @@ void FishfarmsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocati
 
 void FishfarmsStatsPlot::saveTo()
 {
-    mSaveFilename = "fishfarms.txt";
-}
+    if (!lastModel)
+        return;
 
-double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype)
-{
-    switch (stattype) {
-    case FishfarmsStat::FF_FishMeanWeight:
-        return model->getFishfarmsStatistics().getValue(tstep).meanwForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_FishHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).fishharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_EggsHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).eggsharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_AnnualProfit:
-        return model->getFishfarmsStatistics().getValue(tstep).annualprofitForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_NetDischargeN:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_NetDischargeP:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_CumulNetDischargeN:
-        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargeNForFishfarmAndFarmGroup(farmid, farmtype);
-    case FishfarmsStat::FF_CumulNetDischargeP:
-        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargePForFishfarmAndFarmGroup(farmid, farmtype);
+    auto db = lastModel->getOutputStorage();
+    if (db == nullptr)
+        return;
+
+    QString fn = QFileDialog::getSaveFileName(nullptr, QObject::tr("Save plot data"), QString(), QObject::tr("Csv file (*.csv)"));
+    if (!fn.isEmpty()) {
+        QList<int> ipl = lastModel->getInterestingFishfarms();
+
+        QFile file(fn);
+        if (!file.open(QIODevice::ReadWrite)) {
+            QMessageBox::warning(nullptr, QObject::tr("Error"), QObject::tr("Cannot save to %1: %2").arg(fn).arg(file.errorString()));
+            return;
+        }
+
+        QTextStream strm(&file);
+
+        auto farmsTypeGroups = lastModel->getFishfarmsTypesList();
+        QList<int> interFishfarmsTypesList = farmsTypeGroups->list();
+        std::vector<int> ftypes;
+        for (auto i : interFishfarmsTypesList)
+            ftypes.push_back(i);
+
+        // TODO change this accordingly to type.
+        AggregationType aggtype = AggregationType::None;
+
+        for (auto ip : ipl) {
+            auto name = lastModel->getFishfarmId(ip);
+            strm << name << "\n";
+
+            auto v = getData(lastModel, lastStat, aggtype, ip, ftypes);
+            auto &k = std::get<0>(v);
+            auto &d = std::get<1>(v);
+
+            strm << "t";
+            for (int i = 0; i < k.size(); ++i) {
+                strm << "," << k[i];
+            }
+            strm << "\nv";
+            for (int i = 0; i < d.size(); ++i) {
+                strm << "," << d[i];
+            }
+            strm << "\n\n";
+        }
     }
-
-    return 0;
 }
 
 std::tuple<QVector<double>, QVector<double> > FishfarmsStatsPlot::getData(DisplaceModel *model,

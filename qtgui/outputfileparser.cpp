@@ -76,7 +76,7 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     } else if (name.startsWith("popnodes_cumulcatches_per_pop_")) {
         parsePopCumcatchesPerPop(&file, tstep, mModel, period);
     } else if (name.startsWith("nodes_envt_")) {
-        parseNodesEnvt(&file, tstep, mModel, period);
+        //parseNodesEnvt(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
         parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {

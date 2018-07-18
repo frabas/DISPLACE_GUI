@@ -77,6 +77,8 @@ protected:
     void parsePopTariffs(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopImpact(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+
+    [[deprecated]]
     void parseNodesEnvt(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopBenthosStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parseFishfarmslogsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);

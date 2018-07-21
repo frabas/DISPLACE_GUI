@@ -7,6 +7,7 @@
 #include <QList>
 
 #include <memory>
+#include  <QVector>
 
 class SimpleNonInterestingNodesGraphSimplifier
 {

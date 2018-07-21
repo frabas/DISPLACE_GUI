@@ -190,6 +190,10 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Net discharge P (kg)"));
         break;
+    case FishfarmsStat::FF_NetDischargeC:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("Net discharge C (kg)"));
+        break;
     case FishfarmsStat::FF_CumulNetDischargeN:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge N (kg)"));
@@ -197,6 +201,10 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
     case FishfarmsStat::FF_CumulNetDischargeP:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge P (kg)"));
+        break;
+    case FishfarmsStat::FF_CumulNetDischargeC:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge C (kg)"));
         break;
     }
 }

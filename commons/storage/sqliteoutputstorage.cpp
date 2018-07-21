@@ -928,14 +928,30 @@ TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsS
             fld = p->mFishfarmsTable->fldProfit;
             break;
         case displace::plot::FishfarmsStat::FF_FishMeanWeight:
+        fld = p->mFishfarmsTable->fldMeanW;
+        break;
         case displace::plot::FishfarmsStat::FF_NetDischargeN:
+        fld = p->mFishfarmsTable->fldNetDisNperH;
+        break;
         case displace::plot::FishfarmsStat::FF_NetDischargeP:
+        fld = p->mFishfarmsTable->fldNetDisCperH;
+        break;
+        case displace::plot::FishfarmsStat::FF_NetDischargeC:
+        fld = p->mFishfarmsTable->fldNetDisCperH;
+        break;
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeN:
+        fld = p->mFishfarmsTable->fldNetDisNcum;
+        break;
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeP:
-            std::ostringstream ss;
-            ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
-            std::cerr << ss.str() << "\n";
-            throw std::logic_error(ss.str());
+        fld = p->mFishfarmsTable->fldNetDisPcum;
+        break;
+        case displace::plot::FishfarmsStat::FF_CumulNetDischargeC:
+        fld = p->mFishfarmsTable->fldNetDisCcum;
+        break;
+       //     std::ostringstream ss;
+       //     ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
+       //     std::cerr << ss.str() << "\n";
+       //     throw std::logic_error(ss.str());
     }
 
     switch (aggtype) {

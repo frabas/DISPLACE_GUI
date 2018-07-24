@@ -23,7 +23,7 @@ struct EnvironmentData {
     double dissolvedcarbon;
 };
 
-struct NodesStatData {
+struct NodesPopData {
     tstep_t tstep;
     types::NodeId nodeId;
 

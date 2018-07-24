@@ -16,7 +16,7 @@ public:
     void attach (std::shared_ptr<SQLiteOutputStorage> storage);
 
     std::shared_ptr<types::EnvironmentData> getEnvironmentData (types::NodeId nodeId, types::tstep_t tstep);
-    std::shared_ptr<types::NodesStatData> getNodesStatData (types::NodeId nodeId, types::tstep_t tstep);
+    std::shared_ptr<types::NodesPopData> getNodesPopData(types::NodeId nodeId, types::tstep_t tstep);
 };
 
 #endif // MAPSDATAPROVIDER_H

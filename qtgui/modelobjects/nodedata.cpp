@@ -100,11 +100,11 @@ NodeData::~NodeData()
     delete []mBenthosMeanweight;
 }
 
-std::shared_ptr<types::NodesStatData> NodeData::getNodesData() const
+std::shared_ptr<types::NodesPopData> NodeData::getNodesData() const
 {
     auto tstep = mModel->getCurrentStep();
     auto &dp = mModel->getMapDataProvider();
-    return dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
+    return dp.getNodesPopData(get_idx_node(), types::tstep_t(tstep));
 }
 
 int NodeData::getPopCount() const

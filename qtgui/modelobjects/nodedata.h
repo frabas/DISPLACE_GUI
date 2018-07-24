@@ -28,7 +28,7 @@
 
 #include <memory>
 
-namespace types { class NodesStatData; }
+namespace types { class NodesPopData; }
 
 class DisplaceModel;
 
@@ -260,7 +260,7 @@ private:
     double *mFishfarmCumulNetDischargeN;
     double *mFishfarmCumulNetDischargeP;
 
-    std::shared_ptr<types::NodesStatData> getNodesData() const;
+    std::shared_ptr<types::NodesPopData> getNodesData() const;
 
     int areaType;
 

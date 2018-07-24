@@ -25,7 +25,7 @@ public:
     }
 };
 
-class NodePopCachedData : public CachedDataStorage<types::NodesStatData> {
+class NodePopCachedData : public CachedDataStorage<types::NodesPopData> {
     PopTable &table;
 public:
     NodePopCachedData(PopTable &t) : table(t) {}
@@ -35,7 +35,7 @@ public:
             d.dirty = false;
             d.cachedTstep = step;
             if (!d.data)
-                d.data = std::make_shared<types::NodesStatData>();
+                d.data = std::make_shared<types::NodesPopData>();
 
             d.data->tstep = types::tstep_t(n.tstep);
             d.data->nodeId = n.nodeId;
@@ -94,7 +94,7 @@ std::shared_ptr<types::EnvironmentData> MapsDataProvider::getEnvironmentData(typ
     return p->environmentData->getData(nodeId, step);
 }
 
-std::shared_ptr<types::NodesStatData> MapsDataProvider::getNodesStatData(types::NodeId nodeId, types::tstep_t tstep)
+std::shared_ptr<types::NodesPopData> MapsDataProvider::getNodesPopData(types::NodeId nodeId, types::tstep_t tstep)
 {
     if (p->db == nullptr)
         return nullptr;

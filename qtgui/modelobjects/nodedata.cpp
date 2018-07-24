@@ -20,24 +20,19 @@
 
 #include "nodedata.h"
 
+#include <mapsdataprovider.h>
 #include <displacemodel.h>
 
 NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
       mDeleted(false),
-      mHarbourId(-1),
-      mPop(0),
-      mPopTot(0),
-      mPopW(0),
-      mPopWTot(0)
+      mHarbourId(-1)
 {
     if (nd) {
         int N = nd->get_nbpops();
         int N2 = nd->get_nbbenthospops();
         int N3 = 1; // only one farm per node?
-        mPop = new double[N] ;
-        mPopW = new double[N] ;
         mImpact = new double[N];
         mCumcatchesPerPop = new double[N];
         mBenthosBiomass = new double[N2];
@@ -55,8 +50,6 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mFishfarmCumulNetDischargeP = new double[N3];
 
         for (int i = 0; i < N; ++i) {
-            mPop[i] = 0.0;
-            mPopW[i] = 0.0;
             mImpact[i] = 0.0;
             mCumcatchesPerPop[i] = 0.0;
         }
@@ -108,8 +101,6 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
 
 NodeData::~NodeData()
 {
-    delete []mPop;
-    delete []mPopW;
     delete []mImpact;
     delete []mCumcatchesPerPop;
     delete []mBenthosBiomass;
@@ -130,54 +121,58 @@ int NodeData::getBenthosPopCount() const
 
 void NodeData::setPop(int pop, double v)
 {
-    if (pop < mNode->get_nbpops() && pop > 0)
-        mPop[pop] = v;
 }
 
 void NodeData::setPopTot(double tot)
 {
-    mPopTot = tot;
 }
 
 void NodeData::setPop(QList<double> v, double tot)
 {
-    for (int i=0; i < v.size() && i < mNode->get_nbpops(); ++i) {
-        mPop[i] = v[i];
-    }
-    mPopTot = tot;
 }
 
 double NodeData::getPop(int pop) const
 {
-    if (pop < mNode->get_nbpops() && pop >= 0)
-        return mPop[pop];
+    auto tstep = mModel->getCurrentStep();
+    auto &dp = mModel->getMapDataProvider();
+    auto v = dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
+
+    if (v && pop < v->totN.size() && pop >= 0)
+        return v->totN[pop];
 
     return -1;
 }
 
+double NodeData::getPopTot() const
+{
+    return 0;
+}
+
+double NodeData::getPopWTot() const
+{
+    return 0;
+}
+
 void NodeData::setPopW(int pop, double val)
 {
-    if (pop < mNode->get_nbpops() && pop > 0)
-        mPopW[pop] = val;
 }
 
 void NodeData::setPopWTot(double tot)
 {
-    mPopWTot = tot;
 }
 
 void NodeData::setPopW(QList<double> v, double tot)
 {
-    for (int i=0; i < v.size() && i < mNode->get_nbpops(); ++i) {
-        mPopW[i] = v[i];
-    }
-    mPopWTot = tot;
 }
 
 double NodeData::getPopW(int pop) const
 {
-    if (pop < mNode->get_nbpops() && pop >= 0)
-        return mPopW[pop];
+    auto tstep = mModel->getCurrentStep();
+    auto &dp = mModel->getMapDataProvider();
+    auto v = dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
+
+    if (v && pop < v->totW.size() && pop >= 0)
+        return v->totW[pop];
 
     return -1;
 }

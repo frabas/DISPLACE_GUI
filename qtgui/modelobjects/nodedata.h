@@ -130,17 +130,13 @@ public:
     void setPopTot(double tot);
     void setPop(QList<double> v, double tot);
     double getPop(int pop) const ;
-    double getPopTot () const {
-        return mPopTot;
-    }
+    double getPopTot () const;
 
     void setPopW(int pop, double val);
     void setPopWTot(double tot);
     void setPopW(QList<double> v, double tot);
     double getPopW(int pop) const ;
-    double getPopWTot () const {
-        return mPopWTot;
-    }
+    double getPopWTot () const;
 
     void setImpact(int pop, double impact);
     double getImpact(int pop) const {
@@ -242,10 +238,6 @@ private:
     bool mDeleted;
     bool mRelevant;
     int mHarbourId;
-    double *mPop;
-    double mPopTot;
-    double *mPopW;
-    double mPopWTot;
 
     double *mImpact;
     double *mCumcatchesPerPop;

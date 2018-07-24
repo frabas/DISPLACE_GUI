@@ -24,9 +24,10 @@ struct EnvironmentData {
 };
 
 struct NodesStatData {
-    types::NodeId nodeId;
     tstep_t tstep;
-    double cumftime, swarea, ssswarea, cumcat, cumcatthr, cumdis;
+    types::NodeId nodeId;
+
+    std::vector<double> totN, totW, cumC, cumD, impact;
 };
 
 }

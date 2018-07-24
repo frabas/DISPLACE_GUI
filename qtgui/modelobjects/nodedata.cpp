@@ -100,7 +100,7 @@ NodeData::~NodeData()
     delete []mBenthosMeanweight;
 }
 
-std::shared_ptr<types::NodesStatData> NodeData::getNodesData(int pop) const
+std::shared_ptr<types::NodesStatData> NodeData::getNodesData() const
 {
     auto tstep = mModel->getCurrentStep();
     auto &dp = mModel->getMapDataProvider();
@@ -132,7 +132,7 @@ void NodeData::setPop(QList<double> v, double tot)
 
 double NodeData::getPop(int pop) const
 {
-    auto v = getNodesData(pop);
+    auto v = getNodesData();
     if (v && pop < v->totN.size() && pop >= 0)
         return v->totN[pop];
 
@@ -141,17 +141,25 @@ double NodeData::getPop(int pop) const
 
 double NodeData::getPopTot() const
 {
-    return 0;
+    auto v = getNodesData();
+    if (v)
+        return std::accumulate(v->totN.begin(), v->totN.end(), 0.0);
+
+    return -1;
 }
 
 double NodeData::getPopWTot() const
 {
-    return 0;
+    auto v = getNodesData();
+    if (v)
+        return std::accumulate(v->totW.begin(), v->totW.end(), 0.0);
+
+    return -1;
 }
 
 double NodeData::getImpact(int pop) const
 {
-    auto v = getNodesData(pop);
+    auto v = getNodesData();
     if (v && pop < v->impact.size() && pop >= 0)
         return v->impact[pop];
 
@@ -160,7 +168,7 @@ double NodeData::getImpact(int pop) const
 
 double NodeData::getCumcatchesPerPop(int pop)
 {
-    auto v = getNodesData(pop);
+    auto v = getNodesData();
     if (v && pop < v->cumC.size() && pop >= 0)
         return v->cumC[pop];
 
@@ -181,7 +189,7 @@ void NodeData::setPopW(QList<double> v, double tot)
 
 double NodeData::getPopW(int pop) const
 {
-    auto v = getNodesData(pop);
+    auto v = getNodesData();
     if (v && pop < v->totW.size() && pop >= 0)
         return v->totW[pop];
 

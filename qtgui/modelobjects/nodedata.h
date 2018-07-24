@@ -260,7 +260,7 @@ private:
     double *mFishfarmCumulNetDischargeN;
     double *mFishfarmCumulNetDischargeP;
 
-    std::shared_ptr<types::NodesStatData> getNodesData(int pop) const;
+    std::shared_ptr<types::NodesStatData> getNodesData() const;
 
     int areaType;
 

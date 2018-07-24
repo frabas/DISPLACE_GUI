@@ -30,14 +30,7 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
       mHarbourId(-1)
 {
     if (nd) {
-        int N = nd->get_nbpops();
-        int N2 = nd->get_nbbenthospops();
         int N3 = 1; // only one farm per node?
-        mBenthosBiomass = new double[N2];
-        mBenthosNumber = new double[N2];
-        mBenthosMeanweight = new double[N2];
-        mBenthosBiomassOverK=new double[N2];
-        mBenthosNumberOverK=new double[N2];
         mFishfarmMeanweight = new double[N3];
         mFishfarmFishHarvestedKg = new double[N3];
         mFishfarmEggsHarvestedKg = new double[N3];
@@ -46,23 +39,6 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mFishfarmNetDischargeP = new double[N3];
         mFishfarmCumulNetDischargeN = new double[N3];
         mFishfarmCumulNetDischargeP = new double[N3];
-
-        for (int j = 0; j < N2; ++j) {
-            mBenthosBiomass[j] = 0.0;
-        }
-        for (int j = 0; j < N2; ++j) {
-            mBenthosNumber[j] = 0.0;
-        }
-        for (int j = 0; j < N2; ++j) {
-            mBenthosMeanweight[j] = 0.0;
-        }
-
-        for (int j = 0; j < N2; ++j) {
-            mBenthosBiomassOverK[j] = 0.0;
-        }
-        for (int j = 0; j < N2; ++j) {
-            mBenthosNumberOverK[j] = 0.0;
-        }
 
         for (int j = 0; j < N3; ++j) {
             mFishfarmMeanweight[j] = 0.0;
@@ -93,18 +69,20 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     }
 }
 
-NodeData::~NodeData()
-{
-    delete []mBenthosBiomass;
-    delete []mBenthosNumber;
-    delete []mBenthosMeanweight;
-}
+NodeData::~NodeData() = default;
 
 std::shared_ptr<types::NodesPopData> NodeData::getNodesData() const
 {
     auto tstep = mModel->getCurrentStep();
     auto &dp = mModel->getMapDataProvider();
     return dp.getNodesPopData(get_idx_node(), types::tstep_t(tstep));
+}
+
+std::shared_ptr<types::NodesBenthosData> NodeData::getBenthosData() const
+{
+    auto tstep = mModel->getCurrentStep();
+    auto &dp = mModel->getMapDataProvider();
+    return dp.getNodesBenthosData(get_idx_node(), types::tstep_t(tstep));
 }
 
 int NodeData::getPopCount() const
@@ -207,28 +185,67 @@ void NodeData::setCumcatchesPerPop(int pop, double cumcatchesperpop)
 
 void NodeData::setBenthosBiomass(int func, double benthosbiomass)
 {
-    mBenthosBiomass[func] = benthosbiomass;
 }
-
 
 void NodeData::setBenthosNumber(int func, double benthosnumber)
 {
-    mBenthosNumber[func] = benthosnumber;
 }
 
 void NodeData::setBenthosMeanweight(int func, double benthosmeanweight)
 {
-    mBenthosMeanweight[func] = benthosmeanweight;
 }
 
 void NodeData::setBenthosBiomassOverK(int func, double benthosbiomassoverK)
 {
-    mBenthosBiomassOverK[func] = benthosbiomassoverK;
 }
 
 void NodeData::setBenthosNumberOverK(int func, double benthosnumberoverK)
 {
-    mBenthosNumberOverK[func] = benthosnumberoverK;
+}
+
+double NodeData::getBenthosBiomass(int func) const
+{
+    auto v = getBenthosData();
+    if (v && func < v->mBenthosBiomass.size() && func >= 0)
+        return v->mBenthosBiomass[func];
+
+    return -1;
+}
+
+double NodeData::getBenthosNumber(int func) const
+{
+    auto v = getBenthosData();
+    if (v && func < v->mBenthosNumber.size() && func >= 0)
+        return v->mBenthosNumber[func];
+
+    return -1;
+}
+
+double NodeData::getBenthosMeanweight(int func) const
+{
+    auto v = getBenthosData();
+    if (v && func < v->mBenthosMeanweight.size() && func >= 0)
+        return v->mBenthosMeanweight[func];
+
+    return -1;
+}
+
+double NodeData::getBenthosBiomassOverK(int func) const
+{
+    auto v = getBenthosData();
+    if (v && func < v->mBenthosBiomassOverK.size() && func >= 0)
+        return v->mBenthosBiomassOverK[func];
+
+    return -1;
+}
+
+double NodeData::getBenthosNumberOverK(int func) const
+{
+    auto v = getBenthosData();
+    if (v && func < v->mBenthosNumberOverK.size() && func >= 0)
+        return v->mBenthosNumberOverK[func];
+
+    return -1;
 }
 
 void NodeData::setFishfarmFishMeanWeight(int farm, double fishfarmfishmeanweight)

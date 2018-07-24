@@ -30,6 +30,13 @@ struct NodesPopData {
     std::vector<double> totN, totW, cumC, cumD, impact;
 };
 
+struct NodesBenthosData {
+    tstep_t tstep;
+    types::NodeId nodeId;
+    
+    std::vector<double> mBenthosBiomass, mBenthosNumber, mBenthosMeanweight, mBenthosBiomassOverK, mBenthosNumberOverK;
+};
+
 }
 
 #endif // MODELTYPES_H

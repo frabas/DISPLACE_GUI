@@ -1,4 +1,5 @@
 #include <storage/tables/poptable.h>
+#include <storage/tables/funcgroupstable.h>
 #include "mapsdataprovider.h"
 #include "storage/tables/nodesenvttable.h"
 
@@ -51,6 +52,32 @@ public:
     }
 };
 
+class NodeBenthosCachedData : public CachedDataStorage<types::NodesBenthosData> {
+    FuncGroupsTable &table;
+public:
+    NodeBenthosCachedData(FuncGroupsTable &t) : table(t) {}
+    void queryAllData(types::tstep_t step) override {
+        table.queryAllNodesAtStep(step.value(),[this,step](FuncGroupsTable::Stat stat) {
+            auto &d = getRecord(stat.nodeId);
+            d.dirty = false;
+            d.cachedTstep = step;
+            if (!d.data)
+                d.data = std::make_shared<types::NodesBenthosData>();
+
+            d.data->tstep = types::tstep_t(stat.tstep);
+            d.data->nodeId = stat.nodeId;
+
+            setAt(d.data->mBenthosBiomass, stat.funcId, stat.bio);
+            setAt(d.data->mBenthosBiomassOverK, stat.funcId, stat.bioK);
+            setAt(d.data->mBenthosMeanweight, stat.funcId, stat.bioMeanW);
+            setAt(d.data->mBenthosNumber, stat.funcId, stat.numTot);
+            setAt(d.data->mBenthosNumberOverK, stat.funcId, stat.numK);
+
+            return true;
+        } );
+    }
+};
+
 }
 
 struct MapsDataProvider::Impl
@@ -60,6 +87,7 @@ struct MapsDataProvider::Impl
 
     std::shared_ptr<EnvironmentCachedData> environmentData;
     std::shared_ptr<NodePopCachedData> nodeData;
+    std::shared_ptr<NodeBenthosCachedData> benthosData;
 };
 
 MapsDataProvider::MapsDataProvider()
@@ -84,6 +112,9 @@ void MapsDataProvider::attach(std::shared_ptr<SQLiteOutputStorage> storage)
     auto t = p->db->getPopTable();
     p->nodeData = std::make_shared<NodePopCachedData>(*t);
     p->nodeData->invalidateAllCache();
+
+    p->benthosData = std::make_shared<NodeBenthosCachedData>(*(p->db->getFuncGroupsTable()));
+    p->benthosData->invalidateAllCache();
 }
 
 std::shared_ptr<types::EnvironmentData> MapsDataProvider::getEnvironmentData(types::NodeId nodeId, types::tstep_t step)
@@ -99,4 +130,12 @@ std::shared_ptr<types::NodesPopData> MapsDataProvider::getNodesPopData(types::No
     if (p->db == nullptr)
         return nullptr;
     return p->nodeData->getData(nodeId, tstep);
+}
+
+std::shared_ptr<types::NodesBenthosData>
+MapsDataProvider::getNodesBenthosData(types::NodeId nodeId, types::tstep_t tstep)
+{
+    if (p->db == nullptr)
+        return nullptr;
+    return p->benthosData->getData(nodeId, tstep);
 }

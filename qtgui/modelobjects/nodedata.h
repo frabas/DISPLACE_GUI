@@ -28,7 +28,10 @@
 
 #include <memory>
 
-namespace types { class NodesPopData; }
+namespace types {
+class NodesPopData;
+class NodesBenthosData;
+}
 
 class DisplaceModel;
 
@@ -154,27 +157,16 @@ public:
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
     double getCumcatchesPerPop(int pop);
 
-    void setBenthosBiomass(int func, double benthosbiomass);
-    double getBenthosBiomass(int func) const {
-        return mBenthosBiomass[func];
-    }
-    void setBenthosNumber(int func, double benthosnumber);
-    double getBenthosNumber(int func) const {
-        return mBenthosNumber[func];
-    }
-    void setBenthosMeanweight(int func, double benthosmeanweight);
-    double getBenthosMeanweight(int func) const {
-        return mBenthosMeanweight[func];
-    }
-    void setBenthosBiomassOverK(int func, double benthosbiomassoverK);
-    double getBenthosBiomassOverK(int func) const {
-        return mBenthosBiomassOverK[func];
-    }
-    void setBenthosNumberOverK(int func, double benthosnumberoverK);
-    double getBenthosNumberOverK(int func) const {
-        return mBenthosNumberOverK[func];
-    }
-
+    [[deprecated]] void setBenthosBiomass(int func, double benthosbiomass);
+    double getBenthosBiomass(int func) const;
+    [[deprecated]] void setBenthosNumber(int func, double benthosnumber);
+    double getBenthosNumber(int func) const;
+    [[deprecated]] void setBenthosMeanweight(int func, double benthosmeanweight);
+    double getBenthosMeanweight(int func) const ;
+    [[deprecated]] void setBenthosBiomassOverK(int func, double benthosbiomassoverK);
+    double getBenthosBiomassOverK(int func) const ;
+    [[deprecated]] void setBenthosNumberOverK(int func, double benthosnumberoverK);
+    double getBenthosNumberOverK(int func) const;
 
     void setFishfarmFishMeanWeight(int farmid, double meanw_kg);
     double getFishfarmFishMeanWeight(int farm) const {
@@ -216,9 +208,6 @@ public:
         return mFishfarmCumulNetDischargeP[farm];
     }
 
-
-
-
     int getHarbourId() const;
     void setHarbourId(int value);
 
@@ -245,12 +234,6 @@ private:
     bool mRelevant;
     int mHarbourId;
 
-    double *mBenthosBiomass;
-    double *mBenthosNumber;
-    double *mBenthosMeanweight;
-    double *mBenthosBiomassOverK;
-    double *mBenthosNumberOverK;
-
     double *mFishfarmMeanweight;
     double *mFishfarmFishHarvestedKg;
     double *mFishfarmEggsHarvestedKg;
@@ -261,6 +244,7 @@ private:
     double *mFishfarmCumulNetDischargeP;
 
     std::shared_ptr<types::NodesPopData> getNodesData() const;
+    std::shared_ptr<types::NodesBenthosData> getBenthosData() const;
 
     int areaType;
 

@@ -78,9 +78,9 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     } else if (name.startsWith("nodes_envt_")) {
         //parseNodesEnvt(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
-        parsePopBenthosStats(&file, tstep, mModel, period);
+        //parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {
-        parsePopBenthosStats(&file, tstep, mModel, period);
+        //parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("loglike_")) {
         parseVessels(&file, tstep, mModel, period);
     } else if (name.startsWith("fishfarmslogs_")) {

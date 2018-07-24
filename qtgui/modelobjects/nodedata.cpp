@@ -33,8 +33,6 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         int N = nd->get_nbpops();
         int N2 = nd->get_nbbenthospops();
         int N3 = 1; // only one farm per node?
-        mImpact = new double[N];
-        mCumcatchesPerPop = new double[N];
         mBenthosBiomass = new double[N2];
         mBenthosNumber = new double[N2];
         mBenthosMeanweight = new double[N2];
@@ -49,10 +47,6 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mFishfarmCumulNetDischargeN = new double[N3];
         mFishfarmCumulNetDischargeP = new double[N3];
 
-        for (int i = 0; i < N; ++i) {
-            mImpact[i] = 0.0;
-            mCumcatchesPerPop[i] = 0.0;
-        }
         for (int j = 0; j < N2; ++j) {
             mBenthosBiomass[j] = 0.0;
         }
@@ -101,11 +95,16 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
 
 NodeData::~NodeData()
 {
-    delete []mImpact;
-    delete []mCumcatchesPerPop;
     delete []mBenthosBiomass;
     delete []mBenthosNumber;
     delete []mBenthosMeanweight;
+}
+
+std::shared_ptr<types::NodesStatData> NodeData::getNodesData(int pop) const
+{
+    auto tstep = mModel->getCurrentStep();
+    auto &dp = mModel->getMapDataProvider();
+    return dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
 }
 
 int NodeData::getPopCount() const
@@ -133,10 +132,7 @@ void NodeData::setPop(QList<double> v, double tot)
 
 double NodeData::getPop(int pop) const
 {
-    auto tstep = mModel->getCurrentStep();
-    auto &dp = mModel->getMapDataProvider();
-    auto v = dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
-
+    auto v = getNodesData(pop);
     if (v && pop < v->totN.size() && pop >= 0)
         return v->totN[pop];
 
@@ -153,6 +149,24 @@ double NodeData::getPopWTot() const
     return 0;
 }
 
+double NodeData::getImpact(int pop) const
+{
+    auto v = getNodesData(pop);
+    if (v && pop < v->impact.size() && pop >= 0)
+        return v->impact[pop];
+
+    return -1;
+}
+
+double NodeData::getCumcatchesPerPop(int pop)
+{
+    auto v = getNodesData(pop);
+    if (v && pop < v->cumC.size() && pop >= 0)
+        return v->cumC[pop];
+
+    return -1;
+}
+
 void NodeData::setPopW(int pop, double val)
 {
 }
@@ -167,10 +181,7 @@ void NodeData::setPopW(QList<double> v, double tot)
 
 double NodeData::getPopW(int pop) const
 {
-    auto tstep = mModel->getCurrentStep();
-    auto &dp = mModel->getMapDataProvider();
-    auto v = dp.getNodesStatData(get_idx_node(), types::tstep_t(tstep));
-
+    auto v = getNodesData(pop);
     if (v && pop < v->totW.size() && pop >= 0)
         return v->totW[pop];
 
@@ -179,13 +190,11 @@ double NodeData::getPopW(int pop) const
 
 void NodeData::setImpact(int pop, double impact)
 {
-    mImpact[pop] = impact;
 }
 
 
 void NodeData::setCumcatchesPerPop(int pop, double cumcatchesperpop)
 {
-    mCumcatchesPerPop[pop] = cumcatchesperpop;
 }
 
 void NodeData::setBenthosBiomass(int func, double benthosbiomass)
@@ -268,9 +277,6 @@ void NodeData::setAreaType(int value)
 {
     areaType = value;
 }
-
-
-
 
 /**
  * @brief NodeData::appendAdiancency

@@ -28,6 +28,8 @@
 
 #include <memory>
 
+namespace types { class NodesStatData; }
+
 class DisplaceModel;
 
 /** \brief an extension class for Node
@@ -126,27 +128,31 @@ public:
 
     int getPopCount() const;
     int getBenthosPopCount() const;
+    [[deprecated]]
     void setPop(int pop, double v);
+    [[deprecated]]
     void setPopTot(double tot);
+    [[deprecated]]
     void setPop(QList<double> v, double tot);
     double getPop(int pop) const ;
     double getPopTot () const;
 
+    [[deprecated]]
     void setPopW(int pop, double val);
+    [[deprecated]]
     void setPopWTot(double tot);
+    [[deprecated]]
     void setPopW(QList<double> v, double tot);
     double getPopW(int pop) const ;
     double getPopWTot () const;
 
+    [[deprecated]]
     void setImpact(int pop, double impact);
-    double getImpact(int pop) const {
-        return mImpact[pop];
-    }
+    double getImpact(int pop) const;
 
+    [[deprecated]]
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
-    double getCumcatchesPerPop(int pop) const {
-        return mCumcatchesPerPop[pop];
-    }
+    double getCumcatchesPerPop(int pop);
 
     void setBenthosBiomass(int func, double benthosbiomass);
     double getBenthosBiomass(int func) const {
@@ -239,8 +245,6 @@ private:
     bool mRelevant;
     int mHarbourId;
 
-    double *mImpact;
-    double *mCumcatchesPerPop;
     double *mBenthosBiomass;
     double *mBenthosNumber;
     double *mBenthosMeanweight;
@@ -256,6 +260,7 @@ private:
     double *mFishfarmCumulNetDischargeN;
     double *mFishfarmCumulNetDischargeP;
 
+    std::shared_ptr<types::NodesStatData> getNodesData(int pop) const;
 
     int areaType;
 

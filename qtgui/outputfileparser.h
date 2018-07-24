@@ -67,6 +67,7 @@ signals:
     void parseCompleted();
 
 protected:
+    [[deprecated]]
     void parsePopStart(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model, int period = -1);

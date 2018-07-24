@@ -56,7 +56,7 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     }
 
     if (name.startsWith("popnodes_start_") || name.startsWith("popnodes_inc_")) {
-        parsePopStart(&file, tstep, mModel, period);
+        //parsePopStart(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumftime_")) {
         parsePopCumftime(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumsweptarea_")) {
@@ -72,9 +72,9 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     } else if (name.startsWith("popnodes_tariffs_")) {
         parsePopTariffs(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_impact_")) {
-        parsePopImpact(&file, tstep, mModel, period);
+        //parsePopImpact(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumulcatches_per_pop_")) {
-        parsePopCumcatchesPerPop(&file, tstep, mModel, period);
+        //parsePopCumcatchesPerPop(&file, tstep, mModel, period);
     } else if (name.startsWith("nodes_envt_")) {
         //parseNodesEnvt(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {

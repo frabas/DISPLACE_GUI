@@ -46,7 +46,8 @@ bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
 
     double totN_this_pop, totW_this_pop;
 
-    for(unsigned int name_pop = 0; name_pop < node->get_Ns_pops_at_szgroup().size(); name_pop++) {
+      for(unsigned int name_pop = 0; name_pop < node->get_nbpops(); name_pop++) {
+
         totN_this_pop=0;		 // re-init
         totW_this_pop= 0.0;
         auto lower_init_we = weight_at_szgroup.lower_bound(name_pop);
@@ -65,9 +66,9 @@ bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
             totW_this_pop+= ns[sz] * w.at(sz);
         }
 
-        if(totN_this_pop==0) return 1;
 
-        SQLiteTable::insert (p->statement, std::make_tuple(
+
+        if(totN_this_pop!=0) SQLiteTable::insert (p->statement, std::make_tuple(
                     (int)node->get_idx_node().toIndex(),
                     tstep,
                     (int)name_pop,

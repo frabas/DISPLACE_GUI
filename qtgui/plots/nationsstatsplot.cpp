@@ -76,13 +76,13 @@ void NationsStatsPlot::update(QCustomPlot *plot)
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/belgium-flag-round-icon-16.png")));
         if(nationName.toStdString()=="DE" || nationName.toStdString()=="DEU")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/germany-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="ES" || nationName.toStdString()=="SPN")
+        if(nationName.toStdString()=="ES" || nationName.toStdString()=="ESP" || nationName.toStdString()=="SPN")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/spain-flag-round-icon-16.png")));
         if(nationName.toStdString()=="FR" || nationName.toStdString()=="FRA")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/france-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="GB" || nationName.toStdString()=="UK")
+        if(nationName.toStdString()=="GB" || nationName.toStdString()=="GBR" || nationName.toStdString()=="UK")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/united-kingdom-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="IE" || nationName.toStdString()=="IRE")
+        if(nationName.toStdString()=="IE" || nationName.toStdString()=="IRL" ||  nationName.toStdString()=="IRE")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/ireland-flag-round-icon-16.png")));
         if(nationName.toStdString()=="ND" || nationName.toStdString()=="NLD")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/netherlands-flag-round-icon-16.png")));
@@ -90,7 +90,7 @@ void NationsStatsPlot::update(QCustomPlot *plot)
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/norway-flag-round-icon-16.png")));
         if(nationName.toStdString()=="PL" || nationName.toStdString()=="POL")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/poland-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="PT" || nationName.toStdString()=="POR")
+        if(nationName.toStdString()=="PT" || nationName.toStdString()=="PRT" || nationName.toStdString()=="POR")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/portugal-flag-round-icon-16.png")));
         if(nationName.toStdString()=="RO" || nationName.toStdString()=="ROM")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/romania-flag-round-icon-16.png")));

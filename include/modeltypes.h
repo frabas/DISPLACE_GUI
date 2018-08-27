@@ -4,6 +4,8 @@
 #include "StrongType.h"
 #include "idtypes.h"
 
+#include <vector>
+
 namespace types {
 
 struct TStepTag {};

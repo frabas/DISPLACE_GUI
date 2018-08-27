@@ -2555,6 +2555,7 @@ bool DisplaceModel::loadVessels()
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
         spe_fgrounds = find_entries(fgrounds, vesselids[i]);
+        cout <<" nb of grounds for this vessel is "<< spe_fgrounds.size() << endl;
         spe_fgrounds_init = find_entries(fgrounds_init, vesselids[i]);
         spe_freq_fgrounds = find_entries(freq_fgrounds, vesselids[i]);
         spe_freq_fgrounds_init = find_entries(freq_fgrounds_init, vesselids[i]);
@@ -2773,6 +2774,9 @@ bool DisplaceModel::loadVessels()
         for(int pop = 0; pop < nbpops; pop++)
         {
             cout << "...for pop" << pop << endl;
+            cout << "... on " <<  fgrounds.size() << " grounds"  << endl;
+            cout << "... given " <<  gshape_cpue_nodes_species.size() << " size gshape"  << endl;
+            cout << "... given " <<  gscale_cpue_nodes_species.size() << " size gscale"  << endl;
 
             vector<double> cpue_per_fground (fgrounds.size());
                                  // init

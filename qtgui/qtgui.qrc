@@ -90,5 +90,6 @@
         <file>icons/latvia-flag-round-icon-16.png</file>
         <file>icons/estonia-flag-round-icon-16.png</file>
         <file>icons/finland-flag-round-icon-16.png</file>
+        <file>icons/bulgaria-flag-round-icon-16.png</file>
     </qresource>
 </RCC>

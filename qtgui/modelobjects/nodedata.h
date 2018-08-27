@@ -29,8 +29,8 @@
 #include <memory>
 
 namespace types {
-class NodesPopData;
-class NodesBenthosData;
+struct NodesPopData;
+struct NodesBenthosData;
 }
 
 class DisplaceModel;

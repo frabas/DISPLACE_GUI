@@ -3,7 +3,8 @@
 
 #include <memory>
 #include "modeltypes.h"
-#include "storage/sqliteoutputstorage.h"
+
+class SQLiteOutputStorage;
 
 class MapsDataProvider
 {

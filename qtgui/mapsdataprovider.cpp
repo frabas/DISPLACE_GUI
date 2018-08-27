@@ -2,6 +2,7 @@
 #include <storage/tables/funcgroupstable.h>
 #include "mapsdataprovider.h"
 #include "storage/tables/nodesenvttable.h"
+#include "storage/sqliteoutputstorage.h"
 
 #include "storage/cacheddatastorage.h"
 
@@ -93,7 +94,6 @@ struct MapsDataProvider::Impl
 MapsDataProvider::MapsDataProvider()
     : p(std::make_unique<Impl>())
 {
-
 }
 
 MapsDataProvider::~MapsDataProvider() noexcept = default;

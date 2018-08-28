@@ -4,6 +4,8 @@
 #include "StrongType.h"
 #include "idtypes.h"
 
+#include <vector>
+
 namespace types {
 
 struct TStepTag {};
@@ -23,10 +25,18 @@ struct EnvironmentData {
     double dissolvedcarbon;
 };
 
-struct NodesStatData {
-    types::NodeId nodeId;
+struct NodesPopData {
     tstep_t tstep;
-    double cumftime, swarea, ssswarea, cumcat, cumcatthr, cumdis;
+    types::NodeId nodeId;
+
+    std::vector<double> totN, totW, cumC, cumD, impact;
+};
+
+struct NodesBenthosData {
+    tstep_t tstep;
+    types::NodeId nodeId;
+    
+    std::vector<double> mBenthosBiomass, mBenthosNumber, mBenthosMeanweight, mBenthosBiomassOverK, mBenthosNumberOverK;
 };
 
 }

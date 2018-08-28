@@ -299,20 +299,6 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         return true;
     });
 
-    auto ptab = p->db->getPopTable();
-    ptab->queryAllNodesAtStep (step, [&nodes](const PopTable::Stat &stat) {
-        auto nid = stat.nodeId.toIndex();
-        if (nid < nodes.size()) {
-            nodes.at(nid)->setPop(stat.popId,stat.totNid);
-            nodes.at(nid)->setPopW(stat.popId, stat.totWid);
-            nodes.at(nid)->setImpact(stat.popId, stat.impact);
-            nodes.at(nid)->setCumcatchesPerPop(stat.popId, stat.cumC);
-            //TODO: Set Discards!
-            //nodes.at(nid)->set_cumdiscards(stat.popId, stat.cumD);
-        }
-        return true;
-    });
-
     auto ftab = p->db->getFuncGroupsTable();
     ftab->queryAllNodesAtStep(step, [&nodes](const FuncGroupsTable::Stat &stat) {
         int nid = stat.nodeId.toIndex();

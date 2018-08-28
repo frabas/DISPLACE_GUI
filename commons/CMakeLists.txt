@@ -163,6 +163,7 @@ if (WIN32)
     list(APPEND SOURCES
             storage/sqlite3.c
             )
+    include_directories( ${CMAKE_SOURCE_DIR}/commons/storage)
 endif (WIN32)
 
 if (NOT APPLE AND NOT WIN32)

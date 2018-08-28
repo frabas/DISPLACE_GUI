@@ -5,6 +5,8 @@
 #include "sqlitestatementformatters.h"
 #include "sqlitefieldsop.h"
 
+#include <iostream>
+
 struct PopTable::Impl {
     std::mutex mutex;
     bool init = false;
@@ -121,6 +123,7 @@ void PopTable::queryAllNodesAtStep(int tstep, std::function<bool (PopTable::Stat
     p->allNodesQueryStatement.execute([this, &op](){
         auto &st = p->allNodesQueryStatement;
         Stat s;
+        s.tstep = st.getIntValue(7);
         s.nodeId = types::NodeId(st.getIntValue(0));
         s.popId = st.getIntValue(1);
         s.totNid = st.getDoubleValue(2);

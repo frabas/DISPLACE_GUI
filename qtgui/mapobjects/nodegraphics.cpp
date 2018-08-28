@@ -292,9 +292,8 @@ void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    double  salinity =mNode->get_salinity(); // collected
-   // auto r = getEnvtData();
-   // auto salinity = (r != nullptr ? r->salinity : 0);
+    auto r = getEnvtData();
+    auto salinity = (r != nullptr ? r->salinity : 0);
     painter.setBrush(mController->getPalette(mModelIndex,SalinityRole).color(salinity));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
@@ -323,9 +322,8 @@ void NodeWithNitrogenGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    double  ni =mNode->get_Nitrogen(); // collected
-   // auto r = getEnvtData();
-   // auto ni = (r != nullptr ? r->nitrogen : 0);
+    auto r = getEnvtData();
+    auto ni = (r != nullptr ? r->nitrogen : 0);
     painter.setBrush(mController->getPalette(mModelIndex,NitrogenRole).color(ni));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }

@@ -28,6 +28,11 @@
 
 #include <memory>
 
+namespace types {
+struct NodesPopData;
+struct NodesBenthosData;
+}
+
 class DisplaceModel;
 
 /** \brief an extension class for Node
@@ -126,53 +131,42 @@ public:
 
     int getPopCount() const;
     int getBenthosPopCount() const;
+    [[deprecated]]
     void setPop(int pop, double v);
+    [[deprecated]]
     void setPopTot(double tot);
+    [[deprecated]]
     void setPop(QList<double> v, double tot);
     double getPop(int pop) const ;
-    double getPopTot () const {
-        return mPopTot;
-    }
+    double getPopTot () const;
 
+    [[deprecated]]
     void setPopW(int pop, double val);
+    [[deprecated]]
     void setPopWTot(double tot);
+    [[deprecated]]
     void setPopW(QList<double> v, double tot);
     double getPopW(int pop) const ;
-    double getPopWTot () const {
-        return mPopWTot;
-    }
+    double getPopWTot () const;
 
+    [[deprecated]]
     void setImpact(int pop, double impact);
-    double getImpact(int pop) const {
-        return mImpact[pop];
-    }
+    double getImpact(int pop) const;
 
+    [[deprecated]]
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
-    double getCumcatchesPerPop(int pop) const {
-        return mCumcatchesPerPop[pop];
-    }
+    double getCumcatchesPerPop(int pop);
 
-    void setBenthosBiomass(int func, double benthosbiomass);
-    double getBenthosBiomass(int func) const {
-        return mBenthosBiomass[func];
-    }
-    void setBenthosNumber(int func, double benthosnumber);
-    double getBenthosNumber(int func) const {
-        return mBenthosNumber[func];
-    }
-    void setBenthosMeanweight(int func, double benthosmeanweight);
-    double getBenthosMeanweight(int func) const {
-        return mBenthosMeanweight[func];
-    }
-    void setBenthosBiomassOverK(int func, double benthosbiomassoverK);
-    double getBenthosBiomassOverK(int func) const {
-        return mBenthosBiomassOverK[func];
-    }
-    void setBenthosNumberOverK(int func, double benthosnumberoverK);
-    double getBenthosNumberOverK(int func) const {
-        return mBenthosNumberOverK[func];
-    }
-
+    [[deprecated]] void setBenthosBiomass(int func, double benthosbiomass);
+    double getBenthosBiomass(int func) const;
+    [[deprecated]] void setBenthosNumber(int func, double benthosnumber);
+    double getBenthosNumber(int func) const;
+    [[deprecated]] void setBenthosMeanweight(int func, double benthosmeanweight);
+    double getBenthosMeanweight(int func) const ;
+    [[deprecated]] void setBenthosBiomassOverK(int func, double benthosbiomassoverK);
+    double getBenthosBiomassOverK(int func) const ;
+    [[deprecated]] void setBenthosNumberOverK(int func, double benthosnumberoverK);
+    double getBenthosNumberOverK(int func) const;
 
     void setFishfarmFishMeanWeight(int farmid, double meanw_kg);
     double getFishfarmFishMeanWeight(int farm) const {
@@ -214,9 +208,6 @@ public:
         return mFishfarmCumulNetDischargeP[farm];
     }
 
-
-
-
     int getHarbourId() const;
     void setHarbourId(int value);
 
@@ -242,18 +233,6 @@ private:
     bool mDeleted;
     bool mRelevant;
     int mHarbourId;
-    double *mPop;
-    double mPopTot;
-    double *mPopW;
-    double mPopWTot;
-
-    double *mImpact;
-    double *mCumcatchesPerPop;
-    double *mBenthosBiomass;
-    double *mBenthosNumber;
-    double *mBenthosMeanweight;
-    double *mBenthosBiomassOverK;
-    double *mBenthosNumberOverK;
 
     double *mFishfarmMeanweight;
     double *mFishfarmFishHarvestedKg;
@@ -264,6 +243,8 @@ private:
     double *mFishfarmCumulNetDischargeN;
     double *mFishfarmCumulNetDischargeP;
 
+    std::shared_ptr<types::NodesPopData> getNodesData() const;
+    std::shared_ptr<types::NodesBenthosData> getBenthosData() const;
 
     int areaType;
 

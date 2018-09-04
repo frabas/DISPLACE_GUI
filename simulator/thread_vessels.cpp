@@ -245,6 +245,7 @@ static void manage_vessel(int idx_v,
                     //vessels[index_v]->unlock();
                 }
                 // ***************make a probable decision*************************
+                dout(cout << vessels[ index_v ]->get_name() << " which_metier_should_i_go_for? " << endl);
                 vessels[ index_v ]->which_metier_should_i_go_for(metiers);
                 dout(cout << vessels[ index_v ]->get_name() << " should go for metier " << vessels[ index_v ]->get_metier()->get_name() << endl);
 

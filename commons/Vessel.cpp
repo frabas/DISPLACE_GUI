@@ -2571,6 +2571,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         inter = a_szgroup;
                         a_szgroup+=1;
                     }
+                    dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
                     double left_to_MLS=0;
                     double right_to_MLS=0;
 // if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
@@ -3572,6 +3573,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
         for(unsigned int i=0; i<trgts.size(); ++i)
         {
             int a_trgt=trgts.at(i);
+            dout(if(past_freq_cpue_grds_pops.at(gr).size()<trgts.size()) cout << "error: inconsistent nb of pops in config.dat vs. nb of targets in metier files")
             cum_cpue_over_trgt_pop.at(gr) +=past_freq_cpue_grds_pops.at(gr).at(a_trgt);
         }
         //  scale to 1
@@ -4052,7 +4054,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     if(metiers_on_grd.size()!=0)
     {
         vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
-        //cout << "a_met from do_sample is " << a_met.at(0) << " and size of metiers is " << metiers.size() << endl;
+        dout(cout << "a_met from do_sample is " << a_met.at(0) << " and size of metiers is " << metiers.size() << endl);
         this->set_metier(  metiers.at(a_met.at(0))  );
     }
     else

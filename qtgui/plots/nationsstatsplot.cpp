@@ -72,6 +72,10 @@ void NationsStatsPlot::update(QCustomPlot *plot)
         graph->setLineStyle(QCPGraph::lsLine);
         QString nationName = model->getNation(ip).getName();
         // BE,DE,DK,ES,FR,GB,IE,NL,NO,PL,PT etc.
+        if(nationName.toStdString()=="ITA")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/italy-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="HRV")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/croatia-flag-round-icon-16.png")));
         if(nationName.toStdString()=="BE" || nationName.toStdString()=="BEL")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/belgium-flag-round-icon-16.png")));
         if(nationName.toStdString()=="DE" || nationName.toStdString()=="DEU")

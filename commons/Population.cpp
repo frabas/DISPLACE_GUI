@@ -237,6 +237,7 @@ Population::Population(int a_name,
     for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
 		iter = full_spatial_availability.upper_bound( iter->first ) )
 	{
+        dout(if(iter->first.toIndex()>nodes.size()) cout << "error in the avai field: trying to push back node idx " << iter->first.toIndex() << " for max nb of nodes " << nodes.size() << endl);
         p_spe_nodes.push_back (nodes[  iter->first.toIndex()  ]);
         nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);;
 

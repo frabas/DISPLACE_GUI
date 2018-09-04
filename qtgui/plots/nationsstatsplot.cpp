@@ -53,7 +53,7 @@ void NationsStatsPlot::update(QCustomPlot *plot)
     static const QPen pen(QColor(0,0,255,200));
     plot->clearGraphs();
 
-    QList<int> ipl = model->getInterestingNations();
+   QList<int> ipl = model->getInterestingNations();
 
     double t = model->getCurrentStep();
     if (timeline != nullptr ) {
@@ -106,7 +106,8 @@ void NationsStatsPlot::update(QCustomPlot *plot)
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/sweden-flag-round-icon-16.png")));
         if(nationName.toStdString()=="BGR")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/bulgaria-flag-round-icon-16.png")));
-        QColor col = col_it != mPalette.end() ? *col_it : QColor();
+
+     QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
@@ -206,7 +207,6 @@ void NationsStatsPlot::update(QCustomPlot *plot)
         plot->yAxis->setLabel(QObject::tr("#"));
         break;
     }
-
     plot->rescaleAxes();
     plot->replot();
 }

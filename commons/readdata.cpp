@@ -431,6 +431,7 @@ bool read_vessels_features(string a_quarter,
     if(vessels_features.fail())
     {
         open_file_error(filename.c_str());
+        cout << "Error when trying to open the vesselsspe_features.dat file...." << endl;
         return false;
     }
 

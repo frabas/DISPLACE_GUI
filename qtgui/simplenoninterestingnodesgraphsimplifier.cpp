@@ -1,3 +1,5 @@
+#if 0
+
 #include "simplenoninterestingnodesgraphsimplifier.h"
 
 #include "modelobjects/nodedata.h"
@@ -56,3 +58,4 @@ bool SimpleNonInterestingNodesGraphSimplifier::operator()(const QList<std::share
     return true;
 }
 
+#endif

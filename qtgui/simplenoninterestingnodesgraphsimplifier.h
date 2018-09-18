@@ -1,6 +1,8 @@
 #ifndef SIMPLENONINTERESTINGNODESGRAPHSIMPLIFIER_H
 #define SIMPLENONINTERESTINGNODESGRAPHSIMPLIFIER_H
 
+#if 0
+
 #include <Node.h>
 #include <shortestpathbuilder.h>
 
@@ -23,5 +25,7 @@ public:
                      std::vector<ShortestPathBuilder::vertex_descriptor> &predecessors,
                      std::vector<double> &dinstances);
 };
+
+#endif
 
 #endif // SIMPLENONINTERESTINGNODESGRAPHSIMPLIFIER_H

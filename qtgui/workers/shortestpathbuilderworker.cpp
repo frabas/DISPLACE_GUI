@@ -51,6 +51,7 @@ void ShortestPathBuilderWorker::doStep(arg a)
 {
     try {
         ShortestPathBuilder builder (a.me->mModel);
+#if 0
         SimpleNonInterestingNodesGraphSimplifier simplifier;
         simplifier.setRelevantInterNodes(a.me->mRelevantInternNodes);
         builder.appendPostProcessingFilter([&simplifier](const QList<std::shared_ptr<NodeData> > &relNodes,
@@ -59,7 +60,7 @@ void ShortestPathBuilderWorker::doStep(arg a)
                                            std::vector<double> &distances) {
             return simplifier(relNodes, graph, predecessors, distances);
         });
-
+#endif
         builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes, a.me->mTextFormat ? ShortestPathBuilder::Text : ShortestPathBuilder::Binary);
     } catch (std::exception &x) {
         qDebug() << "Cannot create node " << a.node->get_idx_node().toIndex() << ":" << x.what();

@@ -20,6 +20,8 @@
 
 #include "shortestpathbuilder.h"
 
+#include <algo/DijkstraShortestPath.h>
+
 #include <modelobjects/nodedata.h>
 #include <displacemodel.h>
 
@@ -38,125 +40,121 @@
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
  * */
 
-void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
-{
-    QFile mindist_file(mindist);
-    QFile prev_file (prev);
+struct ShortestPathBuilder::Impl {
+    DisplaceModel *mModel;
 
-    mindist_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    prev_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    std::unique_ptr<DijkstraShortestPath> algo;
 
-    QTextStream strm_min(&mindist_file);
-    QTextStream strm_prev(&prev_file);
+#if 1
+    void createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
+    {
+        QFile mindist_file(mindist);
+        QFile prev_file (prev);
 
-    strm_prev << " key  value" << endl;
-    strm_min << " key  value" << endl;
+        mindist_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        prev_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 
-    vector<int> mem(2, 0);
+        QTextStream strm_min(&mindist_file);
+        QTextStream strm_prev(&prev_file);
 
-    vector <int> relevant_nodes;
-    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-       relevant_nodes.push_back(n->get_idx_node().toIndex());
-    }
+        strm_prev << " key  value" << endl;
+        strm_min << " key  value" << endl;
 
-    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-        vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+        vector<int> mem(2, 0);
 
-        while (mPredecessors[nd] != nd) {
-            if (!mGraph[nd].flag) {
-                strm_prev << nd << " " << mPredecessors[nd] << endl;
-                strm_min << nd << " " << mDistances[nd] << endl;
+        vector <int> relevant_nodes;
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+            relevant_nodes.push_back(n->get_idx_node().toIndex());
+        }
+
+        algo->saveRelevantNodes(relevantNodes,[&strm_prev, &strm_min](types::NodeId node, types::NodeId pred, double dist){
+            strm_prev << node.toIndex() << " " << pred.toIndex() << endl;
+            strm_min << node.toIndex() << " " << dist << endl;
+        });
+        /*
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+            vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+
+            while (mPredecessors[nd] != nd) {
+                if (!mGraph[nd].flag) {
+                    strm_prev << nd << " " << mPredecessors[nd] << endl;
+                    strm_min << nd << " " << mDistances[nd] << endl;
+                }
+
+                mGraph[nd].flag = true;
+                nd = mPredecessors[nd];
             }
 
             mGraph[nd].flag = true;
-            nd = mPredecessors[nd];
         }
-
-        mGraph[nd].flag = true;
+*/
+        mindist_file.close();
+        prev_file.close();
     }
 
-    mindist_file.close();
-    prev_file.close();
-}
+    void createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
+    {
+        displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_prev;
+        wr_prev.open(prev.toStdString());
 
-void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
-{
-    displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_prev;
-    wr_prev.open(prev.toStdString());
+        displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_md;
+        wr_md.open(mindist.toStdString());
 
-    displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_md;
-    wr_md.open(mindist.toStdString());
+        algo->saveRelevantNodes(relevantNodes,[&wr_prev, &wr_md](types::NodeId node, types::NodeId pred, double dist){
+            wr_prev.write(node.toIndex(), pred.toIndex());
+            wr_md.write(node.toIndex(), dist);
+        });
 
+        /*
+                foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+                vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
-    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-        vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+                while (mPredecessors[nd] != nd) {
+                    if (!mGraph[nd].flag) {
+                        wr_prev.write(nd, mPredecessors[nd]);
+                        wr_md.write(nd, mDistances[nd]);
+                    }
 
-        while (mPredecessors[nd] != nd) {
-            if (!mGraph[nd].flag) {
-                wr_prev.write(nd, mPredecessors[nd]);
-                wr_md.write(nd, mDistances[nd]);
-            }
+                    mGraph[nd].flag = true;
+                    nd = mPredecessors[nd];
+                }
 
-            mGraph[nd].flag = true;
-            nd = mPredecessors[nd];
-        }
+                mGraph[nd].flag = true;
+            }*/
 
-        mGraph[nd].flag = true;
+        wr_md.close();
+        wr_prev.close();
     }
 
-    wr_md.close();
-    wr_prev.close();
-}
+#endif
+
+    explicit Impl(DisplaceModel *model)
+    : algo (std::make_unique<DijkstraShortestPath>(model))
+    {
+
+    }
+};
+
 
 ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
-    : mModel (model)
+        : p(std::make_unique<Impl>(model))
 {
-    const QList<std::shared_ptr<NodeData> >& nodes = mModel->getNodesList();
-
-    foreach (std::shared_ptr<NodeData> node, nodes) {
-        for (int n = 0; n < node->getAdiacencyCount(); ++n) {
-            std::shared_ptr<NodeData::Edge> edge = node->getAdiacencyByIdx(n);
-            std::shared_ptr<NodeData> tg = edge->target.lock();
-            if (tg.get() != nullptr) {
-                mEdges.push_back(Edge(node->get_idx_node().toIndex(), tg->get_idx_node().toIndex()));
-                mWeights.push_back(edge->weight);
-            }
-        }
-    }
-
-    mGraph = graph_t(mEdges.begin(), mEdges.end(), mWeights.begin(), nodes.size());
-    mWeightmap = get(boost::edge_weight, mGraph);
-    mPredecessors = std::vector<vertex_descriptor> (num_vertices(mGraph));
-    mDistances = std::vector<double> (num_vertices(mGraph));
 }
+
+ShortestPathBuilder::~ShortestPathBuilder() noexcept = default;
 
 void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
                                  const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format)
 {
     Q_UNUSED(simplify);
 
-    // reset relevancy of all nodes
-    for (auto e = boost::vertices(mGraph); e.first != e.second; ++e.first) {
-        mGraph[*e.first].isRelevant = false;
-    }
+    p->algo->create(node, path, simplify, relevantNodes);
 
-    // set relevancy for relevant nodes
-    for (auto rnode : relevantNodes) {
-        vertex_descriptor nd = vertex(rnode->get_idx_node().toIndex(), mGraph);
-        mGraph[nd].isRelevant = true;
-    }
-
-    vertex_descriptor s;
-
-    s = vertex(node->get_idx_node().toIndex(), mGraph);
-    dijkstra_shortest_paths(mGraph, s,
-                             predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
-                             distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
-
+    /*
     for(auto filter : postProcessingFilter) {
         filter(relevantNodes, mGraph, mPredecessors, mDistances);
     }
-
+*/
     QString ext = "bin";
     if (format == Text)
         ext = "dat";
@@ -164,20 +162,23 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
     QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
 
+#if 0
     switch (format) {
-    case Binary:
-        createBinary(prev, mindist, relevantNodes);
-        break;
-    case Text:
-        createText(prev,mindist, relevantNodes);
-        break;
-    default:
-        throw std::runtime_error("Unhandled case");
+        case Binary:
+            createBinary(prev, mindist, relevantNodes);
+            break;
+        case Text:
+            createText(prev,mindist, relevantNodes);
+            break;
+        default:
+            throw std::runtime_error("Unhandled case");
     }
-
+#endif
 }
 
+#if 0
 void ShortestPathBuilder::appendPostProcessingFilter(ShortestPathBuilder::PostProcessingFilter filter)
 {
     postProcessingFilter.push_back(filter);
 }
+#endif

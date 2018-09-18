@@ -45,73 +45,25 @@
 
 #include <QString>
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
-
-#if defined (__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-
-#include <boost/graph/dijkstra_shortest_paths.hpp>
-#if defined (__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-#include <boost/property_map/property_map.hpp>
-
 class NodeData;
 class DisplaceModel;
 
 class ShortestPathBuilder
 {
-public:
-    struct flag_t {
-        typedef boost::edge_property_tag kind;
-
-        bool flag;
-        bool isRelevant;
-
-        flag_t() : flag(false) {}
-    };
-
-    typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::directedS,
-        flag_t,
-        boost::property < boost::edge_weight_t, double > > graph_t;
-    typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_descriptor;
-    typedef std::pair<int, int> Edge;
-
-    using PostProcessingFilter = std::function<bool(const QList<std::shared_ptr<NodeData> > &relNodes,
-                                                    graph_t &graph,
-                                                    std::vector<vertex_descriptor> &predecessors,
-                                                    std::vector<double> &dinstances)>;
-
-
-    DisplaceModel *mModel;
-
-    graph_t mGraph;
-    std::vector<Edge> mEdges;
-    std::vector<double> mWeights;
-
-    boost::property_map<graph_t, boost::edge_weight_t>::type mWeightmap;
-    std::vector<vertex_descriptor> mPredecessors;
-    std::vector<double> mDistances;
-
-    std::list<PostProcessingFilter> postProcessingFilter;
-
 private:
-    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
-    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
-
+    struct Impl;
+    std::unique_ptr<Impl> p;
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);
+
+    virtual ~ShortestPathBuilder() noexcept ;
 
     enum Format {
         Binary, Text
     };
 
     void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format = Binary);
-    void appendPostProcessingFilter(PostProcessingFilter);
+    //void appendPostProcessingFilter(PostProcessingFilter);
 };
 
 #endif // SHORTESTPATHBUILDER_H

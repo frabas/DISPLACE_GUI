@@ -125,6 +125,7 @@ struct AStarShortestPath::Impl {
     std::list<PathSegment>
     findShortestPath(GeoGraph::vertex from, GeoGraph::vertex to)
     {
+        auto &bgraph = graph.graph;
         bool found = false;
 
         std::vector <GeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
@@ -132,11 +133,11 @@ struct AStarShortestPath::Impl {
         try {
             // call astar named parameter interface
             astar_search_tree
-                    (graph, from,
+                    (bgraph, from,
                      distance_heuristic<GeoGraph::Graph, GeoGraph::cost, GeoGraph::location *>
                              (graph.locations.data(), to),
-                     predecessor_map(make_iterator_property_map(p.begin(), get(vertex_index, graph))).
-                             distance_map(make_iterator_property_map(d.begin(), get(vertex_index, graph))).
+                     predecessor_map(make_iterator_property_map(p.begin(), boost::get(boost::vertex_index, bgraph))).
+                             distance_map(make_iterator_property_map(d.begin(), boost::get(boost::vertex_index, bgraph))).
                              visitor(astar_goal_visitor<GeoGraph::vertex>(to)));
 
         } catch (found_goal &x) {
@@ -148,7 +149,7 @@ struct AStarShortestPath::Impl {
             return result;
 
         for(auto v = to;; v = p[v]) {
-            result.push_front(PathSegment{v,d[v]});
+            result.push_front(PathSegment{types::NodeId{static_cast<unsigned short>(v)},d[v]});
             if(p[v] == v)
                 break;
         }
@@ -182,7 +183,7 @@ void AStarShortestPath::create(std::shared_ptr<NodeData> node, QString path, boo
     // set relevancy for relevant nodes
     for (auto rnode : relevantNodes) {
         auto l = p->findShortestPath(node->get_idx_node().toIndex(), rnode->get_idx_node().toIndex());
-        p->paths.insert(std::make_pair(rnode, l));
+        p->paths.insert(std::make_pair(rnode->get_idx_node(), l));
     }
 }
 
@@ -195,7 +196,9 @@ void AStarShortestPath::saveRelevantNodes(const QList<std::shared_ptr<NodeData> 
         if (pathentry != p->paths.end()) {
             const auto &path = pathentry->second;
             for (auto nodeit = path.begin(); nodeit != path.end(); ++nodeit) {
-                writer(pnode.toIndex(), nodeit->n.toIndex(), nodeit->w);
+                writer(types::NodeId{pnode.toIndex()},
+                       types::NodeId{nodeit->n.toIndex()},
+                       nodeit->w);
                 pnode = nodeit->n;
             }
         }

@@ -11,8 +11,6 @@
 
 #include <memory>
 
-class QTextStream;
-
 class DijkstraShortestPath {
     struct Impl;
     std::unique_ptr<Impl> p;

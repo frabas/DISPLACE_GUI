@@ -1807,7 +1807,14 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantInterNodes(nodeids);
     }
 
-    builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
+    if (dlg.isAStarSelected())
+        builder->setAlgorithmType(ShortestPathBuilderWorker::AlgorithmType::Astar);
+    else
+        builder->setAlgorithmType(ShortestPathBuilderWorker::AlgorithmType::Dijkstra);
+
+
+
+        builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
 }
 
 void MainWindow::end_ShortestPathCreated(bool completed)

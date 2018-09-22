@@ -54,7 +54,9 @@ private:
     struct Impl;
     std::unique_ptr<Impl> p;
 public:
-    explicit ShortestPathBuilder(DisplaceModel *model);
+    enum class AlgoType { Dijkstra, AStar };
+
+    explicit ShortestPathBuilder(DisplaceModel *model, AlgoType type);
 
     virtual ~ShortestPathBuilder() noexcept ;
 

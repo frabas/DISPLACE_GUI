@@ -70,6 +70,9 @@ public:
     bool isBinaryFormat() const;
     bool isTextFormat() const;
 
+    bool isAStarSelected() const;
+    bool isDijkstraSelected() const;
+
 private slots:
     void on_browseShortestFolder_clicked();
     void on_browseRelevantFolder_clicked();

@@ -27,6 +27,10 @@ public:
     void setRelevantInterNodes(const QVector<int> &nodes);
     void run(QObject *obj, const char *slot);
 
+    enum class AlgorithmType { Dijkstra, Astar };
+    void setAlgorithmType(AlgorithmType type) {
+        mAlgorithmType = type;
+    }
 protected:
     struct arg {
         std::shared_ptr<NodeData> node;
@@ -48,6 +52,7 @@ private:
     QVector<int> mRelevantInternNodes;
     QList<arg> mArgumentList;
     QFutureWatcher<void> mFutureWatcher;
+    AlgorithmType mAlgorithmType;
 
     bool mTextFormat = false;
 };

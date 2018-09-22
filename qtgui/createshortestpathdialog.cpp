@@ -195,3 +195,13 @@ bool CreateShortestPathDialog::isTextFormat() const
 {
     return ui->formatText->isChecked();
 }
+
+bool CreateShortestPathDialog::isAStarSelected() const
+{
+    return ui->selectAStarAlgorithm->isChecked();
+}
+
+bool CreateShortestPathDialog::isDijkstraSelected() const
+{
+    return ui->selectDijkstraAlgorithm->isChecked();
+}

@@ -50,7 +50,19 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 void ShortestPathBuilderWorker::doStep(arg a)
 {
     try {
-        ShortestPathBuilder builder (a.me->mModel);
+        ShortestPathBuilder::AlgoType type;
+        switch (a.me->mAlgorithmType) {
+            case AlgorithmType::Astar:
+                type = ShortestPathBuilder::AlgoType::AStar;
+                break;
+            case AlgorithmType::Dijkstra:
+                type = ShortestPathBuilder::AlgoType::Dijkstra;
+                break;
+            default:
+                throw std::logic_error("Unhandled switch case: ShortestPathBuilderWorker::AlgorithmType");
+        }
+
+        ShortestPathBuilder builder (a.me->mModel, type);
 #if 0
         SimpleNonInterestingNodesGraphSimplifier simplifier;
         simplifier.setRelevantInterNodes(a.me->mRelevantInternNodes);

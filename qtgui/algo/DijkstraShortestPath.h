@@ -5,13 +5,15 @@
 #ifndef DISPLACE_DIJKSTRASHORTESTPATH_H
 #define DISPLACE_DIJKSTRASHORTESTPATH_H
 
+#include "ShortestPathAlgorithm.h"
+
 #include <modelobjects/nodedata.h>
 
 #include <QString>
 
 #include <memory>
 
-class DijkstraShortestPath {
+class DijkstraShortestPath : public ShortestPathAlgorithm {
     struct Impl;
     std::unique_ptr<Impl> p;
 public:
@@ -20,9 +22,9 @@ public:
     virtual ~DijkstraShortestPath() noexcept;
 
     void create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                const QList<std::shared_ptr<NodeData> > &relevantNodes);
+                const QList<std::shared_ptr<NodeData> > &relevantNodes) override;
 
-    void saveRelevantNodes (const QList<std::shared_ptr<NodeData> > &, std::function<void(types::NodeId, types::NodeId, double)> writer);
+    void saveRelevantNodes (const QList<std::shared_ptr<NodeData> > &, std::function<void(types::NodeId, types::NodeId, double)> writer) override;
 };
 
 

@@ -20,8 +20,9 @@
 
 #include "shortestpathbuilder.h"
 
-#include <algo/DijkstraShortestPath.h>
-#include <algo/AStarShortestPath.h>
+#include "algo/ShortestPathAlgorithm.h"
+#include "algo/DijkstraShortestPath.h"
+#include "algo/AStarShortestPath.h"
 
 #include <modelobjects/nodedata.h>
 #include <displacemodel.h>
@@ -44,9 +45,8 @@
 struct ShortestPathBuilder::Impl {
     DisplaceModel *mModel;
 
-    std::unique_ptr<AStarShortestPath> algo;
+    std::unique_ptr<ShortestPathAlgorithm> algo;
 
-#if 1
     void createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
     {
         QFile mindist_file(mindist);
@@ -72,23 +72,7 @@ struct ShortestPathBuilder::Impl {
             strm_prev << node.toIndex() << " " << pred.toIndex() << endl;
             strm_min << node.toIndex() << " " << dist << endl;
         });
-        /*
-        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-            vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
-            while (mPredecessors[nd] != nd) {
-                if (!mGraph[nd].flag) {
-                    strm_prev << nd << " " << mPredecessors[nd] << endl;
-                    strm_min << nd << " " << mDistances[nd] << endl;
-                }
-
-                mGraph[nd].flag = true;
-                nd = mPredecessors[nd];
-            }
-
-            mGraph[nd].flag = true;
-        }
-*/
         mindist_file.close();
         prev_file.close();
     }
@@ -106,39 +90,28 @@ struct ShortestPathBuilder::Impl {
             wr_md.write(node.toIndex(), dist);
         });
 
-        /*
-                foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-                vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
-
-                while (mPredecessors[nd] != nd) {
-                    if (!mGraph[nd].flag) {
-                        wr_prev.write(nd, mPredecessors[nd]);
-                        wr_md.write(nd, mDistances[nd]);
-                    }
-
-                    mGraph[nd].flag = true;
-                    nd = mPredecessors[nd];
-                }
-
-                mGraph[nd].flag = true;
-            }*/
-
         wr_md.close();
         wr_prev.close();
     }
 
-#endif
-
-    explicit Impl(DisplaceModel *model)
-    : algo (std::make_unique<AStarShortestPath>(model))
+    explicit Impl(DisplaceModel *model, ShortestPathBuilder::AlgoType type)
     {
-
+        switch (type) {
+            case ShortestPathBuilder::AlgoType ::AStar:
+                algo = std::make_unique<AStarShortestPath>(model);
+                break;
+            case ShortestPathBuilder::AlgoType ::Dijkstra:
+                algo = std::make_unique<DijkstraShortestPath>(model);
+                break;
+            default:
+                throw std::logic_error("Unhandled switch case: ShortestPathBuilder::AlgoType");
+        }
     }
 };
 
 
-ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
-        : p(std::make_unique<Impl>(model))
+ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model, AlgoType type)
+        : p(std::make_unique<Impl>(model, type))
 {
 }
 

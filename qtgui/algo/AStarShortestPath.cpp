@@ -6,6 +6,8 @@
 
 #include "displacemodel.h"
 
+#include <GeographicLib/Geodesic.hpp>
+
 #include <boost/graph/astar_search.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/random.hpp>
@@ -71,15 +73,18 @@ struct found_goal {
 template <class Graph, class CostType, class LocMap>
 class distance_heuristic : public astar_heuristic<Graph, CostType>
 {
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+
 public:
     typedef typename graph_traits<Graph>::vertex_descriptor Vertex;
     distance_heuristic(LocMap l, Vertex goal)
             : m_location(l), m_goal(goal) {}
-    CostType operator()(Vertex u)
+
+            CostType operator()(Vertex u)
     {
-        CostType dx = m_location[m_goal].x - m_location[u].x;
-        CostType dy = m_location[m_goal].y - m_location[u].y;
-        return ::sqrt(dx * dx + dy * dy);
+        double d;
+        geod.Inverse(m_location[m_goal].y, m_location[m_goal].x, m_location[u].y, m_location[u].x, d);
+        return d;
     }
 private:
     LocMap m_location;

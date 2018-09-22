@@ -162,18 +162,16 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
     QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
 
-#if 0
     switch (format) {
         case Binary:
-            createBinary(prev, mindist, relevantNodes);
+            p->createBinary(prev, mindist, relevantNodes);
             break;
         case Text:
-            createText(prev,mindist, relevantNodes);
+            p->createText(prev,mindist, relevantNodes);
             break;
         default:
             throw std::runtime_error("Unhandled case");
     }
-#endif
 }
 
 #if 0

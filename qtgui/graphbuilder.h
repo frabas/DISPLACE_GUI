@@ -67,7 +67,7 @@ class GeographicGridBuilder;
 
 namespace deprecated {
 
-class GraphBuilder
+class [[deprecated]] GraphBuilder
 {
 public:
     class Feedback {

@@ -22,8 +22,7 @@ namespace {
 class GeoGraph {
 public:
     // auxiliary types
-    struct location
-    {
+    struct location {
         float y, x; // lat, long
     };
 
@@ -43,13 +42,16 @@ public:
 
     GeoGraph() = default;
 
-    void addNode(int node, float x, float y) {
-        while (locations.size() <= node)
+    void addNode(int node, float x, float y)
+    {
+        while (locations.size() <= node) {
             locations.push_back(location{});
-        locations[node] = { x, y };
+        }
+        locations[node] = {x, y};
     }
 
-    bool addEdge(int node_from, int node_to, cost weight) {
+    bool addEdge(int node_from, int node_to, cost weight)
+    {
         edge_descriptor e;
         bool inserted;
 
@@ -61,8 +63,11 @@ public:
         return inserted;
     }
 
-    size_t numNodes() const { return boost::num_vertices(graph); }
-    size_t numEdges() const { return boost::num_edges(graph); }
+    size_t numNodes() const
+    { return boost::num_vertices(graph); }
+
+    size_t numEdges() const
+    { return boost::num_edges(graph); }
 };
 
 
@@ -70,22 +75,24 @@ struct found_goal {
 };
 
 // euclidean distance heuristic
-template <class Graph, class CostType, class LocMap>
-class distance_heuristic : public astar_heuristic<Graph, CostType>
-{
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+template<class Graph, class CostType, class LocMap>
+class distance_heuristic : public astar_heuristic<Graph, CostType> {
+    const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
 
 public:
     typedef typename graph_traits<Graph>::vertex_descriptor Vertex;
-    distance_heuristic(LocMap l, Vertex goal)
-            : m_location(l), m_goal(goal) {}
 
-            CostType operator()(Vertex u)
+    distance_heuristic(LocMap l, Vertex goal)
+            : m_location(l), m_goal(goal)
+    {}
+
+    CostType operator()(Vertex u)
     {
         double d;
         geod.Inverse(m_location[m_goal].y, m_location[m_goal].x, m_location[u].y, m_location[u].x, d);
         return d;
     }
+
 private:
     LocMap m_location;
     Vertex m_goal;
@@ -123,7 +130,8 @@ struct AStarShortestPath::Impl {
     std::map<types::NodeId, std::list<PathSegment>> paths;
 
     explicit Impl(DisplaceModel *model)
-    : mModel(model) {
+            : mModel(model)
+    {
 
     }
 
@@ -133,8 +141,8 @@ struct AStarShortestPath::Impl {
         auto &bgraph = graph.graph;
         bool found = false;
 
-        std::vector <GeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
-        std::vector <GeoGraph::cost> d(graph.numEdges());
+        std::vector<GeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
+        std::vector<GeoGraph::cost> d(graph.numEdges());
         try {
             // call astar named parameter interface
             astar_search_tree
@@ -142,7 +150,8 @@ struct AStarShortestPath::Impl {
                      distance_heuristic<GeoGraph::Graph, GeoGraph::cost, GeoGraph::location *>
                              (graph.locations.data(), to),
                      predecessor_map(make_iterator_property_map(p.begin(), boost::get(boost::vertex_index, bgraph))).
-                             distance_map(make_iterator_property_map(d.begin(), boost::get(boost::vertex_index, bgraph))).
+                             distance_map(
+                             make_iterator_property_map(d.begin(), boost::get(boost::vertex_index, bgraph))).
                              visitor(astar_goal_visitor<GeoGraph::vertex>(to)));
 
         } catch (found_goal &x) {
@@ -150,13 +159,15 @@ struct AStarShortestPath::Impl {
         }
 
         std::list<PathSegment> result;
-        if (!found)
+        if (!found) {
             return result;
+        }
 
-        for(auto v = to;; v = p[v]) {
-            result.push_front(PathSegment{types::NodeId{static_cast<unsigned short>(v)},d[v]});
-            if(p[v] == v)
+        for (auto v = to;; v = p[v]) {
+            result.push_front(PathSegment{types::NodeId{static_cast<unsigned short>(v)}, d[v]});
+            if (p[v] == v) {
                 break;
+            }
         }
         return result;
     }
@@ -168,22 +179,22 @@ AStarShortestPath::AStarShortestPath(DisplaceModel *model)
 {
     const QList<std::shared_ptr<NodeData> > &nodes = p->mModel->getNodesList();
 
-            for (std::shared_ptr<NodeData> node: nodes) {
-            for (int n = 0; n < node->getAdiacencyCount(); ++n) {
-                std::shared_ptr<NodeData::Edge> edge = node->getAdiacencyByIdx(n);
-                std::shared_ptr<NodeData> tg = edge->target.lock();
-                if (tg.get() != nullptr) {
-                    p->graph.addNode(node->get_idx_node().toIndex(), node->get_x(), node->get_y());
-                    p->graph.addEdge(node->get_idx_node().toIndex(), tg->get_idx_node().toIndex(), edge->weight);
-                }
+    for (std::shared_ptr<NodeData> node: nodes) {
+        for (int n = 0; n < node->getAdiacencyCount(); ++n) {
+            std::shared_ptr<NodeData::Edge> edge = node->getAdiacencyByIdx(n);
+            std::shared_ptr<NodeData> tg = edge->target.lock();
+            if (tg.get() != nullptr) {
+                p->graph.addNode(node->get_idx_node().toIndex(), node->get_x(), node->get_y());
+                p->graph.addEdge(node->get_idx_node().toIndex(), tg->get_idx_node().toIndex(), edge->weight);
             }
         }
+    }
 }
 
 AStarShortestPath::~AStarShortestPath() noexcept = default;
 
 void AStarShortestPath::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                                  const QList<std::shared_ptr<NodeData> > &relevantNodes)
+                               const QList<std::shared_ptr<NodeData> > &relevantNodes)
 {
     // set relevancy for relevant nodes
     for (auto rnode : relevantNodes) {
@@ -193,20 +204,26 @@ void AStarShortestPath::create(std::shared_ptr<NodeData> node, QString path, boo
 }
 
 void AStarShortestPath::saveRelevantNodes(const QList<std::shared_ptr<NodeData> > &relevantNodes,
-                                             std::function<void(types::NodeId, types::NodeId, double)> writer)
+                                          std::function<void(types::NodeId, types::NodeId, double)> writer)
 {
+    std::map<types::NodeId, std::pair<types::NodeId, double>> prevmap;
+
     for (std::shared_ptr<NodeData> n: relevantNodes) {
-        auto pnode = n->get_idx_node();
+        auto startnode = n->get_idx_node();
+        auto pnode = startnode;
         auto pathentry = p->paths.find(pnode);
         if (pathentry != p->paths.end()) {
             const auto &path = pathentry->second;
             for (auto nodeit = path.begin(); nodeit != path.end(); ++nodeit) {
-                writer(types::NodeId{pnode.toIndex()},
-                       types::NodeId{nodeit->n.toIndex()},
-                       nodeit->w);
+                auto w = std::make_pair(types::NodeId{pnode.toIndex()}, nodeit->w);
+                prevmap.insert(std::make_pair(types::NodeId{nodeit->n.toIndex()}, w));
                 pnode = nodeit->n;
             }
         }
     }
 
+
+    for (auto &x : prevmap) {
+        writer(x.first, x.second.first, x.second.second);
+    }
 }

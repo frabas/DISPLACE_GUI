@@ -21,6 +21,7 @@
 #include "shortestpathbuilder.h"
 
 #include <algo/DijkstraShortestPath.h>
+#include <algo/AStarShortestPath.h>
 
 #include <modelobjects/nodedata.h>
 #include <displacemodel.h>
@@ -43,7 +44,7 @@
 struct ShortestPathBuilder::Impl {
     DisplaceModel *mModel;
 
-    std::unique_ptr<DijkstraShortestPath> algo;
+    std::unique_ptr<AStarShortestPath> algo;
 
 #if 1
     void createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
@@ -129,7 +130,7 @@ struct ShortestPathBuilder::Impl {
 #endif
 
     explicit Impl(DisplaceModel *model)
-    : algo (std::make_unique<DijkstraShortestPath>(model))
+    : algo (std::make_unique<AStarShortestPath>(model))
     {
 
     }

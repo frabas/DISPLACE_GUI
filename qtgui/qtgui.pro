@@ -202,7 +202,9 @@ SOURCES += \
     mapsdataprovider.cpp \
     simplenoninterestingnodesgraphsimplifier.cpp \
     plots/vesselsstatsplot.cpp \
-    plots/BaseStatsPlotImpl.cpp
+    plots/BaseStatsPlotImpl.cpp \
+    algo/AStarShortestPath.cpp \
+    algo/DijkstraShortestPath.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -350,7 +352,10 @@ HEADERS += \
     mapsdataprovider.h \
     mapsdatastructures.h \
     simplenoninterestingnodesgraphsimplifier.h \
-    plots/BaseStatsPlotImpl.h
+    plots/BaseStatsPlotImpl.h \
+    algo/AStarShortestPath.h \
+    algo/DijkstraShortestPath.h \
+    algo/ShortestPathAlgorithm.h
 
 ### mSQLiteCpp dependency
 

@@ -142,7 +142,11 @@ set(SOURCES
         ../include/ipcqueue.h
         ../include/ipcmsgtypes.h
         utils/CrashHandler.cpp
-        storage/tables/fishfarmsdeftable.cpp storage/tables/fishfarmsdeftable.h)
+        storage/tables/fishfarmsdeftable.cpp storage/tables/fishfarmsdeftable.h
+        shortestpath/AStarShortestPathFinder.h shortestpath/AStarShortestPathFinder.cpp
+        shortestpath/GeoGraph.h shortestpath/GeoGraph.cpp
+        shortestpath/GeoGraphLoader.h shortestpath/GeoGraphLoader.cpp
+        )
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

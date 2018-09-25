@@ -63,6 +63,8 @@ using namespace sqlite;
 #include <comstructs.h>
 #include <simulation.h>
 #include <tseries/timeseriesmanager.h>
+#include "shortestpath/GeoGraph.h"
+#include "shortestpath/GeoGraphLoader.h"
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -202,6 +204,8 @@ bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
+
+GeoGraph geoGraph;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
@@ -3733,6 +3737,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
+    // ASTAR TODO: Check Loading the nodes
+    try {
+        GeoGraphLoader loader;
+        loader.load(geoGraph, filename_graph, filename_graph_test);
+    } catch (std::exception &x) {
+        std::cerr << "Cannot read Node graphs: " << x.what();
+        return 2;
+    }
 
     // bound the two vectors
     // copy

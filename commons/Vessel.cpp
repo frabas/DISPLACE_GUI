@@ -47,10 +47,16 @@
 #include <dtree/variables.h>
 #include <dtree/vesselsevaluators.h>
 
+#include "shortestpath/AStarShortestPathFinder.h"
+
 #include <boost/make_shared.hpp>
 
 #include <functional>
 #include <stdexcept>
+
+extern GeoGraph geoGraph;
+std::mutex aStarMutex;
+AStarShortestPathFinder aStarPathFinder;
 
 std::vector<std::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 
@@ -4282,6 +4288,13 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     this->set_previous_harbour_idx(from);
 
     PathShop curr_path_shop;
+
+    // ASTAR TODO: Move and replicate the following path in the proper position
+    aStarMutex.lock();
+    auto path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+    aStarMutex.unlock();
+    // ASTAR ...and replicate wherever needed.
+
 
     if(!create_a_path_shop)
     {

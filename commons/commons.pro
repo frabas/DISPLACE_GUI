@@ -80,7 +80,11 @@ SOURCES= \
     diffusion.cpp \
     storage/tables/nodesenvttable.cpp \
     storage/tables/nodesstattable.cpp \
-    storage/tables/nodestariffstattable.cpp
+    storage/tables/nodestariffstattable.cpp \
+    shortestpath/AStarShortestPathFinder.cpp \
+    shortestpath/GeoGraph.cpp \
+    shortestpath/GeoGraphLoader.cpp
+
 
 HEADERS= \
     ../include/readdata.h \
@@ -157,7 +161,10 @@ HEADERS= \
     storage/tables/nodesstattable.h \
     storage/tables/nodestariffstattable.h \
     ../include/StrongType.h \
-    storage/cacheddatastorage.h
+    storage/cacheddatastorage.h \
+    shortestpath/AStarShortestPathFinder.h \
+    shortestpath/GeoGraphLoader.h \
+    shortestpath/GeoGraph.h
 
 ### mSQLiteCpp dependency
 

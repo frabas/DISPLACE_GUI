@@ -5,13 +5,15 @@
 #ifndef EXPERIMENTS_GEOGRAPH_H
 #define EXPERIMENTS_GEOGRAPH_H
 
+#include <commons_global.h>
+
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/random.hpp>
 
 #include <random>
 #include <vector>
 
-class GeoGraph {
+class COMMONSSHARED_EXPORT GeoGraph {
 public:
     // auxiliary types
     struct location

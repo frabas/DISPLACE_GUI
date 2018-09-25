@@ -5,12 +5,14 @@
 #ifndef DISPLACERESEARCH_GEOGRAPHLOADER_H
 #define DISPLACERESEARCH_GEOGRAPHLOADER_H
 
+#include <commons_global.h>
+
 #include <string>
 #include <iostream>
 
 class GeoGraph;
 
-class GeoGraphLoader {
+class COMMONSSHARED_EXPORT GeoGraphLoader {
     void loadNodes(GeoGraph &graph,std::istream &is);
     void loadEdges(GeoGraph &graph,std::istream &is);
 public:

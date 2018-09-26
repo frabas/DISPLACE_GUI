@@ -4291,7 +4291,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     // ASTAR TODO: Move and replicate the following path in the proper position
     aStarMutex.lock();
-    auto path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+    //auto path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
     aStarMutex.unlock();
     // ASTAR ...and replicate wherever needed.
 

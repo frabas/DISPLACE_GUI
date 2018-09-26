@@ -12,6 +12,7 @@
 
 #include <random>
 #include <vector>
+#include <ctime>
 
 class COMMONSSHARED_EXPORT GeoGraph {
 public:

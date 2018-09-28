@@ -4289,16 +4289,22 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     PathShop curr_path_shop;
 
-    // ASTAR TODO: Move and replicate the following path in the proper position
-    aStarMutex.lock();
-    //auto path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
-    aStarMutex.unlock();
-    // ASTAR ...and replicate wherever needed.
 
 
     if(!create_a_path_shop)
     {
-        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+
+
+        // ASTAR TODO: Move and replicate the following path in the proper position
+        aStarMutex.lock();
+        //auto a_path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+        aStarMutex.unlock();
+        cout << from.toIndex() << " test the a-star...ok" <<endl;
+        // ASTAR ...and replicate wherever needed.
+
+
+
+      /*  std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         if (it != relevant_nodes.end())
         {
            cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
@@ -4310,7 +4316,10 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
            //pathshops.push_back(on_the_fly_pathshop);
            cout << from.toIndex() << " add to the pathshops...ok" <<endl;
         }
-     }
+       */
+
+
+    }
     else						 // replaced by:
     {
         std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);

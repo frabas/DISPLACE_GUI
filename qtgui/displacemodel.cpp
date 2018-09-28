@@ -57,7 +57,7 @@ DisplaceModel::DisplaceModel()
       mIndex(-1),
       mSimulSteps(8762),
       mUseStaticPaths(1),
-      mPreexistingPathsShop(1),
+      mPreexistingPathsShop(0),
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),

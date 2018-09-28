@@ -3741,6 +3741,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     try {
         GeoGraphLoader loader;
         loader.load(geoGraph, filename_graph, filename_graph_test);
+        cout << "Loading the graph "<< filename_graph << " ...ok" << endl;
     } catch (std::exception &x) {
         std::cerr << "Cannot read Node graphs: " << x.what();
         return 2;
@@ -3764,7 +3765,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-    if(!create_a_path_shop)
+    if(!create_a_path_shop && read_preexisting_paths)
     {
         outc(cout << "you chose to do not create a path shop...the computation will take far more time." << endl);
     }
@@ -3780,8 +3781,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             //dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
 
             // this is a programs argument option
-            if(read_preexisting_paths)
-            {
 
                 //dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
 
@@ -3794,29 +3793,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 PathShop curr_path_shop =read_graph_details(relevant_nodes.at(i),  namefolderinput,   inputfolder,  a_graph_name);
                 pathshops.push_back(curr_path_shop);
 
-            }
-            else
-            {
-                outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
-                // from the source to all nodes
-              // TO DO: ADAPT TO THE NEW DATA STRUCTURE:  DijkstraComputePaths(relevant_nodes.at(i).toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-
-                // remove unecessary entry keys in the map "previous" for optimisation and speed-up the simus
-                // (i.e. to increase the speed of the previous.find() algo...)
-                //out(cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl);
-                // 'previous' is not modified but a new 'previous' is exported into a file here....
-
-                //SimplifyThePreviousMap(relevant_nodes.at(i).toIndex(), previous,
-                //                       relevant_nodes, min_distance,
-                //                       namefolderinput, inputfolder, a_graph_name);
-                //min_distance.clear();
-                //previous.clear();
-                // these maps come from SimplifyThePreviousMap()
-                //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
-                // these maps come from SimplifyThePreviousMap()
-                //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
-
-            }
 
 
         }

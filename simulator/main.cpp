@@ -205,7 +205,7 @@ bool is_impact_benthos_N; // otherwise the impact is on biomass by default
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
 
-GeoGraph geoGraph;
+
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 

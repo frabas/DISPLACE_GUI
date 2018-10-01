@@ -2,8 +2,8 @@
 // Created by Federico Fuga on 11/07/18.
 //
 
-#ifndef EXPERIMENTS_GEOGRAPH_H
-#define EXPERIMENTS_GEOGRAPH_H
+#ifndef GEOGRAPH_H
+#define GEOGRAPH_H
 
 #include <commons_global.h>
 
@@ -52,4 +52,4 @@ public:
 };
 
 
-#endif //EXPERIMENTS_GEOGRAPH_H
+#endif //GEOGRAPH_H

@@ -55,6 +55,7 @@
 #include <stdexcept>
 
 extern GeoGraph geoGraph;
+
 std::mutex aStarMutex;
 AStarShortestPathFinder aStarPathFinder;
 
@@ -4297,7 +4298,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
         // ASTAR TODO: Move and replicate the following path in the proper position
         aStarMutex.lock();
-        //auto a_path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+        auto a_path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
         cout << from.toIndex() << " test the a-star...ok" <<endl;
         // ASTAR ...and replicate wherever needed.

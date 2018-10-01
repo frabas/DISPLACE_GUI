@@ -38,6 +38,10 @@
 
 #include <mutex>
 
+#include "shortestpath/GeoGraph.h"
+extern COMMONSSHARED_EXPORT GeoGraph geoGraph;
+
+
 typedef types::NodeId::type vertex_t;
 
 class Node;

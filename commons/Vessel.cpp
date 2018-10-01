@@ -54,7 +54,6 @@
 #include <functional>
 #include <stdexcept>
 
-extern GeoGraph geoGraph;
 
 std::mutex aStarMutex;
 AStarShortestPathFinder aStarPathFinder;

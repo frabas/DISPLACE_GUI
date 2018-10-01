@@ -6,8 +6,9 @@
 
 #include "displacemodel.h"
 
-#include <GeographicLib/Geodesic.hpp>
+#include <GeoGraphicLib/Geodesic.hpp>
 
+#include <boost/property_map/property_map.hpp>
 #include <boost/graph/astar_search.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/random.hpp>
@@ -19,7 +20,7 @@ using namespace boost;
 namespace {
 
 
-class GeoGraph {
+class MyGeoGraph {
 public:
     // auxiliary types
     struct location {
@@ -40,7 +41,7 @@ public:
     WeightMap weightmap = get(boost::edge_weight, graph);
     std::vector<location> locations;
 
-    GeoGraph() = default;
+    MyGeoGraph() = default;
 
     void addNode(int node, float x, float y)
     {
@@ -120,7 +121,7 @@ private:
 
 struct AStarShortestPath::Impl {
     DisplaceModel *mModel;
-    GeoGraph graph;
+    MyGeoGraph graph;
 
     struct PathSegment {
         types::NodeId n;
@@ -136,23 +137,23 @@ struct AStarShortestPath::Impl {
     }
 
     std::list<PathSegment>
-    findShortestPath(GeoGraph::vertex from, GeoGraph::vertex to)
+    findShortestPath(MyGeoGraph::vertex from, MyGeoGraph::vertex to)
     {
         auto &bgraph = graph.graph;
         bool found = false;
 
-        std::vector<GeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
-        std::vector<GeoGraph::cost> d(graph.numEdges());
+        std::vector<MyGeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
+        std::vector<MyGeoGraph::cost> d(graph.numEdges());
         try {
             // call astar named parameter interface
             astar_search_tree
                     (bgraph, from,
-                     distance_heuristic<GeoGraph::Graph, GeoGraph::cost, GeoGraph::location *>
+                     distance_heuristic<MyGeoGraph::Graph, MyGeoGraph::cost, MyGeoGraph::location *>
                              (graph.locations.data(), to),
                      predecessor_map(make_iterator_property_map(p.begin(), boost::get(boost::vertex_index, bgraph))).
                              distance_map(
                              make_iterator_property_map(d.begin(), boost::get(boost::vertex_index, bgraph))).
-                             visitor(astar_goal_visitor<GeoGraph::vertex>(to)));
+                             visitor(astar_goal_visitor<MyGeoGraph::vertex>(to)));
 
         } catch (found_goal &x) {
             found = true;

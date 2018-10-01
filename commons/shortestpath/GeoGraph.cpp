@@ -6,6 +6,8 @@
 
 #include <boost/graph/astar_search.hpp>
 
+GeoGraph COMMONSSHARED_EXPORT geoGraph;
+
 using namespace boost;
 
 void GeoGraph::addNode(int node, float x, float y)

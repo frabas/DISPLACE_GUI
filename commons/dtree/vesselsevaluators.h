@@ -37,7 +37,7 @@ public:
     VesselSizeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
       //cout << vessel->get_name() << " with length " << vessel->get_length() << " is of length class " <<  (double)vessel->get_length_class() << endl;
-        return vessel->get_length_class();
+      return static_cast<float>(vessel->get_length_class()) / VariableNames::variableBinCount(Variable::vesselSizeIs);
     }
 };
 

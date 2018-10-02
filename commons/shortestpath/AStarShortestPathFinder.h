@@ -13,7 +13,7 @@
 
 class COMMONSSHARED_EXPORT AStarShortestPathFinder {
 public:
-    std::list<GeoGraph::vertex> findShortestPath (GeoGraph &graph, GeoGraph::vertex from, GeoGraph::vertex to);
+    std::list<int> findShortestPath (GeoGraph &graph, GeoGraph::vertex from, GeoGraph::vertex to);
 };
 
 

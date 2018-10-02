@@ -52,7 +52,7 @@ private:
 
 }
 
-std::list<GeoGraph::vertex>
+std::list<int>
 AStarShortestPathFinder::findShortestPath(GeoGraph &ggraph, GeoGraph::vertex from, GeoGraph::vertex to)
 {
     auto &graph = ggraph.graph;
@@ -75,7 +75,7 @@ AStarShortestPathFinder::findShortestPath(GeoGraph &ggraph, GeoGraph::vertex fro
         found = true;
     }
 
-    std::list<GeoGraph::vertex> result;
+    std::list<int> result;
     if (!found)
         return result;
 

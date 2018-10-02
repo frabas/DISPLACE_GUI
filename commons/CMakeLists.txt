@@ -1,5 +1,5 @@
 
-add_definitions(-DCOMMONS_LIBRARY)
+add_definitions(-DCOMMONS_LIBRARY -DWITH_BOOST)
 
 if (WIN32)
     add_definitions(

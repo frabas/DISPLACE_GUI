@@ -113,7 +113,6 @@ private:
     std::shared_ptr<DisplaceModel> mModel;
     int mSimSteps;
     int useStaticPaths;
-    int preexistingPathsShop;
     int mLastStep;
     QString mOutDir;
     QString mOutputName;

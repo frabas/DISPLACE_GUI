@@ -60,6 +60,33 @@ AStarShortestPathFinder aStarPathFinder;
 
 std::vector<std::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 
+
+
+vector<double> compute_distance_fgrounds_on_the_fly(vector<Node*>& nodes, types::NodeId from,
+                                         vector<types::NodeId> grounds)
+{
+    outc (cout  << "look at the distances on the fly" << endl);
+
+    outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
+
+    vector <double> distance_fgrounds;
+    for (unsigned int i=0; i<grounds.size(); i++)
+      {
+        auto vertex= nodes.at(grounds.at(i).toIndex());
+        auto vertex2= nodes.at(from.toIndex());
+        double dx = vertex->get_x() - vertex2->get_x();
+        double dy = vertex->get_y() - vertex2->get_y();
+
+        distance_fgrounds.at(i)=sqrt(dx * dx + dy * dy);
+
+      }
+
+    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
+
+ return(distance_fgrounds);
+}
+
+
 Vessel::Vessel()
 {
     idx_vessel = 0;
@@ -4079,7 +4106,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
 bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
                                             const DynAllocOptions& dyn_alloc_sce,
-                                            int create_a_path_shop,
+                                            int use_static_paths,
                                             const vector<PathShop> &pathshops,
                                             adjacency_map_t& adjacency_map,
                                             vector<types::NodeId> &relevant_nodes,
@@ -4292,7 +4319,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     list<types::NodeId> path;
 
-    if(!create_a_path_shop)
+    if(!use_static_paths)
     {
 
 
@@ -4411,7 +4438,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
 void Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
-                                                  int create_a_path_shop,
+                                                  int use_static_paths,
                                                   const std::vector<PathShop> &pathshops,
                                                   adjacency_map_t& adjacency_map,
                                                   vector <types::NodeId>& relevant_nodes,
@@ -4444,32 +4471,23 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     //previous.clear();
     PathShop curr_path_shop;
 
-    if(!create_a_path_shop)
-    {
-        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
-        if (it != relevant_nodes.end())
-        {
-           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
-           relevant_nodes.push_back(from);
-           spp::sparse_hash_map <vertex_t, vertex_t> previous;
-           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
-           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
-           //pathshops.push_back(on_the_fly_pathshop);
-           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
-        }
-      }
-    else						 // replaced by:
+    vector <double> distance_fgrounds;
+    if(use_static_paths)
     {
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
 
+         distance_fgrounds= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                      from, grds);
 
     }
+    else
+    {
+        // cartesian approx. actually...
+        distance_fgrounds= compute_distance_fgrounds_on_the_fly(nodes, from, grds);
+    }
 
-    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
-                                                                  from, grds);
 
     for (unsigned int i =0; i< grds.size(); i++)
     {
@@ -4690,7 +4708,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 void Vessel::choose_a_port_and_then_return(int tstep,
                                            const DynAllocOptions &dyn_alloc_sce,
-                                           int create_a_path_shop,
+                                           int use_static_paths,
                                            const std::vector<PathShop> &pathshops,
                                            adjacency_map_t& adjacency_map,
                                            vector <types::NodeId>& relevant_nodes,
@@ -4715,7 +4733,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     // get the shortest path between source and destination
     // with the list of intermediate nodes
 
-    if(!create_a_path_shop)
+    if(!use_static_paths)
     {
         std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         if (it != relevant_nodes.end())
@@ -4796,7 +4814,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         // so tips: use the inversed path instead! i.e. 'from' begin 'arr' while 'arr' begin 'from'
         // and finally the path is inverted.
 
-        if(!create_a_path_shop)
+        if(!use_static_paths)
         {
             std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
             if (it != relevant_nodes.end())
@@ -5694,7 +5712,7 @@ return(shall_I_change_to_another_ground_because_of_StartFishing_dtree ||
 int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool use_the_tree,
                                   int tstep,
                                   const DynAllocOptions& dyn_alloc_sce,
-                                  int create_a_path_shop,
+                                  int use_static_paths,
                                   const std::vector<PathShop> &pathshops,
                                   adjacency_map_t& adjacency_map,
                                   const vector <types::NodeId>& relevant_nodes,

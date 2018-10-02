@@ -458,7 +458,7 @@ public:
 
         bool choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
             const DynAllocOptions &dyn_alloc_sce,
-            int create_a_path_shop,
+            int use_static_paths,
             const std::vector <PathShop>& pathshops,
             adjacency_map_t& adjacencymap,
             vector<types::NodeId> &relevant_nodes,
@@ -472,7 +472,7 @@ public:
 
         void choose_another_ground_and_go_fishing(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
-            int create_a_path_shop,
+            int use_static_paths,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
             vector<types::NodeId> &relevant_nodes,
@@ -483,7 +483,7 @@ public:
             std::ofstream& freq_distance);
         void choose_a_port_and_then_return(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
-            int create_a_path_shop,
+            int use_static_paths,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
             vector<types::NodeId> &relevant_nodes,
@@ -507,7 +507,7 @@ public:
         int should_i_stop_fishing(const std::map<std::string, int> &external_states, bool use_the_tree,
             int tstep,
             const DynAllocOptions& dyn_alloc_sce,
-            int create_a_path_shop,
+            int use_static_paths,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
             const vector<types::NodeId> &relevant_nodes,

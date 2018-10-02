@@ -237,6 +237,7 @@ vector<double> COMMONSSHARED_EXPORT compute_distance_fgrounds(const vector<types
                                          types::NodeId from,
                                          vector<types::NodeId> grounds);
 
+
 //---------------------------------------//
 // data input
 //---------------------------------------//

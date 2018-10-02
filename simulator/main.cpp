@@ -403,14 +403,13 @@ string inputfolder=".";
 string namesimu="sim1";
 int nbsteps=10;
 double dparam=10.0;
-int read_preexisting_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
+int use_static_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
 int selected_vessels_only=0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
 bool use_gui = false;
 bool gui_move_vessels = true;
 bool use_gnuplot = false;
 int num_threads = 4;
 int nb_displayed_moves_out_of_twenty=1;
-int create_a_path_shop = 1;
 int export_vmslike = 1;
 
 void parseCommandLine (int argc, char const *argv[])
@@ -425,8 +424,7 @@ void parseCommandLine (int argc, char const *argv[])
             (",s", po::value(&namesimu), "name of the simulation")
             (",i", po::value(&nbsteps), "lenght of the simulation in number of steps (hours)")
             (",V", po::value(&verbosity), "verbosity level")
-            (",p", po::value(&create_a_path_shop), "Create a Path_shop")
-            (",o", po::value(&read_preexisting_paths), "Read preexisitng paths")
+            (",p", po::value(&use_static_paths), "Use static paths")
             (",e", po::value(&export_vmslike), "Export VMSLike data")
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
@@ -493,12 +491,11 @@ int app_main(int argc, char const* argv[])
 
     // example for setting up options for the command line
     // (in code::blocks, see Project>Set programs arguments in code::blocks menu)
-    // e.g.  -f "balticonly" -f2 "baseline" -s "simu1" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
-    // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot  // disable the VMS file exporting, the most used.
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -o 1 -e 1 -v 0 --with-gnuplot    // enable the VMS file exporting
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -o 1 -e 1 -v 1 --with-gnuplot    // subset of vessels, see features.dat
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -o 0 -e 1 -v 0 --with-gnuplot    // create the path shop
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
+    // e.g.  -f "balticonly" -f2 "baseline" -s "simu1" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot
+    // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot  // disable the VMS file exporting, the most used.
+    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 -v 0 --with-gnuplot    // enable the VMS file exporting
+    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 -v 1 --with-gnuplot    // subset of vessels, see features.dat
+    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because might need much more computation time...
 
     // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
@@ -506,7 +503,7 @@ int app_main(int argc, char const* argv[])
 
     /* run in command line with:
       C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" -f2 "baseline" -s
-      "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
+      "simu2" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
     */
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
@@ -527,7 +524,7 @@ int app_main(int argc, char const* argv[])
 
     lock();
     cout << " nbsteps " << nbsteps
-         << " namefolderinput " << namefolderinput <<" " << read_preexisting_paths << endl;
+         << " namefolderinput " << namefolderinput <<" " << use_static_paths << endl;
     unlock();
 
     //	if(namefolderinput=="fake") inputfolder="DISPLACE_input_test";
@@ -3763,9 +3760,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-    if(!create_a_path_shop && read_preexisting_paths)
+    if(!use_static_paths)
     {
-        outc(cout << "you chose to do not create a path shop...the computation will take far more time." << endl);
+        outc(cout << "you chose to do not using existing path shop...the computation of paths on the fly might take more time." << endl);
     }
     else
     {

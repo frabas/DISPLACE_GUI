@@ -116,7 +116,7 @@ extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
 extern string fleetsce;
-extern int create_a_path_shop;
+extern int use_static_paths;
 extern adjacency_map_t adjacency_map;
 extern vector<string> vertex_names;
 //extern map<vertex_t, vertex_t> previous;
@@ -270,7 +270,7 @@ static void manage_vessel(int idx_v,
                     outc(cout  << "GO FISHING" << endl);
                     do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
                                 tstep, scenario, use_dtrees,
-                                dyn_alloc_sce, create_a_path_shop,  pathshops,
+                                dyn_alloc_sce, use_static_paths,  pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
                                 nodes,
                                 metiers,
@@ -302,7 +302,7 @@ static void manage_vessel(int idx_v,
                             external_states_relevant_for_stopping_fishing,
                             use_dtrees,
                             tstep,
-                            dyn_alloc_sce, create_a_path_shop,
+                            dyn_alloc_sce, use_static_paths,
                             pathshops,
                             adjacency_map, relevant_nodes,
                             nodes,
@@ -350,7 +350,7 @@ static void manage_vessel(int idx_v,
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
                                     tstep,
-                                    dyn_alloc_sce, create_a_path_shop,
+                                    dyn_alloc_sce, use_static_paths,
                                     pathshops,
                                     adjacency_map,relevant_nodes, nodes_in_polygons,
                                     nodes,
@@ -424,7 +424,7 @@ static void manage_vessel(int idx_v,
                     vessels[ index_v ]->choose_a_port_and_then_return(
                                 tstep,
                                 dyn_alloc_sce,
-                                create_a_path_shop,
+                                use_static_paths,
                                 pathshops,
                                 adjacency_map,
                                 relevant_nodes,

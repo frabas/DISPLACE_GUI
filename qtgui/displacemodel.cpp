@@ -57,7 +57,6 @@ DisplaceModel::DisplaceModel()
       mIndex(-1),
       mSimulSteps(8762),
       mUseStaticPaths(0),
-      mPreexistingPathsShop(0),
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
@@ -440,16 +439,6 @@ int DisplaceModel::getUseStaticPaths() const
 void DisplaceModel::setUseStaticPaths(int value)
 {
     mUseStaticPaths = value;
-}
-
-int DisplaceModel::getPreexistingPathsShop() const
-{
-    return mPreexistingPathsShop;
-}
-
-void DisplaceModel::setPreexistingPathsShop(int value)
-{
-    mPreexistingPathsShop = value;
 }
 
 

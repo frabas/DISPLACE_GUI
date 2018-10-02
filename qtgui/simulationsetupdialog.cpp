@@ -66,21 +66,10 @@ void SimulationSetupDialog::setUseStaticPaths(int yesno)
     ui->useStaticPaths->setValue(yesno);
 }
 
-void SimulationSetupDialog::setPreexistingPathsShop(int yesno)
-{
-    ui->preexistingPathsShop->setValue(yesno);
-}
-
-
 
 int SimulationSetupDialog::getUseStaticPaths() const
 {
     return ui->useStaticPaths->value();
-}
-
-int SimulationSetupDialog::getPreexistingPathsShop() const
-{
-    return ui->preexistingPathsShop->value();
 }
 
 

@@ -114,30 +114,14 @@
       <string>Shortest paths</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="0">
-       <widget class="QSpinBox" name="preexistingPathsShop">
-        <property name="suffix">
-         <string/>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Preexisting paths</string>
+         <string>Use static paths</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="1" column="0">
        <widget class="QSpinBox" name="useStaticPaths">
         <property name="suffix">
          <string/>
@@ -150,13 +134,6 @@
         </property>
         <property name="value">
          <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Use static paths</string>
         </property>
        </widget>
       </item>

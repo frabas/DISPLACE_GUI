@@ -52,7 +52,8 @@ private:
 
 }
 
-std::list<int>
+//std::list<int>
+std::list<types::NodeId>
 AStarShortestPathFinder::findShortestPath(GeoGraph &ggraph, GeoGraph::vertex from, GeoGraph::vertex to)
 {
     auto &graph = ggraph.graph;
@@ -75,12 +76,12 @@ AStarShortestPathFinder::findShortestPath(GeoGraph &ggraph, GeoGraph::vertex fro
         found = true;
     }
 
-    std::list<int> result;
+    std::list<types::NodeId> result;
     if (!found)
         return result;
 
     for(auto v = to;; v = p[v]) {
-        result.push_front(v);
+        result.push_front(types::NodeId(static_cast<unsigned short> (v) ));
         if(p[v] == v)
             break;
     }

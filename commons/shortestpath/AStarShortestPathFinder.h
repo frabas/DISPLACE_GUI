@@ -11,9 +11,13 @@
 
 #include <list>
 
+#include<idtypes.h>
+typedef types::NodeId::type vertex_t;
+
+
 class COMMONSSHARED_EXPORT AStarShortestPathFinder {
 public:
-    std::list<int> findShortestPath (GeoGraph &graph, GeoGraph::vertex from, GeoGraph::vertex to);
+    std::list<types::NodeId> findShortestPath (GeoGraph &graph, GeoGraph::vertex from, GeoGraph::vertex to);
 };
 
 

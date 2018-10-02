@@ -4290,6 +4290,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     PathShop curr_path_shop;
 
 
+    list<types::NodeId> path;
 
     if(!create_a_path_shop)
     {
@@ -4297,29 +4298,14 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
         // ASTAR TODO: Move and replicate the following path in the proper position
         aStarMutex.lock();
-        auto a_path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
         cout << from.toIndex() << " test the a-star...ok" <<endl;
         // ASTAR ...and replicate wherever needed.
 
 
 
-      /*  std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
-        if (it != relevant_nodes.end())
-        {
-           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
-           relevant_nodes.push_back(from);
-           spp::sparse_hash_map <vertex_t, vertex_t> previous;
-           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
-           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
-           //pathshops.push_back(on_the_fly_pathshop);
-           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
-        }
-       */
-
-
-    }
+      }
     else						 // replaced by:
     {
         std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
@@ -4344,10 +4330,12 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         outc(cout  << "find path to fishing ground " << ground.toIndex() <<endl);
         outc(cout  << "from the current_path_shop of node " << relevant_nodes.at(idx).toIndex() <<endl);
         outc(cout  << "starting from the node " << from.toIndex() <<endl);
+
+        path = DijkstraGetShortestPathTo(ground, curr_path_shop);
     }
 
 
-    list<types::NodeId> path = DijkstraGetShortestPathTo(ground, curr_path_shop);
+
 
 
     if(path.size()>1)			 // i.e no path has been found if path.size()==1...

@@ -7,7 +7,7 @@ CONFIG += c++14 dll
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
-DEFINES += COMMONS_LIBRARY
+DEFINES += COMMONS_LIBRARY WITH_BOOST
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
 LIBS += -L.. -lformats -lGeographic
 

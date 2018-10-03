@@ -69,7 +69,7 @@ vector<double> compute_distance_fgrounds_on_the_fly(vector<Node*>& nodes, types:
 
     outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
 
-    vector <double> distance_fgrounds;
+    vector <double> distance_fgrounds(grounds.size(), 1000);
     for (unsigned int i=0; i<grounds.size(); i++)
       {
         auto vertex= nodes.at(grounds.at(i).toIndex());
@@ -4382,8 +4382,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
-        cout << from.toIndex() << " test the a-star...ok" <<endl;
-        // ASTAR ...and replicate wherever needed.
+        //cout << from.toIndex() << " test the a-star...ok" <<endl;
 
     }
     else
@@ -4701,7 +4700,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
         aStarMutex.unlock();
-        cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
     }
     else
     {
@@ -4728,7 +4727,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 aStarMutex.lock();
                  path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
                 aStarMutex.unlock();
-                cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+                //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
             }
             else
             {
@@ -4818,24 +4817,8 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     // get the shortest path between source and destination
     // with the list of intermediate nodes
 
-    if(!use_static_paths)
-    {
-        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
-        if (it != relevant_nodes.end())
-        {
-           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
-           relevant_nodes.push_back(from);
-           spp::sparse_hash_map <vertex_t, vertex_t> previous;
-           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
-           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
-           //pathshops.push_back(on_the_fly_pathshop);
-           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
-        }
-      }
-    else						 // replaced by:
-    {
-
+    if(use_static_paths)
+    {     
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
@@ -4903,7 +4886,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
         aStarMutex.unlock();
-        cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
     }
     else
     {
@@ -4936,7 +4919,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
             aStarMutex.lock();
              path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
             aStarMutex.unlock();
-            cout << from.toIndex() << " test the a-star for this situation...ok" <<endl;
+            //cout << from.toIndex() << " test the a-star for this situation...ok" <<endl;
         }
         else
         {

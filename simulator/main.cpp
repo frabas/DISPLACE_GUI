@@ -3762,33 +3762,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if(!use_static_paths)
     {
-        outc(cout << "you chose to do not using existing path shop...the computation of paths on the fly might take more time." << endl);
+        cout << "In Simulation Setup, you have chosen not to use pre-defined static paths... The computation of the paths on the fly might take more time" << endl;
     }
     else
     {
         cout << "reading pre-existing paths shop....wait" << endl;
 
-        // for-loop over potential departure node
+        // for-loop over potential departure nodes
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
         {
             outc(cout << ".");
-            //dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
 
-            // this is a programs argument option
-
-                //dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
-
-                // these maps come from SimplifyThePreviousMap()
-                //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
-                //dout(cout  << ":: "<<  endl);
-                // these maps come from SimplifyThePreviousMap()
-                //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
-
-                PathShop curr_path_shop =read_graph_details(relevant_nodes.at(i),  namefolderinput,   inputfolder,  a_graph_name);
-                pathshops.push_back(curr_path_shop);
-
-
+            PathShop curr_path_shop =read_graph_details(relevant_nodes.at(i),  namefolderinput,   inputfolder,  a_graph_name);
+            pathshops.push_back(curr_path_shop);
 
         }
 

@@ -181,6 +181,7 @@ add_library(commons SHARED
 
 target_link_libraries(commons
         formats
+        Geographic
         ${LIBRARIES}
         )
 

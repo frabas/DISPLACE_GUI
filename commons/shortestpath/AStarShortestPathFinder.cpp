@@ -3,11 +3,9 @@
 //
 
 #include "AStarShortestPathFinder.h"
-
-#include <boost/graph/astar_search.hpp>
-
 #include <GeographicLib/Geodesic.hpp>
 
+#include <boost/graph/astar_search.hpp>
 
 using namespace boost;
 
@@ -28,16 +26,9 @@ public:
             : m_location(l), m_goal(goal) {}
     CostType operator()(Vertex u)
     {
-        // cartesian:
-        //CostType dx = m_location[m_goal].x - m_location[u].x;
-        //CostType dy = m_location[m_goal].y - m_location[u].y;
-        //return ::sqrt(dx * dx + dy * dy);
-
-        // geodesic:
         double d;
         geod.Inverse(m_location[m_goal].y, m_location[m_goal].x, m_location[u].y, m_location[u].x, d);
         return d;
-
     }
 private:
     LocMap m_location;

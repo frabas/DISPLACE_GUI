@@ -9,7 +9,7 @@ macx:DESTDIR=$$LIBDESTDIR
 
 DEFINES += COMMONS_LIBRARY
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
-LIBS += -L.. -lformats
+LIBS += -L.. -lformats -lGeographic
 
 win32 {
     # No crash handler support for Windows

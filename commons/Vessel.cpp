@@ -4384,6 +4384,20 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         aStarMutex.unlock();
         //cout << from.toIndex() << " test the a-star...ok" <<endl;
 
+        /*
+         * if(path.size()<=1)
+        { // a edge case we should avoid!
+            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having chosen a ground?" <<endl;
+            list<types::NodeId>::iterator road_iter = path.begin();
+            dout(cout << "path: ");
+            for( ; road_iter != path.end(); road_iter++)
+            {
+               dout(cout << *road_iter << " " );
+            }
+            dout(cout << endl);
+        }
+        */
+
     }
     else
     {
@@ -4420,7 +4434,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     {
         path.pop_front();		 // delete the first node (departure) because we are lying in...
         this->set_roadmap(path);
-        // show the roadmap
+
+       /* // show the roadmap
         list<types::NodeId> road= this->get_roadmap();
 
         // check path
@@ -4431,6 +4446,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                dout(cout << *road_iter << " " );
             }
             dout(cout << endl);
+        */
 
         // then, call to find.next.pt.on.the.graph()
         this-> find_next_point_on_the_graph_unlocked(nodes);
@@ -4478,7 +4494,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     }
     else
     {
-        outc(cout << "pble calculating from " << from << " to " << ground << endl);
+        outc(cout << "pble calculating from " << from << " to " << ground << " in choose_a_ground_and_go_fishing()"<< endl);
         this->move_to(nodes.at(from.toIndex())) ;
         // no path found: assume the vessel stucks at its current location
     }
@@ -4701,6 +4717,21 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
          path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
         aStarMutex.unlock();
         //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+
+        /*
+         * if(path.size()<=1)
+        { // a edge case we should avoid!
+            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having decided to change ground?" <<endl;
+            list<types::NodeId>::iterator road_iter = path.begin();
+            dout(cout << "path: ");
+            for( ; road_iter != path.end(); road_iter++)
+            {
+               dout(cout << *road_iter << " " );
+            }
+            dout(cout << endl);
+        }
+        */
+
     }
     else
     {
@@ -4720,7 +4751,6 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
             next_ground =  types::NodeId(grds[i]);
             dout(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
 
-            list<types::NodeId> path;
             if(!use_static_paths)
             {
                 // Use ASTAR on the fly

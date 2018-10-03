@@ -1897,12 +1897,12 @@ L3</string>
   </action>
   <action name="actionLink_Shortest_Path_Folder">
    <property name="text">
-    <string>Link Shortest Path Folder...</string>
+    <string>Link Shortest Paths Folder...</string>
    </property>
   </action>
   <action name="actionCreate_Shortest_Path">
    <property name="text">
-    <string>Create Shortest Path...</string>
+    <string>Create Static Shortest Paths...</string>
    </property>
   </action>
   <action name="actionAdd_Penalty_from_File">

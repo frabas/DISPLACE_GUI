@@ -447,12 +447,24 @@ public:
         void alter_freq_fgrounds_for_nodes_in_polygons(std::multimap <int, int> nodes_in_polygons);
 		void alloc_on_high_previous_cpue(int tstep,
             std::ofstream& freq_cpue);
-        void alloc_on_high_profit_grounds(int tstep, const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops,
+        void alloc_on_high_profit_grounds(int tstep,
+                                          int use_static_paths,
+                                          vector<Node *> &nodes,
+                                          const std::vector<types::NodeId> &relevant_nodes,
+                                          const std::vector<PathShop> &pathshops,
             std::ofstream& freq_profit);
-        std::vector<double> expected_profit_on_grounds(const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops);
-        void alloc_while_saving_fuel(int tstep, const std::vector<types::NodeId> &relevant_nodes,
+        std::vector<double> expected_profit_on_grounds(int use_static_paths,
+                                                       vector<Node*>& nodes,
+                                                       const std::vector<types::NodeId> &relevant_nodes,
+                                                       const std::vector<PathShop> &pathshops);
+        void alloc_while_saving_fuel(int tstep,
+                                     int use_static_paths,
+                                     vector<Node*>& nodes,
+                                    const std::vector<types::NodeId> &relevant_nodes,
            const std::vector<PathShop> &pathshops);
-        void alloc_on_closer_grounds(int tstep, const std::vector<types::NodeId> &relevant_nodes,
+        void alloc_on_closer_grounds(int tstep, int use_static_paths,
+                                     vector<Node *> &nodes,
+                                     const std::vector<types::NodeId> &relevant_nodes,
             const std::vector<PathShop> &pathshops,
             std::ofstream& freq_distance);
 
@@ -497,7 +509,7 @@ public:
                                  //yes:1; no=0
         int should_i_go_fishing(int tstep, std::vector<Population* >& populations, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
                                 std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
-        types::NodeId should_i_choose_this_ground(int tstep,
+        types::NodeId should_i_choose_this_ground(int tstep, int use_static_paths,
                                         std::vector<Node*>& nodes,
                                         const std::vector <types::NodeId>& relevant_nodes,
                                         const std::vector<PathShop> &pathshops,

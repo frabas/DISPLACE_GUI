@@ -3569,7 +3569,10 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 }
 
 
-vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops)
+vector<double> Vessel::expected_profit_on_grounds(int use_static_paths,
+                                                  vector<Node*>& nodes,
+                                                  const std::vector<types::NodeId> &relevant_nodes,
+                                                  const std::vector<PathShop> &pathshops)
 {
 
     outc(cout << "compute expected profit on grounds " << endl);
@@ -3589,7 +3592,20 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
     // distance to all grounds (through the graph...)
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops, from, the_grounds);
+
+    vector <double> distance_fgrounds;
+    if(use_static_paths)
+    {
+         distance_fgrounds= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                      from, the_grounds);
+
+    }
+    else
+    {
+        // cartesian approx. actually...
+        distance_fgrounds= compute_distance_fgrounds_on_the_fly(nodes, from, the_grounds);
+    }
+
 
     // vsize
     int length_class =this->get_length_class();
@@ -3710,12 +3726,19 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
 
 }
 
-void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops,
+void Vessel::alloc_on_high_profit_grounds(int tstep,
+                                          int use_static_paths,
+                                          vector<Node*>& nodes,
+                                          const std::vector<types::NodeId> &relevant_nodes,
+                                          const std::vector<PathShop> &pathshops,
                                           ofstream& freq_profit)
 {
 
 
-    vector<double> profit_per_fgrounds = expected_profit_on_grounds(relevant_nodes, pathshops);
+    vector<double> profit_per_fgrounds = expected_profit_on_grounds(use_static_paths,
+                                                                    nodes,
+                                                                    relevant_nodes,
+                                                                    pathshops);
 
 
     vector <double> freq_grds = this->get_freq_fgrounds();
@@ -3779,6 +3802,8 @@ void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<types::No
 
 
 void Vessel::alloc_while_saving_fuel(int tstep,
+                                     int use_static_paths,
+                                     vector<Node*>& nodes,
                                      const vector <types::NodeId>& relevant_nodes,
                                      const std::vector<PathShop> &pathshops
                                      )
@@ -3800,8 +3825,20 @@ void Vessel::alloc_while_saving_fuel(int tstep,
         // distance to all grounds (through the graph...)
         auto from = this->get_loc()->get_idx_node();
         auto the_grounds = this->get_fgrounds();
-        vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
-                                                                       from, the_grounds);
+
+        vector <double> distance_fgrounds;
+        if(use_static_paths)
+        {
+             distance_fgrounds= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                          from, the_grounds);
+
+        }
+        else
+        {
+            // cartesian approx. actually...
+            distance_fgrounds= compute_distance_fgrounds_on_the_fly(nodes, from, the_grounds);
+        }
+
 
         // find the freq for the 3 most used grounds and track their idx.
         // the value
@@ -3938,7 +3975,7 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 }
 
 
-void Vessel::alloc_on_closer_grounds(int tstep, const vector <types::NodeId>& relevant_nodes,
+void Vessel::alloc_on_closer_grounds(int tstep, int use_static_paths, vector<Node*>&nodes, const vector <types::NodeId>& relevant_nodes,
                                      const std::vector<PathShop> &pathshops,
                                      ofstream& freq_distance)
 {
@@ -3961,8 +3998,21 @@ void Vessel::alloc_on_closer_grounds(int tstep, const vector <types::NodeId>& re
 
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
-                                                                  from, the_grounds);
+
+    vector <double> distance_fgrounds;
+    if(use_static_paths)
+    {
+         distance_fgrounds= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                      from, the_grounds);
+
+    }
+    else
+    {
+        // cartesian approx. actually...
+        distance_fgrounds= compute_distance_fgrounds_on_the_fly(nodes, from, the_grounds);
+    }
+
+
     // we could have computed here as well the fuel to be used for reaching each ground...
 
     vector <double> freq_distance_fgrounds= scale_a_vector_to_1(distance_fgrounds);
@@ -4134,6 +4184,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
         outc(cout << " should i choose this ground" << endl);
         ground=this->should_i_choose_this_ground(tstep,
+                                                 use_static_paths,
                                                  nodes,
                                                  relevant_nodes,
                                                  pathshops,
@@ -4163,6 +4214,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
             outc(cout << " alloc on high profit grounds" << endl);
             this->alloc_on_high_profit_grounds(tstep,
+                                               use_static_paths,
+                                               nodes,
                                                relevant_nodes,
                                                pathshops,
                                                freq_profit);
@@ -4179,6 +4232,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
                 outc(cout << " alloc while saving fuel" << endl);
                 this->alloc_while_saving_fuel(tstep,
+                                              use_static_paths,
+                                              nodes,
                                               relevant_nodes,
                                               pathshops);
             }
@@ -4195,6 +4250,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
             outc(cout << " alloc on closer grounds" << endl);
             this->alloc_on_closer_grounds(tstep,
+                                          use_static_paths,
+                                          nodes,
                                           relevant_nodes,
                                           pathshops,
                                           freq_distance);
@@ -4321,20 +4378,17 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     if(!use_static_paths)
     {
-
-
-        // ASTAR TODO: Move and replicate the following path in the proper position
+        // use ASTAR on the fly
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
         cout << from.toIndex() << " test the a-star...ok" <<endl;
         // ASTAR ...and replicate wherever needed.
 
-
-
-      }
-    else						 // replaced by:
+    }
+    else
     {
+        // instead, read into the static paths
         std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx;
         if (it != relevant_nodes.end())
@@ -4349,8 +4403,6 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             spp::sparse_hash_map <vertex_t, vertex_t> previous;
             spp::sparse_hash_map <vertex_t, weight_t> min_distance;
             DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-            //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
-            //pathshops.push_back(on_the_fly_pathshop);
             cout << from.toIndex() << " add to the pathshops...ok" <<endl;
         }
 
@@ -4640,7 +4692,24 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         this->set_cumfuelcons(cumfuelcons);
         this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
     }
-    list<types::NodeId> path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
+
+
+    list<types::NodeId> path;
+    if(!use_static_paths)
+    {
+        // Use ASTAR on the fly
+        aStarMutex.lock();
+         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
+        aStarMutex.unlock();
+        cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+    }
+    else
+    {
+        // instead, read static paths
+        path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
+
+    }
+
     path.pop_front();			 // delete the first node (departure) because we are lying in...
 
     if(path.empty())
@@ -4651,7 +4720,23 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         {
             next_ground =  types::NodeId(grds[i]);
             dout(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
-            path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
+
+            list<types::NodeId> path;
+            if(!use_static_paths)
+            {
+                // Use ASTAR on the fly
+                aStarMutex.lock();
+                 path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
+                aStarMutex.unlock();
+                cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+            }
+            else
+            {
+                // instead, read static paths
+                path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
+
+            }
+
             path.pop_front();	 // delete the first node (departure) because we are lying in...
             if(!path.empty())
             {
@@ -4756,8 +4841,20 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         curr_path_shop = pathshops.at(idx);
     }
 
-    vector <double> distance_to_harb = compute_distance_fgrounds(relevant_nodes, pathshops,
-                                                                 from, harbs);
+
+
+    vector <double> distance_to_harb;
+    if(use_static_paths)
+    {
+         distance_to_harb= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                      from, harbs);
+
+    }
+    else
+    {
+        // cartesian approx. actually...
+        distance_to_harb= compute_distance_fgrounds_on_the_fly(nodes, from, harbs);
+    }
 
 
 
@@ -4798,7 +4895,23 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
     dout(cout  << "from " << from.toIndex() << endl);
     dout(cout  << "choose " << arr.toIndex() << endl);
-    list<types::NodeId> path = DijkstraGetShortestPathTo(arr, curr_path_shop);
+
+    list<types::NodeId> path;
+    if(!use_static_paths)
+    {
+        // Use ASTAR on the fly
+        aStarMutex.lock();
+         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
+        aStarMutex.unlock();
+        cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+    }
+    else
+    {
+        // instead, read static paths
+        path = DijkstraGetShortestPathTo(arr, curr_path_shop);
+
+    }
+
 
     // check the path
     // list<int>::iterator pos;
@@ -4814,30 +4927,29 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         // so tips: use the inversed path instead! i.e. 'from' begin 'arr' while 'arr' begin 'from'
         // and finally the path is inverted.
 
+
+
+        list<types::NodeId> path;
         if(!use_static_paths)
         {
-            std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
-            if (it != relevant_nodes.end())
-            {
-               cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
-               relevant_nodes.push_back(from);
-               spp::sparse_hash_map <vertex_t, vertex_t> previous;
-               spp::sparse_hash_map <vertex_t, weight_t> min_distance;
-               DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-               //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
-               //pathshops.push_back(on_the_fly_pathshop);
-               cout << from.toIndex() << " add to the pathshops...ok" <<endl;
-            }
+            // Use ASTAR on the fly
+            aStarMutex.lock();
+             path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
+            aStarMutex.unlock();
+            cout << from.toIndex() << " test the a-star for this situation...ok" <<endl;
         }
-        else					 // replaced by:
+        else
         {
+            // instead, read static paths
             auto it = find (relevant_nodes.begin(), relevant_nodes.end(), arr);
             int idx = it - relevant_nodes.begin();
             curr_path_shop = pathshops.at(idx);
 
+            path = DijkstraGetShortestPathTo(arr, curr_path_shop);
+
         }
 
-        path = DijkstraGetShortestPathTo(arr, curr_path_shop);
+
         reverse(path.begin(), path.end());
 
         // check
@@ -5125,6 +5237,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& population
 
 
 types::NodeId Vessel::should_i_choose_this_ground(int tstep,
+                                                  int use_static_paths,
                                                   vector<Node *> &nodes,
                                                   const vector<types::NodeId> &relevant_nodes,
                                                   const std::vector<PathShop> &pathshops,
@@ -5224,7 +5337,10 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     {
         outc(cout << "compute smartCatchGround"  << endl);
 
-        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(relevant_nodes, pathshops);
+        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(use_static_paths,
+                                                                                     nodes,
+                                                                                     relevant_nodes,
+                                                                                     pathshops);
 
         // a check
 
@@ -5445,9 +5561,21 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         outc(cout << "compute notThatFarGround"  << endl);
 
         auto from = this->get_loc()->get_idx_node();
-        vector <double> distance_to_grounds = compute_distance_fgrounds
-                                                    (relevant_nodes, pathshops,
-                                                     from, grds);
+
+
+        vector <double> distance_to_grounds;
+        if(use_static_paths)
+        {
+             distance_to_grounds= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                          from, grds);
+
+        }
+        else
+        {
+            // cartesian approx. actually...
+            distance_to_grounds= compute_distance_fgrounds_on_the_fly(nodes, from, grds);
+        }
+
 
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out3;
@@ -5780,8 +5908,20 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
             auto from = this->get_loc()->get_idx_node();
 
 
-            vector <double> dist_to_ports = compute_distance_fgrounds(relevant_nodes, pathshops,
-                                                                          from, harbs);
+            vector <double> dist_to_ports;
+            if(use_static_paths)
+            {
+
+                 dist_to_ports= compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                              from, harbs);
+
+            }
+            else
+            {
+                // cartesian approx. actually...
+                dist_to_ports= compute_distance_fgrounds_on_the_fly(nodes, from, harbs);
+            }
+
 
             vector<double>::iterator where = min_element (dist_to_ports.begin(), dist_to_ports.end());
             a_min_dist = *where;

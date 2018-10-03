@@ -4740,9 +4740,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     }
 
-    path.pop_front();			 // delete the first node (departure) because we are lying in...
+    if(!path.empty()) path.pop_front();			 // delete the first node (departure) because we are lying in...
 
-    if(path.empty())
+    if(path.size()==0)
     {
         dout(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << " you should stop here because my path is empty!");
         // as we detected something wrong here, we try to recover(!):
@@ -4766,8 +4766,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
             }
 
-            path.pop_front();	 // delete the first node (departure) because we are lying in...
-            if(!path.empty())
+            if(!path.empty()) path.pop_front();	 // delete the first node (departure) because we are lying in...
+            if(path.size()>1)
             {
                 dout(cout << "this one is all right." << endl);
                 break;
@@ -4775,7 +4775,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         }
     }
 
-    if(path.empty())
+    if(path.size()==0)
     {
         // still empty!!
         outc(cout << "pble calculating from " << from.toIndex() << " to " << next_ground.toIndex() << endl);
@@ -4787,6 +4787,24 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
+
+
+     /*if(path.size()==0) {
+         cout << "Path is empty!!!" << endl;
+     }
+     else
+     {
+         cout << "Path is not empty! "<< path.size() << endl;
+     }
+     list<types::NodeId>::iterator road_iter = path.begin();
+     dout(cout << "path: ");
+     for( ; road_iter != path.end(); road_iter++)
+     {
+        dout(cout << *road_iter << " " );
+     }
+     dout(cout << endl);
+    */
+
 
     dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
 
@@ -4981,10 +4999,6 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         dout (cout << "still no path found in shop for vessel " << this->get_name() <<
               " going to arr " << arr.toIndex() << " from " << from.toIndex() << " then compute it..." << endl);
 
-        //compute a path!  (24Feb14 but disabled because too time consuming!)
-        //system("PAUSE");
-        //DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes); // from the source to all nodes
-        //print_out=true;
 
         this->move_to(nodes.at(from.toIndex())) ;
         // no path found: assume the vessel stucks at its current location
@@ -4992,7 +5006,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
     }
 
-    path.pop_front();			 // delete the first node (departure) because we are lying in...
+    if(!path.empty()) path.pop_front();			 // delete the first node (departure) because we are lying in...
     // (NOTE: if the 'arr' node is not in the 'previous' object of 'from',
     // then the path is only consistited of 'arr' and then will be blank here because removed by pop_front!!!! => bug)
     this->set_roadmap(path);

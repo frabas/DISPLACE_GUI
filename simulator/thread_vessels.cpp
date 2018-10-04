@@ -345,10 +345,11 @@ static void manage_vessel(int idx_v,
 
                     // ***************implement the decision************************************
                     // ...but not on this ground!
+                    int is_not_possible_to_change=0;
                     if(shall_I_change_to_another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
-                        vessels[ index_v ]->choose_another_ground_and_go_fishing(
+                        is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
                                     tstep,
                                     dyn_alloc_sce, use_static_paths,
                                     pathshops,
@@ -361,8 +362,9 @@ static void manage_vessel(int idx_v,
 
                     }
                     // ***************implement a decision************************************
-                    else // Yes, keep go on catching on this ground...
-                    {
+                    if(! (shall_I_change_to_another_ground || force_another_ground) || is_not_possible_to_change  )
+                     // keep go on catching on this ground...
+                     {
                         outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
                         //#pragma omp critical(docatch)
                         {

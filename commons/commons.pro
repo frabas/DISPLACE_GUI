@@ -7,9 +7,17 @@ CONFIG += c++14 dll
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
+GEOGRAPHICLIB=Geographic
+
+win32 {
+    CONFIG(debug,release|debug){
+        GEOGRAPHICLIB=Geographic_d
+    }
+}
+
 DEFINES += COMMONS_LIBRARY WITH_BOOST
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
-LIBS += -L.. -lformats -lGeographic
+LIBS += -L.. -lformats -l$${GEOGRAPHICLIB}
 
 win32 {
     # No crash handler support for Windows

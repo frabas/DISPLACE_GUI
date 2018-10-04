@@ -482,7 +482,7 @@ public:
             std::ofstream& freq_distance);
 
 
-        void choose_another_ground_and_go_fishing(int tstep,
+        int choose_another_ground_and_go_fishing(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
             int use_static_paths,
             const std::vector<PathShop> &pathshops,

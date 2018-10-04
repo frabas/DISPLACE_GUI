@@ -69,7 +69,7 @@ vector<double> compute_distance_fgrounds_on_the_fly(vector<Node*>& nodes, types:
 
     outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
 
-    vector <double> distance_fgrounds(grounds.size(), 1000);
+    vector <double> distance_fgrounds(grounds.size(), 0);
     for (unsigned int i=0; i<grounds.size(); i++)
       {
         auto vertex= nodes.at(grounds.at(i).toIndex());
@@ -78,7 +78,7 @@ vector<double> compute_distance_fgrounds_on_the_fly(vector<Node*>& nodes, types:
         double dy = vertex->get_y() - vertex2->get_y();
 
         distance_fgrounds.at(i)=sqrt(dx * dx + dy * dy);
-
+        if(grounds.at(i).toIndex()==from.toIndex()) distance_fgrounds.at(i)=1000; // avoid finding the lowest dist with itself
       }
 
     outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
@@ -4503,7 +4503,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 }
 
 
-void Vessel::choose_another_ground_and_go_fishing(int tstep,
+int Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
                                                   int use_static_paths,
                                                   const std::vector<PathShop> &pathshops,
@@ -4562,6 +4562,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         types::NodeId vx = types::NodeId(grds.at(i));// destination
         //dout(cout  << "test the other ground "<< vx.toIndex() << endl);
 
+
         // check for area_closure
         if (
                 (dyn_alloc_sce.option(Options::area_closure) && nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()))
@@ -4595,7 +4596,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 //if(nodes.at(vx)->evaluateAreaType()!=1
                 if (!nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name())
                         // looking around in a radius of 200 km among the grounds I know...
-                        &&  dist_to_this_node < 200)
+                        &&  dist_to_this_node < 200 )
                 {
                     dout(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << endl);
                     // force to steam away by assigning a very low distance
@@ -4698,15 +4699,26 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     if(!a_vect[0] || finally_I_should_go_for_the_closest)
     {
         next_ground = types::NodeId(grds[idx_lowest]);
+
         dout(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << endl);
-        // in this case, get a time and fuel bonus for free! (i.e. note the MINUS sign!)
-        // (in order to somehow correct for the discretisation creating jumps between sequential fgrounds)
-        this->set_timeatsea(this->get_timeatsea() - PING_RATE);
-        this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
-        double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
-        this->set_cumfuelcons(cumfuelcons);
-        this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
     }
+
+    if (from.toIndex() == next_ground.toIndex() ||
+            nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
+    {
+        dout(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
+        unlock();
+        return 1; // actually, there is not found possibility for a change....
+    }
+
+
+    // in this case, get a time and fuel bonus for free! (i.e. note the MINUS sign!)
+    // (in order to somehow correct for the discretisation creating jumps between sequential fgrounds)
+    this->set_timeatsea(this->get_timeatsea() - PING_RATE);
+    this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+    double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
+    this->set_cumfuelcons(cumfuelcons);
+    this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
 
 
     list<types::NodeId> path;
@@ -4829,6 +4841,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     // find.next.pt.on.the.graph()
     this->find_next_point_on_the_graph_unlocked(nodes);
     unlock();
+return 0;
 }
 
 

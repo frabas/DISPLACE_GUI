@@ -1,3 +1,10 @@
+displace (0.9.15) bionic; urgency=medium
+
+  * new on the fly path calculation using A* algorithm
+  * new version
+
+ -- Federico Fuga <fuga@studiofuga.com>  Fri, 05 Oct 2018 13:10:52 +0200
+
 displace (0.9.13) xenial; urgency=medium
 
   * proportional_mature_fish computation

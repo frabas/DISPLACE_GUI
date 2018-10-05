@@ -1686,7 +1686,8 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
         // assuming a hardcoded price flexibility at 25% for all stocks
         // and price equation Pt=Po *  sum(Qt^e)/sum(Qo^e) with e price flexibility rate and Po initial average price
         double price_multiplier=1.0;
-        if(tstep>8761) // i.e. apply from second y only (also bc no end_of_years reached yet...)
+        if(tstep>8761 &&
+                !binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) ) // i.e. apply from second y only (also bc no end_of_years reached yet...)
         {
            vector <double> amount_fish_per_y;
            if(dyn_alloc_sce.option(Options::TACs))

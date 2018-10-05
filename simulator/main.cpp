@@ -4452,7 +4452,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                     {
 
-                        if(rand()<exit_vessels_per_year) vessels.at(v)-> set_vessel_exited(1);
+                        if((rand() % 2) <exit_vessels_per_year) vessels.at(v)-> set_vessel_exited(1);
 
                     }
                 }

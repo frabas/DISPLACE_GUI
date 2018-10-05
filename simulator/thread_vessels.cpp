@@ -108,6 +108,7 @@ extern bool is_tacs;
 extern bool is_fishing_credits;
 extern bool is_discard_ban;
 extern bool is_grouped_tacs;
+extern double tech_creeping_multiplier;
 extern bool is_impact_benthos_N;
 extern vector <int> implicit_pops;
 extern vector <int> grouped_tacs;
@@ -372,7 +373,7 @@ static void manage_vessel(int idx_v,
                             vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, benthoss, implicit_pops, grouped_tacs,
                                                          tstep, graph_res,
                                                          is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,
-                                                         is_discard_ban, is_grouped_tacs, is_fishing_credits, is_impact_benthos_N);
+                                                         is_discard_ban, is_grouped_tacs, tech_creeping_multiplier,  is_fishing_credits, is_impact_benthos_N);
 
                             // check
                             //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)

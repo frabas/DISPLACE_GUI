@@ -2177,7 +2177,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
                       vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
-                      bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, bool& is_fishing_credits,  bool& is_impact_benthos_N)
+                      bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, double& tech_creeping_multiplier,
+                      bool& is_fishing_credits,  bool& is_impact_benthos_N)
 {
     lock();
 
@@ -2567,7 +2568,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                                       h_betas_per_pop[pop]*1 +
                                                    // fish avai*sel effect
                                                           avai_betas  // poisson regression, see the R code
-                                                )*populations[pop]->get_cpue_multiplier() );
+                                                )*populations[pop]->get_cpue_multiplier()* tech_creeping_multiplier );
                                         // 'min' is there for not allowing catching more than available!
 
                     dout(cout  << "-------------------------" << endl);

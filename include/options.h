@@ -107,6 +107,7 @@ enum Dyn_Alloc {
     twoFoldTACconstr,
     fishing_credits,
     envt_variables_diffusion,
+    TechCreeping3Per,
 
     Dyn_Alloc_last
 };

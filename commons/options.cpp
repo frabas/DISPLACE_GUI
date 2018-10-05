@@ -49,6 +49,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
     O(mMap,envt_variables_diffusion);
+    O(mMap,TechCreeping3Per);
+
 
 
     for (int i = 0; i < n(); ++i)

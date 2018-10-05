@@ -433,7 +433,7 @@ public:
                       std::vector<int>& implicit_pops, vector<int>& grouped_tacs,
                       int& tstep, double &graph_res,
                       bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
-                      bool &is_discard_ban, bool &is_grouped_tacs, bool &is_fishing_credits, bool &is_impact_benthos_N);
+                      bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier, bool &is_fishing_credits, bool &is_impact_benthos_N);
 		void clear_catch_pop_at_szgroup();
         void clear_ping_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();

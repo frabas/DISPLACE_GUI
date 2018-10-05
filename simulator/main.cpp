@@ -202,6 +202,7 @@ bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+double tech_creeping_multiplier=1;
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
 
@@ -4163,6 +4164,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
+
+
         //----------------------------------------//
         //----------------------------------------//
         // BIOLOGICAL MODULE----------------------//
@@ -4274,6 +4277,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
          {
             a_year+=1;
+
+
+            if(dyn_alloc_sce.option(Options::TechCreeping3Per))
+            {
+                tech_creeping_multiplier=pow(1.03,a_year); //  this is a rate per year...so multiply over years
+            } else{
+                tech_creeping_multiplier=1.0;
+            }
 
 
 

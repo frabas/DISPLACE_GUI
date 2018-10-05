@@ -50,6 +50,7 @@ static const char *dyn_alloc_options[] = {
     "FMSYrange",
     "fishing_credits",
     "envt_variables_diffusion",
+    "TechCreeping3Per",
 };
 
 static const char *dyn_pop_options[] = {

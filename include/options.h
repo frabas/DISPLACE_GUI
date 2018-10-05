@@ -108,6 +108,7 @@ enum Dyn_Alloc {
     fishing_credits,
     envt_variables_diffusion,
     TechCreeping3Per,
+    ExitVessels10Per,
 
     Dyn_Alloc_last
 };

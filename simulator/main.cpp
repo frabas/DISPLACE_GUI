@@ -4446,6 +4446,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {   
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
 
+                if(dyn_alloc_sce.option(Options::ExitVessels10Per))
+                {
+                    double exit_vessels_per_year=0.1; //  this is a rate of vessel leaving per year
+                    if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+                    {
+
+                        if(rand()<exit_vessels_per_year) vessels.at(v)-> set_vessel_exited(1);
+
+                    }
+                }
+
                 if(a_quarter=="quarter1")
                 {
                     double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;

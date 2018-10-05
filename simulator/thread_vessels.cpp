@@ -200,10 +200,14 @@ static void manage_vessel(int idx_v,
     int possible_metiers_size = vessels[ index_v ]->get_possible_metiers().size();
     bool inharbour = vessels[ index_v ]->get_inharbour();
     bool inactive = vessels[ index_v ]-> get_inactive();
+    int is_exited   = vessels[ index_v ]-> get_is_vessel_exited();
     vessels[index_v]->unlock();
 
-    if(roadmap_empty)
+    if(!is_exited)
     {
+
+      if(roadmap_empty)
+      {
         // check if the vessel is actually active this quarter
         // (when at least one possible metier within this quarter)
         if(possible_metiers_size > 1)
@@ -507,7 +511,7 @@ static void manage_vessel(int idx_v,
         ::mutex.unlock();
     }
     vessels[index_v]->unlock();
-
+ } // end is_exited
 }
 
 

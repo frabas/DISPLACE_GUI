@@ -59,6 +59,7 @@ public:
 private:
         std::string name;
         int vid_is_active;
+        int is_vessel_exited;
         int vid_is_part_of_ref_fleet;
         int idx_vessel;
         int firm_id;
@@ -267,6 +268,7 @@ public:
         const std::list<types::NodeId> &get_roadmap () const;
 		bool get_inharbour() const;
 		bool get_inactive() const;
+        int get_is_vessel_exited () const;
 		bool get_natio() const;
 		int get_state() const;
 		int get_reason_to_go_back () const;
@@ -399,6 +401,7 @@ public:
         void set_roadmap (const std::list<types::NodeId> &_roadmap);
 		void set_inharbour (bool logic);
 		void set_inactive (bool logic);
+        void set_vessel_exited (int logic);
 		void set_natio (bool logic);
         void set_smartcatch (types::NodeId smartcatch);
         void set_highpotentialcatch (types::NodeId highpotentialcatch);

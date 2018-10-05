@@ -50,6 +50,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,fishing_credits);
     O(mMap,envt_variables_diffusion);
     O(mMap,TechCreeping3Per);
+    O(mMap,ExitVessels10Per);
+
 
 
 

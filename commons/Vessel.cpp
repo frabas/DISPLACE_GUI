@@ -151,6 +151,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                double _annual_discount_rate)
     : calendar(cd)
 {
+    is_vessel_exited=0;
     m_location = p_location;
     idx_vessel = a_idx_vessel;
     firm_id=_firm_id;
@@ -626,6 +627,11 @@ bool Vessel::get_inharbour() const
 bool Vessel::get_inactive() const
 {
     return(inactive);
+}
+
+int Vessel::get_is_vessel_exited() const
+{
+    return(is_vessel_exited);
 }
 
 
@@ -1458,6 +1464,11 @@ void Vessel::set_inharbour (bool logic)
 void Vessel::set_inactive (bool logic)
 {
     inactive = logic;
+}
+
+void Vessel::set_vessel_exited (int logic)
+{
+    is_vessel_exited = logic;
 }
 
 

@@ -6,7 +6,7 @@
 
 #include "displacemodel.h"
 
-#include <GeoGraphicLib/Geodesic.hpp>
+#include "GeographicLib/Geodesic.hpp"
 
 #include <boost/property_map/property_map.hpp>
 #include <boost/graph/astar_search.hpp>

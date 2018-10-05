@@ -3,7 +3,7 @@
 //
 
 #include "AStarShortestPathFinder.h"
-#include <GeographicLib/Geodesic.hpp>
+#include "GeographicLib/Geodesic.hpp"
 
 #include <boost/graph/astar_search.hpp>
 

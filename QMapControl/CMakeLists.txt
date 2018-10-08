@@ -34,4 +34,4 @@ target_link_libraries(QMapControl
         )
 
 # Set target directory
-install(TARGETS QMapControl DESTINATION lib)
+install(TARGETS QMapControl LIBRARY DESTINATION lib COMPONENT gui)

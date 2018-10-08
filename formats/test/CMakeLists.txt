@@ -32,3 +32,5 @@ if (${CMAKE_MAJOR_VERSION} GREATER 2)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
+
+intall (TARGETS test_formats RUNTIME DESTINATION bin COMPONENT tests)

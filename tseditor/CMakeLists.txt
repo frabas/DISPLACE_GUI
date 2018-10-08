@@ -45,4 +45,4 @@ target_link_libraries(tseditor
         )
 
 # Set target directory
-install(TARGETS tseditor DESTINATION bin)
+install(TARGETS tseditor RUNTIME DESTINATION bin COMPONENT tools)

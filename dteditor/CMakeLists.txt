@@ -44,4 +44,4 @@ target_link_libraries(dteditor
         )
 
 # Set target directory
-install(TARGETS dteditor DESTINATION bin)
+install(TARGETS dteditor RUNTIME DESTINATION bin COMPONENT tools)

@@ -11,4 +11,4 @@ target_link_libraries(avaifieldupdater
         )
 
 # Set target directory
-install(TARGETS avaifieldupdater DESTINATION bin)
+install(TARGETS avaifieldupdater RUNTIME DESTINATION bin COMPONENT tools)

@@ -11,4 +11,4 @@ target_link_libraries(vmsmerger
         )
 
 # Set target directory
-install(TARGETS vmsmerger DESTINATION bin)
+install(TARGETS vmsmerger RUNTIME DESTINATION bin COMPONENT tools)

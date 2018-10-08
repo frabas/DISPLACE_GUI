@@ -40,4 +40,4 @@ target_link_libraries(objeditor
         )
 
 # Set target directory
-install(TARGETS objeditor DESTINATION bin)
+install(TARGETS objeditor RUNTIME DESTINATION bin COMPONENT tools)

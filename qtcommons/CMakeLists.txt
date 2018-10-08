@@ -32,4 +32,4 @@ target_link_libraries(qtcommons
         )
 
 # Set target directory
-install(TARGETS qtcommons DESTINATION lib)
+install(TARGETS qtcommons LIBRARY DESTINATION lib COMPONENT gui)

@@ -38,4 +38,4 @@ target_link_libraries(scheduler
         )
 
 # Set target directory
-install(TARGETS scheduler DESTINATION bin)
+install(TARGETS scheduler RUNTIME DESTINATION bin COMPONENT tools)

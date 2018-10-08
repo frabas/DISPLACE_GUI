@@ -58,4 +58,4 @@ target_link_libraries(displace
 
 
 # Set target directory
-install(TARGETS displace DESTINATION bin)
+install(TARGETS displace RUNTIME DESTINATION bin COMPONENT simulator)

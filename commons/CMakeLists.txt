@@ -186,4 +186,4 @@ target_link_libraries(commons
         )
 
 # Set target directory
-install(TARGETS commons DESTINATION lib)
+install(TARGETS commons LIBRARY DESTINATION lib COMPONENT libraries)

@@ -19,6 +19,6 @@ add_library(formats SHARED
         )
 
 # Set target directory
-install(TARGETS formats DESTINATION lib)
+install(TARGETS formats LIBRARY DESTINATION lib COMPONENT libraries)
 
 #add_subdirectory(test)

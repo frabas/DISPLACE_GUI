@@ -12,4 +12,4 @@ target_link_libraries(avaifieldshuffler
 
 
 # Set target directory
-install(TARGETS avaifieldshuffler DESTINATION bin)
+install(TARGETS avaifieldshuffler RUNTIME DESTINATION bin COMPONENT tools)

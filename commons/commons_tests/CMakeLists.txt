@@ -32,3 +32,5 @@ target_link_libraries(commons_tests
         formats
         Boost::unit_test_framework
         )
+
+install(TARGETS commons_tests RUNTIME DESTINATION bin COMPONENT tests)

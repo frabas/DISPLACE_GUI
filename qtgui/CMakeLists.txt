@@ -105,4 +105,4 @@ target_link_libraries(displacegui
         )
 
 # Set target directory
-install(TARGETS displacegui DESTINATION bin)
+install(TARGETS displacegui RUNTIME DESTINATION bin COMPONENT gui)

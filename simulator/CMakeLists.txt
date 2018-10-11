@@ -64,7 +64,7 @@ target_link_libraries(displace
         commons
         formats
         ${LIBRARIES}
-        Boost::program_options
+        boost_program_options
         )
 
 

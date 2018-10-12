@@ -14,5 +14,5 @@ message ("GeographicLib version: ${GeographicLib_VERSION}")
 find_package(GDAL REQUIRED 1.11)
 message ("GDAL library: ${GDAL_LIBRARY}")
 
-find_package(cgal REQUIRED)
-message ("cgal version: ${CGAL_VERSION}")
+find_package(CGAL REQUIRED)
+message ("CGAL version: ${CGAL_VERSION}")

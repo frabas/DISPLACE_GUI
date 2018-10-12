@@ -21,6 +21,21 @@ $ cmake ..
 
 You can use the cmake GUI to select the building directory and the root of the project.
 
+## Building with Out-of-system-tree libraries
+
+If the dependent libraries are installed out of the system tree (for example, because your distribution don't provide
+a proper package, or you want to compile with a different version, or in Windows), you may instruct CMake to search 
+for the library in the correct directory.
+
+For GeographicLib, use `-DGeographicLib_DIR=`
+
+
+
+```
+cmake 
+    -DGeographicLib_DIR=/opt/GeographicLib-1.49/install/usr/local/lib/cmake/GeographicLib 
+```
+
 ### Specifying QT paths
 
 If cmake can't find the right path to a package, or you want to select a different version of the package, you can 

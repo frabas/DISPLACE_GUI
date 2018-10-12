@@ -16,6 +16,16 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/sparsepp
 )
 
+if(GEOGRAPHIC_INCLUDE)
+    message("GeographicLib Include: ${GEOGRAPHIC_INCLUDE}")
+    include_directories(${GEOGRAPHIC_INCLUDE})
+endif()
+
+if (GEOGRAPHIC_LIBDIR)
+    message("GeographicLib Lib: ${GEOGRAPHIC_LIBDIR}")
+    link_directories(${GEOGRAPHIC_LIBDIR})
+endif()
+
 set(SOURCES
         commons_global.h
         diffusion.cpp

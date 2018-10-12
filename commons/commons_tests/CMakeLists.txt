@@ -30,5 +30,5 @@ add_executable(commons_tests
 target_link_libraries(commons_tests
         commons
         formats
-        Boost::unit_test_framework
+        boost_unit_test_framework
         )

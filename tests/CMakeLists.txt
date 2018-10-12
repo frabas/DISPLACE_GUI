@@ -32,5 +32,5 @@ target_link_libraries(unittests
         commons
         formats
         qtcommons
-        Boost::unit_test_framework
+        boost_unit_test_framework
         )

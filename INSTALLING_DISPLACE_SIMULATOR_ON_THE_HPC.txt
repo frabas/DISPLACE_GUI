@@ -1,0 +1,36 @@
+
+
+INSTALLING DISPLACE SIMULATOR ON THE HPC:
+
+First we need the GeographicLib, 
+download at https://geographiclib.sourceforge.io/html/install.html#cmake
+
+linuxsh
+
+tar xfpz GeographicLib-1.49.tar.gz
+cd GeographicLib-1.49/
+./configure --prefix=$HOME/local/geographiclib-1.49
+make -j 8
+make install
+
+then it should be now in ~//local/ on the HPC
+
+cd DISPLACE_GUI
+mkdir Build 
+cd Build
+
+then, compile in DISPLACE_GUI/Build with:
+
+  /appl/cmake/3.12.2/bin/cmake .. -DCMAKE_BUILD_TYPE=Release 
+    -DBOOST_ROOT="/appl/boost/1.64.0-gcc-6.3.0/" 
+     -DCMAKE_CXX_COMPILER="/appl/gcc/7.3.0/bin/g++" 
+      -DCMAKE_C_COMPILER="/appl/gcc/7.3.0/bin/gcc"
+       -DGEOGRAPHIC_INCLUDE="/zhome/fe/8/43283/local/geographiclib-1.49/include/"
+      -DGEOGRAPHIC_LIBDIR="~//local/geographiclib-1.49/lib/"
+
+make displace
+
+likely need to cp GeographicLib.so* in the bin directory
+
+
+

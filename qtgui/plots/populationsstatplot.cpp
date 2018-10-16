@@ -132,6 +132,11 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
             }
 
             auto v = getData(model, stat, aggtype, ipop, stype);
+            if(stat==PopulationStat::FvsEffort)
+               {
+                v = getData(model, (displace::plot::PopulationStat) 1, (displace::plot::NationsStat) 4, aggtype, ipop, stype); // see 1 is F and 4 is "TimeAtSea" in plottype.h
+               }
+
             graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
         }
@@ -166,6 +171,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Proportion mature fish"));
         break;
+    case PopulationStat::FvsEffort:
+        theplot->yAxis->setLabel(QObject::tr("F"));
+        theplot->xAxis->setLabel(QObject::tr("Effort (h)"));
+        break;
     }
 
 
@@ -184,6 +193,9 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
                                                                            displace::plot::AggregationType aggtype,
                                                                            int popid, vector<int> szid)
 {
+    if(stattype==PopulationStat::FvsEffort) return  std::make_tuple(QVector<double > (0),  QVector<double > (0));
+
+
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
@@ -192,6 +204,26 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
+}
+
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model,
+                                                                           displace::plot::PopulationStat stattype,
+                                                                           displace::plot::NationsStat stattype2,
+                                                                           displace::plot::AggregationType aggtype,
+                                                                           int popid, vector<int> szid)
+{
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
+
+    auto dt = db->getPopulationStatData(stattype, aggtype, popid, szid);
+    int nation =0;
+    auto dt2 = db->getVesselLoglikeDataByNation(stattype2, model->getNation(nation).getName().toStdString(),
+                                                          SQLiteOutputStorage::Operation::Sum);
+
+
+    QVector<double> vd1 = QVector<double>::fromStdVector(dt.v), vd2 = QVector<double>::fromStdVector(dt2.v);
+    return std::make_tuple(vd1, vd2);
 }
 
 

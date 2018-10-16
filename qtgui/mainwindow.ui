@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -430,6 +430,11 @@
                 <item>
                  <property name="text">
                   <string>Proportion of mature fish</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>F vs. Effort</string>
                  </property>
                 </item>
                </widget>

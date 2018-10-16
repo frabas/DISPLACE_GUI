@@ -3174,6 +3174,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);
         exportPlot (out + QString("/pop_ffmsy.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FFmsy), r);
         exportPlot (out + QString("/pop_propmature.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::PropMature), r);
+        exportPlot (out + QString("/pop_fvseffort.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FvsEffort), r);
 
         exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Catches), r);
         exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Discards), r);

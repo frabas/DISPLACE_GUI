@@ -39,6 +39,10 @@ private:
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype,
                                                         displace::plot::AggregationType aggtype, int popid,
                                                         std::vector<int> szid);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype,
+                                                        displace::plot::NationsStat stattype2,
+                                                        displace::plot::AggregationType aggtype, int popid,
+                                                        std::vector<int> szid);
 };
 
 #endif // POPULATIONSSTATPLOT_H

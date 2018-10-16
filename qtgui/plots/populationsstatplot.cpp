@@ -1,5 +1,7 @@
 #include "populationsstatplot.h"
 
+#include "stats/statsutils.h"
+
 #include <displacemodel.h>
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/vesselslogliketable.h>
@@ -212,17 +214,22 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
                                                                            displace::plot::AggregationType aggtype,
                                                                            int popid, vector<int> szid)
 {
+   // a getData() version to cross to origin of data i.e. PopulationStat and NationsStat
+
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getPopulationStatData(stattype, aggtype, popid, szid);
-    int nation =0;
-    auto dt2 = db->getVesselLoglikeDataByNation(stattype2, model->getNation(nation).getName().toStdString(),
+    // x
+    int nation =0; // TO DO..
+    auto dt1 = db->getVesselLoglikeDataByNation(stattype2, model->getNation(nation).getName().toStdString(),
                                                           SQLiteOutputStorage::Operation::Sum);
+    stats::runningSum(dt1.v);   // TO DO.. PROBLEM HERE...WHAT IS PLOTTED on X IS NOT CLEAR....
 
+    // y
+    auto dt2 = db->getPopulationStatData(stattype, aggtype, popid, szid);
 
-    QVector<double> vd1 = QVector<double>::fromStdVector(dt.v), vd2 = QVector<double>::fromStdVector(dt2.v);
+    QVector<double> vd1 = QVector<double>::fromStdVector(dt1.v), vd2 = QVector<double>::fromStdVector(dt2.v);
     return std::make_tuple(vd1, vd2);
 }
 

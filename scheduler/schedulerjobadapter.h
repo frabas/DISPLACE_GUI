@@ -11,7 +11,7 @@ class SchedulerJobAdapter : public QAbstractItemModel
 
     SchedulerJob &mSj;
 
-    enum Columns { JobName, ModelName, OutputName, NumSteps,
+    enum Columns { JobName, ModelName, OutputName, NumSteps, UseStaticPaths,
                    ColumnsCount
                  };
 

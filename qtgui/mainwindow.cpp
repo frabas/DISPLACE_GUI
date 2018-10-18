@@ -1035,6 +1035,7 @@ void MainWindow::on_cmdSetup_clicked()
 
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
         set.setValue(Simulator::SET_VERBOSITY, dlg.getVerbosityLevel());
+
      
         if (mSimulation){
             mSimulation->setVerbosityLevel(dlg.getVerbosityLevel());

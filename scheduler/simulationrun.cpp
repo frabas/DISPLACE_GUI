@@ -46,6 +46,12 @@ void SimulationRun::setSimulationName(QString name)
     mSimName = name;
 }
 
+
+void SimulationRun::setUsingStaticPaths(int n)
+{
+    mUseStaticPaths = n;
+}
+
 void SimulationRun::setNumThreads(int n)
 {
     nThreads = n;

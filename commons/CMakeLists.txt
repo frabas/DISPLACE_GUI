@@ -10,7 +10,6 @@ endif (WIN32)
 
 include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_SOURCE_DIR}/mSqliteCpp/include
         ${CMAKE_SOURCE_DIR}/include/
         ${CMAKE_SOURCE_DIR}/formats
         ${CMAKE_SOURCE_DIR}/sparsepp
@@ -112,7 +111,6 @@ set(SOURCES
         storage/sqliteoutputstorage.h
         storage/tables/vesselslogliketable.h
         storage/tables/poptable.h
-        ../mSqliteCpp/include/msqlitecpp.h
         storage/tables/vesselvmsliketable.h
         storage/tables/fishfarmstable.h
         storage/tables/windfarmstable.h
@@ -120,14 +118,6 @@ set(SOURCES
         storage/tables/nodesdeftable.h
         storage/tables/popdyntable.h
         storage/tables/popquotastable.h
-        ../mSqliteCpp/include/msqlitecpp.h
-        ../mSqliteCpp/include/sqlitefielddef.h
-        ../mSqliteCpp/include/sqlitefieldsop.h
-        ../mSqliteCpp/include/sqlitestatement.h
-        ../mSqliteCpp/include/sqlitestatementformatters.h
-        ../mSqliteCpp/include/sqlitestorage.h
-        ../mSqliteCpp/include/sqlitetable.h
-        ../mSqliteCpp/include/sqlitetransaction.h
         storage/tables/metadatatable.h
         storage/modelconfig.h
         storage/modelmetadataaccessor.h
@@ -154,9 +144,7 @@ endif (WIN32 OR APPLE)
 
 
 # Add msqlite
-file(GLOB MSQLITE_SOURCES ${CMAKE_SOURCE_DIR}/mSqliteCpp/src/*.cpp)
-file(GLOB MSQLITE_HEADERS ${CMAKE_SOURCE_DIR}/mSqliteCpp/include/*.h)
-
+find_package(MSqliteCpp)
 
 if (NOT WIN32)
     list(APPEND LIBRARIES sqlite3)
@@ -176,13 +164,13 @@ endif (NOT APPLE AND NOT WIN32)
 
 add_library(commons SHARED
         ${SOURCES}
-        ${MSQLITE_SOURCES} ${MSQLITE_HEADERS}
         )
 
 target_link_libraries(commons
         formats
         Geographic
         ${LIBRARIES}
+        MSqliteCpp::MSqliteCpp
         )
 
 # Set target directory

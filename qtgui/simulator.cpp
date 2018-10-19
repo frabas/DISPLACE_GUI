@@ -44,7 +44,7 @@ Simulator::Simulator()
       mIpcThread(0),
       mIpcQueue(0),
       mModel(),
-      mSimSteps(8762),
+      mSimSteps(8761),
       useStaticPaths(1),
       mLastStep(-1),
       mOutDir("C:"),
@@ -73,7 +73,7 @@ void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
     mModel= model;
 }
 
-// -f "myfish" -f2 "baseline" -s "simu2" -i 8762 -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 0 --num_threads 8 --outdir "D:"
+// -f "myfish" -f2 "baseline" -s "simu2" -i 8761 -p 1 -e 1 -v 0 --without-gnuplot -V 0 --num_threads 8 --outdir "D:"
 bool Simulator::start(QString outdir, QString name, QString folder, QString simul_name)
 {
     if (mSimulation != 0) {

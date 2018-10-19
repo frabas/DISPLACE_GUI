@@ -118,14 +118,13 @@
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
+    <addaction name="actionCheck_for_isolated_subgraphs"/>
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="actionLoadStockNames"/>
-    <addaction name="separator"/>
-    <addaction name="actionCreate_Shortest_Path"/>
-    <addaction name="actionLink_Shortest_Path_Folder"/>
-    <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
+    <addaction name="actionAdd_Penalty_from_File"/>
+    <addaction name="separator"/>
     <addaction name="actionAssign_Landscape_codes"/>
     <addaction name="actionAssign_Total_benthos_biomass"/>
     <addaction name="actionAssign_Total_benthos_number"/>
@@ -141,8 +140,9 @@
     <addaction name="actionMergeWeights"/>
     <addaction name="actionMergePings"/>
     <addaction name="actionCalcPopDistribution"/>
-    <addaction name="actionCheck_for_isolated_subgraphs"/>
     <addaction name="separator"/>
+    <addaction name="actionLink_Shortest_Path_Folder"/>
+    <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="menuFormats_conversion"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
@@ -1887,7 +1887,7 @@ L3</string>
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
-    <string>Load...</string>
+    <string>Load Graph...</string>
    </property>
   </action>
   <action name="actionCreate_Graph">
@@ -1926,7 +1926,7 @@ L3</string>
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
-    <string>Save...</string>
+    <string>Save Graph...</string>
    </property>
   </action>
   <action name="actionLink_Harbours_to_Graph">
@@ -2018,7 +2018,7 @@ L3</string>
   </action>
   <action name="actionCheck_for_isolated_subgraphs">
    <property name="text">
-    <string>Check for isolated subgraphs...</string>
+    <string>Check for Isolated Subgraphs...</string>
    </property>
   </action>
   <action name="actionClean_Selection">

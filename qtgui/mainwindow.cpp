@@ -1576,7 +1576,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
                                                    bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
-                             tr("Graph weights are changed, you'll need to recreate the shortest path."));
+                             tr("Graph weights has changed, if static paths in use you'll need to recreate the shortest paths."));
     }
 }
 
@@ -1886,7 +1886,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
         mMapController->redraw();
 
-        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
+        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights has changed, if using static paths you'll need to recreate the shortest path."));
     }
 }
 

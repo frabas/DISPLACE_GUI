@@ -92,6 +92,7 @@ extern vector <Ship*> ships;
 extern vector <Population* > populations;
 extern vector <Benthos* > benthoss;
 extern int tstep;
+extern int nbsteps;
 extern int nbpops;
 extern int export_vmslike;
 extern double graph_res;
@@ -482,13 +483,20 @@ static void manage_vessel(int idx_v,
     // for VMS, export the first year only because the file is growing too big otherwise....
     vessels[index_v]->lock();
 
+
+
     if( vessels[ index_v ]->get_state()!=3) {
-       if(export_vmslike && tstep<8641) {
+        // Keep the export for the last year only to avoid too large db output
+        bool alogic = (ceil((double)tstep/(double)8761) == ceil((double)nbsteps/(double)8761));
+
+       if(export_vmslike && alogic) { //  && tstep<8641) {
            std::unique_lock<std::mutex> m(listVesselMutex);
            listVesselIdForVmsLikeToExport.push_back(index_v);
            //OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }
-       if( vessels[ index_v ]->get_state()==1 && vessels[ index_v ]->get_vid_is_part_of_ref_fleet()) { // fishing state
+       if( vessels[ index_v ]->get_state()==1 &&
+                vessels[ index_v ]->get_vid_is_part_of_ref_fleet() &&
+                  alogic) { // fishing state
            std::unique_lock<std::mutex> m(listVesselMutex);
            listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
            // OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);

@@ -5785,8 +5785,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             std::unique_lock<std::mutex> m(listVesselMutex);
             for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
             {
-            //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
-                  OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+               //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+
+                OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
             }
             listVesselIdForVmsLikeToExport.clear();
 

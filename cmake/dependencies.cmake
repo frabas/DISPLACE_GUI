@@ -1,6 +1,6 @@
 # Check dependencies
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
 ## Common packages to all modules
 find_package(Boost 1.55 REQUIRED)

@@ -486,8 +486,10 @@ static void manage_vessel(int idx_v,
 
 
     if( vessels[ index_v ]->get_state()!=3) {
-        // Keep the export for the last year only to avoid too large db output
-        bool alogic = (ceil((double)tstep/(double)8761) == ceil((double)nbsteps/(double)8761));
+        // Keep the export for the last year only to avoid too large db output:
+        //bool alogic = (ceil((double)tstep/(double)8761) == ceil((double)nbsteps/(double)8761));
+        // DOES NOT WORK UNDER UNIX, so USE:
+        bool alogic = (tstep <= 8762);
 
        if(export_vmslike && alogic) { //  && tstep<8641) {
            std::unique_lock<std::mutex> m(listVesselMutex);

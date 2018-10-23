@@ -3226,14 +3226,15 @@ bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, st
     }
 
     std::vector<NodeBanningInfo> banning;
-    double nbOfDaysClosedPerMonth=31;
-    bool r = read_metier_closures(is, separator, banning, nbOfDaysClosedPerMonth);
+    bool r = read_metier_closures(is, separator, banning);
 
     if (r) {
         for (auto &info : banning) {
+            int count =0;
             for (auto id : info.banned) {
                 nodes.at(info.nodeId.toIndex())->setBannedMetier(id);
-                nodes.at(info.nodeId.toIndex())->setNbOfDaysClosedPerMonth(id, nbOfDaysClosedPerMonth);
+                nodes.at(info.nodeId.toIndex())->setNbOfDaysClosedPerMonth(id, info.nbOfDaysClosedPerMonth.at(count));
+                ++count;
             }
 
         }
@@ -3260,14 +3261,14 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
     }
 
     std::vector<NodeBanningInfo> banning;
-    double nbOfDaysClosedPerMonth=31;
-    bool r = read_metier_closures(is, separator, banning, nbOfDaysClosedPerMonth);
-
+    bool r = read_metier_closures(is, separator, banning);
     if (r) {
         for (auto &info : banning) {
+            int count =0;
             for (auto id : info.banned) {
                 nodes.at(info.nodeId.toIndex())->setBannedMetier(id);
-                nodes.at(info.nodeId.toIndex())->setNbOfDaysClosedPerMonth(id, nbOfDaysClosedPerMonth);
+                nodes.at(info.nodeId.toIndex())->setNbOfDaysClosedPerMonth(id, info.nbOfDaysClosedPerMonth.at(count));
+                ++count;
             }
 
         }
@@ -3278,7 +3279,7 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
     return r;
 }
 
-bool read_metier_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth)
+bool read_metier_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
 {
     // Format:
     // PolyId nbOfDaysClosed NodeId Metier [Metier[ Metier...]]
@@ -3295,14 +3296,12 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
 
             std::vector<std::string> sr;
             boost::split(sr, line, boost::is_any_of(separator));
-
-            nbOfDaysClosedPerMonth=boost::lexical_cast<double>(sr[1]);
-
             NodeBanningInfo info;
             info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[2]));
             for (size_t i = 3; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 info.banned.push_back(m);
+                info.nbOfDaysClosedPerMonth.push_back(boost::lexical_cast<double>(sr[1]));
             }
             nodes.push_back(info);
             ++linenum;
@@ -3334,9 +3333,8 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
         return false;
     }
 
-    double nbOfDaysClosedPerMonth=31;
     std::vector<NodeBanningInfo> banning;
-    bool r = read_vsize_closures(is, separator, banning,  nbOfDaysClosedPerMonth);
+    bool r = read_vsize_closures(is, separator, banning);
 
     if (r) {
         for (auto &info : banning) {
@@ -3351,7 +3349,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
     return r;
 }
 
-bool read_vsize_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth)
+bool read_vsize_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
 {
     // Format:
     // PolyId nbOfDaysClosed NodeId Vessel Size [Vessel Size[ Vessel Size...]]
@@ -3369,7 +3367,6 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
             std::vector<std::string> sr;
             boost::split(sr, line, boost::is_any_of(separator));
 
-            nbOfDaysClosedPerMonth=boost::lexical_cast<double>(sr[1]);
 
             NodeBanningInfo info;
             info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[2]));

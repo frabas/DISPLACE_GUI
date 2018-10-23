@@ -305,14 +305,15 @@ multimap<int, int> COMMONSSHARED_EXPORT read_nodes_in_polygons(string a_quarter,
 struct COMMONSSHARED_EXPORT NodeBanningInfo {
     types::NodeId nodeId;
     std::vector<int> banned;
+    std::vector<double> nbOfDaysClosedPerMonth;
 };
 
 // area_closure and area_monthly_closure options
 bool COMMONSSHARED_EXPORT read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 bool COMMONSSHARED_EXPORT read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
 bool COMMONSSHARED_EXPORT read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
-bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth);
-bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth);
+bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
+bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
 bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, vector <std::tuple< string, double, double, double, double,
                                                         double, double, double, double,

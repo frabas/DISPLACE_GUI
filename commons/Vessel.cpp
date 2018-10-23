@@ -4378,6 +4378,19 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     //int ground=grds[0];
     outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl);
 
+    /*if(ground.toIndex()==12132) {
+        cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl;
+        cout << "nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+        cout << "nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+        cout << "nbOpenedDays on this ground this met is " <<  (31- nodes.at(ground.toIndex())->getNbOfDaysClosed(this->get_metier()->get_name())) << endl;
+        const auto &somefreqgrds = this->get_freq_fgrounds();
+        for (int i=0; i<somefreqgrds.size();++i)
+        {
+            cout << somefreqgrds.at(i) << " ";
+        }
+        cout << endl;
+    }
+    */
 
     // get the shortest path between source and destination
     // with the list of intermediate nodes
@@ -4720,6 +4733,12 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
         dout(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
+       /* if(next_ground.toIndex()==12132){
+            cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl;
+            cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+            cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+         }
+       */
         unlock();
         return 1; // actually, there is not found possibility for a change....
     }
@@ -4812,7 +4831,13 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
-
+    /*if(next_ground.toIndex()==12132){
+        cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl;
+        cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl;
+        cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+        cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+     }
+     */
 
      /*if(path.size()==0) {
          cout << "Path is empty!!!" << endl;

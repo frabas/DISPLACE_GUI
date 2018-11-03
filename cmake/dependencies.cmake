@@ -18,3 +18,5 @@ find_package(CGAL REQUIRED)
 message ("CGAL version: ${CGAL_VERSION}")
 
 find_package(Sparsepp REQUIRED)
+
+find_package(MSqliteCpp REQUIRED)

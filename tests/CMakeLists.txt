@@ -7,7 +7,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
         ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/sparsepp
+        ${Sparsepp_INCLUDE_DIRS}
         ${Qt5Core_INCLUDE_DIRS}
 )
 

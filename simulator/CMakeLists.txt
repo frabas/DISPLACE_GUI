@@ -8,8 +8,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
         ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/sparsepp
-        ${CMAKE_SOURCE_DIR}/mSqliteCpp/include
+        ${Sparsepp_INCLUDE_DIRS}
 )
 
 set(SOURCES

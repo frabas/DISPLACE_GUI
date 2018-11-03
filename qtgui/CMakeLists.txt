@@ -12,9 +12,8 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/formats
         ${CMAKE_SOURCE_DIR}/qtcommons
         ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/
-        ${CMAKE_SOURCE_DIR}/sparsepp
-        ${CMAKE_SOURCE_DIR}/mSqliteCpp/include
         ${CMAKE_BINARY_DIR}         # For UI headers
+        ${Sparsepp_INCLUDE_DIRS}
         ${Qt5Widgest_INCLUDE_DIRS}
         ${Qt5PrintSupport_INCLUDE_DIRS}
 )

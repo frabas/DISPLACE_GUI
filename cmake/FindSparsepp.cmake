@@ -6,6 +6,7 @@ find_file(Sparsepp_HEADER_FILE
 mark_as_advanced(Sparsepp_HEADER_FILE)
 
 get_filename_component(Sparsepp_INCLUDE_DIRS "${Sparsepp_HEADER_FILE}" PATH)
+get_filename_component(Sparsepp_INCLUDE_DIRS "${Sparsepp_INCLUDE_DIRS}" PATH)
 
 if (Sparsepp_HEADER_FILE)
     set(Sparsepp_FOUND yes)

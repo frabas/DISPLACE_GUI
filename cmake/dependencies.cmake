@@ -1,6 +1,6 @@
 # Check dependencies
 
-list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 ## Common packages to all modules
 find_package(Boost 1.55 REQUIRED)
@@ -16,3 +16,5 @@ message ("GDAL library: ${GDAL_LIBRARY}")
 
 find_package(CGAL REQUIRED)
 message ("CGAL version: ${CGAL_VERSION}")
+
+find_package(Sparsepp REQUIRED)

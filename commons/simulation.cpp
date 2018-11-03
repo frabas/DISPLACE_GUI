@@ -102,7 +102,7 @@ TimeSeries *Simulation::getTimeSeries(TimeSeriesManager::Variables var, int zone
     return mTsManager->getTimeSeries(var, zone, adim).get();
 }
 
-bool Simulation::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
+bool Simulation::readTsFile (std::string filename)
 {
     std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;
 

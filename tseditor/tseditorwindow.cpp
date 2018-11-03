@@ -414,7 +414,7 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
     return tr("%1 files generated out of %2 possible combinations.").arg(ngood).arg(n);
 }
 
-double TsEditorWindow::parseThreshold(QString l) throw (std::invalid_argument)
+double TsEditorWindow::parseThreshold(QString l)
 {
     bool ok;
     double th1v;

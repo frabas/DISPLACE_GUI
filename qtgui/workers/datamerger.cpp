@@ -55,7 +55,7 @@ void DataMerger::start(QString in, QString out)
 /** \brief this function returns true.
  * The purpose of this function is simply calling QFuture::result() to check whether an displace::DisplaceException was raised.
  * */
-bool DataMerger::checkResult() throw (displace::DisplaceException)
+bool DataMerger::checkResult()
 {
     // Note: mWork.result() will throw if an displace::DisplaceException has been raised. So it must be called before
     // any other operation that returns values.

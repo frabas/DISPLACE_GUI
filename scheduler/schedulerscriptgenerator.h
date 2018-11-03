@@ -18,7 +18,7 @@ public:
     virtual bool generate (QString path, SchedulerJob *scheduler, QString *errorMsg);
 
 private:
-    void parseTemplate(QString templatePath) throw (QString);
+    void parseTemplate(QString templatePath);
     QString substKeywords(QString in);
     QString substKeywords(QString in, const SimulationRun &job);
 

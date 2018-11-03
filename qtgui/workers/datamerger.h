@@ -42,7 +42,7 @@ public:
     double distance() const { return mDist; }
 
     void start(QString in, QString out);
-    bool checkResult() throw (displace::DisplaceException);
+    bool checkResult();
 
     void setSeparator(QChar sep) { mSeparator = sep; }
     QChar separator() const { return mSeparator; }

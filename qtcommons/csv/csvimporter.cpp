@@ -10,7 +10,7 @@ CsvImporter::CsvImporter()
 {
 }
 
-QList<QStringList> CsvImporter::import(QString filename) throw (Exception)
+QList<QStringList> CsvImporter::import(QString filename)
 {
     QFile file (filename);
 

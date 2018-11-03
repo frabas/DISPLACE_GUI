@@ -8,7 +8,7 @@ CsvExporter::CsvExporter()
 {
 }
 
-bool CsvExporter::exportFile(QString filename, const QList<QStringList> &list) throw (Exception)
+bool CsvExporter::exportFile(QString filename, const QList<QStringList> &list)
 {
     QFile file (filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {

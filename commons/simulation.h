@@ -54,7 +54,7 @@ public:
 private:
     std::shared_ptr<TimeSeriesManager> mTsManager;
 
-    bool readTsFile(std::string filename) throw (boost::bad_lexical_cast);
+    bool readTsFile(std::string filename);
 };
 
 } } // ns displace::simulation

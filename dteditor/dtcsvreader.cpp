@@ -36,7 +36,6 @@ DtCsvReader::DtCsvReader()
 }
 
 bool DtCsvReader::readTree(QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
-throw (std::invalid_argument)
 {
     QString line;
 

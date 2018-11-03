@@ -77,7 +77,7 @@ bool SchedulerScriptGenerator::generate(QString path, SchedulerJob *scheduler, Q
     return true;
 }
 
-void SchedulerScriptGenerator::parseTemplate(QString templatePath) throw (QString)
+void SchedulerScriptGenerator::parseTemplate(QString templatePath)
 {
     enum Status { None, Header, Content, Footer } status;
 

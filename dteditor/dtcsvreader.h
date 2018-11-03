@@ -38,8 +38,7 @@ public:
     static const int VERSION;
 
     DtCsvReader();
-    bool readTree (QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
-    throw (std::invalid_argument);
+    bool readTree (QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene);
 };
 
 #endif // DTCSVREADER_H

@@ -14,7 +14,7 @@ public:
         explicit Exception (QString what)
             : mWhat(what) {
         }
-        ~Exception() throw () {}
+        ~Exception() noexcept {}
 
         void raise() const override { throw *this; }
         Exception *clone() const override { return new Exception(*this); }
@@ -29,7 +29,7 @@ public:
 
     CsvImporter();
 
-    QList<QStringList> import (QString filename) throw (Exception);
+    QList<QStringList> import (QString filename);
 
     void setSeparator (QChar sep) { mSeparator = sep; }
 protected:

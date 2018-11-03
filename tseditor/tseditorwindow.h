@@ -110,7 +110,7 @@ private:
     void generateAll (QString outpath);
     QString generateAllWorker(QString outpath);
 
-    double parseThreshold(QString l) throw (std::invalid_argument);
+    double parseThreshold(QString l);
 };
 
 #endif // TSEDITORWINDOW_H

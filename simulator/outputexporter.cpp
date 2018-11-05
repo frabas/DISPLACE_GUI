@@ -229,6 +229,16 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
 
     logbook.tstep = tstep;
     logbook.tstepdep = v->get_tstep_dep();
+
+    /* // check
+    if(logbook.tstep == logbook.tstepdep)
+    {
+        cout << "Pblm with " << v->get_name() << endl;
+        int aa;
+        cin >> aa;
+    }
+    */
+
     logbook.rtbb = v->get_reason_to_go_back();
     logbook.cumstm = v->get_cumsteaming();
     logbook.node = v->get_loc()->get_idx_node().toIndex();

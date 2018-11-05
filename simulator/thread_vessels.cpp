@@ -229,7 +229,6 @@ static void manage_vessel(int idx_v,
 
                     std::unique_lock<std::mutex> m(listVesselMutex);
                     listVesselIdForLogLikeToExport.push_back(index_v);
-                    //cout << "tstep: "<< tstep << "we should have exported loglike for " << index_v << endl;
                     //OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
 
                     if(vessels[index_v]->get_vid_is_part_of_ref_fleet()){
@@ -249,7 +248,12 @@ static void manage_vessel(int idx_v,
                     //vessels[index_v]->lock();
                     //vessels[ index_v ]->reinit_after_a_trip();
                     //vessels[index_v]->unlock();
+
+                    // the vessel do not take any further move decision here
+                    // because the vessel will spend step to declare the landings...
                 }
+                else
+                {
                 // ***************make a probable decision*************************
                 dout(cout << vessels[ index_v ]->get_name() << " which_metier_should_i_go_for? " << endl);
                 vessels[ index_v ]->which_metier_should_i_go_for(metiers);
@@ -295,7 +299,7 @@ static void manage_vessel(int idx_v,
                     dout(cout  << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl);
 
                 }
-
+             } // end else{} that is taking a decision because not arriving in harb
             }
             else
             {

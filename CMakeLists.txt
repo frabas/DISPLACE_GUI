@@ -3,6 +3,7 @@ project(displace VERSION 1.0 LANGUAGES C CXX)
 
 include (cmake/options.cmake)
 include (cmake/compiler.cmake)
+include (cmake/withconan.cmake)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

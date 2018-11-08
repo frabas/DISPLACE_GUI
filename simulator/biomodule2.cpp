@@ -444,11 +444,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                     // update, export and clear for the next time...
-                    if(export_vmslike  && impact_on_pop!=0)
-                    {
+                    //if(export_vmslike  && impact_on_pop!=0)
+                    //{
                         if(tstep < 8761) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
                         a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
-                    }
+                    //}
                          // RE-INIT if no cumul is wished
                 //a_list_nodes.at(n)->clear_removals_pops_at_szgroup(name_pop);
                 //a_list_nodes.at(n)->clear_impact_on_pops();

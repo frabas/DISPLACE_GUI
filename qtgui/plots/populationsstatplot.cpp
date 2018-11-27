@@ -163,7 +163,7 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         break;
     case PopulationStat::Quotas:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
-        theplot->yAxis->setLabel(QObject::tr("Quota (kg)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota (tons)"));
         break;
     case PopulationStat::FFmsy:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));

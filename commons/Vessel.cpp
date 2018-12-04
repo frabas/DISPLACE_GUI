@@ -2606,7 +2606,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     //for(int i = 0; i < cumcatch_fgrounds.size(); i++){
                     //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
                     //}
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
 
 
                     // compute the landings vs. discard part
@@ -2615,7 +2615,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
                     }
                     int inter=0;
                     int a_szgroup=0;
@@ -2626,16 +2626,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
                     double left_to_MLS=0;
                     double right_to_MLS=0;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
                     if(selectivity_per_stock[pop].at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
                         left_to_MLS  = trapezoidal(0, inter, selectivity_per_stock[pop]) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
                         right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " here" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " here" << endl;
 
                     } else{
                         left_to_MLS  = trapezoidal(0, MLS_cat, selectivity_per_stock[pop]); // discards
                         right_to_MLS = trapezoidal(MLS_cat, inter, selectivity_per_stock[pop])+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " there" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " there" << endl;
 
                     }
 
@@ -2647,9 +2647,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
 
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
 
                     // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
                     //  AND CONVERT INTO REMOVALS IN NUMBER
@@ -2810,6 +2810,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                             // caution: cumul landings at the trip level
+//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
+//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup]; // ping catch in weight
@@ -2995,6 +2997,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
+                                    dout(cout << "tac exhausted for pop "<< pop << ": discards all !!!!  because " << "(" << so_far << "/1000) > (" << global_quotas.at(pop) << ")" << endl);
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all! => no landings
                                     ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // => catches=discards

@@ -1703,11 +1703,17 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
            double denominator=0.0;
            for(int i=0; i<amount_fish_per_y.size();++i)
            {
+              if(amount_fish_per_y.at(i)<=1) amount_fish_per_y.at(i)=amount_to; // so that num/denom will be 1...to avoid nan or a large price_multiplier when amount caught is very very low
               numerator += pow(amount_fish_per_y.at(i), -0.25);
               denominator += pow(amount_to, -0.25);
            }
            price_multiplier=numerator/denominator;
-           if(price_multiplier!=price_multiplier) price_multiplier=1.0; // debug if nan
+           cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl;
+           if(!isfinite(price_multiplier))
+           {
+               cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << endl;
+               price_multiplier=1.0; // extra precaution if any unexpected NaN.
+           }
            dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
         }
 

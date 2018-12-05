@@ -1,6 +1,6 @@
 find_file(Sparsepp_HEADER_FILE
         NAMES spp.h
-        PATHS $ENV{SPARSEPP_ROOT}
+        PATHS $ENV{SPARSEPP_ROOT} ${SPARSEPP_ROOT}
         PATH_SUFFIXES sparsepp
         )
 mark_as_advanced(Sparsepp_HEADER_FILE)

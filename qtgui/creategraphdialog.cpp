@@ -22,17 +22,78 @@
 #include "ui_creategraphdialog.h"
 
 #include <QMessageBox>
+#include <QSettings>
+#include <QFileDialog>
+#include <QFileInfo>
 
 CreateGraphDialog::CreateGraphDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CreateGraphDialog)
 {
     ui->setupUi(this);
+
+    QButtonGroup *group = new QButtonGroup(this);
+    group->addButton(ui->radioCreate);
+    group->addButton(ui->radioLoad);
+
+    ui->radioLoad->setAutoExclusive(true);
+    ui->radioCreate->setAutoExclusive(true);
+    connect(ui->radioLoad, SIGNAL(clicked(bool)), this, SLOT(onLoadRadioSelected(bool)));
+    connect(ui->radioCreate, SIGNAL(clicked(bool)), this, SLOT(onCreateRadioSelected(bool)));
+
+    ui->radioCreate->setChecked(true);
+    onCreateRadioSelected(true);
+
+    connect(ui->buttonBrowsePath, SIGNAL(clicked()), this, SLOT(onLoadBrowseButtonClicked()));
 }
 
 CreateGraphDialog::~CreateGraphDialog()
 {
     delete ui;
+}
+
+
+void CreateGraphDialog::onLoadBrowseButtonClicked()
+{
+    QSettings sets;
+    QString lastpath = sets.value("last_graphpath", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getOpenFileName(this, tr("Import Graph file"), lastpath);
+    if (!fn.isEmpty()) {
+        QString graphpath, coordspath;
+
+        QFileInfo info(fn);
+        QString fnn = info.absoluteFilePath();
+
+        ui->loadGraphPath->setText(fnn);
+    }
+}
+
+void CreateGraphDialog::onLoadRadioSelected(bool checked)
+{
+    if (checked) {
+        ui->radioCreate->setChecked(false);
+    }
+    updateView();
+}
+
+void CreateGraphDialog::updateView() const
+{
+    auto loadEnabled = ui->radioLoad->isChecked();
+    ui->frameLoad->setEnabled(loadEnabled);
+
+    ui->frameCreate->setEnabled(!loadEnabled);
+    ui->step->setEnabled(!loadEnabled);
+    ui->step1->setEnabled(!loadEnabled);
+    ui->step2->setEnabled(!loadEnabled);
+}
+
+void CreateGraphDialog::onCreateRadioSelected(bool checked)
+{
+    if (checked) {
+        ui->radioLoad->setChecked(false);
+    }
+    updateView();
 }
 
 double CreateGraphDialog::defaultStep() const
@@ -148,15 +209,37 @@ int CreateGraphDialog::getMinLinks() const
 void CreateGraphDialog::done(int r)
 {
     if (r == QDialog::Accepted) {
-        if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
+        if (isCreateEnabled()) {
+            if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
                 std::abs(ui->long1->value() - ui->long2->value()) < 1e-5 ||
-            ui->step->value() < 0.5) {
-            QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
+                ui->step->value() < 0.5) {
+                QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
+            } else {
+                QDialog::done(r);
+            }
         } else {
+            if (loadGraphPath().isEmpty() || !QFile::exists(loadGraphPath())) {
+                QMessageBox::warning(this, tr("Invalid File Path"), tr("The selected file doesn't exists or is invalid"));
+                return;
+            }
             QDialog::done(r);
         }
-
     } else {
         QDialog::done(r);
     }
+}
+
+bool CreateGraphDialog::isCreateEnabled() const
+{
+    return ui->radioCreate->isChecked();
+}
+
+bool CreateGraphDialog::isLoadEnabled() const
+{
+    return ui->radioLoad->isChecked();
+}
+
+QString CreateGraphDialog::loadGraphPath() const
+{
+    return ui->loadGraphPath->text();
 }

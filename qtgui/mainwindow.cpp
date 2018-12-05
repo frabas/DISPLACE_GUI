@@ -1512,11 +1512,24 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder *gb = new GraphBuilder();
-        gb->setType(dlg.getType());
-        gb->setDefaultDistance(dlg.defaultStep() * 1000);
-        gb->setDistance1(dlg.step1() * 1000);
-        gb->setDistance2(dlg.step2() * 1000);
-        gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+
+        if (dlg.isCreateEnabled()) {
+            gb->actionCreate();
+
+            gb->setType(dlg.getType());
+            gb->setDefaultDistance(dlg.defaultStep() * 1000);
+            gb->setDistance1(dlg.step1() * 1000);
+            gb->setDistance2(dlg.step2() * 1000);
+            gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+        } else if (dlg.isLoadEnabled()){
+            gb->actionLoad(dlg.loadGraphPath());
+        } else {
+            // that shouldn't be possible.
+            QMessageBox::critical(this, tr("Logic Error"),
+                    "Something strange happened. No Action is selected for CreateGraphDialog.");
+            return;
+        }
+
         gb->setOutsideEnabled(dlg.isOutsideEnabled());
         gb->setExcludeZoneEdgeRemovalEnabled(dlg.isRemoveEdgesInExclusionZoneEnabled());
         gb->setMaxLinks(dlg.isMaxLinksEnabled() ? dlg.getMaxLinks() : -1);

@@ -79,11 +79,21 @@ public:
     int getMaxLinks() const;
     int getMinLinks() const;
 
+    bool isCreateEnabled() const;
+    bool isLoadEnabled() const;
+    QString loadGraphPath() const;
+
 public slots:
     void done(int) override;
 
+    void onLoadBrowseButtonClicked();
+    void onLoadRadioSelected(bool checked);
+    void onCreateRadioSelected(bool checked);
+
 private:
     Ui::CreateGraphDialog *ui;
+
+    void updateView() const;
 };
 
 #endif // CREATEGRAPHDIALOG_H

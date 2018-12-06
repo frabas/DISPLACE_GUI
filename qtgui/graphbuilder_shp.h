@@ -109,9 +109,8 @@ private:
     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
 
 
-    void createMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&gridlayerOut,
-                        OGRLayer *&resultLayer);
-    void loadMainGrid();
+    void createMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&resultLayer);
+    void loadMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&resultLayer);
 
     void createGrid (OGRDataSource *tempDatasource,
                      std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,

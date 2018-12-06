@@ -20,10 +20,7 @@
 
 #include "graphbuilder_shp.h"
 
-#include <cmath>
-#include <m_constants.h>
-
-#include <QDebug>
+#include "inputfileparser.h"
 
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/GeodesicLine.hpp>
@@ -34,6 +31,10 @@
 #include <algo/simpleplanargraphbuilder.h>
 
 #include <QDir>
+#include <QDebug>
+
+#include <cmath>
+#include <m_constants.h>
 
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
@@ -83,7 +84,7 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
     mShapefileExc = src;
 }
 
-void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&gridlayerOut, OGRLayer *&resultLayer)
+void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&resultLayer)
 {
     auto memdataset = memdriver->CreateDataSource("memory", nullptr );
 
@@ -94,6 +95,7 @@ void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdata
     OGRLayer *gridlayer1 = nullptr;
     OGRLayer *gridlayer2 = nullptr;
     OGRLayer *outlayer1 = nullptr, *outlayer2 = nullptr;
+    OGRLayer *gridlayerOut = nullptr;
 
     OGRLayer *exclusionLayer1 = nullptr;
     OGRLayer *exclusionLayer2 = nullptr;
@@ -158,13 +160,44 @@ void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdata
     }
 }
 
-void GraphBuilder::loadMainGrid()
+void GraphBuilder::loadMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&resultLayer)
 {
+    InputFileParser parser;
+    QList<GraphBuilder::Node> nodes;
+    QString error;
+    if (parser.parseGraph(QString(), mLoadPath, nodes, &error)) {
+        qDebug()  << nodes.size() << "Nodes loaded.";
+    } else {
+        throw std::runtime_error(QObject::tr("Error loading coords file: %1").arg(error).toStdString());
+    }
 
+    resultLayer = createGridLayer(outdataset, "Displace-ResultGrid");
+
+    auto fId = getPointFieldIndex(resultLayer);
+    auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
+    if (fieldConstrain == -1) {
+        OGRFieldDefn fldConstrain("Constrain", OFTInteger);
+        resultLayer->CreateField(&fldConstrain);
+        fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
+    }
+
+    for (auto &node : nodes) {
+        OGRPoint pt(node.point.x(),node.point.y());
+        auto f = OGRFeature::CreateFeature(resultLayer->GetLayerDefn());
+        auto id = mId++;
+        f->SetField(fId, id);
+        f->SetField(fieldConstrain, (int)-1);
+
+        f->SetGeometry(&pt);
+        if (resultLayer->CreateFeature(f) != OGRERR_NONE) {
+            throw std::runtime_error("Cannot create points");
+        }
+        OGRFeature::DestroyFeature(f);
+    }
 }
 
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
-{   
+{
     const QString OUTDIR = QString("%1/DisplaceBuildGraph").arg(QDir::tempPath());
     QDir toremove(OUTDIR);
     toremove.removeRecursively();
@@ -199,205 +232,210 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     // create the grid.
 
     // Create an in-memory db
-    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
+    OGRSFDriverRegistrar *registrar = OGRSFDriverRegistrar::GetRegistrar();
 
     auto memdriver = registrar->GetDriverByName("memory"); // was memory
 
     auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
-    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
-    OGRLayer *gridlayerOut = nullptr;
+    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr);
 
     ///
     OGRLayer *resultLayer = nullptr;
 
-    if (mCreateMode) {
-        createMainGrid(memdriver, outdataset, gridlayerOut, resultLayer);
-    } else  {
-        throw std::logic_error("unimplemneted yet");
-    }
-
-    // Triangulate
-    auto nIdField = getPointFieldIndex(resultLayer);
-
-    long prevFid = -1;
-    CDT::Vertex_handle prevHandle;
-    auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
-    assert(fieldConstrain != -1);
-
-    CDT tri;
-    OGRFeature *feature;
-    resultLayer->ResetReading();
-
-    while ((feature = resultLayer->GetNextFeature()) != nullptr) {
-        const auto geometry(feature->GetGeometryRef());
-        assert(geometry != nullptr);
-        assert(wkbFlatten(geometry->getGeometryType()) == wkbPoint);
-
-        const auto point(static_cast<OGRPoint*>(geometry));
-        assert(point != nullptr);
-
-        auto id = feature->GetFieldAsInteger(nIdField);
-        auto constrFid = feature->GetFieldAsInteger(fieldConstrain);
-
-        CDT::Point pt(point->getX(), point->getY());
-        auto handle = tri.insert(pt);
-
-        if (constrFid != -1 && constrFid == prevFid) {
-            tri.insert_constraint(prevHandle, handle);
+    try {
+        if (mCreateMode) {
+            createMainGrid(memdriver, outdataset, resultLayer);
+        } else {
+            loadMainGrid(memdriver, outdataset, resultLayer);
         }
-        prevHandle = handle;
-        prevFid = id;
 
-        handle->info() = id;
-        ++id;
+        // Triangulate
+        auto nIdField = getPointFieldIndex(resultLayer);
 
-        resultLayer->SetFeature(feature);
-    }
+        long prevFid = -1;
+        CDT::Vertex_handle prevHandle;
+        auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
+        assert(fieldConstrain != -1);
 
+        CDT tri;
+        OGRFeature *feature;
+        resultLayer->ResetReading();
 
-    OGRLayer *layerEdges = createEdgesLayer(outdataset, "Displace-InEdges");
-    auto fldFrom = getFromFieldIndex(layerEdges);
-    assert(fldFrom != -1);
-    auto fldTo = getToFieldIndex(layerEdges);
-    assert(fldTo != -1);
-    auto fldWeight = getWeightFieldIndex(layerEdges);
-    assert(fldWeight != -1);
+        while ((feature = resultLayer->GetNextFeature()) != nullptr) {
+            const auto geometry(feature->GetGeometryRef());
+            assert(geometry != nullptr);
+            assert(wkbFlatten(geometry->getGeometryType()) == wkbPoint);
 
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+            const auto point(static_cast<OGRPoint *>(geometry));
+            assert(point != nullptr);
 
-    qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
-    CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
-    while (vrt != tri.finite_vertices_end()) {
-        CDT::Vertex_circulator vc = tri.incident_vertices((CDT::Vertex_handle)vrt);
-        CDT::Vertex_circulator done(vc);
+            auto id = feature->GetFieldAsInteger(nIdField);
+            auto constrFid = feature->GetFieldAsInteger(fieldConstrain);
 
-        const auto &pt = vrt->point();
-        do {
-            if (vc != tri.infinite_vertex()) {
-                const auto &pt2 = vc->point();
+            CDT::Point pt(point->getX(), point->getY());
+            auto handle = tri.insert(pt);
 
-                double d;
-                geod.Inverse(pt.y(), pt.x(), pt2.y(), pt2.x(), d);
-
-                if (mLinkLimits < 1e-3 || d < mLinkLimits) {
-                    OGRLineString line;
-                    line.addPoint(pt.x(), pt.y());
-                    line.addPoint(pt2.x(), pt2.y());
-
-                    OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
-                    f->SetGeometry(&line);
-                    f->SetField(fldFrom, static_cast<int>(vrt->info()));
-                    f->SetField(fldTo, static_cast<int>(vc->info()));
-
-                    f->SetField(fldWeight, std::floor(d / 1000 + 0.5));
-
-                    layerEdges->CreateFeature(f);
-                    OGRFeature::DestroyFeature(f);
-                }
+            if (constrFid != -1 && constrFid == prevFid) {
+                tri.insert_constraint(prevHandle, handle);
             }
-            ++vc;
-        } while (vc != done);
-        ++vrt;
-    }
+            prevHandle = handle;
+            prevFid = id;
 
-    // here remove the other Exclusion Grid
+            handle->info() = id;
+            ++id;
 
-    int deletedField = -1;
-    if (mShapefileExc) {
-        auto tempLayer2 = layerEdges;
+            resultLayer->SetFeature(feature);
+        }
 
-        layerEdges = createEdgesLayer(outdataset,"Displace-ResultEdges");
-        OGRFieldDefn delFld ("Deleted", OFTInteger);
-        layerEdges->CreateField(&delFld);
-        deletedField = layerEdges->FindFieldIndex("Deleted", TRUE);
-
-        fldFrom = getFromFieldIndex(layerEdges);
+        OGRLayer *layerEdges = createEdgesLayer(outdataset, "Displace-InEdges");
+        auto fldFrom = getFromFieldIndex(layerEdges);
         assert(fldFrom != -1);
-        fldTo = getToFieldIndex(layerEdges);
+        auto fldTo = getToFieldIndex(layerEdges);
         assert(fldTo != -1);
-        fldWeight = getWeightFieldIndex(layerEdges);
+        auto fldWeight = getWeightFieldIndex(layerEdges);
         assert(fldWeight != -1);
 
+        const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
+
+        qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
+        CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
+        while (vrt != tri.finite_vertices_end()) {
+            CDT::Vertex_circulator vc = tri.incident_vertices((CDT::Vertex_handle) vrt);
+            CDT::Vertex_circulator done(vc);
+
+            const auto &pt = vrt->point();
+            do {
+                if (vc != tri.infinite_vertex()) {
+                    const auto &pt2 = vc->point();
+
+                    double d;
+                    geod.Inverse(pt.y(), pt.x(), pt2.y(), pt2.x(), d);
+
+                    if (mLinkLimits < 1e-3 || d < mLinkLimits) {
+                        OGRLineString line;
+                        line.addPoint(pt.x(), pt.y());
+                        line.addPoint(pt2.x(), pt2.y());
+
+                        OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
+                        f->SetGeometry(&line);
+                        f->SetField(fldFrom, static_cast<int>(vrt->info()));
+                        f->SetField(fldTo, static_cast<int>(vc->info()));
+
+                        f->SetField(fldWeight, std::floor(d / 1000 + 0.5));
+
+                        layerEdges->CreateFeature(f);
+                        OGRFeature::DestroyFeature(f);
+                    }
+                }
+                ++vc;
+            } while (vc != done);
+            ++vrt;
+        }
+
+        // here remove the other Exclusion Grid
+
+        int deletedField = -1;
+        if (mShapefileExc) {
+            auto tempLayer2 = layerEdges;
+
+            layerEdges = createEdgesLayer(outdataset, "Displace-ResultEdges");
+            OGRFieldDefn delFld("Deleted", OFTInteger);
+            layerEdges->CreateField(&delFld);
+            deletedField = layerEdges->FindFieldIndex("Deleted", TRUE);
+
+            fldFrom = getFromFieldIndex(layerEdges);
+            assert(fldFrom != -1);
+            fldTo = getToFieldIndex(layerEdges);
+            assert(fldTo != -1);
+            fldWeight = getWeightFieldIndex(layerEdges);
+            assert(fldWeight != -1);
+
 //        diffEdges(tempLayer2, exclusionLayer1, layerEdges, memdataset);
-        copyLayerContent(tempLayer2, layerEdges);
+            copyLayerContent(tempLayer2, layerEdges);
 
-        auto exclusionLayer1 = mShapefileExc->GetLayer(0);
-        exclusionLayer1->ResetReading();
-        qDebug()<< "Before removing features: " << layerEdges->GetFeatureCount();
+            auto exclusionLayer1 = mShapefileExc->GetLayer(0);
+            exclusionLayer1->ResetReading();
+            qDebug() << "Before removing features: " << layerEdges->GetFeatureCount();
 
-        OGRFeature *feature;
+            OGRFeature *feature;
 
-        int n = 0;
-        while (( feature = exclusionLayer1->GetNextFeature()) != nullptr) {
-            OGRGeometry *geometry = feature->GetGeometryRef();
-            layerEdges->ResetReading();
-            layerEdges->SetSpatialFilter(geometry);
-            OGRFeature *edgeF;
-            while ((edgeF = layerEdges->GetNextFeature()) != nullptr) {
-                layerEdges->DeleteFeature(edgeF->GetFID());
-                //edgeF->SetField(deletedField, 1);
-                ++n;
-                //layerEdges->SetFeature(edgeF);
+            int n = 0;
+            while ((feature = exclusionLayer1->GetNextFeature()) != nullptr) {
+                OGRGeometry *geometry = feature->GetGeometryRef();
+                layerEdges->ResetReading();
+                layerEdges->SetSpatialFilter(geometry);
+                OGRFeature *edgeF;
+                while ((edgeF = layerEdges->GetNextFeature()) != nullptr) {
+                    layerEdges->DeleteFeature(edgeF->GetFID());
+                    //edgeF->SetField(deletedField, 1);
+                    ++n;
+                    //layerEdges->SetFeature(edgeF);
+                }
+            }
+
+            qDebug() << "Removed: " << n;
+        }
+
+        // build the list of results
+        QList<Node> res;
+        resultLayer->ResetReading();
+        while (auto f = resultLayer->GetNextFeature()) {
+            auto pt = f->GetGeometryRef();
+            if (pt != NULL && wkbFlatten(pt->getGeometryType()) == wkbPoint) {
+                OGRPoint *point = (OGRPoint *) pt;
+                Node n;
+                n.point = QPointF(point->getX(), point->getY());
+                n.good = true;
+
+                int id = f->GetFieldAsInteger(nIdField);
+                assert(id != -1);
+
+                while (res.size() <= id)
+                    res.push_back(Node());
+                res[id] = n;
             }
         }
 
-        qDebug() << "Removed: " << n;
-    }
+        // Fill the adiacencies.
 
-    // build the list of results
-    QList<Node> res;
-    resultLayer->ResetReading();
-    while (auto f = resultLayer->GetNextFeature()) {
-        auto pt = f->GetGeometryRef();
-        if( pt != NULL && wkbFlatten(pt->getGeometryType()) == wkbPoint )
-        {
-            OGRPoint *point = (OGRPoint *) pt;
-            Node n;
-            n.point = QPointF(point->getX(), point->getY());
-            n.good = true;
+        int nEdges = 0;
+        layerEdges->SetSpatialFilter(nullptr);
+        layerEdges->ResetReading();
 
-            int id = f->GetFieldAsInteger(nIdField);
-            assert(id != -1);
+        qDebug() << "Actual features: " << layerEdges->GetFeatureCount() << deletedField;
+        while (auto f = layerEdges->GetNextFeature()) {
+            /*
+            if (deletedField != -1) {
+                auto isDeleted = f->GetFieldAsInteger(deletedField);
+                if (isDeleted != 0)
+                    continue;   // Skip deleted fields.
+            }*/
 
-            while (res.size() <= id)
-                res.push_back(Node());
-            res[id] = n;
+            auto from = static_cast<unsigned>(f->GetFieldAsInteger(fldFrom));
+            auto to = static_cast<unsigned>(f->GetFieldAsInteger(fldTo));
+            auto weight = f->GetFieldAsDouble(fldWeight);
+
+            auto &adj = res[from].adiacencies;
+            adj.push_back(to);
+            res[from].weight.push_back(weight);
+            ++nEdges;
         }
+
+        qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount() << nEdges << " edges ";
+
+        for (int i = 0; i < 10; ++i) {
+            qDebug() << i << res[i].point << res[i].adiacencies << res[i].weight;
+        }
+
+        OGRDataSource::DestroyDataSource(outdataset);
+        return res;
+    } catch (std::exception &ex) {
+        OGRDataSource::DestroyDataSource(outdataset);
+
+        qCritical() << "Error: " << ex.what();
+
+        return QList<GraphBuilder::Node>();
     }
-
-    // Fill the adiacencies.
-
-    int nEdges = 0;
-    layerEdges->SetSpatialFilter(nullptr);
-    layerEdges->ResetReading();
-
-    qDebug()<< "Actual features: " << layerEdges->GetFeatureCount() << deletedField;
-    while (auto f = layerEdges->GetNextFeature()) {
-        /*
-        if (deletedField != -1) {
-            auto isDeleted = f->GetFieldAsInteger(deletedField);
-            if (isDeleted != 0)
-                continue;   // Skip deleted fields.
-        }*/
-
-        auto from = static_cast<unsigned>(f->GetFieldAsInteger(fldFrom));
-        auto to = static_cast<unsigned>(f->GetFieldAsInteger(fldTo));
-        auto weight = f->GetFieldAsDouble(fldWeight);
-
-        auto &adj = res[from].adiacencies;
-        adj.push_back(to);
-        res[from].weight.push_back(weight);
-        ++nEdges;
-    }
-
-    qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount() << nEdges << " edges ";
-
-    for (int i = 0; i < 10; ++i) {
-        qDebug() << i << res[i].point << res[i].adiacencies << res[i].weight;
-    }
-
-    OGRDataSource::DestroyDataSource(outdataset);
-    return res;
 }
 
 void GraphBuilder::createGrid(OGRDataSource *tempDatasource,

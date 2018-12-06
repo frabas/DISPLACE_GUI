@@ -63,7 +63,7 @@ void CreateGraphDialog::onLoadBrowseButtonClicked()
         QString graphpath, coordspath;
 
         QFileInfo info(fn);
-        QString fnn = info.fileName();
+        QString fnn = info.absoluteFilePath();
 
         ui->loadGraphPath->setText(fnn);
     }
@@ -209,14 +209,21 @@ int CreateGraphDialog::getMinLinks() const
 void CreateGraphDialog::done(int r)
 {
     if (r == QDialog::Accepted) {
-        if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
+        if (isCreateEnabled()) {
+            if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
                 std::abs(ui->long1->value() - ui->long2->value()) < 1e-5 ||
-            ui->step->value() < 0.5) {
-            QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
+                ui->step->value() < 0.5) {
+                QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
+            } else {
+                QDialog::done(r);
+            }
         } else {
+            if (loadGraphPath().isEmpty() || !QFile::exists(loadGraphPath())) {
+                QMessageBox::warning(this, tr("Invalid File Path"), tr("The selected file doesn't exists or is invalid"));
+                return;
+            }
             QDialog::done(r);
         }
-
     } else {
         QDialog::done(r);
     }

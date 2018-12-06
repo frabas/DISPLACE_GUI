@@ -632,46 +632,6 @@ int GraphBuilder::waitfunc(double progress, const char *msg, void *thiz)
     return TRUE;
 }
 
-
-#if 0
-void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
-{
-
-#ifdef HAVE_GEOGRAPHICLIB
-    double d;
-
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
-
-    geod.Inverse(nodes[source].point.y(), nodes[source].point.x(), nodes[target].point.y(), nodes[target].point.x(), d);
-
-#else
-    double ph1 = nodes[source].point.x() * M_PI / 180;
-    double la1 = nodes[source].point.y() * M_PI / 180;
-    double ph2 = nodes[target].point.x() * M_PI / 180;
-    double la2 = nodes[target].point.y() * M_PI / 180;
-    double dp = ph2 - ph1;
-    double dl = la2 - la1;
-
-    double a = std::sin(dp/2) * std::sin(dp/2) +
-            std::cos(ph1) * std::cos(ph2) *
-            std::sin(dl/2) * std::sin(dl/2);
-    double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1-a));
-
-    double d = earthRadius * c;
-#endif
-
-    if (mLinkLimits < 1e-3 || d < mLinkLimits) {
-        nodes[source].adiacencies.push_back(target);
-        nodes[source].weight.push_back(std::floor(d / 1000 + 0.5));
-    }
-}
-#endif
-
-
 bool GraphBuilder::outsideEnabled() const
 {
     return mOutsideEnabled;
@@ -708,3 +668,13 @@ std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> GraphBuilder::cr
     throw std::runtime_error("Unhandled case");
 }
 
+void GraphBuilder::actionCreate()
+{
+    mCreateMode = true;
+}
+
+void GraphBuilder::actionLoad(QString path)
+{
+    mCreateMode = false;
+    mLoadPath = path;
+}

@@ -58,6 +58,9 @@ public:
 
     GraphBuilder();
 
+    void actionCreate();
+    void actionLoad(QString path);
+
     void setType (Type type) {
         mType = type;
     }
@@ -94,7 +97,6 @@ public:
 
     QList<Node> buildGraph();
 
-    static void pointSumWithBearing (const QPointF &p1, double dist, double bearing, QPointF &p2);
     static const double earthRadius;
 
     bool outsideEnabled() const;
@@ -102,6 +104,8 @@ public:
     void setLinkLimits(double limit_km);
 
 private:
+    bool mCreateMode = false;
+    QString mLoadPath;
     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
     void createGrid (OGRDataSource *tempDatasource,
                      std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,

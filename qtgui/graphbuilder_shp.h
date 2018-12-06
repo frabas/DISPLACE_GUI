@@ -107,6 +107,12 @@ private:
     bool mCreateMode = false;
     QString mLoadPath;
     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
+
+
+    void createMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&gridlayerOut,
+                        OGRLayer *&resultLayer);
+    void loadMainGrid();
+
     void createGrid (OGRDataSource *tempDatasource,
                      std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
                      OGRLayer *lyOut,

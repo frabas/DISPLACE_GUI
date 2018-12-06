@@ -83,56 +83,21 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
     mShapefileExc = src;
 }
 
-QList<GraphBuilder::Node> GraphBuilder::buildGraph()
-{   
-    const QString OUTDIR = QString("%1/DisplaceBuildGraph").arg(QDir::tempPath());
-    QDir toremove(OUTDIR);
-    toremove.removeRecursively();
-    toremove.mkpath(OUTDIR);
-
-    // sanitize
-    if (mShapefileExc.get() == 0)
-        mRemoveEdgesInExcludeZone = false;
+void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&gridlayerOut, OGRLayer *&resultLayer)
+{
+    auto memdataset = memdriver->CreateDataSource("memory", nullptr );
 
     auto builderInc1 = createBuilder(mType, mStep1);
     auto builderInc2 = createBuilder(mType, mStep2);
     auto builderOut = createBuilder(mType, mStep);
 
-    int total = 0;
-
-    if (mShapefileInc1.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep1 /earthRadius));
-    }
-    if (mShapefileInc2.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep2 /earthRadius));
-    }
-    if (mOutsideEnabled) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep /earthRadius));
-    }
-
-    total += 50; // Node creation, links, removing.
-
-    if (mFeedback) {
-        mFeedback->setMax(total);
-    }
-
-    progress = 0;
-
-    // create the grid.
-
-    // Create an in-memory db
-    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
-
-    auto memdriver = registrar->GetDriverByName("memory"); // was memory
-    auto memdataset = memdriver->CreateDataSource("memory", nullptr );
-
-    auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
-    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
     OGRLayer *gridlayer1 = nullptr;
     OGRLayer *gridlayer2 = nullptr;
-    OGRLayer *gridlayerOut = nullptr;
-
     OGRLayer *outlayer1 = nullptr, *outlayer2 = nullptr;
+
+    OGRLayer *exclusionLayer1 = nullptr;
+    OGRLayer *exclusionLayer2 = nullptr;
+    OGRLayer *outLayerOut = nullptr;
 
     if (mShapefileInc1) {
         gridlayer1 = createGridLayer(outdataset, "grid1");
@@ -154,9 +119,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         createGrid(memdataset, builderInc2, outlayer2, gridlayer2, inclusionLayer, exclusionLayer, nullptr);
     }
 
-    OGRLayer *exclusionLayer1 = nullptr, *exclusionLayer2 = nullptr;
-    OGRLayer *outLayerOut = nullptr;
-    OGRLayer *resultLayer = nullptr;
 
     if (outsideEnabled()) {
         gridlayerOut = createGridLayer(outdataset, "gridOut");
@@ -193,6 +155,65 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         resultLayer = createGridLayer(outdataset, "Displace-ResultGrid");
         exclusionLayer1 = mShapefileExc->GetLayer(0);
         diff(tempLayer, exclusionLayer1, resultLayer, memdataset);
+    }
+}
+
+void GraphBuilder::loadMainGrid()
+{
+
+}
+
+QList<GraphBuilder::Node> GraphBuilder::buildGraph()
+{   
+    const QString OUTDIR = QString("%1/DisplaceBuildGraph").arg(QDir::tempPath());
+    QDir toremove(OUTDIR);
+    toremove.removeRecursively();
+    toremove.mkpath(OUTDIR);
+
+    // sanitize
+    if (mShapefileExc.get() == 0)
+        mRemoveEdgesInExcludeZone = false;
+
+    int total = 0;
+
+    if (mCreateMode) {
+        if (mShapefileInc1.get()) {
+            total += ((mLatMax * M_PI / 180.0 - mLatMin * M_PI / 180.0) / (mStep1 / earthRadius));
+        }
+        if (mShapefileInc2.get()) {
+            total += ((mLatMax * M_PI / 180.0 - mLatMin * M_PI / 180.0) / (mStep2 / earthRadius));
+        }
+        if (mOutsideEnabled) {
+            total += ((mLatMax * M_PI / 180.0 - mLatMin * M_PI / 180.0) / (mStep / earthRadius));
+        }
+    }
+
+    total += 50; // Node creation, links, removing.
+
+    if (mFeedback) {
+        mFeedback->setMax(total);
+    }
+
+    progress = 0;
+
+    // create the grid.
+
+    // Create an in-memory db
+    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
+
+    auto memdriver = registrar->GetDriverByName("memory"); // was memory
+
+    auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
+    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
+    OGRLayer *gridlayerOut = nullptr;
+
+    ///
+    OGRLayer *resultLayer = nullptr;
+
+    if (mCreateMode) {
+        createMainGrid(memdriver, outdataset, gridlayerOut, resultLayer);
+    } else  {
+        throw std::logic_error("unimplemneted yet");
     }
 
     // Triangulate
@@ -300,7 +321,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 //        diffEdges(tempLayer2, exclusionLayer1, layerEdges, memdataset);
         copyLayerContent(tempLayer2, layerEdges);
 
-        exclusionLayer1 = mShapefileExc->GetLayer(0);
+        auto exclusionLayer1 = mShapefileExc->GetLayer(0);
         exclusionLayer1->ResetReading();
         qDebug()<< "Before removing features: " << layerEdges->GetFeatureCount();
 

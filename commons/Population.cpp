@@ -97,6 +97,7 @@ Population::Population(int a_name,
 
 
         tot_N_at_szgroup.push_back(0);
+        tot_C_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
         prop_migrants_in_N_at_szgroup.push_back(0);
         tot_N_at_szgroup_just_after_redistribution.push_back(0);
@@ -372,6 +373,12 @@ const vector<double>& Population::get_tot_N_at_szgroup() const
 {
 	return(tot_N_at_szgroup);
 }
+
+const vector<double>& Population::get_tot_C_at_szgroup() const
+{
+    return(tot_C_at_szgroup);
+}
+
 
 const vector<double>& Population::get_true_tot_N_at_szgroup() const
 {
@@ -663,6 +670,12 @@ void Population::set_hyperstability_param(double _hyperstability_param)
 void Population::set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup)
 {
 	tot_N_at_szgroup =_N_at_szgroup;
+
+}
+
+void Population::set_tot_C_at_szgroup(const vector<double>& _C_at_szgroup)
+{
+    tot_C_at_szgroup =_C_at_szgroup;
 
 }
 
@@ -1573,6 +1586,16 @@ void Population::clear_tot_F_at_age()
 		tot_F_at_age[a]=0;
 		tot_F_at_age_last_quarter[a]=0;
 	}
+}
+
+
+
+void Population::clear_tot_C_at_szgroup()
+{
+    for(unsigned int sz = 0; sz < tot_C_at_szgroup.size(); sz++)
+    {
+        tot_C_at_szgroup[sz]=0.0;
+    }
 }
 
 

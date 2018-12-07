@@ -136,7 +136,7 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
             auto v = getData(model, stat, aggtype, ipop, stype);
             if(stat==PopulationStat::FvsEffort)
                {
-                v = getData(model, (displace::plot::PopulationStat) 2, (displace::plot::NationsStat) 5, aggtype, ipop, stype); // see 1 is F and 4 is "TimeAtSea" in plottype.h
+                v = getData(model, (displace::plot::PopulationStat) 2, (displace::plot::NationsStat) 4, aggtype, ipop, stype); // see 1 is F and 4 is "TimeAtSea" in plottype.h
                }
 
             graph->setData(std::get<0>(v), std::get<1>(v));

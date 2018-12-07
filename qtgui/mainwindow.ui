@@ -404,6 +404,11 @@
                 </item>
                 <item>
                  <property name="text">
+                  <string>Catches in kg</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
                   <string>Fishing mortality F</string>
                  </property>
                 </item>

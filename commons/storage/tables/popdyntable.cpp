@@ -7,7 +7,7 @@ struct PopDynTable::Impl {
     bool init = false;
     std::mutex mutex;
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
+        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,  FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
 };
 
@@ -27,6 +27,7 @@ void PopDynTable::dropAndCreate()
                            fldPopId,
                            fldGroup,
                            fldN,
+                           fldC,
                            fldF,
                            fldM,
                            fldSSB,
@@ -44,6 +45,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
                                            fldPopId,
                                            fldGroup,
                                            fldN,
+                                           fldC,
                                            fldF,
                                            fldM,
                                            fldSSB,
@@ -53,6 +55,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
     }
 
     const auto &N = pop->get_tot_N_at_szgroup();
+    const auto &C = pop->get_tot_N_at_szgroup();
     const auto &F = pop->get_tot_F_at_age();
     const auto &M = pop->get_tot_M_at_age();
     const auto &SSB = pop->get_SSB_at_szgroup();
@@ -66,6 +69,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
                             popid,
                             (int)i,
                             (i < N.size() ? N.at(i) : -1),
+                            (i < C.size() ? N.at(i) : -1),
                             (i < F.size() ? F.at(i) : -1),
                             (i < M.size() ? M.at(i) : -1),
                             (i < SSB.size() ? SSB.at(i) : -1),

@@ -25,8 +25,9 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(0),  mortality(0), natmortality(0), SSB(),
+      aggregate(0),  catches(0), mortality(0), natmortality(0), SSB(),
       totAggregate(0.0),
+      totCatches(0.0),
       totMortality(0.0),
       totNatMortality(0.0),
       totSSB(0.0)
@@ -35,8 +36,9 @@ PopulationData::PopulationData(int _id)
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
+      aggregate(p.aggregate), catches(p.catches), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
       totAggregate(p.totAggregate),
+      totCatches(p.totCatches),
       totMortality(p.totMortality),
       totNatMortality(p.totNatMortality),
       totSSB(p.totSSB)
@@ -73,6 +75,27 @@ void PopulationData::setAggregate(const QVector<double> &value)
     while (mortality.size() < aggregate.size())
         mortality.push_back(0);
 }
+
+const QVector<double> &PopulationData::getCatches() const
+{
+    return catches;
+}
+
+double PopulationData::getCatchesAt(int i) const
+{
+    if (catches.size() > i)
+        return catches.at(i);
+    return 0;
+}
+
+void PopulationData::setCatches(const QVector<double> &value)
+{
+    catches = value;
+    // force aggregate and mortality to have the same size!
+    while (mortality.size() < catches.size())
+        catches.push_back(0);
+}
+
 
 const QVector<double> &PopulationData::getMortality() const
 {
@@ -176,4 +199,15 @@ void PopulationData::setAggregateTot(double value)
 {
     totAggregate = value;
 }
+
+double PopulationData::getCatchesTot() const
+{
+    return totCatches;
+}
+
+void PopulationData::setCatchesTot(double value)
+{
+    totCatches = value;
+}
+
 

@@ -28,15 +28,16 @@ class PopulationData
     int id;
     QString mName;
     QVector<double> aggregate;
+    QVector<double> catches;
     QVector<double> mortality;
     QVector<double> natmortality;
     QVector<double> SSB;
 
-    double totAggregate, totMortality, totNatMortality, totSSB;
+    double totAggregate, totCatches, totMortality, totNatMortality, totSSB;
 
 public:
     PopulationData()
-        : id(-1), aggregate(), mortality(), natmortality(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
+        : id(-1), aggregate(), catches(), mortality(), natmortality(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
 
     explicit PopulationData(int _id);
     PopulationData(const PopulationData&p);
@@ -47,6 +48,9 @@ public:
 
     double getAggregateTot() const;
     void setAggregateTot(double value);
+
+    double getCatchesTot() const;
+    void setCatchesTot(double value);
 
     double getMortalityTot() const;
     void setMortalityTot(double value);
@@ -60,18 +64,23 @@ public:
     void clear() {
         for (int i = 0; i < aggregate.size(); ++i)
             aggregate[i] = 0;
+        for (int i = 0; i < catches.size(); ++i)
+            catches[i] = 0;
         for (int i = 0; i < mortality.size(); ++i)
             mortality[i] = 0;
         for (int i = 0; i < natmortality.size(); ++i)
             natmortality[i] = 0;
         for (int i = 0; i < SSB.size(); ++i)
             SSB[i] = 0;
-        totAggregate = totMortality = totNatMortality = totSSB = 0;
+        totAggregate = totCatches = totMortality = totNatMortality = totSSB = 0;
     }
 
     const QVector<double> &getAggregate() const;
     double getAggregateAt(int i) const;
     void setAggregate(const QVector<double> &value);
+    const QVector<double> &getCatches() const;
+    double getCatchesAt(int i) const;
+    void setCatches(const QVector<double> &value);
     const QVector<double> &getMortality() const;
     double getMortalityAt(int i) const;
     void setMortality(const QVector<double> &value);

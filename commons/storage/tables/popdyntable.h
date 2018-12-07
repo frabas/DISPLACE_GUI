@@ -25,6 +25,7 @@ public:
     const FieldDef<FieldType::Integer> fldGroup = makeFieldDef("PopGroup",FieldType::Integer()).notNull();
 
     const FieldDef<FieldType::Real> fldN = makeFieldDef("N",FieldType::Real());
+    const FieldDef<FieldType::Real> fldC = makeFieldDef("Catch",FieldType::Real());
     const FieldDef<FieldType::Real> fldF = makeFieldDef("F",FieldType::Real());
     const FieldDef<FieldType::Real> fldM = makeFieldDef("M",FieldType::Real());
     const FieldDef<FieldType::Real> fldSSB = makeFieldDef("SSB",FieldType::Real());

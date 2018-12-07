@@ -136,7 +136,7 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
             auto v = getData(model, stat, aggtype, ipop, stype);
             if(stat==PopulationStat::FvsEffort)
                {
-                v = getData(model, (displace::plot::PopulationStat) 1, (displace::plot::NationsStat) 4, aggtype, ipop, stype); // see 1 is F and 4 is "TimeAtSea" in plottype.h
+                v = getData(model, (displace::plot::PopulationStat) 2, (displace::plot::NationsStat) 5, aggtype, ipop, stype); // see 1 is F and 4 is "TimeAtSea" in plottype.h
                }
 
             graph->setData(std::get<0>(v), std::get<1>(v));
@@ -148,6 +148,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
     case PopulationStat::Aggregate:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
+        break;
+    case PopulationStat::Catches:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("kg"));
         break;
     case PopulationStat::Mortality:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));

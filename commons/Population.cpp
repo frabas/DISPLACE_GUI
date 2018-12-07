@@ -1797,6 +1797,10 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 								 // the current tac is the avant-dernier
 
 
+    //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+    //cout << "a fake, non binding value is filled in for now" << endl;
+    //tac_y_plus_1 =100000; // tons
+
    }
 
    if(HCR==2){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger)
@@ -1913,6 +1917,11 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                 (1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
 
         }
+
+        //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+        //cout << "a fake, non binding value is filled in for now" << endl;
+        //tac_y_plus_1 =100000; // tons
+
    }
 
    if(HCR==3){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger) but with flexibility of FMSY range
@@ -2032,6 +2041,11 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                 (1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
 
         }
+
+        //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+        //cout << "a fake, non binding value is filled in for now" << endl;
+        //tac_y_plus_1 =100000; // tons
+
    }
 
    if(HCR==4){ //  statuquo TAC
@@ -2129,6 +2143,9 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
       }
 
+             //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+             //cout << "a fake, non binding value is filled in for now" << endl;
+             //tac_y_plus_1 =100000; // tons
 
      }
 

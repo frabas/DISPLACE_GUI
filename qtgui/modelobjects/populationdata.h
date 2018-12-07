@@ -29,13 +29,14 @@ class PopulationData
     QString mName;
     QVector<double> aggregate;
     QVector<double> mortality;
+    QVector<double> natmortality;
     QVector<double> SSB;
 
-    double totAggregate, totMortality, totSSB;
+    double totAggregate, totMortality, totNatMortality, totSSB;
 
 public:
     PopulationData()
-        : id(-1), aggregate(), mortality(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
+        : id(-1), aggregate(), mortality(), natmortality(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
 
     explicit PopulationData(int _id);
     PopulationData(const PopulationData&p);
@@ -50,6 +51,9 @@ public:
     double getMortalityTot() const;
     void setMortalityTot(double value);
 
+    double getNatMortalityTot() const;
+    void setNatMortalityTot(double value);
+
     double getSSBTot() const;
     void setSSBTot(double value);
 
@@ -58,9 +62,11 @@ public:
             aggregate[i] = 0;
         for (int i = 0; i < mortality.size(); ++i)
             mortality[i] = 0;
+        for (int i = 0; i < natmortality.size(); ++i)
+            natmortality[i] = 0;
         for (int i = 0; i < SSB.size(); ++i)
             SSB[i] = 0;
-        totAggregate = totMortality = totSSB = 0;
+        totAggregate = totMortality = totNatMortality = totSSB = 0;
     }
 
     const QVector<double> &getAggregate() const;
@@ -69,6 +75,9 @@ public:
     const QVector<double> &getMortality() const;
     double getMortalityAt(int i) const;
     void setMortality(const QVector<double> &value);
+    const QVector<double> &getNatMortality() const;
+    double getNatMortalityAt(int i) const;
+    void setNatMortality(const QVector<double> &value);
     const QVector<double> &getSSB() const;
     void setSSB(const QVector<double> &value);
 };

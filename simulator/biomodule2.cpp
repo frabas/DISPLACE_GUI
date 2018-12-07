@@ -196,6 +196,13 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                        popstats  << SSB_per_szgroup.at(i)  << " " ;
                     }
 
+                    // ... / tot_M_at_age
+                    vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
+                    for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+                    {
+                                                 // output M in CUMUL over months, caution!
+                        popstats  << tot_M_at_age.at(a)  << " " ;
+                    }
 
                  popstats << " " <<  endl;
 
@@ -778,6 +785,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
 
                         popstats  << SSB_per_szgroup.at(i) << " " ;
+                        }
+
+                        // ... / tot_M_at_age
+                        vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
+                        for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+                        {
+                                                     // output M in CUMUL over months, caution!
+                            popstats  << tot_M_at_age.at(a)  << " " ;
                         }
 
 

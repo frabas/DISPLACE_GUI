@@ -25,18 +25,20 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(0), mortality(0), SSB(),
+      aggregate(0),  mortality(0), natmortality(0), SSB(),
       totAggregate(0.0),
       totMortality(0.0),
+      totNatMortality(0.0),
       totSSB(0.0)
 {
 }
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate), mortality(p.mortality), SSB(p.SSB),
+      aggregate(p.aggregate), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
       totAggregate(p.totAggregate),
       totMortality(p.totMortality),
+      totNatMortality(p.totNatMortality),
       totSSB(p.totSSB)
 {
 
@@ -77,10 +79,22 @@ const QVector<double> &PopulationData::getMortality() const
     return mortality;
 }
 
+const QVector<double> &PopulationData::getNatMortality() const
+{
+    return natmortality;
+}
+
 double PopulationData::getMortalityAt(int i) const
 {
     if (mortality.size() > i)
         return mortality.at(i);
+    return 0;
+}
+
+double PopulationData::getNatMortalityAt(int i) const
+{
+    if (natmortality.size() > i)
+        return natmortality.at(i);
     return 0;
 }
 
@@ -89,6 +103,14 @@ void PopulationData::setMortality(const QVector<double> &value)
     mortality = value;
     // force aggregate and mortality to have the same size!
     while (aggregate.size() < mortality.size())
+        aggregate.push_back(0);
+}
+
+void PopulationData::setNatMortality(const QVector<double> &value)
+{
+    natmortality = value;
+    // force aggregate and mortality to have the same size!
+    while (aggregate.size() < natmortality.size())
         aggregate.push_back(0);
 }
 
@@ -104,6 +126,7 @@ void PopulationData::setSSB(const QVector<double> &value)
     while (aggregate.size() < SSB.size()){
         aggregate.push_back(0);
         mortality.push_back(0);
+        natmortality.push_back(0);
      }
 }
 
@@ -118,9 +141,19 @@ double PopulationData::getMortalityTot() const
     return totMortality;
 }
 
+double PopulationData::getNatMortalityTot() const
+{
+    return totNatMortality;
+}
+
 void PopulationData::setMortalityTot(double value)
 {
     totMortality = value;
+}
+
+void PopulationData::setNatMortalityTot(double value)
+{
+    totNatMortality = value;
 }
 
 double PopulationData::getSSBTot() const

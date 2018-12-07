@@ -1797,9 +1797,6 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 								 // the current tac is the avant-dernier
 
 
-    //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-    //cout << "a fake, non binding value is filled in for now" << endl;
-    //tac_y_plus_1 =100000; // tons
 
    }
 
@@ -1918,9 +1915,6 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
         }
 
-        //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-        //cout << "a fake, non binding value is filled in for now" << endl;
-        //tac_y_plus_1 =100000; // tons
 
    }
 
@@ -2042,9 +2036,6 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
         }
 
-        //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-        //cout << "a fake, non binding value is filled in for now" << endl;
-        //tac_y_plus_1 =100000; // tons
 
    }
 
@@ -2143,13 +2134,13 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
       }
 
-             //cout << "WARNING: TACs Option is active but TAC found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-             //cout << "a fake, non binding value is filled in for now" << endl;
-             //tac_y_plus_1 =100000; // tons
 
      }
 
 
+     cout << "WARNING: TACs Option is active but TAC for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+     cout << "a fake, non binding value is filled in for now" << endl;
+     if(tac_y_plus_1==0) tac_y_plus_1 =100000; // tons
 
      cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
 

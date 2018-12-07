@@ -1708,10 +1708,10 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
               denominator += pow(amount_to, -0.25);
            }
            price_multiplier=numerator/denominator;
-           cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl;
+           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
            if(!isfinite(price_multiplier))
            {
-               cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << endl;
+               dout(cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << endl);
                price_multiplier=1.0; // extra precaution if any unexpected NaN.
            }
            dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);

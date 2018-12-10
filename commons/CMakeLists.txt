@@ -170,8 +170,11 @@ target_link_libraries(commons
         formats
         Geographic
         ${LIBRARIES}
-        MSqliteCpp::MSqliteCpp
+        msqlitecpp::msqlitecpp
         )
 
 # Set target directory
-install(TARGETS commons LIBRARY DESTINATION lib COMPONENT libraries)
+install(TARGETS commons
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        COMPONENT libraries)

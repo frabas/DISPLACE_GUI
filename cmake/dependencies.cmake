@@ -19,4 +19,4 @@ message ("CGAL version: ${CGAL_VERSION}")
 
 find_package(Sparsepp REQUIRED)
 
-find_package(MSqliteCpp REQUIRED)
+find_package(msqlitecpp REQUIRED)

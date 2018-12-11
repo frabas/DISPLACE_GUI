@@ -1,7 +1,0 @@
-[requires]
-boost/1.66.0@conan/stable
-geographiclib/1.49@bincrafters/stable
-#Gdal/2.1.3@osechet/testing
-
-[generators]
-cmake

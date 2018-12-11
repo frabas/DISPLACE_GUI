@@ -354,12 +354,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                             // then, collect and accumulate tot_C_at_szgroup
                             vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                            vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
                             vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                            vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
                             for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
                             {
                                newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                               newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
                             }
                             populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                            populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
 
 
                         }
@@ -382,14 +386,19 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
+
                         // then, collect and accumulate tot_C_at_szgroup
                         vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                        vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
                         vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                        vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
                         for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
                         {
                            newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                           newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
                         }
                         populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                        populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
 
                     }
                 }
@@ -931,6 +940,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 populations.at(sp)->add_to_landings_at_end_of_years(populations.at(sp)->get_landings_so_far());
                                 populations.at(sp)->set_landings_so_far(0);
                                 populations.at(sp)->clear_tot_C_at_szgroup();
+                                populations.at(sp)->clear_tot_D_at_szgroup();
 
                             //}
                             //else

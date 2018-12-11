@@ -153,6 +153,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("kg"));
         break;
+    case PopulationStat::Discards:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("kg"));
+        break;
     case PopulationStat::Mortality:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("F"));

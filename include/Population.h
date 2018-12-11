@@ -83,6 +83,7 @@ class COMMONSSHARED_EXPORT Population
 		double get_cpue_multiplier() const;
         const vector<double>& get_tot_N_at_szgroup() const;
         const vector<double>& get_tot_C_at_szgroup() const;
+        const vector<double>& get_tot_D_at_szgroup() const;
         const vector<double>& get_true_tot_N_at_szgroup() const;
         const vector<double>& get_prop_migrants_in_tot_N_at_szgroup() const;
         const vector<double>& get_tot_N_at_szgroup_just_after_redistribution() const;
@@ -137,6 +138,7 @@ class COMMONSSHARED_EXPORT Population
         void set_hyperstability_param(double _hyperstability_param);
         void set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup);
         void set_tot_C_at_szgroup(const vector<double>& _C_at_szgroup);
+        void set_tot_D_at_szgroup(const vector<double>& _D_at_szgroup);
         void set_true_tot_N_at_szgroup(const vector<double>& _true_tot_N_at_szgroup);
         void set_prop_migrants_in_tot_N_at_szgroup(const vector<double>& _prop_migrants_at_szgroup);
         void set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution);
@@ -187,6 +189,7 @@ class COMMONSSHARED_EXPORT Population
 		void clear_tot_F_at_age();
         void clear_tot_M_at_age();
         void clear_tot_C_at_szgroup();
+        void clear_tot_D_at_szgroup();
         void do_growth();		 // apply the size transition matrix
 								 // stock-recruitment relationship via fecundity_at_szgroup
         void apply_overall_migration_fluxes(vector<Population* >& populations);
@@ -220,6 +223,8 @@ class COMMONSSHARED_EXPORT Population
                                  //
         vector<double> tot_C_at_szgroup;
                                  //
+        vector<double> tot_D_at_szgroup;
+
         vector<double> true_tot_N_at_szgroup; // same as tot_N_at_szgroup if pop is 100% of the same species (i.e. different if stock mixing occurs)
                                  //
         vector<double> prop_migrants_in_N_at_szgroup; //0 if pop is 100% of the same species (i.e. different if stock mixing occurs)

@@ -3281,11 +3281,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         // collect and accumulate tot_C_at_szgroup at the end of the pop loop
         // (accumulate in szgroup 0 if implicit pop)
         vector <double> newTotC= populations.at(pop)->get_tot_C_at_szgroup();
+        vector <double> newTotD= populations.at(pop)->get_tot_D_at_szgroup();
         for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
         {
            newTotC.at(szgroup) = newTotC.at(szgroup) + catch_pop_at_szgroup.at(pop).at(szgroup);
+           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_pop_at_szgroup.at(pop).at(szgroup);
         }
         populations.at(pop)->set_tot_C_at_szgroup(newTotC);
+        populations.at(pop)->set_tot_D_at_szgroup(newTotC);
 
     } // end pop
 

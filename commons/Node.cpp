@@ -192,6 +192,7 @@ Node::Node()
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
       last_oth_catch_pops_at_szgroup(),
+      last_oth_disc_pops_at_szgroup(),
       pressure_pops_at_szgroup(),
       avai_pops_at_selected_szgroup(),
       impact_on_pops(),
@@ -585,6 +586,19 @@ vector<double> Node::get_last_oth_catch_pops_at_szgroup(int name_pop) const
     return(a_last_oth_catch_pops_at_szgroup);
 }
 
+vector<double> Node::get_last_oth_disc_pops_at_szgroup(int name_pop) const
+{
+
+    vector<double> a_last_oth_disc_pops_at_szgroup;
+
+    for(unsigned int j = 0; j < last_oth_disc_pops_at_szgroup[name_pop].size(); j++)
+    {
+        a_last_oth_disc_pops_at_szgroup.push_back(last_oth_disc_pops_at_szgroup[name_pop] [j]);
+    }
+
+    return(a_last_oth_disc_pops_at_szgroup);
+}
+
 
 vector<double>  Node::get_pressure_pops_at_szgroup(int name_pop) const
 {
@@ -894,6 +908,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (Ns_pops_at_szgroup_at_month_start, nbpops, nbszgroups);
     reinit (removals_pops_at_szgroup, nbpops, nbszgroups);
     reinit (last_oth_catch_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (last_oth_disc_pops_at_szgroup, nbpops, nbszgroups);
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
     reinit (impact_on_pops, nbpops);
     reinit (cumcatches_per_pop, nbpops);
@@ -981,6 +996,15 @@ void Node::set_last_oth_catch_pops_at_szgroup(int name_pop, const vector<double>
     for(unsigned int j = 0; j < last_oth_catch_pops_at_szgroup[name_pop].size(); j++)
     {
         last_oth_catch_pops_at_szgroup[name_pop][j]= newval[j];
+    }
+
+}
+
+void Node::set_last_oth_disc_pops_at_szgroup(int name_pop, const vector<double>& newval)
+{
+    for(unsigned int j = 0; j < last_oth_disc_pops_at_szgroup[name_pop].size(); j++)
+    {
+        last_oth_disc_pops_at_szgroup[name_pop][j]= newval[j];
     }
 
 }
@@ -1119,10 +1143,19 @@ void Node::clear_removals_pops_at_szgroup(int namepop)
 
 void Node::clear_last_oth_catch_pops_at_szgroup(int namepop)
 {
-    dout(cout  << "clear removals on nodes..." << endl);
+    dout(cout  << "clear oth catch on nodes..." << endl);
         for(unsigned int sz = 0; sz < last_oth_catch_pops_at_szgroup[namepop].size(); sz++)
         {
             last_oth_catch_pops_at_szgroup[namepop][sz] = 0;
+        }
+}
+
+void Node::clear_last_oth_disc_pops_at_szgroup(int namepop)
+{
+    dout(cout  << "clear oth disc on nodes..." << endl);
+        for(unsigned int sz = 0; sz < last_oth_disc_pops_at_szgroup[namepop].size(); sz++)
+        {
+            last_oth_disc_pops_at_szgroup[namepop][sz] = 0;
         }
 }
 
@@ -1303,7 +1336,8 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	vector <double>alloc_key             = Ns_at_szgroup_pop;
 								 // init
 	vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
-								 // init
+    vector <double>disc_per_szgroup     = Ns_at_szgroup_pop;
+                                 // init
 	vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
 								 // init
 	vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
@@ -1394,13 +1428,15 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 					new_Ns_at_szgroup_pop[szgroup]=0;
 								 // just right after the calculation of removals, reverse back to get the landings only
 					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-				}
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup];
+                }
 				else
 				{
                     // finally, impact the N
 					new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 								 // reverse back to get the landings only
 					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup];
                     //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
 					// update the availability to impact the future vessel cpue
 					double val=0;// init
@@ -1463,6 +1499,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 		this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
 		this->set_removals_pops_at_szgroup(  name_pop, new_removals_at_szgroup_pop);
         this->set_last_oth_catch_pops_at_szgroup(  name_pop, catch_per_szgroup);
+        this->set_last_oth_disc_pops_at_szgroup(  name_pop, disc_per_szgroup);
 
 
 

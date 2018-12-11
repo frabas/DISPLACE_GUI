@@ -361,7 +361,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -404,7 +404,12 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Catches in kg</string>
+                  <string>Catches per szgr in kg</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Discards per szgr in kg</string>
                  </property>
                 </item>
                 <item>

@@ -99,6 +99,7 @@ Population::Population(int a_name,
         tot_N_at_szgroup.push_back(0);
         a_tot_N_at_szgroup_before_applying_M.push_back(0);
         tot_C_at_szgroup.push_back(0);
+        tot_D_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
         prop_migrants_in_N_at_szgroup.push_back(0);
         tot_N_at_szgroup_just_after_redistribution.push_back(0);
@@ -381,6 +382,10 @@ const vector<double>& Population::get_tot_C_at_szgroup() const
     return(tot_C_at_szgroup);
 }
 
+const vector<double>& Population::get_tot_D_at_szgroup() const
+{
+    return(tot_D_at_szgroup);
+}
 
 const vector<double>& Population::get_true_tot_N_at_szgroup() const
 {
@@ -683,6 +688,12 @@ void Population::set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup)
 void Population::set_tot_C_at_szgroup(const vector<double>& _C_at_szgroup)
 {
     tot_C_at_szgroup =_C_at_szgroup;
+
+}
+
+void Population::set_tot_D_at_szgroup(const vector<double>& _D_at_szgroup)
+{
+    tot_D_at_szgroup =_D_at_szgroup;
 
 }
 
@@ -1672,6 +1683,14 @@ void Population::clear_tot_C_at_szgroup()
     }
 }
 
+void Population::clear_tot_D_at_szgroup()
+{
+    for(unsigned int sz = 0; sz < tot_D_at_szgroup.size(); sz++)
+    {
+        tot_D_at_szgroup[sz]=0.0;
+    }
+}
+
 
 double Population::compute_fbar()
 {
@@ -2354,7 +2373,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	popdyn_annual_indic  << so_far << " ";
 
     vector<double> tacs = this->get_tac()->get_ts_tac();
-    double last_year_tac=tacs.at(tacs.size()-1); // because computeTAC() has just been called before this export
+    double last_year_tac=tacs.at(tacs.size()-2); // because computeTAC() has just been called before this export
     popdyn_annual_indic  << last_year_tac << " ";
 
 								 // attempt for a calibration to obtain same F

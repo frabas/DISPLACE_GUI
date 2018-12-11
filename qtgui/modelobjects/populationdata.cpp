@@ -25,9 +25,10 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(0),  catches(0), mortality(0), natmortality(0), SSB(),
+      aggregate(0),  catches(0),  discards(0), mortality(0), natmortality(0), SSB(),
       totAggregate(0.0),
       totCatches(0.0),
+      totDiscards(0.0),
       totMortality(0.0),
       totNatMortality(0.0),
       totSSB(0.0)
@@ -36,9 +37,10 @@ PopulationData::PopulationData(int _id)
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate), catches(p.catches), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
+      aggregate(p.aggregate), catches(p.catches), discards(p.discards), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
       totAggregate(p.totAggregate),
       totCatches(p.totCatches),
+      totDiscards(p.totDiscards),
       totMortality(p.totMortality),
       totNatMortality(p.totNatMortality),
       totSSB(p.totSSB)
@@ -94,6 +96,26 @@ void PopulationData::setCatches(const QVector<double> &value)
     // force aggregate and mortality to have the same size!
     while (mortality.size() < catches.size())
         catches.push_back(0);
+}
+
+const QVector<double> &PopulationData::getDiscards() const
+{
+    return discards;
+}
+
+double PopulationData::getDiscardsAt(int i) const
+{
+    if (discards.size() > i)
+        return discards.at(i);
+    return 0;
+}
+
+void PopulationData::setDiscards(const QVector<double> &value)
+{
+    discards = value;
+    // force aggregate and mortality to have the same size!
+    while (mortality.size() < discards.size())
+        discards.push_back(0);
 }
 
 

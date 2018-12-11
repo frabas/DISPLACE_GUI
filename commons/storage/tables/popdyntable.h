@@ -26,6 +26,7 @@ public:
 
     const FieldDef<FieldType::Real> fldN = makeFieldDef("N",FieldType::Real());
     const FieldDef<FieldType::Real> fldC = makeFieldDef("Catch",FieldType::Real());
+    const FieldDef<FieldType::Real> fldD = makeFieldDef("Discard",FieldType::Real());
     const FieldDef<FieldType::Real> fldF = makeFieldDef("F",FieldType::Real());
     const FieldDef<FieldType::Real> fldM = makeFieldDef("M",FieldType::Real());
     const FieldDef<FieldType::Real> fldSSB = makeFieldDef("SSB",FieldType::Real());

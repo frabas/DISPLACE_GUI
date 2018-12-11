@@ -257,6 +257,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // will be used in case of area_closure
             double cumul_oth_land_to_be_displaced=0.0;
             int a_source_node_idx=0;
+
+            // TO DO:
+            // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe to refined.
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
@@ -266,8 +269,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // apply "other" landings
                 // (also accounting for a potential multiplier (default at 1.0))
                 double oth_land_this_pop_this_node=
-                map_oth[a_list_nodes.at(n)->get_idx_node()]*
-                populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+                  map_oth[a_list_nodes.at(n)->get_idx_node()]*
+                   populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
 
                 // magic number for a the below scenario: add a stochastic variation
                 // area-based sce
@@ -346,6 +349,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 }
                             }
 
+                            // apply_oth_land()
                             if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
 
                             // then, collect and accumulate tot_C_at_szgroup

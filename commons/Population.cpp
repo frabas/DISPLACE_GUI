@@ -2353,8 +2353,9 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	double so_far    =this->get_landings_so_far();
 	popdyn_annual_indic  << so_far << " ";
 
-	double current_tac=this->get_tac()->get_current_tac();
-	popdyn_annual_indic  << current_tac << " ";
+    vector<double> tacs = this->get_tac()->get_ts_tac();
+    double last_year_tac=tacs.at(tacs.size()-1); // because computeTAC() has just been called before this export
+    popdyn_annual_indic  << last_year_tac << " ";
 
 								 // attempt for a calibration to obtain same F
 	vector <double>W_at_age=this->get_tot_W_at_age();

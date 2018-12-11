@@ -1330,18 +1330,16 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	vector<double> clup_sel_ogive (clupeid_sel_ogive, clupeid_sel_ogive + sizeof(clupeid_sel_ogive) / sizeof(double) );
 	vector<double> gad_sel_ogive (gadoid_sel_ogive, gadoid_sel_ogive + sizeof(gadoid_sel_ogive) / sizeof(double) );
 	vector<double> sel_ogive;
-    if(name_pop==10 || name_pop==11) // HARDCODING
-	{
-		sel_ogive =gad_sel_ogive;
-	}
-	else						 // i.e. 3 and 7
-	{
-		sel_ogive =clup_sel_ogive;
-	}
+    //if(name_pop==10 || name_pop==11) // HARDCODING
+    //{
+        sel_ogive =gad_sel_ogive;
+    //}
+    //else						 // i.e. 3 and 7
+    //{
+    //	sel_ogive =clup_sel_ogive;
+    //}
 
-	//vector <double> dis_ogive (NBSZGROUP, 0);
-	//double default_dis_ogive [ ] = {0.5,0.1,0.012,0.001,0,0,0,0,0,0,0,0,0,0};
-	double default_dis_ogive [ ] = {0.634,0.366,0.161,0.06,0.021,0.007,0.002,0.001,0,0,0,0,0,0};
+    double default_dis_ogive [ ] = {0.634,0.366,0.161,0.06,0.021,0.007,0.002,0.001,0,0,0,0,0,0}; // 14 szgroups
 	vector<double> dis_ogive (default_dis_ogive, default_dis_ogive + sizeof(default_dis_ogive) / sizeof(double) );
 
 	// compute available biomass via selectivity

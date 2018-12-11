@@ -97,6 +97,7 @@ Population::Population(int a_name,
 
 
         tot_N_at_szgroup.push_back(0);
+        a_tot_N_at_szgroup_before_applying_M.push_back(0);
         tot_C_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
         prop_migrants_in_N_at_szgroup.push_back(0);
@@ -115,6 +116,7 @@ Population::Population(int a_name,
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
 	{
 		tot_F_at_age.push_back(0);
+        tot_M_at_age.push_back(0);
         FFmsy.push_back(0);
     }
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
@@ -405,6 +407,11 @@ const vector<double>& Population::get_tot_N_at_szgroup_month_minus_1() const
 const vector<double>& Population::get_tot_N_at_szgroup_year_minus_1() const
 {
 	return(tot_N_at_szgroup_year_minus_1);
+}
+
+const vector<double>& Population::get_a_tot_N_at_szgroup_before_applying_M() const
+{
+    return(a_tot_N_at_szgroup_before_applying_M);
 }
 
 
@@ -711,6 +718,13 @@ void Population::set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_s
 	tot_N_at_szgroup_year_minus_1 =_N_at_szgroup_year_minus_1;
 
 }
+
+void Population::set_a_tot_N_at_szgroup_before_applying_M(const vector<double>& _a_tot_N_at_szgroup_before_applying_M)
+{
+    a_tot_N_at_szgroup_before_applying_M =_a_tot_N_at_szgroup_before_applying_M;
+
+}
+
 
 
 void Population::set_tot_N_at_age(const vector<double>& _tot_N_at_age)
@@ -1420,15 +1434,15 @@ void Population::add_recruits_from_eggs()
 }
 
 
-void Population::compute_tot_N_and_F_and_M_and_W_at_age()
+void Population::compute_tot_N_and_F_and_W_at_age()
 {
-    dout(cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl );
+    cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl ;
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
     vector <double> FFmsy (tot_F_at_age.size());
     vector <double> perceived_tot_F_at_age = get_tot_F_at_age();
                                  // init
-	vector <double> tot_M_at_age (tot_F_at_age.size());
+    //vector <double> tot_M_at_age (tot_F_at_age.size());
 								 // init
 	vector <double> tot_W_at_age (tot_F_at_age.size());
 								 // init
@@ -1510,7 +1524,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
                 dout(cout << "weight_at_szgroup[sz]  is "<< weight_at_szgroup[sz]  << endl);
 			}
 			*/
-			tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
+            //tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
 			tot_W_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * weight_at_szgroup[sz] ;
             tot_Mat_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * maturity_at_szgroup[sz] ;
         }
@@ -1554,7 +1568,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
         dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
-        dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
+        //dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
 
         if(this->get_name()==1){
             cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
@@ -1570,13 +1584,66 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
     this->set_FFmsy(FFmsy);
     this->set_tot_F_at_age(tot_F_at_age);
     this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
-    this->set_tot_M_at_age(tot_M_at_age);
+    //this->set_tot_M_at_age(tot_M_at_age);
 	this->set_tot_W_at_age(tot_W_at_age);
     this->set_tot_Mat_at_age(tot_Mat_at_age);
 
-    dout(cout << "END compute_tot_N_and_F_and_M_and_W_at_age() "  << endl);
+    cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl;
 
 }
+
+
+
+
+void Population::compute_tot_M_at_age()
+{
+    cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl;
+
+    vector <double> tot_M_at_age = this->get_tot_M_at_age();
+    vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
+    vector <double> a_tot_N_at_szgroup_before_applying_M=this->get_a_tot_N_at_szgroup_before_applying_M();
+    vector <double> tot_N_at_age (tot_M_at_age.size());
+    vector <double> tot_N_at_age_before_M (tot_M_at_age.size());
+
+    int nbsz = percent_szgroup_per_age_matrix.size();
+    int nbages = percent_szgroup_per_age_matrix[0].size();
+
+     for(int sz = 0; sz < nbsz; sz++)
+    {
+        for(int a = 0; a < nbages; a++)
+        {
+            cout << "FOR sz  " << sz << " and age " << a  << endl;
+            cout << "a_tot_N_at_szgroup[sz]   " << a_tot_N_at_szgroup[sz]   << endl;
+                  tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup[sz] ;
+            cout << "FOR2 sz  " << sz << " and age " << a  << endl;
+            cout << "a_tot_N_at_szgroup_before_applying_M[sz]   " << a_tot_N_at_szgroup_before_applying_M[sz]   << endl;
+                  tot_N_at_age_before_M[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_before_applying_M[sz] ;
+        }
+    }
+
+     cout << "comput the log " << endl;
+
+     for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+    {
+         cout << "FOR age " << a  << endl;
+
+         if(tot_N_at_age_before_M.at(a) >0 && tot_N_at_age.at(a)>0)
+        {
+            tot_M_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_before_M.at(a));  // used for outcomes
+        }
+        else
+        {
+            tot_M_at_age.at(a)+= 0;
+        }
+cout << " tot_M_at_age.at(a) is " <<  tot_M_at_age.at(a)  << endl;
+    }
+     cout << "set the new M at age " << endl;
+
+   this->set_tot_M_at_age(tot_M_at_age);
+
+   dout(cout << "END compute_tot_M_at_age() "  << endl);
+}
+
 
 
 void Population::clear_tot_F_at_age()

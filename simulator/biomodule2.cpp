@@ -493,7 +493,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
             */
 
-            populations.at(sp)->compute_tot_N_and_F_and_M_and_W_at_age();
+            populations.at(sp)->compute_tot_N_and_F_and_W_at_age();
 
         }
         else
@@ -517,7 +517,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 //cout << "apply M on the whole pop..." << endl;
                 //populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
                outc(cout << "apply M on each node of the pop..." << endl);
-                vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
+               vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
                 vector <int> species_on_node;
                 for (unsigned int n=0; n<a_list_nodes.size(); n++)
                 {
@@ -534,7 +534,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             a_prop_M.at(spp)=0.0; // put 0 in prop if pop not found on this node
                         }
                     }
-                     if (dyn_pop_sce.option(Options::sizeSpectra))
+                    // keep track of the N before applying M
+                    populations.at(sp)->set_a_tot_N_at_szgroup_before_applying_M(populations.at(sp)->get_tot_N_at_szgroup());
+
+                    //... then apply M:
+                    if (dyn_pop_sce.option(Options::sizeSpectra))
                      {
                         a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
                      }
@@ -543,9 +547,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
                      }
                 }
-                // then re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
+                // then, re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();
 
+                // then, re-estimate what the applied M has been, to keep it tracked later in popstats
+                populations.at(sp)->compute_tot_M_at_age();
 
 
                 // apply only at the beginning of the year (this is maybe not always relevant...)

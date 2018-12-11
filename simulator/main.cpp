@@ -2686,7 +2686,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   cout << " reading f0est is " << f0est << endl;
   cout << " reading lambda is " << lambda << endl;
 
-  const string separator=",";
+  const string separator=";";
 
   string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/Stock_biological_traits.csv"; // file location is an issue....
 
@@ -2705,7 +2705,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double> > biological_traits_params;
+                                   double, double, double,double, double> > biological_traits_params;
   bool r = read_biological_traits_params (is, separator, biological_traits_params);
 
   cout << "compute the searchVolMat..." << endl;

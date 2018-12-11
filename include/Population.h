@@ -88,6 +88,7 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_tot_N_at_szgroup_just_after_redistribution() const;
         const vector<double>& get_tot_N_at_szgroup_month_minus_1() const;
         const vector<double>& get_tot_N_at_szgroup_year_minus_1() const;
+        const vector<double>& get_a_tot_N_at_szgroup_before_applying_M() const;
         const vector<double>& get_tot_N_at_age() const;
         const vector<double>& get_perceived_tot_N_at_age() const;
         const vector<double>& get_tot_N_at_age_last_quarter() const;
@@ -141,6 +142,7 @@ class COMMONSSHARED_EXPORT Population
         void set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution);
         void set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1);
         void set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1);
+        void set_a_tot_N_at_szgroup_before_applying_M(const vector<double>& _a_tot_N_at_szgroup_before_applying_M);
         void set_tot_N_at_age(const vector<double>& _N_at_age);
         void set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age);
         void set_tot_N_at_age_last_quarter(const vector<double>& _N_at_age_last_quarter);
@@ -175,7 +177,8 @@ class COMMONSSHARED_EXPORT Population
 		void aggregate_N();		 // aggregate from nodes
 								 // do a cumul for F
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
-		void compute_tot_N_and_F_and_M_and_W_at_age();
+        void compute_tot_N_and_F_and_W_at_age();
+        void compute_tot_M_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
         double compute_proportion_mature_fish();
@@ -226,6 +229,8 @@ class COMMONSSHARED_EXPORT Population
 								 //
 		vector<double> tot_N_at_szgroup_year_minus_1;
 								 //
+        vector<double> a_tot_N_at_szgroup_before_applying_M;
+
 		vector<double> tot_N_at_age;
         vector<double> perceived_tot_N_at_age;
                                  //

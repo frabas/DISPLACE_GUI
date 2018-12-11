@@ -399,7 +399,7 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>Number at size</string>
+                  <string>Number at size group</string>
                  </property>
                 </item>
                 <item>
@@ -409,17 +409,17 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Fishing mortality F</string>
+                  <string>Fishing mortality F at age</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Natural mortality M</string>
+                  <string>Natural mortality M at age</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Spawning Stock Biomass SSB</string>
+                  <string>Spawning Stock Biomass SSB at szgrp</string>
                  </property>
                 </item>
                 <item>
@@ -444,7 +444,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>F vs. Effort</string>
+                  <string>F vs. Effort (wip!)</string>
                  </property>
                 </item>
                </widget>

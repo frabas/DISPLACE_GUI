@@ -3395,7 +3395,7 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double> > & biological_traits_params)
+                                   double, double, double, double, double> > & biological_traits_params)
 {
     // Format:
     // Stock Winf k  Linf K t0 a b L50 alpha beta r_age tac_tons fbar_age_min fbar_age_max F_target F_percent TAC_percent B_trigger FMSY"
@@ -3426,7 +3426,7 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
                                                double, double, double, double,
                                                double, double, double, double,
                                                double, double, double, double,
-                                               double, double, double > a_tuple;
+                                               double, double, double, double, double > a_tuple;
 
             std::get<0>(a_tuple)=boost::lexical_cast<string>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);

@@ -320,7 +320,7 @@ bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const s
                                                         double, double, double, double,
                                                         double, double, double, double,
                                                         double, double, double, double,
-                                                        double, double, double> > & biological_traits_params);
+                                                        double, double, double, double, double> > & biological_traits_params);
 
 struct EnvironmentDataRecord {
     double x;

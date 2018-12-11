@@ -4768,7 +4768,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(redispatch_the_pop)	 // EVENT => re-read pop data
         {
-            cout << "redispatch the population over the its spatial extent...." << endl;
+            cout << "redispatch the population over its spatial extent...." << endl;
 
             // aggregate from nodes to set the tot_N_at_szgroup per pop
             for (unsigned int sp=0; sp<populations.size(); sp++)

@@ -185,6 +185,7 @@ class COMMONSSHARED_EXPORT Population
         void compute_TAC(double multiOnTACconstraint, int HCR);
 								 // clear the cumul
 		void clear_tot_F_at_age();
+        void clear_tot_M_at_age();
         void clear_tot_C_at_szgroup();
         void do_growth();		 // apply the size transition matrix
 								 // stock-recruitment relationship via fecundity_at_szgroup

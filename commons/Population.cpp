@@ -1612,20 +1612,20 @@ void Population::compute_tot_M_at_age()
     {
         for(int a = 0; a < nbages; a++)
         {
-            cout << "FOR sz  " << sz << " and age " << a  << endl;
-            cout << "a_tot_N_at_szgroup[sz]   " << a_tot_N_at_szgroup[sz]   << endl;
+//if(this->get_name() ==2)    cout << "FOR sz  " << sz << " and age " << a  << endl;
+//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup[sz]   " << a_tot_N_at_szgroup[sz]   << endl;
                   tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup[sz] ;
-            cout << "FOR2 sz  " << sz << " and age " << a  << endl;
-            cout << "a_tot_N_at_szgroup_before_applying_M[sz]   " << a_tot_N_at_szgroup_before_applying_M[sz]   << endl;
+//if(this->get_name() ==2)      cout << "FOR2 sz  " << sz << " and age " << a  << endl;
+//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup_before_applying_M[sz]   " << a_tot_N_at_szgroup_before_applying_M[sz]   << endl;
                   tot_N_at_age_before_M[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_before_applying_M[sz] ;
         }
     }
 
-     cout << "comput the log " << endl;
+//if(this->get_name() ==2)      cout << "comput the log " << endl;
 
      for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
     {
-         cout << "FOR age " << a  << endl;
+//if(this->get_name() ==2)        cout << "FOR age " << a  << endl;
 
          if(tot_N_at_age_before_M.at(a) >0 && tot_N_at_age.at(a)>0)
         {
@@ -1635,9 +1635,9 @@ void Population::compute_tot_M_at_age()
         {
             tot_M_at_age.at(a)+= 0;
         }
-cout << " tot_M_at_age.at(a) is " <<  tot_M_at_age.at(a)  << endl;
+//if(this->get_name() ==2)  cout << " tot_M_at_age.at(a) is " <<  tot_M_at_age.at(a)  << endl;
     }
-     cout << "set the new M at age " << endl;
+//if(this->get_name() ==2)    cout << "set the new M at age " << endl;
 
    this->set_tot_M_at_age(tot_M_at_age);
 
@@ -1655,6 +1655,13 @@ void Population::clear_tot_F_at_age()
 	}
 }
 
+void Population::clear_tot_M_at_age()
+{
+    for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+    {
+        tot_M_at_age[a]=0;
+    }
+}
 
 
 void Population::clear_tot_C_at_szgroup()
@@ -2228,9 +2235,13 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
      }
 
 
-     cout << "WARNING: TACs Option is active but TAC for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-     cout << "a fake, non binding value is filled in for now" << endl;
-     if(tac_y_plus_1==0) tac_y_plus_1 =100000; // tons
+     if(tac_y_plus_1==0 || !isfinite(tac_y_plus_1))
+     {
+         cout << "WARNING: TACs Option is active but TAC for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
+         cout << "a fake, non binding value is filled in for now" << endl;
+
+         tac_y_plus_1 =100000; // tons
+     }
 
      cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
 

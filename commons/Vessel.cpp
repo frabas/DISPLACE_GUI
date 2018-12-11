@@ -1690,21 +1690,24 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
                 !binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) ) // i.e. apply from second y only (also bc no end_of_years reached yet...)
         {
            vector <double> amount_fish_per_y;
+           int a_unit=1;
            if(dyn_alloc_sce.option(Options::TACs))
            {
               amount_fish_per_y = populations[pop]->get_tac()->get_ts_tac();
+              a_unit=1000; // because tac in tons
            }
            else
            {
               amount_fish_per_y= populations[pop]->get_landings_at_end_of_years();
+              a_unit=1; // because landings in kilo
            }
-           double amount_to= amount_fish_per_y.at(0);
+           double amount_to= amount_fish_per_y.at(0)*a_unit;
            double numerator=0.0;
            double denominator=0.0;
            for(int i=0; i<amount_fish_per_y.size();++i)
            {
               if(amount_fish_per_y.at(i)<=1) amount_fish_per_y.at(i)=amount_to; // so that num/denom will be 1...to avoid nan or a large price_multiplier when amount caught is very very low
-              numerator += pow(amount_fish_per_y.at(i), -0.25);
+              numerator += pow(amount_fish_per_y.at(i)*a_unit, -0.25);
               denominator += pow(amount_to, -0.25);
            }
            price_multiplier=numerator/denominator;

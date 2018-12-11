@@ -191,6 +191,7 @@ Node::Node()
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
+      last_oth_catch_pops_at_szgroup(),
       pressure_pops_at_szgroup(),
       avai_pops_at_selected_szgroup(),
       impact_on_pops(),
@@ -571,6 +572,20 @@ vector<double> Node::get_removals_pops_at_szgroup(int name_pop) const
 }
 
 
+vector<double> Node::get_last_oth_catch_pops_at_szgroup(int name_pop) const
+{
+
+    vector<double> a_last_oth_catch_pops_at_szgroup;
+
+    for(unsigned int j = 0; j < last_oth_catch_pops_at_szgroup[name_pop].size(); j++)
+    {
+        a_last_oth_catch_pops_at_szgroup.push_back(last_oth_catch_pops_at_szgroup[name_pop] [j]);
+    }
+
+    return(a_last_oth_catch_pops_at_szgroup);
+}
+
+
 vector<double>  Node::get_pressure_pops_at_szgroup(int name_pop) const
 {
 
@@ -878,6 +893,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (Ns_pops_at_szgroup, nbpops, nbszgroups);
     reinit (Ns_pops_at_szgroup_at_month_start, nbpops, nbszgroups);
     reinit (removals_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (last_oth_catch_pops_at_szgroup, nbpops, nbszgroups);
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
     reinit (impact_on_pops, nbpops);
     reinit (cumcatches_per_pop, nbpops);
@@ -957,6 +973,15 @@ void Node::set_removals_pops_at_szgroup(int name_pop, const vector<double>& newv
 	{
 		removals_pops_at_szgroup[name_pop][j]= newval[j];
 	}
+
+}
+
+void Node::set_last_oth_catch_pops_at_szgroup(int name_pop, const vector<double>& newval)
+{
+    for(unsigned int j = 0; j < last_oth_catch_pops_at_szgroup[name_pop].size(); j++)
+    {
+        last_oth_catch_pops_at_szgroup[name_pop][j]= newval[j];
+    }
 
 }
 
@@ -1089,6 +1114,16 @@ void Node::clear_removals_pops_at_szgroup(int namepop)
 		{
             removals_pops_at_szgroup[namepop][sz] = 0;
 		}
+}
+
+
+void Node::clear_last_oth_catch_pops_at_szgroup(int namepop)
+{
+    dout(cout  << "clear removals on nodes..." << endl);
+        for(unsigned int sz = 0; sz < last_oth_catch_pops_at_szgroup[namepop].size(); sz++)
+        {
+            last_oth_catch_pops_at_szgroup[namepop][sz] = 0;
+        }
 }
 
 
@@ -1255,7 +1290,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 {
     dout(cout << "BEGIN: apply_oth_land()" << endl);
 
-	// DISSAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
+    // DISAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
 	// AND CONVERT INTO REMOVALS IN NUMBERS
 	// NOTICE THAT THIS IS THE SAME PROCEDURE THAN THE ONE IN do.catch()
 	vector <double> Ns_at_szgroup_pop = this->get_Ns_pops_at_szgroup(name_pop);
@@ -1429,8 +1464,11 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 		this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
 		this->set_removals_pops_at_szgroup(  name_pop, new_removals_at_szgroup_pop);
+        this->set_last_oth_catch_pops_at_szgroup(  name_pop, catch_per_szgroup);
 
-	}
+
+
+    }
 	else
 	{
         cout  << "no biomass available here...." << tot << endl;

@@ -231,6 +231,7 @@ class COMMONSSHARED_EXPORT Node
         const vector<double> &get_Ns_pops_at_szgroup(int name_pop) const;
         vector<double> get_Ns_pops_at_szgroup_at_month_start(int name_pop) const;
         vector<double> get_removals_pops_at_szgroup(int name_pop) const;
+        vector<double> get_last_oth_catch_pops_at_szgroup(int name_pop) const;
         vector<double> get_pressure_pops_at_szgroup(int name_pop) const;
         vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
         int get_benthos_id() const;
@@ -264,9 +265,11 @@ class COMMONSSHARED_EXPORT Node
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
-        void set_Ns_pops_at_szgroup_at_month_start(int name_pop, const vector<double>& val);
+        void set_Ns_pops_at_szgroup_at_month_start(int name_pop, const vector<double>& val);        
         void set_removals_pops_at_szgroup(int name_pop, const vector<double>& val);
-        void set_pressure_pops_at_szgroup(int name_pop, const vector<double>& val);
+        void set_last_oth_catch_pops_at_szgroup(int name_pop, const vector<double>& val);
+        void set_set_last_oth_catch_pops_at_szgroup(int name_pop, const vector<double>& val);
+       void set_pressure_pops_at_szgroup(int name_pop, const vector<double>& val);
 		void init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroups);
         void set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& val);
 		void set_impact_on_pops(int name_pop, double val);
@@ -302,7 +305,8 @@ class COMMONSSHARED_EXPORT Node
         void remove_pop_names_on_node(int name_pop);
 		void clear_Ns_pops_at_szgroup();
         void clear_removals_pops_at_szgroup(int pop);
-		void clear_avai_pops_at_selected_szgroup();
+        void clear_last_oth_catch_pops_at_szgroup(int pop);
+        void clear_avai_pops_at_selected_szgroup();
 		void clear_impact_on_pops();
         void clear_cumcatches_per_pop();
         void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
@@ -412,7 +416,7 @@ private:
         vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;
-								 //i.e. impact
+        vector< vector<double> > last_oth_catch_pops_at_szgroup;
 		vector< vector<double> > pressure_pops_at_szgroup;
 		vector< vector<double> > avai_pops_at_selected_szgroup;
 								 // a proportion i.e. ratio removals/available on node

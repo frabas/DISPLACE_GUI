@@ -348,6 +348,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                             if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
 
+                            // then, collect and accumulate tot_C_at_szgroup
+                            vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                            vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                            for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                            {
+                               newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                            }
+                            populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
 
 
                         }
@@ -370,6 +378,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
+                        // then, collect and accumulate tot_C_at_szgroup
+                        vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                        vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                        for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                        {
+                           newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                        }
+                        populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+
                     }
                 }
 
@@ -377,6 +394,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 double so_far = (populations.at(name_pop)->get_landings_so_far()) +
                     oth_land_this_pop_this_node;
                 populations.at(name_pop)->set_landings_so_far(so_far);
+
+
+
+
+
 
             }
 
@@ -899,6 +921,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                 // RE-INIT....
                                 populations.at(sp)->clear_tot_F_at_age();
+                                populations.at(sp)->clear_tot_M_at_age();
                                 //=> obviously, F restart from 0 each year...
                                 cout << "Adding to landings_at_end_of_years this pop "<< sp << ": " << populations.at(sp)->get_landings_so_far() << endl;
                                 populations.at(sp)->add_to_landings_at_end_of_years(populations.at(sp)->get_landings_so_far());

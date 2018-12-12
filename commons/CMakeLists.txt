@@ -122,7 +122,6 @@ set(SOURCES
         storage/sqliteoutputstorage.h
         storage/tables/vesselslogliketable.h
         storage/tables/poptable.h
-        ../mSqliteCpp/include/msqlitecpp.h
         storage/tables/vesselvmsliketable.h
         storage/tables/fishfarmstable.h
         storage/tables/windfarmstable.h
@@ -130,14 +129,6 @@ set(SOURCES
         storage/tables/nodesdeftable.h
         storage/tables/popdyntable.h
         storage/tables/popquotastable.h
-        ../mSqliteCpp/include/msqlitecpp.h
-        ../mSqliteCpp/include/sqlitefielddef.h
-        ../mSqliteCpp/include/sqlitefieldsop.h
-        ../mSqliteCpp/include/sqlitestatement.h
-        ../mSqliteCpp/include/sqlitestatementformatters.h
-        ../mSqliteCpp/include/sqlitestorage.h
-        ../mSqliteCpp/include/sqlitetable.h
-        ../mSqliteCpp/include/sqlitetransaction.h
         storage/tables/metadatatable.h
         storage/modelconfig.h
         storage/modelmetadataaccessor.h
@@ -162,21 +153,12 @@ if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)
 endif (WIN32 OR APPLE)
 
-
-# Add msqlite
-file(GLOB MSQLITE_SOURCES ${CMAKE_SOURCE_DIR}/mSqliteCpp/src/*.cpp)
-file(GLOB MSQLITE_HEADERS ${CMAKE_SOURCE_DIR}/mSqliteCpp/include/*.h)
-
-
 if (NOT WIN32)
     list(APPEND LIBRARIES sqlite3)
 endif (NOT WIN32)
 
 if (WIN32)
     list(APPEND LIBRARIES psapi)
-    list(APPEND SOURCES
-            storage/sqlite3.c
-            )
     include_directories( ${CMAKE_SOURCE_DIR}/commons/storage)
 endif (WIN32)
 
@@ -186,12 +168,18 @@ endif (NOT APPLE AND NOT WIN32)
 
 add_library(commons SHARED
         ${SOURCES}
-        ${MSQLITE_SOURCES} ${MSQLITE_HEADERS}
         )
+
+if (WIN32)
+    set (GEOGRAPHIC_LIB Geographic-i)
+else()
+    set (GEOGRAPHIC_LIB Geographic)
+endif()
 
 target_link_libraries(commons
         formats
-        Geographic
+        msqlitecpp::msqlitecpp
+        ${GEOGRAPHIC_LIB}
         ${LIBRARIES}
         )
 

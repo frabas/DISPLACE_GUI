@@ -4526,14 +4526,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // inform grounds in closed areas
                 // TO DO: TO BE REMOVED BECAUSE DEPRECATED
-                const auto &new_grds = vessels.at(v)->get_fgrounds();
-                vector<types::NodeId> fgrounds_in_closed_areas;
-                for(unsigned int i=0; i<new_grds.size();++i)
-                {
-                    if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
-                        fgrounds_in_closed_areas.push_back(new_grds.at(i));
-                }
-                vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+                //const auto &new_grds = vessels.at(v)->get_fgrounds();
+                //vector<types::NodeId> fgrounds_in_closed_areas;
+                //for(unsigned int i=0; i<new_grds.size();++i)
+                //{
+                //    if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
+                //        fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                //}
+                //vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
 
 
 

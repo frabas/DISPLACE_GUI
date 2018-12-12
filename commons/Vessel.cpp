@@ -3288,7 +3288,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
            newTotD.at(szgroup) = newTotD.at(szgroup) + discards_pop_at_szgroup.at(pop).at(szgroup);
         }
         populations.at(pop)->set_tot_C_at_szgroup(newTotC);
-        populations.at(pop)->set_tot_D_at_szgroup(newTotC);
+        populations.at(pop)->set_tot_D_at_szgroup(newTotD);
 
     } // end pop
 

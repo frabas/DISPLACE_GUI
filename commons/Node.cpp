@@ -1427,16 +1427,16 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 								 // nothing left.
 					new_Ns_at_szgroup_pop[szgroup]=0;
 								 // just right after the calculation of removals, reverse back to get the landings only
-					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup];
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
+                    catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
                 }
 				else
 				{
                     // finally, impact the N
 					new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 								 // reverse back to get the landings only
-					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup];
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
+                    catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
                     //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
 					// update the availability to impact the future vessel cpue
 					double val=0;// init
@@ -1487,19 +1487,21 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 			}
 		}
 
-		// additionally, impact the catches realized on this node
-        dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
-		oth_land_this_pop_this_node=0;
-        for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
-		{
-			oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
-		}
-        dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
+        // check catches realized on this node
+        //dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
+        //oth_land_this_pop_this_node=0;
+        //for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
+        //{
+        //	oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
+        //}
+        //dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
-		this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
+
+        // updates
+        this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
 		this->set_removals_pops_at_szgroup(  name_pop, new_removals_at_szgroup_pop);
-        this->set_last_oth_catch_pops_at_szgroup(  name_pop, catch_per_szgroup);
-        this->set_last_oth_disc_pops_at_szgroup(  name_pop, disc_per_szgroup);
+        this->set_last_oth_catch_pops_at_szgroup(  name_pop, catch_per_szgroup); // for tracking in pop stat panel
+        this->set_last_oth_disc_pops_at_szgroup(  name_pop, disc_per_szgroup);   // for tracking in pop stat panel
 
 
 

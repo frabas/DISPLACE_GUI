@@ -69,24 +69,24 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax);// * M_PI / 180.0;
 }
 
-void GraphBuilder::setIncludingShapefile1(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setIncludingShapefile1(std::shared_ptr<GDALDataset> src)
 {
     mShapefileInc1 = src;
 }
 
-void GraphBuilder::setIncludingShapefile2(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setIncludingShapefile2(std::shared_ptr<GDALDataset> src)
 {
     mShapefileInc2 = src;
 }
 
-void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setExcludingShapefile(std::shared_ptr<GDALDataset> src)
 {
     mShapefileExc = src;
 }
 
-void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&resultLayer)
+void GraphBuilder::createMainGrid(GDALDriver *memdriver, GDALDataset *outdataset, OGRLayer *&resultLayer)
 {
-    auto memdataset = memdriver->CreateDataSource("memory", nullptr );
+    auto memdataset = memdriver->Create("memory", 0,0,0, GDT_Unknown, nullptr);
 
     auto builderInc1 = createBuilder(mType, mStep1);
     auto builderInc2 = createBuilder(mType, mStep2);
@@ -160,7 +160,7 @@ void GraphBuilder::createMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdata
     }
 }
 
-void GraphBuilder::loadMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdataset, OGRLayer *&resultLayer)
+void GraphBuilder::loadMainGrid(GDALDriver *memdriver, GDALDataset *memdataset, OGRLayer *&resultLayer)
 {
     InputFileParser parser;
     QList<GraphBuilder::Node> nodes;
@@ -171,7 +171,7 @@ void GraphBuilder::loadMainGrid(OGRSFDriver *memdriver, OGRDataSource *outdatase
         throw std::runtime_error(QObject::tr("Error loading coords file: %1").arg(error).toStdString());
     }
 
-    resultLayer = createGridLayer(outdataset, "Displace-ResultGrid");
+    resultLayer = createGridLayer(memdataset, "Displace-ResultGrid");
 
     auto fId = getPointFieldIndex(resultLayer);
     auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
@@ -237,7 +237,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     auto memdriver = registrar->GetDriverByName("memory"); // was memory
 
     auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
-    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr);
+
+    auto outdataset = outdriver->Create(OUTDIR.toStdString().c_str(), 0, 0, 0, GDT_Unknown, nullptr);
 
     ///
     OGRLayer *resultLayer = nullptr;
@@ -427,10 +428,10 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             qDebug() << i << res[i].point << res[i].adiacencies << res[i].weight;
         }
 
-        OGRDataSource::DestroyDataSource(outdataset);
+        GDALClose(outdataset);
         return res;
     } catch (std::exception &ex) {
-        OGRDataSource::DestroyDataSource(outdataset);
+        GDALClose(outdataset);
 
         qCritical() << "Error: " << ex.what();
 
@@ -438,14 +439,14 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 }
 
-void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
+void GraphBuilder::createGrid(GDALDataset *tempDatasource,
                               std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
                               OGRLayer *lyOut,
                               OGRLayer *lyGrid,
                               OGRLayer *lyIncluded,
                               OGRLayer *lyExclusion1,
                               OGRLayer *lyExclusion2
-                              )
+)
 {
     OGRLayer *gridout = lyGrid;
     if (lyIncluded == nullptr && lyExclusion1 == nullptr && lyExclusion2 == nullptr)
@@ -525,7 +526,7 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     }
 }
 
-void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out, OGRDataSource *tempds)
+void GraphBuilder::clip(OGRLayer *in, OGRLayer *feature, OGRLayer *out, GDALDataset *tempds)
 {
     startNewPartProgress("Clipping");
     auto temp = createGridLayer(tempds, "tempclip");
@@ -536,7 +537,7 @@ void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out, OGRData
     deleteLayer(tempds, temp);
 }
 
-void GraphBuilder::diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds)
+void GraphBuilder::diff(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, GDALDataset *tempds)
 {
     /*
 #if defined (DEBUG)
@@ -559,7 +560,7 @@ void GraphBuilder::diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSou
     deleteLayer(tempds, temp3);
 }
 
-void GraphBuilder::diffEdges(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds)
+void GraphBuilder::diffEdges(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, GDALDataset *tempds)
 {
     startNewPartProgress("Clipping");
     auto temp = createEdgesLayer(tempds, "temp2");
@@ -615,7 +616,7 @@ void GraphBuilder::startNewPartProgress(QString msg)
     mFeedbackPreviousETC = -1;
 }
 
-OGRLayer *GraphBuilder::createGridLayer(OGRDataSource *datasource, const char * const name)
+OGRLayer *GraphBuilder::createGridLayer(GDALDataset *datasource, const char *const name)
 {
     auto resultLayer = datasource->CreateLayer(name, &mSpatialReference, wkbPoint, nullptr);
     OGRFieldDefn fldConstrain("Constrain", OFTInteger);
@@ -624,7 +625,7 @@ OGRLayer *GraphBuilder::createGridLayer(OGRDataSource *datasource, const char * 
     return resultLayer;
 }
 
-OGRLayer *GraphBuilder::createEdgesLayer(OGRDataSource *datasource, const char * const name)
+OGRLayer *GraphBuilder::createEdgesLayer(GDALDataset *datasource, const char *const name)
 {
     OGRLayer *layer = datasource->CreateLayer(name, &mSpatialReference, wkbLineString, nullptr);
     OGRFieldDefn fromField( "FromFid", OFTInteger );
@@ -640,7 +641,7 @@ OGRLayer *GraphBuilder::createEdgesLayer(OGRDataSource *datasource, const char *
     return layer;
 }
 
-void GraphBuilder::deleteLayer(OGRDataSource *src, OGRLayer *layer)
+void GraphBuilder::deleteLayer(GDALDataset *src, OGRLayer *layer)
 {
     for (int i = 0; i < src->GetLayerCount(); ++i) {
         if (src->GetLayer(i) == layer) {

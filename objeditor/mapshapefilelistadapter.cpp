@@ -94,7 +94,7 @@ bool MapShapefileListAdapter::setData(const QModelIndex &index, const QVariant &
 MapShapefileListAdapter::MapEntry::MapEntry(const QString &path, qmapcontrol::QMapControl *controller, QString name)
     : mPath (path), mName(name), mController(controller)
 {
-    mDataSource = OGRSFDriverRegistrar::Open(path.toStdString().c_str(), FALSE);
+    mDataSource = (GDALDataset*)OGROpen(path.toStdString().c_str(), 0, nullptr);
     if (!mDataSource) {
         // throw
         std::ostringstream ss;

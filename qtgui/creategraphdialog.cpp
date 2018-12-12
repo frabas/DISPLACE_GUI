@@ -22,6 +22,7 @@
 #include "ui_creategraphdialog.h"
 
 #include <QMessageBox>
+#include <QButtonGroup>
 #include <QSettings>
 #include <QFileDialog>
 #include <QFileInfo>

@@ -7,7 +7,7 @@
 #include <memory>
 
 namespace qmapcontrol { class QMapControl; class LayerESRIShapefile; }
-class OGRDataSource;
+class GDALDataset;
 
 class MapShapefileListAdapter : public QAbstractListModel
 {
@@ -33,7 +33,7 @@ private:
         QString mPath;
         QString mName;
         qmapcontrol::QMapControl *mController;
-        OGRDataSource *mDataSource;
+        GDALDataset *mDataSource;
         std::shared_ptr<qmapcontrol::LayerESRIShapefile> mLayer;
 
     public:

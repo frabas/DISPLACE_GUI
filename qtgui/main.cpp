@@ -27,7 +27,7 @@
 
 #include <QMapControl/ImageManager.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 #include <modelobjects/vesseldata.h>
 

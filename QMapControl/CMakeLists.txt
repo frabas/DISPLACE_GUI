@@ -13,10 +13,10 @@ file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 
 set(GDAL_LIBRARY gdal)
 
-if (WIN32)
-    link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
-    set(GDAL_LIBRARY gdal_i)
-endif (WIN32)
+#if (WIN32)
+#    link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
+#    set(GDAL_LIBRARY gdal_i)
+#endif (WIN32)
 
 set(LIBRARIES
         ${GDAL_LIBRARY}

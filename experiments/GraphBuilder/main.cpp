@@ -47,8 +47,8 @@ int main()
 
     const char* path = SHP;
     OGRRegisterAll();
-    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
-    auto indriver = registrar->GetDriverByName(indrivername.c_str());
+//    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
+//    auto indriver = registrar->GetDriverByName(indrivername.c_str());
 
     if( indriver == NULL )
     {
@@ -59,8 +59,8 @@ int main()
     auto *file = fopen(path, "r");
     if (file != nullptr) {
         fclose(file);
-        indriver->DeleteDataSource(path);
-        //indriver->Delete(path);
+        indriver->Delete(path);
+//        indriver->DeleteDataSource(path);
     }
 
     OGRSpatialReference sr;
@@ -170,7 +170,7 @@ int main()
         cerr << "Cannot clip Grid Layer";
     }
 
-    OGRDataSource::DestroyDataSource(indataset);
+//    OGRDataSource::DestroyDataSource(indataset);
 
     return 0;
 }

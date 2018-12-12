@@ -1,7 +1,7 @@
 #ifndef GRAPHBUILDER_SHP_H
 #define GRAPHBUILDER_SHP_H
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 #include <QPoint>
 #include <QList>
 #include <QString>
@@ -82,9 +82,9 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
-    void setIncludingShapefile1 (std::shared_ptr<OGRDataSource> src);
-    void setIncludingShapefile2 (std::shared_ptr<OGRDataSource> src);
-    void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile1 (std::shared_ptr<GDALDataset> src);
+    void setIncludingShapefile2 (std::shared_ptr<GDALDataset> src);
+    void setExcludingShapefile (std::shared_ptr<GDALDataset> src);
     void setExcludeZoneEdgeRemovalEnabled (bool en) {
         mRemoveEdgesInExcludeZone = en;
     }
@@ -109,24 +109,24 @@ private:
     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
 
 
-    void createMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&resultLayer);
-    void loadMainGrid(OGRSFDriver *memdriver, OGRDataSource *memdataset, OGRLayer *&resultLayer);
+    void createMainGrid(GDALDriver *memdriver, GDALDataset *outdataset, OGRLayer *&resultLayer);
+    void loadMainGrid(GDALDriver *memdriver, GDALDataset *memdataset, OGRLayer *&resultLayer);
 
-    void createGrid (OGRDataSource *tempDatasource,
-                     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
-                     OGRLayer *lyOut,
-                     OGRLayer *lyGrid,
-                     OGRLayer *lyIncluded, OGRLayer *lyExclusion1, OGRLayer *lyExclusion2);
+    void createGrid(GDALDataset *tempDatasource,
+                    std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
+                    OGRLayer *lyOut,
+                    OGRLayer *lyGrid,
+                    OGRLayer *lyIncluded, OGRLayer *lyExclusion1, OGRLayer *lyExclusion2);
 
-    void clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out, OGRDataSource *tempds);
-    void diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
-    void diffEdges (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
+    void clip(OGRLayer *in, OGRLayer *feature, OGRLayer *out, GDALDataset *tempds);
+    void diff(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, GDALDataset *tempds);
+    void diffEdges(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, GDALDataset *tempds);
     void copyLayerContent(OGRLayer *src, OGRLayer *dst);
     void makePartProgress(double x);
     void startNewPartProgress(QString msg);
-    OGRLayer *createGridLayer (OGRDataSource *datasource, const char *const name);
-    OGRLayer *createEdgesLayer (OGRDataSource *datasource, const char *const name);
-    void deleteLayer(OGRDataSource *src, OGRLayer *layer);
+    OGRLayer *createGridLayer(GDALDataset *datasource, const char *const name);
+    OGRLayer *createEdgesLayer(GDALDataset *datasource, const char *const name);
+    void deleteLayer(GDALDataset *src, OGRLayer *layer);
 
     int getFromFieldIndex (OGRLayer *layer);
     int getToFieldIndex (OGRLayer *layer);
@@ -146,9 +146,9 @@ private:
     int mId = 0;
     OGRSpatialReference mSpatialReference;
 
-    std::shared_ptr<OGRDataSource> mShapefileInc1;
-    std::shared_ptr<OGRDataSource> mShapefileInc2;
-    std::shared_ptr<OGRDataSource> mShapefileExc;
+    std::shared_ptr<GDALDataset> mShapefileInc1;
+    std::shared_ptr<GDALDataset> mShapefileInc2;
+    std::shared_ptr<GDALDataset> mShapefileExc;
 
     Feedback *mFeedback = 0;
 

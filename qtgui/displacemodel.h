@@ -57,7 +57,7 @@
 #include <memory>
 #include <functional>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 #include <QDebug>
 
@@ -584,7 +584,7 @@ private:
     QString mLastError;
     /* Editor stuff */
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
-    OGRDataSource *mDataSource;
+    GDALDataset *mDataSource;
     OGRLayer *mNodesLayer;
 
     int mNodesLayerIndex;

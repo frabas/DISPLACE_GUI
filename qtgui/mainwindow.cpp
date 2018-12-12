@@ -88,7 +88,7 @@
 
 #include <dialogs/graphexportproperties.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 #include <GeographicLib/Geodesic.hpp>
 #include <version.h>    // Version.h should be included after GeographicLib because it undefines VERSION symbol
 
@@ -1424,7 +1424,7 @@ void MainWindow::on_actionImport_Shapefile_triggered()
     if (!name.isEmpty()) {
         QFileInfo info (name);
 
-        OGRDataSource *ds = OGRSFDriverRegistrar::Open(name.toStdString().c_str(), FALSE);
+        GDALDataset *ds = (GDALDataset*)OGROpen(name.toStdString().c_str(), 0, nullptr);
 
         QString layer;
 
@@ -1877,7 +1877,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
-            std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, sh);
+            std::shared_ptr<GDALDataset> ds = mMapController->cloneShapefileDatasource(currentModelIdx, sh);
 //            dss.push_back(ds);
 
             int n = ds->GetLayerCount();
@@ -1902,13 +1902,17 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
     }
 }
 
+// TODO: Refactor all the following functions, they are copy-and-paste of the same code.
 void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        // TODO WATCHOUT! raw pointer shouldn't be embedded in smart pointers!
+        //ds = std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(shp.toStdString().c_str(), 0, nullptr));
     }
 
     if (ds.get() == nullptr) {
@@ -1959,11 +1963,13 @@ void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const 
 
 void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), GA_ReadOnly));
     }
 
     if (ds.get() == nullptr) {
@@ -2012,11 +2018,13 @@ void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const ch
 
 void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2065,11 +2073,13 @@ void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, con
 
 void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2117,11 +2127,13 @@ void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, con
 
 void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2170,11 +2182,13 @@ void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, c
 
 void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2222,11 +2236,13 @@ void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const
 
 void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2275,11 +2291,13 @@ void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString s
 
 void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2330,11 +2348,13 @@ void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const c
 
 void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {
@@ -2383,11 +2403,13 @@ void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString sh
 
 void MainWindow::assignBenthosNumberFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        throw std::logic_error ("Not implemented. ");
+        // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
+        //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
 
     if (ds.get() == nullptr) {

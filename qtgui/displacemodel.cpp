@@ -83,11 +83,11 @@ DisplaceModel::DisplaceModel()
     OGRRegisterAll();
 
     const char *pszDriverName = "Memory";
-    OGRSFDriver *poDriver;
-    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+    GDALDriver *poDriver;
+    poDriver = (GDALDriver*)GDALGetDriverByName(pszDriverName);
 
     mMapsDataProvider = std::make_shared<MapsDataProvider>();
-    mDataSource = poDriver->CreateDataSource("memory");
+    mDataSource = poDriver->Create("memory", 0, 0, 0, GDT_Unknown, nullptr);
     Q_ASSERT(mDataSource);
 
     mSpatialRef = new OGRSpatialReference();

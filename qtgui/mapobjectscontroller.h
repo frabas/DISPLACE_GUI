@@ -54,7 +54,7 @@
 #include <editorlayerinterface.h>
 #include <mapobjects/mapobjectcontainer.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 #include <QMapControl/Layer.h>
 #include <QMapControl/Geometry.h>
@@ -304,7 +304,7 @@ public:
     bool importShapefile(int model_idx, QString path, QString layername);
     QStringList getShapefilesList(int model_idx) const;
     std::shared_ptr<qmapcontrol::ESRIShapefile> getShapefile(int model_idx, int idx);
-    std::shared_ptr<OGRDataSource> cloneShapefileDatasource(int model_idx, const QString &name);
+    std::shared_ptr<GDALDataset> cloneShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
     EditorModes getEditorMode() const { return mEditorMode; }
@@ -331,7 +331,7 @@ protected:
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
     void addEnvLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
-    void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
+    void addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
     void delSelectedNodes(int model);
@@ -414,7 +414,7 @@ private:
     QVector<LayerListImpl> mEnvLayers;
     QVector<LayerListImpl> mOutputLayers;
     QVector<LayerListImpl> mTariffsLayers;
-    QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;
+    QVector<QList<std::shared_ptr<GDALDataset> > > mShapefiles;
     QVector<LayerVarListImpl<qmapcontrol::LayerESRIShapefile> > mShapefileLayers;
 
     EditorModes mEditorMode;

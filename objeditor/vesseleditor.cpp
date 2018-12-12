@@ -26,8 +26,8 @@
 #include <appsettings.h>
 #include <vesseleditormainwindow.h>
 
-#include <gdal/ogr_core.h>
-#include <gdal/ogrsf_frmts.h>
+#include <ogr_core.h>
+#include <ogrsf_frmts.h>
 
 int main (int argc, char *argv[])
 {

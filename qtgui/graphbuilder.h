@@ -45,7 +45,7 @@
 #include <QPointF>
 
 #include <memory>
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"

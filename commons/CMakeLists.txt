@@ -171,6 +171,7 @@ endif()
 target_link_libraries(commons
         formats
         msqlitecpp::msqlitecpp
+        Boost::date_time
         ${GEOGRAPHIC_LIB}
         ${LIBRARIES}
         )

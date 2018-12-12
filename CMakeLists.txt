@@ -22,10 +22,6 @@ include(cmake/installer.cmake)
 add_definitions(-DBOOST_ALL_NO_LIB)
 
 include(cmake/dependencies.cmake)
-find_package(msqlitecpp REQUIRED)
-
-include_directories(${Boost_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
 
 add_subdirectory(formats)
 add_subdirectory(commons)

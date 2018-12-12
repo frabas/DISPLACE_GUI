@@ -12,7 +12,6 @@ include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_SOURCE_DIR}/include/
         ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
 )
 
 set(SOURCES
@@ -152,9 +151,6 @@ endif (NOT WIN32)
 
 if (WIN32)
     list(APPEND LIBRARIES psapi)
-    list(APPEND SOURCES
-            storage/sqlite3.c
-            )
     include_directories( ${CMAKE_SOURCE_DIR}/commons/storage)
 endif (WIN32)
 
@@ -166,11 +162,17 @@ add_library(commons SHARED
         ${SOURCES}
         )
 
+if (WIN32)
+    set (GEOGRAPHIC_LIB Geographic-i)
+else()
+    set (GEOGRAPHIC_LIB Geographic)
+endif()
+
 target_link_libraries(commons
         formats
-        Geographic
-        ${LIBRARIES}
         msqlitecpp::msqlitecpp
+        ${GEOGRAPHIC_LIB}
+        ${LIBRARIES}
         )
 
 # Set target directory

@@ -223,7 +223,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
 if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
-
+    int will_I_discard_all=0; // init
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
         outc(cout << "...pop " << sp << endl;)
@@ -340,17 +340,27 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             }
                             */
 
-                            if(dyn_alloc_sce.option(Options::TACs))
-                            {
                                 // prevent TAC overshoot from other_landings
-                                if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) {
-                                             oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
-                                }
-                            }
+                                will_I_discard_all=0;
+                                if(dyn_alloc_sce.option(Options::TACs))
+                                {
+                                     if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                                     {
+                                            if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+                                            {  // STOP!
+                                               oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                            }
+                                            else
+                                            {
+                                                // CONTINUE & DISCARD ALL!
+                                            will_I_discard_all=1;
+                                            }
+                                     }
+                                 }
 
                             // apply_oth_land()
-                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
 
                             // then, collect and accumulate tot_C_at_szgroup
                             vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
@@ -371,19 +381,29 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     }
                     else
                     {
+
+                        // prevent TAC overshoot from other_landings
+                        will_I_discard_all=0;
                         if(dyn_alloc_sce.option(Options::TACs))
                         {
-                            // prevent TAC overshoot from other_landings
-                            if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()){
-                                oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
-                            }
-
-                        }
+                             if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                             {
+                                    if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+                                    {  // STOP!
+                                       oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                    }
+                                    else
+                                    {
+                                        // CONTINUE & DISCARD ALL!
+                                    will_I_discard_all=1; // all catches in apply_oth_land() will actually go to discards_per_szgroup, for the tracking...
+                                    }
+                             }
+                         }
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
 
@@ -404,10 +424,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 }
 
                 // update landings in pop from oth landings
-                double so_far = (populations.at(name_pop)->get_landings_so_far()) +
-                    oth_land_this_pop_this_node;
-                populations.at(name_pop)->set_landings_so_far(so_far);
-
+                if(will_I_discard_all==0)
+                {
+                   double so_far = (populations.at(name_pop)->get_landings_so_far()) +
+                                      oth_land_this_pop_this_node;
+                   populations.at(name_pop)->set_landings_so_far(so_far);
+                }
 
 
 

@@ -1319,7 +1319,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
-                          const vector<double>&  weight_at_szgroup, const vector<double>& totN)
+                          const vector<double>&  weight_at_szgroup, const vector<double>& totN,
+                          int will_I_discard_all)
 {
     dout(cout << "BEGIN: apply_oth_land()" << endl);
 
@@ -1429,6 +1430,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 								 // just right after the calculation of removals, reverse back to get the landings only
                     disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
                     catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
+
+                    if(will_I_discard_all==1)
+                    {
+                    disc_per_szgroup[szgroup] = disc_per_szgroup[szgroup]  + catch_per_szgroup[szgroup];
+                    catch_per_szgroup[szgroup]= 0; // DISCARD ALL!
+                    }
+
                 }
 				else
 				{
@@ -1437,6 +1445,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 								 // reverse back to get the landings only
                     disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
                     catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
+
+                    if(will_I_discard_all==1)
+                    {
+                    disc_per_szgroup[szgroup] = disc_per_szgroup[szgroup]  + catch_per_szgroup[szgroup];
+                    catch_per_szgroup[szgroup]= 0; // DISCARD ALL!
+                    }
+
                     //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
 					// update the availability to impact the future vessel cpue
 					double val=0;// init

@@ -1323,7 +1323,8 @@ void Population::add_recruits_from_SR()
 
     // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
 	// TO DO: use a stock-specific input there...
-    double sd=0.2;
+    double sd=param_sr[2];
+    if(sd==0.0) sd=0.2; // default
 	double rec_error=0;
 	rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
 	recruits= recruits * rec_error;
@@ -1379,7 +1380,8 @@ void Population::add_recruits_from_a_fixed_number()
 
     // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
     // TO DO: use a stock-specific input there...
-    double sd=0.2;
+    double sd=param_sr[2];
+    if(sd==0.0) sd=0.2; // default
     double rec_error=0;
     rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
     recruits= recruits * rec_error;

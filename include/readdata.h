@@ -315,12 +315,7 @@ bool COMMONSSHARED_EXPORT read_vsize_monthly_closures (vector <Node*> &nodes, st
 bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
-bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, vector <std::tuple< string, double, double, double, double,
-                                                        double, double, double, double,
-                                                        double, double, double, double,
-                                                        double, double, double, double,
-                                                        double, double, double, double,
-                                                        double, double, double, double, double> > & biological_traits_params);
+bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double> > &biological_traits_params);
 
 struct EnvironmentDataRecord {
     double x;

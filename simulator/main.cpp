@@ -2705,7 +2705,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double,double, double> > biological_traits_params;
+                                   double, double, double,double, double, double> > biological_traits_params;
   bool r = read_biological_traits_params (is, separator, biological_traits_params);
 
   cout << "compute the searchVolMat..." << endl;
@@ -4988,7 +4988,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // CHECK...CHECK...CHECK...
             // write done  pop number in popdyn_test
-            for (unsigned int sp=0; sp<populations.size(); sp++)
+            /*for (unsigned int sp=0; sp<populations.size(); sp++)
             {
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
@@ -5008,6 +5008,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     popdyn_test << " " <<  endl;
                 }
             }
+            */
 
         }						 // END RE-READ DATA FOR POP...
 

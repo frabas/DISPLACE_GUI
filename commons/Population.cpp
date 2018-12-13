@@ -1828,8 +1828,15 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 								 // class change from 31th of Dec to 1st of Jan
 		forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
 	}
-								 // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
-	forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+
+    //  assuming fixed recruits...
+    // ...then distribute recruits among szgroup
+    double recruits = tot_N_at_age_end_previous_y.at(0);
+    for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y.size(); i++)
+    {
+        forecast_tot_N_at_age_start_y.at(i) =  forecast_tot_N_at_age_start_y.at(i) + (recruits* proprecru_at_szgroup.at(i));
+    }
+
     for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
 	{
         dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
@@ -1874,8 +1881,14 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 			exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
 		;						 // class change and apply mortality F+M
 	}							 // TO DO: add the plusgroup (if necessary)
-	forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
-	// note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+    //  assuming fixed recruits...
+    // ...then distribute recruits among szgroup
+    recruits = forecast_tot_N_at_age_start_y.at(0);
+    for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+    {
+        forecast_tot_N_at_age_start_y_plus_1.at(i) =  forecast_tot_N_at_age_start_y_plus_1.at(i) + (recruits* proprecru_at_szgroup.at(i));
+    }
 
     for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
 	{
@@ -1973,8 +1986,16 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                                      // class change from 31th of Dec to 1st of Jan
             forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
         }
-                                     // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
-        forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+
+        //  assuming fixed recruits...
+        // ...then distribute recruits among szgroup
+        double recruits = tot_N_at_age_end_previous_y.at(0);
+        for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y.size(); i++)
+        {
+            forecast_tot_N_at_age_start_y.at(i) =  forecast_tot_N_at_age_start_y.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        }
+
+
         for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
         {
             cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl;
@@ -2018,8 +2039,17 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                 exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
             ;						 // class change and apply mortality F+M
         }							 // TO DO: add the plusgroup (if necessary)
-        forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
-        // note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+
+        //  assuming fixed recruits...
+        // ...then distribute recruits among szgroup
+        recruits = forecast_tot_N_at_age_start_y.at(0);
+        for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+        {
+            forecast_tot_N_at_age_start_y_plus_1.at(i) =  forecast_tot_N_at_age_start_y_plus_1.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        }
+
+
 
         for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
         {
@@ -2099,8 +2129,15 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                                      // class change from 31th of Dec to 1st of Jan
             forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
         }
-                                     // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
-        forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+
+        //  assuming fixed recruits...
+        // ...then distribute recruits among szgroup
+        double recruits = tot_N_at_age_end_previous_y.at(0);
+        for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y.size(); i++)
+        {
+            forecast_tot_N_at_age_start_y.at(i) =  forecast_tot_N_at_age_start_y.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        }
+
         for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
         {
             dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
@@ -2144,8 +2181,15 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                 exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
             ;						 // class change and apply mortality F+M
         }							 // TO DO: add the plusgroup (if necessary)
-        forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
-        // note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+
+        //  assuming fixed recruits...
+        // ...then distribute recruits among szgroup
+        recruits = forecast_tot_N_at_age_start_y.at(0);
+        for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+        {
+            forecast_tot_N_at_age_start_y_plus_1.at(i) =  forecast_tot_N_at_age_start_y_plus_1.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        }
 
         for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
         {
@@ -2202,8 +2246,15 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                                           // class change from 31th of Dec to 1st of Jan
                  forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
              }
-                                          // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
-             forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+
+             //  assuming fixed recruits...
+             // ...then distribute recruits among szgroup
+             double recruits = tot_N_at_age_end_previous_y.at(0);
+             for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y.size(); i++)
+             {
+                 forecast_tot_N_at_age_start_y.at(i) =  forecast_tot_N_at_age_start_y.at(i) + (recruits* proprecru_at_szgroup.at(i));
+             }
+
              for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
              {
                  dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
@@ -2247,8 +2298,16 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                      exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
                  ;						 // class change and apply mortality F+M
              }							 // TO DO: add the plusgroup (if necessary)
-             forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
-             // note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+
+             //  assuming fixed recruits...
+             // ...then distribute recruits among szgroup
+             recruits = forecast_tot_N_at_age_start_y.at(0);
+             for(unsigned int i = 0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+             {
+                 forecast_tot_N_at_age_start_y_plus_1.at(i) =  forecast_tot_N_at_age_start_y_plus_1.at(i) + (recruits* proprecru_at_szgroup.at(i));
+             }
+
 
              for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
              {

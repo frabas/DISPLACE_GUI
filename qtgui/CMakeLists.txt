@@ -57,19 +57,19 @@ if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
     if (CMAKE_BUILD_TYPE MATCHES Release)
         list(APPEND EXTRA_LIBRARIES
-                CGAL-vc140-mt-4.9
-                Geographic
+                CGAL::CGAL
+                ${GeographicLib_LIBRARIES}
                 )
     else(CMAKE_BUILD_TYPE MATCHES Release)
         list(APPEND EXTRA_LIBRARIES
-                CGAL-vc140-mt-gd-4.9
-                Geographic_d
+                CGAL::CGAL
+                ${GeographicLib_LIBRARIES}
                 )
     endif(CMAKE_BUILD_TYPE MATCHES Release)
 else(WIN32)
     list(APPEND EXTRA_LIBRARIES
-            CGAL
-            Geographic
+            ${CGAL_LIBRARIES}
+            ${GeographicLib_LIBRARIES}
             sqlite3
             )
 endif(WIN32)
@@ -100,7 +100,7 @@ target_link_libraries(displacegui
         Qt5::PrintSupport
         Qt5::Network
 
-        ${EXTRA_LIBRARIES} gmp
+        ${EXTRA_LIBRARIES}
         )
 
 # Set target directory

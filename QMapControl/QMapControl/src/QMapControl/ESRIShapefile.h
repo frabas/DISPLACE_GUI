@@ -64,7 +64,7 @@ namespace qmapcontrol
          */
         explicit ESRIShapefile(const std::string& file_path, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
 
-        explicit ESRIShapefile(OGRDataSourceH datasource, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
+        explicit ESRIShapefile(GDALDataset *datasource, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
 
         //! Destructor.
         virtual ~ESRIShapefile();

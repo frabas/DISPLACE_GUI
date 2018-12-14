@@ -42,8 +42,8 @@ namespace qmapcontrol
         m_ogr_data_set = reinterpret_cast<GDALDataset*>(OGROpen(file_path.c_str(), 0, nullptr));
     }
 
-    ESRIShapefile::ESRIShapefile(OGRDataSourceH datasource, const std::string &layer_name, const int &zoom_minimum, const int &zoom_maximum)
-        : m_ogr_data_set(reinterpret_cast<GDALDataset*>(datasource)), m_layer_name(layer_name), m_zoom_minimum(zoom_minimum), m_zoom_maximum(zoom_maximum)
+    ESRIShapefile::ESRIShapefile(GDALDataset *datasource, const std::string &layer_name, const int &zoom_minimum, const int &zoom_maximum)
+        : m_ogr_data_set(datasource), m_layer_name(layer_name), m_zoom_minimum(zoom_minimum), m_zoom_maximum(zoom_maximum)
     {
     }
 

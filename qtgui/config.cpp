@@ -159,16 +159,6 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
         stream << a << " ";
     stream << endl;
 
-    stream <<"# implicit stocks_pops_level2"<< endl;
-    foreach (int a, m_implicit_pops_level2)
-        stream << a << " ";
-    stream << endl;
-
-    stream <<"# grouped tacs"<< endl;
-    foreach (int a, m_grouped_tacs)
-        stream << a << " ";
-    stream << endl;
-
     stream <<"# calib the other landings per stock"<< endl;
     foreach (double a, m_calib_oth_landings)
         stream << a << " ";
@@ -187,6 +177,16 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
     stream <<"# Interesting harbours"<< endl;
     for (auto a : m_interesting_harbours)
         stream << a.toIndex() << " ";
+    stream << endl;
+
+    stream <<"# implicit stocks_pops_level2"<< endl;
+    foreach (int a, m_implicit_pops_level2)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# grouped tacs"<< endl;
+    foreach (int a, m_grouped_tacs)
+        stream << a << " ";
     stream << endl;
 
     file.close();

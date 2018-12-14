@@ -154,22 +154,22 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
 
     stream << "# nbbenthospops"<< endl << nbbenthospops << endl;
 
-    stream <<"# implicit stocks"<< endl;
+    stream <<"# implicit stocks (i.e. with no pop dynamics)"<< endl;
     foreach (int a, m_implicit_pops)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib the other landings per stock"<< endl;
+    stream <<"# calib the other landings per stock (a multiplier for landings other than from the simulated vessels)"<< endl;
     foreach (double a, m_calib_oth_landings)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib weight-at-szgroup per stock"<< endl;
+    stream <<"# calib weight-at-szgroup per stock (a multiplier for w)"<< endl;
     foreach (double a, m_calib_weight_at_szgroup)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib the cpue multiplier per stock"<< endl;
+    stream <<"# calib the cpue multiplier per stock (a multiplier for w)"<< endl;
     foreach (double a, m_calib_cpue_multiplier)
         stream << a << " ";
     stream << endl;
@@ -179,12 +179,12 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
         stream << a.toIndex() << " ";
     stream << endl;
 
-    stream <<"# implicit stocks_pops_level2"<< endl;
+    stream <<"# implicit stocks_pops_level2 (...)"<< endl;
     foreach (int a, m_implicit_pops_level2)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# grouped tacs"<< endl;
+    stream <<"# grouped tacs (a group nb for each stock e.g. 1 1 2 2 3 4 if 6 stocks)"<< endl;
     foreach (int a, m_grouped_tacs)
         stream << a << " ";
     stream << endl;

@@ -2394,6 +2394,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         //if(tstep>8761  && !is_individual_vessel_quotas)
         if(!is_individual_vessel_quotas)
         {
+            // remember that grouped_tacs is in form of e.g. 1 1 1 2 2 3 3 4 4 5 5 5 5 5 etc. as many as stocks.
             for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
              global_quotas.at(pop) = populations.at(pop)->get_tac()->get_current_tac(); // default when global TAC

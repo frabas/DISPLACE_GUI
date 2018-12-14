@@ -2213,8 +2213,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int,double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
         vector<double> init_tot_N_per_szgroup;
         for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
-            // convert in thousands
+            // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
             init_tot_N_per_szgroup.push_back(pos->second * 1000);
+            // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
+            cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
 
         // initial prop_migrants for this particular pop
         multimap<int,double>::iterator lower_init_migrants = init_prop_migrants_pops_per_szgroup.lower_bound(sp);

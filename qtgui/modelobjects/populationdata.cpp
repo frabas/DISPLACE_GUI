@@ -25,24 +25,32 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(0),  catches(0),  discards(0), mortality(0), natmortality(0), SSB(),
+      aggregate(0),  catches(0),  discards(0), mortality(0), natmortality(0),
+      numberatage(0), weightatage(0), maturityatage(0), SSB(),
       totAggregate(0.0),
       totCatches(0.0),
       totDiscards(0.0),
       totMortality(0.0),
       totNatMortality(0.0),
+      totNumberAtAge(0.0),
+      totWeightAtAge(0.0),
+      totMaturityAtAge(0.0),
       totSSB(0.0)
 {
 }
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate), catches(p.catches), discards(p.discards), mortality(p.mortality), natmortality(p.natmortality), SSB(p.SSB),
+      aggregate(p.aggregate), catches(p.catches), discards(p.discards), mortality(p.mortality), natmortality(p.natmortality),
+      numberatage(p.numberatage), weightatage(p.weightatage), maturityatage(p.maturityatage), SSB(p.SSB),
       totAggregate(p.totAggregate),
       totCatches(p.totCatches),
       totDiscards(p.totDiscards),
       totMortality(p.totMortality),
       totNatMortality(p.totNatMortality),
+      totNumberAtAge(p.totNumberAtAge),
+      totWeightAtAge(p.totWeightAtAge),
+      totMaturityAtAge(p.totMaturityAtAge),
       totSSB(p.totSSB)
 {
 
@@ -147,8 +155,8 @@ void PopulationData::setMortality(const QVector<double> &value)
 {
     mortality = value;
     // force aggregate and mortality to have the same size!
-    while (aggregate.size() < mortality.size())
-        aggregate.push_back(0);
+    while (mortality.size() < aggregate.size())
+        mortality.push_back(0);
 }
 
 void PopulationData::setNatMortality(const QVector<double> &value)
@@ -156,8 +164,71 @@ void PopulationData::setNatMortality(const QVector<double> &value)
     natmortality = value;
     // force aggregate and mortality to have the same size!
     while (aggregate.size() < natmortality.size())
-        aggregate.push_back(0);
+        natmortality.push_back(0);
 }
+
+
+const QVector<double> &PopulationData::getNumberAtAge() const
+{
+    return numberatage;
+}
+
+double PopulationData::getNumberAtAgeAt(int i) const
+{
+    if (numberatage.size() > i)
+        return numberatage.at(i);
+    return 0;
+}
+
+void PopulationData::setNumberAtAge(const QVector<double> &value)
+{
+    numberatage = value;
+    // force aggregate and numberatage to have the same size!
+    while (numberatage.size() < aggregate.size())
+        numberatage.push_back(0);
+}
+
+
+const QVector<double> &PopulationData::getWeightAtAge() const
+{
+    return weightatage;
+}
+
+double PopulationData::getWeightAtAgeAt(int i) const
+{
+    if (weightatage.size() > i)
+        return weightatage.at(i);
+    return 0;
+}
+
+void PopulationData::setWeightAtAge(const QVector<double> &value)
+{
+    weightatage = value;
+    // force aggregate and weightatage to have the same size!
+    while (weightatage.size() < aggregate.size())
+        weightatage.push_back(0);
+}
+
+const QVector<double> &PopulationData::getMaturityAtAge() const
+{
+    return maturityatage;
+}
+
+double PopulationData::getMaturityAtAgeAt(int i) const
+{
+    if (maturityatage.size() > i)
+        return maturityatage.at(i);
+    return 0;
+}
+
+void PopulationData::setMaturityAtAge(const QVector<double> &value)
+{
+    maturityatage = value;
+    // force aggregate and maturityatage to have the same size!
+    while (maturityatage.size() < aggregate.size())
+        maturityatage.push_back(0);
+}
+
 
 const QVector<double> &PopulationData::getSSB() const
 {

@@ -3186,6 +3186,9 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/pop_discard.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Discards), r);
         exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
         exportPlot (out + QString("/pop_natmortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NatMortality), r);
+        exportPlot (out + QString("/pop_numberatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NumberAtAge), r);
+        exportPlot (out + QString("/pop_weightatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::WeightAtAge), r);
+        exportPlot (out + QString("/pop_maturityatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::MaturityAtAge), r);
         exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::SSB), r);
         exportPlot (out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
         exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);

@@ -187,7 +187,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                     // ... / SSB_per_szgroup
                     dout(cout  << "write down the SSB...");
                     populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
-                    populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // here in kilos
+                    populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // 0 to 1
                     vector <double> SSB_per_szgroup= populations.at(sp)->get_SSB_at_szgroup();
                     // reminder: tot_N_at_szgroup are in thousand in input file
                     //  but in absolute numbers here because have been multiplied by 1000 when importing

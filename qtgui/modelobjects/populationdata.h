@@ -32,13 +32,16 @@ class PopulationData
     QVector<double> discards;
     QVector<double> mortality;
     QVector<double> natmortality;
+    QVector<double> numberatage;
+    QVector<double> weightatage;
+    QVector<double> maturityatage;
     QVector<double> SSB;
 
-    double totAggregate, totCatches, totDiscards, totMortality, totNatMortality, totSSB;
+    double totAggregate, totCatches, totDiscards, totMortality, totNatMortality, totNumberAtAge, totWeightAtAge, totMaturityAtAge, totSSB;
 
 public:
     PopulationData()
-        : id(-1), aggregate(), catches(), discards(), mortality(), natmortality(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
+        : id(-1), aggregate(), catches(), discards(), mortality(), natmortality(), numberatage(), weightatage(), maturityatage(), SSB(),  totAggregate(0.0), totMortality(0.0), totSSB(0.0) { }
 
     explicit PopulationData(int _id);
     PopulationData(const PopulationData&p);
@@ -62,6 +65,15 @@ public:
     double getNatMortalityTot() const;
     void setNatMortalityTot(double value);
 
+    double getNumberAtAgeTot() const;
+    void setNumberAtAgeTot(double value);
+
+    double getWeightAtAgeTot() const;
+    void setWeightAtAgeTot(double value);
+
+    double getMaturityAtAgeTot() const;
+    void setMaturityAtAgeTot(double value);
+
     double getSSBTot() const;
     void setSSBTot(double value);
 
@@ -76,6 +88,12 @@ public:
             mortality[i] = 0;
         for (int i = 0; i < natmortality.size(); ++i)
             natmortality[i] = 0;
+        for (int i = 0; i < numberatage.size(); ++i)
+            numberatage[i] = 0;
+        for (int i = 0; i < weightatage.size(); ++i)
+            weightatage[i] = 0;
+        for (int i = 0; i < maturityatage.size(); ++i)
+            maturityatage[i] = 0;
         for (int i = 0; i < SSB.size(); ++i)
             SSB[i] = 0;
         totAggregate = totCatches = totDiscards = totMortality = totNatMortality = totSSB = 0;
@@ -96,6 +114,15 @@ public:
     const QVector<double> &getNatMortality() const;
     double getNatMortalityAt(int i) const;
     void setNatMortality(const QVector<double> &value);
+    const QVector<double> &getNumberAtAge() const;
+    double getNumberAtAgeAt(int i) const;
+    void setNumberAtAge(const QVector<double> &value);
+    const QVector<double> &getWeightAtAge() const;
+    double getWeightAtAgeAt(int i) const;
+    void setWeightAtAge(const QVector<double> &value);
+    const QVector<double> &getMaturityAtAge() const;
+    double getMaturityAtAgeAt(int i) const;
+    void setMaturityAtAge(const QVector<double> &value);
     const QVector<double> &getSSB() const;
     void setSSB(const QVector<double> &value);
 };

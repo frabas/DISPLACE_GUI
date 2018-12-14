@@ -716,7 +716,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
-        fld = p->mPopDynTable->fldN;
+        fld = p->mPopDynTable->fldNz;
         name= p->mPopDynTable->name();
         fldTStep = p->mPopDynTable->fldTStep;
         fldPopId = p->mPopDynTable->fldPopId;
@@ -745,6 +745,27 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     case displace::plot::PopulationStat::NatMortality:
         fld = p->mPopDynTable->fldM;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::NumberAtAge:
+        fld = p->mPopDynTable->fldNa;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::WeightAtAge:
+        fld = p->mPopDynTable->fldW;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::MaturityAtAge:
+        fld = p->mPopDynTable->fldMat;
         name= p->mPopDynTable->name();
         fldTStep = p->mPopDynTable->fldTStep;
         fldPopId = p->mPopDynTable->fldPopId;

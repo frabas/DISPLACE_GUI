@@ -24,11 +24,14 @@ public:
     const FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldGroup = makeFieldDef("PopGroup",FieldType::Integer()).notNull();
 
-    const FieldDef<FieldType::Real> fldN = makeFieldDef("N",FieldType::Real());
+    const FieldDef<FieldType::Real> fldNz = makeFieldDef("Nz",FieldType::Real());
     const FieldDef<FieldType::Real> fldC = makeFieldDef("Catch",FieldType::Real());
     const FieldDef<FieldType::Real> fldD = makeFieldDef("Discard",FieldType::Real());
     const FieldDef<FieldType::Real> fldF = makeFieldDef("F",FieldType::Real());
     const FieldDef<FieldType::Real> fldM = makeFieldDef("M",FieldType::Real());
+    const FieldDef<FieldType::Real> fldNa = makeFieldDef("Na",FieldType::Real());
+    const FieldDef<FieldType::Real> fldW = makeFieldDef("W",FieldType::Real());
+    const FieldDef<FieldType::Real> fldMat = makeFieldDef("Mat",FieldType::Real());
     const FieldDef<FieldType::Real> fldSSB = makeFieldDef("SSB",FieldType::Real());
     const FieldDef<FieldType::Real> fldFFmsy = makeFieldDef("FFmsy",FieldType::Real());
     const FieldDef<FieldType::Real> fldPropMature = makeFieldDef("PropMature",FieldType::Real());

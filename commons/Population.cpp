@@ -419,6 +419,10 @@ const vector<double>& Population::get_a_tot_N_at_szgroup_before_applying_M() con
     return(a_tot_N_at_szgroup_before_applying_M);
 }
 
+const vector<double>& Population::get_tot_N_at_age() const
+{
+    return(tot_N_at_age);
+}
 
 const vector<double>& Population::get_tot_F_at_age() const
 {
@@ -1263,7 +1267,7 @@ cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr
        }
       } else{
 
-       dout(cout << "no migration for this pop"  << endl );
+       dout(cout << "no migration for this pop" << this->get_name()  << endl );
 
        cout << "no migration for this pop"  << endl;
 

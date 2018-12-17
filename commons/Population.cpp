@@ -1658,6 +1658,11 @@ void Population::compute_tot_M_at_age()
 
    this->set_tot_M_at_age(tot_M_at_age);
 
+
+     // don´t forget to update the perceived N with the N affected by the natural mortality
+     this->set_perceived_tot_N_at_age(tot_N_at_age);
+     this->set_tot_N_at_age(tot_N_at_age);
+
    dout(cout << "END compute_tot_M_at_age() "  << endl);
 }
 

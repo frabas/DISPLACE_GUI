@@ -616,15 +616,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 {
                    outc(cout<< "ADD RECRUITS" << endl);
                     //populations[sp]->add_recruits_from_eggs();
-                    vector <double> params = populations[sp]->get_param_sr();
-                    if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
-                    {
-                       populations[sp]->add_recruits_from_a_fixed_number();
-                    }
-                    else
-                    {
-                       populations[sp]->add_recruits_from_SR();
-                    }
+                    //vector <double> params = populations[sp]->get_param_sr();
+                    //if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
+                    //{
+                    //   populations[sp]->add_recruits_from_a_fixed_number();
+                    //}
+                    //else
+                    //{
+                     //  populations[sp]->add_recruits_from_SR();
+                    //}
 
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
                     // compute the cpue_multiplier
@@ -759,6 +759,22 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    cout <<"tstep " << tstep << "STORED N MINUS 1:  a_tot_N_at_szgroup_minus1_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
                }
                */
+
+               // apply only at the beginning of the year (this is maybe not always relevant...)
+               if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+               {
+                  outc(cout<< "ADD RECRUITS" << endl);
+                   //populations[sp]->add_recruits_from_eggs();
+                   vector <double> params = populations[sp]->get_param_sr();
+                   if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
+                   {
+                      populations[sp]->add_recruits_from_a_fixed_number();
+                   }
+                   else
+                   {
+                      populations[sp]->add_recruits_from_SR();
+                   }
+                }
 
             // spread out the recruits
             // apply only by semester, to be consistent with the timeframe of survey data

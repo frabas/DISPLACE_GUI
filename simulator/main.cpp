@@ -412,6 +412,7 @@ bool use_gnuplot = false;
 int num_threads = 4;
 int nb_displayed_moves_out_of_twenty=1;
 int export_vmslike = 1;
+int export_hugefiles = 1;
 
 void parseCommandLine (int argc, char const *argv[])
 {
@@ -427,6 +428,7 @@ void parseCommandLine (int argc, char const *argv[])
             (",V", po::value(&verbosity), "verbosity level")
             (",p", po::value(&use_static_paths), "Use static paths")
             (",e", po::value(&export_vmslike), "Export VMSLike data")
+            ("huge", po::value(&export_hugefiles), "Export huge files data")
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
             ("commit-rate", po::value(&numStepTransactions), "Modify the number of loops before committing to sqlite db")
@@ -492,19 +494,19 @@ int app_main(int argc, char const* argv[])
 
     // example for setting up options for the command line
     // (in code::blocks, see Project>Set programs arguments in code::blocks menu)
-    // e.g.  -f "balticonly" -f2 "baseline" -s "simu1" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot
-    // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot  // disable the VMS file exporting, the most used.
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 -v 0 --with-gnuplot    // enable the VMS file exporting
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 -v 1 --with-gnuplot    // subset of vessels, see features.dat
-    // -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because might need much more computation time...
+    // e.g.  -f "balticonly" --f2 "baseline" -s "simu1" -i 8761 -p 1 -e 0 --huge 1 -v 0 --without-gnuplot
+    // -f "balticonly" --f2 "baseline" -s "simu2" -i 8761 -p 1 -e 0 --huge 1 -v 0 --without-gnuplot  // disable the VMS file exporting, the most used.
+    // -f "balticonly" --f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 --huge 1 -v 0 --with-gnuplot    // enable the VMS file exporting
+    // -f "balticonly" --f2 "baseline"  -s "simu2" -i 8761 -p 1 -e 1 --huge 1 -v 1 --with-gnuplot    // subset of vessels, see features.dat
+    // -f "balticonly" --f2 "baseline"  -s "simu2" -i 8761 -p 0 -e 1 --huge 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because might need much more computation time...
 
     // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
     // --disable-crashhandler or --debug => Disables crash handling code.
 
     /* run in command line with:
-      C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" -f2 "baseline" -s
-      "simu2" -i 8761 -p 1 -e 0 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
+      C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" --f2 "baseline" -s
+      "simu2" -i 8761 -p 1 -e 0 --huge 1 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
     */
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
@@ -5508,7 +5510,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                   windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
                   //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
-                  windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+                  if (export_hugefiles) {
+                      windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+                  }
 
                   if (enable_sqlite_out) {
                       outSqlite->exportWindmillsLog(windmills.at(i), tstep);
@@ -5538,8 +5542,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                   ships.at(i)->compute_emissions_in_ship(); // discrete event
                   //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
-                  ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
-
+                  if (export_hugefiles)
+                  {
+                      ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
+                  }
                   if (enable_sqlite_out)
                       outSqlite->exportShip(tstep, ships.at(i));
             }
@@ -5607,8 +5613,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            if (enable_sqlite_out)
                                outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
 
-                           fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
-                       }
+                           if (export_hugefiles)
+                            {
+                               fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
+                            }
+                        }
                    }
                }
             }

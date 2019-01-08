@@ -13,7 +13,7 @@ echo "Running Simulation %%%JobName%%% %%%JobSimuName%%%, %%%JobLength%%% steps"
     --f2 "%%%JobSimuOutName%%%" \
     -s "%%%JobSimuName%%%" \
     -i %%%JobLength%%% \
-    -p %%%JobUseStaticPaths%%% -e 1 -v 0 \
+    -p %%%JobUseStaticPaths%%% -e 1 --huge 1 -v 0 \
     --without-gnuplot \
     --disable-sqlite \
     -V 1 --num_threads \

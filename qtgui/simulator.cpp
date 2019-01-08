@@ -73,7 +73,7 @@ void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
     mModel= model;
 }
 
-// -f "myfish" -f2 "baseline" -s "simu2" -i 8761 -p 1 -e 1 -v 0 --without-gnuplot -V 0 --num_threads 8 --outdir "D:"
+// -f "myfish" --f2 "baseline" -s "simu2" -i 8761 -p 1 -e 1 --huge 1 -v 0 --without-gnuplot -V 0 --num_threads 8 --outdir "D:"
 bool Simulator::start(QString outdir, QString name, QString folder, QString simul_name)
 {
     if (mSimulation != 0) {
@@ -137,6 +137,8 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     arguments.push_back(QString::number(useStaticPaths)); // Changeme
     arguments.push_back("-e");
     arguments.push_back("1"); // Changeme       // export vmslike
+    arguments.push_back("--huge");
+    arguments.push_back("1"); // Changeme       // export huge files
     arguments.push_back("-v");
     arguments.push_back("0"); // Changeme
     arguments.push_back("--use-gui");

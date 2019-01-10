@@ -4,6 +4,7 @@ import shutil
 import glob
 
 def fixup_file(filename, newpath, overwrite):
+    newpath = newpath.replace('\\', '/')
     pattern = r"C:[^;]*vcpkg"
 
     regex = re.compile(pattern)

@@ -3,11 +3,6 @@ if (NOT WIN32)
     message(FATAL "platform_win.cmake must be included only on Win32 interface")
 endif()
 
-
-if (NOT BOOST_ROOT)
-    set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/install/msvc)
-endif (NOT BOOST_ROOT)
-
 add_definitions(-D_WINSOCKAPI_)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)

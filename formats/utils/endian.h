@@ -11,11 +11,7 @@ namespace helpers {
 
 // Default are disabled
 
-#ifdef __clang__
-#define DELETED {}
-#else
-#define DELETED =delete;
-#endif
+#define DELETED { static_assert(sizeof(T) == 0, "Non specialized functions are deleted"); }
 
 template <typename T>
 T inline toBigEndian (T) DELETED

@@ -15,7 +15,15 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "prettyprint.h"
+// workarfound this bug:
+// Internal error c1001 d:\agent\_work\1\s\src\vctools\compiler\cxxfe\sl\p1\c\types.c', line 4563
+#if defined(_MSC_VER) && !(_MSC_VER < 1915 && _MSC_VER >= 2000)
+#define AVOID_MSVC_C1001_BUG
+#endif
+
+#ifndef AVOID_MSVC_C1001_BUG
+#include <prettyprint.h>
+#endif
 
 namespace displace {
     namespace formats {
@@ -63,10 +71,11 @@ namespace displace {
                     return mConfig.size();
                 }
 
+#ifndef AVOID_MSVC_C1001_BUG
                 friend std::ostream &operator << (std::ostream &strm, const LineNumberReader &rdr) {
                     return strm << rdr.mConfig;
                 }
-
+#endif
             private:
                 bool set(const std::string &key, const std::string &value);
 

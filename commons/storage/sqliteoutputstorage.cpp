@@ -181,7 +181,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     log.lastHarbour = v->get_loc()->get_idx_node().toIndex();
     log.revenueAV = v->getLastTripRevenues();
     log.revenueExAV = v->getLastTripExplicitRevenues();
-    log.timeAtSea = v->get_timeatsea();
+    log.timeAtSea = v->get_cumsteaming();
     log.reasonToGoBack = v->get_reason_to_go_back();
     log.cumFuelCons = v->get_cumfuelcons();
 

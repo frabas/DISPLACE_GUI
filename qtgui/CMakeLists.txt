@@ -75,7 +75,7 @@ else(WIN32)
 endif(WIN32)
 
 if (NOT APPLE AND NOT WIN32)
-    list(APPEND EXTRA_LIBRARIES rt)
+    list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp rt)
 endif (NOT APPLE AND NOT WIN32)
 
 add_executable(displacegui

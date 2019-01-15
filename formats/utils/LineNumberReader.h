@@ -22,7 +22,7 @@
 #endif
 
 #ifndef AVOID_MSVC_C1001_BUG
-#include <prettyprint.h>
+#include "prettyprint.h"
 #endif
 
 namespace displace {

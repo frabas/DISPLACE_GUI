@@ -143,7 +143,7 @@ endif (WIN32 OR APPLE)
 
 
 # Add msqlite
-find_package(MSqliteCpp)
+find_package(msqlitecpp REQUIRED)
 
 if (NOT WIN32)
     list(APPEND LIBRARIES sqlite3)

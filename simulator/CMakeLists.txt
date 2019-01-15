@@ -4,17 +4,6 @@ find_package(Boost REQUIRED
 
 add_definitions(-DBOOST_PROGRAM_OPTIONS_DYN_LINK)
 
-if(GEOGRAPHIC_INCLUDE)
-    message("GeographicLib Include: ${GEOGRAPHIC_INCLUDE}")
-    include_directories(${GEOGRAPHIC_INCLUDE})
-endif()
-
-if (GEOGRAPHIC_LIBDIR)
-    message("GeographicLib Lib: ${GEOGRAPHIC_LIBDIR}")
-    link_directories(${GEOGRAPHIC_LIBDIR})
-endif()
-
-
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
@@ -63,7 +52,7 @@ target_link_libraries(displace
         commons
         formats
         ${LIBRARIES}
-        boost_program_options
+        Boost::program_options
         )
 
 

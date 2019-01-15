@@ -32,7 +32,7 @@ target_link_libraries(unittests
         commons
         formats
         qtcommons
-        boost_unit_test_framework
+        Boost::unit_test_framework
         )
 
 install(TARGETS unittests RUNTIME DESTINATION bin COMPONENT tests)

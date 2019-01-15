@@ -30,7 +30,7 @@ add_executable(commons_tests
 target_link_libraries(commons_tests
         commons
         formats
-        boost_unit_test_framework
+        Boost::unit_test_framework
         )
 
 install(TARGETS commons_tests RUNTIME DESTINATION bin COMPONENT tests)

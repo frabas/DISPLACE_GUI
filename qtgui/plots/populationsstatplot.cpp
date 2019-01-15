@@ -1,5 +1,7 @@
 #include "populationsstatplot.h"
 
+#include "stats/statsutils.h"
+
 #include <displacemodel.h>
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/vesselslogliketable.h>
@@ -132,6 +134,11 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
             }
 
             auto v = getData(model, stat, aggtype, ipop, stype);
+            if(stat==PopulationStat::FvsEffort)
+               {
+                v = getData(model, (displace::plot::PopulationStat) 3, (displace::plot::NationsStat) 4, aggtype, ipop, stype); // see 3 is F and 4 is "TimeAtSea" in plottype.h
+               }
+
             graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
         }
@@ -142,9 +149,33 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
         break;
+    case PopulationStat::Catches:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("kg"));
+        break;
+    case PopulationStat::Discards:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("kg"));
+        break;
     case PopulationStat::Mortality:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("F"));
+        break;
+    case PopulationStat::NatMortality:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("M"));
+        break;
+    case PopulationStat::NumberAtAge:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
+        break;
+    case PopulationStat::WeightAtAge:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("kg"));
+        break;
+    case PopulationStat::MaturityAtAge:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Proportion mature"));
         break;
     case PopulationStat::SSB:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -156,7 +187,7 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         break;
     case PopulationStat::Quotas:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
-        theplot->yAxis->setLabel(QObject::tr("Quota (kg)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota (tons)"));
         break;
     case PopulationStat::FFmsy:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -165,6 +196,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
     case PopulationStat::PropMature:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Proportion mature fish"));
+        break;
+    case PopulationStat::FvsEffort:
+        theplot->yAxis->setLabel(QObject::tr("F"));
+        theplot->xAxis->setLabel(QObject::tr("Effort (h)"));
         break;
     }
 
@@ -184,6 +219,9 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
                                                                            displace::plot::AggregationType aggtype,
                                                                            int popid, vector<int> szid)
 {
+    if(stattype==PopulationStat::FvsEffort) return  std::make_tuple(QVector<double > (0),  QVector<double > (0));
+
+
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
@@ -192,6 +230,31 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
+}
+
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model,
+                                                                           displace::plot::PopulationStat stattype,
+                                                                           displace::plot::NationsStat stattype2,
+                                                                           displace::plot::AggregationType aggtype,
+                                                                           int popid, vector<int> szid)
+{
+   // a getData() version to cross to origin of data i.e. PopulationStat and NationsStat
+
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
+
+    // x
+    int nation =0; // TO DO..
+    auto dt1 = db->getVesselLoglikeDataByNation(stattype2, model->getNation(nation).getName().toStdString(),
+                                                          SQLiteOutputStorage::Operation::Sum);
+    stats::runningSum(dt1.v);   // TO DO.. PROBLEM HERE...WHAT IS PLOTTED on X IS NOT CLEAR....
+
+    // y
+    auto dt2 = db->getPopulationStatData(stattype, aggtype, popid, szid);
+
+    QVector<double> vd1 = QVector<double>::fromStdVector(dt1.v), vd2 = QVector<double>::fromStdVector(dt2.v);
+    return std::make_tuple(vd1, vd2);
 }
 
 

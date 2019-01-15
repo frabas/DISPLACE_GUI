@@ -24,6 +24,8 @@ const QString SchedulerScriptGenerator::sKeySimuName = "JobSimuName";
 const QString SchedulerScriptGenerator::sKeySimuOutName = "JobSimuOutName";
 const QString SchedulerScriptGenerator::sKeySimuLength = "JobLength";
 const QString SchedulerScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
+const QString SchedulerScriptGenerator::sKeyJobUseStaticPaths = "JobUseStaticPaths";
+
 
 SchedulerScriptGenerator::SchedulerScriptGenerator(const QString &templatename)
     : mTemplateName(templatename)
@@ -199,7 +201,12 @@ bool SchedulerScriptGenerator::getValue(QString key, const SimulationRun &job, Q
 
     } else if (key == sKeySimuNumThreads) {
         r = QString::number(job.getNumThreads());
+
+    } else if (key == sKeyJobUseStaticPaths) {
+       r = QString::number(job.getUsingStaticPaths());
     }
+
+
 
     if (r.isEmpty())
         return false;

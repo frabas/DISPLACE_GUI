@@ -191,6 +191,8 @@ Node::Node()
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
+      last_oth_catch_pops_at_szgroup(),
+      last_oth_disc_pops_at_szgroup(),
       pressure_pops_at_szgroup(),
       avai_pops_at_selected_szgroup(),
       impact_on_pops(),
@@ -571,6 +573,33 @@ vector<double> Node::get_removals_pops_at_szgroup(int name_pop) const
 }
 
 
+vector<double> Node::get_last_oth_catch_pops_at_szgroup(int name_pop) const
+{
+
+    vector<double> a_last_oth_catch_pops_at_szgroup;
+
+    for(unsigned int j = 0; j < last_oth_catch_pops_at_szgroup[name_pop].size(); j++)
+    {
+        a_last_oth_catch_pops_at_szgroup.push_back(last_oth_catch_pops_at_szgroup[name_pop] [j]);
+    }
+
+    return(a_last_oth_catch_pops_at_szgroup);
+}
+
+vector<double> Node::get_last_oth_disc_pops_at_szgroup(int name_pop) const
+{
+
+    vector<double> a_last_oth_disc_pops_at_szgroup;
+
+    for(unsigned int j = 0; j < last_oth_disc_pops_at_szgroup[name_pop].size(); j++)
+    {
+        a_last_oth_disc_pops_at_szgroup.push_back(last_oth_disc_pops_at_szgroup[name_pop] [j]);
+    }
+
+    return(a_last_oth_disc_pops_at_szgroup);
+}
+
+
 vector<double>  Node::get_pressure_pops_at_szgroup(int name_pop) const
 {
 
@@ -878,6 +907,8 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (Ns_pops_at_szgroup, nbpops, nbszgroups);
     reinit (Ns_pops_at_szgroup_at_month_start, nbpops, nbszgroups);
     reinit (removals_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (last_oth_catch_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (last_oth_disc_pops_at_szgroup, nbpops, nbszgroups);
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
     reinit (impact_on_pops, nbpops);
     reinit (cumcatches_per_pop, nbpops);
@@ -957,6 +988,24 @@ void Node::set_removals_pops_at_szgroup(int name_pop, const vector<double>& newv
 	{
 		removals_pops_at_szgroup[name_pop][j]= newval[j];
 	}
+
+}
+
+void Node::set_last_oth_catch_pops_at_szgroup(int name_pop, const vector<double>& newval)
+{
+    for(unsigned int j = 0; j < last_oth_catch_pops_at_szgroup[name_pop].size(); j++)
+    {
+        last_oth_catch_pops_at_szgroup[name_pop][j]= newval[j];
+    }
+
+}
+
+void Node::set_last_oth_disc_pops_at_szgroup(int name_pop, const vector<double>& newval)
+{
+    for(unsigned int j = 0; j < last_oth_disc_pops_at_szgroup[name_pop].size(); j++)
+    {
+        last_oth_disc_pops_at_szgroup[name_pop][j]= newval[j];
+    }
 
 }
 
@@ -1089,6 +1138,25 @@ void Node::clear_removals_pops_at_szgroup(int namepop)
 		{
             removals_pops_at_szgroup[namepop][sz] = 0;
 		}
+}
+
+
+void Node::clear_last_oth_catch_pops_at_szgroup(int namepop)
+{
+    dout(cout  << "clear oth catch on nodes..." << endl);
+        for(unsigned int sz = 0; sz < last_oth_catch_pops_at_szgroup[namepop].size(); sz++)
+        {
+            last_oth_catch_pops_at_szgroup[namepop][sz] = 0;
+        }
+}
+
+void Node::clear_last_oth_disc_pops_at_szgroup(int namepop)
+{
+    dout(cout  << "clear oth disc on nodes..." << endl);
+        for(unsigned int sz = 0; sz < last_oth_disc_pops_at_szgroup[namepop].size(); sz++)
+        {
+            last_oth_disc_pops_at_szgroup[namepop][sz] = 0;
+        }
 }
 
 
@@ -1251,11 +1319,12 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
-                          const vector<double>&  weight_at_szgroup, const vector<double>& totN)
+                          const vector<double>&  weight_at_szgroup, const vector<double>& totN,
+                          int will_I_discard_all)
 {
     dout(cout << "BEGIN: apply_oth_land()" << endl);
 
-	// DISSAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
+    // DISAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
 	// AND CONVERT INTO REMOVALS IN NUMBERS
 	// NOTICE THAT THIS IS THE SAME PROCEDURE THAN THE ONE IN do.catch()
 	vector <double> Ns_at_szgroup_pop = this->get_Ns_pops_at_szgroup(name_pop);
@@ -1268,7 +1337,8 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	vector <double>alloc_key             = Ns_at_szgroup_pop;
 								 // init
 	vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
-								 // init
+    vector <double>disc_per_szgroup     = Ns_at_szgroup_pop;
+                                 // init
 	vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
 								 // init
 	vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
@@ -1295,18 +1365,16 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	vector<double> clup_sel_ogive (clupeid_sel_ogive, clupeid_sel_ogive + sizeof(clupeid_sel_ogive) / sizeof(double) );
 	vector<double> gad_sel_ogive (gadoid_sel_ogive, gadoid_sel_ogive + sizeof(gadoid_sel_ogive) / sizeof(double) );
 	vector<double> sel_ogive;
-    if(name_pop==10 || name_pop==11) // HARDCODING
-	{
-		sel_ogive =gad_sel_ogive;
-	}
-	else						 // i.e. 3 and 7
-	{
-		sel_ogive =clup_sel_ogive;
-	}
+    //if(name_pop==10 || name_pop==11) // HARDCODING
+    //{
+        sel_ogive =gad_sel_ogive;
+    //}
+    //else						 // i.e. 3 and 7
+    //{
+    //	sel_ogive =clup_sel_ogive;
+    //}
 
-	//vector <double> dis_ogive (NBSZGROUP, 0);
-	//double default_dis_ogive [ ] = {0.5,0.1,0.012,0.001,0,0,0,0,0,0,0,0,0,0};
-	double default_dis_ogive [ ] = {0.634,0.366,0.161,0.06,0.021,0.007,0.002,0.001,0,0,0,0,0,0};
+    double default_dis_ogive [ ] = {0.634,0.366,0.161,0.06,0.021,0.007,0.002,0.001,0,0,0,0,0,0}; // 14 szgroups
 	vector<double> dis_ogive (default_dis_ogive, default_dis_ogive + sizeof(default_dis_ogive) / sizeof(double) );
 
 	// compute available biomass via selectivity
@@ -1360,14 +1428,30 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 								 // nothing left.
 					new_Ns_at_szgroup_pop[szgroup]=0;
 								 // just right after the calculation of removals, reverse back to get the landings only
-					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-				}
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
+                    catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
+
+                    if(will_I_discard_all==1)
+                    {
+                    disc_per_szgroup[szgroup] = disc_per_szgroup[szgroup]  + catch_per_szgroup[szgroup];
+                    catch_per_szgroup[szgroup]= 0; // DISCARD ALL!
+                    }
+
+                }
 				else
 				{
                     // finally, impact the N
 					new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 								 // reverse back to get the landings only
-					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
+                    disc_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *dis_ogive[szgroup]; // first...
+                    catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]); //..second
+
+                    if(will_I_discard_all==1)
+                    {
+                    disc_per_szgroup[szgroup] = disc_per_szgroup[szgroup]  + catch_per_szgroup[szgroup];
+                    catch_per_szgroup[szgroup]= 0; // DISCARD ALL!
+                    }
+
                     //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
 					// update the availability to impact the future vessel cpue
 					double val=0;// init
@@ -1418,19 +1502,25 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 			}
 		}
 
-		// additionally, impact the catches realized on this node
-        dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
-		oth_land_this_pop_this_node=0;
-        for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
-		{
-			oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
-		}
-        dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
+        // check catches realized on this node
+        //dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
+        //oth_land_this_pop_this_node=0;
+        //for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
+        //{
+        //	oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
+        //}
+        //dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
-		this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
+
+        // updates
+        this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
 		this->set_removals_pops_at_szgroup(  name_pop, new_removals_at_szgroup_pop);
+        this->set_last_oth_catch_pops_at_szgroup(  name_pop, catch_per_szgroup); // for tracking in pop stat panel
+        this->set_last_oth_disc_pops_at_szgroup(  name_pop, disc_per_szgroup);   // for tracking in pop stat panel
 
-	}
+
+
+    }
 	else
 	{
         cout  << "no biomass available here...." << tot << endl;

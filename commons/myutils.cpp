@@ -998,19 +998,33 @@ fill in
 */
 bool fill_in_param_sr(istream& in, vector<double>& param_sr)
 {
-    double val;
-    for(unsigned int i = 0; i < param_sr.size(); i++)
-    {
-        in>> val;
-        param_sr[i] = val;
+    param_sr.clear();
+    try {
+        while (in) {
+
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            double val = boost::lexical_cast<double>(line);
+            param_sr.emplace_back (val);
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        return false;
     }
-    dout(cout  << "read param_sr"  << endl << flush);
+
+    while(param_sr.size()<3) param_sr.emplace_back (0.0);
+
+    cout  << "read param_sr"  << endl;
 
     for(unsigned int i = 0; i < param_sr.size(); i++)
     {
-        dout(cout  << param_sr[i] << " ");
+        cout  << param_sr[i] << " ";
     }
-    dout(cout  << endl);
+    cout  << endl;
 
     return true;
 }

@@ -50,6 +50,8 @@ QVariant SchedulerJobAdapter::data(const QModelIndex &index, int role) const
         return job.getSimulationOutputName();
     case NumSteps:
         return job.getSimulationSteps();
+    case UseStaticPaths:
+        return job.getUsingStaticPaths();
     }
 
     return QVariant::Invalid;
@@ -76,6 +78,9 @@ bool SchedulerJobAdapter::setData(const QModelIndex &index, const QVariant &valu
     case NumSteps:
         job.setSimulationSteps(value.toInt(&r));
         break;
+    case UseStaticPaths:
+        job.setUsingStaticPaths(value.toInt(&r));
+        break;
     default:
         r = false;
         break;
@@ -100,6 +105,9 @@ QVariant SchedulerJobAdapter::headerData(int section, Qt::Orientation orientatio
         return tr("Output folder name");
     case NumSteps:
         return tr("Steps");
+    case UseStaticPaths:
+        return tr("Use static paths");
+
     }
 
     return QVariant::Invalid;

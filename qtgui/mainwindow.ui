@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -103,11 +103,11 @@
    </widget>
    <widget class="QMenu" name="menuGraph">
     <property name="title">
-     <string>Graph</string>
+     <string>Graph Creator</string>
     </property>
     <widget class="QMenu" name="menuFormats_conversion">
      <property name="title">
-      <string>Formats conversion</string>
+      <string>Formats conversion (deprecated)</string>
      </property>
      <addaction name="actionShortest_Path_to_Binary"/>
      <addaction name="actionShortest_Path_to_Text"/>
@@ -118,14 +118,13 @@
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
+    <addaction name="actionCheck_for_isolated_subgraphs"/>
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="actionLoadStockNames"/>
-    <addaction name="separator"/>
-    <addaction name="actionCreate_Shortest_Path"/>
-    <addaction name="actionLink_Shortest_Path_Folder"/>
-    <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
+    <addaction name="actionAdd_Penalty_from_File"/>
+    <addaction name="separator"/>
     <addaction name="actionAssign_Landscape_codes"/>
     <addaction name="actionAssign_Total_benthos_biomass"/>
     <addaction name="actionAssign_Total_benthos_number"/>
@@ -141,8 +140,9 @@
     <addaction name="actionMergeWeights"/>
     <addaction name="actionMergePings"/>
     <addaction name="actionCalcPopDistribution"/>
-    <addaction name="actionCheck_for_isolated_subgraphs"/>
     <addaction name="separator"/>
+    <addaction name="actionLink_Shortest_Path_Folder"/>
+    <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="menuFormats_conversion"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
@@ -361,7 +361,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -399,17 +399,47 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>Number at size</string>
+                  <string>Number at size group</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Fishing mortality F</string>
+                  <string>Catches per szgr in kg</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Spawning Stock Biomass SSB</string>
+                  <string>Discards per szgr in kg</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fishing mortality F at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Natural mortality M at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Number at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Weight at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Maturity at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Spawning Stock Biomass SSB at szgrp</string>
                  </property>
                 </item>
                 <item>
@@ -430,6 +460,11 @@
                 <item>
                  <property name="text">
                   <string>Proportion of mature fish</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>F vs. Effort (wip!)</string>
                  </property>
                 </item>
                </widget>
@@ -1718,7 +1753,7 @@ L3</string>
      <normaloff>:/icons/loadsim.png</normaloff>:/icons/loadsim.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Load Model...</string>
+    <string>&amp;Load a Scenario Model...</string>
    </property>
   </action>
   <action name="actionScenario">
@@ -1754,7 +1789,7 @@ L3</string>
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
-    <string>Load results...</string>
+    <string>Load Results from a Database...</string>
    </property>
   </action>
   <action name="actionConfiguration">
@@ -1784,7 +1819,7 @@ L3</string>
      <normaloff>:/icons/compass.png</normaloff>:/icons/compass.png</iconset>
    </property>
    <property name="text">
-    <string>Import Shapefile...</string>
+    <string>Import GIS Shapefiles...</string>
    </property>
   </action>
   <action name="actionPalettes">
@@ -1873,7 +1908,7 @@ L3</string>
   </action>
   <action name="actionExport_Graph">
    <property name="text">
-    <string>Export...</string>
+    <string>Export (optional)...</string>
    </property>
   </action>
   <action name="actionLoad_Graph">
@@ -1882,7 +1917,7 @@ L3</string>
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
-    <string>Load...</string>
+    <string>Load Graph...</string>
    </property>
   </action>
   <action name="actionCreate_Graph">
@@ -1897,12 +1932,12 @@ L3</string>
   </action>
   <action name="actionLink_Shortest_Path_Folder">
    <property name="text">
-    <string>Link Shortest Paths Folder...</string>
+    <string>Link Shortest Paths Folder (optional)...</string>
    </property>
   </action>
   <action name="actionCreate_Shortest_Path">
    <property name="text">
-    <string>Create Static Shortest Paths...</string>
+    <string>Create Static Shortest Paths (optional)...</string>
    </property>
   </action>
   <action name="actionAdd_Penalty_from_File">
@@ -1921,7 +1956,7 @@ L3</string>
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
-    <string>Save...</string>
+    <string>Save Graph...</string>
    </property>
   </action>
   <action name="actionLink_Harbours_to_Graph">
@@ -1940,7 +1975,7 @@ L3</string>
   </action>
   <action name="actionAbout_displace">
    <property name="text">
-    <string>About displace...</string>
+    <string>About DISPLACE...</string>
    </property>
   </action>
   <action name="actionCSV_Editor">
@@ -1954,17 +1989,17 @@ L3</string>
   </action>
   <action name="actionMergeWeights">
    <property name="text">
-    <string>Merge Geodata to At-Sea Nodes...</string>
+    <string>Merge Geodata to At-Sea Nodes (deprecated)...</string>
    </property>
   </action>
   <action name="actionMergePings">
    <property name="text">
-    <string>Merge Geodata to Harbour Nodes...</string>
+    <string>Merge Geodata to Harbour Nodes (deprecated)...</string>
    </property>
   </action>
   <action name="actionCalcPopDistribution">
    <property name="text">
-    <string>Calculate Population Distribution...</string>
+    <string>Calculate Population Distribution (deprecated)...</string>
    </property>
   </action>
   <action name="actionExport_Map">
@@ -1989,12 +2024,12 @@ L3</string>
   </action>
   <action name="actionAssign_Landscape_codes">
    <property name="text">
-    <string>Assign Landscape codes...</string>
+    <string>Assign Landscape codes (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Area_codes">
    <property name="text">
-    <string>Assign Area codes...</string>
+    <string>Assign Area codes (optional)...</string>
    </property>
   </action>
   <action name="actionLoadStockNames">
@@ -2013,7 +2048,7 @@ L3</string>
   </action>
   <action name="actionCheck_for_isolated_subgraphs">
    <property name="text">
-    <string>Check for isolated subgraphs...</string>
+    <string>Check for Isolated Subgraphs...</string>
    </property>
   </action>
   <action name="actionClean_Selection">
@@ -2101,47 +2136,47 @@ L3</string>
   </action>
   <action name="actionAssign_Total_benthos_biomass">
    <property name="text">
-    <string>Assign Benthos Total Biomass...</string>
+    <string>Assign Benthos Total Biomass (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Total_benthos_number">
    <property name="text">
-    <string>Assign Benthos Total Number...</string>
+    <string>Assign Benthos Total Number (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Wind">
    <property name="text">
-    <string>Assign Wind...</string>
+    <string>Assign Wind (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_SST">
    <property name="text">
-    <string>Assign SST...</string>
+    <string>Assign SST (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Salinity">
    <property name="text">
-    <string>Assign Salinity...</string>
+    <string>Assign Salinity (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Nitrogen">
    <property name="text">
-    <string>Assign Nitrogen...</string>
+    <string>Assign Nitrogen (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Phosphorus">
    <property name="text">
-    <string>Assign Phosphorus...</string>
+    <string>Assign Phosphorus (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_Oxygen">
    <property name="text">
-    <string>Assign Oxygen...</string>
+    <string>Assign Oxygen (optional)...</string>
    </property>
   </action>
   <action name="actionAssign_DissolvedCarbon">
    <property name="text">
-    <string>Assign DissolvedCarbon...</string>
+    <string>Assign DissolvedCarbon (optional)...</string>
    </property>
   </action>
   <action name="actionBathymetry">

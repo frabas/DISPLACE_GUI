@@ -187,7 +187,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                     // ... / SSB_per_szgroup
                     dout(cout  << "write down the SSB...");
                     populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
-                    populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // here in kilos
+                    populations.at(sp)->set_proportion_mature_fish(populations.at(sp)->compute_proportion_mature_fish() ); // 0 to 1
                     vector <double> SSB_per_szgroup= populations.at(sp)->get_SSB_at_szgroup();
                     // reminder: tot_N_at_szgroup are in thousand in input file
                     //  but in absolute numbers here because have been multiplied by 1000 when importing
@@ -196,6 +196,13 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                        popstats  << SSB_per_szgroup.at(i)  << " " ;
                     }
 
+                    // ... / tot_M_at_age
+                    vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
+                    for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+                    {
+                                                 // output M in CUMUL over months, caution!
+                        popstats  << tot_M_at_age.at(a)  << " " ;
+                    }
 
                  popstats << " " <<  endl;
 
@@ -216,7 +223,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
 if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
-
+    int will_I_discard_all=0; // init
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
         outc(cout << "...pop " << sp << endl;)
@@ -250,6 +257,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // will be used in case of area_closure
             double cumul_oth_land_to_be_displaced=0.0;
             int a_source_node_idx=0;
+
+            // TO DO:
+            // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe to refined.
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
@@ -259,8 +269,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // apply "other" landings
                 // (also accounting for a potential multiplier (default at 1.0))
                 double oth_land_this_pop_this_node=
-                map_oth[a_list_nodes.at(n)->get_idx_node()]*
-                populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+                  map_oth[a_list_nodes.at(n)->get_idx_node()]*
+                   populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
 
                 // magic number for a the below scenario: add a stochastic variation
                 // area-based sce
@@ -330,17 +340,40 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             }
                             */
 
-                            if(dyn_alloc_sce.option(Options::TACs))
-                            {
                                 // prevent TAC overshoot from other_landings
-                                if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) {
-                                             oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
-                                }
+                                will_I_discard_all=0;
+                                if(dyn_alloc_sce.option(Options::TACs))
+                                {
+                                     if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                                     {
+                                            if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+                                            {  // STOP!
+                                               oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                            }
+                                            else
+                                            {
+                                                // CONTINUE & DISCARD ALL!
+                                            will_I_discard_all=1;
+                                            }
+                                     }
+                                 }
+
+                            // apply_oth_land()
+                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
+
+                            // then, collect and accumulate tot_C_at_szgroup
+                            vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                            vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
+                            vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                            vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
+                            for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                            {
+                               newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                               newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
                             }
-
-                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
-
+                            populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                            populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
 
 
                         }
@@ -348,28 +381,59 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     }
                     else
                     {
+
+                        // prevent TAC overshoot from other_landings
+                        will_I_discard_all=0;
                         if(dyn_alloc_sce.option(Options::TACs))
                         {
-                            // prevent TAC overshoot from other_landings
-                            if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()){
-                                oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
-                            }
-
-                        }
+                             if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                             {
+                                    if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+                                    {  // STOP!
+                                       oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                    }
+                                    else
+                                    {
+                                        // CONTINUE & DISCARD ALL!
+                                    will_I_discard_all=1; // all catches in apply_oth_land() will actually go to discards_per_szgroup, for the tracking...
+                                    }
+                             }
+                         }
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
+
+
+                        // then, collect and accumulate tot_C_at_szgroup
+                        vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                        vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
+                        vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
+                        vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
+                        for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                        {
+                           newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                           newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
+                        }
+                        populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                        populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
 
                     }
                 }
 
                 // update landings in pop from oth landings
-                double so_far = (populations.at(name_pop)->get_landings_so_far()) +
-                    oth_land_this_pop_this_node;
-                populations.at(name_pop)->set_landings_so_far(so_far);
+                if(will_I_discard_all==0)
+                {
+                   double so_far = (populations.at(name_pop)->get_landings_so_far()) +
+                                      oth_land_this_pop_this_node;
+                   populations.at(name_pop)->set_landings_so_far(so_far);
+                }
+
+
+
+
 
             }
 
@@ -444,11 +508,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                     // update, export and clear for the next time...
-                    if(export_vmslike  && impact_on_pop!=0)
-                    {
-                        if(tstep < 8761) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
-                        a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
-                    }
+                    //if(export_vmslike  && impact_on_pop!=0)
+                    //{
+                        // tstep == 34321 is 1st december 4th year
+                        if(tstep == 34321) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
+                        if(tstep == 34321) a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
+                    //}
                          // RE-INIT if no cumul is wished
                 //a_list_nodes.at(n)->clear_removals_pops_at_szgroup(name_pop);
                 //a_list_nodes.at(n)->clear_impact_on_pops();
@@ -485,7 +550,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
             */
 
-            populations.at(sp)->compute_tot_N_and_F_and_M_and_W_at_age();
+            populations.at(sp)->compute_tot_N_and_F_and_W_at_age();
 
         }
         else
@@ -509,7 +574,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 //cout << "apply M on the whole pop..." << endl;
                 //populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
                outc(cout << "apply M on each node of the pop..." << endl);
-                vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
+               vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
                 vector <int> species_on_node;
                 for (unsigned int n=0; n<a_list_nodes.size(); n++)
                 {
@@ -526,7 +591,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             a_prop_M.at(spp)=0.0; // put 0 in prop if pop not found on this node
                         }
                     }
-                     if (dyn_pop_sce.option(Options::sizeSpectra))
+                    // keep track of the N before applying M
+                    populations.at(sp)->set_a_tot_N_at_szgroup_before_applying_M(populations.at(sp)->get_tot_N_at_szgroup());
+
+                    //... then apply M:
+                    if (dyn_pop_sce.option(Options::sizeSpectra))
                      {
                         a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
                      }
@@ -535,9 +604,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
                      }
                 }
-                // then re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
+                // then, re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();
 
+                // then, re-estimate what the applied M has been, to keep it tracked later in popstats
+                populations.at(sp)->compute_tot_M_at_age();
 
 
                 // apply only at the beginning of the year (this is maybe not always relevant...)
@@ -545,15 +616,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 {
                    outc(cout<< "ADD RECRUITS" << endl);
                     //populations[sp]->add_recruits_from_eggs();
-                    vector <double> params = populations[sp]->get_param_sr();
-                    if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
-                    {
-                       populations[sp]->add_recruits_from_a_fixed_number();
-                    }
-                    else
-                    {
-                       populations[sp]->add_recruits_from_SR();
-                    }
+                    //vector <double> params = populations[sp]->get_param_sr();
+                    //if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
+                    //{
+                    //   populations[sp]->add_recruits_from_a_fixed_number();
+                    //}
+                    //else
+                    //{
+                     //  populations[sp]->add_recruits_from_SR();
+                    //}
 
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
                     // compute the cpue_multiplier
@@ -689,6 +760,22 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                }
                */
 
+               // apply only at the beginning of the year (this is maybe not always relevant...)
+               if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+               {
+                  outc(cout<< "ADD RECRUITS" << endl);
+                   //populations[sp]->add_recruits_from_eggs();
+                   vector <double> params = populations[sp]->get_param_sr();
+                   if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
+                   {
+                      populations[sp]->add_recruits_from_a_fixed_number();
+                   }
+                   else
+                   {
+                      populations[sp]->add_recruits_from_SR();
+                   }
+                }
+
             // spread out the recruits
             // apply only by semester, to be consistent with the timeframe of survey data
             if(do_growth)
@@ -777,6 +864,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
 
                         popstats  << SSB_per_szgroup.at(i) << " " ;
+                        }
+
+                        // ... / tot_M_at_age
+                        vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
+                        for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
+                        {
+                                                     // output M in CUMUL over months, caution!
+                            popstats  << tot_M_at_age.at(a)  << " " ;
                         }
 
 
@@ -877,10 +972,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                 // RE-INIT....
                                 populations.at(sp)->clear_tot_F_at_age();
+                                populations.at(sp)->clear_tot_M_at_age();
                                 //=> obviously, F restart from 0 each year...
                                 cout << "Adding to landings_at_end_of_years this pop "<< sp << ": " << populations.at(sp)->get_landings_so_far() << endl;
                                 populations.at(sp)->add_to_landings_at_end_of_years(populations.at(sp)->get_landings_so_far());
                                 populations.at(sp)->set_landings_so_far(0);
+                                populations.at(sp)->clear_tot_C_at_szgroup();
+                                populations.at(sp)->clear_tot_D_at_szgroup();
 
                             //}
                             //else
@@ -965,7 +1063,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 
      }
 

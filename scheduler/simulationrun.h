@@ -14,6 +14,7 @@ class SimulationRun
     QString mSimName;
     int nSteps = 0;
     int nThreads = 0;
+    int mUseStaticPaths=0;
 
 public:
     using DataAsTuple = std::tuple<std::string, std::string,
@@ -58,6 +59,9 @@ public:
 
     void setSimulationOutputName(QString name);
     QString getSimulationOutputName() const { return mOutName; }
+
+    void setUsingStaticPaths(int n);
+    int getUsingStaticPaths() const { return mUseStaticPaths; }
 
     void setSimulationName(QString name);
     QString getSimulationName() const { return mSimName; }

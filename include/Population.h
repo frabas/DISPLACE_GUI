@@ -82,11 +82,14 @@ class COMMONSSHARED_EXPORT Population
 		double get_avai7_beta() const;
 		double get_cpue_multiplier() const;
         const vector<double>& get_tot_N_at_szgroup() const;
+        const vector<double>& get_tot_C_at_szgroup() const;
+        const vector<double>& get_tot_D_at_szgroup() const;
         const vector<double>& get_true_tot_N_at_szgroup() const;
         const vector<double>& get_prop_migrants_in_tot_N_at_szgroup() const;
         const vector<double>& get_tot_N_at_szgroup_just_after_redistribution() const;
         const vector<double>& get_tot_N_at_szgroup_month_minus_1() const;
         const vector<double>& get_tot_N_at_szgroup_year_minus_1() const;
+        const vector<double>& get_a_tot_N_at_szgroup_before_applying_M() const;
         const vector<double>& get_tot_N_at_age() const;
         const vector<double>& get_perceived_tot_N_at_age() const;
         const vector<double>& get_tot_N_at_age_last_quarter() const;
@@ -134,11 +137,14 @@ class COMMONSSHARED_EXPORT Population
 		void set_cpue_multiplier(double _cpue_multiplier);
         void set_hyperstability_param(double _hyperstability_param);
         void set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup);
+        void set_tot_C_at_szgroup(const vector<double>& _C_at_szgroup);
+        void set_tot_D_at_szgroup(const vector<double>& _D_at_szgroup);
         void set_true_tot_N_at_szgroup(const vector<double>& _true_tot_N_at_szgroup);
         void set_prop_migrants_in_tot_N_at_szgroup(const vector<double>& _prop_migrants_at_szgroup);
         void set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution);
         void set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1);
         void set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1);
+        void set_a_tot_N_at_szgroup_before_applying_M(const vector<double>& _a_tot_N_at_szgroup_before_applying_M);
         void set_tot_N_at_age(const vector<double>& _N_at_age);
         void set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age);
         void set_tot_N_at_age_last_quarter(const vector<double>& _N_at_age_last_quarter);
@@ -173,14 +179,18 @@ class COMMONSSHARED_EXPORT Population
 		void aggregate_N();		 // aggregate from nodes
 								 // do a cumul for F
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
-		void compute_tot_N_and_F_and_M_and_W_at_age();
+        void compute_tot_N_and_F_and_W_at_age();
+        void compute_tot_M_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
         double compute_proportion_mature_fish();
         void compute_TAC(double multiOnTACconstraint, int HCR);
 								 // clear the cumul
 		void clear_tot_F_at_age();
-		void do_growth();		 // apply the size transition matrix
+        void clear_tot_M_at_age();
+        void clear_tot_C_at_szgroup();
+        void clear_tot_D_at_szgroup();
+        void do_growth();		 // apply the size transition matrix
 								 // stock-recruitment relationship via fecundity_at_szgroup
         void apply_overall_migration_fluxes(vector<Population* >& populations);
 
@@ -211,6 +221,10 @@ class COMMONSSHARED_EXPORT Population
 								 //
 		vector<double> tot_N_at_szgroup;
                                  //
+        vector<double> tot_C_at_szgroup;
+                                 //
+        vector<double> tot_D_at_szgroup;
+
         vector<double> true_tot_N_at_szgroup; // same as tot_N_at_szgroup if pop is 100% of the same species (i.e. different if stock mixing occurs)
                                  //
         vector<double> prop_migrants_in_N_at_szgroup; //0 if pop is 100% of the same species (i.e. different if stock mixing occurs)
@@ -221,6 +235,8 @@ class COMMONSSHARED_EXPORT Population
 								 //
 		vector<double> tot_N_at_szgroup_year_minus_1;
 								 //
+        vector<double> a_tot_N_at_szgroup_before_applying_M;
+
 		vector<double> tot_N_at_age;
         vector<double> perceived_tot_N_at_age;
                                  //

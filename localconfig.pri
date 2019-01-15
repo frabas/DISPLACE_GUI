@@ -107,4 +107,5 @@ DESTDIR=$$top_builddir
 
 HEADERS += \
     $$PWD/include/dbtypes.h \
-    $$PWD/include/modeltypes.h
+    $$PWD/include/modeltypes.h \
+    $$PWD/include/plottypes.h

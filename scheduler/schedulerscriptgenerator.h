@@ -39,6 +39,8 @@ private:
     static const QString sKeySimuOutName;
     static const QString sKeySimuLength;
     static const QString sKeySimuNumThreads;
+    static const QString sKeyJobUseStaticPaths;
+
 
     static const QString sValueAppExec;
 };

@@ -11,11 +11,11 @@ struct COMMONSSHARED_EXPORT ModelConfig {
     int szGroups;
 
     std::vector <int> m_implicit_pops;
-    std::vector <int> m_implicit_pops_level2;
-    std::vector <int> m_grouped_tacs;
     std::vector <double> m_calib_oth_landings;
     std::vector <double> m_calib_weight_at_szgroup;
     std::vector <double> m_calib_cpue_multiplier;
+    std::vector <int> m_implicit_pops_level2;
+    std::vector <int> m_grouped_tacs;
 };
 
 

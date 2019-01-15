@@ -88,4 +88,5 @@ void RunDialog::on_RunDialog_accepted()
     mData.setSimulationName(ui->simName->text());
     mData.setNumThreads(ui->threads->value());
     mData.setSimulationSteps(ui->simSteps->value());
+    mData.setUsingStaticPaths(ui->useStaticPaths->value());
 }

@@ -1690,24 +1690,33 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
                 !binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) ) // i.e. apply from second y only (also bc no end_of_years reached yet...)
         {
            vector <double> amount_fish_per_y;
+           int a_unit=1;
            if(dyn_alloc_sce.option(Options::TACs))
            {
               amount_fish_per_y = populations[pop]->get_tac()->get_ts_tac();
+              a_unit=1000; // because tac in tons
            }
            else
            {
               amount_fish_per_y= populations[pop]->get_landings_at_end_of_years();
+              a_unit=1; // because landings in kilo
            }
-           double amount_to= amount_fish_per_y.at(0);
+           double amount_to= amount_fish_per_y.at(0)*a_unit;
            double numerator=0.0;
            double denominator=0.0;
            for(int i=0; i<amount_fish_per_y.size();++i)
            {
-              numerator += pow(amount_fish_per_y.at(i), -0.25);
+              if(amount_fish_per_y.at(i)<=1) amount_fish_per_y.at(i)=amount_to; // so that num/denom will be 1...to avoid nan or a large price_multiplier when amount caught is very very low
+              numerator += pow(amount_fish_per_y.at(i)*a_unit, -0.25);
               denominator += pow(amount_to, -0.25);
            }
            price_multiplier=numerator/denominator;
-           if(price_multiplier!=price_multiplier) price_multiplier=1.0; // debug if nan
+           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
+           if(!isfinite(price_multiplier))
+           {
+               dout(cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << endl);
+               price_multiplier=1.0; // extra precaution if any unexpected NaN.
+           }
            dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
         }
 
@@ -2385,6 +2394,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         //if(tstep>8761  && !is_individual_vessel_quotas)
         if(!is_individual_vessel_quotas)
         {
+            // remember that grouped_tacs is in form of e.g. 1 1 1 2 2 3 3 4 4 5 5 5 5 5 etc. as many as stocks.
             for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
              global_quotas.at(pop) = populations.at(pop)->get_tac()->get_current_tac(); // default when global TAC
@@ -2600,7 +2610,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     //for(int i = 0; i < cumcatch_fgrounds.size(); i++){
                     //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
                     //}
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
 
 
                     // compute the landings vs. discard part
@@ -2609,7 +2619,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
                     }
                     int inter=0;
                     int a_szgroup=0;
@@ -2620,16 +2630,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
                     double left_to_MLS=0;
                     double right_to_MLS=0;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
                     if(selectivity_per_stock[pop].at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
                         left_to_MLS  = trapezoidal(0, inter, selectivity_per_stock[pop]) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
                         right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " here" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " here" << endl;
 
                     } else{
                         left_to_MLS  = trapezoidal(0, MLS_cat, selectivity_per_stock[pop]); // discards
                         right_to_MLS = trapezoidal(MLS_cat, inter, selectivity_per_stock[pop])+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " there" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " there" << endl;
 
                     }
 
@@ -2641,9 +2651,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
 
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
-// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
 
                     // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
                     //  AND CONVERT INTO REMOVALS IN NUMBER
@@ -2804,6 +2814,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                             // caution: cumul landings at the trip level
+//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
+//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup]; // ping catch in weight
@@ -2989,6 +3001,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
+                                    dout(cout << "tac exhausted for pop "<< pop << ": discards all !!!!  because " << "(" << so_far << "/1000) > (" << global_quotas.at(pop) << ")" << endl);
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all! => no landings
                                     ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // => catches=discards
@@ -3264,6 +3277,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         // contribute to accumulated catches on this node
         this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
         this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+
+
+        // collect and accumulate tot_C_at_szgroup at the end of the pop loop
+        // (accumulate in szgroup 0 if implicit pop)
+        vector <double> newTotC= populations.at(pop)->get_tot_C_at_szgroup();
+        vector <double> newTotD= populations.at(pop)->get_tot_D_at_szgroup();
+        for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
+        {
+           newTotC.at(szgroup) = newTotC.at(szgroup) + catch_pop_at_szgroup.at(pop).at(szgroup);
+           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_pop_at_szgroup.at(pop).at(szgroup);
+        }
+        populations.at(pop)->set_tot_C_at_szgroup(newTotC);
+        populations.at(pop)->set_tot_D_at_szgroup(newTotD);
 
     } // end pop
 
@@ -4378,6 +4404,19 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     //int ground=grds[0];
     outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl);
 
+    /*if(ground.toIndex()==12132) {
+        cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl;
+        cout << "nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+        cout << "nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+        cout << "nbOpenedDays on this ground this met is " <<  (31- nodes.at(ground.toIndex())->getNbOfDaysClosed(this->get_metier()->get_name())) << endl;
+        const auto &somefreqgrds = this->get_freq_fgrounds();
+        for (int i=0; i<somefreqgrds.size();++i)
+        {
+            cout << somefreqgrds.at(i) << " ";
+        }
+        cout << endl;
+    }
+    */
 
     // get the shortest path between source and destination
     // with the list of intermediate nodes
@@ -4720,6 +4759,12 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
         dout(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
+       /* if(next_ground.toIndex()==12132){
+            cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl;
+            cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+            cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+         }
+       */
         unlock();
         return 1; // actually, there is not found possibility for a change....
     }
@@ -4812,7 +4857,13 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
-
+    /*if(next_ground.toIndex()==12132){
+        cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl;
+        cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl;
+        cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+        cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+     }
+     */
 
      /*if(path.size()==0) {
          cout << "Path is empty!!!" << endl;

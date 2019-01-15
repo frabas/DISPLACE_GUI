@@ -181,7 +181,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     log.lastHarbour = v->get_loc()->get_idx_node().toIndex();
     log.revenueAV = v->getLastTripRevenues();
     log.revenueExAV = v->getLastTripExplicitRevenues();
-    log.timeAtSea = v->get_timeatsea();
+    log.timeAtSea = v->get_cumsteaming();
     log.reasonToGoBack = v->get_reason_to_go_back();
     log.cumFuelCons = v->get_cumfuelcons();
 
@@ -716,7 +716,21 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
-        fld = p->mPopDynTable->fldN;
+        fld = p->mPopDynTable->fldNz;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Catches:
+        fld = p->mPopDynTable->fldC;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Discards:
+        fld = p->mPopDynTable->fldD;
         name= p->mPopDynTable->name();
         fldTStep = p->mPopDynTable->fldTStep;
         fldPopId = p->mPopDynTable->fldPopId;
@@ -724,6 +738,34 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     case displace::plot::PopulationStat::Mortality:
         fld = p->mPopDynTable->fldF;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::NatMortality:
+        fld = p->mPopDynTable->fldM;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::NumberAtAge:
+        fld = p->mPopDynTable->fldNa;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::WeightAtAge:
+        fld = p->mPopDynTable->fldW;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::MaturityAtAge:
+        fld = p->mPopDynTable->fldMat;
         name= p->mPopDynTable->name();
         fldTStep = p->mPopDynTable->fldTStep;
         fldPopId = p->mPopDynTable->fldPopId;

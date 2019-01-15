@@ -1035,6 +1035,7 @@ void MainWindow::on_cmdSetup_clicked()
 
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
         set.setValue(Simulator::SET_VERBOSITY, dlg.getVerbosityLevel());
+
      
         if (mSimulation){
             mSimulation->setVerbosityLevel(dlg.getVerbosityLevel());
@@ -1588,7 +1589,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
                                                    bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
-                             tr("Graph weights are changed, you'll need to recreate the shortest path."));
+                             tr("Graph weights has changed, if static paths in use you'll need to recreate the shortest paths."));
     }
 }
 
@@ -1898,7 +1899,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
         mMapController->redraw();
 
-        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
+        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights has changed, if using static paths you'll need to recreate the shortest path."));
     }
 }
 
@@ -3203,12 +3204,19 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         auto r = p.getOptions();
 
         exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Aggregate), r);
+        exportPlot (out + QString("/pop_catch.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Catches), r);
+        exportPlot (out + QString("/pop_discard.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Discards), r);
         exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
+        exportPlot (out + QString("/pop_natmortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NatMortality), r);
+        exportPlot (out + QString("/pop_numberatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NumberAtAge), r);
+        exportPlot (out + QString("/pop_weightatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::WeightAtAge), r);
+        exportPlot (out + QString("/pop_maturityatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::MaturityAtAge), r);
         exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::SSB), r);
         exportPlot (out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
         exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);
         exportPlot (out + QString("/pop_ffmsy.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FFmsy), r);
         exportPlot (out + QString("/pop_propmature.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::PropMature), r);
+        exportPlot (out + QString("/pop_fvseffort.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FvsEffort), r);
 
         exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Catches), r);
         exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Discards), r);

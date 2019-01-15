@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE ( test_spe_SSB_R_parameters_biolsce_dat )
     vector<double> res(2);
     vector<double> ex = {3.3, 4.54};
 
-    std::istringstream ss ("3.3\n4.54\n");
+    std::istringstream ss ("3.3\n4.54\n0.2\n");
     bool r = fill_in_param_sr(ss, res);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());

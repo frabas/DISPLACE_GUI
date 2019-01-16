@@ -45,3 +45,4 @@ cmake-build-*
 .idea/shelf
 .idea
 /CMakeLists.txt.user
+/CMakeSettings.json

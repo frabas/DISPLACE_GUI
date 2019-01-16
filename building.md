@@ -40,3 +40,27 @@ and so on for all packages.
 == Export the SDK package
 
 $ .\vcpkg.exe export --7zip GeographicLib cgal gdal msqlitecpp boost-program-options boost-interprocess sparsepp
+
+
+== Setting up cmake
+
+Cmake requires the following variables:
+
+CMAKE_TOOLCHAIN_FILE=<path-to-sdk>\scripts\buildsystems\vcpkg.cmake
+
+You can add the following lines to CMakeSettins.json to setup visual studio
+
+
+	"variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "C:\\path-to-sdk\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "C:\\Qt\\5.12.0\\msvc2017_64"
+        }
+      ]
+	  
+	  
+after each "ctestCommandsArgs" key.

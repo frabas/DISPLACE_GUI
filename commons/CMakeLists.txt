@@ -162,17 +162,11 @@ add_library(commons SHARED
         ${SOURCES}
         )
 
-if (WIN32)
-    set (GEOGRAPHIC_LIB Geographic-i)
-else()
-    set (GEOGRAPHIC_LIB Geographic)
-endif()
-
 target_link_libraries(commons
         formats
         msqlitecpp::msqlitecpp
         Boost::date_time
-        ${GEOGRAPHIC_LIB}
+        ${GeographicLib_LIBRARIES}
         ${LIBRARIES}
         )
 

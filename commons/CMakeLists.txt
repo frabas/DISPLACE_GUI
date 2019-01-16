@@ -1,4 +1,3 @@
-
 add_definitions(-DCOMMONS_LIBRARY -DWITH_BOOST)
 
 if (WIN32)
@@ -162,17 +161,11 @@ add_library(commons SHARED
         ${SOURCES}
         )
 
-if (WIN32)
-    set (GEOGRAPHIC_LIB Geographic-i)
-else()
-    set (GEOGRAPHIC_LIB Geographic)
-endif()
-
 target_link_libraries(commons
         formats
         msqlitecpp::msqlitecpp
         Boost::date_time
-        ${GEOGRAPHIC_LIB}
+        ${GeographicLib_LIBRARIES}
         ${LIBRARIES}
         )
 
@@ -180,4 +173,4 @@ target_link_libraries(commons
 install(TARGETS commons
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
-        COMPONENT libraries)
+COMPONENT libraries)

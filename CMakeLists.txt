@@ -3,7 +3,6 @@ project(displace VERSION 1.0 LANGUAGES C CXX)
 
 include (cmake/options.cmake)
 include (cmake/compiler.cmake)
-include (cmake/withconan.cmake)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -25,9 +24,11 @@ include(cmake/dependencies.cmake)
 
 add_subdirectory(formats)
 add_subdirectory(commons)
-add_subdirectory(QMapControl)
-add_subdirectory(qtcommons)
-add_subdirectory(qtgui)
+if (NOT WITHOUT_GUI)
+    add_subdirectory(QMapControl)
+    add_subdirectory(qtcommons)
+    add_subdirectory(qtgui)
+endif ()
 add_subdirectory(simulator)
 
 ## Tools
@@ -38,13 +39,18 @@ add_subdirectory(vmsmerger)
 
 ## Gui TOOLS
 
-add_subdirectory(dteditor)
-add_subdirectory(objeditor)
-add_subdirectory(tseditor)
-add_subdirectory(scheduler)
+if (NOT WITHOUT_GUI)
+    add_subdirectory(dteditor)
+    add_subdirectory(objeditor)
+    add_subdirectory(tseditor)
+    add_subdirectory(scheduler)
+endif ()
 
 ## Test
 
-add_subdirectory(tests)
+if (NOT WITHOUT_GUI)
+    add_subdirectory(tests)
+endif ()
+
 add_subdirectory(commons/commons_tests)
 

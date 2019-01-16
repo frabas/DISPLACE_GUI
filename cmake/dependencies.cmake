@@ -17,10 +17,12 @@ message ("GDAL library: ${GDAL_LIBRARY}")
 include_directories( ${GDAL_INCLUDE_DIR} )
 link_directories( ${GDAL_LIBRARY_DIRS} )
 
+if (NOT WITHOUT_GUI)
 find_package(CGAL REQUIRED)
 message ("CGAL version: ${CGAL_VERSION}")
 include_directories( ${CGAL_INCLUDE_DIR} )
 link_directories( ${CGAL_LIBRARY_DIRS} )
+endif ()
 
 find_package(Sparsepp REQUIRED)
 

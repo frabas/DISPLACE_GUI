@@ -11,6 +11,7 @@ include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_SOURCE_DIR}/include/
         ${CMAKE_SOURCE_DIR}/formats
+        ${Sparsepp_INCLUDE_DIRS}
 )
 
 set(SOURCES

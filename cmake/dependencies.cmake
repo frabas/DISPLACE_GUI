@@ -9,7 +9,8 @@ link_directories( ${Boost_LIBRARY_DIRS} )
 
 find_package(GeographicLib REQUIRED)
 message ("GeographicLib version: ${GeographicLib_VERSION}")
-include_directories( ${GeographicLib_INCLUDE_DIR} )
+if (NOT WITHOUT_GUI) include_directories( ${GeographicLib_INCLUDE_DIR} )
+if (WITHOUT_GUI) include_directories( ${GeographicLib_INCLUDE_DIRS} )
 link_directories( ${GeographicLib_LIBRARY_DIRS} )
 
 find_package(GDAL REQUIRED 1.11)

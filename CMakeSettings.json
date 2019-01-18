@@ -32,7 +32,17 @@
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_GUI\\install\\displacesdk_for_QtCreator\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "C:\\Qt\\5.12.0\\msvc2017_64"
+        }
+      ]
     },
     {
       "name": "x64-Release",
@@ -43,7 +53,17 @@
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_GUI\\install\\displacesdk_for_QtCreator\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "C:\\Qt\\5.12.0\\msvc2017_64"
+        }
+      ]
     }
   ]
 }

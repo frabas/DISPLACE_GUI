@@ -968,7 +968,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                 // export
                                 // ...export the cpue and oth_land multiplier
-                                populations.at(sp)->export_popdyn_annual_indic(popdyn_annual_indic, tstep);
+                                populations.at(sp)->export_popdyn_annual_indic(popdyn_annual_indic, tstep, dyn_alloc_sce);
 
                                 // RE-INIT....
                                 populations.at(sp)->clear_tot_F_at_age();

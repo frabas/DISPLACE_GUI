@@ -369,7 +369,8 @@ public:
         //double a_tariff = the_grds.at(idx_node_r)->get_tariffs();
         //cout << "...the tariff for that ground is: " << a_tariff << endl;
         //return  a_tariff >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
-        }
+		return 0.0;
+	}
 };
 
 

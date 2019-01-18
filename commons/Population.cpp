@@ -283,7 +283,8 @@ Population::Population(int a_name,
 
     // init tac
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
-	oth_land_multiplier=1.0;
+    fbar=0.0;
+    oth_land_multiplier=1.0;
 
     quota =init_tac[0];
     quota_uptake=0.0;
@@ -513,6 +514,11 @@ const vector<double>& Population::get_SSB_at_szgroup() const
 double Population::get_SSB() const
 {
 	return(SSB);
+}
+
+double Population::get_fbar() const
+{
+    return(fbar);
 }
 
 const vector<double>& Population::get_FFmsy() const
@@ -869,6 +875,11 @@ void Population::set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup)
 void Population::set_SSB(double _SSB)
 {
 	SSB=_SSB;
+}
+
+void Population::set_fbar(double _fbar)
+{
+    SSB=_fbar;
 }
 
 void Population::set_FFmsy(const vector<double> &_FFmsy)
@@ -1705,6 +1716,8 @@ void Population::clear_tot_D_at_szgroup()
 
 double Population::compute_fbar()
 {
+    tout(cout<< "compute fbar for pop..." << this->get_name() << endl);
+
     dout(cout<< "compute fbar..." << endl);
 	double fbar=0;
 	int age_min =this->fbar_ages_min_max.at(0);
@@ -1723,8 +1736,11 @@ double Population::compute_fbar()
         fbar+=a_tot_F_at_age[a];
 	}
 								 // then do the average...
-	fbar=fbar/(fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0));
-	return(fbar);
+    tout(cout<< "sum fbar..." << fbar << endl);
+    fbar=fbar/(fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0));
+    tout(cout<< "fbar..." << fbar << endl);
+    tout(cout<< "compute fbar...ok" << endl);
+    return(fbar);
 }
 
 
@@ -1797,7 +1813,9 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
     dout(cout<< "FMSYup:" << FMSY << endl);
     // 1. compute previous fbar
 								 // at the end of the last year, then for last year py...
-	double fbar_py= this->compute_fbar();
+    tout(cout<< "when computing TAC, first compute fbar for pop..." << this->get_name() << endl);
+    double fbar_py= this->compute_fbar();
+    this->set_fbar(fbar_py);
     dout(cout << "the fbar at y-1 for this pop is " << fbar_py << endl);
 
     vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
@@ -2595,10 +2613,12 @@ void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
 
 
 
-void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep)
+void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce)
 {
 
-	popdyn_annual_indic << setprecision(4) << fixed;
+    tout(cout << "begin export_popdyn_annual_indic..."<< endl);
+
+    popdyn_annual_indic << setprecision(4) << fixed;
 	// tstep / pop / F at szgroup / tot landings on pop i.e. including oth landings as well
 	popdyn_annual_indic << tstep << " " << this->get_name() << " ";
 	double oth_mult   =this->get_oth_land_multiplier();
@@ -2607,16 +2627,23 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 								 // output the annual multiplier
 	popdyn_annual_indic  << oth_mult << " " << cpue_mult << " ";
 
-	double fbar_py= this->compute_fbar();
+    tout(cout<< "when exporting, get fbar for pop..." << this->get_name() << endl);
+    double fbar_py= this->get_fbar();
 	popdyn_annual_indic  << fbar_py << " ";
 
 								 //...also including the oth land
 	double so_far    =this->get_landings_so_far();
 	popdyn_annual_indic  << so_far << " ";
 
-    vector<double> tacs = this->get_tac()->get_ts_tac();
-    double last_year_tac=tacs.at(tacs.size()-2); // because computeTAC() has just been called before this export
-    popdyn_annual_indic  << last_year_tac << " ";
+    tout(cout << "retrieve tacs if any..."<< endl);
+
+     double last_year_tac=0.0;
+     if(dyn_alloc_sce.option(Options::TACs))
+     {
+         vector<double> tacs = this->get_tac()->get_ts_tac();
+         last_year_tac=tacs.at(tacs.size()-2); // because compute_TAC() has just been called before this export
+     }
+     popdyn_annual_indic  << last_year_tac << " ";
 
 								 // attempt for a calibration to obtain same F
 	vector <double>W_at_age=this->get_tot_W_at_age();
@@ -2633,5 +2660,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	}
 
 	popdyn_annual_indic << " " <<  endl;
+
+    tout(cout << "export_popdyn_annual_indic...ok"<< endl);
 
 }

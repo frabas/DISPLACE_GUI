@@ -29,6 +29,7 @@
 #include "myutils.h"
 #include "Node.h"
 #include "Tac.h"
+#include <options.h>
 
 class COMMONSSHARED_EXPORT Population
 {
@@ -108,6 +109,7 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_proprecru_at_szgroup() const;
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;
+        double get_fbar() const;
         double get_proportion_mature_fish() const;
         const vector<double> &get_FFmsy() const;
         const vector<double>& get_param_sr() const;
@@ -162,6 +164,7 @@ class COMMONSSHARED_EXPORT Population
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
+        void set_fbar(double _fbar);
         void set_FFmsy(const vector<double>& _FFmsy);
         void set_is_choking_fisheries(int is_choking_fisheries);
         void set_proportion_mature_fish(double _proportion_mature_fish);
@@ -203,7 +206,7 @@ class COMMONSSHARED_EXPORT Population
 		void export_popdyn_N(ofstream& popdyn_N, int tstep);
 		void export_popdyn_F(ofstream& popdyn_F, int tstep);
         void export_popdyn_SSB(ofstream& popdyn_SSB, int tstep);
-        void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep);
+        void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce);
 
 	protected:
 	private:
@@ -263,7 +266,7 @@ class COMMONSSHARED_EXPORT Population
 								 //
 		vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
-        double SSB;				 //
+        double SSB ,fbar;				 //
         vector<double>  FFmsy;				 //
         double proportion_mature_fish;				 //
         int is_choking_fisheries;

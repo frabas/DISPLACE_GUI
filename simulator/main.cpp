@@ -5357,7 +5357,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     double ftarget = fbar_ages_min_max.at(2);
                     cout << "...the ftarget at y-1 for this pop is " << ftarget << endl;
                     ftarget_allpopav +=ftarget; // cumul...
-                    double fbar_py= populations.at(tariff_pop.at(ipop))->compute_fbar();
+                    cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop) << endl;
+                    double fbar_py= populations.at(tariff_pop.at(ipop))->get_fbar();
                     fbar_py_allpopav +=fbar_py; // cumul...
                     cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
                 }
@@ -5383,6 +5384,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
 
                // 2 - Re-init vessel total credits
+                cout<< "Re-init vessel total credits..." << endl;
                 fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {

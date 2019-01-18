@@ -5266,7 +5266,15 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& population
          }
          else
          {
-            still_some_quotas=1; // init
+            if(dyn_alloc_sce.option(Options::fishing_credits))
+            {
+                tout(cout << "What this vessel " << this->get_name() <<" has for remaining credits ? " << this->get_fishing_credits().at(0) << endl);
+                if(this->get_fishing_credits().at(0) <=0) still_some_quotas=0; // here, quota means credits
+            }
+            else
+            {
+               still_some_quotas=1; // init
+            }
          }
    }
 
@@ -5330,7 +5338,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& population
     }
     else
     {
-        dout(cout  << "no quota left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
+        dout(cout  << "no quota or credit left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
         unlock();
         return(0);
     }

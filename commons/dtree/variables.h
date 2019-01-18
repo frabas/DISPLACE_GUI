@@ -33,6 +33,7 @@ enum Variable {
     globalQuotaLeftOnAvoidedStksIs,    // ChooseGround
     saveFuel,                    // ChooseGround
     isInAreaClosure,             // ChooseGround
+    TariffThisGroundIs,          // ChooseGround
 
 
     arrivedOnGroundIs,                // StartFishing

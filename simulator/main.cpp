@@ -5339,11 +5339,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        // UPDATE THE TARIFF MAP
+        // UPDATE THE TARIFF MAP & RE-READ FISHING_CREDITS PER VESSEL
         if(dyn_alloc_sce.option(Options::fishing_credits) )
         {
 
-            // annual tariff HCR (currently pooling all tariff pops together)
+            // 1- annual tariff HCR (currently pooling all tariff pops together)
             if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
             {
                 cout << "Annual tariff HCR... " << endl;
@@ -5380,6 +5380,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 for (unsigned int icl=0; icl <tariff_pop.size();++icl)
                 {
                     arbitary_breaks_for_tariff.at(icl) * fmultiplier;
+                }
+
+               // 2 - Re-init vessel total credits
+                fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
+                for (unsigned int v=0; v<vessels.size(); v++)
+                {
+                   cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl;
+                   vector <double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
+                   for (int icr=0; icr <spe_fishing_credits.size();++icr)
+                   {
+                       spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
+                   }
+
+                   // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
+                   while (spe_fishing_credits.size() <= 3) spe_fishing_credits.push_back(0);
+
+                   vessels.at(v)->set_fishing_credits(spe_fishing_credits);
                 }
             }
 

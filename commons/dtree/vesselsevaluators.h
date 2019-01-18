@@ -358,6 +358,19 @@ public:
 };
 
 
+class VesselTariffThisGroundIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselTariffThisGroundIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        auto the_grds = v->get_fgrounds();
+        int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
+        //cout << "Tariff on this ground being evaluated..." << endl;
+        //double a_tariff = the_grds.at(idx_node_r)->get_tariffs();
+        //cout << "...the tariff for that ground is: " << a_tariff << endl;
+        //return  a_tariff >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
+        }
+};
 
 
 }

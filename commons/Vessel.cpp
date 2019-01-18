@@ -383,6 +383,8 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
+        mStateEvaluators[dtree::TariffThisGroundIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTariffThisGroundIsStateEvaluator);
 
 
 
@@ -5719,6 +5721,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
 
 
+
     // 3. traverseDTree for each possible relevant grounds
     types::NodeId ground= types::special::InvalidNodeId;
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
@@ -5743,6 +5746,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"globalQuotaLeftOnAvoidedStksIs"    // ChooseGround
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
+        //"TariffThisGroundIs" // ChooseGround               => relevant only if fishing_credits Option is active
         //=> TO DO: add the corresponding dtree evaluators...
 
         // cout << "traverse tree for ground " << ground << endl;

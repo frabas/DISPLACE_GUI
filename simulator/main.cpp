@@ -3287,6 +3287,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers);
 
 
+        // Give super power to each vessel (so that he can consult the common tariff map for example)
+        vessels[i]->set_map_of_nodes(nodes);
+
+
+
         // inform grounds in closed areas
         // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
 //        const auto &grds = vessels[i]->get_fgrounds();

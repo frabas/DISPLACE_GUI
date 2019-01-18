@@ -62,7 +62,7 @@ std::vector<std::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 
 
 
-vector<double> compute_distance_fgrounds_on_the_fly(vector<Node*>& nodes, types::NodeId from,
+vector<double> compute_distance_fgrounds_on_the_fly(vector<Node* >& nodes, types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
     outc (cout  << "look at the distances on the fly" << endl);
@@ -125,7 +125,7 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 }
 
 
-Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, int nbszgroups,
+Vessel::Vessel(Node* p_location, int a_idx_vessel, string a_name,  int nbpops, int nbszgroups,
                const vector<types::NodeId> &_harbours, const vector<types::NodeId> &_fgrounds, const vector<types::NodeId> &_fgrounds_init,
                const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds, const vector<double> &_freq_fgrounds_init,
                const vector<double> &_vessel_betas_per_pop,
@@ -383,8 +383,11 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
-        mStateEvaluators[dtree::TariffThisGroundIs] =
-                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTariffThisGroundIsStateEvaluator);
+        mStateEvaluators[dtree::lowestTariff] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselLowestTariffStateEvaluator);
+        mStateEvaluators[dtree::avoidHighTariffAreas] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselAvoidHighTariffAreasStateEvaluator);
+
 
 
 
@@ -500,6 +503,11 @@ vector<types::NodeId> &Vessel::get_fgrounds_in_closed_areas()
     return(fgrounds_in_closed_areas);
 }
 
+
+const std::vector<Node* > &Vessel::get_map_of_nodes() const
+ {
+     return(map_of_nodes);
+ }
 
 
 const vector<double> &Vessel::get_freq_harbours() const
@@ -1162,6 +1170,10 @@ void Vessel::reset_message()
     message= 0;
 }
 
+void Vessel::set_map_of_nodes (const vector<Node* > &_map_of_nodes)
+{
+    map_of_nodes=_map_of_nodes;
+}
 
 void Vessel::set_spe_harbours (const vector<types::NodeId> &_harbours)
 {
@@ -3611,7 +3623,7 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 
 
 vector<double> Vessel::expected_profit_on_grounds(int use_static_paths,
-                                                  vector<Node*>& nodes,
+                                                  vector<Node* > &nodes,
                                                   const std::vector<types::NodeId> &relevant_nodes,
                                                   const std::vector<PathShop> &pathshops)
 {
@@ -3769,7 +3781,7 @@ vector<double> Vessel::expected_profit_on_grounds(int use_static_paths,
 
 void Vessel::alloc_on_high_profit_grounds(int tstep,
                                           int use_static_paths,
-                                          vector<Node*>& nodes,
+                                          vector<Node* >&nodes,
                                           const std::vector<types::NodeId> &relevant_nodes,
                                           const std::vector<PathShop> &pathshops,
                                           ofstream& freq_profit)
@@ -4564,8 +4576,8 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   adjacency_map_t& adjacency_map,
                                                   vector <types::NodeId>& relevant_nodes,
                                                   const multimap<int, int>& nodes_in_polygons,
-                                                  vector<Node* >& nodes,
-                                                  vector <Metier*>& metiers,
+                                                  vector<Node* > &nodes,
+                                                  vector <Metier* > &metiers,
                                                   ofstream& freq_cpue,
                                                   ofstream& freq_distance
                                                   )
@@ -5727,7 +5739,10 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     }
 
 
-
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::lowestTariff) == true)
+    {
+    // TODO
+    }
 
 
     // 3. traverseDTree for each possible relevant grounds
@@ -5754,7 +5769,8 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"globalQuotaLeftOnAvoidedStksIs"    // ChooseGround
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
-        //"TariffThisGroundIs" // ChooseGround               => relevant only if fishing_credits Option is active
+        //"lowestTariff"   // ChooseGround               => relevant only if fishing_credits Option is active
+        // avoidHighTariffAreas  // ChooseGround               => relevant only if fishing_credits Option is active
         //=> TO DO: add the corresponding dtree evaluators...
 
         // cout << "traverse tree for ground " << ground << endl;
@@ -5816,6 +5832,21 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
            freq_grds.at(it)= 1 - freq_grds.at(it);
        }
    }
+
+    if(dyn_alloc_sce.option(Options::fishing_credits))
+    {
+      if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::avoidHighTariffAreas) == true)
+      {
+        freq_grds= this->get_freq_fgrounds();
+        for(int gr=0; gr < grds.size(); ++gr)
+        {
+            freq_grds.at(gr)= freq_grds.at(gr) * nodes.at(grds.at(gr).toIndex())->get_tariffs().at(0); // probas weigthed by the tariffs
+        }
+        freq_grds= scale_a_vector_to_1(freq_grds);
+      }
+    }
+
+
 
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;

@@ -65,6 +65,7 @@ private:
         int firm_id;
 		//std::shared_ptr<Node> m_location;
 		Node* m_location;
+        std::vector<Node* > map_of_nodes;
 		Metier* metier;
         std::vector<types::NodeId> fgrounds;	 // idx nodes for fishing grounds specific to this vessel
         std::vector<types::NodeId> fgrounds_init;	 // fishing grounds specific to e.g. port shared
@@ -183,7 +184,7 @@ protected:
 
 public:
         //Vessel(std::string name,  std::shared_ptr<Node> a_location);
-        Vessel(std::string name,  Node* a_location);
+        Vessel(std::string name,  Node *a_location);
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name);
         Vessel(Node* a_location, int idx_vessel, std::string name);
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name, int nbpops, int nbszgroups, std::vector<int> harbours, std::vector<int> fgrounds,
@@ -235,7 +236,8 @@ public:
         int get_vid_is_part_of_ref_fleet() const;
         int get_firm_id () const;
         Node* get_loc() const;
-		Metier* get_metier() const;
+        const std::vector<Node *> &get_map_of_nodes() const;
+        Metier* get_metier() const;
 		double get_speed () const;
         double get_length () const;
 		double get_KW () const;
@@ -347,6 +349,7 @@ public:
         int get_numTrips()const;
         void addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, double a_portion);
         void reinitDaysSpentInRestrictedAreaThisMonthtoZero();
+        void set_map_of_nodes (const vector<Node* > &_map_of_nodes);
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_vid_is_part_of_ref_fleet(int val);

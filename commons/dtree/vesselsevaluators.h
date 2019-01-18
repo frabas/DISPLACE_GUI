@@ -358,20 +358,34 @@ public:
 };
 
 
-class VesselTariffThisGroundIsStateEvaluator : public dtree::StateEvaluator {
+class VesselLowestTariffStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    VesselTariffThisGroundIsStateEvaluator() {}
+    VesselLowestTariffStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        auto the_grds = v->get_fgrounds();
-        int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        //cout << "Tariff on this ground being evaluated..." << endl;
-        //double a_tariff = the_grds.at(idx_node_r)->get_tariffs();
-        //cout << "...the tariff for that ground is: " << a_tariff << endl;
-        //return  a_tariff >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
-		return 0.0;
-	}
+        //bool LowestTariff = (types::NodeId(fground)==v->get_lowesttariff());
+        //cout << "LowestTariff on this ground evaluated at " << LowestTariff << endl;
+        //return  LowestTariff ? 1.0 : 0.0; // Is yes or no the closest ground?
+     return 0;
+    }
+
 };
+
+class VesselAvoidHighTariffAreasStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselAvoidHighTariffAreasStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        //auto the_grds = v->get_fgrounds();
+        //int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
+        cout << "Tariff on this ground being evaluated..." << endl;
+        vector <double> tariffs_over_layers = v->get_map_of_nodes().at(fground)->get_tariffs(); // using the superpower of omniscience (which is anyway quite expected on tariffs!)
+        cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
+        return  tariffs_over_layers.at(0) >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
+    }
+};
+
+
 
 
 }

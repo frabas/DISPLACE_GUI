@@ -55,7 +55,8 @@ const char *const VariableNames::names[] = {
     "globalQuotaLeftOnAvoidedStksIs",    // ChooseGround
     "saveFuel",                    // ChooseGround
     "isInAreaClosure",             // ChooseGround
-    "TariffThisGroundIs",         // ChooseGround
+    "lowestTariff",          // ChooseGround
+    "avoidHighTariffAreas",          // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing
@@ -113,6 +114,7 @@ const char *const VariableNames::bins[][40] = {
     { "<20% bycatch", ">20%",0 },
     { ">10% quota left", "<10%",0 },
     { ">10% quota left", "<10%",0 },
+    { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "<5", ">=5",0 },

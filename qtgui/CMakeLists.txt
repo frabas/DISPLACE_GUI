@@ -78,6 +78,10 @@ if (NOT APPLE AND NOT WIN32)
     list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp rt)
 endif (NOT APPLE AND NOT WIN32)
 
+if (APPLE)
+    list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp)
+endif()
+
 add_executable(displacegui
         ${SOURCES} ${HEADERS}
         qtgui.rc

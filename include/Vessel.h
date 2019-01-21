@@ -174,7 +174,7 @@ private:
         VesselCalendar calendar;
 
         types::NodeId smartcatch;
-        types::NodeId highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
+        types::NodeId highpotentialcatch, notthatfar, lowesttariff, mosthistoricallyused; // some relevant grounds
 
         std::mutex mutex;
 
@@ -317,6 +317,7 @@ public:
         types::NodeId get_smartcatch() const;
         types::NodeId get_highpotentialcatch() const;
         types::NodeId get_notthatfar() const;
+        types::NodeId get_lowesttariff() const;
         types::NodeId get_mosthistoricallyused() const;
         const std::vector<std::vector<double> > &get_gshape_cpue_nodes_species() const;
         const std::vector<std::vector<double> > &get_gscale_cpue_nodes_species() const;
@@ -409,6 +410,7 @@ public:
         void set_smartcatch (types::NodeId smartcatch);
         void set_highpotentialcatch (types::NodeId highpotentialcatch);
         void set_notthatfar (types::NodeId notthatfar);
+        void set_lowesttariff (types::NodeId lowesttariff);
         void set_mosthistoricallyused (types::NodeId mosthistoricallyused);
         void set_state (int _state);
         void set_previous_harbour_idx (types::NodeId previous_harbour_idx);

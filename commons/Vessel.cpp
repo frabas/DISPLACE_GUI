@@ -942,6 +942,11 @@ types::NodeId  Vessel::get_notthatfar () const
     return(notthatfar);
 }
 
+types::NodeId  Vessel::get_lowesttariff () const
+{
+    return(lowesttariff);
+}
+
 types::NodeId  Vessel::get_mosthistoricallyused () const
 {
     return(mosthistoricallyused);
@@ -1926,6 +1931,12 @@ void Vessel::set_notthatfar(types::NodeId _notthatfar)
 {
     notthatfar=_notthatfar;
 }
+
+void Vessel::set_lowesttariff(types::NodeId _lowesttariff)
+{
+    lowesttariff=_lowesttariff;
+}
+
 
 void Vessel::set_mosthistoricallyused(types::NodeId _mosthistoricallyused)
 {
@@ -5387,7 +5398,8 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     types::NodeId smartCatchGround = types::special::InvalidNodeId;
     types::NodeId highPotentialCatchGround = types::special::InvalidNodeId;
     types::NodeId notThatFarGround = types::special::InvalidNodeId;
-    types::NodeId knowledgeOfThisGround;
+    types::NodeId lowestTariffGround = types::special::InvalidNodeId;
+    types::NodeId knowledgeOfThisGround = types::special::InvalidNodeId;
 
     // 1. grounds of that vessel
     auto grds= this->get_fgrounds();
@@ -5741,8 +5753,54 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::lowestTariff) == true)
     {
-    // TODO
+        outc(cout << "compute lowestTariff"  << endl);
+
+
+        vector <double> tariff_per_ground;
+        for (unsigned int i=0; i<grds.size();++i)
+        {
+           tariff_per_ground.push_back(nodes.at(grds.at(i).toIndex())->get_tariffs().at(0));
+        }
+
+        // keep only the grds out the closed areas...
+        vector <types::NodeId> grds_out4;
+        vector <double> tariff_per_ground_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
+        if(grds_in_closure.size()>0)
+        {
+            for (unsigned int i=0; i<grds.size();++i)
+            {
+                auto it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+                if(it == grds_in_closure.end()) // not found
+                {
+                    grds_out4.push_back(grds.at(i));
+                    tariff_per_ground_out.push_back(tariff_per_ground.at(i));
+                }
+            }
+        } else{
+            grds_out4=grds;
+            tariff_per_ground_out=tariff_per_ground;
+        }
+        if(grds_out4.size()>0){
+
+            // ...and find the min
+            idx = distance(tariff_per_ground_out.begin(),
+                           min_element(tariff_per_ground_out.begin(), tariff_per_ground_out.end()));
+            lowestTariffGround = grds_out4.at(idx);
+            this->set_lowesttariff(lowestTariffGround);
+
+            relevant_grounds_to_evaluate.push_back(lowestTariffGround); // use it to limit the search time...
+
+        } else{
+            this->set_lowesttariff(types::special::InvalidNodeId);  // grounds are all included in closed areas...
+        }
+        outc(cout << "lowestTariffGround is " << lowestTariffGround.toIndex() << endl);
     }
+
+
+
+
+
 
 
     // 3. traverseDTree for each possible relevant grounds

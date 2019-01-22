@@ -385,8 +385,8 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
         mStateEvaluators[dtree::lowestTariff] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselLowestTariffStateEvaluator);
-        mStateEvaluators[dtree::avoidHighTariffAreas] =
-                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselAvoidHighTariffAreasStateEvaluator);
+        mStateEvaluators[dtree::tariffThisGroundIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTariffThisGroundIsStateEvaluator);
 
 
 
@@ -5393,7 +5393,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     int idx=0; // idx of the relevant ground
 
-    // keep tracks relevant nodes to evaluate
+    // keep tracks of relevant "special nodes" to evaluate
     vector <types::NodeId> relevant_grounds_to_evaluate;
     types::NodeId smartCatchGround = types::special::InvalidNodeId;
     types::NodeId highPotentialCatchGround = types::special::InvalidNodeId;
@@ -5803,9 +5803,9 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
 
 
-    // 3. traverseDTree for each possible relevant grounds
+    // 3. traverseDTree for each possible relevant grounds.
+    // This FOR-LOOP will give a chance to all the "special node" grounds to be explored one by one if no exit before...
     types::NodeId ground= types::special::InvalidNodeId;
-    //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
         ground=relevant_grounds_to_evaluate.at(it);
         outc(cout << "Evaluate for ground... "<< ground.toIndex() << endl);
@@ -5839,15 +5839,15 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         if(unif_rand()<the_value) {
             unlock();
             //cout << "END1 should_i_choose_this_ground for ..." << this->get_name() << endl;
-            return(ground);
+            return(ground); // EXIT: WE FOUND A SUITABLE GROUND!
         }
-        //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
+        //  else // CONTINUE SEARCHING AMONG RELEVANT SPECIAL NODE GROUNDS
     }
 
 
-    // if here, then no ground has actually been found within
-    // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar.....
-    // so we will rely on freq_grds to choose the ground.
+    // NO-EXIT: if there, then no ground among the special nodes has actually been found i.e. within
+    // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar or lowestTariff.....
+    // so we will now rely on freq_grds to choose the ground.
     // i.e. MIXED APPROACH
 
     // (because of 1- a *non-complete* tree;
@@ -5856,16 +5856,17 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
 
     //for the last node....caution. Check if rand>last_value if yes then go to freq_fgrounds use...otherwise do nothing
+    // SO IT IS LIKELY THAT MOST OF THE TIME WE WANT THIS PARTICULAR PROBA NODE TO BE AT 1.00: CHECK YOUR ChooseGround dtree!
 
-    double last_value = traverseDtree(0, tree.get()); // traverse up to the last value, assuming node 0 is no meaning for the vessel...
-    // if 1 found in the very last leaf of the tree then we´ll go for sure for sampling into freq_grds..
+    double last_value = traverseDtree(0, tree.get()); // traverse up to the last value, by the way assuming graph node 0 is by chance no meaning for the vessel...
+    // if 1.00 found in the very last leaf of the tree then we´ll go for sure for sampling into freq_grds..
     // if less than 1 then it is tested to know if the vessel do nothing or if the vessel will proceed further.
 
 
     if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
          unlock();
          //cout << "END2 should_i_choose_this_ground for ..." << this->get_name() << endl;
-        return (types::special::InvalidNodeId); // do_nothing, likely because all grounds in closed areas and last leaf at 0
+        return (types::special::InvalidNodeId); // EXIT: do_nothing, likely because all grounds in closed areas or last leaf value !=1.00
     }
 
 
@@ -5893,8 +5894,9 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     if(dyn_alloc_sce.option(Options::fishing_credits))
     {
-      if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::avoidHighTariffAreas) == true)
+      if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::tariffThisGroundIs) == true)
       {
+
         freq_grds= this->get_freq_fgrounds();
         for(int gr=0; gr < grds.size(); ++gr)
         {

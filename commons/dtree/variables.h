@@ -34,7 +34,7 @@ enum Variable {
     saveFuel,                    // ChooseGround
     isInAreaClosure,             // ChooseGround
     lowestTariff,         // ChooseGround
-    avoidHighTariffAreas,          // ChooseGround
+    tariffThisGroundIs,          // ChooseGround
 
 
     arrivedOnGroundIs,                // StartFishing

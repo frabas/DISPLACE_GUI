@@ -125,6 +125,7 @@ public:
     void set_freq_usual_fgrounds(vector<double> freq_usual_fgrounds) { mNode->set_freq_usual_fgrounds(freq_usual_fgrounds); }
     int evaluateAreaType() { return mNode->evaluateAreaType(); }
 
+
     /* Extending functions */
 
     DisplaceModel *getModel() const { return mModel; }
@@ -156,6 +157,10 @@ public:
     [[deprecated]]
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
     double getCumcatchesPerPop(int pop);
+
+    [[deprecated]]
+    void setCumdiscardsPerPop(int pop, double cumdiscardsperpop);
+    double getCumdiscardsPerPop(int pop);
 
     [[deprecated]] void setBenthosBiomass(int func, double benthosbiomass);
     double getBenthosBiomass(int func) const;

@@ -183,6 +183,10 @@ void NodeData::setCumcatchesPerPop(int pop, double cumcatchesperpop)
 {
 }
 
+void NodeData::setCumdiscardsPerPop(int pop, double cumdiscardsperpop)
+{
+}
+
 void NodeData::setBenthosBiomass(int func, double benthosbiomass)
 {
 }

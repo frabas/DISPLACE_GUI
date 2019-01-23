@@ -281,6 +281,28 @@ bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> 
     return true;
 }
 
+bool DbHelper::updatePopValuesForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes)
+{
+    auto ntab = p->db->getPopTable();
+
+
+    ntab->queryAllNodesAtStep (step, [&nodes](const PopTable::Stat &pvalues){
+        auto nid = pvalues.nodeId.toIndex();
+        auto &node = nodes.at(nid);
+        int pop = pvalues.popId;
+        node->setPop (pop, pvalues.totNid);
+        node->setPopW(pop, pvalues.totWid);
+        node->setCumcatchesPerPop(pop, pvalues.cumC);
+        node->setCumdiscardsPerPop(pop, pvalues.cumD);
+        node->setImpact(pop, pvalues.impact);
+        return true;
+    });
+
+
+    return true;
+}
+
+
 bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes)
 {
     auto ntab = p->db->getNodesStatTable();

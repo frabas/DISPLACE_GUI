@@ -89,6 +89,7 @@ public:
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);
     bool updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes);
+    bool updatePopValuesForNodesToStep (int step, QList<std::shared_ptr<NodeData> > &nodes);
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 

@@ -1730,6 +1730,7 @@ void DisplaceModel::setCurrentStep(int step)
     if (mDb) {
         mDb->updateVesselsToStep(mCurrentStep, mVessels);
         mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
+        mDb->updatePopValuesForNodesToStep(mCurrentStep, mNodes);
 
         // re-loading Historical data is not needed!
 

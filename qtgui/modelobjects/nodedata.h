@@ -117,6 +117,14 @@ public:
     void set_cumcatches_with_threshold(int v) { mNode->set_cumcatches_with_threshold(v); }
     void set_cumdiscards(double v) { mNode->set_cumdiscards(v); }
     void set_cumdiscardsratio(double v) { mNode->set_cumdiscardsratio(v); }
+
+    void set_totNs_per_pop (int pop, int v){ mNode->set_totNs_per_pop(pop, v); }
+    void set_totWs_per_pop(int pop, int v){ mNode->set_totWs_per_pop(pop, v); }
+    void set_cumcatches_per_pop(int pop, int v){ mNode->set_cumcatches_per_pop(pop, v); }
+    void set_cumdiscards_per_pop(int pop, int v){ mNode->set_cumdiscards_per_pop(pop, v); }
+    void set_impact_per_pop(int pop, int v){ mNode->set_impact_per_pop(pop, v); }
+
+
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
     const vector<types::NodeId> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }

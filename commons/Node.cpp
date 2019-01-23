@@ -195,7 +195,9 @@ Node::Node()
       last_oth_disc_pops_at_szgroup(),
       pressure_pops_at_szgroup(),
       avai_pops_at_selected_szgroup(),
-      impact_on_pops(),
+      totNs_per_pop(),
+      totWs_per_pop(),
+      impact_per_pop(),
       cumcatches_per_pop(),
       cumdiscards_per_pop(),
       vid(),
@@ -769,10 +771,19 @@ vector<int> Node::get_ff_names_on_node ()
     return(ff_names_on_node);
 }
 
-
-const vector<double>& Node::get_impact_on_pops ()
+const vector<double>& Node::get_totNs_per_pop ()
 {
-	return(impact_on_pops);
+    return(totNs_per_pop);
+}
+
+const vector<double>& Node::get_totWs_per_pop ()
+{
+    return(totWs_per_pop);
+}
+
+const vector<double>& Node::get_impact_per_pop ()
+{
+    return(impact_per_pop);
 }
 
 const vector<double>& Node::get_cumcatches_per_pop ()
@@ -910,34 +921,12 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (last_oth_catch_pops_at_szgroup, nbpops, nbszgroups);
     reinit (last_oth_disc_pops_at_szgroup, nbpops, nbszgroups);
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
-    reinit (impact_on_pops, nbpops);
+    reinit (totNs_per_pop, nbpops);
+    reinit (totWs_per_pop, nbpops);
+    reinit (impact_per_pop, nbpops);
     reinit (cumcatches_per_pop, nbpops);
     reinit (cumdiscards_per_pop, nbpops);
 
-#if 0
-	// init at 0 the matrix of Ns
-    //dout(cout  << "init matrix of Ns" << endl);
-	vector< vector<double> > init_Ns_pops_at_szgroup(nbpops, vector<double>(nbszgroups));
-	Ns_pops_at_szgroup= init_Ns_pops_at_szgroup;
-	Ns_pops_at_szgroup_at_month_start= init_Ns_pops_at_szgroup;
-	removals_pops_at_szgroup= init_Ns_pops_at_szgroup;
-	pressure_pops_at_szgroup= init_Ns_pops_at_szgroup;
-    for(int i = 0; i < nbpops; i++)
-	{
-        for(int j = 0; j < nbszgroups; j++)
-		{
-			Ns_pops_at_szgroup.at(i).at(j) = 0;
-			Ns_pops_at_szgroup_at_month_start.at(i).at(j) = 0;
-            dout(cout  << Ns_pops_at_szgroup[i][j] << " ");
-			pressure_pops_at_szgroup.at(i).at(j) = 0;
-			removals_pops_at_szgroup.at(i).at(j) = 0;
-		}
-        dout(cout  << endl);
-
-		impact_on_pops.push_back(0);
-        cumcatches_per_pop.push_back(0);
-    }
-#endif
 }
 
 
@@ -1029,11 +1018,24 @@ void Node::set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>&
 
 }
 
-
-void Node::set_impact_on_pops(int name_pop, double newval)
+void Node::set_totNs_per_pop(int name_pop, double newval)
 {
 
-	impact_on_pops.at(name_pop)=newval;
+    totNs_per_pop.at(name_pop)=newval;
+
+}
+
+void Node::set_totWs_per_pop(int name_pop, double newval)
+{
+
+    totWs_per_pop.at(name_pop)=newval;
+
+}
+
+void Node::set_impact_per_pop(int name_pop, double newval)
+{
+
+    impact_per_pop.at(name_pop)=newval;
 
 }
 
@@ -1159,12 +1161,29 @@ void Node::clear_last_oth_disc_pops_at_szgroup(int namepop)
         }
 }
 
-
-void Node::clear_impact_on_pops()
+void Node::clear_totNs_per_pop()
 {
-    for(unsigned int i=0; i<impact_on_pops.size(); i++)
+    for(unsigned int i=0; i<totNs_per_pop.size(); i++)
+    {
+        totNs_per_pop.at(i)=0;
+    }
+
+}
+
+void Node::clear_totWs_per_pop()
+{
+    for(unsigned int i=0; i<totWs_per_pop.size(); i++)
+    {
+        totWs_per_pop.at(i)=0;
+    }
+
+}
+
+void Node::clear_impact_per_pop()
+{
+    for(unsigned int i=0; i<impact_per_pop.size(); i++)
 	{
-		impact_on_pops.at(i)=0;
+        impact_per_pop.at(i)=0;
 	}
 
 }
@@ -1174,6 +1193,15 @@ void Node::clear_cumcatches_per_pop()
     for(unsigned int i=0; i<cumcatches_per_pop.size(); i++)
     {
         cumcatches_per_pop.at(i)=0;
+    }
+
+}
+
+void Node::clear_cumdiscards_per_pop()
+{
+    for(unsigned int i=0; i<cumdiscards_per_pop.size(); i++)
+    {
+        cumdiscards_per_pop.at(i)=0;
     }
 
 }
@@ -1590,9 +1618,9 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-    if(impact_on_pops.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(impact_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
-		impact_on_pops.at(pop) << " " <<  endl;
+        impact_per_pop.at(pop) << " " <<  endl;
 
 }
 
@@ -1641,9 +1669,9 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
     popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() ;
 
-    for(unsigned int sz = 0; sz < impact_on_pops.size(); sz++)
+    for(unsigned int sz = 0; sz < impact_per_pop.size(); sz++)
 	{
-		popnodes << " " << impact_on_pops.at(sz);
+        popnodes << " " << impact_per_pop.at(sz);
 	}
 
 	popnodes << " " <<  endl;

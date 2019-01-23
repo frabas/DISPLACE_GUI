@@ -253,7 +253,9 @@ class COMMONSSHARED_EXPORT Node
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
         vector<int> get_ff_names_on_node();
-        const vector<double>& get_impact_on_pops ();
+        const vector<double>& get_totNs_per_pop ();
+        const vector<double>& get_totWs_per_pop ();
+        const vector<double>& get_impact_per_pop ();
         const vector<double>& get_cumcatches_per_pop ();
         const vector<double>& get_cumdiscards_per_pop ();
         int get_cumftime() const;
@@ -273,7 +275,9 @@ class COMMONSSHARED_EXPORT Node
         void set_pressure_pops_at_szgroup(int name_pop, const vector<double>& val);
 		void init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroups);
         void set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& val);
-		void set_impact_on_pops(int name_pop, double val);
+        void set_totNs_per_pop(int name_pop, double val);
+        void set_totWs_per_pop(int name_pop, double val);
+        void set_impact_per_pop(int name_pop, double val);
         void set_cumcatches_per_pop(int name_pop, double val);
         void set_cumdiscards_per_pop(int name_pop, double val);
         void set_vid(int val);
@@ -309,8 +313,11 @@ class COMMONSSHARED_EXPORT Node
         void clear_last_oth_catch_pops_at_szgroup(int pop);
         void clear_last_oth_disc_pops_at_szgroup(int pop);
         void clear_avai_pops_at_selected_szgroup();
-		void clear_impact_on_pops();
+        void clear_totNs_per_pop();
+        void clear_totWs_per_pop();
+        void clear_impact_per_pop();
         void clear_cumcatches_per_pop();
+        void clear_cumdiscards_per_pop();
         void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
         void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, const vector<vector<double> > & Ws_at_szgroup, const vector<vector<vector<vector<double> > > > & predkernel, const vector<vector<double> > & searchVolMat);
         void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN, int will_I_discard_all);
@@ -423,7 +430,9 @@ private:
         vector< vector<double> > pressure_pops_at_szgroup;
 		vector< vector<double> > avai_pops_at_selected_szgroup;
 								 // a proportion i.e. ratio removals/available on node
-		vector<double> impact_on_pops;
+        vector<double> totNs_per_pop;
+        vector<double> totWs_per_pop;
+        vector<double> impact_per_pop;
         vector<double> cumcatches_per_pop;
         vector<double> cumdiscards_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node

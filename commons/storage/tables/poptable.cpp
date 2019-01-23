@@ -60,7 +60,7 @@ bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
 
         auto const &ns =node->get_Ns_pops_at_szgroup(name_pop);
         auto const &cumulcatches_per_pop =node->get_cumcatches_per_pop().at(name_pop);
-        auto const &impact_per_pop =node->get_impact_on_pops().at(name_pop);
+        auto const &impact_per_pop =node->get_impact_per_pop().at(name_pop);
         auto const &cumuldiscards_per_pop=node->get_cumdiscards_per_pop().at(name_pop);
         for(unsigned int sz = 0; sz < ns.size(); sz++)
         {

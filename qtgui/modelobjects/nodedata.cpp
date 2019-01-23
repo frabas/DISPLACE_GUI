@@ -153,6 +153,7 @@ double NodeData::getCumcatchesPerPop(int pop)
     return -1;
 }
 
+
 void NodeData::setPopW(int pop, double val)
 {
 }

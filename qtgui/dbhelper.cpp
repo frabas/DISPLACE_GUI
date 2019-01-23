@@ -290,14 +290,13 @@ bool DbHelper::updatePopValuesForNodesToStep(int step, QList<std::shared_ptr<Nod
         auto nid = pvalues.nodeId.toIndex();
         auto &node = nodes.at(nid);
         int pop = pvalues.popId;
-        node->setPop (pop, pvalues.totNid);
-        node->setPopW(pop, pvalues.totWid);
-        node->setCumcatchesPerPop(pop, pvalues.cumC);
-        node->setCumdiscardsPerPop(pop, pvalues.cumD);
-        node->setImpact(pop, pvalues.impact);
+        node->set_totNs_per_pop (pop, pvalues.totNid);
+        node->set_totWs_per_pop(pop, pvalues.totWid);
+        node->set_cumcatches_per_pop(pop, pvalues.cumC);
+        node->set_cumdiscards_per_pop(pop, pvalues.cumD);
+        node->set_impact_per_pop(pop, pvalues.impact);
         return true;
     });
-
 
     return true;
 }
@@ -315,9 +314,6 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         node->set_cumsubsurfacesweptarea(stat.cumsubsurfswa);
         node->set_cumcatches(stat.cumcatches);
         node->set_cumdiscards(stat.cumdisc);
-        //nodes.at(nid)->setPopTot(tot);
-        //nodes.at(nid)->setPopWTot(totw);
-        //nodes.at(nid)->set_tariffs(tariffs);
         return true;
     });
 

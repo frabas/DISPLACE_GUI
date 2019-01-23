@@ -233,8 +233,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
-           cout << ".....monthly pop model for pop " << sp << endl;
-
+           cout << ".....monthly pop model for pop " << sp << endl;           
             int name_pop =populations.at(sp)->get_name();
             outc(cout << "apply other land on nodes..." << endl);
             vector <double> M_at_szgroup      = populations.at(sp)->get_M_at_szgroup();
@@ -471,7 +470,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     // cumul
                     tot_removals+=(removals_per_szgroup[szgroup]*wsz[szgroup]);
                          // cumul
-                    tot_B+=(N_at_szgroup_at_month_start[szgroup]*wsz[szgroup]);
+                    tot_B+=(N_at_szgroup_at_month_start[szgroup]*wsz[szgroup]);                    
+
                 }
 
                     // 2- per total
@@ -506,7 +506,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          // => no available biomass then no catch...
                         impact_on_pop=0;
                     }
-                    a_list_nodes.at(n)->set_impact_on_pops(name_pop, impact_on_pop);
+                    a_list_nodes.at(n)->set_impact_per_pop(name_pop, impact_on_pop);
                     dout(cout  << "impact_on_pop " << impact_on_pop << endl);
 
 
@@ -1065,10 +1065,34 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     }
 
 
-   // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
-   // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-   // cout << "tstep " << tstep << " AT THE MIDDLE OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
+    // FOR THE MAP WIDGET: update the populations values
+
+    for (unsigned int sp=0; sp<populations.size(); sp++)
+    {
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+        {
+           cout << "..... compute totNs and totWs for pop " << sp << endl;
+           int name_pop =populations.at(sp)->get_name();
+           vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
+           vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
+
+           for(unsigned int n=0; n<a_list_nodes.size(); n++)
+           {
+              //  compute totNs and totWs
+              auto const &ns =a_list_nodes.at(n)->get_Ns_pops_at_szgroup(name_pop);
+              double totN_this_pop =0.0;
+              double totW_this_pop =0.0;
+              for(unsigned int sz = 0; sz < ns.size(); sz++)
+              {
+                 totN_this_pop+= ns[sz];
+                 totW_this_pop+= ns[sz] * weight_at_szgroup.at(sz);
+              }
+              a_list_nodes.at(n)->set_totNs_per_pop(name_pop, totN_this_pop);
+              a_list_nodes.at(n)->set_totWs_per_pop(name_pop, totW_this_pop);
+           }
+         }
+    }
 
 
     // EXPORT: populations statistics - Monthly

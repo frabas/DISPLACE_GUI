@@ -206,9 +206,13 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 
                  popstats << " " <<  endl;
 
-                 // to db
+                 // send to db
                  if (enable_sqlite_out)
                          outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+                         for (unsigned int n=0; n<nodes.size(); n++)
+                         {
+                            outSqlite->exportPopNodes(tstep, nodes.at(n));
+                         }
                 }
 
 

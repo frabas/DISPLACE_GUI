@@ -980,13 +980,32 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 populations.at(sp)->clear_tot_C_at_szgroup();
                                 populations.at(sp)->clear_tot_D_at_szgroup();
 
-                            //}
-                            //else
-                            //{
-                             //}
+                            }
+                            else
+                            {
 
 
-                        }
+                         /*   // compute the TAC the 1st of Feb just for fun for debugging purpose
+                               if(dyn_alloc_sce.option(Options::TACs))
+                                 {
+                                   if(dyn_alloc_sce.option(Options::FMSY))
+                                   {
+                                       int multiOnTACconstraint=1.0;
+                                       populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+
+                                       // PAUSE TO CHECK NUMBERS...
+                                       int aa;
+                                       cin >> aa;
+
+                                   }
+                                 }
+                          */
+
+
+                             } // end else
+
+
+
 
                }
                else

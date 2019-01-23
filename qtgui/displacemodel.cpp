@@ -3295,7 +3295,18 @@ bool DisplaceModel::initPopulations()
     qSort(imp2);
 
     clearInterestingPop();
-    int c = 0;
+
+
+    for (int i = 0; i < mConfig.getNbpops(); ++i) {
+        setInterestingPop(i);
+    }
+    for (int i = 0; i < imp.size(); ++i) {
+        remInterestingPop(imp[i]);
+    }
+
+ /*
+  * broken when not a single implicit pop is given in input
+  *    int c = 0;
     for (int i = 0; i < imp.size(); ++i) {
         while (c < imp[i]) {
             setInterestingPop(c);
@@ -3303,6 +3314,7 @@ bool DisplaceModel::initPopulations()
         }
         ++c;
     }
+ */
 
     clearInterestingPop2();
     int c2 = 0;

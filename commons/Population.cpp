@@ -1567,8 +1567,8 @@ void Population::compute_tot_N_and_F_and_W_at_age()
 			}
 			*/
             //tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
-			tot_W_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * weight_at_szgroup[sz] ;
-            tot_Mat_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * maturity_at_szgroup[sz] ;
+            tot_W_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * weight_at_szgroup[sz] ;
+            tot_Mat_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * maturity_at_szgroup[sz] ;
         }
 
 		// check
@@ -1861,6 +1861,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
             }
         this->set_perceived_tot_F_at_age(tot_F_at_age_end_previous_y); // assumption
+        this->set_tot_F_at_age(tot_F_at_age_end_previous_y); // assumption
         this->set_tot_M_at_age(tot_M_at_age_y); // assumption
         this->set_perceived_tot_N_at_age(tot_N_at_age_end_previous_y); // assumption
         this->set_tot_W_at_age(tot_W_at_age_y_plus_1); // assumption

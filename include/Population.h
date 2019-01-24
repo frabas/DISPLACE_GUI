@@ -74,6 +74,8 @@ class COMMONSSHARED_EXPORT Population
 								 // Copy constructor
 		int get_name() const;
         string get_pop_name() const;
+        int get_nb_szgroups() const;
+        int get_nb_ages() const;
         const vector<Node *> &get_list_nodes() const;
         const vector<int> &get_selected_szgroups() const;
 		double get_avai0_beta() const;
@@ -187,7 +189,7 @@ class COMMONSSHARED_EXPORT Population
 		double compute_fbar();
         vector <double> compute_SSB();
         double compute_proportion_mature_fish();
-        void compute_TAC(double multiOnTACconstraint, int HCR);
+        void compute_TAC(int tstep, double multiOnTACconstraint, int HCR);
 								 // clear the cumul
 		void clear_tot_F_at_age();
         void clear_tot_M_at_age();
@@ -214,7 +216,8 @@ class COMMONSSHARED_EXPORT Population
         string pop_name;
         int idx_pop;
 		int nb_szgroups;
-		vector<int> selected_szgroups;
+        int nb_ages;
+        vector<int> selected_szgroups;
 		double avai0_beta;		 // actually, only one value here...
 		double avai2_beta;		 //
 		double avai3_beta;		 //

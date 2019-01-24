@@ -76,6 +76,9 @@ Population::Population(int a_name,
 	percent_szgroup_per_age_matrix=_percent_szgroup_per_age_matrix;
 	percent_age_per_szgroup_matrix=_percent_age_per_szgroup_matrix;
 
+    nb_szgroups=init_tot_N_at_szgroup.size();
+    nb_ages=percent_szgroup_per_age_matrix[0].size();
+
 	param_sr=_param_sr;
 
 	landings_so_far= 0.0;
@@ -91,7 +94,7 @@ Population::Population(int a_name,
         cin >> aa;
      }
 
-    for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
+    for(unsigned int sz=0; sz<nb_szgroups; sz++)
 	{
 
 
@@ -114,13 +117,13 @@ Population::Population(int a_name,
         SSB_at_szgroup.push_back(0);
 
 	}
-	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
+    for(unsigned int a=0; a<nb_ages; a++)
 	{
 		tot_F_at_age.push_back(0);
         tot_M_at_age.push_back(0);
         FFmsy.push_back(0);
     }
-	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
+    for(unsigned int a=0; a<nb_ages; a++)
 	{
 		tot_F_at_age_last_quarter.push_back(0);
 	}
@@ -188,7 +191,7 @@ Population::Population(int a_name,
     // look at the config.dat for calibration values
 
     dout(cout << "calib the weight at szgroup..." << name << endl);
-    for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
+    for(unsigned int i=0; i < nb_szgroups; i++)
     {
         init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
 	}
@@ -322,6 +325,16 @@ int Population::get_name() const
 string Population::get_pop_name() const
 {
     return(pop_name);
+}
+
+int Population::get_nb_szgroups() const
+{
+    return(nb_szgroups);
+}
+
+int Population::get_nb_ages() const
+{
+    return(nb_ages);
 }
 
 
@@ -997,14 +1010,15 @@ void Population::distribute_N()
         for(unsigned int i=0; i<tot_N_at_szgroup.size(); i++)
 			N_at_szgroup.push_back( tot_N_at_szgroup.at(i)*avai_this_node.at(i) );
 
-        dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl;
+        /*dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl;
         for(int i=0; i<N_at_szgroup.size(); i++)
            cout << N_at_szgroup[i] << " ";
            cout << endl
          );
+         */
 
 		// set the new Ns for this specific pop in the multimap of this node
-        dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
+        //dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
         list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
        // if(this->get_name()==1) for(int i=0; i<N_at_szgroup.size(); i++)
@@ -1750,7 +1764,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
-    cout << "pop is " << this->get_name()  << " " << endl;
+    cout << "compute SSB given pop is " << this->get_name()  << " " << endl;
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1787,9 +1801,10 @@ double Population::compute_proportion_mature_fish()
 
 
 
-void Population::compute_TAC(double multiOnTACconstraint, int HCR)
+void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 {
-    dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year" << endl);
+    dout(cout<< "------------" << endl);
+    dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year for pop " << this->get_name() << endl);
 	vector<double> fbar_ages_min_max =this-> get_fbar_ages_min_max();
 	int age_min = fbar_ages_min_max.at(0);
     dout(cout<< "age min:" << age_min << endl);
@@ -1811,18 +1826,62 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
     //double FMSYup = fbar_ages_min_max.at(8);
     double FMSYup=FMSY*1.1; // TO BE REMOVED WHEN INPUT DATA
     dout(cout<< "FMSYup:" << FMSY << endl);
+
+    int nbages=this->get_nb_ages();
+    int nbszgroups=this->get_nb_szgroups();
+    vector <double> tot_N_at_age_end_previous_y(nbages);
+    vector <double> tot_W_at_age_y_plus_1(nbages);
+    vector <double> maturity_at_age_y_plus_1(nbages);
+    vector <double> tot_F_at_age_end_previous_y(nbages);
+    vector <double> tot_M_at_age_y(nbages);
+
     // 1. compute previous fbar
 								 // at the end of the last year, then for last year py...
     tout(cout<< "when computing TAC, first compute fbar for pop..." << this->get_name() << endl);
-    double fbar_py= this->compute_fbar();
+    double fbar_py=1.0;
+    if(tstep==0)
+    {
+        fbar_py=FMSY; // in case the tac is computed at start (for debugging) then use FMSY, because by nature perceived_F does not exist yet
+
+        // but first apply size percent_szgroup_per_age_matrix to finds out N & co IN AGE!
+        vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
+        vector <double> a_weight_at_szgroup        =this->get_weight_at_szgroup();
+        vector <double> a_maturity_at_szgroup      =this->get_maturity_at_szgroup();
+        vector <vector <double> > percent_szgroup_per_age_matrix= this->get_percent_age_per_szgroup_matrix();
+            for(int sz = 0; sz < nbszgroups; sz++)
+            {
+                for(int a = 0; a < nbages; a++)
+                {
+                    tot_F_at_age_end_previous_y[a] = fbar_py; // assumption
+                    tot_M_at_age_y[a]              = 0.2; // assumption
+                    tot_N_at_age_end_previous_y[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup[sz] ; // assumption
+                    tot_W_at_age_y_plus_1[a]       +=  percent_szgroup_per_age_matrix[sz][a] * a_weight_at_szgroup[sz] ; // assumption
+                    maturity_at_age_y_plus_1[a]    +=  percent_szgroup_per_age_matrix[sz][a] * a_maturity_at_szgroup[sz] ; // assumption
+                }
+
+            }
+        this->set_perceived_tot_F_at_age(tot_F_at_age_end_previous_y); // assumption
+        this->set_tot_M_at_age(tot_M_at_age_y); // assumption
+        this->set_perceived_tot_N_at_age(tot_N_at_age_end_previous_y); // assumption
+        this->set_tot_W_at_age(tot_W_at_age_y_plus_1); // assumption
+        this->set_tot_Mat_at_age(maturity_at_age_y_plus_1);// assumption
+
+    }
+    else
+    {   // by default...
+        fbar_py= this->compute_fbar();
+        tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
+        tot_W_at_age_y_plus_1       = this->get_tot_W_at_age();
+        maturity_at_age_y_plus_1    = this->get_tot_Mat_at_age();
+    }
     this->set_fbar(fbar_py);
     dout(cout << "the fbar at y-1 for this pop is " << fbar_py << endl);
 
-    vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
-    vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
-    vector <double> maturity_at_age_y_plus_1 = this->get_tot_Mat_at_age();
 
-    double tac_y_plus_1=0;
+
+    double tac_y_plus_1=0.0;
+    if(fbar_py>0)
+    {
 
     if(HCR==1){ // long term management plan
 
@@ -1934,7 +1993,7 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
     }
 
 
-    //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
+    // Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
     recruits = forecast_tot_N_at_age_end_y.at(0);
     forecast_tot_N_at_age_end_y.at(0)=0.0;
     for(unsigned int i = 0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
@@ -2030,7 +2089,7 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
           }
 
          cout << "HCR type 2: the fmultiplier for this pop " << this->get_name() <<" is then " << fmultiplier <<
-            " given the target F " <<  FMSY << " in the plan..." << endl;
+            " given the target F " <<  FMSY << " in the plan..." << " while fbar_py is " << fbar_py << endl;
 
          // 3. perform a short-term forecast on N with F * fmultipier * fmultiplier
 
@@ -2512,6 +2571,11 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
             tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
      }
+
+
+
+     } // end fbar_py is 0
+
 
 
      if(tac_y_plus_1==0 || !isfinite(tac_y_plus_1))

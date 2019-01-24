@@ -141,7 +141,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 {
 
 
-
+int will_stop=0; // see Options::DEBUG
 
 //----------------------------------------//
 //----------------------------------------//
@@ -149,7 +149,14 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 //----------------------------------------//
 //----------------------------------------//
 
-    // export initial POPSTATS
+//!!!!!!!!!!!!!//
+//!!!!!!!!!!!!!//
+//!!!TSTEP 0!!!//
+//!!!!!!!!!!!!!//
+//!!!!!!!!!!!!!//
+
+
+// export initial POPSTATS
     if(tstep==0)
     {
         // EXPORT POPSTATS FILE
@@ -217,11 +224,41 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 
 
 
-            }
+                // normally the TAC is computed at the end of the each year.
+                // but here we compute the TAC "for fun" at the start tstep=0 just for checking purpose
+                if(tstep==0)
+                {
+                    if(dyn_alloc_sce.option(Options::TACs) && dyn_alloc_sce.option(Options::DEBUG))
+                    {
+                       will_stop=1; // trigger to stop the simu at the end of biomodule to avoid going further after this below computation that have potential side effects
+                       if(dyn_alloc_sce.option(Options::FMSY))
+                          {
+                          int multiOnTACconstraint=1.0;
+                          populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2); // use for checking
+                          }
+                     }
+                 }
+
+
+            } // end sp
+
+
+
+
+
 
     }
 
 
+
+
+
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!//
+//!!!!!!!!!!!!!!!!!!!!!!!!!//
+//!!!TSTEPS START MONTHS!!!//
+//!!!!!!!!!!!!!!!!!!!!!!!!!//
+//!!!!!!!!!!!!!!!!!!!!!!!!!//
 
 
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
@@ -896,6 +933,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             //----------------------------------------//
             //----------------------------------------//
 
+
+
                         // apply only at the beginning of the year (this is maybe not always relevant...)
                         if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                         {
@@ -928,16 +967,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                if(dyn_alloc_sce.option(Options::LTMP)){
 
-                                   populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
+                                   populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 1);
                                } else{
                                    if(dyn_alloc_sce.option(Options::FMSY)){
 
-                                       populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+                                       populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2);
                                     } else{
                                        if(dyn_alloc_sce.option(Options::FMSYrange)){
-                                           populations.at(sp)->compute_TAC(multiOnTACconstraint, 3);
+                                           populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 3);
                                        } else{
-                                         populations.at(sp)->compute_TAC(multiOnTACconstraint, 4); // statuquo is default
+                                         populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 4); // statuquo is default
                                        }
                                    }
                                }
@@ -989,21 +1028,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             {
 
 
-                         /*   // compute the TAC the 1st of Feb just for fun for debugging purpose
-                               if(dyn_alloc_sce.option(Options::TACs))
-                                 {
-                                   if(dyn_alloc_sce.option(Options::FMSY))
-                                   {
-                                       int multiOnTACconstraint=1.0;
-                                       populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
-
-                                       // PAUSE TO CHECK NUMBERS...
-                                       int aa;
-                                       cin >> aa;
-
-                                   }
-                                 }
-                          */
 
 
                              } // end else
@@ -1256,6 +1280,15 @@ dout(cout  << "END: POP MODEL TASKS----------" << endl);
    // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
    // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
    // cout << "tstep " << tstep << " AT THE END OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+
+if(dyn_alloc_sce.option(Options::DEBUG) && will_stop==1)
+  {
+    cout << "Stop here because DEBUG Option is ON" << endl;
+
+    //PAUSE
+    int aa;
+    cin >> aa;
+  }
 
 return 0;
 }

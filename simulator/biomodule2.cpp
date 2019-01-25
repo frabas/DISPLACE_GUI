@@ -1045,11 +1045,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                           //cout << "1- Current global tac for this pop " << sp << "is " << populations.at(sp)->get_tac()->get_current_tac() << endl;
                           double tac_y_plus_1 = populations.at(sp)->get_tac()->get_current_tac();
 
-                         // should be equivalent to do:
-                         // vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
-                         //  populations.at(sp)->get_tac()->add_tac_y_plus_1(ts_tac.at(0));
-
-                          populations.at(sp)->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
+                          populations.at(sp)->get_tac()->add_tac_to_ts(tac_y_plus_1, "current_is_the_one_before");
 
                           //cout << "2- Current global tac for this pop " << sp << "is " << populations.at(sp)->get_tac()->get_current_tac() << endl;;
 

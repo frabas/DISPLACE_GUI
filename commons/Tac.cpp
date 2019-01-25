@@ -88,16 +88,16 @@ int Tac::get_is_tac_exhausted() const
 }
 
 
-void Tac:: add_tac_y_plus_1(double a_tac)
+void Tac:: add_tac_to_ts(double a_tac, string current_is)
 {
-    //current_tac=ts_tac.at(ts_tac.size()-1);
-    current_tac=a_tac;
     ts_tac.push_back(a_tac);
     dout(cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl);
     for(unsigned int i=0; i<ts_tac.size(); i++)
 	{
         dout(cout << "tac: " << ts_tac.at(i) << endl);
 	}
+    if(current_is=="current_is_this_one") current_tac=a_tac;
+    if(current_is=="current_is_the_one_before") current_tac=ts_tac.at(ts_tac.size()-1);
 
 }
 

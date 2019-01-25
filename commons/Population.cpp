@@ -1294,7 +1294,7 @@ cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr
 
        dout(cout << "no migration for this pop" << this->get_name()  << endl );
 
-       cout << "no migration for this pop"  << endl;
+       cout << "no migration for this pop " << this->get_name()   << endl;
 
     }
 
@@ -1771,10 +1771,10 @@ vector<double> Population::compute_SSB()
        // reminder: tot_N_at_szgroup are in thousand in input file
        //  but in absolute numbers here because have been multiplied by 1000 when importing
        SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
-       dout(cout << "szgroup is " << i  << " " << endl );
-       cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
-       cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
-       cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
+       //cout << "szgroup is " << i  << " " << endl );
+       //cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
+       //cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
+       //cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
 
     }
 
@@ -1840,7 +1840,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 								 // at the end of the last year, then for last year py...
     tout(cout<< "when computing TAC, first compute fbar for pop..." << this->get_name() << endl);
     double fbar_py=1.0;
-    if(tstep==0)
+    if(tstep==0) // THIS CODE BLOCK IS NOT USED IN NORMAL MODE, THIS IS JUST FOR DEBUGGING (Options::DEBUG) TO AVOID WAITING THE FULL Y TO LOOK AT TAC NUMBERS...
     {
         fbar_py=FMSY; // in case the tac is computed at start (for debugging) then use FMSY, because by nature perceived_F does not exist yet
 
@@ -1883,22 +1883,29 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
     double tac_y_plus_1=0.0;
-    double tac_y=0.0; // only for YEAR 2
+    double tac_y=0.0; // only used for YEAR 2
     if(fbar_py>0)
     {
+       if(fbar_py>2)
+       {
+        fbar_py=2; // a safeguard to avoid non-sense computation of TAC change
+        cout << "fbar_py set to 2 for pop " << this->get_name() << endl;
+       }
 
-    if(HCR==1){ // long term management plan
 
-    // 2. compare with the target
-	double fmultiplier=1;
-	if(fbar_py > ftarget)
-	{
+
+       if(HCR==1){ // long-term management plan
+
+       // 2. compare with the target
+       double fmultiplier=1;
+       if(fbar_py > ftarget)
+       {
 		fmultiplier = 1.0 - (Fpercent/100);
-	}
-	else
-	{
+       }
+       else
+       {
 		fmultiplier = 1.0 + (Fpercent/100);
-	}
+       }
     cout << "HCR type 1: the fmultiplier for this pop " << this->get_name() <<" is then " << fmultiplier <<
 		" given the target F " <<  ftarget << " in the plan..." << endl;
 
@@ -2098,9 +2105,9 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
         biomass_computed_from_szgroups= biomass_computed_from_szgroups/1000; // SSB in tons
-        cout << "current SSB in tons is " << biomass_computed_from_szgroups << "  for this stock...(when computed from szgroups (true)) " << endl;
+        cout << "current SSB pop"<< this->get_name() <<" in tons is " << biomass_computed_from_szgroups << "  for this stock...(when computed from szgroups (true)) " << endl;
         biomass_computed_from_ages= biomass_computed_from_ages/1000; // SSB in tons
-        cout << "current SSB in tons is " << biomass_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << endl;
+        cout << "current SSB pop"<< this->get_name() <<" in tons is " << biomass_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << endl;
 
 
 
@@ -2121,15 +2128,18 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          //a. for year y from y-1
          dout(cout << "the  N by age at the end of  y is " << endl);
          tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
-
          for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
          {
              cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
          }
 
+         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+         for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
+         {
+             cout << "tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << endl;
+         }
 
          dout(cout << "the forecast F by age for y (from y-1) is " << endl);
-         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
          vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
@@ -2652,13 +2662,13 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
     if(tstep==8761) {
-        this->get_tac()->add_tac_to_ts(tac_y, "current_is_this_one");
-        this->get_tac()->add_tac_to_ts(tac_y_plus_1, "current_is_the_one_before");
+        this->get_tac()->add_tac_to_ts(tac_y, 1);
+        this->get_tac()->add_tac_to_ts(tac_y_plus_1, -1);
         cout << "so, the TAC (in tons) for y will be " << tac_y << endl;
         cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
     } else{
         cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
-        this->get_tac()->add_tac_to_ts(tac_y_plus_1, "current_is_the_one_before");
+        this->get_tac()->add_tac_to_ts(tac_y_plus_1, -1);
     }
 
     this->set_is_choking_fisheries(0); // reinit

@@ -41,7 +41,7 @@ class COMMONSSHARED_EXPORT Tac
 		vector<double> get_ts_tac() const;
 		double get_current_tac() const;
         int get_is_tac_exhausted() const;
-        void add_tac_to_ts(double a_tac, string current_is);
+        void add_tac_to_ts(double a_tac, int current_is);
         void set_is_tac_exhausted(int val);
 
 	protected:

@@ -1910,12 +1910,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
     for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+        cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
     }
-
-    dout(cout << "the forecast N by age for y (from y-1) is " << endl);
-                                 // init
-    vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
     dout(cout << "the forecast F by age for y (from y-1) is " << endl);
@@ -1928,7 +1924,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
     }
     for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_F_at_age_y.at(i) << endl);
+        cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
     }
 
 
@@ -1936,11 +1932,15 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
     vector <double> tot_M_at_age_y = this->get_tot_M_at_age();
     for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_M_at_age_y.at(i) << endl);
+        cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
     }
 
+    dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                 // init
+    vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
+
     //  adding recruits before the F, assuming fixed recruits
-    double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits;
+    double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
     forecast_tot_N_at_age_end_y.at(0)=recruits;
 
     dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
@@ -1953,23 +1953,20 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
     }							 // TO DO: add the plusgroup (if necessary)
 
 
-
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
     {
-        cout << "age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+        cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
     }
 
     // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
     // according to the forecast N (Baronovs equation)
     // TAC per age and then sum over ages....
-    if(tstep==8761){
-       double contribution_this_age=0.0;
+    if(tstep==8761)
+    {
+       cout << "FOR YEAR y i.e. year 2" << endl;
+        double contribution_this_age=0.0;
        for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
        {
-        cout << "tot_F_at_age_y at age " << i << " is " << tot_F_at_age_y.at(i) << endl;
-        cout << "tot_M_at_age_y at age " << i << " is " << tot_M_at_age_y.at(i) << endl;
-        cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-        cout << "forecast_tot_N_at_age_end_y at age " << i << " is " << forecast_tot_N_at_age_end_y.at(i) << endl;
         if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
         contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
@@ -1978,9 +1975,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
        if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
        tac_y+= contribution_this_age;
+       cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
        }
-    tac_y= tac_y/1000;   // convert in tons;
+       cout << "tac_y in kg is: " << tac_y << endl;
+       tac_y= tac_y/1000;   // convert in tons;
     }
+
 
     //b. for year y+1 from y
     dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
@@ -1995,26 +1995,26 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
     }
     for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+        cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
     }
 
     dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
     vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
     for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+        cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
     }
 
     dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
     tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
     for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
     {
-        dout(cout << "age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+        cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
     }
 
 
     //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
-    recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits;
+    recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
     forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
     dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
@@ -2029,20 +2029,16 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
     {
-        cout << "age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+        cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
     }
 
-    // 4. compute the TAC (in tons) according to the forecast N (Baronovs equation)
+    // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
     // TAC per age and then sum over ages....
     cout << "compute TAC from contributions of age classes---" << endl;
     double contribution_this_age=0.0;
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
     {
-        cout << "pop" << this->get_name() << ": tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
-        cout << "pop" << this->get_name() << ": tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
-        cout << "pop" << this->get_name() << ": tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-        cout << "pop" << this->get_name() << ": forecast_tot_N_at_age_end_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
-       if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "W is 0?...something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+        if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
        contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
             forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -2054,7 +2050,9 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
        cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
    }
+    cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
    tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
+
 
 	// 5. check if within the TAC range, otherwise force to keep the range.
 								 // i.e. at y
@@ -2078,7 +2076,10 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
 
-   }
+   } // end HCR type 1
+
+
+
 
    if(HCR==2){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger)
 
@@ -2123,12 +2124,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
          for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
          }
-
-         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
-                                      // init
-         vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
          dout(cout << "the forecast F by age for y (from y-1) is " << endl);
@@ -2141,7 +2138,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          }
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_F_at_age_y.at(i) << endl);
+             cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
          }
 
 
@@ -2149,8 +2146,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          vector <double> tot_M_at_age_y = this->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_M_at_age_y.at(i) << endl);
+             cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
          }
+
+         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                      // init
+         vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
          //  adding recruits before the F, assuming fixed recruits
          double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
@@ -2168,20 +2169,18 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
-             cout << "age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
          }
 
          // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
          // according to the forecast N (Baronovs equation)
          // TAC per age and then sum over ages....
-         if(tstep==8761){
-            double contribution_this_age=0.0;
+         if(tstep==8761)
+         {
+            cout << "FOR YEAR y i.e. year 2" << endl;
+             double contribution_this_age=0.0;
             for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
             {
-             cout << "tot_F_at_age_y at age " << i << " is " << tot_F_at_age_y.at(i) << endl;
-             cout << "tot_M_at_age_y at age " << i << " is " << tot_M_at_age_y.at(i) << endl;
-             cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-             cout << "forecast_tot_N_at_age_end_y at age " << i << " is " << forecast_tot_N_at_age_end_y.at(i) << endl;
              if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
              contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
@@ -2190,8 +2189,10 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
             if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
             tac_y+= contribution_this_age;
+            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
             }
-         tac_y= tac_y/1000;   // convert in tons;
+            cout << "tac_y in kg is: " << tac_y << endl;
+            tac_y= tac_y/1000;   // convert in tons;
          }
 
 
@@ -2208,21 +2209,21 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          }
          for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
          }
 
          dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
          vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
          }
 
          dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
          tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
          for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
          }
 
 
@@ -2242,7 +2243,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
          }
 
          // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
@@ -2251,10 +2252,6 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          double contribution_this_age=0.0;
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "pop" << this->get_name() << ": tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": forecast_tot_N_at_age_end_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
              if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
             contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
@@ -2267,10 +2264,11 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
             cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
         }
+         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
         tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
+   } // end HCR type 2
 
-   }
 
    if(HCR==3){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger) but with flexibility of FMSY range
 
@@ -2318,12 +2316,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
          for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
          }
-
-         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
-                                      // init
-         vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
          dout(cout << "the forecast F by age for y (from y-1) is " << endl);
@@ -2336,7 +2330,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          }
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_F_at_age_y.at(i) << endl);
+             cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
          }
 
 
@@ -2344,8 +2338,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          vector <double> tot_M_at_age_y = this->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_M_at_age_y.at(i) << endl);
+             cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
          }
+
+         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                      // init
+         vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
          //  adding recruits before the F, assuming fixed recruits
          double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
@@ -2361,24 +2359,20 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          }							 // TO DO: add the plusgroup (if necessary)
 
 
-
-
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
-             cout << "age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
          }
 
          // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
          // according to the forecast N (Baronovs equation)
          // TAC per age and then sum over ages....
-         if(tstep==8761){
-            double contribution_this_age=0.0;
+         if(tstep==8761)
+         {
+            cout << "FOR YEAR y i.e. year 2" << endl;
+             double contribution_this_age=0.0;
             for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
             {
-             cout << "tot_F_at_age_y at age " << i << " is " << tot_F_at_age_y.at(i) << endl;
-             cout << "tot_M_at_age_y at age " << i << " is " << tot_M_at_age_y.at(i) << endl;
-             cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-             cout << "forecast_tot_N_at_age_end_y at age " << i << " is " << forecast_tot_N_at_age_end_y.at(i) << endl;
              if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
              contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
@@ -2387,9 +2381,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
             if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
             tac_y+= contribution_this_age;
+            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
             }
-         tac_y= tac_y/1000;   // convert in tons;
+            cout << "tac_y in kg is: " << tac_y << endl;
+            tac_y= tac_y/1000;   // convert in tons;
          }
+
 
          //b. for year y+1 from y
          dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
@@ -2404,21 +2401,21 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          }
          for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
          }
 
          dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
          vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
          }
 
          dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
          tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
          for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
          {
-             dout(cout << "age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
          }
 
 
@@ -2438,19 +2435,16 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
          }
 
+         // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
          // TAC per age and then sum over ages....
          cout << "compute TAC from contributions of age classes---" << endl;
          double contribution_this_age=0.0;
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "pop" << this->get_name() << ": tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-             cout << "pop" << this->get_name() << ": forecast_tot_N_at_age_end_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
-            if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "W is 0?...something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
             contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                  forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -2462,9 +2456,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
             cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
         }
+         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
         tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
-   }
+
+   } // end HCR type 3
+
 
    if(HCR==4){ //  statuquo TAC
 
@@ -2484,12 +2481,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
              for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+                 cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
              }
-
-             dout(cout << "the forecast N by age for y (from y-1) is " << endl);
-                                          // init
-             vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
              dout(cout << "the forecast F by age for y (from y-1) is " << endl);
@@ -2502,7 +2495,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              }
              for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_F_at_age_y.at(i) << endl);
+                 cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
              }
 
 
@@ -2510,8 +2503,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              vector <double> tot_M_at_age_y = this->get_tot_M_at_age();
              for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_M_at_age_y.at(i) << endl);
+                 cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
              }
+
+             dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                          // init
+             vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
              //  adding recruits before the F, assuming fixed recruits
              double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
@@ -2527,24 +2524,20 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              }							 // TO DO: add the plusgroup (if necessary)
 
 
-
-
              for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
              {
-                 cout << "age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+                 cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
              }
 
              // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
              // according to the forecast N (Baronovs equation)
              // TAC per age and then sum over ages....
-             if(tstep==8761){
-                double contribution_this_age=0.0;
+             if(tstep==8761)
+             {
+                cout << "FOR YEAR y i.e. year 2" << endl;
+                 double contribution_this_age=0.0;
                 for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
                 {
-                 cout << "tot_F_at_age_y at age " << i << " is " << tot_F_at_age_y.at(i) << endl;
-                 cout << "tot_M_at_age_y at age " << i << " is " << tot_M_at_age_y.at(i) << endl;
-                 cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-                 cout << "forecast_tot_N_at_age_end_y at age " << i << " is " << forecast_tot_N_at_age_end_y.at(i) << endl;
                  if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
                  contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
@@ -2553,9 +2546,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
                 if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
                 tac_y+= contribution_this_age;
+                cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
                 }
-             tac_y= tac_y/1000;   // convert in tons;
+                cout << "tac_y in kg is: " << tac_y << endl;
+                tac_y= tac_y/1000;   // convert in tons;
              }
+
 
              //b. for year y+1 from y
              dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
@@ -2570,21 +2566,21 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              }
              for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+                 cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
              }
 
              dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
              vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
              for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+                 cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
              }
 
              dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
              tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
              for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
              {
-                 dout(cout << "age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+                 cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
              }
 
 
@@ -2604,19 +2600,16 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
              for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
              {
-                 cout << "age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+                 cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
              }
 
+             // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
              // TAC per age and then sum over ages....
              cout << "compute TAC from contributions of age classes---" << endl;
              double contribution_this_age=0.0;
              for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
              {
-                 cout << "pop" << this->get_name() << ": tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
-                 cout << "pop" << this->get_name() << ": tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
-                 cout << "pop" << this->get_name() << ": tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
-                 cout << "pop" << this->get_name() << ": forecast_tot_N_at_age_end_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
-                if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "W is 0?...something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+                 if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
                 contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                      forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -2628,9 +2621,12 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
                 cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
             }
+             cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
             tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
-     }
+
+       } // end HCR type 4
+
 
 
 

@@ -1271,6 +1271,17 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
     vector<double> M2_on_node(Np.size(), 0.0);
     vector<double> dwpred(Np.size(), 0.0);
 
+    // Background mortality from Andersen et al.
+    // from surv<-round(exp(-(0.12*27*(l+(size_bin_cm/2))^(-1))),4)  # length dependent mortality vector using the lower bound length (+1 to ignore 0) to get survival
+    // mort<-round((1-surv),4)
+    double values_M_background [ ] =
+    {
+       0.7264, 0.3508, 0.2283, 0.1690, 0.1341, 0.1111, 0.0949, 0.0828, 0.0734, 0.0659, 0.0598, 0.0548, 0.0505, 0.0469
+       //  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+    vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
+
+
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
 
@@ -1331,11 +1342,12 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            // divide according to tstep (month in this case)
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
-            Np.at(sz) =  Np.at(sz)  *exp(-M2_on_node.at(sz)/12);
+            double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
+            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(sz))/12);
 
             //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
-           // (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
+           // (the pblm with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
         }
 
 

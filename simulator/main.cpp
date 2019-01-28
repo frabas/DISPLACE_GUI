@@ -4182,6 +4182,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         int biocheck = applyBiologicalModule2(tstep,
+                                             a_month_i,
                                              namesimu,
                                              namefolderinput,
                                              namefolderoutput,

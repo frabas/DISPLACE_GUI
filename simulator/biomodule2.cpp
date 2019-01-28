@@ -77,7 +77,7 @@ static void unlock()
 }
 
 
-int applyBiologicalModule2(int tstep, const string & namesimu,
+int applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,
@@ -591,7 +591,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
             */
 
-            populations.at(sp)->compute_tot_N_and_F_and_W_at_age();
+            populations.at(sp)->compute_tot_N_and_F_and_W_at_age(a_month_i);
 
         }
         else

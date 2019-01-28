@@ -97,6 +97,7 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_perceived_tot_N_at_age() const;
         const vector<double>& get_tot_N_at_age_last_quarter() const;
         const vector<double>& get_tot_F_at_age() const;
+        const vector<double>& get_tot_F_at_age_running_average() const;
         const vector<double>& get_tot_F_at_age_last_quarter() const;
         const vector<double>& get_perceived_tot_F_at_age() const;
         const vector<double>& get_tot_M_at_age() const;
@@ -153,6 +154,7 @@ class COMMONSSHARED_EXPORT Population
         void set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age);
         void set_tot_N_at_age_last_quarter(const vector<double>& _N_at_age_last_quarter);
         void set_tot_F_at_age(const vector<double>& _F_at_age);
+        void set_tot_F_at_age_running_average(const vector<double>& _tot_F_at_age_running_average);
         void set_perceived_tot_F_at_age(const vector<double>& _perceived_F_at_age);
         void set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter);
         void set_tot_M_at_age(const vector<double>& _M_at_age);
@@ -184,7 +186,7 @@ class COMMONSSHARED_EXPORT Population
 		void aggregate_N();		 // aggregate from nodes
 								 // do a cumul for F
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
-        void compute_tot_N_and_F_and_W_at_age();
+        void compute_tot_N_and_F_and_W_at_age(int a_month_i);
         void compute_tot_M_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
@@ -247,6 +249,7 @@ class COMMONSSHARED_EXPORT Population
         vector<double> perceived_tot_N_at_age;
                                  //
 		vector<double> tot_F_at_age;
+        vector<double> tot_F_at_age_running_average;
                                  //
         vector<double> perceived_tot_F_at_age;
         vector<double> tot_F_at_age_last_quarter;

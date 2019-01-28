@@ -10,7 +10,7 @@ struct PopDynTable::Impl {
         FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
+        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
 };
 
 PopDynTable::PopDynTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -32,6 +32,7 @@ void PopDynTable::dropAndCreate()
                            fldC,
                            fldD,
                            fldF,
+                           fldravF,
                            fldM,
                            fldNa,
                            fldW,
@@ -54,6 +55,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
                                            fldC,
                                            fldD,
                                            fldF,
+                                           fldravF,
                                            fldM,
                                            fldNa,
                                            fldW,
@@ -68,6 +70,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
     const auto &C = pop->get_tot_C_at_szgroup();
     const auto &D = pop->get_tot_D_at_szgroup();
     const auto &F = pop->get_tot_F_at_age();
+    const auto &ravF = pop->get_tot_F_at_age_running_average();
     const auto &M = pop->get_tot_M_at_age();
     const auto &Na = pop->get_tot_N_at_age();
     const auto &W = pop->get_tot_W_at_age();
@@ -86,6 +89,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
                             (i < C.size() ? C.at(i) : -1),
                             (i < D.size() ? D.at(i) : -1),
                             (i < F.size() ? F.at(i) : -1),
+                            (i < ravF.size() ? ravF.at(i) : -1),
                             (i < M.size() ? M.at(i) : -1),
                             (i < Na.size() ? Na.at(i) : -1),
                             (i < W.size() ? W.at(i) : -1),

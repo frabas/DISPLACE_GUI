@@ -743,6 +743,13 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         fldPopId = p->mPopDynTable->fldPopId;
         fldGroup = p->mPopDynTable->fldGroup;
         break;
+    case displace::plot::PopulationStat::RavFMortality:
+        fld = p->mPopDynTable->fldravF;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
     case displace::plot::PopulationStat::NatMortality:
         fld = p->mPopDynTable->fldM;
         name= p->mPopDynTable->name();

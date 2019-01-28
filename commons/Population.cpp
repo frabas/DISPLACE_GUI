@@ -120,6 +120,7 @@ Population::Population(int a_name,
     for(unsigned int a=0; a<nb_ages; a++)
 	{
 		tot_F_at_age.push_back(0);
+        tot_F_at_age_running_average.push_back(0);
         tot_M_at_age.push_back(0);
         FFmsy.push_back(0);
     }
@@ -441,6 +442,11 @@ const vector<double>& Population::get_tot_N_at_age() const
 const vector<double>& Population::get_tot_F_at_age() const
 {
 	return(tot_F_at_age);
+}
+
+const vector<double>& Population::get_tot_F_at_age_running_average() const
+{
+    return(tot_F_at_age_running_average);
 }
 
 
@@ -773,6 +779,13 @@ void Population::set_tot_F_at_age(const vector<double>& _tot_F_at_age)
 	tot_F_at_age =_tot_F_at_age;
 
 }
+
+void Population::set_tot_F_at_age_running_average(const vector<double>& _tot_F_at_age_running_average)
+{
+    tot_F_at_age_running_average =_tot_F_at_age_running_average;
+
+}
+
 
 
 void Population::set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age)
@@ -1476,11 +1489,12 @@ void Population::add_recruits_from_eggs()
 }
 
 
-void Population::compute_tot_N_and_F_and_W_at_age()
+void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 {
     cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl ;
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
+    vector <double> tot_F_at_age_running_average = get_tot_F_at_age_running_average();
     vector <double> FFmsy (tot_F_at_age.size());
     vector <double> perceived_tot_F_at_age = get_tot_F_at_age();
                                  // init
@@ -1594,11 +1608,22 @@ void Population::compute_tot_N_and_F_and_W_at_age()
             perceived_tot_F_at_age.at(a)+= -log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a)); // used for perceived stock in the management procedure
             tot_F_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a));  // used for outcomes
             FFmsy.at(a)=tot_F_at_age.at(a)/ FMSY;
+            // note that because tot_F_at_age is biased by the growth computation within a year, this making some sz group gaining some individuals at t+1, then we need
+            // an alternative proxy computation for the F at age: a running average over months of month F raised to year.
+            if(a_month_i!=1)
+            {
+                tot_F_at_age_running_average.at(a)= (tot_F_at_age_running_average.at(a)+(-log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a))*12)) /2;  // used for outcomes
+            }
+            else
+            {
+                tot_F_at_age_running_average.at(a)= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a))*12;
+            }
         }
 		else
 		{
             perceived_tot_F_at_age.at(a)+= 0;
             tot_F_at_age.at(a)+= 0;
+            tot_F_at_age_running_average = tot_F_at_age_running_average;
             FFmsy.at(a)=0;
         }
 
@@ -1610,13 +1635,14 @@ void Population::compute_tot_N_and_F_and_W_at_age()
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
         dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
+        dout(cout << "tot_F_at_age_running_average[a]  is "<< tot_F_at_age_running_average[a]  << endl);
         //dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
 
-        if(this->get_name()==1){
-            cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
-            cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
-            cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
-        }
+       // if(this->get_name()==1){
+       //     cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
+       //     cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
+       //     cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
+       // }
 
 	}
 
@@ -1625,6 +1651,7 @@ void Population::compute_tot_N_and_F_and_W_at_age()
     this->set_perceived_tot_N_at_age(perceived_tot_N_at_age);
     this->set_FFmsy(FFmsy);
     this->set_tot_F_at_age(tot_F_at_age);
+    this->set_tot_F_at_age_running_average(tot_F_at_age_running_average);
     this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
     //this->set_tot_M_at_age(tot_M_at_age);
 	this->set_tot_W_at_age(tot_W_at_age);
@@ -1699,7 +1726,8 @@ void Population::clear_tot_F_at_age()
 	{
 		tot_F_at_age[a]=0;
 		tot_F_at_age_last_quarter[a]=0;
-	}
+        tot_F_at_age_running_average[a]=0;
+    }
 }
 
 void Population::clear_tot_M_at_age()

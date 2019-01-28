@@ -27,6 +27,7 @@ public:
     const FieldDef<FieldType::Real> fldNz = makeFieldDef("Nz",FieldType::Real());
     const FieldDef<FieldType::Real> fldC = makeFieldDef("Catch",FieldType::Real());
     const FieldDef<FieldType::Real> fldD = makeFieldDef("Discard",FieldType::Real());
+    const FieldDef<FieldType::Real> fldravF = makeFieldDef("RunningF",FieldType::Real());
     const FieldDef<FieldType::Real> fldF = makeFieldDef("F",FieldType::Real());
     const FieldDef<FieldType::Real> fldM = makeFieldDef("M",FieldType::Real());
     const FieldDef<FieldType::Real> fldNa = makeFieldDef("Na",FieldType::Real());

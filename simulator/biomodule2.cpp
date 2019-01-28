@@ -215,6 +215,7 @@ int will_stop=0; // see Options::DEBUG
 
                  // send to db
                  if (enable_sqlite_out)
+                {
                          outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
                          for (unsigned int n=0; n<nodes.size(); n++)
                          {
@@ -240,8 +241,9 @@ int will_stop=0; // see Options::DEBUG
                  }
 
 
-            } // end sp
+             } // end sp implcit
 
+            } // end sp
 
 
 

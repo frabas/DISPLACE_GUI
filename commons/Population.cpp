@@ -1612,11 +1612,11 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
             // an alternative proxy computation for the F at age: a running average over months of month F raised to year.
             if(a_month_i!=1)
             {
-                tot_F_at_age_running_average.at(a)= (tot_F_at_age_running_average.at(a)+(-log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a))*12)) /2;  // used for outcomes
+                tot_F_at_age_running_average.at(a)= (tot_F_at_age_running_average.at(a)+(-log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a))*12)) /2;  // used for outcomes
             }
             else
             {
-                tot_F_at_age_running_average.at(a)= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a))*12;
+                tot_F_at_age_running_average.at(a)= -log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a))*12;
             }
         }
 		else
@@ -1770,7 +1770,7 @@ double Population::compute_fbar()
 		age_max=5;
 	}
 
-    vector <double> a_tot_F_at_age= this->get_perceived_tot_F_at_age(); // perceived
+    vector <double> a_tot_F_at_age= this->get_tot_F_at_age_running_average(); // perceived
 
     for(int a = age_min; a < age_max; a++)
 	{
@@ -1950,7 +1950,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
     dout(cout << "the forecast F by age for y (from y-1) is " << endl);
-    vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+    vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age_running_average();
     vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
     for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
     {
@@ -2161,7 +2161,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
          }
 
-         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age_running_average();
          for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
          {
              cout << "tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << endl;
@@ -2359,7 +2359,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
          dout(cout << "the forecast F by age for y (from y-1) is " << endl);
-         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+         vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age_running_average();
          vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
@@ -2524,7 +2524,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
              dout(cout << "the forecast F by age for y (from y-1) is " << endl);
-             vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+             vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age_running_average();
              vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
              for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
              {

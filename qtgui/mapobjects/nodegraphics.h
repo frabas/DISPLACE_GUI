@@ -69,7 +69,7 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 
     Type getType() const { return mType; }
-    double getValueForPop(int pop) const;
+    boost::optional<double> getValueForPop(int pop) const;
     QList<int> getInterestingList() const;
 
 private:

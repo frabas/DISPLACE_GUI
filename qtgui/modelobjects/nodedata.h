@@ -26,6 +26,8 @@
 #include <QList>
 #include <QVector>
 
+#include <boost/optional.hpp>
+
 #include <memory>
 
 namespace types {
@@ -146,8 +148,8 @@ public:
     void setPopTot(double tot);
     [[deprecated]]
     void setPop(QList<double> v, double tot);
-    double getPop(int pop) const ;
-    double getPopTot () const;
+    boost::optional<double> getPop(int pop) const ;
+    boost::optional<double> getPopTot () const;
 
     [[deprecated]]
     void setPopW(int pop, double val);
@@ -155,16 +157,16 @@ public:
     void setPopWTot(double tot);
     [[deprecated]]
     void setPopW(QList<double> v, double tot);
-    double getPopW(int pop) const ;
+    boost::optional<double> getPopW(int pop) const ;
     double getPopWTot () const;
 
     [[deprecated]]
     void setImpact(int pop, double impact);
-    double getImpact(int pop) const;
+    boost::optional<double> getImpact(int pop) const;
 
     [[deprecated]]
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
-    double getCumcatchesPerPop(int pop);
+    boost::optional<double> getCumcatchesPerPop(int pop);
 
     [[deprecated]]
     void setCumdiscardsPerPop(int pop, double cumdiscardsperpop);

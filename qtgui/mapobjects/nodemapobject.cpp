@@ -370,8 +370,8 @@ QString NodeMapObject::updateStatText(QString prefix)
     QList<int> ilist = getInterestingList();
     double tot = 0.0;
 
-    foreach(int i, ilist) {
-        double val;
+    for(int i : ilist) {
+        boost::optional<double> val;
 
         switch (mRole) {
         case GraphNodeWithPopStatsRole:
@@ -402,8 +402,10 @@ QString NodeMapObject::updateStatText(QString prefix)
         text += QString("<b>%1 %2:</b> %3<br/>")
                 .arg(prefix)
                 .arg(i)
-                .arg(val);
-        tot += val;
+                .arg(val.is_initialized() ? QString::number(val.value()) : "-");
+        if (val.is_initialized()) {
+            tot += val.value();
+        }
     }
     text += QString("<b>Total:</b> %1<br/>")
             .arg(tot);

@@ -108,7 +108,10 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     QList<int> ilist = getInterestingList();
 
     for (int i = 0; i < ilist.size(); ++i) {
-        tot += getValueForPop(ilist[i]);
+        auto v = getValueForPop(ilist[i]);
+        if (v.is_initialized()) {
+            tot += v.value();
+        }
     }
 
     int RADIUS = piew() / LastType * (LastType - mType);
@@ -116,13 +119,16 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     if (ilist.size() > 1) {
         if (tot > 1e-3) {
             double inc = 0.0;
-            double v;
+            boost::optional<double> v;
             for (int i = 0; i < ilist.size(); ++i) {
                 v = getValueForPop(ilist[i]);
-                v = v / tot * 360.0 * 16.0;
-                painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).color(ilist[i]));
-                painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
-                inc += v;
+
+                if (v.is_initialized()) {
+                    double vr = v.value() / tot * 360.0 * 16.0;
+                    painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).color(ilist[i]));
+                    painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (vr));
+                    inc += vr;
+                }
             }
         } else {
             /* Don't display "zero" values
@@ -132,9 +138,11 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
             */
         }
     } else if (ilist.size() == 1) {
-        double v = getValueForPop(ilist[0]);
-        painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(v));
-        painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+        boost::optional<double> v = getValueForPop(ilist[0]);
+        if (v.is_initialized()) {
+            painter.setBrush(mController->getPalette(mModelIndex, ValueRole).color(v.value()));
+            painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+        }
     } else {        // nothing to display.
         /*
         painter.setBrush(Qt::transparent);
@@ -144,7 +152,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     }
 }
 
-double NodeWithPopStatsGraphics::getValueForPop(int pop) const
+boost::optional<double> NodeWithPopStatsGraphics::getValueForPop(int pop) const
 {
     switch (mType) {
     case Population:

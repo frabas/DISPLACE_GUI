@@ -108,7 +108,7 @@ void PopTable::init()
                                                       sqlite::op::max(fldTStep)
                                                       )
                 .where (sqlite::op::le(fldTStep))
-                .groupBy (fldNodeId);
+                .groupBy (fldNodeId, fldPopId);
 
         p->allNodesQueryStatement = sqlite::SQLiteStatement(db(), sqlAllQuery);
     }

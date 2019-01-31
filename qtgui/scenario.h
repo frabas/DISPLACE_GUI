@@ -75,6 +75,7 @@ private:
 
     QStringList tariff_pop;
     int freq_update_tariff_code;
+    int update_tariffs_based_on_lpue_or_dpue_code;
     QStringList arbitary_breaks_for_tariff;
     int total_amount_credited;
     double tariff_annual_hcr_percent_change;
@@ -136,7 +137,9 @@ public:
     std::vector<int> getTariffPop_asVector() const;
     void setTariffPop(const QStringList &value);
     int getFreqUpdateTariffCode() const;
+    int getUpdateTariffsBasedOnLpueOrDpueCode() const;
     void setFreqUpdateTariffCode(int value);
+    void setUpdateTariffsBasedOnLpueOrDpueCode(int value);
     std::vector<double> getArbitraryBreaksForTariff_asVector() const;
     void setArbitraryBreaksForTariff(const QStringList &value);
     int getTotalAmountCredited() const;

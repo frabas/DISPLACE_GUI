@@ -2351,6 +2351,16 @@ bool DisplaceModel::loadNodes()
        }
 
     }
+    else
+    {
+        // need to inform with a vector of three zeros at least
+        vector<double> init_tariffs(3, 0);
+        for(size_t a_idx=0; a_idx<mNodes.size(); a_idx++)
+        {
+            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+        }
+    }
+
 
 
 

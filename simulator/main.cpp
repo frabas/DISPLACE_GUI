@@ -191,6 +191,7 @@ bool is_individual_vessel_quotas;
 bool check_all_stocks_before_going_fishing;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
+int update_tariffs_based_on_lpue_or_dpue_code;
 int freq_do_growth;
 int freq_redispatch_the_pop;
 vector <double> arbitary_breaks_for_tariff;
@@ -657,6 +658,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         tariff_pop=scenario.tariff_pop;
         freq_update_tariff_code=scenario.freq_update_tariff_code;
+        update_tariffs_based_on_lpue_or_dpue_code=scenario.update_tariffs_based_on_lpue_or_dpue_code;
         arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
         total_amount_credited=scenario.total_amount_credited;
         tariff_annual_hcr_percent_change=scenario.tariff_annual_hcr_percent_change;
@@ -726,6 +728,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
         outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
+        outc(cout << "update_tariffs_based_on_lpue_or_dpue_code " << update_tariffs_based_on_lpue_or_dpue_code << endl);
         outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
         outc(cout << "total_amount_credited " << total_amount_credited << endl);
         outc(cout << "tariff_annual_hcr_percent_change " << tariff_annual_hcr_percent_change << endl);
@@ -2564,6 +2567,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                  " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
         }
     }
+    else
+    {
+        // need to inform with a vector of three zeros at least
+        vector<double> init_tariffs(3, 0);
+        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+        {
+            nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+        }
+    }
 
 
     dout(cout  << "---------------------------" << endl);
@@ -3178,7 +3190,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(dyn_alloc_sce.option(Options::fishing_credits))
         {
-            cout << "Read in fishing credits for this vessel " << vesselids[i] << endl;
+            tout(cout << "Read in fishing credits for this vessel " << vesselids[i] << endl);
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
             for (int icr=0; icr <spe_fishing_credits.size();++icr)
             {
@@ -5384,17 +5396,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
                 cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
                         " given the target F " <<  ftarget_allpopav << "  and the assessed F averaged over tariff pops " <<  fbar_py_allpopav  << endl;
-                for (unsigned int icl=0; icl <tariff_pop.size();++icl)
+                for (unsigned int icl=0; icl <arbitary_breaks_for_tariff.size();++icl)
                 {
                     arbitary_breaks_for_tariff.at(icl) * fmultiplier;
                 }
 
                // 2 - Re-init vessel total credits
-                cout<< "Re-init vessel total credits..." << endl;
+                tout(cout<< "Re-init vessel total credits..." << endl);
                 fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {
-                   cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl;
+                   tout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
                    vector <double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
                    for (int icr=0; icr <spe_fishing_credits.size();++icr)
                    {
@@ -5456,38 +5468,70 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //cout << endl;
 
 
-                // loop over to find out the mean lpue
-                double cumcatches = 0, cumeffort = 0, mean_lpue;
+                // loop over to find out the mean pue
+                double cumcatches = 0, cumdiscards = 0, cumeffort = 0, mean_pue;
                 for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
                 {
-                    for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                    if(update_tariffs_based_on_lpue_or_dpue_code==1)
                     {
+                       dout(cout << "Updating tariffs based on lpue" << endl);
+                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                       {
                         cumcatches+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                       }
                     }
+                    if(update_tariffs_based_on_lpue_or_dpue_code==2)
+                    {
+                       dout(cout << "Updating tariffs based on dpue" << endl);
+                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                        {
+                         cumdiscards+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                        }
+                    }
+
                     cumeffort+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                 }
                 //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
                 //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
                 if(cumeffort!=0){
-                    mean_lpue =cumcatches/cumeffort;
-                    dout(cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl);
+                    if(update_tariffs_based_on_lpue_or_dpue_code==1) mean_pue =cumcatches/cumeffort;
+                    if(update_tariffs_based_on_lpue_or_dpue_code==2) mean_pue =cumdiscards/cumeffort;
+                    dout(cout << " mean_pue of reference for the update is.... " << mean_pue << endl);
 
 
                     // loop over to scale the tariff (on each node) up or down (caution: by one category)
-                    double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
+                    double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
                     for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
                     {
                         tariff_this_node =  nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
                         effort_on_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                         double cumcatches_this_node=0;
-                        for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                        if(update_tariffs_based_on_lpue_or_dpue_code==1)
                         {
+                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                           {
                             cumcatches_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                           }
+                        }
+                        double cumdiscards_this_node=0;
+                        if(update_tariffs_based_on_lpue_or_dpue_code==2)
+                        {
+                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                           {
+                            cumdiscards_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                           }
+                        }
+                        if(update_tariffs_based_on_lpue_or_dpue_code==1) {
+                            node_pue = cumcatches_this_node /effort_on_this_node;
+                            nb_times_diff    =  node_pue/mean_pue;
                         }
 
-                        node_lpue = cumcatches_this_node /effort_on_this_node;
-                        nb_times_diff    =  node_lpue/mean_lpue;
+                        if(update_tariffs_based_on_lpue_or_dpue_code==2) {
+                            node_pue = cumdiscards_this_node /effort_on_this_node;
+                            nb_times_diff    =  node_pue/mean_pue;
+                        }
+
                         //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
 
 
@@ -5510,6 +5554,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             if((count2) >= arbitary_breaks_for_tariff.size()-1) break;
                             count2 = count2+1;
                         }
+
+                        // if landing/effort or discard/effort increases we want to increase the tariff on this areas
                         if(count1>count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
                         if(count1<count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2-1);
                         if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);

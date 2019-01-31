@@ -5499,7 +5499,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         {
 
             // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
-            cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+            tout(cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;)
             // => Then, imagine a mean to expand the range of these vessels....
 /*
             // e.g. look at what use to do some vessels sharing the same departure harbour!

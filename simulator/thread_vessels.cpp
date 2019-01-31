@@ -101,6 +101,7 @@ extern bool is_individual_vessel_quotas;
 extern bool check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
+extern int update_tariffs_based_on_lpue_or_dpue_code;
 extern int freq_do_growth;
 extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;

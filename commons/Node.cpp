@@ -1563,7 +1563,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
     }
 	else
 	{
-        cout  << "no biomass available here...." << tot << endl;
+        tout(cout  << "no biomass available here...." << tot << endl);
 
 	}
 

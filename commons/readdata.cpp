@@ -153,9 +153,11 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         {13,"a_graph"},{15,"nrow_coord"},{17,"nrow_graph"},{19,"a_port"},{21,"graph_res"},
         {23,"is_individual_vessel_quotas"},{25,"check_all_stocks_before_going_fishing"},{27,"dt_go_fishing"},
         {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
-        {37,"dt_change_port"},{39,"use_dtrees"},{41,"tariff_pop"},{43,"freq_update_tariff_code"},
+        {37,"dt_change_port"},{39,"use_dtrees"},
+        {41,"tariff_pop"},{43,"freq_update_tariff_code"},
         {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
-        {51,"metier_closures"}
+        {51,"update_tariffs_based_on_lpue_or_dpue_code"},
+        {53,"metier_closures"}
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -213,6 +215,8 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
 
         scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
         scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
+        scenario.update_tariffs_based_on_lpue_or_dpue_code = reader.getAs<int>("update_tariffs_based_on_lpue_or_dpue_code", 0);
+
     } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
         cerr << x.what() << endl;

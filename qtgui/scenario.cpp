@@ -51,7 +51,8 @@ Scenario::Scenario()
       freq_update_tariff_code(0),
       arbitary_breaks_for_tariff(0),
       total_amount_credited(0),
-      tariff_annual_hcr_percent_change(0.0)
+      tariff_annual_hcr_percent_change(0.0),
+      update_tariffs_based_on_lpue_or_dpue_code(1)
 
 {
 }
@@ -228,6 +229,17 @@ return freq_update_tariff_code;
 }
 
 
+void Scenario::setUpdateTariffsBasedOnLpueOrDpueCode(int value)
+{
+    update_tariffs_based_on_lpue_or_dpue_code = value;
+}
+
+int Scenario::getUpdateTariffsBasedOnLpueOrDpueCode() const
+{
+return update_tariffs_based_on_lpue_or_dpue_code;
+}
+
+
 void Scenario::setArbitraryBreaksForTariff(const QStringList &value)
 {
     arbitary_breaks_for_tariff = value;
@@ -362,6 +374,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     s.setTariffPop(tariff_pops);
     s.setFreqUpdateTariffCode(scenario.freq_update_tariff_code);
+    s.setUpdateTariffsBasedOnLpueOrDpueCode (scenario.update_tariffs_based_on_lpue_or_dpue_code);
     s.setArbitraryBreaksForTariff(breaks_for_tariffs);
 
 

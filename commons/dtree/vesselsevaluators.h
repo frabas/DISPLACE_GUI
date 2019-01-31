@@ -302,9 +302,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         //auto the_grds = v->get_fgrounds();
         //int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        cout << "Tariff on this ground being evaluated..." << endl;
+        //cout << "Tariff on this ground being evaluated..." << endl;
         vector <double> tariffs_over_layers = v->get_map_of_nodes().at(fground)->get_tariffs(); // using the superpower of omniscience (which is anyway quite expected on tariffs!)
-        cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
+        //cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
         return  tariffs_over_layers.at(0) >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
     }
 };

@@ -2321,7 +2321,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
         dout(cout << "overall migration has been read correctly" << endl);
 
-        double landings_so_far=0;
+        double landings_so_far=1.0;
 
         double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
         double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);

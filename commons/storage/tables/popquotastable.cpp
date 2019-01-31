@@ -7,7 +7,7 @@ struct PopQuotasTable::Impl {
     bool init = false;
     std::mutex mutex;
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
+        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
 };
 
 PopQuotasTable::PopQuotasTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -26,7 +26,8 @@ void PopQuotasTable::dropAndCreate()
                            fldPopId,
                            fldGroup,
                            fldQuotasUptake,
-                           fldQuotas
+                           fldQuotas,
+                           fldChoking
                            ));
 }
 
@@ -39,12 +40,14 @@ void PopQuotasTable::insert(int tstep, int popid, Population *pop)
                                            fldPopId,
                                            fldGroup,
                                            fldQuotasUptake,
-                                           fldQuotas));
+                                           fldQuotas,
+                                           fldChoking));
         p->init = true;
     }
 
     const auto &QuotasUptake = pop->get_quota_uptake();
     const auto &Quotas = pop->get_quota();
+    const auto &Choking= static_cast<double>(pop->get_is_choking_fisheries());
 
     auto n = 1;
 
@@ -53,6 +56,7 @@ void PopQuotasTable::insert(int tstep, int popid, Population *pop)
                             popid,
                             (int)i,
                             (QuotasUptake),
-                            (Quotas)
+                            (Quotas),
+                            (Choking)
                     ));
 }

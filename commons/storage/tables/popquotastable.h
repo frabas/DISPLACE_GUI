@@ -26,6 +26,7 @@ public:
 
     const FieldDef<FieldType::Real> fldQuotasUptake = makeFieldDef("QuotasUptake",FieldType::Real());
     const FieldDef<FieldType::Real> fldQuotas = makeFieldDef("Quotas",FieldType::Real());
+    const FieldDef<FieldType::Real> fldChoking = makeFieldDef("Choking",FieldType::Real());
 
     PopQuotasTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~PopQuotasTable() noexcept;

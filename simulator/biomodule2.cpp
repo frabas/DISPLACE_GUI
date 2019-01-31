@@ -1022,7 +1022,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 //=> obviously, F restart from 0 each year...
                                 cout << "Adding to landings_at_end_of_years this pop "<< sp << ": " << populations.at(sp)->get_landings_so_far() << endl;
                                 populations.at(sp)->add_to_landings_at_end_of_years(populations.at(sp)->get_landings_so_far());
-                                populations.at(sp)->set_landings_so_far(0);
+                                populations.at(sp)->set_landings_so_far(1.0);
                                 populations.at(sp)->clear_tot_C_at_szgroup();
                                 populations.at(sp)->clear_tot_D_at_szgroup();
 

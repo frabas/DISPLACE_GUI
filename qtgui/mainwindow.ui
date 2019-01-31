@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -361,7 +361,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -455,6 +455,11 @@
                 <item>
                  <property name="text">
                   <string>Quotas (if TACs On)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Choking stocks (if TACs On)</string>
                  </property>
                 </item>
                 <item>

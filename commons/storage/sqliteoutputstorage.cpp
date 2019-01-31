@@ -714,6 +714,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     FieldDef<FieldType::Integer> fldGroup("");
 
 
+
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
         fld = p->mPopDynTable->fldNz;
@@ -794,6 +795,13 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     case displace::plot::PopulationStat::Quotas:
         fld = p->mPopQuotasTable->fldQuotas;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Choking:
+        fld = p->mPopQuotasTable->fldChoking;
         name= p->mPopQuotasTable->name();
         fldTStep = p->mPopQuotasTable->fldTStep;
         fldPopId = p->mPopQuotasTable->fldPopId;

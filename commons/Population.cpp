@@ -81,7 +81,7 @@ Population::Population(int a_name,
 
 	param_sr=_param_sr;
 
-	landings_so_far= 0.0;
+    this->set_landings_so_far(0.0);
 
 	// init...
     dout(cout << "init..." << name << endl);

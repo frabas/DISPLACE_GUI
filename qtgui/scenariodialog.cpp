@@ -49,6 +49,7 @@ static const char *dyn_alloc_options[] = {
     "FMSY",
     "FMSYrange",
     "fishing_credits",
+    "promote_high_tariffs",
     "envt_variables_diffusion",
     "TechCreeping3Per",
     "ExitVessels10Per",

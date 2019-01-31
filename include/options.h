@@ -106,6 +106,7 @@ enum Dyn_Alloc {
     shared_harbour_knowledge,
     twoFoldTACconstr,
     fishing_credits,
+    promote_high_tariffs,
     envt_variables_diffusion,
     TechCreeping3Per,
     ExitVessels10Per,

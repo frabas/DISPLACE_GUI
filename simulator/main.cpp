@@ -5485,8 +5485,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         {
                             cumcatches_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
                         }
-                        node_lpue = cumcatches_this_node /effort_on_this_node;
 
+                        node_lpue = cumcatches_this_node /effort_on_this_node;
                         nb_times_diff    =  node_lpue/mean_lpue;
                         //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
 

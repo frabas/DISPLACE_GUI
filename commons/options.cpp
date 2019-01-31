@@ -48,6 +48,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
+    O(mMap,promote_high_tariffs);
     O(mMap,envt_variables_diffusion);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);

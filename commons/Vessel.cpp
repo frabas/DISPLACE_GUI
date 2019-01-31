@@ -5828,7 +5828,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //"lowestTariff"   // ChooseGround               => relevant only if fishing_credits Option is active
-        // avoidHighTariffAreas  // ChooseGround               => relevant only if fishing_credits Option is active
+        // tariffThisGroundIs  // ChooseGround               => relevant only if fishing_credits Option is active
         //=> TO DO: add the corresponding dtree evaluators...
 
         // cout << "traverse tree for ground " << ground << endl;
@@ -5898,9 +5898,23 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
       {
 
         freq_grds= this->get_freq_fgrounds();
-        for(int gr=0; gr < grds.size(); ++gr)
+        if(dyn_alloc_sce.option(Options::promote_high_tariffs))
         {
+           // promote visiting high tariff areas
+           for(int gr=0; gr < grds.size(); ++gr)
+           {
             freq_grds.at(gr)= freq_grds.at(gr) * nodes.at(grds.at(gr).toIndex())->get_tariffs().at(0); // probas weigthed by the tariffs
+           }
+        }
+        else
+        {
+           // promote avoiding high tariff areas
+            double denom=0.0;
+            for(int gr=0; gr < grds.size(); ++gr)
+            {
+             denom= nodes.at(grds.at(gr).toIndex())->get_tariffs().at(0);
+             if(denom!=0) freq_grds.at(gr)= freq_grds.at(gr) * 1/denom; // probas weigthed by the tariffs
+            }
         }
         freq_grds= scale_a_vector_to_1(freq_grds);
       }

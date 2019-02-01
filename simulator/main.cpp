@@ -5774,7 +5774,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         ///------------------------------///
         ///------------------------------///
-        ///  THE QUOTA UPTAKES           ///
+        ///  THE QUOTA UPTAKES & CHOKING ///
         ///------------------------------///
         ///------------------------------///
 
@@ -5804,6 +5804,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                    quotasuptake << tstep << " " <<pop << " " <<
                                    global_quotas_uptake.at(pop) << " " <<
                                      populations.at(pop)->get_tac()->get_current_tac() << endl;
+
+
+
+                   // if more than x% of vessels choked then declare this stock as choking fisheries
+                   int nbchoked=0;
+                   for (unsigned int v=0; v<vessels.size(); v++)
+                   {
+                       nbchoked+=vessels.at(v)->get_is_choked().at(pop);
+                   }
+                   // HARDCODED threshold...
+                   if(nbchoked>=ceil(0.3*vessels.size())) populations.at(pop)->set_is_choking_fisheries(1);
 
                 }
            }
@@ -5859,6 +5870,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                    }
                    guiSendUpdateCommand(nodes_envt_filename, tstep);
                }
+          }
+
+
+          ///------------------------------///
+          ///------------------------------///
+          ///  REINIT SOME VALUES ON NODES ///
+          ///------------------------------///
+          ///------------------------------///
+
+          if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+          {
+              for (unsigned int i=0; i<nodes.size(); i++)
+              {
+              nodes.at(i)->set_nbchoked(0);
+              }
           }
 
 

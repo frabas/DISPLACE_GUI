@@ -3016,7 +3016,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
-                                dout(cout  << "...and declare you are choked by " << pop << "!!! " << endl);
+                                tout(cout  << "...I declare I am choked by " << pop << "!!! " << endl);
                                 this->set_is_choked(pop, 1);
                                 populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
                                 // => back correction (disable if you want to know the discarded part in annual_indic.

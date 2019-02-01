@@ -943,22 +943,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         // apply only at the beginning of the year (this is maybe not always relevant...)
                         if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                         {
-                            int namepop = populations.at(sp)->get_name();
-
 
 
                             if(dyn_alloc_sce.option(Options::TACs))
                             {
                                // compute a TAC for y+1 from a short-term forecast (STF)
                                // and a long-term management plan (LTMP)
-
-                                // if more than x% of vessels cheoked then declare this stock as choking fisheries
-                                int nbchoked=0;
-                                for (unsigned int v=0; v<vessels.size(); v++)
-                                {
-                                    nbchoked+=vessels.at(v)->get_is_choked().at(sp);
-                                }
-                                if(nbchoked>ceil(0.5*vessels.size())) populations.at(sp)->set_is_choking_fisheries(1);
 
 
                                double multiOnTACconstraint;
@@ -1115,6 +1105,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
               }
               a_list_nodes.at(n)->set_totNs_per_pop(name_pop, totN_this_pop);
               a_list_nodes.at(n)->set_totWs_per_pop(name_pop, totW_this_pop);
+
+
+
+             // Update the "choking" area extend (pblm here of double counting...but too costly to avoid for now....)
+             if(populations.at(sp)->get_is_choking_fisheries()) a_list_nodes.at(n)->set_nbchoked(a_list_nodes.at(n)->get_nbchoked() + 1);
+
            }
          }
     }

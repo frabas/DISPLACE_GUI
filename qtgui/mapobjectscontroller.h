@@ -216,6 +216,7 @@ public:
         OutLayerCumCatchesWithThreshold,
         OutLayerCumdiscards,
         OutLayerCumdiscardsRatio,
+        OutLayerNbChoked,
 
         OutLayerMax
 
@@ -396,6 +397,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesWithThreshold[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscards[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscardsratio[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerNbchoked[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];

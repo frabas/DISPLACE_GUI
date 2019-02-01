@@ -160,6 +160,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumdiscardsratio[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Discards Ratio (NodesStat CumDiscardsRatio)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumdiscardsRatio, mStatsLayerCumdiscardsratio[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerNbchoked[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Nb choked stocks (NodesStat NbChokedStks)")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerNbChoked, mStatsLayerNbchoked[model_n],type != DisplaceModel::LiveModelType ? false : false);
+
     mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerWind, mStatsLayerWind[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
@@ -493,6 +496,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerCumcatchesWithThreshold[model_n]->clearGeometries();
     mStatsLayerCumdiscards[model_n]->clearGeometries();
     mStatsLayerCumdiscardsratio[model_n]->clearGeometries();
+    mStatsLayerNbchoked[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerCumcatchesPerPop[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
@@ -595,6 +599,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumDiscardsRatioRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumdiscardsratio[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithNbChokedRole, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerNbchoked[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

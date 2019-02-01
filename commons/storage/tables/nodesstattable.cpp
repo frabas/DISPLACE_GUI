@@ -12,7 +12,7 @@ struct NodesStatTable::Impl {
 
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
-    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
 
@@ -36,7 +36,8 @@ void NodesStatTable::dropAndCreate()
                            cumCatches,
                            cumCatchesThrshld,
                            cumDisc,
-                           cumDiscRatio
+                           cumDiscRatio,
+                           nbChoked
                            ));
 }
 
@@ -55,11 +56,12 @@ void NodesStatTable::init()
                                                            cumCatches,
                                                            cumCatchesThrshld,
                                                            cumDisc,
-                                                           cumDiscRatio));
+                                                           cumDiscRatio,
+                                                           nbChoked));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       fldNodeId,
-                                                      cumFTime, cumSwA, cumSubSurfSwA, cumCatches, cumCatchesThrshld, cumDisc, cumDiscRatio,
+                                                      cumFTime, cumSwA, cumSubSurfSwA, cumCatches, cumCatchesThrshld, cumDisc, cumDiscRatio, nbChoked,
                                                       sqlite::op::max(fldTStep)
                                                       )
                 .where (sqlite::op::le(fldTStep))
@@ -90,7 +92,9 @@ bool NodesStatTable::insert(int tstep, Node *node)
                             node->get_cumcatches(),
                             node->get_cumcatches_with_threshold(),
                             node->get_cumdiscards(),
-                            discratio)
+                            discratio,
+                            node->get_nbchoked()
+                            )
                         );
 return 0;
 }
@@ -111,7 +115,8 @@ void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesSta
         s.cumcatchesthrshld= st.getDoubleValue(5);
         s.cumdisc = st.getDoubleValue(6);
         s.cumdiscratio = st.getDoubleValue(7);
-        s.tstep = st.getIntValue(8);
+        s.nbchoked = st.getDoubleValue(8);
+        s.tstep = st.getIntValue(9);
         if (op)
             return op(s);
         return false;

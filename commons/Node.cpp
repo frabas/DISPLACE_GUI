@@ -62,6 +62,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     cumcatches_with_threshold=0;
     cumdiscards=0;
     cumdiscardsratio=0;
+    nbchoked=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -188,6 +189,7 @@ Node::Node()
       cumcatches(0),
       cumdiscards(0),
       cumdiscardsratio(0),
+      nbchoked(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -761,6 +763,11 @@ double Node::get_cumdiscardsratio() const
     return(cumdiscardsratio);
 }
 
+double Node::get_nbchoked() const
+{
+    return(nbchoked);
+}
+
 vector<int> Node::get_pop_names_on_node ()
 {
 	return(pop_names_on_node);
@@ -837,6 +844,12 @@ void Node::set_cumdiscardsratio(double rat)
 {
    cumdiscardsratio = rat;
 }
+
+void Node::set_nbchoked(double val)
+{
+   nbchoked = val;
+}
+
 
 void Node::set_xy(double xval, double yval)
 {
@@ -1754,7 +1767,7 @@ void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
-    // tstep / node / long / lat /  tot impact pop
+    // tstep / node / long / lat /  tot cumdiscards pop
    if(cumdiscards>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumdiscards << " "  << endl;
@@ -1764,14 +1777,28 @@ void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
 void Node::export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export cumdiscardratio on nodes for use in e.g. a GIS engine" << endl);
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
-    // tstep / node / long / lat /  tot impact pop
+    // tstep / node / long / lat /  value
    if(this->get_cumdiscardsratio()>1e-6 && this->get_cumdiscards()>1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         this->get_cumdiscardsratio() << " "  << endl;
+
+}
+
+void Node::export_popnodes_nbchoked(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export nbchoked on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  value
+   if(this->get_nbchoked()>=1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        this->get_nbchoked() << " "  << endl;
 
 }
 

@@ -115,10 +115,12 @@ public:
     double get_cumcatches_with_threshold() const { return mNode->get_cumcatches_with_threshold(); }
     double get_cumdiscards() const { return mNode->get_cumdiscards(); }
     double get_cumdiscardsratio() const { return mNode->get_cumdiscardsratio(); }
+    double get_nbchoked() const { return mNode->get_nbchoked(); }
     void set_cumcatches(double v) { mNode->set_cumcatches(v); }
     void set_cumcatches_with_threshold(int v) { mNode->set_cumcatches_with_threshold(v); }
     void set_cumdiscards(double v) { mNode->set_cumdiscards(v); }
     void set_cumdiscardsratio(double v) { mNode->set_cumdiscardsratio(v); }
+    void set_nbchoked(double v) { mNode->set_nbchoked(v); }
 
     void set_totNs_per_pop (int pop, int v){ mNode->set_totNs_per_pop(pop, v); }
     void set_totWs_per_pop(int pop, int v){ mNode->set_totWs_per_pop(pop, v); }

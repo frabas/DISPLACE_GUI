@@ -267,6 +267,14 @@ void NodeWithCumDiscardsRatioGraphics::drawShape(QPainter &painter, const qmapco
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
+void NodeWithNbChokedGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((double)mNode->get_nbchoked()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
 
 void NodeWithTariffs0Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {

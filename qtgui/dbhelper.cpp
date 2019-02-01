@@ -316,6 +316,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         node->set_cumsubsurfacesweptarea(stat.cumsubsurfswa);
         node->set_cumcatches(stat.cumcatches);
         node->set_cumdiscards(stat.cumdisc);
+        node->set_nbchoked(stat.nbchoked);
         return true;
     });
 

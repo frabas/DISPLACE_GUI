@@ -67,6 +67,8 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopCumcatches(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumdiscardsratio_")) {
         parsePopCumdiscardsratio(&file, tstep, mModel, period);
+    } else if (name.startsWith("popnodes_nbchoked_")) {
+        parsePopNbchoked(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumdiscards_")) {
         parsePopCumdiscards(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_tariffs_")) {
@@ -266,6 +268,35 @@ void OutputFileParser::parsePopCumdiscardsratio(QFile *file, int tstep, Displace
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step);
 }
+
+void OutputFileParser::parsePopNbchoked(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int id = fields[1].toInt();
+            double nbchoked = fields[4].toDouble();
+            model->collectPopNbchoked (step, id, nbchoked);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
+
 
 void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period)
 {

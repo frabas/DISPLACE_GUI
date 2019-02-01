@@ -115,6 +115,10 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumDiscardsRatioGraphics(mNode.get(), mController, indx));
         break;
+    case GraphNodeWithNbChokedRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithNbChokedGraphics(mNode.get(), mController, indx));
+        break;
 
     case GraphNodeWithTariffs0:
         mGeometry = std::shared_ptr<NodeGraphics>(
@@ -357,6 +361,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithCumDiscardsRatioRole:
         text += QString("<br/><b>Discards ratio:</b> %1<br/>")
                 .arg(mNode->get_cumdiscardsratio());
+        break;
+
+    case GraphNodeWithNbChokedRole:
+        text += QString("<br/><b>Nb choked stks:</b> %1<br/>")
+                .arg(mNode->get_nbchoked());
         break;
     }
 

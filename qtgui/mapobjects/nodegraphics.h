@@ -142,6 +142,16 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+class NodeWithNbChokedGraphics : public NodeGraphics {
+public:
+    NodeWithNbChokedGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
 class NodeWithTariffs0Graphics : public NodeGraphics {
 public:
     NodeWithTariffs0Graphics(NodeData *node, MapObjectsController *controller, int indx)

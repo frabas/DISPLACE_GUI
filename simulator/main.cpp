@@ -3995,6 +3995,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumdiscardsratio.open(filename.c_str());
     std::string popnodes_cumdiscardsratio_filename = filename;
 
+    ofstream popnodes_nbchoked;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_nbchoked_"+namesimu+".dat";
+    popnodes_nbchoked.open(filename.c_str());
+    std::string popnodes_nbchoked_filename = filename;
+
     ofstream popnodes_tariffs;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
     popnodes_tariffs.open(filename.c_str());
@@ -4214,6 +4219,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches_with_threshold,
                                              popnodes_cumdiscards,
                                              popnodes_cumdiscardsratio,
+                                             popnodes_nbchoked,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -4236,6 +4242,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches_with_threshold_filename,
                                              popnodes_cumdiscards_filename,
                                              popnodes_cumdiscardsratio_filename,
+                                             popnodes_nbchoked_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,

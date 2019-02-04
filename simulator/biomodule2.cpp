@@ -125,6 +125,7 @@ int applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           const vector<int> & tsteps_years, const vector<int> & tsteps_months,
                           const vector<int> & implicit_pops,
                           const vector<double> & calib_oth_landings,
+                          vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
                           int export_vmslike,
                           int freq_do_growth,
@@ -404,7 +405,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                  }
 
                             // apply_oth_land()
-                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
+                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                 oth_land_this_pop_this_node,
+                                                                                                 weight_at_szgroup,
+                                                                                                 totN,
+                                                                                                 will_I_discard_all,
+                                                                                                 selectivity_per_stock_ogives_for_oth_land);
 
                             // then, collect and accumulate tot_C_at_szgroup
                             vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
@@ -447,7 +453,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN, will_I_discard_all);
+                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                             oth_land_this_pop_this_node,
+                                                                                             weight_at_szgroup,
+                                                                                             totN,
+                                                                                             will_I_discard_all,
+                                                                                             selectivity_per_stock_ogives_for_oth_land);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
 

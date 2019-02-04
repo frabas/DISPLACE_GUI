@@ -2794,6 +2794,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read metier gear width model type parameters....ok? " << endl;
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
 
+    // oth_land are not metier-specific by nature, but the reader is placed here for coherence...
+    vector< vector<double> > selectivity_per_stock_ogives_for_oth_land= read_selectivity_per_stock_ogives_for_oth_land(nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
 
     // get the name of the metiers
     // copy only unique elements into name_metiers
@@ -2834,6 +2836,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
+
 
         // metier_target_stocks for this particular metier
         multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
@@ -4252,6 +4255,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              tsteps_months,
                                              implicit_pops,
                                              calib_oth_landings,
+                                             selectivity_per_stock_ogives_for_oth_land,
                                              is_tacs,
                                              export_vmslike,
                                              freq_do_growth,

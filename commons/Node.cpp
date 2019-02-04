@@ -1373,7 +1373,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN,
-                          int will_I_discard_all)
+                          int will_I_discard_all, vector<vector<double> >& selectivity_per_stock_ogives_for_oth_land)
 {
     dout(cout << "BEGIN: apply_oth_land()" << endl);
 
@@ -1401,31 +1401,26 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 	double tot            = 0;	 //init
 
-	// (rough) assumption for selectivity ogive of others => 1,1,1,1,1,1,etc.
-	//vector <double> sel_ogive (NBSZGROUP, 1);
-    // MAGIC NUMBERS
-	double clupeid_sel_ogive [ ] =
-	{
-		0.000601409471228288, 0.00929350798322286, 0.127575084407118,
-		0.695076124968439, 0.972628235474595, 0.998197939139254, 0.999884202454116, 0.99999257077887,1,1,1,1,1,1
-	};							 // same as for OTM_SPF
 	double gadoid_sel_ogive [ ] =
 	{
 		0.00000225976, 0.00001410136387, 0.00008798955470,
 		0.000548823892218543, 0.00341497770850069, 0.0209356687119669, 0.117728102864771,
 		0.45435195117619,0.838609522203591,0.970082540287596,0.995082177119589,0.999208651051219,0.999873102040564,1
 	};							 // same as for OTB_DEF
-	vector<double> clup_sel_ogive (clupeid_sel_ogive, clupeid_sel_ogive + sizeof(clupeid_sel_ogive) / sizeof(double) );
 	vector<double> gad_sel_ogive (gadoid_sel_ogive, gadoid_sel_ogive + sizeof(gadoid_sel_ogive) / sizeof(double) );
-	vector<double> sel_ogive;
-    //if(name_pop==10 || name_pop==11) // HARDCODING
-    //{
-        sel_ogive =gad_sel_ogive;
-    //}
-    //else						 // i.e. 3 and 7
-    //{
-    //	sel_ogive =clup_sel_ogive;
-    //}
+
+
+    vector<double> sel_ogive;
+    if(empty(selectivity_per_stock_ogives_for_oth_land))
+    {
+            sel_ogive=gad_sel_ogive; // choose the hardcoded...
+
+    }
+    else
+    {
+            sel_ogive=selectivity_per_stock_ogives_for_oth_land.at(name_pop);  // ...or read from param
+    }
+
 
     double default_dis_ogive [ ] = {0.634,0.366,0.161,0.06,0.021,0.007,0.002,0.001,0,0,0,0,0,0}; // 14 szgroups
 	vector<double> dis_ogive (default_dis_ogive, default_dis_ogive + sizeof(default_dis_ogive) / sizeof(double) );

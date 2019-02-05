@@ -1383,27 +1383,27 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
     // NOTICE THAT THIS IS THE SAME PROCEDURE THAN THE ONE IN do.catch()
     vector <double> Ns_at_szgroup_pop = this->get_Ns_pops_at_szgroup(name_pop);
                                  // ...input to be compared with output!
+    vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
 
                                  // init
-    vector <double>avail_biomass         = Ns_at_szgroup_pop;
-    vector <double> avail_biomass_to_landings = Ns_at_szgroup_pop;
-    vector <double> avail_biomass_to_discards = Ns_at_szgroup_pop;
+    vector <double>avail_biomass (Ns_at_szgroup_pop.size(), 0.0);
+    vector <double> avail_biomass_to_landings (Ns_at_szgroup_pop.size(), 0.0);
+    vector <double> avail_biomass_to_discards  (Ns_at_szgroup_pop.size(), 0.0);
                                  // init
-    vector <double>alloc_key1             = Ns_at_szgroup_pop;
-    vector <double>alloc_key2             = Ns_at_szgroup_pop;
+    vector <double>alloc_key1(Ns_at_szgroup_pop.size(), 0.0);
+    vector <double>alloc_key2(Ns_at_szgroup_pop.size(), 0.0);
                                  // init
-    vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
-    vector <double>land_per_szgroup     = Ns_at_szgroup_pop;
-    vector <double>disc_per_szgroup     = Ns_at_szgroup_pop;
+    vector <double>catch_per_szgroup(Ns_at_szgroup_pop.size(), 0.0);
+    vector <double>land_per_szgroup(Ns_at_szgroup_pop.size(), 0.0);
+    vector <double>disc_per_szgroup(Ns_at_szgroup_pop.size(), 0.0);
                                  // init
-    vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
+    vector <double>removals_per_szgroup(Ns_at_szgroup_pop.size(), 0.0);
                                  // init
-    vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
     vector <double>cumul_removals_at_szgroup_pop=this->get_removals_pops_at_szgroup(name_pop);
                                  // init
-    vector <double>new_removals_at_szgroup_pop=Ns_at_szgroup_pop;
+    vector <double>new_removals_at_szgroup_pop(Ns_at_szgroup_pop.size(), 0.0);
 
-    double tot            = 0;	 //init
+    double tot            = 0;	 // init
 
 
 
@@ -1425,6 +1425,11 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
     {
             sel_ogive=selectivity_per_stock_ogives_for_oth_land.at(name_pop);  // ...or read from param
     }
+
+
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND the sel_ogive in use is " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) for (int i=0; i <sel_ogive.size();++i) cout << sel_ogive.at(i) << " " ;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << endl;
 
 
     // compute available biomass via selectivity
@@ -1449,6 +1454,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
     }
     dout(cout  << "tot biomass available" << tot << endl);
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout  << "tot biomass available" << tot << endl;
 
     if(tot>1.0)
     {
@@ -1485,11 +1491,15 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
         //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
         //discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
-        discardfactor = min( 0.5 , discardfactor);
+        discardfactor = min( 0.5 , discardfactor); // HARDCODED THRESHOLD
         // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic discards will be produced when no adult left on zones
         double tot_landings_this_pop=oth_land_this_pop_this_node;
         double tot_discards_this_pop=oth_land_this_pop_this_node*discardfactor ;
 
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "oth_land_this_pop_this_node in kg is " << oth_land_this_pop_this_node << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "discardfactor" << discardfactor << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_landings_this_pop in kg is " << tot_landings_this_pop << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_discards_this_pop in kg is " << tot_discards_this_pop << endl;
 
 
         // init
@@ -1506,17 +1516,22 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                 if(szgroup>=MLS_cat){
                     alloc_key1[szgroup]=avail_biomass_to_landings[szgroup] /(tot_avai_for_land);
                     alloc_key2[szgroup]=0;
+                    discardfactor=0; // no discard if >MLS
                 } else{
                     alloc_key1[szgroup]=0;
                     alloc_key2[szgroup]=avail_biomass_to_discards[szgroup] /(tot_avai_for_disc);
                 }
 
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key1[" << szgroup<< "] is " << alloc_key1[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key2[" << szgroup<< "] is " << alloc_key2[szgroup] << endl;
 
 
                 // disaggregate total catch (in weight) for this pop according to the alloc key
                 catch_per_szgroup[szgroup]= (tot_landings_this_pop * alloc_key1[szgroup]) +(tot_discards_this_pop * alloc_key2[szgroup]);
                 // then get the removals in terms of N
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "total catch catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
                 removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/weight_at_szgroup[szgroup];
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << endl;
 
                 // do not allow negative abundance!
                 if(removals_per_szgroup[szgroup] > new_Ns_at_szgroup_pop[szgroup])
@@ -1527,15 +1542,21 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                         "for this pop " << name_pop << " is fully depleted on this node by other land. " <<
                         idx_node << "! catch is "<<
                         catch_per_szgroup[szgroup] << endl);
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "total catch corrected catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
 
                                  // take all...
                     removals_per_szgroup[szgroup]=new_Ns_at_szgroup_pop[szgroup];
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "corrected removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << endl;
                                  // nothing left.
                     new_Ns_at_szgroup_pop[szgroup]=0;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << endl;
                                  // just right after the calculation of removals, reverse back to get the landings only
-                  land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1*discardfactor) * alloc_key1[szgroup]; // first...
+                  land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1+discardfactor); // first...
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << endl;
                   disc_per_szgroup[szgroup] = catch_per_szgroup[szgroup] - land_per_szgroup[szgroup] ; // first...
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << endl;
                   catch_per_szgroup[szgroup]= land_per_szgroup[szgroup]; //..second
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
 
                     if(will_I_discard_all==1)
                     {
@@ -1549,9 +1570,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                     // finally, impact the N
                     new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
                                  // reverse back to get the landings only
-                    land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1*discardfactor) * alloc_key1[szgroup]; // first...
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << endl;
+                    land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1+discardfactor) ; // first...
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << endl;
                     disc_per_szgroup[szgroup] = catch_per_szgroup[szgroup] - land_per_szgroup[szgroup] ; // first...
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "2 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << endl;
                     catch_per_szgroup[szgroup]= land_per_szgroup[szgroup]; //..second
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
 
                     if(will_I_discard_all==1)
                     {
@@ -1615,6 +1640,18 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
         //}
         //dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND FINALLY new_Ns_at_szgroup_pop " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)        for (int i=0; i <new_Ns_at_szgroup_pop.size();++i) cout << new_Ns_at_szgroup_pop.at(i) << " " ;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)        cout << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY new_removals_at_szgroup_pop " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)               for (int i=0; i <new_removals_at_szgroup_pop.size();++i) cout << new_removals_at_szgroup_pop.at(i) << " " ;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)               cout << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY catch_per_szgroup " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                     for (int i=0; i <catch_per_szgroup.size();++i) cout << catch_per_szgroup.at(i) << " " ;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                     cout << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY disc_per_szgroup " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                            for (int i=0; i <disc_per_szgroup.size();++i) cout << disc_per_szgroup.at(i) << " " ;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                           cout << endl;
 
         // updates
         this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);

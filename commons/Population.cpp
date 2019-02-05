@@ -303,6 +303,18 @@ Population::Population(int a_name,
     // hyperstability
     this->set_hyperstability_param(hyperstability_param);
 
+    int nbsz = percent_szgroup_per_age_matrix.size();
+    int nbages = percent_szgroup_per_age_matrix[0].size();
+
+
+    // will be of use for TAC STF
+    tot_N_at_age0 =0.0;
+    for(int sz = 0; sz < nbsz; sz++)
+    {
+        tot_N_at_age0 +=  percent_szgroup_per_age_matrix[sz][0] * tot_N_at_szgroup[sz];
+    }
+    cout << "pop "<< this->get_name() << ": tot_N_at_age0 is " << tot_N_at_age0 << endl;
+
 
 }
 
@@ -554,6 +566,12 @@ double Population::get_landings_so_far() const
 {
 	return(landings_so_far);
 }
+
+double Population::get_tot_N_at_age0() const
+{
+    return(tot_N_at_age0);
+}
+
 
 const vector<double>& Population::get_landings_at_end_of_years() const
 {
@@ -1307,7 +1325,6 @@ cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr
 
        dout(cout << "no migration for this pop" << this->get_name()  << endl );
 
-       cout << "no migration for this pop " << this->get_name()   << endl;
 
     }
 
@@ -1416,7 +1433,6 @@ void Population::add_recruits_from_a_fixed_number()
     vector <double> new_tot_N_at_szgroup (a_tot_N_at_szgroup.size());
 
 
-    // assign a fixed numbernt, e.g. SSB-R for cod 2532 is usually simulated for age2)...
     double recruits =param_sr[0];
     dout(cout << "New recruits are " << recruits  << endl );
 
@@ -1491,7 +1507,7 @@ void Population::add_recruits_from_eggs()
 
 void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 {
-    cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl ;
+    tout(cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl) ;
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
     vector <double> tot_F_at_age_running_average = get_tot_F_at_age_running_average();
@@ -1657,7 +1673,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 	this->set_tot_W_at_age(tot_W_at_age);
     this->set_tot_Mat_at_age(tot_Mat_at_age);
 
-    cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl;
+    tout(cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl);
 
 }
 
@@ -1666,7 +1682,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 
 void Population::compute_tot_M_at_age()
 {
-    cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl;
+    tout(cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl);
 
     vector <double> tot_M_at_age = this->get_tot_M_at_age();
     vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
@@ -1715,7 +1731,7 @@ void Population::compute_tot_M_at_age()
      this->set_perceived_tot_N_at_age(tot_N_at_age);
      this->set_tot_N_at_age(tot_N_at_age);
 
-   dout(cout << "END compute_tot_M_at_age() "  << endl);
+   tout(cout << "END compute_tot_M_at_age() "  << endl);
 }
 
 
@@ -1792,7 +1808,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
-    cout << "compute SSB given pop is " << this->get_name()  << " " << endl;
+    tout(cout << "compute SSB given pop is " << this->get_name()  << " " << endl);
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1975,7 +1991,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
     vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
     //  adding recruits before the F, assuming fixed recruits
-    double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+    //double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+    double recruits = get_tot_N_at_age0();
     forecast_tot_N_at_age_end_y.at(0)=recruits;
 
     dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
@@ -2049,7 +2066,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
     //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
-    recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+    //recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+    recruits = get_tot_N_at_age0();
     forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
     dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
@@ -2192,7 +2210,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
          //  adding recruits before the F, assuming fixed recruits
-         double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+         //double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+         double recruits = get_tot_N_at_age0();
          forecast_tot_N_at_age_end_y.at(0)=recruits;
 
          dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
@@ -2266,7 +2285,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
          //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
-         recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+         //recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+         recruits = get_tot_N_at_age0();
          forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
          dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
@@ -2384,7 +2404,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
          vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
          //  adding recruits before the F, assuming fixed recruits
-         double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+         //double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+         double recruits = get_tot_N_at_age0();
          forecast_tot_N_at_age_end_y.at(0)=recruits;
 
          dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
@@ -2458,7 +2479,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
          //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
-         recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+         //recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+         recruits = get_tot_N_at_age0();
          forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
          dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
@@ -2549,7 +2571,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
              vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
              //  adding recruits before the F, assuming fixed recruits
-             double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+             //double recruits = tot_N_at_age_end_previous_y.at(0)*0.9; // precautionary pessimistic recruits
+             double recruits = get_tot_N_at_age0();
              forecast_tot_N_at_age_end_y.at(0)=recruits;
 
              dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
@@ -2623,7 +2646,8 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
 
              //  Adding recruits before the F, assuming fixed recruits and distribute recruits among szgroup
-             recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+             //recruits = forecast_tot_N_at_age_end_y.at(0)*0.9; // precautionary pessimistic recruits
+             recruits = get_tot_N_at_age0();
              forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
              dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);

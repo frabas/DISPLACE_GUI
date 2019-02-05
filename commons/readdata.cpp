@@ -2762,7 +2762,7 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
         open_file_error(filename);
         //return 1;
     }
-    cout << "filename for pop  " << a_pop << " is " << filename << endl;
+    dout(cout << "filename for pop  " << a_pop << " is " << filename << endl;)
 
     multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop))

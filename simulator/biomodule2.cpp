@@ -77,7 +77,7 @@ static void unlock()
 }
 
 
-int applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
+bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,
@@ -275,7 +275,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
-           cout << ".....monthly pop model for pop " << sp << endl;           
+           cout << "tstep " << tstep << endl;
+           cout << ".....monthly pop model (apply_oth_land and compute F) for pop " << sp << endl;
             int name_pop =populations.at(sp)->get_name();
             outc(cout << "apply other land on nodes..." << endl);
             vector <double> M_at_szgroup      = populations.at(sp)->get_M_at_szgroup();
@@ -405,12 +406,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                  }
 
                             // apply_oth_land()
-                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
-                                                                                                 oth_land_this_pop_this_node,
-                                                                                                 weight_at_szgroup,
-                                                                                                 totN,
-                                                                                                 will_I_discard_all,
-                                                                                                 selectivity_per_stock_ogives_for_oth_land);
+                                try {
+                                    if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                     oth_land_this_pop_this_node,
+                                                                                                     weight_at_szgroup,
+                                                                                                     totN,
+                                                                                                     will_I_discard_all,
+                                                                                                     selectivity_per_stock_ogives_for_oth_land);
+                                } catch (runtime_error &) {
+                                    return false;
+                                }
+
 
                             // then, collect and accumulate tot_C_at_szgroup
                             vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
@@ -428,7 +434,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         }
 
-                    }
+                    } // end area_closure
                     else
                     {
 
@@ -453,12 +459,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
-                                                                                             oth_land_this_pop_this_node,
-                                                                                             weight_at_szgroup,
-                                                                                             totN,
-                                                                                             will_I_discard_all,
-                                                                                             selectivity_per_stock_ogives_for_oth_land);
+                        // apply_oth_land()
+                            try {
+                                if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                 oth_land_this_pop_this_node,
+                                                                                                 weight_at_szgroup,
+                                                                                                 totN,
+                                                                                                 will_I_discard_all,
+                                                                                                 selectivity_per_stock_ogives_for_oth_land);
+                            } catch (runtime_error &) {
+                                return false;
+                            }
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
 
@@ -497,7 +508,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // over the removals (from catches + oth_land) during this month....
             // caution with terminology: here we named "pressure" what is actually "impact"
             // i.e. a ratio, (to do: need correction...)
-            cout  << "compute the impact for pop " << name_pop << endl;
+            //cout  << "compute the impact for pop " << name_pop << endl;
             vector <double>wsz = populations[name_pop]->get_weight_at_szgroup();
             for (unsigned int n=0; n<a_list_nodes.size(); n++)
             {
@@ -608,6 +619,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             populations.at(sp)->compute_tot_N_and_F_and_W_at_age(a_month_i);
 
+            cout << ".....monthly pop model for pop " << sp << "...ok" << endl;
+
         }
         else
         {
@@ -621,6 +634,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
             if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )  // not an implicit species
             {
+                cout << ".....monthly pop model (apply M on nodes) for pop " << sp << endl;
                 vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
 
@@ -707,7 +721,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     populations.at(sp)->set_tot_N_at_szgroup_year_minus_1( N_at_szgroup );
 
                 }
-             } // end implcit
+                cout << ".....monthly pop model (apply M on nodes) for pop " << sp << "...ok" << endl;
+
+             } // end !=implcit
            } // end sp
         } // end month detection
 
@@ -752,6 +768,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                if(do_growth)
                 {
+                   cout << ".....monthly pop model (apply growth) for pop " << sp  << endl;
                    /*
                    if(sp==1){
                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
@@ -779,6 +796,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                   */
 
                }
+               cout << ".....monthly pop model (apply growth) for pop " << sp << "...ok" << endl;
 
             }
             else
@@ -798,6 +816,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     {
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
+            cout << ".....monthly pop model (possibly add recruits, dispatch over nodes, apply MP) for pop " << sp  << endl;
 
             int name_pop =populations.at(sp)->get_name();
 
@@ -871,7 +890,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
-
+             cout << "export popstats..." << endl;
 
                  // exporting popstats in txt
                  popstats << setprecision(6) << fixed;
@@ -1040,6 +1059,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
+               cout << ".....monthly pop model (possibly add recruits, dispatch over nodes, apply MP) for pop " << sp  << "...ok" << endl;
 
                }
                else
@@ -1098,7 +1118,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     {
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
-           cout << "..... compute totNs and totWs for pop " << sp << endl;
+           tout(cout << "..... compute totNs and totWs for pop " << sp << endl);
            int name_pop =populations.at(sp)->get_name();
            vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
            vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
@@ -1285,6 +1305,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     mPopExportProfile.elapsed_ms();
 #endif
 }
+
+cout << ".....exit from pop model...ok" << endl;
+
 dout(cout  << "END: POP MODEL TASKS----------" << endl);
 
    // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
@@ -1300,7 +1323,7 @@ if(dyn_alloc_sce.option(Options::DEBUG) && will_stop==1)
     cin >> aa;
   }
 
-return 0;
+return true;
 }
 
 

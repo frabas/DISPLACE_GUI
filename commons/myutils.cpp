@@ -1153,7 +1153,7 @@ bool fill_from_vessels_specifications (istream& in,
             boost::split(fields, line, boost::is_any_of("|"));
 
             if (fields.size() < 22) {
-              cout << "missing fields when loading vessel features" << endl;
+              cout << "missing fields when loading vessel features!!" << endl;
                 return false;   // all fields are MANDATORY.
             }
 
@@ -1162,7 +1162,7 @@ bool fill_from_vessels_specifications (istream& in,
             calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
             calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
 
-            cout << "Reading vessel features for " << fields[0] << endl;
+            tout(cout << "Reading vessel features for " << fields[0] << endl);
             names.push_back(fields[0]);
             vid_is_actives.push_back(boost::lexical_cast<int>(fields[1].c_str()));
             speeds.push_back(boost::lexical_cast<double>(fields[2].c_str()));
@@ -1188,7 +1188,7 @@ bool fill_from_vessels_specifications (istream& in,
         return false;
     }
 
-    dout(cout  << "read and set up the general features of each vessel...OK" << endl);
+    tout(cout  << "read and set up the general features of each vessel...OK" << endl);
 
     return true;
 }

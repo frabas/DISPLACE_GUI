@@ -4201,7 +4201,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        int biocheck = applyBiologicalModule2(tstep,
+        if(!applyBiologicalModule2(tstep,
                                              a_month_i,
                                              namesimu,
                                              namefolderinput,
@@ -4270,7 +4270,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              Ws_at_szgroup,
                                              predKernel,
                                              searchVolMat
-                                           );
+                                           ) )
+                throw std::runtime_error("Error while executing: applyBiologicalModule2");
+
 
 
 

@@ -130,6 +130,7 @@ class COMMONSSHARED_EXPORT Population
         double get_quota_uptake() const;
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
+        double get_tot_N_at_age0() const;
         const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
         void set_quota_uptake(double _quota_uptake);
@@ -295,6 +296,7 @@ class COMMONSSHARED_EXPORT Population
 		double landings_so_far;	 // global landings, reinit each start of the year...
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
+        double tot_N_at_age0;
 
 
 };

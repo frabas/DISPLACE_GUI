@@ -4916,6 +4916,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     stringstream out;
                     out << i;
 
+                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " << folder_name_parameterization << " " << inputfolder << endl;
+
                     // read a new spatial_availability
                     auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file,  type_of_avai_field_to_read);
                     auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, type_of_avai_field_to_read);

@@ -2558,7 +2558,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     if(szgroup >=MLS_cat) {
                         tot_avai_for_land= tot_avai_for_land+avail_biomass[szgroup];
                     } else{
-                        tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
+                       // tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
+                        tot_avai_for_disc= tot_avai_for_disc+avail_biomass[szgroup];
                     }
                     dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
                     dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << endl);
@@ -2719,7 +2720,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // compute alloc key
                             // proportion
                             if(szgroup<MLS_cat){
-                                alloc_key[szgroup]=all_biomass[szgroup] /(tot_avai_for_disc);
+                             //   alloc_key[szgroup]=all_biomass[szgroup] /(tot_avai_for_disc);
+                                  alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_disc);
                             } else{
                                 alloc_key[szgroup]=0;
                             }

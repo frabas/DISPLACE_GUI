@@ -1408,7 +1408,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 
     vector<double> sel_ogive;
-    int    MLS_cat = 4; // hardcoded for now
+    int    MLS_cat = 3; // HARDCODED for now
     if(selectivity_per_stock_ogives_for_oth_land.empty())
     {
         double gadoid_sel_ogive [ ] =

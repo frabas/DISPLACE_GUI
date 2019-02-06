@@ -327,6 +327,8 @@ public:
 
     MapsDataProvider &getMapDataProvider(int model);
 
+    void delSelectedNodes(int model);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
@@ -335,7 +337,6 @@ protected:
     void addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
-    void delSelectedNodes(int model);
 
 protected slots:
     void geometryClicked(const Geometry *);

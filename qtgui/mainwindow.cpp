@@ -3163,6 +3163,26 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
     }
 }
 
+void MainWindow::on_actionRemove_isolated_subgraphs_triggered()
+{
+    IsolatedSubgraphChecker checker(currentModel.get());
+
+    if (checker.process()) {
+        QMessageBox::warning(this, tr("Subgraphs checking"), tr("There are isolated subgraphs."));
+        QList<int> isn = checker.getIsolatedNodes();
+
+        mMapController->clearNodeSelection(currentModelIdx);
+        mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
+
+        qDebug() << "Nb nodes to remove " << isn.size() << endl;
+        mMapController->delSelectedNodes(currentModelIdx);
+
+    } else {
+        QMessageBox::information(this, tr("Subgraphs checking"), tr("All isolated nodes have been removed."));
+    }
+}
+
+
 void MainWindow::on_actionR_Console_triggered()
 {
     RConsole *console = new RConsole();

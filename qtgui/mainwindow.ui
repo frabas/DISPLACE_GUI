@@ -119,6 +119,7 @@
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
     <addaction name="actionCheck_for_isolated_subgraphs"/>
+    <addaction name="actionRemove_isolated_subgraphs"/>
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="actionLoadStockNames"/>
@@ -142,7 +143,6 @@
     <addaction name="actionCalcPopDistribution"/>
     <addaction name="separator"/>
     <addaction name="actionLink_Shortest_Path_Folder"/>
-    <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="menuFormats_conversion"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
@@ -2268,6 +2268,11 @@ L3</string>
    </property>
    <property name="text">
     <string>Values 0 to 1</string>
+   </property>
+  </action>
+  <action name="actionRemove_isolated_subgraphs">
+   <property name="text">
+    <string>Remove Isolated Subgraphs...</string>
    </property>
   </action>
  </widget>

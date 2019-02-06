@@ -414,6 +414,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                                                                                      will_I_discard_all,
                                                                                                      selectivity_per_stock_ogives_for_oth_land);
                                 } catch (runtime_error &) {
+                                    cout << "Fail in apply_oth_land 1" << endl;
                                     return false;
                                 }
 
@@ -468,6 +469,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                                                                                  will_I_discard_all,
                                                                                                  selectivity_per_stock_ogives_for_oth_land);
                             } catch (runtime_error &) {
+                                cout << "Fail in apply_oth_land 2" << endl;
                                 return false;
                             }
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
@@ -593,7 +595,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             // At the aggregated population scale,
             // first, sum up the N over node and overwrite tot_N_at_szgroup....
-            populations.at(sp)->aggregate_N();
+            try {
+                populations.at(sp)->aggregate_N();
+            } catch (runtime_error &) {
+                cout << "Fail in aggregate_N after impact computation" << endl;
+                return false;
+            }
 
 
             // then, compute F_at_age from F_at_szgroup as -log(N(t)/N(t-1))
@@ -653,7 +660,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     //... then apply M:
                     if (dyn_pop_sce.option(Options::sizeSpectra))
                      {
-                        a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
+                      try {
+                            a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
+                        } catch (runtime_error &) {
+                            cout << "Fail in apply_natural_mortality_at_node_from_size_spectra_approach" << endl;
+                            return false;
+                        }
                      }
                      else
                      {
@@ -671,7 +683,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 a_prop_M.at(spp)=0.0; // put 0 in prop if pop not found on this node
                             }
                         }
-                         a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
+                        try {
+                              a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
+                          } catch (runtime_error &) {
+                              cout << "Fail in apply_natural_mortality_at_node" << endl;
+                              return false;
+                          }
                      }
                 } // end over n
 
@@ -782,7 +799,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    */
 
                    outc(cout<<"tstep " << tstep << "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
-                    populations[sp]->do_growth();
+                   try {
+                       populations[sp]->do_growth();
+                     } catch (runtime_error &) {
+                         cout << "Fail in do_growth" << endl;
+                         return false;
+                     }
 
                   /*  if(sp==1){
                         vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
@@ -794,9 +816,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          cout <<"tstep " << tstep << "AFTER GROWTH: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
                     }
                   */
+                   cout << ".....monthly pop model (apply growth) for pop " << sp << "...ok" << endl;
 
                }
-               cout << ".....monthly pop model (apply growth) for pop " << sp << "...ok" << endl;
 
             }
             else
@@ -844,11 +866,21 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    vector <double> params = populations[sp]->get_param_sr();
                    if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
                    {
-                      populations[sp]->add_recruits_from_a_fixed_number();
+                       try {
+                           populations[sp]->add_recruits_from_a_fixed_number();
+                         } catch (runtime_error &) {
+                             cout << "Fail in add_recruits_from_a_fixed_number" << endl;
+                             return false;
+                         }
                    }
                    else
                    {
-                      populations[sp]->add_recruits_from_SR();
+                       try {
+                           populations[sp]->add_recruits_from_SR();
+                         } catch (runtime_error &) {
+                             cout << "Fail in add_recruits_from_SR" << endl;
+                             return false;
+                         }
                    }
                 }
 
@@ -857,7 +889,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             if(do_growth)
             {
                 // at the very end, then re-dispatch over nodes to re-dispatch the recruits over the nodes....
-                populations.at(sp)->distribute_N();
+                try {
+                    populations.at(sp)->distribute_N();
+                  } catch (runtime_error &) {
+                      cout << "Fail in distribute_N" << endl;
+                      return false;
+                  }
             }
 
             /*
@@ -897,7 +934,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         dout(cout  << "write down the N...");
                         // get total N from summing up N over nodes
-                        populations.at(sp)->aggregate_N();
+                        try {
+                            populations.at(sp)->aggregate_N();
+                          } catch (runtime_error &) {
+                              cout << "Fail in aggregate_N" << endl;
+                              return false;
+                          }
                         // tstep / pop / tot N at szgroup
                         popstats << tstep << " " << sp << " ";
                         vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
@@ -992,16 +1034,36 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                if(dyn_alloc_sce.option(Options::LTMP)){
 
-                                   populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 1);
+                                   try {
+                                       populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 1);
+                                     } catch (runtime_error &) {
+                                         cout << "Fail in compute_TAC LTMP" << endl;
+                                         return false;
+                                     }
                                } else{
                                    if(dyn_alloc_sce.option(Options::FMSY)){
 
-                                       populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2);
+                                       try {
+                                           populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2);
+                                         } catch (runtime_error &) {
+                                             cout << "Fail in compute_TAC FMSY" << endl;
+                                             return false;
+                                         }
                                     } else{
                                        if(dyn_alloc_sce.option(Options::FMSYrange)){
-                                           populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 3);
+                                           try {
+                                               populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 3);
+                                             } catch (runtime_error &) {
+                                                 cout << "Fail in compute_TAC FMSYrange" << endl;
+                                                 return false;
+                                             }
                                        } else{
-                                         populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 4); // statuquo is default
+                                           try {
+                                               populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 4); // statuquo is default
+                                             } catch (runtime_error &) {
+                                                 cout << "Fail in compute_TAC statuquo" << endl;
+                                                 return false;
+                                             }
                                        }
                                    }
                                }
@@ -1120,6 +1182,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
            tout(cout << "..... compute totNs and totWs for pop " << sp << endl);
            int name_pop =populations.at(sp)->get_name();
+           cout << "pop" << name_pop <<": update the populations values for the map widget" << endl;
            vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
            vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
 
@@ -1306,7 +1369,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 #endif
 }
 
-cout << ".....exit from pop model...ok" << endl;
 
 dout(cout  << "END: POP MODEL TASKS----------" << endl);
 

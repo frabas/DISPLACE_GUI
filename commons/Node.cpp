@@ -1664,7 +1664,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
     }
     else
     {
-        tout(cout  << "no biomass available here...." << tot << endl);
+        dout(cout  << "no biomass available here...." << tot << endl);
 
     }
 
@@ -1888,7 +1888,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
     }
 	else
 	{
-        tout(cout  << "no biomass available here...." << tot << endl);
+        dout(cout  << "no biomass available here...." << tot << endl);
 
 	}
 

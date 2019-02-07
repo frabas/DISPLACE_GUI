@@ -1180,7 +1180,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     {
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
-           tout(cout << "..... compute totNs and totWs for pop " << sp << endl);
+           dout(cout << "..... compute totNs and totWs for pop " << sp << endl);
            int name_pop =populations.at(sp)->get_name();
            cout << "pop" << name_pop <<": update the populations values for the map widget" << endl;
            vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();

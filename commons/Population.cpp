@@ -1509,7 +1509,7 @@ void Population::add_recruits_from_eggs()
 
 void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 {
-    tout(cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl) ;
+    dout(cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl) ;
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
     vector <double> tot_F_at_age_running_average = get_tot_F_at_age_running_average();
@@ -1675,7 +1675,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 	this->set_tot_W_at_age(tot_W_at_age);
     this->set_tot_Mat_at_age(tot_Mat_at_age);
 
-    tout(cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl);
+    dout(cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl);
 
 }
 
@@ -1684,7 +1684,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 
 void Population::compute_tot_M_at_age()
 {
-    tout(cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl);
+    dout(cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl);
 
     vector <double> tot_M_at_age = this->get_tot_M_at_age();
     vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
@@ -1733,7 +1733,7 @@ void Population::compute_tot_M_at_age()
      this->set_perceived_tot_N_at_age(tot_N_at_age);
      this->set_tot_N_at_age(tot_N_at_age);
 
-   tout(cout << "END compute_tot_M_at_age() "  << endl);
+   dout(cout << "END compute_tot_M_at_age() "  << endl);
 }
 
 
@@ -1776,7 +1776,7 @@ void Population::clear_tot_D_at_szgroup()
 
 double Population::compute_fbar()
 {
-    tout(cout<< "compute fbar for pop..." << this->get_name() << endl);
+    dout(cout<< "compute fbar for pop..." << this->get_name() << endl);
 
     dout(cout<< "compute fbar..." << endl);
 	double fbar=0;
@@ -1796,10 +1796,10 @@ double Population::compute_fbar()
         fbar+=a_tot_F_at_age[a];
 	}
 								 // then do the average...
-    tout(cout<< "sum fbar..." << fbar << endl);
+    dout(cout<< "sum fbar..." << fbar << endl);
     fbar=fbar/(fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0));
-    tout(cout<< "fbar..." << fbar << endl);
-    tout(cout<< "compute fbar...ok" << endl);
+    dout(cout<< "fbar..." << fbar << endl);
+    dout(cout<< "compute fbar...ok" << endl);
     return(fbar);
 }
 
@@ -1810,7 +1810,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
-    tout(cout << "compute SSB given pop is " << this->get_name()  << " " << endl);
+    dout(cout << "compute SSB given pop is " << this->get_name()  << " " << endl);
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1884,7 +1884,7 @@ void Population::compute_TAC(int tstep, double multiOnTACconstraint, int HCR)
 
     // 1. compute previous fbar
 								 // at the end of the last year, then for last year py...
-    tout(cout<< "when computing TAC, first compute fbar for pop..." << this->get_name() << endl);
+    dout(cout<< "when computing TAC, first compute fbar for pop..." << this->get_name() << endl);
     double fbar_py=1.0;
     if(tstep==0) // THIS CODE BLOCK IS NOT USED IN NORMAL MODE, THIS IS JUST FOR DEBUGGING (Options::DEBUG) TO AVOID WAITING THE FULL Y TO LOOK AT TAC NUMBERS...
     {
@@ -2944,7 +2944,7 @@ void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
 void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce)
 {
 
-    tout(cout << "begin export_popdyn_annual_indic..."<< endl);
+    dout(cout << "begin export_popdyn_annual_indic..."<< endl);
 
     popdyn_annual_indic << setprecision(4) << fixed;
 	// tstep / pop / F at szgroup / tot landings on pop i.e. including oth landings as well
@@ -2955,7 +2955,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 								 // output the annual multiplier
 	popdyn_annual_indic  << oth_mult << " " << cpue_mult << " ";
 
-    tout(cout<< "when exporting, get fbar for pop..." << this->get_name() << endl);
+    dout(cout<< "when exporting, get fbar for pop..." << this->get_name() << endl);
     double fbar_py= this->get_fbar();
 	popdyn_annual_indic  << fbar_py << " ";
 
@@ -2963,7 +2963,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	double so_far    =this->get_landings_so_far();
 	popdyn_annual_indic  << so_far << " ";
 
-    tout(cout << "retrieve tacs if any..."<< endl);
+    dout(cout << "retrieve tacs if any..."<< endl);
 
      double last_year_tac=0.0;
      if(dyn_alloc_sce.option(Options::TACs))
@@ -2989,6 +2989,6 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 
 	popdyn_annual_indic << " " <<  endl;
 
-    tout(cout << "export_popdyn_annual_indic...ok"<< endl);
+    dout(cout << "export_popdyn_annual_indic...ok"<< endl);
 
 }

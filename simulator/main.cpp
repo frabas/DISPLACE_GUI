@@ -5421,7 +5421,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {
-                   tout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
+                   dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
                    vector <double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
                    for (int icr=0; icr <spe_fishing_credits.size();++icr)
                    {

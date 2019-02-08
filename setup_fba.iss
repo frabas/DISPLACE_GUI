@@ -16,11 +16,13 @@
 
 #define Build "release"
 #define QT_DEBUG ""
+;#define QT_DIR "C:\Qt\5.11.1\msvc2017_64"
 #define QT_DIR "C:\Qt\5.12.0\msvc2017_64"
+;#define QT_PLUGINS_DIR "C:\Qt\5.11.1\msvc2017_64\plugins"
 #define QT_PLUGINS_DIR "C:\Qt\5.12.0\msvc2017_64\plugins"
-#define SDK_DIR "install\displacesdk_for_QtCreator\installed\x64-windows"
+#define SDK_DIR "..\sdk\installed\x64-windows"
 
- [Setup]
+[Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -47,26 +49,16 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-;Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
@@ -115,7 +107,7 @@ Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\p
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 ;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+;Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 

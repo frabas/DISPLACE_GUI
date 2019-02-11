@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2018 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -2379,14 +2379,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
-        cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
-                " has tariffs0 " << tariff_this_cell.at(0) << endl;
-        cout << "this vessel " << this->get_name() <<
-                " has credits " << fishing_credits.at(0) << endl;
+        dout(cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
+                " has tariffs0 " << tariff_this_cell.at(0) << endl);
+        dout(cout << "this vessel " << this->get_name() <<
+                " has credits " << fishing_credits.at(0) << endl);
         fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(0);
         this->set_fishing_credits(fishing_credits);
-        cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
-                " has remaining credits " << this->get_fishing_credits().at(0) << endl;
+        dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
+                " has remaining credits " << this->get_fishing_credits().at(0) << endl);
     }
 
 

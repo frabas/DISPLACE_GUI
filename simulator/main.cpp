@@ -5571,7 +5571,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
 
                         // if landing/effort or discard/effort increases we want to increase the tariff on this areas
-                        if(count1>count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
+                        if(count1>count2 && ((count2+1) < arbitary_breaks_for_tariff.size()))  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
                         if(count1<count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2-1);
                         if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);
 

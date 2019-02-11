@@ -1639,15 +1639,16 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
         }
 		else
 		{
-            perceived_tot_F_at_age.at(a)+= 0;
-            tot_F_at_age.at(a)+= 0;
-            tot_F_at_age_running_average = tot_F_at_age_running_average;
-            FFmsy.at(a)=0;
+            perceived_tot_F_at_age.at(a)+= 0.0;
+            tot_F_at_age.at(a)+= 0.0;
+            tot_F_at_age_running_average.at(a) = 0.0;
+            FFmsy.at(a)=0.0;
         }
 
         // prevent negative Fs in few cases where more N at t+1 than at t e.g. from growth and class change in the older ages...
         // should not happen if the growth timing is right.
         if(tot_F_at_age.at(a)<0) tot_F_at_age.at(a)  =0.0;
+        if(tot_F_at_age_running_average.at(a)<0) tot_F_at_age_running_average.at(a)  =0.0;
 
 		// => cumul over months
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);

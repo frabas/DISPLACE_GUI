@@ -110,7 +110,7 @@ enum Dyn_Alloc {
     envt_variables_diffusion,
     TechCreeping3Per,
     ExitVessels10Per,
-    DEBUG,
+    DEBUG_TAC,
 
     Dyn_Alloc_last
 };

@@ -144,7 +144,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
 {
 
 
-int will_stop=0; // see Options::DEBUG
+int will_stop=0; // see Options::DEBUG_TAC
 
 //----------------------------------------//
 //----------------------------------------//
@@ -232,7 +232,7 @@ int will_stop=0; // see Options::DEBUG
                 // but here we compute the TAC "for fun" at the start tstep=0 just for checking purpose
                 if(tstep==0)
                 {
-                    if(dyn_alloc_sce.option(Options::TACs) && dyn_alloc_sce.option(Options::DEBUG))
+                    if(dyn_alloc_sce.option(Options::TACs) && dyn_alloc_sce.option(Options::DEBUG_TAC))
                     {
                        will_stop=1; // trigger to stop the simu at the end of biomodule to avoid going further after this below computation that have potential side effects
                        if(dyn_alloc_sce.option(Options::FMSY))
@@ -1376,9 +1376,9 @@ dout(cout  << "END: POP MODEL TASKS----------" << endl);
    // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
    // cout << "tstep " << tstep << " AT THE END OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
-if(dyn_alloc_sce.option(Options::DEBUG) && will_stop==1)
+if(dyn_alloc_sce.option(Options::DEBUG_TAC) && will_stop==1)
   {
-    cout << "Stop here because DEBUG Option is ON" << endl;
+    cout << "Stop here because DEBUG_TAC Option is ON" << endl;
 
     //PAUSE
     int aa;

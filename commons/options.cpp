@@ -52,7 +52,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,envt_variables_diffusion);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);
-    O(mMap,DEBUG);
+    O(mMap,DEBUG_TAC);
 
 
 

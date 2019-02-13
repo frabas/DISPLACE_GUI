@@ -168,7 +168,13 @@ private:
 public:
     VesselEndOfTheDayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *vessel) const {
-              return ((int)((tstep % 24)+0.5) == vessel->getWorkDayEndHour() ? 0.0 : 1.0); // hardcoded return for daily trip after 10 p.m. //0: "true" node; 1: "false"
+              int current_hour= (int)((tstep % 24)+0.5);
+              return ((
+                      // caution: we expect getWorkDayEndHour to be within 0 and 23...(i.e. no 24)
+                      (current_hour >= vessel->getWorkDayEndHour()-1) ||  // end of day is true if +/- 1 hour of the usual return hour (make flexible because the vessel might be steaming at the exact hour then not taking any stop fishing decision...)
+                      (vessel->get_timeatsea() > 24) // worst case, end of the day triggered as soon as trying to fish again within the next day...
+                      )
+                      ? 0.0 : 1.0); //0: "true" node; 1: "false"
           }
 };
 

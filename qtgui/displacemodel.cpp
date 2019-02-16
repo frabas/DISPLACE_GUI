@@ -100,7 +100,9 @@ DisplaceModel::DisplaceModel()
 
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+    connect (mOutputFileParser, &OutputFileParser::parseCompleted, [this]() {
+        emit outputParsed();
+    });
 
     mFuncGroups->setValuesFormatString(tr("Functional Group #%1"));
     mFuncGroups->addSpecialValue(tr("Total"));
@@ -1734,6 +1736,7 @@ void DisplaceModel::setConfig(const Config &config)
 void DisplaceModel::setCurrentStep(int step)
 {
     mCurrentStep = step;
+    /*        // TODO Move this only when needed
     if (mDb) {
         mDb->updateVesselsToStep(mCurrentStep, mVessels);
         mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
@@ -1741,8 +1744,9 @@ void DisplaceModel::setCurrentStep(int step)
 
         // re-loading Historical data is not needed!
 
-        /* TODO: Update here all other entries */
+        // TODO: Update here all other entries
     }
+    */
 }
 
 void DisplaceModel::setInterestingPop(int n)

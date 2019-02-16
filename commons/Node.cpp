@@ -114,6 +114,13 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     tariffs.push_back(0);
     tariffs.push_back(0);
 
+    // initialize the vectors
+
+    totNs_per_pop.resize(m_nbpops);
+    totWs_per_pop.resize(m_nbpops);
+    impact_per_pop.resize(m_nbpops);
+    cumcatches_per_pop.resize(m_nbpops);
+    cumdiscards_per_pop.resize(m_nbpops);
 
 }
 

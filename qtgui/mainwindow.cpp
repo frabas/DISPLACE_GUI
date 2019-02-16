@@ -183,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mMemoryWatchTimer.start(2500);
 
-    cout << "Connect gui to simulator" << endl;
+    qDebug() << "Connect gui to simulator";
     mSimulation = new Simulator();
     mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -201,7 +201,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
-    cout << "Connect gui to simulator...OK" << endl;
+    qDebug() << "Connect gui to simulator...OK";
 
     ui->cmdProfileEnable->setChecked(false);
     ui->profilingOutput->setVisible(false);
@@ -222,7 +222,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
-    cout << "Connect map widget " << endl;
+    qDebug() << "Connect map widget ";
     map = ui->mapWidget;
     mMapController = new MapObjectsController(map);
     connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
@@ -235,52 +235,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map->setBackgroundColour(Qt::white);
 
-    cout << "Connect map widget...OK " << endl;
-
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
 
     /* Stats windows setup */
-    cout << "Connect Stats windows " << endl;
 
     mStatsController = new StatsController(this);
-    cout << "for Pop " << endl;
     mStatsController->setPopulationPlot(ui->plotPopulations, new GraphInteractionController(ui->plotPopulations, this));
-    cout << "for Pop...ok " << endl;
-    cout << "for Harbour " << endl;
-    mStatsController->setHarboursPlot(ui->plotHarbours);
-    cout << "for Harbour...ok " << endl;
-    cout << "for Nations " << endl;
-    mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
-    cout << "for Nations...ok " << endl;
-    cout << "for Vessels " << endl;
-    mStatsController->setVesselsStatsPlot(ui->plotVessels, vesselsStatsPlotController);
-    cout << "for Vessels...ok " << endl;
-    cout << "for Metiers " << endl;
-    mStatsController->setMetiersPlot(ui->plotMetiers);
-    cout << "for Metiers...ok " << endl;
-    cout << "for Benthos " << endl;
-    mStatsController->setBenthosPlot(ui->plotBenthos, benthosPlotController);
-    cout << "for Benthos...ok " << endl;
-    cout << "for Fishfarms " << endl;
-    mStatsController->setFishfarmsPlot(ui->plotFishfarms, fishfarmPlotController);
-    cout << "for Fishfarms...ok " << endl;
-    mStatsController->setWindfarmsPlot(ui->plotWindfarms, windfarmPlotController);
-    cout << "for Windfarms...ok " << endl;
-    mStatsController->setShipsPlot(ui->plotShips, shipPlotController);
-    cout << "for Ships...ok " << endl;
 
-    cout << "Connect Stats windows...OK " << endl;
+    mStatsController->setHarboursPlot(ui->plotHarbours);
+    mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
+    mStatsController->setVesselsStatsPlot(ui->plotVessels, vesselsStatsPlotController);
+    mStatsController->setMetiersPlot(ui->plotMetiers);
+    mStatsController->setBenthosPlot(ui->plotBenthos, benthosPlotController);
+    mStatsController->setFishfarmsPlot(ui->plotFishfarms, fishfarmPlotController);
+    mStatsController->setWindfarmsPlot(ui->plotWindfarms, windfarmPlotController);
+    mStatsController->setShipsPlot(ui->plotShips, shipPlotController);
 
     /* Tree model setup */
-    cout << "Tree model setup " << endl;
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
-
-    cout << "Tree model setup...OK " << endl;
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -459,10 +436,7 @@ void MainWindow::simulationEnded(int exitcode)
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)
 {
-    cout << "is simulator process state changed?" <<  endl;
-
     if (models[0] != 0) {
-        cout << "is there any model?" <<  endl;
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
         ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
@@ -473,12 +447,10 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
         }
     } else {
-        cout << "there is no model yet..." <<  endl;
         ui->cmdStart->setEnabled(false);
         ui->cmdStop->setEnabled(false);
         ui->cmdSetup->setEnabled(false);
         simulatorProcessStepChanged(-1);
-        cout << "and..." <<  endl;
     }
 }
 
@@ -491,6 +463,9 @@ void MainWindow::simulatorProcessStepChanged(int step)
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
+
+    if (step != -1 && models[0] != nullptr)
+        models[0]->setCurrentStep(step);
 
     updateCalendarDisplay(step);
 }
@@ -524,7 +499,6 @@ void MainWindow::shipMoved(int step, int idx, float x, float y, float course)
 
 void MainWindow::updateModelState()
 {
-    cout << "update model state" <<  endl;
     simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
     updateModelList();
 }
@@ -537,8 +511,9 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     try {
-    mMapController->updateNodes(0);
-    mStatsController->updateStats(models[0].get());
+        qDebug() << "Updating map to step " << models[0]->getCurrentStep();
+        mMapController->updateNodes(0);
+        mStatsController->updateStats(models[0].get());
     } catch (sqlite::SQLiteException &xcp) {
         qWarning() << "Error updating output: " << xcp.what();
     }
@@ -784,7 +759,6 @@ void MainWindow::centerMapOnHarbourId(int id)
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    std::cout << "id is " << id << endl;
     std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
@@ -1611,13 +1585,10 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
         return false;
     }
 
-    cout << "live model loaded..." << endl;
-
     /* Connect model */
+    qDebug() << "connecting outputParsed()";
     connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
     connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
-
-    cout << "current model connected..." << endl;
 
     mMapController->removeModel(model_idx);
 
@@ -1627,11 +1598,7 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
     ui->modelSelector->setCurrentIndex(model_idx);
     models[model_idx] = m;
 
-    cout << "create map objects from model..." << endl;
-
     mSimulation->linkModel(models[model_idx]);
-
-    cout << "link model to next simulation..." << endl;
 
     emit modelStateChanged();
 

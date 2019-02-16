@@ -95,6 +95,7 @@ void OutputFileParser::parse(QString path, int tstep, int period)
 
     mModel->endCollectingStats();
 
+    qDebug() << "parseCompleted()";
     emit parseCompleted();
 }
 

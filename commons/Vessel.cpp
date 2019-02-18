@@ -2372,8 +2372,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double totAvoiStksDiscThisEvent=0.0001;
 
     // TARIFFS ON THE NODE
-    vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
-    vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
+    //vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
+    //vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
     if(is_fishing_credits)
     {
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
@@ -3060,7 +3060,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
-                    this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
+                    this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
                     // catches
                     cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
@@ -3075,7 +3075,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         totDiscThisEvent += discards_per_szgroup[sz];
                     }
                     this->cumdiscards+= totDiscThisEvent;
-                    this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    this->get_loc()->add_to_cumdiscards_per_pop(totDiscThisEvent, pop);
+
                     cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
@@ -3269,8 +3271,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // CUMUL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
                 this->cumdiscards+= discards_pop_at_szgroup[pop][0];
-                this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + catch_pop_at_szgroup[pop][0]);
-                this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + 0);
+                this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
+                this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
+
                 /*
                 if(pop==21 && (this->get_name())=="DNK000012028"){
                     dout(cout << "cpue " <<cpue << endl);
@@ -3291,6 +3294,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // effort
                 cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
+                // contribute to accumulated catches on this node
+                this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+                this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
             }
             else
             {
@@ -3301,9 +3307,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-        // contribute to accumulated catches on this node
-        this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
-        this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
 
 
         // collect and accumulate tot_C_at_szgroup at the end of the pop loop

@@ -100,6 +100,7 @@ DisplaceModel::DisplaceModel()
 
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
+    //connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
     connect (mOutputFileParser, &OutputFileParser::parseCompleted, [this]() {
         emit outputParsed();
     });
@@ -1736,17 +1737,17 @@ void DisplaceModel::setConfig(const Config &config)
 void DisplaceModel::setCurrentStep(int step)
 {
     mCurrentStep = step;
-    /*        // TODO Move this only when needed
+            // TODO Move this only when needed
     if (mDb) {
-        mDb->updateVesselsToStep(mCurrentStep, mVessels);
+        mDb->updateVesselsToStep(mCurrentStep, mVessels); // SHOULD NOT BE CALLED IN LIVE MODE
         mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
-        mDb->updatePopValuesForNodesToStep(mCurrentStep, mNodes);
+        mDb->updatePopValuesForNodesToStep(mCurrentStep, mNodes); // SHOULD BE CALLED ONLY AT START OF MONTHS
 
         // re-loading Historical data is not needed!
 
         // TODO: Update here all other entries
     }
-    */
+
 }
 
 void DisplaceModel::setInterestingPop(int n)

@@ -464,8 +464,13 @@ void MainWindow::simulatorProcessStepChanged(int step)
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
 
-    if (step != -1 && models[0] != nullptr)
-        models[0]->setCurrentStep(step);
+   // if (step != -1 && models[0] != nullptr)
+   //     models[0]->setCurrentStep(step);
+   // => but this creates too many and unecessary update sql requests in live mode
+   // (e.g. updateVesselsToStep() etc. )...then overwhelming the gui!!
+   // however the update of the map layers will not be done in live mode if the current step is not set...
+   // we should find a way to only update when necessary i.e. start of the month for the map layers...
+   // on the other hand the vessel update from db is not necessary in live mode because of the "Collect" way from txt files
 
     updateCalendarDisplay(step);
 }

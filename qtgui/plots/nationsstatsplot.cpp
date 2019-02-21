@@ -102,7 +102,9 @@ void NationsStatsPlot::update(QCustomPlot *plot)
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/finland-flag-round-icon-16.png")));
         if(nationName.toStdString()=="EE" || nationName.toStdString()=="EST")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/estonia-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="LT" || nationName.toStdString()=="LTV")
+        if(nationName.toStdString()=="LTU")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/lithuania-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="LVA")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/latvia-flag-round-icon-16.png")));
         if(nationName.toStdString()=="DNK" || nationName.toStdString()=="DEN")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/denmark-flag-round-icon-16.png")));

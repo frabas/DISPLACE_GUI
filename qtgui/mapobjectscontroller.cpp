@@ -411,7 +411,8 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
     newlayer->addESRIShapefile(file);
-    addShapefileLayer(model_idx, layername, src, newlayer);
+    //addShapefileLayer(model_idx, layername, src, newlayer); // WRONG
+    addShapefileLayer(model_idx, path, src, newlayer);
 
     return true;
 }

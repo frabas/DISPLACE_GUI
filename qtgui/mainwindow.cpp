@@ -3279,6 +3279,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
 void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties)
 {
     QCustomPlot plot;
+
     plot.resize(properties.width, properties.height);
     plot.legend->setVisible(true);
     mStatsController->plotGraph(currentModel.get(), type, subtype, &plot);
@@ -3379,12 +3380,20 @@ void MainWindow::on_actionClear_configuration_triggered()
 void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
 {
     bool ok;
-    int sz = QInputDialog::getInt(this, tr("Set Node Symbol size"),
-                                  tr("Symbol size, in pixels:"),
+    int sz1 = QInputDialog::getInt(this, tr("Set Node Symbol size in x"),
+                                  tr("Symbol size in x, in pixels:"),
                                   NodeGraphics::pieh(), 1, 1000, 1, &ok);
 
+    int sz2=sz1;
     if (ok) {
-        NodeGraphics::setPieSize(sz, sz);
+     ok=false;
+     sz2 = QInputDialog::getInt(this, tr("Set Node Symbol size in y"),
+                                  tr("Symbol size in y, in pixels:"),
+                                  NodeGraphics::pieh(), 1, 1000, 1, &ok);
+    }
+
+    if (ok) {
+        NodeGraphics::setPieSize(sz1, sz2);
         QMessageBox::information(this, tr("Node Symbol Size"),
                                  tr("Nodes symbol size has changed, refresh the layers on the map"));
     }

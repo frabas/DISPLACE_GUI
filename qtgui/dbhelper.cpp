@@ -50,6 +50,8 @@
 #include <QStringList>
 #include <QDebug>
 
+#include <chrono>
+
 struct DbHelper::Impl
 {
     std::shared_ptr<SQLiteOutputStorage> db;
@@ -265,6 +267,9 @@ bool DbHelper::loadFishFarms(const QList<std::shared_ptr<NodeData> > &nodes,QLis
 bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> > &vessels)
 {
     auto vtab = p->db->getVesselVmsLikeTable();
+
+    auto start = std::chrono::system_clock::now();
+
     vtab->queryAllVesselsAtStep (tstep, [&vessels](const VesselVmsLikeTable::Log & log){
         if (log.id < vessels.size()) {
             std::shared_ptr<VesselData> v (vessels.at(log.id));
@@ -279,6 +284,11 @@ bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> 
 
         return true;
     });
+
+    auto end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+
+    std::cout << "Update Vessels Performances: " << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count() << "ms\n";
 
     return true;
 }

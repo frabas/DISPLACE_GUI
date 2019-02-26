@@ -3,21 +3,25 @@
 #include <sqlitestatementformatters.h>
 #include <sqlitestatement.h>
 #include <sqlitefieldsop.h>
+#include <insertstatement.h>
+#include <createstatement.h>
 
 struct VesselVmsLikeTable::Impl
 {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>,
-                    FieldDef<FieldType::Integer> ,
-                    FieldDef<FieldType::Integer> ,
-                    FieldDef<FieldType::Real>,
-                    FieldDef<FieldType::Real>,
-                    FieldDef<FieldType::Real>,
-                    FieldDef<FieldType::Real>,
-                    FieldDef<FieldType::Integer>
-    > statement;
+    using ThisInsertStatement = InsertStatement<
+            decltype(VesselVmsLikeTable::fldId),
+            decltype(VesselVmsLikeTable::fldTStep),
+            decltype(VesselVmsLikeTable::fldTStepDep),
+            decltype(VesselVmsLikeTable::fldPosLong),
+            decltype(VesselVmsLikeTable::fldPosLat),
+            decltype(VesselVmsLikeTable::fldCourse),
+            decltype(VesselVmsLikeTable::fldCumFuel),
+            decltype(VesselVmsLikeTable::fldState)>;
+
+    std::shared_ptr<ThisInsertStatement> statement;
 
     sqlite::SQLiteStatement vesselTStepSelect;
 };
@@ -42,6 +46,10 @@ void VesselVmsLikeTable::dropAndCreate()
                 );
 
     create(def);
+
+    auto index = sqlite::makeCreateUniqueIndexStatement(db(), "index" + name(), name(), fldId, fldTStep);
+    index.unique();
+    index.execute();
 }
 
 void VesselVmsLikeTable::init()
@@ -49,11 +57,13 @@ void VesselVmsLikeTable::init()
     if (!p->init) {
         p->init = true;
 
-        p->statement = prepareInsert(std::make_tuple(fldId, fldTStep, fldTStepDep,
-                                     fldPosLong, fldPosLat, fldCourse,
-                                     fldCumFuel,
-                                     fldState));
-
+        p->statement = std::make_shared<Impl::ThisInsertStatement>(fldId, fldTStep, fldTStepDep,
+                                               fldPosLong, fldPosLat, fldCourse,
+                                               fldCumFuel,
+                                               fldState);
+        p->statement->replaceOnConflict();
+        p->statement->attach(db(), name());
+        p->statement->prepare();
 
         auto select = sqlite::statements::Select(name(),
                                                  fldId, fldTStep, fldTStepDep,
@@ -72,15 +82,14 @@ void VesselVmsLikeTable::insertLog(const VesselVmsLikeTable::Log &log)
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
-    SQLiteTable::insert(p->statement, std::make_tuple(log.id,
+    p->statement->insert(log.id,
                         log.tstep,
                         log.tstep_dep,
                         log.p_long,
                         log.p_lat,
                         log.p_course,
                         log.cum_fuel,
-                        log.state)
-                        );
+                        log.state);
 }
 
 void VesselVmsLikeTable::queryAllVesselsAtStep(int tstep, std::function<bool (const VesselVmsLikeTable::Log &)> op)

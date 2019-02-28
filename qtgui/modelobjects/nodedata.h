@@ -77,6 +77,7 @@ public:
     double get_Oxygen() const { return mNode->get_Oxygen(); }
     double get_DissolvedCarbon() const { return mNode->get_DissolvedCarbon(); }
     double get_bathymetry() const { return mNode->get_bathymetry(); }
+    double get_shippingdensity() const { return mNode->get_shippingdensity(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
@@ -92,6 +93,7 @@ public:
     void setOxygen(double o) { mNode->setOxygen(o); }
     void setDissolvedCarbon(double dc) { mNode->setDissolvedCarbon(dc); }
     void setBathymetry(double b) { mNode->setBathymetry(b); }
+    void setShippingdensity(double b) { mNode->setShippingdensity(b); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }

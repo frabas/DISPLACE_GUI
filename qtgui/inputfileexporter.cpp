@@ -31,7 +31,7 @@ InputFileExporter::InputFileExporter()
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
-                                    QString bathymetrypath,
+                                    QString bathymetrypath, QString shippingdensitypath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -160,6 +160,17 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         bathymetrystream.setDevice(&bathymetryfile);
     }
 
+    QFile shippingdensityfile(shippingdensitypath);
+    QTextStream shippingdensitystream;
+    if (!shippingdensitypath.isEmpty()) {
+        if (!shippingdensityfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open shippingdensity file %1: %2"))
+                    .arg(shippingdensitypath).arg(shippingdensityfile.errorString());
+            return false;
+        }
+        shippingdensitystream.setDevice(&shippingdensityfile);
+    }
 
 
 
@@ -243,6 +254,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 DissolvedCarbonstream << nd->get_DissolvedCarbon() << endl;
             if (bathymetryfile.isOpen())
                 bathymetrystream << nd->get_bathymetry() << endl;
+            if (shippingdensityfile.isOpen())
+                shippingdensitystream << nd->get_shippingdensity() << endl;
 
 
         }
@@ -276,6 +289,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     Oxygenfile.close();
     DissolvedCarbonfile.close();
     bathymetryfile.close();
+    shippingdensityfile.close();
     bfile.close();
     bnbfile.close();
 

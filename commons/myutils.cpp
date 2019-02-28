@@ -736,6 +736,38 @@ bool fill_from_bathymetry(istream& in, vector<double>& graph_point_bathymetry, i
 }
 
 
+bool fill_from_shippingdensity(istream& in, vector<double>& graph_point_shippingdensity, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_shippingdensity.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_shippingdensity file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
 
 
 bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_biomass, int nrow)

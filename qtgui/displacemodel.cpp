@@ -634,6 +634,13 @@ void DisplaceModel::collectBathymetry(int step, int node_idx,  double bathy)
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectShippingdensity(int step, int node_idx,  double shippingdensity)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setShippingdensity(shippingdensity);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectWind(int step, int node_idx,  double wind)
 {
     checkStatsCollection(step);
@@ -1071,7 +1078,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1905,6 +1912,9 @@ bool DisplaceModel::loadNodes()
     string filename_bathymetry_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_bathymetry.dat";
 
+    string filename_shippingdensity_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_shippingdensity.dat";
+
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
 
@@ -2065,6 +2075,20 @@ bool DisplaceModel::loadNodes()
     if (!fill_from_bathymetry(bathymetry_graph, graph_point_bathymetry, nrow_coord))
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_bathymetry_graph.c_str()));
+
+    // input data, for the shippingdensity for each point of the graph
+    ifstream shippingdensity_graph;
+    shippingdensity_graph.open(filename_shippingdensity_graph.c_str());
+    if(shippingdensity_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_shippingdensity_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_shippingdensity;
+    if (!fill_from_shippingdensity(shippingdensity_graph, graph_point_shippingdensity, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_shippingdensity_graph.c_str()));
 
     vector<double> graph_point_landscape_norm(nrow_coord, 0);
     vector<double> graph_point_landscape_alpha(nrow_coord, 0);
@@ -2229,6 +2253,7 @@ bool DisplaceModel::loadNodes()
                                        graph_point_DissolvedCarbon_norm[i],
                                        graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_bathymetry[i],
+                                       graph_point_shippingdensity[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
@@ -2284,6 +2309,7 @@ bool DisplaceModel::loadNodes()
                                  graph_point_DissolvedCarbon_norm[i],
                                  graph_point_DissolvedCarbon_alpha[i],
                                  graph_point_bathymetry[i],
+                                 graph_point_shippingdensity[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer

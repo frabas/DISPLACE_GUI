@@ -41,6 +41,7 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
     ui->optOxygen->setChecked(true);
     ui->optDissolvedCarbon->setChecked(true);
     ui->optBathymetry->setChecked(true);
+    ui->optShippingdensity->setChecked(true);
     ui->optBenthosBio->setChecked(true);
     ui->optBenthosNb->setChecked(true);
     ui->optClosed->setChecked(true);
@@ -137,6 +138,12 @@ QString SaveGraphDialog::getBathymetryFilename() const
     return QString();
 }
 
+QString SaveGraphDialog::getShippingdensityFilename() const
+{
+    if (ui->optShippingdensity->isChecked())
+        return ui->outputFolder->text() + "/" + ui->shippingdensityFileName->text();
+    return QString();
+}
 
 QString SaveGraphDialog::getBenthosFilename() const
 {
@@ -194,6 +201,7 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->OxygenFileName->setEnabled(checked);
     ui->DissolvedCarbonFileName->setEnabled(checked);
     ui->bathymetryFileName->setEnabled(checked);
+    ui->shippingdensityFileName->setEnabled(checked);
     ui->benthosFileName->setEnabled(checked);
     ui->benthosNbFileName->setEnabled(checked);
     ui->closedPolyFilename->setEnabled(checked);
@@ -215,6 +223,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->OxygenFileName->setText(QString("coord%1_with_oxygen.dat").arg(gn));
     ui->DissolvedCarbonFileName->setText(QString("coord%1_with_dissolvedcarbon.dat").arg(gn));
     ui->bathymetryFileName->setText(QString("coord%1_with_bathymetry.dat").arg(gn));
+    ui->shippingdensityFileName->setText(QString("coord%1_with_shippingdensity.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
     ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));

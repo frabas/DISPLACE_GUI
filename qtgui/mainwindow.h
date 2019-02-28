@@ -154,6 +154,7 @@ private slots:
     void on_actionPopulations_triggered();
     void on_actionTariffs_triggered();
     void on_actionBathymetry_triggered();
+    void on_actionShippingdensity_triggered();
     void on_actionSalinity_triggered();
     void on_actionSST_triggered();
     void on_actionWind_triggered();

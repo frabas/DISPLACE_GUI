@@ -175,6 +175,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithBathymetryGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithShippingdensity:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithShippingdensityGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -326,6 +331,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithBathymetry:
         text += QString("<br/><b>Bathymetry:</b> %1<br/>")
                 .arg(mNode->get_bathymetry());
+        break;
+
+    case GraphNodeWithShippingdensity:
+        text += QString("<br/><b>Shipping density:</b> %1<br/>")
+                .arg(mNode->get_shippingdensity());
         break;
 
     case GraphNodeWithCumFTimeRole:

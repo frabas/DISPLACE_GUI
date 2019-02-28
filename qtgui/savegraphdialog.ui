@@ -6,307 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>777</height>
+    <width>585</width>
+    <height>997</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="3" column="0">
-    <widget class="QLineEdit" name="outputFolder"/>
-   </item>
-   <item row="5" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Output names</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="13" column="0">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>DissolvedCarbon file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QLineEdit" name="NitrogenFileName"/>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>Wind file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Landscape file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>Nitrogen file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="landscapeFileName"/>
-      </item>
-      <item row="12" column="0">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>Oxygen file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
-       <widget class="QLineEdit" name="PhosphorusFileName"/>
-      </item>
-      <item row="13" column="1">
-       <widget class="QLineEdit" name="DissolvedCarbonFileName"/>
-      </item>
-      <item row="17" column="1">
-       <widget class="QLineEdit" name="closedPolyFilename_VesSize"/>
-      </item>
-      <item row="15" column="1">
-       <widget class="QLineEdit" name="closedPolyFilename"/>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="benthosFileName"/>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_14">
-        <property name="text">
-         <string>Area codes file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="coordFileName"/>
-      </item>
-      <item row="8" column="1">
-       <widget class="QLineEdit" name="sstFileName"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="optCustomize">
-        <property name="text">
-         <string>Customize</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="benthosNbFileName"/>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="areaCodeFileName"/>
-      </item>
-      <item row="14" column="0">
-       <widget class="QLabel" name="label_35">
-        <property name="text">
-         <string>Bathymetry file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="16" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Closed polygon files (Monthly)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="graphFileName"/>
-      </item>
-      <item row="12" column="1">
-       <widget class="QLineEdit" name="OxygenFileName"/>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Benthos Total Bio.  file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QLineEdit" name="windFileName"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Coordinates file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Salinity file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>SST file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="1">
-       <widget class="QLineEdit" name="bathymetryFileName">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>Phosphorus file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Closed polygon files (Quarterly)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>Benthos Total Nb.  file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <widget class="QLineEdit" name="salinityFileName"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Graph File</string>
-        </property>
-       </widget>
-      </item>
-      <item row="16" column="1">
-       <widget class="QLineEdit" name="closedPolyFilename_Months"/>
-      </item>
-      <item row="17" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Closed polygon files (Ves Sizes)</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Output options</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="optNitrogen">
-        <property name="text">
-         <string>Nitrogen file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="optSST">
-        <property name="text">
-         <string>SST file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="optOxygen">
-        <property name="text">
-         <string>Oxygen file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="optWind">
-        <property name="text">
-         <string>Wind file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QCheckBox" name="optBenthosNb">
-        <property name="text">
-         <string>Benthos Number file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="optPhosphorus">
-        <property name="text">
-         <string>Phosphorus file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QCheckBox" name="optAreaCodes">
-        <property name="text">
-         <string>Area codes file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QCheckBox" name="optBenthosBio">
-        <property name="text">
-         <string>Benthos Biomass file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="optDissolvedCarbon">
-        <property name="text">
-         <string>DissolvedCarbon file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="optSalinity">
-        <property name="text">
-         <string>Salinity file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QCheckBox" name="optLandscape">
-        <property name="text">
-         <string>Landscape file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="2">
-       <widget class="QCheckBox" name="optClosed">
-        <property name="text">
-         <string>Closed polygons</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="optBathymetry">
-        <property name="text">
-         <string>Bathymetry file</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -324,14 +31,325 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="3" column="0">
+    <widget class="QLineEdit" name="outputFolder"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QToolButton" name="cmdBrowse">
+     <property name="text">
+      <string>...</string>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Output options</string>
      </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="optBathymetry">
+        <property name="text">
+         <string>Bathymetry file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="optDissolvedCarbon">
+        <property name="text">
+         <string>DissolvedCarbon file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="optBenthosNb">
+        <property name="text">
+         <string>Benthos Number file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="optWind">
+        <property name="text">
+         <string>Wind file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="optSST">
+        <property name="text">
+         <string>SST file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="optBenthosBio">
+        <property name="text">
+         <string>Benthos Biomass file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="optNitrogen">
+        <property name="text">
+         <string>Nitrogen file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="optSalinity">
+        <property name="text">
+         <string>Salinity file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="optLandscape">
+        <property name="text">
+         <string>Landscape file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="optOxygen">
+        <property name="text">
+         <string>Oxygen file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="optPhosphorus">
+        <property name="text">
+         <string>Phosphorus file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QCheckBox" name="optAreaCodes">
+        <property name="text">
+         <string>Area codes file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="optShippingdensity">
+        <property name="text">
+         <string>Shipping density</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QCheckBox" name="optClosed">
+        <property name="text">
+         <string>Closed polygons</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Output names</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="optCustomize">
+        <property name="text">
+         <string>Customize</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Graph File</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="graphFileName"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Coordinates file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="coordFileName"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Landscape file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="landscapeFileName"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Benthos Total Bio.  file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="benthosFileName"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Benthos Total Nb.  file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="benthosNbFileName"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>Area codes file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="areaCodeFileName"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>Wind file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLineEdit" name="windFileName"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>SST file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="sstFileName"/>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Salinity file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="salinityFileName"/>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Nitrogen file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLineEdit" name="NitrogenFileName"/>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Phosphorus file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QLineEdit" name="PhosphorusFileName"/>
+      </item>
+      <item row="12" column="0">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>Oxygen file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QLineEdit" name="OxygenFileName"/>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>DissolvedCarbon file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QLineEdit" name="DissolvedCarbonFileName"/>
+      </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="label_35">
+        <property name="text">
+         <string>Bathymetry file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QLineEdit" name="bathymetryFileName">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0">
+       <widget class="QLabel" name="label_36">
+        <property name="text">
+         <string>Shipping density file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="1">
+       <widget class="QLineEdit" name="shippingdensityFileName">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Closed polygon files (Quarterly)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="1">
+       <widget class="QLineEdit" name="closedPolyFilename"/>
+      </item>
+      <item row="17" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Closed polygon files (Monthly)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="1">
+       <widget class="QLineEdit" name="closedPolyFilename_Months"/>
+      </item>
+      <item row="18" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Closed polygon files (Ves Sizes)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="18" column="1">
+       <widget class="QLineEdit" name="closedPolyFilename_VesSize"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="5" column="1">
@@ -347,10 +365,13 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="1">
-    <widget class="QToolButton" name="cmdBrowse">
-     <property name="text">
-      <string>...</string>
+   <item row="6" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

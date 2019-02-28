@@ -1283,6 +1283,11 @@ void MainWindow::on_actionBathymetry_triggered()
     showPaletteDialog(BathyRole);
 }
 
+void MainWindow::on_actionShippingdensity_triggered()
+{
+    showPaletteDialog(ShippingdensityRole);
+}
+
 void MainWindow::on_actionSalinity_triggered()
 {
     showPaletteDialog(SalinityRole);
@@ -1716,6 +1721,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString Oxygenpath = savedlg.getOxygenFilename();
         QString DissolvedCarbonpath = savedlg.getDissolvedCarbonFilename();
         QString bathymetrypath = savedlg.getBathymetryFilename();
+        QString shippingdensitypath = savedlg.getShippingdensityFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1727,7 +1733,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath,
+                                 bathymetrypath, shippingdensitypath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
@@ -2731,6 +2737,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString Oxygenpath = dlg.getOxygenFilename();
         QString DissolvedCarbonpath = dlg.getDissolvedCarbonFilename();
         QString bathymetrypath = dlg.getBathymetryFilename();
+        QString shippingdensitypath = dlg.getShippingdensityFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2742,7 +2749,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath,
+                                 bathymetrypath, shippingdensitypath,
                                  benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {

@@ -51,7 +51,7 @@ class COMMONSSHARED_EXPORT Node
               double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
               double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
               double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
-              double _bathymetry,
+              double _bathymetry, double _shippingdensity,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
               int nbpops, int nbbenthospops,  int nbszgroups);
         /*
@@ -201,6 +201,11 @@ class COMMONSSHARED_EXPORT Node
         double get_bathymetry() const;
         void setBathymetry(double depth) {
             bathymetry = depth;
+        }
+
+        double get_shippingdensity() const;
+        void setShippingdensity(double density) {
+            shippingdensity = density;
         }
 
         // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
@@ -411,6 +416,7 @@ private:
         double Oxygen, Oxygen_norm, Oxygen_alpha;
         double DissolvedCarbon, DissolvedCarbon_norm, DissolvedCarbon_alpha;
         double bathymetry;
+        double shippingdensity;
         int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file

@@ -483,6 +483,8 @@ void OutputFileParser::parseNodesEnvt(QFile *file, int tstep, DisplaceModel *mod
             model->collectDissolvedCarbon( step, nodeid, dissolvedcarbon);
             double bathy = fields[10].toDouble();
             model->collectBathymetry( step, nodeid, bathy);
+            double shippingdensity = fields[11].toDouble();
+            model->collectShippingdensity(step, nodeid, shippingdensity);
         }
     }
 

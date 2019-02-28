@@ -72,7 +72,8 @@ public:
         GraphNodeWithPhosphorus,
         GraphNodeWithOxygen,
         GraphNodeWithDissolvedCarbon,
-        GraphNodeWithBathymetry
+        GraphNodeWithBathymetry,
+        GraphNodeWithShippingdensity
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);

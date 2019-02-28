@@ -187,6 +187,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerBathymetry[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Bathymetry")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerBathymetry, mStatsLayerBathymetry[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerShippingdensity[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Shippingdensity")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerShippingdensity, mStatsLayerShippingdensity[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all (NodesTariffStat TariffAll)")).arg(model_n).toStdString()));
     addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
@@ -515,6 +518,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerOxygen[model_n]->clearGeometries();
     mStatsLayerDissolvedCarbon[model_n]->clearGeometries();
     mStatsLayerBathymetry[model_n]->clearGeometries();
+    mStatsLayerShippingdensity[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
 
@@ -672,6 +676,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBathymetry, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBathymetry[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithShippingdensity, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerShippingdensity[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);

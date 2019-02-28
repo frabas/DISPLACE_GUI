@@ -381,3 +381,12 @@ void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol:
     painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
+
+void NodeWithShippingdensityGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color((float)mNode->get_shippingdensity()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+

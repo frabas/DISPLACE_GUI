@@ -66,6 +66,7 @@
      <addaction name="actionPhosphorus"/>
      <addaction name="actionOxygen"/>
      <addaction name="actionDissolvedCarbon"/>
+     <addaction name="actionShippingDensity"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -2273,6 +2274,15 @@ L3</string>
   <action name="actionRemove_isolated_subgraphs">
    <property name="text">
     <string>Remove Isolated Subgraphs...</string>
+   </property>
+  </action>
+  <action name="actionShippingDensity">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/colors.png</normaloff>icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>ShippingDensity...</string>
    </property>
   </action>
  </widget>

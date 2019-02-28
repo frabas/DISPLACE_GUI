@@ -50,6 +50,7 @@ class COMMONSSHARED_EXPORT Harbour : public Node
             double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
             double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
             double _bathymetry,
+            double _shippingdensity,
             double _benthos_biomass,
             double _benthos_number,
             double _benthos_meanweight,

@@ -268,6 +268,8 @@ bool COMMONSSHARED_EXPORT fill_from_DissolvedCarbon (istream& in, vector<double>
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_bathymetry (istream& in, vector<double>& graph_point_bathymetry,
                                       int nrow);
+bool COMMONSSHARED_EXPORT fill_from_shippingdensity (istream& in, vector<double>& graph_point_shippingdensity,
+                                      int nrow);
 
 bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);

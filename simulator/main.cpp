@@ -1151,7 +1151,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
           << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
     node.set_xy(2,2);
@@ -1176,6 +1176,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_oxygen.dat";
     string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_dissolvedcarbon.dat";
     string filename_bathymetry_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_bathymetry.dat";
+    string filename_shippingdensity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_shippingdensity.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 
@@ -1330,6 +1331,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 1;
     }
 
+    ifstream shippingdensity_graph;
+    shippingdensity_graph.open(filename_shippingdensity_graph.c_str());
+    if(shippingdensity_graph.fail())
+    {
+        open_file_error(filename_shippingdensity_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_shippingdensity;
+    if (!fill_from_shippingdensity(shippingdensity_graph, graph_point_shippingdensity, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_shippingdensity_graph << " Bad format\n";
+        return 1;
+    }
+
     vector<double> graph_point_landscape_norm(graph_coord_x.size(), 0);
     vector<double> graph_point_landscape_alpha(graph_coord_x.size(), 0);
     vector<double> graph_point_wind_norm(graph_coord_x.size(), 0);
@@ -1415,6 +1429,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        //"oxygen" 23              "oxygen_norm" 24         "oxygen_alpha" 25
        //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
        //"bathymetry" 29
+       //"shippingdensity" 30
 
        cout << "environment_on_coord.size() "<< environment_on_coord.size() << endl;
        for (unsigned int n=0; n<environment_on_coord.size(); n++)
@@ -1448,6 +1463,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           graph_point_DissolvedCarbon_norm.at(n)=environment_on_coord.at(n).dissolvedcarbon_norm;
           graph_point_DissolvedCarbon_alpha.at(n)=environment_on_coord.at(n).dissolvedcarbon_alpha;
           graph_point_bathymetry.at(n)=environment_on_coord.at(n).bathymetry; // 29
+          graph_point_shippingdensity.at(n)=environment_on_coord.at(n).shippingdensity; // 30
        }
 
        //check
@@ -1592,6 +1608,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                        graph_point_DissolvedCarbon_norm[i],
                                        graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_bathymetry[i],
+                                       graph_point_shippingdensity[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // meanweight not set from a GIS layer....
@@ -1643,6 +1660,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     graph_point_DissolvedCarbon_norm[i],
                                     graph_point_DissolvedCarbon_alpha[i],
                                     graph_point_bathymetry[i],
+                                    graph_point_shippingdensity[i],
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....

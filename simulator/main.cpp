@@ -1788,8 +1788,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
             {
-                outc(cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
-                     ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl);
+                cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
+                     ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl;
                 int aa;
                 cin>>aa;
             }

@@ -1866,7 +1866,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
         {
-            cerr << "something wrong for benthos_tot_biomass here!" << endl;
+            cout << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again" << endl;
             int aa;
             cin >> aa;
         }

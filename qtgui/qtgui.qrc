@@ -92,5 +92,6 @@
         <file>icons/finland-flag-round-icon-16.png</file>
         <file>icons/bulgaria-flag-round-icon-16.png</file>
         <file>icons/lithuania-flag-round-icon-16.png</file>
+        <file>palettes/shippingdensity_colors.p2c</file>
     </qresource>
 </RCC>

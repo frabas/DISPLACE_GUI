@@ -90,6 +90,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     DissolvedCarbon_norm=_DissolvedCarbon_norm;
     DissolvedCarbon_alpha=_DissolvedCarbon_alpha;
     bathymetry=_bathymetry;
+    shippingdensity=_shippingdensity;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;

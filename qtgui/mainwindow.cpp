@@ -1283,7 +1283,7 @@ void MainWindow::on_actionBathymetry_triggered()
     showPaletteDialog(BathyRole);
 }
 
-void MainWindow::on_actionShippingdensity_triggered()
+void MainWindow::on_actionShippingDensity_triggered()
 {
     showPaletteDialog(ShippingdensityRole);
 }

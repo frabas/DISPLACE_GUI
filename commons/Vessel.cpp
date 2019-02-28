@@ -2340,6 +2340,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         }
         else
         { // impact on biomass instead...
+            if(loss_after_1_passage_per_func_group.size()==0) cout << "check inconsistent input files for metier-benthos..." << endl;
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_bio                    = this->get_loc()->get_benthos_tot_biomass(funcid);
             double next_bio                       = (area_ratio1*current_bio) + (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));

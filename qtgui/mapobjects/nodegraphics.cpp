@@ -378,7 +378,10 @@ void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol:
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->bathymetry : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
+    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -386,7 +389,10 @@ void NodeWithShippingdensityGraphics::drawShape(QPainter &painter, const qmapcon
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color((float)mNode->get_shippingdensity()));
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->shippingdensity : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color((float)mNode->get_shippingdensity()));
+    painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 

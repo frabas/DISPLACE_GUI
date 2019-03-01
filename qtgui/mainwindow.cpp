@@ -464,8 +464,13 @@ void MainWindow::simulatorProcessStepChanged(int step)
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
 
+
     if (step != -1 && models[0] != nullptr)
-        models[0]->setCurrentStep(step);
+    {
+        int mtminus1 = models[0]->calendar()->getMonth(step-1);
+        int mt = models[0]->calendar()->getMonth(step);
+        if(mt!=mtminus1) models[0]->setCurrentStep(step); // update only if month starts
+    }
 
     updateCalendarDisplay(step);
 }

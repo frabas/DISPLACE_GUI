@@ -100,7 +100,7 @@ DisplaceModel::DisplaceModel()
 
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+    //connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
     connect (mOutputFileParser, &OutputFileParser::parseCompleted, [this]() {
         emit outputParsed();
     });

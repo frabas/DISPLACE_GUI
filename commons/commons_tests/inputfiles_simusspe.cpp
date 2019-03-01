@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
         DynAllocOptions(), PopSceOptions(), ClosureOptions(),
         "1", "2",
         1, 2, 56, 10140, 57555, types::NodeId(6),
-        7.1,
+        {7.1, 7},
         true, false, true,
         { 100, 101 },
         8,

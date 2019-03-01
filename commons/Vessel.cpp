@@ -2222,7 +2222,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
-                      vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
+                      vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, vector<double>& graph_res, bool& is_tacs, bool& is_individual_vessel_quotas,
                       bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, double& tech_creeping_multiplier,
                       bool& is_fishing_credits,  bool& is_impact_benthos_N)
 {
@@ -2294,7 +2294,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width
          << "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
          << ", swept area this fishing event is then:" << swept_area
-         << " compared to the cell area which is " << graph_res*graph_res << endl ;);
+         << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << endl ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
     this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
@@ -2309,8 +2309,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...
     double decrease_factor_on_benthos_funcgroup;
-    double area_ratio1 = ((graph_res*graph_res)-swept_area)/(graph_res*graph_res);
-    double area_ratio2 = swept_area/(graph_res*graph_res);
+    double area_ratio1 = ((graph_res.at(0)*graph_res.at(1))-swept_area)/(graph_res.at(0)*graph_res.at(1));
+    double area_ratio2 = swept_area/(graph_res.at(0)*graph_res.at(1));
 
     if(area_ratio1<0)
     {
@@ -2327,8 +2327,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         dout(cout  << "for the landscape is " << a_landscape);
         dout(cout  << "and the metier " <<  this->get_metier()->get_name());
 
-        // decrease_factor_on_benthos_funcgroup= 1-(1-(loss_after_1_passage_per_func_group.at(funcid)*(swept_area/(graph_res*graph_res)) ) );
-        //this->get_loc()->set_benthos_tot_biomass(funcid, this->get_loc()->get_benthos_tot_biomass(funcid)*(1-decrease_factor_on_benthos_funcgroup));
 
         // Inspired from Pitcher et al 2016
         if(is_impact_benthos_N)

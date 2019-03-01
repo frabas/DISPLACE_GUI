@@ -44,7 +44,7 @@ Scenario::Scenario()
       nrow_coord(0),
       nrow_graph(0),
       a_port(0),
-      graph_res(10),
+      graph_res(0),
       is_individual_vessel_quotas(0),
       check_all_stocks_before_going_fishing(0),
       tariff_pop(0),
@@ -174,15 +174,24 @@ void Scenario::setA_port(types::NodeId value)
     a_port = value;
 }
 
-double Scenario::getGraph_res() const
+QStringList Scenario::getGraph_res() const
 {
     return graph_res;
 }
 
-void Scenario::setGraph_res(double value)
+std::vector<double> Scenario::getGraph_res_asVector() const
+{
+    std::vector<double> vec;
+    foreach (QString s, graph_res)
+        vec.push_back(s.toDouble());
+    return vec;
+}
+
+void Scenario::setGraph_res(const QStringList &value)
 {
     graph_res = value;
 }
+
 
 bool Scenario::getIs_individual_vessel_quotas() const
 {
@@ -306,7 +315,9 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# nrow_coord\n" << nrow_coord << endl;
     stream << "# nrow_graph\n" << nrow_graph << endl;
     stream << "# a_port\n" << a_port.toIndex() << endl;
-    stream << "# grid res km\n" << graph_res << endl;
+    stream << "# grid res km\n" << endl;
+    foreach (QString a, graph_res)
+        stream << a << " ";
     stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << endl;
     stream << "#  check all stocks before going fishing (otherwise, explicit pops only)\n" << check_all_stocks_before_going_fishing << endl;
 
@@ -350,8 +361,10 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setGraph(scenario.a_graph);
     s.setNrow_coord(scenario.nrow_coord);
     s.setNrow_graph(scenario.nrow_graph);
-    if (scenario.graph_res > 1e-3)
-        s.setGraph_res(scenario.graph_res);
+    std::stringstream graphres;
+    std::copy(scenario.graph_res.begin(), scenario.graph_res.end(), std::ostream_iterator<int>(graphres, " "));
+    QStringList graphresxy = QString::fromStdString(graphres.str().c_str()).split(" ", QString::SkipEmptyParts);
+    s.setGraph_res(graphresxy);
     s.setA_port(scenario.a_port);
 
     s.setDtGoFishing(QString::fromStdString(scenario.dt_go_fishing));

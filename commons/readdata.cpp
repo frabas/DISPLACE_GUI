@@ -198,7 +198,8 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         scenario.nrow_coord=reader.getAs<int>("nrow_coord");
         scenario.nrow_graph=reader.getAs<int>("nrow_graph");
         scenario.a_port=types::NodeId(reader.getAs<int>("a_port"));
-        scenario.graph_res=reader.getAs<double>("graph_res");
+        scenario.graph_res= displace::formats::utils::stringToVector<double>(reader.get("graph_res"), " ");
+        if(scenario.graph_res.size()==1) scenario.graph_res.push_back(scenario.graph_res.at(0)); //res x and y required
         scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
         scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
         scenario.dt_go_fishing=reader.get("dt_go_fishing");

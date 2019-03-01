@@ -61,7 +61,7 @@ private:
     int nrow_coord;
     int nrow_graph;
     types::NodeId a_port;
-    double graph_res;
+    QStringList graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;
     bool use_dtrees;
@@ -107,8 +107,8 @@ public:
     void setNrow_graph(int value);
     types::NodeId getA_port() const;
     void setA_port(types::NodeId value);
-    double getGraph_res() const;
-    void setGraph_res(double value);
+    void setGraph_res(const QStringList &value);
+    QStringList getGraph_res() const;
     bool getIs_individual_vessel_quotas() const;
     void setIs_individual_vessel_quotas(bool value);
     bool getIs_check_all_stocks_before_going_fishing() const;
@@ -134,7 +134,9 @@ public:
     QString getDtChangePort() const;
     void setDtChangePort(const QString &dtChangePort);
 
+    std::vector<double>  getGraph_res_asVector() const;
     std::vector<int> getTariffPop_asVector() const;
+
     void setTariffPop(const QStringList &value);
     int getFreqUpdateTariffCode() const;
     int getUpdateTariffsBasedOnLpueOrDpueCode() const;

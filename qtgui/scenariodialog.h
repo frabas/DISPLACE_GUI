@@ -88,6 +88,7 @@ private slots:
 private:
     void setDynPop(const QStringList &text);
     void setDynAlloc(const QStringList &options);
+    void setGraphRes(const QStringList &xy);
 
 private:
     Ui::ScenarioDialog *ui;

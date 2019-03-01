@@ -180,7 +180,7 @@ bool DbHelper::loadScenario(Scenario &sce)
     sce.setNrow_graph(getMetadata("sce::nrow_graph").toInt());
     sce.setNrow_coord(getMetadata("sce::nrow_coord").toInt());
     sce.setA_port(types::NodeId(getMetadata("sce::aport").toInt()));
-    sce.setGraph_res(getMetadata("sce::graph_res").toDouble());
+    sce.setGraph_res(getMetadata("sce::graph_res").split(" "));
     sce.setIs_individual_vessel_quotas(getMetadata("sce::is_individual_vessel_quotas").toDouble());
     sce.setIs_check_all_stocks_before_going_fishing(getMetadata("sce::check_all_stocks_before_going_fishing").toDouble());
     sce.setDyn_alloc_sce(getMetadata("sce::dyn_alloc_sce").split(" "));
@@ -199,7 +199,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::nrow_graph", QString::number(sce.getNrow_graph()));
     setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
     setMetadata("sce::aport", QString::number(sce.getA_port().toIndex()));
-    setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
+    setMetadata("sce::graph_res", sce.getGraph_res().join(" "));
     setMetadata("sce::is_individual_vessel_quotas", (sce.getIs_individual_vessel_quotas() ? "1" : "0"));
     setMetadata("sce::check_all_stocks_before_going_fishing", (sce.getIs_check_all_stocks_before_going_fishing() ? "1" : "0"));
     setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));

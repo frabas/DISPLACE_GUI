@@ -186,7 +186,7 @@ int a_graph;
 types::NodeId a_port;
 int nrow_coord;
 int nrow_graph;
-double graph_res;
+vector <double> graph_res;
 bool is_individual_vessel_quotas;
 bool check_all_stocks_before_going_fishing;
 vector <int> tariff_pop;
@@ -720,7 +720,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     outc(cout << "nrow_coord " << nrow_coord << endl);
     outc(cout << "nrow_graph " << nrow_graph << endl);
     outc(cout << "a_port " << a_port << endl);
-    outc(cout << "graph res in km " << graph_res << endl);
+    outc(cout << "graph res in km xy " << graph_res.at(0) << " " << graph_res.at(1) << endl);
     outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
     outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
 

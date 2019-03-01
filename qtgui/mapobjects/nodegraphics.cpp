@@ -40,7 +40,7 @@ NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int
     int l = (mNode->get_marine_landscape() * 0x1000000) / 1000;
     c = QColor(QRgb(l & 0x00ffffff));
 
-    double res_km = mNode->getModel()->scenario().getGraph_res();
+    vector<double> res_km = mNode->getModel()->scenario().getGraph_res_asVector();
 
     double psi = node->mNode->get_x() / 180.0 * M_PI;
     double phi = node->mNode->get_y() / 180.0 * M_PI;
@@ -48,8 +48,15 @@ NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int
     // one degree of latitude, in meters, is: 111132.954 - 559.822 cos (2 phi) + 1.175 cos (4 phi)
     // one degree of longitude, in meter, is: pi / 180  *  6,367,449 * cos psi.
 
-    double dy = 1000.0 * res_km  / (111132.954 - 559.822 * std::cos(2.0 * phi) + 1.175 * std::cos(4.0 * phi));
-    double dx = 1000.0 * res_km  / (M_PI / 180.0 * 6367449 * std::cos(psi) );
+    double dy;
+    double dx;
+    dx = 1000.0 * res_km.at(0)  / (M_PI / 180.0 * 6367449 * std::cos(psi) );
+    if(res_km.size()>1){
+        dy= 1000.0 * res_km.at(1)  / (111132.954 - 559.822 * std::cos(2.0 * phi) + 1.175 * std::cos(4.0 * phi));
+    } else{
+       dy=dx;
+    }
+    //cout << "gridres, dx:" << dx << " dy:" << dy << endl;
 
     PointWorldPx c2 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi - dx/2, phi - dy/2), baseZoom());
     PointWorldPx c1 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi + dx/2, phi + dy/2), baseZoom());

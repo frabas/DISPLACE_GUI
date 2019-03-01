@@ -96,7 +96,7 @@ extern int nbsteps;
 extern int nbpops;
 extern int export_vmslike;
 extern int export_hugefiles;
-extern double graph_res;
+extern vector<double> graph_res;
 extern bool is_individual_vessel_quotas;
 extern bool check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;

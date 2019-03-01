@@ -41,7 +41,7 @@ struct COMMONSSHARED_EXPORT Scenario {
     int nrow_coord;
     int nrow_graph;
     types::NodeId a_port;
-    double graph_res;
+    std::vector <double>  graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;
     bool use_dtrees;
@@ -74,7 +74,7 @@ struct COMMONSSHARED_EXPORT Scenario {
                 s1.nrow_coord == s2.nrow_coord &&
                 s1.nrow_graph == s2.nrow_graph &&
                 s1.a_port == s2.a_port &&
-                std::abs((double)(s1.graph_res - s2.graph_res)) < 1e-3 &&
+                check(s1.graph_res, s2.graph_res) &&
                 s1.is_individual_vessel_quotas == s2.is_individual_vessel_quotas &&
                 s1.check_all_stocks_before_going_fishing == s2.check_all_stocks_before_going_fishing &&
                 s1.use_dtrees == s2.use_dtrees &&

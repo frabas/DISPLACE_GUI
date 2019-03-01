@@ -5901,6 +5901,56 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
           ///------------------------------///
           ///------------------------------///
+          ///  SHIPPING DISTURBING BENTHOS ///
+          ///------------------------------///
+          ///------------------------------///
+
+       if(dyn_alloc_sce.option(Options::shipping_on_benthos))
+        {
+          if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+          {
+              double shippingdensity=0;
+              double bathymetry=0;
+              for (unsigned int i=0; i<nodes.size(); i++)
+              {
+                 shippingdensity = nodes.at(i)->get_shippingdensity();
+                 if(shippingdensity>0)
+                 {
+                     bathymetry =nodes.at(i)->get_bathymetry();
+                     for (unsigned int funcid=0; funcid< nodes.at(i)->get_benthos_tot_biomass().size(); funcid++)
+                     {
+                        double scaling =1000;
+                        double loss_after_1_month_shipping_here = -1;
+                        if(bathymetry!=0) loss_after_1_month_shipping_here =(shippingdensity/12)/scaling *1/abs(bathymetry);
+                        //look at scaling range: 1-exp( (6000/12/(100:1000)) * 1/abs(-10)) // e.g at 10 m deep
+                        // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
+                        double decrease_factor_on_benthos_funcgroup=0;
+
+                        if(dyn_pop_sce.option(Options::impact_benthos_N))
+                        {
+                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
+                         double current_nb                    = nodes.at(i)->get_benthos_tot_number(funcid);
+                         double next_nb                       = current_nb*(1+decrease_factor_on_benthos_funcgroup);
+                         nodes.at(i)->set_benthos_tot_number(funcid, next_nb); // update
+                        }
+                        else
+                        { // impact on biomass instead...
+                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
+                         double current_bio                    = nodes.at(i)->get_benthos_tot_biomass(funcid);
+                         double next_bio                       = current_bio*(1+decrease_factor_on_benthos_funcgroup);
+                         nodes.at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
+                        }
+
+                     } // end funcid
+
+
+                 }
+              }
+          }
+        }
+
+          ///------------------------------///
+          ///------------------------------///
           ///  REINIT SOME VALUES ON NODES ///
           ///------------------------------///
           ///------------------------------///
@@ -5912,8 +5962,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               nodes.at(i)->set_nbchoked(0);
               }
           }
-
-
 
 
 

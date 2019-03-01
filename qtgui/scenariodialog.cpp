@@ -51,6 +51,7 @@ static const char *dyn_alloc_options[] = {
     "fishing_credits",
     "promote_high_tariffs",
     "envt_variables_diffusion",
+    "shipping_on_benthos",
     "TechCreeping3Per",
     "ExitVessels10Per",
 };

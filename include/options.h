@@ -108,6 +108,7 @@ enum Dyn_Alloc {
     fishing_credits,
     promote_high_tariffs,
     envt_variables_diffusion,
+    shipping_on_benthos,
     TechCreeping3Per,
     ExitVessels10Per,
     DEBUG_TAC,

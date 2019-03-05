@@ -3426,18 +3426,21 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 
 
 
-bool read_biological_traits_params(istream &stream, const std::string &separator, vector <std::tuple< string, double, double, double, double,
+bool read_biological_traits_params(istream &stream, const std::string &separator, std::vector <std::tuple< string, double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double, double, double, double> > & biological_traits_params)
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, string> >  & biological_traits_params)
 {
     // Format:
-    // Stock Winf k  Linf K t0 a b L50 alpha beta r_age tac_tons fbar_age_min fbar_age_max F_target F_percent TAC_percent B_trigger FMSY"
-    // fbar_assessment ssb_assessment mls_cat mls
+    //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
+    //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
 
-    // TODO: FOR NOW, ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
+    // TODO: FOR NOW, more or less ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
 
     cout << "Reading biological_traits_params..." << endl;
 
@@ -3462,11 +3465,46 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
                                                double, double, double, double,
                                                double, double, double, double,
                                                double, double, double, double,
-                                               double, double, double, double, double, double > a_tuple;
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, string>  a_tuple;
 
             std::get<0>(a_tuple)=boost::lexical_cast<string>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
             std::get<2>(a_tuple)=boost::lexical_cast<double>(sr[2]);
+            std::get<3>(a_tuple)=boost::lexical_cast<double>(sr[3]);
+            std::get<4>(a_tuple)=boost::lexical_cast<double>(sr[4]);
+            std::get<5>(a_tuple)=boost::lexical_cast<double>(sr[5]);
+            std::get<6>(a_tuple)=boost::lexical_cast<double>(sr[6]);
+            std::get<7>(a_tuple)=boost::lexical_cast<double>(sr[7]);
+            std::get<8>(a_tuple)=boost::lexical_cast<double>(sr[8]);
+            std::get<9>(a_tuple)=boost::lexical_cast<double>(sr[9]);
+            std::get<10>(a_tuple)=boost::lexical_cast<double>(sr[10]);
+            std::get<11>(a_tuple)=boost::lexical_cast<double>(sr[11]);
+            std::get<12>(a_tuple)=boost::lexical_cast<double>(sr[12]);
+            std::get<13>(a_tuple)=boost::lexical_cast<double>(sr[13]);
+            std::get<14>(a_tuple)=boost::lexical_cast<double>(sr[14]);
+            std::get<15>(a_tuple)=boost::lexical_cast<double>(sr[15]);
+            std::get<16>(a_tuple)=boost::lexical_cast<double>(sr[16]);
+            std::get<17>(a_tuple)=boost::lexical_cast<double>(sr[17]);
+            std::get<18>(a_tuple)=boost::lexical_cast<double>(sr[18]);
+            std::get<19>(a_tuple)=boost::lexical_cast<double>(sr[19]);
+            std::get<20>(a_tuple)=boost::lexical_cast<double>(sr[20]);
+            std::get<21>(a_tuple)=boost::lexical_cast<double>(sr[21]);
+            std::get<22>(a_tuple)=boost::lexical_cast<double>(sr[22]);
+            std::get<23>(a_tuple)=boost::lexical_cast<double>(sr[23]);
+            std::get<24>(a_tuple)=boost::lexical_cast<double>(sr[24]);
+            std::get<25>(a_tuple)=boost::lexical_cast<double>(sr[25]);
+            std::get<26>(a_tuple)=boost::lexical_cast<double>(sr[26]);
+            std::get<27>(a_tuple)=boost::lexical_cast<double>(sr[27]);
+            std::get<28>(a_tuple)=boost::lexical_cast<double>(sr[28]);
+            std::get<29>(a_tuple)=boost::lexical_cast<double>(sr[29]);
+            std::get<30>(a_tuple)=boost::lexical_cast<double>(sr[30]);
+            std::get<31>(a_tuple)=boost::lexical_cast<double>(sr[31]);
+            std::get<32>(a_tuple)=boost::lexical_cast<double>(sr[32]);
+            std::get<33>(a_tuple)=boost::lexical_cast<double>(sr[33]);
+            std::get<34>(a_tuple)=boost::lexical_cast<string>(sr[34]);
 
             // check
             //cout << "0: " << std::get<0>(a_tuple) << endl;

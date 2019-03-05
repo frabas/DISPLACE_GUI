@@ -2666,7 +2666,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "compute PredKernel..." << endl;
         vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-        vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        //BEFORE 050320129 vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        vector<double> beta (nbpops, 80);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
         for (unsigned int prey=0; prey<nbpops; ++prey)
         {  // loop over prey
            for (unsigned int j=0; j<nbpops; ++j)
@@ -2706,19 +2707,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cin >> a;
         }
 
-  // parameters to compute the search volume (volumetric search rate)
-  cout << "read few parameters ..." << endl;
-  auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6);
-  double kappa  = std::get<0>(param);
-  double q      = std::get<1>(param);     // Scaling of search volume
-  double n      = std::get<2>(param);
-  double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
-  double lambda= 2+q-n;
-  cout << " reading kappa is " << kappa << endl;
-  cout << " reading q is " << q << endl;
-  cout << " reading n is " << n << endl;
-  cout << " reading f0est is " << f0est << endl;
-  cout << " reading lambda is " << lambda << endl;
 
   const string separator=";";
 
@@ -2739,13 +2727,44 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double,double, double, double> > biological_traits_params;
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, string> > biological_traits_params;
   bool r = read_biological_traits_params (is, separator, biological_traits_params);
+
+  //colnames:
+  //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
+  //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
+
+  // parameters to compute the search volume (volumetric search rate)
+  cout << "read few parameters ..." << endl;
+  //auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6); //TODO: AVOID HARDCODING FOR THESE BUNCH OF PARAMS
+  //double kappa  = std::get<0>(param);
+  //double q      = std::get<1>(param);     // Scaling of search volume
+  //double n      = std::get<2>(param);
+  //double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
+
 
   cout << "compute the searchVolMat..." << endl;
   for (unsigned int prey=0; prey<nbpops; ++prey)
   {  // loop over prey
-     double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
+
+
+      double kappa  = get<30>(biological_traits_params.at(prey));
+      double q      = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
+      double n      = get<32>(biological_traits_params.at(prey));
+      double f0est  = get<33>(biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
+
+
+      double lambda= 2+q-n;
+      cout << " reading kappa is " << kappa << endl;
+      cout << " reading q is " << q << endl;
+      cout << " reading n is " << n << endl;
+      cout << " reading f0est is " << f0est << endl;
+      cout << " reading lambda is " << lambda << endl;
+
+      double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
 
      //cout << " this prey " << prey << " alphae is " << alphae << endl;
      //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(prey) is " << beta.at(prey) << " lambda is " << lambda << endl;
@@ -2753,11 +2772,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
      for (unsigned int j=0; j<nbpops; ++j)
      {  // loop over predators
          for (unsigned int k=0; k<NBSZGROUP; ++k)
-         {  // loop over predator sizes
+         {
+             // loop over predator sizes
             double Wk = get<2>(biological_traits_params.at(j));
             double Winf = get<1>(biological_traits_params.at(j));
             double h               = 3*Wk/(0.6*   pow(Winf,(-0.333333333))   ); // Calculate h from K
-            double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            // TODO input eta_m (specific to stock)
+            // TODO: double h               = (3/0.36)*Wk*pow(Winf,(0.25))*pow(eta_m,(-0.333333333)); // Calculate h from K
+            //BEFORE 05032019: double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            double gamma           = (f0est*h / (alphae*kappa*0.5*(1-f0est)));
             //cout << "j: " << j << " k: " << k << endl;
             //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
             //cout << "h: " << h << " gamma: " << gamma << endl;

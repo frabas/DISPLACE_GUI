@@ -1336,6 +1336,9 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                predKernel.at(j).at(kprey).at(k).at(name_pop)* (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
                            // assuming feeding level at 0.6
                            // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
+
+                        // TODO: AJOUTER UNE MATRICE D INTERACTION PREFERENCE DES ESPACES PREDATEUR-PROIE dietPreferenceMatrix.at(j).at(kprey),
+                           // 2 matrices for juveniles vs adults, depending on mat_cat (see pop parameters)
                         }
 
 

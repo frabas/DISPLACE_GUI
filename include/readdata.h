@@ -274,8 +274,6 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_avai_szgroup_nodes_wit
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file, string type_of_avai_field_to_read);
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
-vector< vector<double> > COMMONSSHARED_EXPORT read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
-vector< vector<double> > COMMONSSHARED_EXPORT read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector<double> COMMONSSHARED_EXPORT read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce);
@@ -287,6 +285,15 @@ map<types::NodeId, double> COMMONSSHARED_EXPORT read_oth_land_nodes_with_pop(str
 map<string, double> COMMONSSHARED_EXPORT read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
+
+
+// pop size spectra specific
+multimap<int, double> COMMONSSHARED_EXPORT read_adults_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce);
+multimap<int, double> COMMONSSHARED_EXPORT read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce);
+
+// pop interaction (deprecated)
+vector< vector<double> > COMMONSSHARED_EXPORT read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
+vector< vector<double> > COMMONSSHARED_EXPORT read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 
 // simu settings
 vector <int> COMMONSSHARED_EXPORT read_tsteps_quarters(string folder_name_parameterization, string inputfolder);

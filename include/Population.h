@@ -161,6 +161,8 @@ class COMMONSSHARED_EXPORT Population
         void set_tot_M_at_age(const vector<double>& _M_at_age);
         void set_tot_W_at_age(const vector<double>& _W_at_age);
         void set_tot_Mat_at_age(const vector<double>& _Mat_at_age);
+        void set_adults_diet_preference_per_stock(const vector<double>& _adults_diet_preference_per_stock);
+        void set_juveniles_diet_preference_per_stock(const vector<double>& _juveniles_diet_preference_per_stock);
         void set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup);
         void set_fecundity_at_szgroup(const vector<double>& _fecundity_at_szgroup);
         void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
@@ -260,6 +262,10 @@ class COMMONSSHARED_EXPORT Population
 		vector<double> tot_W_at_age;
 								 //
         vector<double> tot_Mat_at_age;
+                                 //
+        vector<double> adults_diet_preference_per_stock;
+                                 //
+        vector<double> juveniles_diet_preference_per_stock;
                                  //
         vector<double> weight_at_szgroup;
 								 //

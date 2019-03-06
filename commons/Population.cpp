@@ -848,6 +848,20 @@ void Population::set_tot_Mat_at_age(const vector<double>& _tot_Mat_at_age)
 
 }
 
+
+void Population::set_adults_diet_preference_per_stock(const vector<double>& _adults_diet_preference_per_stock)
+{
+    adults_diet_preference_per_stock =_adults_diet_preference_per_stock;
+
+}
+
+void Population::set_juveniles_diet_preference_per_stock(const vector<double>& _juveniles_diet_preference_per_stock)
+{
+   juveniles_diet_preference_per_stock =_juveniles_diet_preference_per_stock;
+
+}
+
+
 void Population::set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_maturity_at_szgroup.size(); sz++)

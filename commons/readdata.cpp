@@ -2114,6 +2114,91 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
 
 
 
+multimap<int, double> read_adults_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/_adults_diet_preference_per_stock_allstks_biolsce"+biolsce+".dat";
+
+    //input data
+    ifstream file_adults_diet_preference_per_stock_allstks;
+    file_adults_diet_preference_per_stock_allstks.open(filename.c_str());
+    if(file_adults_diet_preference_per_stock_allstks.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/adults_diet_preference_per_stock_allstks_biolsce1.dat";
+        file_adults_diet_preference_per_stock_allstks.open(filename.c_str());
+    }
+    if(file_adults_diet_preference_per_stock_allstks.fail())
+    {
+        cout << "Unfortunately the adults_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> adults_diet_preference_per_stock_allstks;
+    fill_multimap_from_specifications_i_d(file_adults_diet_preference_per_stock_allstks,  adults_diet_preference_per_stock_allstks);
+    file_adults_diet_preference_per_stock_allstks.close();
+    // Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
+    // was creating access violation from pointers misuse, etc.
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator lower_init = adults_diet_preference_per_stock_allstks.lower_bound(0);
+    multimap<int,double>::iterator upper_init = adults_diet_preference_per_stock_allstks.upper_bound(0);
+    dout(cout << "adults_diet_preference_per_stock_allstks for pop0: ");
+    for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(adults_diet_preference_per_stock_allstks);
+}
+
+
+multimap<int, double> read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/_juveniles_diet_preference_per_stock_allstks_biolsce"+biolsce+".dat";
+
+    //input data
+    ifstream file_juveniles_diet_preference_per_stock_allstks;
+    file_juveniles_diet_preference_per_stock_allstks.open(filename.c_str());
+    if(file_juveniles_diet_preference_per_stock_allstks.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/juveniles_diet_preference_per_stock_allstks_biolsce1.dat";
+        file_juveniles_diet_preference_per_stock_allstks.open(filename.c_str());
+    }
+    if(file_juveniles_diet_preference_per_stock_allstks.fail())
+    {
+        cout << "Unfortunately the juveniles_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> juveniles_diet_preference_per_stock_allstks;
+    fill_multimap_from_specifications_i_d(file_juveniles_diet_preference_per_stock_allstks,  juveniles_diet_preference_per_stock_allstks);
+    file_juveniles_diet_preference_per_stock_allstks.close();
+    // Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
+    // was creating access violation from pointers misuse, etc.
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator lower_init = juveniles_diet_preference_per_stock_allstks.lower_bound(0);
+    multimap<int,double>::iterator upper_init = juveniles_diet_preference_per_stock_allstks.upper_bound(0);
+    dout(cout << "juveniles_diet_preference_per_stock_allstks for pop0: ");
+    for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(juveniles_diet_preference_per_stock_allstks);
+}
+
+
+
 multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce)
 {
 

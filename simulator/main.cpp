@@ -2621,6 +2621,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // compute a predKernel and a searchVol
         // predKernel.at(j).at(kprey).at(k).at(name_pop)
 
+        // read-in multimap on diet of stocks per stock
+        multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
+        multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
+
 
        cout << "compute Ws_at_szgroup..." << endl;
         for (unsigned int j=0; j<nbpops; ++j)
@@ -2795,6 +2799,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   // because it is a simplified version we do not compute phiprey, encounteredfood and feedinglevel
   // we will instead assume feeding level at 0.6
   // this is why this loop over prey seems useless for now
+
+
+
+     // assign diet info to this stock
+     multimap<int,double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(prey);
+     multimap<int,double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(prey);
+     vector<double> adults_diet_preference_per_stock;
+     for (multimap<int, double>::iterator pos=lower_ia; pos != upper_ia; pos++)
+         adults_diet_preference_per_stock.push_back(pos->second);
+     multimap<int,double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(prey);
+     multimap<int,double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(prey);
+     vector<double> juveniles_diet_preference_per_stock;
+     for (multimap<int, double>::iterator pos=lower_ij; pos != upper_ij; pos++)
+         juveniles_diet_preference_per_stock.push_back(pos->second);
+
+     populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference_per_stock);
+     populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference_per_stock);
 
   }
 

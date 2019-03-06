@@ -2612,7 +2612,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                                                )
                                                                 );
     vector<vector<double> > searchVolMat(nbpops, vector<double> (NBSZGROUP));
-
+    vector<vector<double> > juveniles_diet_preference(nbpops, vector<double> (nbpops));
+    vector<vector<double> > adults_diet_preference(nbpops, vector<double> (nbpops));
+    int mat_cat=0; //init - split juveniles vs. adult categories
+    vector<int> mat_cats(nbpops, 0);
 
     if(dyn_pop_sce.option(Options::sizeSpectra))
     {
@@ -2759,7 +2762,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       double q      = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
       double n      = get<32>(biological_traits_params.at(prey));
       double f0est  = get<33>(biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
-
+      mat_cat       = get<28>(biological_traits_params.at(prey));
+      mat_cats.at(prey)=mat_cat;
 
       double lambda= 2+q-n;
       cout << " reading kappa is " << kappa << endl;
@@ -2802,23 +2806,38 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-     // assign diet info to this stock
-     multimap<int,double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(prey);
-     multimap<int,double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(prey);
-     vector<double> adults_diet_preference_per_stock;
-     for (multimap<int, double>::iterator pos=lower_ia; pos != upper_ia; pos++)
-         adults_diet_preference_per_stock.push_back(pos->second);
-     multimap<int,double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(prey);
-     multimap<int,double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(prey);
-     vector<double> juveniles_diet_preference_per_stock;
-     for (multimap<int, double>::iterator pos=lower_ij; pos != upper_ij; pos++)
-         juveniles_diet_preference_per_stock.push_back(pos->second);
-
-     populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference_per_stock);
-     populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference_per_stock);
 
   }
 
+
+
+  cout << "Read in the diet preference..." << endl;
+  for (unsigned int j=0; j<nbpops; ++j)
+  {  // loop over predators
+      multimap<int,double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
+      multimap<int,double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
+      multimap<int,double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(j);
+      multimap<int,double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(j);
+      vector<double> ad_diet_pref;
+      for (multimap<int, double>::iterator pos=lower_ia; pos != upper_ia; pos++)
+                ad_diet_pref.push_back(pos->second);
+      vector<double> juv_diet_pref;
+      for (multimap<int, double>::iterator pos=lower_ij; pos != upper_ij; pos++)
+                juv_diet_pref.push_back(pos->second);
+      if(ad_diet_pref.size()!=nbpops) cout << "error dim in input file for adults diet preference" << endl;
+      if(juv_diet_pref.size()!=nbpops) cout << "error dim in input file for juveniles diet preference" << endl;
+
+      for (unsigned int prey=0; prey<nbpops; ++prey)
+          {  // loop over prey
+          // assign diet info to this stock
+            adults_diet_preference.at(j).at(prey)= ad_diet_pref.at(prey);
+            juveniles_diet_preference.at(j).at(prey)= juv_diet_pref.at(prey);
+
+          // useless because getters not used
+          //populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
+          //populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
+          }
+   }
 
 
     cout << "Initial objects for sizeSpectra option...ok" << endl;
@@ -4331,7 +4350,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_alloc_sce,
                                              Ws_at_szgroup,
                                              predKernel,
-                                             searchVolMat
+                                             searchVolMat,
+                                             juveniles_diet_preference,
+                                             adults_diet_preference,
+                                             mat_cats
                                            ) )
                 throw std::runtime_error("Error while executing: applyBiologicalModule2");
 

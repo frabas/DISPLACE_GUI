@@ -139,7 +139,10 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           const DynAllocOptions &dyn_alloc_sce,
                           vector<vector<double> > &Ws_at_szgroup,
                           vector<vector<vector<vector<double> > > > &predKernel,
-                          vector<vector<double> > &searchVolMat
+                          vector<vector<double> > &searchVolMat,
+                          vector<vector<double> > &juveniles_diet_preference,
+                          vector<vector<double> > &adults_diet_preference,
+                          vector<int> &  mat_cats
                            )
 {
 
@@ -661,7 +664,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     if (dyn_pop_sce.option(Options::sizeSpectra))
                      {
                       try {
-                            a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
+                            a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp,
+                                                                                                           Ws_at_szgroup,
+                                                                                                           predKernel,
+                                                                                                           searchVolMat,
+                                                                                                           juveniles_diet_preference,
+                                                                                                           adults_diet_preference,
+                                                                                                           mat_cats);
                         } catch (runtime_error &) {
                             cout << "Fail in apply_natural_mortality_at_node_from_size_spectra_approach" << endl;
                             return false;

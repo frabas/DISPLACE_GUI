@@ -326,7 +326,13 @@ class COMMONSSHARED_EXPORT Node
         void clear_cumcatches_per_pop();
         void clear_cumdiscards_per_pop();
         void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
-        void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, const vector<vector<double> > & Ws_at_szgroup, const vector<vector<vector<vector<double> > > > & predkernel, const vector<vector<double> > & searchVolMat);
+        void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,
+                                                                        const vector<vector<double> > & Ws_at_szgroup,
+                                                                        const vector<vector<vector<vector<double> > > > & predkernel,
+                                                                        const vector<vector<double> > & searchVolMat,
+                                                                        const vector<vector<double> > & juveniles_diet_preference,
+                                                                        const vector<vector<double> > & adults_diet_preference,
+                                                                        const vector<int> &mat_cats);
         void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN, int will_I_discard_all, vector<vector<double> > &selectivity_per_stock_ogives_for_oth_land);
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);

@@ -102,7 +102,10 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string &namesimu,
                           const DynAllocOptions &dyn_alloc_sce,
                           vector<vector<double> > &Ws_at_szgroup,
                           vector<vector<vector<vector<double> > > > &predKernel,
-                          vector<vector<double> > &searchVolMat
+                          vector<vector<double> > &searchVolMat,
+                          vector<vector<double> > &juveniles_diet_preference,
+                          vector<vector<double> > &adults_diet_preference,
+                          vector<int> &  mat_cats
                            );
 
 

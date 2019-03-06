@@ -1277,11 +1277,16 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,
                                                                       const vector<vector<double> > & Ws_at_szgroup,
                                                                       const vector<vector<vector<vector<double> > > > & predKernel,
-                                                                      const vector<vector<double> > & searchVolMat)
+                                                                      const vector<vector<double> > & searchVolMat,
+                                                                      const vector<vector<double> > & juveniles_diet_preference,
+                                                                      const vector<vector<double> > & adults_diet_preference,
+                                                                      const vector<int> & mat_cats)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
     vector<int> spp_on_this_node = this->get_pop_names_on_node();
+
+    vector<vector<double> > diet_preference = juveniles_diet_preference; // init
 
     // check
     //if(this->get_idx_node().toIndex()==40)
@@ -1332,13 +1337,26 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
                         for (unsigned int k=0; k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
-                           predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
-                                               predKernel.at(j).at(kprey).at(k).at(name_pop)* (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
+
+                            //cout << "mat_cat is " << mat_cats.at(j) << endl;
+
+                            if (mat_cats.at(j) < k)
+                            {
+                                diet_preference = juveniles_diet_preference;
+                            }
+                            else
+                            {
+                                diet_preference = adults_diet_preference;
+                            }
+
+                            //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
+
+                            predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                               predKernel.at(j).at(kprey).at(k).at(name_pop)* diet_preference.at(j).at(kprey) *
+                                                   (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
                            // assuming feeding level at 0.6
                            // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
 
-                        // TODO: AJOUTER UNE MATRICE D INTERACTION PREFERENCE DES ESPACES PREDATEUR-PROIE dietPreferenceMatrix.at(j).at(kprey),
-                           // 2 matrices for juveniles vs adults, depending on mat_cat (see pop parameters)
                         }
 
 

@@ -5964,6 +5964,34 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                }
           }
 
+          ///------------------------------///
+          ///------------------------------///
+          ///  THE DIFFUSIVE BENTHOS       ///
+          ///------------------------------///
+          ///------------------------------///
+          if(dyn_alloc_sce.option(Options::benthos_diffusion))
+          {
+              int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
+              if((tstep % numStepDiffusions) == (numStepDiffusions-1))
+              {
+
+                 // naive diffusion
+                 double coeff_diffusion =0.01;
+                 bool r= diffuse_Benthos_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+
+                 // gradient diffusion
+                 // using the rtree
+                 // bool r=  diffuse_Benthos_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+
+
+
+
+
+              }
+            }
+
+
+
 
           ///------------------------------///
           ///------------------------------///

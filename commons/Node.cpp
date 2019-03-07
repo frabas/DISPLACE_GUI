@@ -1132,6 +1132,11 @@ void  Node::set_benthos_tot_number_K(int funcgr, double value)
     benthos_tot_number_K.at(funcgr)= value;
 }
 
+void Node::set_benthos_biomass_per_funcgr(vector<double> _benthos_tot_biomass)
+{
+    benthos_tot_biomass=_benthos_tot_biomass;
+}
+
 
 void  Node::set_tariffs(int type, double value)
 {
@@ -1341,7 +1346,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         {
 
 
-                                if(juveniles_diet_preference.at(j).at(kprey)!=0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                if(juveniles_diet_preference.at(j).at(kprey)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
                                                    predKernel.at(j).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(j).at(kprey) *
                                                        (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
@@ -1351,7 +1356,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         // adults
                         for (unsigned int k=mat_cats.at(j); k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
-                                if(adults_diet_preference.at(j).at(kprey)!=0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                if(adults_diet_preference.at(j).at(kprey)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
                                                    predKernel.at(j).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(kprey) *
                                                        (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
 

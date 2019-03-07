@@ -311,6 +311,7 @@ class COMMONSSHARED_EXPORT Node
         void set_benthos_tot_meanweight(int funcgr, double value);
         void set_benthos_tot_biomass_K(int funcgr, double value);
         void set_benthos_tot_number_K(int funcgr, double value);
+        void set_benthos_biomass_per_funcgr(vector<double> benthos);
         void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();

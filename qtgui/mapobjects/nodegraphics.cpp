@@ -403,3 +403,13 @@ void NodeWithShippingdensityGraphics::drawShape(QPainter &painter, const qmapcon
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
+void NodeWithSiltfractionGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->siltfraction : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color((float)mNode->get_siltfraction()));
+    painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color(ca));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}

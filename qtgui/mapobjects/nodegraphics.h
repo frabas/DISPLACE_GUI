@@ -265,4 +265,14 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+
+class NodeWithSiltfractionGraphics : public NodeGraphics {
+public:
+    NodeWithSiltfractionGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
 #endif // NODEGRAPHICS_H

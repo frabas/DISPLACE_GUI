@@ -47,7 +47,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
            double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
            double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
            double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
-           double _bathymetry, double _shippingdensity,
+           double _bathymetry, double _shippingdensity, double _siltfraction,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            double _benthos_biomass_K, double _benthos_number_K,
            int nbpops, int nbbenthospops, int nbszgroups)
@@ -91,6 +91,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     DissolvedCarbon_alpha=_DissolvedCarbon_alpha;
     bathymetry=_bathymetry;
     shippingdensity=_shippingdensity;
+    siltfraction=_siltfraction;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
@@ -386,6 +387,11 @@ double Node::get_bathymetry() const
 double Node::get_shippingdensity() const
 {
     return(shippingdensity);
+}
+
+double Node::get_siltfraction() const
+{
+    return(siltfraction);
 }
 
 double Node::get_init_benthos_biomass() const
@@ -1813,7 +1819,7 @@ void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
                   " " << this->get_sst() << " " << this->get_wind() << " " <<
                   " " << this->get_Nitrogen() << " " << this->get_Phosphorus() << " " <<
                   " " << this->get_Oxygen() << " " << this->get_DissolvedCarbon() << " " <<
-                     this->get_bathymetry()  << " " << this->get_shippingdensity()  <<  endl;
+                     this->get_bathymetry()  << " " << this->get_shippingdensity() << " " << this->get_siltfraction() <<  endl;
 
 }
 

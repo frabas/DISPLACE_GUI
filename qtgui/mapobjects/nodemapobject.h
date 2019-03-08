@@ -73,7 +73,8 @@ public:
         GraphNodeWithOxygen,
         GraphNodeWithDissolvedCarbon,
         GraphNodeWithBathymetry,
-        GraphNodeWithShippingdensity
+        GraphNodeWithShippingdensity,
+        GraphNodeWithSiltfraction
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);

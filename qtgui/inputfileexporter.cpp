@@ -31,7 +31,7 @@ InputFileExporter::InputFileExporter()
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
-                                    QString bathymetrypath, QString shippingdensitypath,
+                                    QString bathymetrypath, QString shippingdensitypath,  QString siltfractionpath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -173,6 +173,18 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     }
 
 
+    QFile siltfractionfile(siltfractionpath);
+    QTextStream siltfractionstream;
+    if (!siltfractionpath.isEmpty()) {
+        if (!siltfractionfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open siltfraction file %1: %2"))
+                    .arg(siltfractionpath).arg(siltfractionfile.errorString());
+            return false;
+        }
+        siltfractionstream.setDevice(&siltfractionfile);
+    }
+
 
     QFile bfile(benthospath);
     QTextStream bstream;
@@ -256,6 +268,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 bathymetrystream << nd->get_bathymetry() << endl;
             if (shippingdensityfile.isOpen())
                 shippingdensitystream << nd->get_shippingdensity() << endl;
+            if (siltfractionfile.isOpen())
+                siltfractionstream << nd->get_siltfraction() << endl;
 
 
         }
@@ -290,6 +304,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     DissolvedCarbonfile.close();
     bathymetryfile.close();
     shippingdensityfile.close();
+    siltfractionfile.close();
     bfile.close();
     bnbfile.close();
 

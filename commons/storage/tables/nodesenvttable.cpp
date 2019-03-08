@@ -28,11 +28,13 @@ struct NodesEnvtTable::Impl {
     FieldDef<FieldType::Real> dissolvedcarbon = makeFieldDef("dissolvedcarbon",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> bathymetry = makeFieldDef("bathymetry",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> shippingdensity = makeFieldDef("shippingdensity",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> siltfraction = makeFieldDef("siltfraction",FieldType::Real()).notNull();
 
 
     PreparedInsert<FieldDef<FieldType::Integer>,
                    FieldDef<FieldType::Integer>,
                    FieldDef<FieldType::Integer>,
+                   FieldDef<FieldType::Real>,
                    FieldDef<FieldType::Real>,
                    FieldDef<FieldType::Real>,
                    FieldDef<FieldType::Real>,
@@ -57,13 +59,14 @@ struct NodesEnvtTable::Impl {
         FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>,
+        FieldDef<FieldType::Real>,
         FieldDef<FieldType::Real>
             >nodeQueryStatement;
     sqlite::Where<FieldType::Integer, FieldType::Integer> nodeQueryWhere;
 
     Impl()
         : nodeQueryStatement(op::max(fldTStep), fldNodeId, marineLandscape, salinity, sst, wind, nitrogen, phosphorus,
-                                                     oxygen, dissolvedcarbon, bathymetry, shippingdensity) {
+                                                     oxygen, dissolvedcarbon, bathymetry, shippingdensity, siltfraction) {
 
     }
 
@@ -92,7 +95,8 @@ void NodesEnvtTable::dropAndCreate()
                            p->oxygen,
                            p->dissolvedcarbon,
                            p->bathymetry,
-                           p->shippingdensity
+                           p->shippingdensity,
+                           p->siltfraction
                            ));
 }
 
@@ -112,7 +116,9 @@ void NodesEnvtTable::init()
                                                            p->oxygen,
                                                            p->dissolvedcarbon,
                                                            p->bathymetry,
-                                                           p->shippingdensity));
+                                                           p->shippingdensity,
+                                                           p->siltfraction
+                                                           ));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       p->fldNodeId,
@@ -126,6 +132,7 @@ void NodesEnvtTable::init()
                                                       p->dissolvedcarbon,
                                                       p->bathymetry,
                                                       p->shippingdensity,
+                                                      p->siltfraction,
                                                       sqlite::op::max(p->fldTStep)
                                                       )
                 .where (sqlite::op::le(p->fldTStep))
@@ -159,7 +166,8 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
                                         node->get_Oxygen(),
                                         node->get_DissolvedCarbon(),
                                         node->get_bathymetry(),
-                                        node->get_shippingdensity())
+                                        node->get_shippingdensity(),
+                                        node->get_siltfraction())
                         );
     return 0;
 }
@@ -185,6 +193,7 @@ void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<boo
         s.dissolvedcarbon = st.getDoubleValue(8);
         s.bathymetry = st.getDoubleValue(9);
         s.shippingdensity = st.getDoubleValue(10);
+        s.siltfraction = st.getDoubleValue(11);
         if (op)
             return op(s);
         return false;
@@ -200,7 +209,7 @@ void NodesEnvtTable::queryNodeAtStep(types::NodeId nodeId, types::tstep_t tstep,
     p->nodeQueryStatement.exec([this, &op](
                                    int nodeid, int tstep, int marinelandscape,
                                    double salinity, double sst, double wind,
-                                   double no, double p, double o2, double co2, double deep, double sd
+                                   double no, double p, double o2, double co2, double deep, double sd, double sf
                                    ) {
         NodeEnvt s;
         s.nodeId = types::NodeId(nodeid);
@@ -215,6 +224,7 @@ void NodesEnvtTable::queryNodeAtStep(types::NodeId nodeId, types::tstep_t tstep,
         s.dissolvedcarbon = co2;
         s.bathymetry = deep;
         s.shippingdensity = sd;
+        s.siltfraction = sf;
         if (op)
             return op(s);
         return false;

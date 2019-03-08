@@ -3620,7 +3620,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
     //"x"                     "y"                     "harb"                  "pt_graph"              "code_area"             "landscapes_code"       "landscape_norm"
     //"landscape_alpha"       "sst"                   "sst_norm"              "sst_alpha"             "salinity"              "salinity_norm"         "salinity_alpha"        "nitrogen"
     //"nitrogen_norm"         "nitrogen_alpha"        "phosphorus"            "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"
-    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry" "shippingdensity"
+    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry" "shippingdensity" "siltfraction"
 
     cout << "Reading environment_on_coord..." << endl;
 
@@ -3673,6 +3673,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
             a_tuple.dissolvedcarbon_alpha= boost::lexical_cast<double>(sr[28]);
             a_tuple.bathymetry=boost::lexical_cast<double>(sr[29]);
             a_tuple.shippingdensity=boost::lexical_cast<double>(sr[30]);
+            a_tuple.siltfraction=boost::lexical_cast<double>(sr[31]);
 
             // check
             //cout << "reading  environment_on_coord: " << endl;

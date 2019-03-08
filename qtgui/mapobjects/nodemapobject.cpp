@@ -180,6 +180,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithShippingdensityGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithSiltfraction:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithSiltfractionGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -336,6 +341,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithShippingdensity:
         text += QString("<br/><b>Shipping density:</b> %1<br/>")
                 .arg(mNode->get_shippingdensity());
+        break;
+
+    case GraphNodeWithSiltfraction:
+        text += QString("<br/><b>Silt fraction:</b> %1<br/>")
+                .arg(mNode->get_siltfraction());
         break;
 
     case GraphNodeWithCumFTimeRole:

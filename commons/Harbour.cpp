@@ -52,6 +52,7 @@ double _DissolvedCarbon_norm,
 double _DissolvedCarbon_alpha,
 double _bathymetry,
 double _shippingdensity,
+double _siltfraction,
 double _benthos_biomass,
 double _benthos_number,
 double _benthos_meanweight,
@@ -75,7 +76,7 @@ vector<double> _freq_usual_fgrounds)
         _Phosphorus, _Phosphorus_norm,  _Phosphorus_alpha,
         _Oxygen,  _Oxygen_norm,  _Oxygen_alpha,
         _DissolvedCarbon,  _DissolvedCarbon_norm,  _DissolvedCarbon_alpha,
-        _bathymetry, _shippingdensity,
+        _bathymetry, _shippingdensity, _siltfraction,
        _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
@@ -100,7 +101,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 {
 
 }

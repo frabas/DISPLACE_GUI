@@ -41,7 +41,8 @@ const QString PaletteManager::defaultPaletteFileNames[] = {
     ":/palettes/phosphorus_colors.p2c",
     ":/palettes/oxygen_colors.p2c",
     ":/palettes/dissolvedcarbon_colors.p2c",
-    ":/palettes/shippingdensity_colors.p2c"
+    ":/palettes/shippingdensity_colors.p2c",
+    ":/palettes/siltfraction_colors.p2c"
 };
 
 Palette::Palette()

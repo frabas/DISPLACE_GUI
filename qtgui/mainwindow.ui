@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -67,6 +67,7 @@
      <addaction name="actionOxygen"/>
      <addaction name="actionDissolvedCarbon"/>
      <addaction name="actionShippingDensity"/>
+     <addaction name="actionSiltFraction"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -2283,6 +2284,15 @@ L3</string>
    </property>
    <property name="text">
     <string>ShippingDensity...</string>
+   </property>
+  </action>
+  <action name="actionSiltFraction">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>SiltFraction...</string>
    </property>
   </action>
  </widget>

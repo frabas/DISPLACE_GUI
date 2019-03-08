@@ -48,10 +48,10 @@ class COMMONSSHARED_EXPORT Node
               double _sst, double sst_norm, double sst_alpha,
               double _salinity, double _salinity_norm, double _salinity_alpha,
               double _Nitrogen, double _Nitrogen_norm, double _Nitrogen_alpha,
-              double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
+              double _Phosphorus, double _Phosphorus_norm, double _Phosphorus_alpha,
               double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
               double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
-              double _bathymetry, double _shippingdensity,
+              double _bathymetry, double _shippingdensity, double _siltfraction,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
               int nbpops, int nbbenthospops,  int nbszgroups);
         /*
@@ -206,6 +206,11 @@ class COMMONSSHARED_EXPORT Node
         double get_shippingdensity() const;
         void setShippingdensity(double density) {
             shippingdensity = density;
+        }
+
+        double get_siltfraction() const;
+        void setSiltfraction(double fraction) {
+            siltfraction = fraction;
         }
 
         // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
@@ -424,6 +429,7 @@ private:
         double DissolvedCarbon, DissolvedCarbon_norm, DissolvedCarbon_alpha;
         double bathymetry;
         double shippingdensity;
+        double siltfraction;
         int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file

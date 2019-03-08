@@ -49,6 +49,7 @@ public:
     QString getDissolvedCarbonFilename() const;
     QString getBathymetryFilename() const;
     QString getShippingdensityFilename() const;
+    QString getSiltfractionFilename() const;
     QString getBenthosFilename() const;
     QString getBenthosNbFilename() const;
     QString getAreacodesFilename() const;

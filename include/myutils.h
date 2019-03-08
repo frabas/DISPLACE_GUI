@@ -271,6 +271,9 @@ bool COMMONSSHARED_EXPORT fill_from_bathymetry (istream& in, vector<double>& gra
 bool COMMONSSHARED_EXPORT fill_from_shippingdensity (istream& in, vector<double>& graph_point_shippingdensity,
                                       int nrow);
 
+bool COMMONSSHARED_EXPORT fill_from_siltfraction (istream& in, vector<double>& graph_point_siltfraction,
+                                      int nrow);
+
 bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,

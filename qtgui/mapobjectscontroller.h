@@ -240,6 +240,7 @@ public:
         EnvLayerDissolvedCarbon,
         EnvLayerBathymetry,
         EnvLayerShippingdensity,
+        EnvLayerSiltfraction,
 
      EnvLayerMax
     };
@@ -412,6 +413,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerDissolvedCarbon[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBathymetry[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerShippingdensity[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSiltfraction[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 

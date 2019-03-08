@@ -355,6 +355,7 @@ struct EnvironmentDataRecord {
     double dissolvedcarbon_alpha;
     double bathymetry;
     double shippingdensity;
+    double siltfraction;
 };
 
 bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator, std::vector <EnvironmentDataRecord> & environment_on_coord);

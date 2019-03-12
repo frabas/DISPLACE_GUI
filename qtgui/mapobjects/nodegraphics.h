@@ -37,7 +37,6 @@ protected:
     NodeData *mNode;
     MapObjectsController *mController;
     int mModelIndex;
-    QSizeF mGrid;
 
     std::shared_ptr<types::EnvironmentData> getEnvtData();
 public:

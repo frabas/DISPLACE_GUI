@@ -2295,7 +2295,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
          << "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
          << ", swept area this fishing event is then:" << swept_area
          << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << endl ;);
-cout << "SWEPT AREA ADDED IS " << swept_area << endl;
     this->get_loc()->add_to_cumsweptarea(swept_area);
     this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);

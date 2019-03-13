@@ -1367,7 +1367,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 1;
     }
     vector<double> graph_point_siltfraction;
-    if (!fill_from_shippingdensity(siltfraction_graph, graph_point_siltfraction, nrow_coord)) {
+    if (!fill_from_siltfraction(siltfraction_graph, graph_point_siltfraction, nrow_coord)) {
         std::cerr << "Cannot parse " << filename_siltfraction_graph << " Bad format\n";
         return 1;
     }

@@ -2314,14 +2314,17 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     }
 
 
-    // SEDIMENT RESUSPENSION EFFECT (O´Neill et al)
+    // SEDIMENT RESUSPENSION EFFECT
     if(resuspension_effect_on_benthos)
     {
        double siltfraction = this->get_loc()->get_siltfraction();
-       //double gear_drag_factor = 0.5*density*fspeed*NAUTIC*hydrodynamic_drag_coeff_this_met*gear_width/1000;
-       double gear_drag_factor =1.0;
-       double scaling = 1e-8;
-       double sediment_mass_mobilized = (2.0602 * siltfraction) + (1.206e-3 * gear_drag_factor) + (1.321e10-3 * siltfraction * gear_drag_factor);
+       //double hydrodynamic_drag_coeff_this_met=0.67;
+       //double gear_radius = 0.3; // im meter
+       //double gear_drag_factor = 0.5*density*((1000*fspeed*NAUTIC)^2)*hydrodynamic_drag_coeff_this_met*gear_width*gear_radius; // TODO: maybe assume only a fraction of the gear width impacting...
+       double gear_drag_factor =500.0; //drage per unit of gear component (N.m-1)
+       double scaling = 1e2;
+       double sediment_mass_mobilized = (2.0602 * siltfraction) + (1.206e-3 * gear_drag_factor) + (1.321e-3 * siltfraction * gear_drag_factor); // (O´Neill and Ivanovic 2016)
+       //=> kg per meter-squared (e.g. if drag is 500 and siltfraction is 0.4 then 1.5 kg mobilized per meter-squared)
        for (unsigned int funcid=0; funcid< nbfuncid; funcid++)
        {
           loss_after_1_passage_per_func_group.at(funcid)+= - sediment_mass_mobilized/scaling; // assuming proportional relatinoship for now. TODO: retrieve a proper relationship

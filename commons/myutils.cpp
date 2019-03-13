@@ -782,7 +782,7 @@ bool fill_from_siltfraction(istream& in, vector<double>& graph_point_siltfractio
                 continue;
 
             if (linenum < nrow) {
-                double val = boost::lexical_cast<int>(line);
+                double val = boost::lexical_cast<double>(line);
                 graph_point_siltfraction.push_back(val);
             } else {
                 break;  // finish.

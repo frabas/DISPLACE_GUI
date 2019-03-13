@@ -45,7 +45,7 @@ FuncGroupsTable::FuncGroupsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std:
                                                   sqlite::op::max(fldTStep)
                                                   )
             .where (sqlite::op::le(fldTStep))
-            .groupBy (fldNodeId);
+            .groupBy (fldNodeId, fldFGroup);
 
     p->allNodesQueryStatement = sqlite::SQLiteStatement(db, sqlAllQuery);
 }

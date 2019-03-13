@@ -52,15 +52,16 @@ static const char *dyn_alloc_options[] = {
     "promote_high_tariffs",
     "envt_variables_diffusion",
     "benthos_diffusion",
-    "shipping_on_benthos",
     "TechCreeping3Per",
     "ExitVessels10Per",
 };
 
 static const char *dyn_pop_options[] = {
     "baseline",
-    "use_SMS",
-    "impact_benthos_N",
+    "benthos_in_numbers",
+    "direct_killing_on_benthos",
+    "resuspension_effect_on_benthos",
+    "shipping_on_benthos",
     "diffuseN",
     "sizeSpectra",
 };

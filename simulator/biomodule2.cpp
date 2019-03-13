@@ -1284,7 +1284,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
      }
 
 
-    if(dyn_pop_sce.option(Options::impact_benthos_N))
+    if(dyn_pop_sce.option(Options::benthos_in_numbers))
     {
         //...and export the benthos numbers on node
        for (unsigned int n=0; n<nodes.size(); n++)

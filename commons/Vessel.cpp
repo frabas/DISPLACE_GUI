@@ -2224,7 +2224,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
                       vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, vector<double>& graph_res, bool& is_tacs, bool& is_individual_vessel_quotas,
                       bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, double& tech_creeping_multiplier,
-                      bool& is_fishing_credits,  bool& is_impact_benthos_N)
+                      bool& is_fishing_credits,  bool& direct_killing_on_benthos, bool& resuspension_effect_on_benthos, bool& is_benthos_in_numbers)
 {
     lock();
 
@@ -2295,19 +2295,42 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
          << "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
          << ", swept area this fishing event is then:" << swept_area
          << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << endl ;);
+cout << "SWEPT AREA ADDED IS " << swept_area << endl;
     this->get_loc()->add_to_cumsweptarea(swept_area);
     this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
     this->set_subsurfacesweptareathistrip(this->get_subsurfacesweptareathistrip() + surface_and_subsurface_swept_area);
 
-    // FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
-    int a_landscape                  =           this->get_loc()->get_marine_landscape();
-    //vector<double> a_benthos_biomass =           this->get_loc()->get_benthos_biomass_per_funcgr();
-    multimap<int,double> loss        =           this->get_metier()->get_loss_after_1_passage();
-    vector<double> loss_after_1_passage_per_func_group= find_entries_i_d (loss,  a_landscape);
+
+    int nbfuncid = this->get_loc()->get_benthos_tot_biomass().size();
+    vector<double> loss_after_1_passage_per_func_group(nbfuncid, 0); // init. exp(0)=1 => no effect
 
 
-    // THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...
+    // FIND OUT THE DECREASE FACTOR FROM DIRECT KILLING AFTER THE PASSAGE
+    int a_landscape                      =    this->get_loc()->get_marine_landscape();
+    if(direct_killing_on_benthos)
+    {
+      multimap<int,double> loss          =    this->get_metier()->get_loss_after_1_passage();
+     loss_after_1_passage_per_func_group =    find_entries_i_d (loss,  a_landscape);
+    }
+
+
+    // SEDIMENT RESUSPENSION EFFECT (O´Neill et al)
+    if(resuspension_effect_on_benthos)
+    {
+       double siltfraction = this->get_loc()->get_siltfraction();
+       //double gear_drag_factor = 0.5*density*fspeed*NAUTIC*hydrodynamic_drag_coeff_this_met*gear_width/1000;
+       double gear_drag_factor =1.0;
+       double scaling = 1e-8;
+       double sediment_mass_mobilized = (2.0602 * siltfraction) + (1.206e-3 * gear_drag_factor) + (1.321e10-3 * siltfraction * gear_drag_factor);
+       for (unsigned int funcid=0; funcid< nbfuncid; funcid++)
+       {
+          loss_after_1_passage_per_func_group.at(funcid)+= - sediment_mass_mobilized/scaling; // assuming proportional relatinoship for now. TODO: retrieve a proper relationship
+       }
+    }
+
+
+    // THEN, POSSIBLY DEPLETE THE UNDERLYING BENTHOS ON THIS NODE FROM DIRECT KILLING AND/OR SEDIMENT RESUSPENSION...
     double decrease_factor_on_benthos_funcgroup;
     double area_ratio1 = ((graph_res.at(0)*graph_res.at(1))-swept_area)/(graph_res.at(0)*graph_res.at(1));
     double area_ratio2 = swept_area/(graph_res.at(0)*graph_res.at(1));
@@ -2318,7 +2341,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         area_ratio2=1;
     }
 
-    for (unsigned int funcid=0; funcid< this->get_loc()->get_benthos_tot_biomass().size(); funcid++)
+    for (unsigned int funcid=0; funcid< nbfuncid; funcid++)
     {
         // if(swept_area>0.0001)
         // {
@@ -2329,7 +2352,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
         // Inspired from Pitcher et al 2016
-        if(is_impact_benthos_N)
+        if(is_benthos_in_numbers)
         {
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_nb                    = this->get_loc()->get_benthos_tot_number(funcid);

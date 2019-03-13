@@ -202,7 +202,9 @@ bool is_tacs;
 bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
-bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
+bool is_direct_killing_on_benthos;
+bool is_resuspension_effect_on_benthos;
 double tech_creeping_multiplier=1;
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
@@ -968,14 +970,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    if(dyn_pop_sce.option(Options::impact_benthos_N))
+    if(dyn_pop_sce.option(Options::benthos_in_numbers))
     {
-        is_impact_benthos_N=1;
+        is_benthos_in_numbers=1;
     } else{
-        is_impact_benthos_N=0; // if not N then it impacts the benthos biomass by default
+        is_benthos_in_numbers=0; // if not N then it impacts the benthos biomass by default
     }
 
+    if(dyn_pop_sce.option(Options::direct_killing_on_benthos))
+    {
+        is_direct_killing_on_benthos=1;
+    } else{
+        is_direct_killing_on_benthos=0; // direct fishing effect on benthos
+    }
 
+    if(dyn_pop_sce.option(Options::resuspension_effect_on_benthos))
+    {
+        is_resuspension_effect_on_benthos=1;
+    } else{
+        is_resuspension_effect_on_benthos=0; // indirect fishing effect on benthos
+    }
 
     if (!OutputExporter::instantiate(outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
@@ -1726,7 +1740,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
     multimap<int, double> prop_funcgr_biomass_per_node;
     multimap<int, double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-    if(dyn_pop_sce.option(Options::impact_benthos_N))
+    if(dyn_pop_sce.option(Options::benthos_in_numbers))
     {
         prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
         benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
@@ -1769,7 +1783,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        if(dyn_pop_sce.option(Options::impact_benthos_N))
+        if(dyn_pop_sce.option(Options::benthos_in_numbers))
         {
             multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
             multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
@@ -1869,7 +1883,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                             init_recovery_rates_per_funcgr,
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                            is_impact_benthos_N,
+                                            is_benthos_in_numbers,
                                             init_h_betas_per_pop);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
@@ -6017,7 +6031,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           ///------------------------------///
           ///------------------------------///
 
-       if(dyn_alloc_sce.option(Options::shipping_on_benthos))
+       if(dyn_pop_sce.option(Options::shipping_on_benthos))
         {
           if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
           {
@@ -6038,7 +6052,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
                         double decrease_factor_on_benthos_funcgroup=0;
 
-                        if(dyn_pop_sce.option(Options::impact_benthos_N))
+                        if(dyn_pop_sce.option(Options::benthos_in_numbers))
                         {
                          decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
                          double current_nb                    = nodes.at(i)->get_benthos_tot_number(funcid);

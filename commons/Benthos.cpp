@@ -35,7 +35,7 @@ Benthos::Benthos(int _id,
                     const vector<double> &_recovery_rates_per_funcgr,
                     const vector<double> &_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                     const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                    bool is_impact_benthos_N,
+                    bool is_benthos_in_numbers,
                     const vector<double> &_h_betas_per_pop
                     )
 {
@@ -67,7 +67,7 @@ Benthos::Benthos(int _id,
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-        if(is_impact_benthos_N)
+        if(is_benthos_in_numbers)
           {
 
             for(unsigned int funcgr=0; funcgr<prop_funcgr_number_per_node.size();funcgr++)

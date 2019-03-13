@@ -41,7 +41,7 @@ class COMMONSSHARED_EXPORT Benthos
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
             const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-            bool is_impact_benthos_N,
+            bool is_benthos_in_numbers,
             const vector<double> &h_betas_per_pop);
         virtual ~Benthos();
         int get_id() const;

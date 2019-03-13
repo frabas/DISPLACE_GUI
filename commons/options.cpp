@@ -51,7 +51,6 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,promote_high_tariffs);
     O(mMap,envt_variables_diffusion);
     O(mMap,benthos_diffusion);
-    O(mMap,shipping_on_benthos);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);
     O(mMap,DEBUG_TAC);
@@ -74,7 +73,10 @@ PopSceOptions::PopSceOptions()
     O(mMap,avai_updater_on);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
-    O(mMap,impact_benthos_N);
+    O(mMap,benthos_in_numbers);
+    O(mMap,direct_killing_on_benthos);
+    O(mMap,shipping_on_benthos);
+    O(mMap,resuspension_effect_on_benthos);
     O(mMap,sizeSpectra);
 
     for (int i = 0; i < n(); ++i)

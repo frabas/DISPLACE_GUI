@@ -75,7 +75,7 @@ void MetiersStatsPlot::update(QCustomPlot *theplot)
         break;
     case MetiersStat::M_SweptArea:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
-        theplot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        theplot->yAxis->setLabel(QObject::tr("Swept Area (m^2)"));
         break;
     case MetiersStat::M_RevenuesPerSweptArea:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));

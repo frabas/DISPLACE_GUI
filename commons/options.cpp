@@ -79,6 +79,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,modelResuspensionEffectOnBenthos);
     O(mMap,sizeSpectra);
     O(mMap,diffuseNutrients);
+    O(mMap,noHyperstability);
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

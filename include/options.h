@@ -132,6 +132,7 @@ enum Pop_Sce {
     modelShippingOnBenthos,
     sizeSpectra,
     diffuseNutrients,
+    noHyperstability,
 
     Pop_Sce_last
 };

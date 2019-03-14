@@ -738,6 +738,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                     //  see Harley et al 2001 Canadian Journal for the hyperstability b param (CPUE=qN_t^b)
                     double a_hyperstability_param = populations.at(sp)->get_hyperstability_param();
+                    if(dyn_pop_sce.option(Options::noHyperstability)) a_hyperstability_param=1.0;
                     populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, a_hyperstability_param));
                     // e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 

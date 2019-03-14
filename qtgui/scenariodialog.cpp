@@ -65,6 +65,7 @@ static const char *dyn_pop_options[] = {
     "diffusePopN",
     "sizeSpectra",
     "diffuseNutrients",
+    "noHyperstability",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

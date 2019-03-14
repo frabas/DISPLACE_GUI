@@ -970,21 +970,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    if(dyn_pop_sce.option(Options::benthos_in_numbers))
+    if(dyn_pop_sce.option(Options::modelBenthosInN))
     {
         is_benthos_in_numbers=1;
     } else{
         is_benthos_in_numbers=0; // if not N then it impacts the benthos biomass by default
     }
 
-    if(dyn_pop_sce.option(Options::direct_killing_on_benthos))
+    if(dyn_pop_sce.option(Options::modeldirectKillingOnBenthos))
     {
         is_direct_killing_on_benthos=1;
     } else{
         is_direct_killing_on_benthos=0; // direct fishing effect on benthos
     }
 
-    if(dyn_pop_sce.option(Options::resuspension_effect_on_benthos))
+    if(dyn_pop_sce.option(Options::modelResuspensionEffectOnBenthos))
     {
         is_resuspension_effect_on_benthos=1;
     } else{
@@ -1422,7 +1422,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // overwriting for GRAPH ENVT FORCING VARIABLES
-    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    if(dyn_pop_sce.option(Options::includeForcingLayers))
     {
        cout << "import environmental variables in one shoot..." << endl;
 
@@ -1740,7 +1740,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
     multimap<int, double> prop_funcgr_biomass_per_node;
     multimap<int, double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-    if(dyn_pop_sce.option(Options::benthos_in_numbers))
+    if(dyn_pop_sce.option(Options::modelBenthosInN))
     {
         prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
         benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
@@ -1783,7 +1783,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        if(dyn_pop_sce.option(Options::benthos_in_numbers))
+        if(dyn_pop_sce.option(Options::modelBenthosInN))
         {
             multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
             multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
@@ -2329,7 +2329,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // input data
         multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
-        if(dyn_pop_sce.option(Options::diffuseN))
+        if(dyn_pop_sce.option(Options::diffusePopN))
         {
             cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
             field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
@@ -4231,7 +4231,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // initial export at t=0
-    //if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    // if(dyn_pop_sce.option(Options::include_forcing_layers))
     //{
 
         // Flush and updates all statistics for nodes envt
@@ -4392,7 +4392,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        if(dyn_pop_sce.option(Options::diffuseN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+        if(dyn_pop_sce.option(Options::diffusePopN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
@@ -5951,7 +5951,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///  THE DIFFUSIVE ENVT          ///
         ///------------------------------///
         ///------------------------------///
-        if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+        if(dyn_pop_sce.option(Options::diffuseNutrients))
         {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
             if((tstep % numStepDiffusions) == (numStepDiffusions-1))
@@ -6001,7 +6001,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           ///  THE DIFFUSIVE BENTHOS       ///
           ///------------------------------///
           ///------------------------------///
-          if(dyn_alloc_sce.option(Options::benthos_diffusion))
+          if(dyn_pop_sce.option(Options::diffuseBenthos))
           {
               int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
               if((tstep % numStepDiffusions) == (numStepDiffusions-1))
@@ -6031,7 +6031,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           ///------------------------------///
           ///------------------------------///
 
-       if(dyn_pop_sce.option(Options::shipping_on_benthos))
+       if(dyn_pop_sce.option(Options::modelShippingOnBenthos))
         {
           if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
           {
@@ -6052,7 +6052,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
                         double decrease_factor_on_benthos_funcgroup=0;
 
-                        if(dyn_pop_sce.option(Options::benthos_in_numbers))
+                        if(dyn_pop_sce.option(Options::modelBenthosInN))
                         {
                          decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
                          double current_nb                    = nodes.at(i)->get_benthos_tot_number(funcid);

@@ -50,20 +50,21 @@ static const char *dyn_alloc_options[] = {
     "FMSYrange",
     "fishing_credits",
     "promote_high_tariffs",
-    "envt_variables_diffusion",
-    "benthos_diffusion",
     "TechCreeping3Per",
     "ExitVessels10Per",
 };
 
 static const char *dyn_pop_options[] = {
     "baseline",
-    "benthos_in_numbers",
-    "direct_killing_on_benthos",
-    "resuspension_effect_on_benthos",
-    "shipping_on_benthos",
-    "diffuseN",
+    "includeForcingLayers",
+    "diffuseBenthos",
+    "modelBenthosInN",
+    "modeldirectKillingOnBenthos",
+    "modelResuspensionEffectOnBenthos",
+    "modelShippingOnBenthos",
+    "diffusePopN",
     "sizeSpectra",
+    "diffuseNutrients",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

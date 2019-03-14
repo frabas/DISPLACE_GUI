@@ -49,8 +49,6 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
     O(mMap,promote_high_tariffs);
-    O(mMap,envt_variables_diffusion);
-    O(mMap,benthos_diffusion);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);
     O(mMap,DEBUG_TAC);
@@ -68,16 +66,19 @@ PopSceOptions::PopSceOptions()
     M(mMap,"baseline", pop_baseline);
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
-    O(mMap,diffuseN);
+    O(mMap,diffusePopN);
     O(mMap,avai_shuffler_on);
     O(mMap,avai_updater_on);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
-    O(mMap,benthos_in_numbers);
-    O(mMap,direct_killing_on_benthos);
-    O(mMap,shipping_on_benthos);
-    O(mMap,resuspension_effect_on_benthos);
+    O(mMap,includeForcingLayers);
+    O(mMap,diffuseBenthos);
+    O(mMap,modelBenthosInN);
+    O(mMap,modeldirectKillingOnBenthos);
+    O(mMap,modelShippingOnBenthos);
+    O(mMap,modelResuspensionEffectOnBenthos);
     O(mMap,sizeSpectra);
+    O(mMap,diffuseNutrients);
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

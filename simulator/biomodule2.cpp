@@ -1025,6 +1025,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         // apply only at the beginning of the year (this is maybe not always relevant...)
                         if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                         {
+                           // first, compute fbar, whatever the management regime will be...
+                           double fbar_py=0.0;
+                           fbar_py= populations.at(sp)->compute_fbar();
+                           populations.at(sp)->set_fbar(fbar_py);
 
 
                             if(dyn_alloc_sce.option(Options::TACs))

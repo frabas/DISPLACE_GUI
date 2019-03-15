@@ -939,7 +939,7 @@ void Population::set_SSB(double _SSB)
 
 void Population::set_fbar(double _fbar)
 {
-    SSB=_fbar;
+    fbar=_fbar;
 }
 
 void Population::set_FFmsy(const vector<double> &_FFmsy)
@@ -1793,17 +1793,24 @@ double Population::compute_fbar()
 {
     dout(cout<< "compute fbar for pop..." << this->get_name() << endl);
 
+    vector <double> a_tot_F_at_age= this->get_tot_F_at_age_running_average(); // perceived
+
+
     dout(cout<< "compute fbar..." << endl);
 	double fbar=0;
 	int age_min =this->fbar_ages_min_max.at(0);
 	int age_max =this->fbar_ages_min_max.at(1);
-	if(age_max==0 || (age_max < age_min))
+    if(age_max==0 || (age_max < age_min))
 	{
         dout(cout << "age_max at 0 for this pop??" << endl);
 		age_max=5;
 	}
 
-    vector <double> a_tot_F_at_age= this->get_tot_F_at_age_running_average(); // perceived
+
+    if(age_max == age_min)
+    {
+      return(a_tot_F_at_age[age_max]);
+    }
 
     for(int a = age_min; a < age_max; a++)
 	{

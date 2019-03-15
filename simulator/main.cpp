@@ -6040,6 +6040,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               for (unsigned int i=0; i<nodes.size(); i++)
               {
                  shippingdensity = nodes.at(i)->get_shippingdensity();
+                 if(dyn_alloc_sce.option(Options::halfShippingDensity)) shippingdensity=shippingdensity/2;
                  if(shippingdensity>0)
                  {
                      bathymetry =nodes.at(i)->get_bathymetry();

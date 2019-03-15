@@ -52,6 +52,7 @@ static const char *dyn_alloc_options[] = {
     "promote_high_tariffs",
     "TechCreeping3Per",
     "ExitVessels10Per",
+    "halfShippingDensity",
 };
 
 static const char *dyn_pop_options[] = {

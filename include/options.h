@@ -109,6 +109,7 @@ enum Dyn_Alloc {
     promote_high_tariffs,
     TechCreeping3Per,
     ExitVessels10Per,
+    halfShippingDensity,
     DEBUG_TAC,
 
     Dyn_Alloc_last

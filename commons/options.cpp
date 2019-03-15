@@ -51,6 +51,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,promote_high_tariffs);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);
+    O(mMap,halfShippingDensity);
     O(mMap,DEBUG_TAC);
 
 

@@ -217,7 +217,7 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nod
 multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);
 int COMMONSSHARED_EXPORT read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
 int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
-void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
+void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(types::NodeId i, string a_quarter, map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 
 // metier specific

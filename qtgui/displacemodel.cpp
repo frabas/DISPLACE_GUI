@@ -2217,13 +2217,13 @@ bool DisplaceModel::loadNodes()
                                 "fuelprice_plus20percent"))
             {
                 cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
                 cout << "...OK" << endl;
             }
             else
             {
                 cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
                 map<int,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)

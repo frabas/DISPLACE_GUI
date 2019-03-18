@@ -1582,7 +1582,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // read fuel price (vessel size dependent for the time being)
             if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
             {
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
 
                 map<int,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -1597,7 +1597,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
             else
             {
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
 
             }
 

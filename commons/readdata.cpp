@@ -890,27 +890,41 @@ void read_pop_names_in_string(map<int, string>& pop_names,
 }
 
 
-void read_fuel_prices_per_vsize(map<int, double>& fuel_prices_per_vsize,
+void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter,
+                                map<int, double>& fuel_prices_per_vsize,
                                 string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
+    // casting sp into a string
+    stringstream out;
+    out << i.toIndex();
+
+    //input data, harbour characteristics
+    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_fuel_price_per_vessel_size.dat";
     ifstream file_fuel_prices_per_vsize;
     file_fuel_prices_per_vsize.open(filename.c_str());
     if(file_fuel_prices_per_vsize.fail())
     {
-        cout << "fail to load the file for price per pop per cat for this port" << endl;
-        open_file_error(filename.c_str());
+        cout << "fail to load the file for fuel price per vsize for this port...search in vesselspe instead..." << endl;
 
-    }
-    else
-    {
-        fill_map_from_specifications_i_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize,  inputfolder);
-        file_fuel_prices_per_vsize.close();
+       // by default:
+       filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
+       file_fuel_prices_per_vsize.open(filename.c_str());
+       if(file_fuel_prices_per_vsize.fail())
+       {
+           cout << "fail to load the file for fuel price in vesselspe..." << endl;
+           open_file_error(filename.c_str());
 
+       }
     }
+
+
+    fill_map_from_specifications_i_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize,  inputfolder);
+    file_fuel_prices_per_vsize.close();
+
+
+
 }
-
 
 int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
                                              multimap<int, double>& prices_per_harbour_each_species_per_cat,

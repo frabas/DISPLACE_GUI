@@ -328,7 +328,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     logbook.revenuepersweptarea=0.0;
     if(logbook.sweptarea>10) // i.e. at least 10 sqr meters
     {
-          logbook.revenuepersweptarea=logbook.revenue_from_av_prices/(logbook.sweptarea); // euro per m^2
+          logbook.revenuepersweptarea=logbook.revenue_from_av_prices/(logbook.sweptarea/1e6); // euro per km^2
     } 
 
 
@@ -371,7 +371,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     ss  << 0 << " " ;
     ss  << setprecision(0) << logbook.gav2 << " " ;
     ss  << setprecision(0) << logbook.sweptarea << " " ;
-    ss  << setprecision(0) << logbook.revenuepersweptarea << " " ;
+    ss  << setprecision(2) << logbook.revenuepersweptarea << " " ;
     for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
         ss  << setprecision(1) << *it2 << " " ;
     ss << setprecision(0) << logbook.GVA << " " ;

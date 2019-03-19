@@ -119,7 +119,7 @@ void VesselsStatsPlot::update(QCustomPlot *plot)
         break;
     case VesselsStat::RevenuePerSweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/m^2)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/km^2)"));
         break;
     case VesselsStat::GVA:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));

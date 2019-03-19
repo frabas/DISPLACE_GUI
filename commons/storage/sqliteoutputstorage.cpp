@@ -195,7 +195,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
 
     log.revenuePerSweptArea = 0;
     if(log.sweptArea>10) // i.e. at least 10 sqr meters
-          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea); // euro per m^2
+          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea/1e6); // euro per km^2
 
     log.GVA = v->get_GVA();
     log.GVAPerRevenue = v->get_GVAPerRevenue();

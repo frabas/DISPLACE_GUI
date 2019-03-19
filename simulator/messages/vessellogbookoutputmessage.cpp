@@ -112,7 +112,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     logbook.revenuepersweptarea=0.0;
     if(logbook.sweptarea>10) // i.e. at least 10 sqr meters
     {
-        logbook.revenuepersweptarea=logbook.revenue_from_av_prices /(logbook.sweptarea); // euro per m^2
+        logbook.revenuepersweptarea=logbook.revenue_from_av_prices /(logbook.sweptarea/1e6); // euro per km^2
     }
 
 

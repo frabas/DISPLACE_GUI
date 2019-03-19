@@ -162,7 +162,7 @@ void NationsStatsPlot::update(QCustomPlot *plot)
         break;
     case NationsStat::RevenuePerSweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/m^2)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/km^2)"));
         break;
     case NationsStat::GVA:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));

@@ -2995,7 +2995,20 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
      }
      popdyn_annual_indic  << last_year_tac << " ";
 
-								 // attempt for a calibration to obtain same F
+     //
+     vector <double>N_at_age=this->get_tot_N_at_age();
+     for(unsigned int a = 0; a < N_at_age.size(); a++)
+     {
+        popdyn_annual_indic  << N_at_age.at(a)  << " " ;
+     }
+
+     //
+     vector <double>F_at_age=this->get_tot_F_at_age();
+     for(unsigned int a = 0; a < F_at_age.size(); a++)
+     {
+        popdyn_annual_indic  << F_at_age.at(a)  << " " ;
+     }
+                                 // attempt for a calibration to obtain same F
 	vector <double>W_at_age=this->get_tot_W_at_age();
 	for(unsigned int a = 0; a < W_at_age.size(); a++)
 	{

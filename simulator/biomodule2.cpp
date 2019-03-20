@@ -188,12 +188,12 @@ int will_stop=0; // see Options::DEBUG_TAC
                         popstats  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
                     }
 
-                    // ... / tot_F_at_age
-                    vector <double>tot_F_at_age=populations.at(sp)->get_tot_F_at_age();
-                    for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+                    // ... / W_per_szgroup
+                    vector <double>W_per_szgroup=populations.at(sp)->get_weight_at_szgroup();
+                    for(unsigned int sz = 0; sz < W_per_szgroup.size(); sz++)
                     {
-                                                 // output F in CUMUL over months, caution!
-                        popstats  << tot_F_at_age.at(a)  << " " ;
+
+                        popstats  << W_per_szgroup.at(sz)  << " " ;
                     }
 
 
@@ -209,13 +209,7 @@ int will_stop=0; // see Options::DEBUG_TAC
                        popstats  << SSB_per_szgroup.at(i)  << " " ;
                     }
 
-                    // ... / tot_M_at_age
-                    vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
-                    for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
-                    {
-                                                 // output M in CUMUL over months, caution!
-                        popstats  << tot_M_at_age.at(a)  << " " ;
-                    }
+
 
                  popstats << " " <<  endl;
 
@@ -966,12 +960,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         }
                         */
 
-                        // ... / tot_F_at_age
-                        vector <double>tot_F_at_age=populations.at(sp)->get_tot_F_at_age();
-                        for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+                        // ... / W_per_szgroup
+                        vector <double>W_per_szgroup=populations.at(sp)->get_weight_at_szgroup();
+                        for(unsigned int sz = 0; sz < W_per_szgroup.size(); sz++)
                         {
-                                                     // output F in CUMUL over months, caution!
-                            popstats  << tot_F_at_age.at(a)  << " " ;
+
+                            popstats  << W_per_szgroup.at(sz)  << " " ;
                         }
 
 
@@ -994,13 +988,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         popstats  << SSB_per_szgroup.at(i) << " " ;
                         }
 
-                        // ... / tot_M_at_age
-                        vector <double>tot_M_at_age=populations.at(sp)->get_tot_M_at_age();
-                        for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
-                        {
-                                                     // output M in CUMUL over months, caution!
-                            popstats  << tot_M_at_age.at(a)  << " " ;
-                        }
 
 
                      popstats << " " <<  endl;

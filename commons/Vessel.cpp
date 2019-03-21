@@ -2473,6 +2473,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
     {
         int namepop = populations[pop]->get_name();
+
+        // init
+        vector <double>landings_per_szgroup(NBSZGROUP, 0);
+        // init
+        vector <double>discards_per_szgroup(NBSZGROUP, 0);
+
         // is this pop not implicit? AND is this node in the range of the pop? remember code 10 is for out of range (see R code)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) && code_area!=10)
         {
@@ -2541,10 +2547,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 vector <double>alloc_key             = Ns_at_szgroup_pop;
                 // init
                 vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
-                // init
-                vector <double>landings_per_szgroup     = Ns_at_szgroup_pop;
-                // init
-                vector <double>discards_per_szgroup     = Ns_at_szgroup_pop;
                 // init
                 vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
                 // init
@@ -2761,7 +2763,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                         " discards per sz "      << discards_per_szgroup[szgroup] << endl
                                         );
 
-
+                            // TRUE CATCHES:
                             catch_per_szgroup[szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup];
                             dout(cout  << " sz " << szgroup <<
                                  " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
@@ -2867,6 +2869,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // caution: cumul landings at the trip level
 //if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
 //if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
+                            // CUMUL PER TRIP FOR THIS VESSEL (note that catch_pop_at_szgroup is LANDINGS)
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup]; // ping catch in weight
@@ -2934,14 +2937,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     {
                         for(unsigned int a_szgroup = 0; a_szgroup < catch_per_szgroup.size(); a_szgroup++)
                         {
-                            a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
+                            a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup]; // land+disc
                         }
                     }
                     else
                     {
                         for(unsigned int a_szgroup = 0; a_szgroup < landings_per_szgroup.size(); a_szgroup++)
                         {
-                            a_cumul_weight_this_pop_this_vessel +=landings_per_szgroup[a_szgroup];
+                            a_cumul_weight_this_pop_this_vessel +=landings_per_szgroup[a_szgroup]; // land only
                         }
 
                     }
@@ -3012,6 +3015,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 a_cumul_weight_this_pop_this_vessel;
                         // "real-time" update, accounting for this last bit of catches
                         populations.at(pop)->set_landings_so_far(so_far);
+
+
+
                         // note that oth_land (per node) are also added to landings_so_far but at the start of each month.
 
                         dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << endl);
@@ -3048,6 +3054,18 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 // => back correction (disable if you want to know the discarded part in annual_indic.
                                 // ...i.e. discarded = so_far - current_tac)
                                 // what a waste !!...
+
+                                /* CHECK so_far!!
+                                cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+                                double land_so_far    = 0;
+                                vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+                                for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+                                {
+                                   land_so_far+=C_at_szgroup.at(sz);
+                                }
+                                cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << endl;
+                                */
+
                                 a_cumul_weight_this_pop_this_vessel=0;// discard all!
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
@@ -3286,27 +3304,23 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             if(cpue!=0)
             {
                 // ON THIS NODE, cpue per hour, see the R code
-                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE;
+                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE; // cumul this vessel over the trip
                 ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE;
                 discards_pop_at_szgroup[pop][0] = 0;
 
+                landings_per_szgroup.at(0)=cpue*PING_RATE; // this event only
+                discards_per_szgroup.at(0)=0; // no assumption made here
 
+                double so_far=0.0;
+                so_far = (populations.at(pop)->get_landings_so_far()) +
+                        cpue*PING_RATE;
+                // "real-time" update, accounting for this last bit of catches
+                populations.at(pop)->set_landings_so_far(so_far);
 
-                // CUMUL
+                // CUMUL ON VESSEL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
                 this->cumdiscards+= discards_pop_at_szgroup[pop][0];
-                this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
-                this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
 
-                /*
-                if(pop==21 && (this->get_name())=="DNK000012028"){
-                    dout(cout << "cpue " <<cpue << endl);
-                    dout(cout << "catch_pop_at_szgroup[pop][0] " <<catch_pop_at_szgroup[pop][0] << endl);
-                        int a;
-                        dout(cout << "Pause: type a number to continue");
-                        cin >> a;
-                }
-                */
 
                 // update dynamic trip-based cumul for this node
                 // catches
@@ -3318,9 +3332,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // effort
                 cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
+
                 // contribute to accumulated catches on this node
-                this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
-                this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+                this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
+                this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
             }
             else
             {
@@ -3332,18 +3347,29 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-
         // collect and accumulate tot_C_at_szgroup at the end of the pop loop
         // (accumulate in szgroup 0 if implicit pop)
         vector <double> newTotC= populations.at(pop)->get_tot_C_at_szgroup();
         vector <double> newTotD= populations.at(pop)->get_tot_D_at_szgroup();
         for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
         {
-           newTotC.at(szgroup) = newTotC.at(szgroup) + catch_pop_at_szgroup.at(pop).at(szgroup);
-           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_pop_at_szgroup.at(pop).at(szgroup);
+           newTotC.at(szgroup) = newTotC.at(szgroup) + landings_per_szgroup.at(szgroup);
+           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_per_szgroup.at(szgroup);
         }
         populations.at(pop)->set_tot_C_at_szgroup(newTotC);
         populations.at(pop)->set_tot_D_at_szgroup(newTotD);
+
+
+        /* CHECK so_far!! i.e. should return the exact same value...
+        cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+        double land_so_far    = 0;
+        vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+        for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+        {
+           land_so_far+=C_at_szgroup.at(sz);
+        }
+        cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << endl;
+        */
 
     } // end pop
 

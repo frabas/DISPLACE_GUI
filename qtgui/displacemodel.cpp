@@ -1147,9 +1147,10 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
 
     auto idx = node->get_idx_node().toIndex();
 
+
     // fix the node indexes
     for (auto i = idx+1; i < mNodes.count(); ++i) {
-        mNodes.at(i)->mNode->setNodeIdx(types::NodeId{i-1});
+        mNodes.at(i)->mNode->setNodeIdx(types::NodeId{ static_cast<uint16_t>(i-1) });
     }
     mNodes.removeAt(idx);
 

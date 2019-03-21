@@ -498,8 +498,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
-
-
             }
 
             dout(cout  << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << endl);

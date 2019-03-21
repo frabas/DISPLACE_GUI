@@ -2982,8 +2982,8 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	popdyn_annual_indic  << fbar_py << " ";
 
 								 //...also including the oth land
-    double so_far    =this->get_landings_so_far();
-    popdyn_annual_indic  << so_far << " ";
+    //double so_far    =this->get_landings_so_far();
+    //popdyn_annual_indic  << so_far << " ";
 
     double land_so_far    = 0;
     vector <double> C_at_szgroup= this->get_tot_C_at_szgroup();

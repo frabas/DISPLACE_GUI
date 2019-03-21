@@ -31,6 +31,7 @@ public:
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
     void update (QCustomPlot *);
+    void update (QCustomPlot *, displace::plot::VesselsStat stat);
     void saveTo();
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::VesselsStat stat,
                                                         std::string vesselId);

@@ -34,6 +34,7 @@ public:
 
     void setCurrentTimeStep(double t);
 private:
+    void update (QCustomPlot *plot, displace::plot::PopulationStat stat);
     void update (QCustomPlot *plot);
     void saveTo();
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype,

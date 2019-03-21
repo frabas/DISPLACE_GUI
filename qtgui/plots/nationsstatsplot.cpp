@@ -23,7 +23,7 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
 {
     if (theplot != nullptr) {
         // do not cache
-        update(theplot);
+        update(theplot, stat);
     } else {
         if (model != lastModel || stat != lastStat) {
             // need to properly update
@@ -32,14 +32,13 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
             invalidate();
         }
         if (isVisible())
-            update(nullptr);
+            update(plotNations, stat);
     }
 }
 
-void NationsStatsPlot::update(QCustomPlot *plot)
+void NationsStatsPlot::update(QCustomPlot *plot, displace::plot::NationsStat stat)
 {
     auto model = lastModel;
-    auto stat = lastStat;
 
     qDebug() << "NationsStatPlot UPDATE";
 
@@ -316,5 +315,5 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
 
 void NationsStatsPlot::doUpdate()
 {
-    update(nullptr);
+    update(plotNations, lastStat);
 }

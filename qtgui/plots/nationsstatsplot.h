@@ -30,7 +30,7 @@ public:
     void update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *theplot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
-    void update (QCustomPlot *);
+    void update (QCustomPlot *, displace::plot::NationsStat stat);
     void saveTo();
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation);
 

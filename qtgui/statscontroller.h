@@ -103,8 +103,8 @@ protected:
                                QCustomPlot *plot);
     void updateVesselStats(DisplaceModel *model, displace::plot::VesselsStat mSelectedVesselsStat,
                                QCustomPlot *plot);
-    void updateHarboursStats (DisplaceModel *model, QCustomPlot *plot);
-    void updateMetiersStats(DisplaceModel *model, QCustomPlot *plot);
+    void updateHarboursStats (DisplaceModel *model, displace::plot::HarboursStat stat, QCustomPlot *plot);
+    void updateMetiersStats(DisplaceModel *model, displace::plot::MetiersStat stat, QCustomPlot *plot);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat);

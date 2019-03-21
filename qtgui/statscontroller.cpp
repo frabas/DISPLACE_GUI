@@ -202,8 +202,8 @@ void StatsController::updateStats(DisplaceModel *model)
         updateVesselStats(model, mSelectedVesselsStat, nullptr);
     }
 
-    updateHarboursStats(model, nullptr);
-    updateMetiersStats(model, nullptr);
+    updateHarboursStats(model, mSelectedHarboursStat, nullptr);
+    updateMetiersStats(model, mSelectedMetiersStat, nullptr);
 
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
@@ -302,10 +302,10 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
         updateVesselStats(model, static_cast<displace::plot::VesselsStat>(subtype), plot);
         break;
     case Harbours:
-        updateHarboursStats(model,plot);
+        updateHarboursStats(model, static_cast<displace::plot::HarboursStat>(subtype),plot);
         break;
     case Metiers:
-        updateMetiersStats(model,plot);
+        updateMetiersStats(model,static_cast<displace::plot::MetiersStat>(subtype), plot);
         break;
     }
 }
@@ -328,18 +328,18 @@ void StatsController::updateVesselStats(DisplaceModel *model, displace::plot::Ve
     mVesselsStatsPlotController->update(model, vesselsStat, plot);
 }
 
-void StatsController::updateHarboursStats(DisplaceModel *model, QCustomPlot *plot)
+void StatsController::updateHarboursStats(DisplaceModel *model, displace::plot::HarboursStat stat, QCustomPlot *plot)
 {
     if (mPlotHarbours) {
-        mPlotHarbours->setStat(mSelectedHarboursStat);
+        mPlotHarbours->setStat(stat);
         mPlotHarbours->update(model, plot);
     }
 }
 
-void StatsController::updateMetiersStats(DisplaceModel *model, QCustomPlot *plot)
+void StatsController::updateMetiersStats(DisplaceModel *model, displace::plot::MetiersStat stat, QCustomPlot *plot)
 {
     if (mPlotMetiers) {
-        mPlotMetiers->setStat (mSelectedMetiersStat);
+        mPlotMetiers->setStat (stat);
         mPlotMetiers->update(model,plot);
     }
 }

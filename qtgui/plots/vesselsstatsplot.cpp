@@ -37,8 +37,11 @@ void VesselsStatsPlot::update(DisplaceModel *model, displace::plot::VesselsStat 
 
 void VesselsStatsPlot::update(QCustomPlot *plot)
 {
+    update (plot, lastStat);
+}
+void VesselsStatsPlot::update(QCustomPlot *plot, displace::plot::VesselsStat stat)
+{
     auto model = lastModel;
-    auto stat = lastStat;
 
     qDebug() << "VesselsStatPlot UPDATE";
 

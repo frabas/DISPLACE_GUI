@@ -1143,7 +1143,16 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
     // update scenario nrow_coord, nrow_graph
     qDebug() << "1) Node " << node->get_idx_node().toIndex() << " has " << node.use_count() << " instances";
 
-    mNodes[node->get_idx_node().toIndex()].reset();       // removed
+    //mNodes[].reset();       // removed
+
+    auto idx = node->get_idx_node().toIndex();
+
+    // fix the node indexes
+    for (auto i = idx+1; i < mNodes.count(); ++i) {
+        mNodes.at(i)->mNode->setNodeIdx(types::NodeId{i-1});
+    }
+    mNodes.removeAt(idx);
+
     mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node().toIndex()).toStdString().c_str());
 
     OGRFeature *ftr;

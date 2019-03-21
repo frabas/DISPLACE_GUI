@@ -2982,8 +2982,34 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	popdyn_annual_indic  << fbar_py << " ";
 
 								 //...also including the oth land
-	double so_far    =this->get_landings_so_far();
-	popdyn_annual_indic  << so_far << " ";
+    double so_far    =this->get_landings_so_far();
+    popdyn_annual_indic  << so_far << " ";
+
+    double land_so_far    = 0;
+    vector <double> C_at_szgroup= this->get_tot_C_at_szgroup();
+    for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+    {
+       land_so_far+=C_at_szgroup.at(sz);
+    }
+    popdyn_annual_indic  << land_so_far << " ";
+
+
+    double disc_so_far    = 0;
+    vector <double> D_at_szgroup= this->get_tot_D_at_szgroup();
+    for(unsigned int sz = 0; sz < D_at_szgroup.size(); sz++)
+    {
+       disc_so_far+=D_at_szgroup.at(sz);
+    }
+    popdyn_annual_indic  << disc_so_far << " ";
+
+    double tot_SSB    = 0;
+    vector <double> SSB_at_szgroup= this->get_SSB_at_szgroup();
+    for(unsigned int sz = 0; sz < SSB_at_szgroup.size(); sz++)
+    {
+       tot_SSB+=SSB_at_szgroup.at(sz);
+    }
+    popdyn_annual_indic  << tot_SSB << " ";
+
 
     dout(cout << "retrieve tacs if any..."<< endl);
 

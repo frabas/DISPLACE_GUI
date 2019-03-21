@@ -73,6 +73,8 @@ class COMMONSSHARED_EXPORT Node
         void lock() { mutex.lock(); }
         void unlock() { mutex.unlock(); }
 
+        void setNodeIdx(types::NodeId id) { idx_node = id; }
+
         types::NodeId get_idx_node() const;
 		int get_code_area() const;
         void setCodeArea(int id) {

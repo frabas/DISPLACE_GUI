@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<palette role="2" type="displace" name="VALUE0TO1_COLORS">
+<palette role="1" type="displace" name="VALUE0TO1_COLORS">
 <color value="0" rgb="0,255,255"/>
 <color value="0.05" rgb="46,255,239"/>
 <color value="0.1" rgb="92,255,223"/>

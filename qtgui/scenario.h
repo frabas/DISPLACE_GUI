@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ private:
     int nrow_coord;
     int nrow_graph;
     types::NodeId a_port;
-    double graph_res;
+    QStringList graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;
     bool use_dtrees;
@@ -75,6 +75,7 @@ private:
 
     QStringList tariff_pop;
     int freq_update_tariff_code;
+    int update_tariffs_based_on_lpue_or_dpue_code;
     QStringList arbitary_breaks_for_tariff;
     int total_amount_credited;
     double tariff_annual_hcr_percent_change;
@@ -106,8 +107,8 @@ public:
     void setNrow_graph(int value);
     types::NodeId getA_port() const;
     void setA_port(types::NodeId value);
-    double getGraph_res() const;
-    void setGraph_res(double value);
+    void setGraph_res(const QStringList &value);
+    QStringList getGraph_res() const;
     bool getIs_individual_vessel_quotas() const;
     void setIs_individual_vessel_quotas(bool value);
     bool getIs_check_all_stocks_before_going_fishing() const;
@@ -133,10 +134,14 @@ public:
     QString getDtChangePort() const;
     void setDtChangePort(const QString &dtChangePort);
 
+    std::vector<double>  getGraph_res_asVector() const;
     std::vector<int> getTariffPop_asVector() const;
+
     void setTariffPop(const QStringList &value);
     int getFreqUpdateTariffCode() const;
+    int getUpdateTariffsBasedOnLpueOrDpueCode() const;
     void setFreqUpdateTariffCode(int value);
+    void setUpdateTariffsBasedOnLpueOrDpueCode(int value);
     std::vector<double> getArbitraryBreaksForTariff_asVector() const;
     void setArbitraryBreaksForTariff(const QStringList &value);
     int getTotalAmountCredited() const;

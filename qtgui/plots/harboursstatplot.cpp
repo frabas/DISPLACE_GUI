@@ -122,11 +122,11 @@ void HarboursStatPlot::update(QCustomPlot *theplot)
         break;
     case HarboursStat::H_SweptArea:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
-        theplot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        theplot->yAxis->setLabel(QObject::tr("Swept Area (m^2)"));
         break;
     case HarboursStat::H_RevenuePerSweptArea:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
-        theplot->yAxis->setLabel(QObject::tr("Revenue per Swept Area (Euro/km^2)"));
+        theplot->yAxis->setLabel(QObject::tr("Revenue per Swept Area (Euro/m^2)"));
         break;
     case HarboursStat::H_GVA:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));

@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -736,6 +736,71 @@ bool fill_from_bathymetry(istream& in, vector<double>& graph_point_bathymetry, i
 }
 
 
+bool fill_from_shippingdensity(istream& in, vector<double>& graph_point_shippingdensity, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_shippingdensity.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_shippingdensity file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+bool fill_from_siltfraction(istream& in, vector<double>& graph_point_siltfraction, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_point_siltfraction.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_siltfraction file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
 
 
 bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_biomass, int nrow)
@@ -1153,7 +1218,7 @@ bool fill_from_vessels_specifications (istream& in,
             boost::split(fields, line, boost::is_any_of("|"));
 
             if (fields.size() < 22) {
-              cout << "missing fields when loading vessel features" << endl;
+              cout << "missing fields when loading vessel features!!" << endl;
                 return false;   // all fields are MANDATORY.
             }
 
@@ -1162,7 +1227,7 @@ bool fill_from_vessels_specifications (istream& in,
             calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
             calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
 
-            cout << "Reading vessel features for " << fields[0] << endl;
+            tout(cout << "Reading vessel features for " << fields[0] << endl);
             names.push_back(fields[0]);
             vid_is_actives.push_back(boost::lexical_cast<int>(fields[1].c_str()));
             speeds.push_back(boost::lexical_cast<double>(fields[2].c_str()));
@@ -1188,7 +1253,7 @@ bool fill_from_vessels_specifications (istream& in,
         return false;
     }
 
-    dout(cout  << "read and set up the general features of each vessel...OK" << endl);
+    tout(cout  << "read and set up the general features of each vessel...OK" << endl);
 
     return true;
 }

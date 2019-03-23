@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -49,6 +49,8 @@
 
 #include <QStringList>
 #include <QDebug>
+
+#include <chrono>
 
 struct DbHelper::Impl
 {
@@ -178,7 +180,7 @@ bool DbHelper::loadScenario(Scenario &sce)
     sce.setNrow_graph(getMetadata("sce::nrow_graph").toInt());
     sce.setNrow_coord(getMetadata("sce::nrow_coord").toInt());
     sce.setA_port(types::NodeId(getMetadata("sce::aport").toInt()));
-    sce.setGraph_res(getMetadata("sce::graph_res").toDouble());
+    sce.setGraph_res(getMetadata("sce::graph_res").split(" "));
     sce.setIs_individual_vessel_quotas(getMetadata("sce::is_individual_vessel_quotas").toDouble());
     sce.setIs_check_all_stocks_before_going_fishing(getMetadata("sce::check_all_stocks_before_going_fishing").toDouble());
     sce.setDyn_alloc_sce(getMetadata("sce::dyn_alloc_sce").split(" "));
@@ -197,7 +199,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::nrow_graph", QString::number(sce.getNrow_graph()));
     setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
     setMetadata("sce::aport", QString::number(sce.getA_port().toIndex()));
-    setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
+    setMetadata("sce::graph_res", sce.getGraph_res().join(" "));
     setMetadata("sce::is_individual_vessel_quotas", (sce.getIs_individual_vessel_quotas() ? "1" : "0"));
     setMetadata("sce::check_all_stocks_before_going_fishing", (sce.getIs_check_all_stocks_before_going_fishing() ? "1" : "0"));
     setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));
@@ -215,6 +217,8 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
     auto nodesTab = p->db->getNodesDefTable();
 
     nodesTab->queryAllNodes([&nodes, &model, &harbours](std::shared_ptr<Node> nodeData, std::shared_ptr<Harbour> harbour) {
+        nodeData->init_Ns_pops_at_szgroup(model->getNBPops(), model->getSzGrupsCount());
+
         auto n = std::make_shared<NodeData>(nodeData, model);
 
         auto idx = n->get_idx_node().toIndex();
@@ -263,6 +267,9 @@ bool DbHelper::loadFishFarms(const QList<std::shared_ptr<NodeData> > &nodes,QLis
 bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> > &vessels)
 {
     auto vtab = p->db->getVesselVmsLikeTable();
+
+    auto start = std::chrono::system_clock::now();
+
     vtab->queryAllVesselsAtStep (tstep, [&vessels](const VesselVmsLikeTable::Log & log){
         if (log.id < vessels.size()) {
             std::shared_ptr<VesselData> v (vessels.at(log.id));
@@ -277,6 +284,11 @@ bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> 
 
         return true;
     });
+
+    auto end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+
+    std::cout << "Update Vessels Performances: " << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count() << "ms\n";
 
     return true;
 }
@@ -314,6 +326,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         node->set_cumsubsurfacesweptarea(stat.cumsubsurfswa);
         node->set_cumcatches(stat.cumcatches);
         node->set_cumdiscards(stat.cumdisc);
+        node->set_nbchoked(stat.nbchoked);
         return true;
     });
 

@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -97,6 +97,7 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_perceived_tot_N_at_age() const;
         const vector<double>& get_tot_N_at_age_last_quarter() const;
         const vector<double>& get_tot_F_at_age() const;
+        const vector<double>& get_tot_F_at_age_running_average() const;
         const vector<double>& get_tot_F_at_age_last_quarter() const;
         const vector<double>& get_perceived_tot_F_at_age() const;
         const vector<double>& get_tot_M_at_age() const;
@@ -129,6 +130,7 @@ class COMMONSSHARED_EXPORT Population
         double get_quota_uptake() const;
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
+        double get_tot_N_at_age0() const;
         const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
         void set_quota_uptake(double _quota_uptake);
@@ -153,11 +155,14 @@ class COMMONSSHARED_EXPORT Population
         void set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age);
         void set_tot_N_at_age_last_quarter(const vector<double>& _N_at_age_last_quarter);
         void set_tot_F_at_age(const vector<double>& _F_at_age);
+        void set_tot_F_at_age_running_average(const vector<double>& _tot_F_at_age_running_average);
         void set_perceived_tot_F_at_age(const vector<double>& _perceived_F_at_age);
         void set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter);
         void set_tot_M_at_age(const vector<double>& _M_at_age);
         void set_tot_W_at_age(const vector<double>& _W_at_age);
         void set_tot_Mat_at_age(const vector<double>& _Mat_at_age);
+        void set_adults_diet_preference_per_stock(const vector<double>& _adults_diet_preference_per_stock);
+        void set_juveniles_diet_preference_per_stock(const vector<double>& _juveniles_diet_preference_per_stock);
         void set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup);
         void set_fecundity_at_szgroup(const vector<double>& _fecundity_at_szgroup);
         void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
@@ -184,7 +189,7 @@ class COMMONSSHARED_EXPORT Population
 		void aggregate_N();		 // aggregate from nodes
 								 // do a cumul for F
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
-        void compute_tot_N_and_F_and_W_at_age();
+        void compute_tot_N_and_F_and_W_at_age(int a_month_i);
         void compute_tot_M_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
@@ -247,6 +252,7 @@ class COMMONSSHARED_EXPORT Population
         vector<double> perceived_tot_N_at_age;
                                  //
 		vector<double> tot_F_at_age;
+        vector<double> tot_F_at_age_running_average;
                                  //
         vector<double> perceived_tot_F_at_age;
         vector<double> tot_F_at_age_last_quarter;
@@ -256,6 +262,10 @@ class COMMONSSHARED_EXPORT Population
 		vector<double> tot_W_at_age;
 								 //
         vector<double> tot_Mat_at_age;
+                                 //
+        vector<double> adults_diet_preference_per_stock;
+                                 //
+        vector<double> juveniles_diet_preference_per_stock;
                                  //
         vector<double> weight_at_szgroup;
 								 //
@@ -292,6 +302,7 @@ class COMMONSSHARED_EXPORT Population
 		double landings_so_far;	 // global landings, reinit each start of the year...
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
+        double tot_N_at_age0;
 
 
 };

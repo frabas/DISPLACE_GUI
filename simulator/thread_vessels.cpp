@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -96,11 +96,12 @@ extern int nbsteps;
 extern int nbpops;
 extern int export_vmslike;
 extern int export_hugefiles;
-extern double graph_res;
+extern vector<double> graph_res;
 extern bool is_individual_vessel_quotas;
 extern bool check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
+extern int update_tariffs_based_on_lpue_or_dpue_code;
 extern int freq_do_growth;
 extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;
@@ -108,10 +109,12 @@ extern int total_amount_credited;
 extern double tariff_annual_hcr_percent_change;
 extern bool is_tacs;
 extern bool is_fishing_credits;
+extern bool is_direct_killing_on_benthos;
+extern bool is_resuspension_effect_on_benthos;
 extern bool is_discard_ban;
 extern bool is_grouped_tacs;
 extern double tech_creeping_multiplier;
-extern bool is_impact_benthos_N;
+extern bool is_benthos_in_numbers;
 extern vector <int> implicit_pops;
 extern vector <int> grouped_tacs;
 extern displace::commons::Scenario scenario;
@@ -383,7 +386,8 @@ static void manage_vessel(int idx_v,
                             vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, benthoss, implicit_pops, grouped_tacs,
                                                          tstep, graph_res,
                                                          is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,
-                                                         is_discard_ban, is_grouped_tacs, tech_creeping_multiplier,  is_fishing_credits, is_impact_benthos_N);
+                                                         is_discard_ban, is_grouped_tacs, tech_creeping_multiplier,  is_fishing_credits,
+                                                         is_direct_killing_on_benthos, is_resuspension_effect_on_benthos, is_benthos_in_numbers);
 
                             // check
                             //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)

@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -217,7 +217,7 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nod
 multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);
 int COMMONSSHARED_EXPORT read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
 int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
-void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
+void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(types::NodeId i, string a_quarter, map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 
 // metier specific
@@ -241,6 +241,7 @@ multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
+vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_for_oth_land(int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
 
 // benthos specific
 multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
@@ -273,8 +274,6 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_avai_szgroup_nodes_wit
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file, string type_of_avai_field_to_read);
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
-vector< vector<double> > COMMONSSHARED_EXPORT read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
-vector< vector<double> > COMMONSSHARED_EXPORT read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector<double> COMMONSSHARED_EXPORT read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce);
@@ -286,6 +285,15 @@ map<types::NodeId, double> COMMONSSHARED_EXPORT read_oth_land_nodes_with_pop(str
 map<string, double> COMMONSSHARED_EXPORT read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
+
+
+// pop size spectra specific
+multimap<int, double> COMMONSSHARED_EXPORT read_adults_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce);
+multimap<int, double> COMMONSSHARED_EXPORT read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce);
+
+// pop interaction (deprecated)
+vector< vector<double> > COMMONSSHARED_EXPORT read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
+vector< vector<double> > COMMONSSHARED_EXPORT read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 
 // simu settings
 vector <int> COMMONSSHARED_EXPORT read_tsteps_quarters(string folder_name_parameterization, string inputfolder);
@@ -315,7 +323,7 @@ bool COMMONSSHARED_EXPORT read_vsize_monthly_closures (vector <Node*> &nodes, st
 bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
-bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double> > &biological_traits_params);
+bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, std::vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string> > &biological_traits_params);
 
 struct EnvironmentDataRecord {
     double x;
@@ -346,6 +354,8 @@ struct EnvironmentDataRecord {
     double dissolvedcarbon_norm;
     double dissolvedcarbon_alpha;
     double bathymetry;
+    double shippingdensity;
+    double siltfraction;
 };
 
 bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator, std::vector <EnvironmentDataRecord> & environment_on_coord);

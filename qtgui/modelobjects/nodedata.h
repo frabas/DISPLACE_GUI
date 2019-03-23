@@ -26,6 +26,8 @@
 #include <QList>
 #include <QVector>
 
+#include <boost/optional.hpp>
+
 #include <memory>
 
 namespace types {
@@ -75,6 +77,8 @@ public:
     double get_Oxygen() const { return mNode->get_Oxygen(); }
     double get_DissolvedCarbon() const { return mNode->get_DissolvedCarbon(); }
     double get_bathymetry() const { return mNode->get_bathymetry(); }
+    double get_shippingdensity() const { return mNode->get_shippingdensity(); }
+    double get_siltfraction() const { return mNode->get_siltfraction(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
@@ -90,6 +94,8 @@ public:
     void setOxygen(double o) { mNode->setOxygen(o); }
     void setDissolvedCarbon(double dc) { mNode->setDissolvedCarbon(dc); }
     void setBathymetry(double b) { mNode->setBathymetry(b); }
+    void setShippingdensity(double val) { mNode->setShippingdensity(val); }
+    void setSiltfraction(double val) { mNode->setSiltfraction(val); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }
@@ -113,10 +119,12 @@ public:
     double get_cumcatches_with_threshold() const { return mNode->get_cumcatches_with_threshold(); }
     double get_cumdiscards() const { return mNode->get_cumdiscards(); }
     double get_cumdiscardsratio() const { return mNode->get_cumdiscardsratio(); }
+    double get_nbchoked() const { return mNode->get_nbchoked(); }
     void set_cumcatches(double v) { mNode->set_cumcatches(v); }
     void set_cumcatches_with_threshold(int v) { mNode->set_cumcatches_with_threshold(v); }
     void set_cumdiscards(double v) { mNode->set_cumdiscards(v); }
     void set_cumdiscardsratio(double v) { mNode->set_cumdiscardsratio(v); }
+    void set_nbchoked(double v) { mNode->set_nbchoked(v); }
 
     void set_totNs_per_pop (int pop, int v){ mNode->set_totNs_per_pop(pop, v); }
     void set_totWs_per_pop(int pop, int v){ mNode->set_totWs_per_pop(pop, v); }
@@ -146,8 +154,8 @@ public:
     void setPopTot(double tot);
     [[deprecated]]
     void setPop(QList<double> v, double tot);
-    double getPop(int pop) const ;
-    double getPopTot () const;
+    boost::optional<double> getPop(int pop) const ;
+    boost::optional<double> getPopTot () const;
 
     [[deprecated]]
     void setPopW(int pop, double val);
@@ -155,16 +163,16 @@ public:
     void setPopWTot(double tot);
     [[deprecated]]
     void setPopW(QList<double> v, double tot);
-    double getPopW(int pop) const ;
+    boost::optional<double> getPopW(int pop) const ;
     double getPopWTot () const;
 
     [[deprecated]]
     void setImpact(int pop, double impact);
-    double getImpact(int pop) const;
+    boost::optional<double> getImpact(int pop) const;
 
     [[deprecated]]
     void setCumcatchesPerPop(int pop, double cumcatchesperpop);
-    double getCumcatchesPerPop(int pop);
+    boost::optional<double> getCumcatchesPerPop(int pop);
 
     [[deprecated]]
     void setCumdiscardsPerPop(int pop, double cumdiscardsperpop);

@@ -37,8 +37,11 @@ void VesselsStatsPlot::update(DisplaceModel *model, displace::plot::VesselsStat 
 
 void VesselsStatsPlot::update(QCustomPlot *plot)
 {
+    update (plot, lastStat);
+}
+void VesselsStatsPlot::update(QCustomPlot *plot, displace::plot::VesselsStat stat)
+{
     auto model = lastModel;
-    auto stat = lastStat;
 
     qDebug() << "VesselsStatPlot UPDATE";
 
@@ -115,11 +118,11 @@ void VesselsStatsPlot::update(QCustomPlot *plot)
         break;
     case VesselsStat::SweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        plot->yAxis->setLabel(QObject::tr("Swept Area (m^2)"));
         break;
     case VesselsStat::RevenuePerSweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/km^2)"));
         break;
     case VesselsStat::GVA:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));

@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -48,10 +48,11 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
-    O(mMap,envt_variables_diffusion);
+    O(mMap,promote_high_tariffs);
     O(mMap,TechCreeping3Per);
     O(mMap,ExitVessels10Per);
-    O(mMap,DEBUG);
+    O(mMap,halfShippingDensity);
+    O(mMap,DEBUG_TAC);
 
 
 
@@ -66,13 +67,20 @@ PopSceOptions::PopSceOptions()
     M(mMap,"baseline", pop_baseline);
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
-    O(mMap,diffuseN);
+    O(mMap,diffusePopN);
     O(mMap,avai_shuffler_on);
     O(mMap,avai_updater_on);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
-    O(mMap,impact_benthos_N);
+    O(mMap,includeForcingLayers);
+    O(mMap,diffuseBenthos);
+    O(mMap,modelBenthosInN);
+    O(mMap,modeldirectKillingOnBenthos);
+    O(mMap,modelShippingOnBenthos);
+    O(mMap,modelResuspensionEffectOnBenthos);
     O(mMap,sizeSpectra);
+    O(mMap,diffuseNutrients);
+    O(mMap,noHyperstability);
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

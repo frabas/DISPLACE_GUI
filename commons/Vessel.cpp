@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -2222,9 +2222,9 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
-                      vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
+                      vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, vector<double>& graph_res, bool& is_tacs, bool& is_individual_vessel_quotas,
                       bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, double& tech_creeping_multiplier,
-                      bool& is_fishing_credits,  bool& is_impact_benthos_N)
+                      bool& is_fishing_credits,  bool& direct_killing_on_benthos, bool& resuspension_effect_on_benthos, bool& is_benthos_in_numbers)
 {
     lock();
 
@@ -2294,23 +2294,48 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width
          << "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
          << ", swept area this fishing event is then:" << swept_area
-         << " compared to the cell area which is " << graph_res*graph_res << endl ;);
+         << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << endl ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
     this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
     this->set_subsurfacesweptareathistrip(this->get_subsurfacesweptareathistrip() + surface_and_subsurface_swept_area);
 
-    // FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
-    int a_landscape                  =           this->get_loc()->get_marine_landscape();
-    //vector<double> a_benthos_biomass =           this->get_loc()->get_benthos_biomass_per_funcgr();
-    multimap<int,double> loss        =           this->get_metier()->get_loss_after_1_passage();
-    vector<double> loss_after_1_passage_per_func_group= find_entries_i_d (loss,  a_landscape);
+
+    int nbfuncid = this->get_loc()->get_benthos_tot_biomass().size();
+    vector<double> loss_after_1_passage_per_func_group(nbfuncid, 0); // init. exp(0)=1 => no effect
 
 
-    // THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...
+    // FIND OUT THE DECREASE FACTOR FROM DIRECT KILLING AFTER THE PASSAGE
+    int a_landscape                      =    this->get_loc()->get_marine_landscape();
+    if(direct_killing_on_benthos)
+    {
+      multimap<int,double> loss          =    this->get_metier()->get_loss_after_1_passage();
+     loss_after_1_passage_per_func_group =    find_entries_i_d (loss,  a_landscape);
+    }
+
+
+    // SEDIMENT RESUSPENSION EFFECT
+    if(resuspension_effect_on_benthos)
+    {
+       double siltfraction = this->get_loc()->get_siltfraction();
+       //double hydrodynamic_drag_coeff_this_met=0.67;
+       //double gear_radius = 0.3; // im meter
+       //double gear_drag_factor = 0.5*density*((1000*fspeed*NAUTIC)^2)*hydrodynamic_drag_coeff_this_met*gear_width*gear_radius; // TODO: maybe assume only a fraction of the gear width impacting...
+       double gear_drag_factor =500.0; //drage per unit of gear component (N.m-1)
+       double scaling = 1e2;
+       double sediment_mass_mobilized = (2.0602 * siltfraction) + (1.206e-3 * gear_drag_factor) + (1.321e-3 * siltfraction * gear_drag_factor); // (O´Neill and Ivanovic 2016)
+       //=> kg per meter-squared (e.g. if drag is 500 and siltfraction is 0.4 then 1.5 kg mobilized per meter-squared)
+       for (unsigned int funcid=0; funcid< nbfuncid; funcid++)
+       {
+          loss_after_1_passage_per_func_group.at(funcid)+= - sediment_mass_mobilized/scaling; // assuming proportional relatinoship for now. TODO: retrieve a proper relationship
+       }
+    }
+
+
+    // THEN, POSSIBLY DEPLETE THE UNDERLYING BENTHOS ON THIS NODE FROM DIRECT KILLING AND/OR SEDIMENT RESUSPENSION...
     double decrease_factor_on_benthos_funcgroup;
-    double area_ratio1 = ((graph_res*graph_res)-swept_area)/(graph_res*graph_res);
-    double area_ratio2 = swept_area/(graph_res*graph_res);
+    double area_ratio1 = ((graph_res.at(0)*graph_res.at(1))-swept_area)/(graph_res.at(0)*graph_res.at(1));
+    double area_ratio2 = swept_area/(graph_res.at(0)*graph_res.at(1));
 
     if(area_ratio1<0)
     {
@@ -2318,7 +2343,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         area_ratio2=1;
     }
 
-    for (unsigned int funcid=0; funcid< this->get_loc()->get_benthos_tot_biomass().size(); funcid++)
+    for (unsigned int funcid=0; funcid< nbfuncid; funcid++)
     {
         // if(swept_area>0.0001)
         // {
@@ -2327,11 +2352,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         dout(cout  << "for the landscape is " << a_landscape);
         dout(cout  << "and the metier " <<  this->get_metier()->get_name());
 
-        // decrease_factor_on_benthos_funcgroup= 1-(1-(loss_after_1_passage_per_func_group.at(funcid)*(swept_area/(graph_res*graph_res)) ) );
-        //this->get_loc()->set_benthos_tot_biomass(funcid, this->get_loc()->get_benthos_tot_biomass(funcid)*(1-decrease_factor_on_benthos_funcgroup));
 
         // Inspired from Pitcher et al 2016
-        if(is_impact_benthos_N)
+        if(is_benthos_in_numbers)
         {
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_nb                    = this->get_loc()->get_benthos_tot_number(funcid);
@@ -2340,6 +2363,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         }
         else
         { // impact on biomass instead...
+            if(loss_after_1_passage_per_func_group.size()==0) cout << "check inconsistent input files for metier-benthos..." << endl;
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_bio                    = this->get_loc()->get_benthos_tot_biomass(funcid);
             double next_bio                       = (area_ratio1*current_bio) + (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
@@ -2372,21 +2396,21 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double totAvoiStksDiscThisEvent=0.0001;
 
     // TARIFFS ON THE NODE
-    vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
-    vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
+    //vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
+    //vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
     if(is_fishing_credits)
     {
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
-        cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
-                " has tariffs0 " << tariff_this_cell.at(0) << endl;
-        cout << "this vessel " << this->get_name() <<
-                " has credits " << fishing_credits.at(0) << endl;
+        dout(cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
+                " has tariffs0 " << tariff_this_cell.at(0) << endl);
+        dout(cout << "this vessel " << this->get_name() <<
+                " has credits " << fishing_credits.at(0) << endl);
         fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(0);
         this->set_fishing_credits(fishing_credits);
-        cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
-                " has remaining credits " << this->get_fishing_credits().at(0) << endl;
+        dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
+                " has remaining credits " << this->get_fishing_credits().at(0) << endl);
     }
 
 
@@ -2449,6 +2473,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
     {
         int namepop = populations[pop]->get_name();
+
+        // init
+        vector <double>landings_per_szgroup(NBSZGROUP, 0);
+        // init
+        vector <double>discards_per_szgroup(NBSZGROUP, 0);
+
         // is this pop not implicit? AND is this node in the range of the pop? remember code 10 is for out of range (see R code)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) && code_area!=10)
         {
@@ -2518,10 +2548,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // init
                 vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
                 // init
-                vector <double>landings_per_szgroup     = Ns_at_szgroup_pop;
-                // init
-                vector <double>discards_per_szgroup     = Ns_at_szgroup_pop;
-                // init
                 vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
                 // init
                 vector <double>pressure_per_szgroup_pop  = Ns_at_szgroup_pop;
@@ -2558,7 +2584,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     if(szgroup >=MLS_cat) {
                         tot_avai_for_land= tot_avai_for_land+avail_biomass[szgroup];
                     } else{
-                        tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
+                       // tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
+                        tot_avai_for_disc= tot_avai_for_disc+avail_biomass[szgroup];
                     }
                     dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
                     dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << endl);
@@ -2719,7 +2746,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // compute alloc key
                             // proportion
                             if(szgroup<MLS_cat){
-                                alloc_key[szgroup]=all_biomass[szgroup] /(tot_avai_for_disc);
+                             //   alloc_key[szgroup]=all_biomass[szgroup] /(tot_avai_for_disc);
+                                  alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_disc);
                             } else{
                                 alloc_key[szgroup]=0;
                             }
@@ -2735,7 +2763,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                         " discards per sz "      << discards_per_szgroup[szgroup] << endl
                                         );
 
-
+                            // TRUE CATCHES:
                             catch_per_szgroup[szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup];
                             dout(cout  << " sz " << szgroup <<
                                  " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
@@ -2841,6 +2869,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // caution: cumul landings at the trip level
 //if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
 //if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
+                            // CUMUL PER TRIP FOR THIS VESSEL (note that catch_pop_at_szgroup is LANDINGS)
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup]; // ping catch in weight
@@ -2908,14 +2937,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     {
                         for(unsigned int a_szgroup = 0; a_szgroup < catch_per_szgroup.size(); a_szgroup++)
                         {
-                            a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
+                            a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup]; // land+disc
                         }
                     }
                     else
                     {
                         for(unsigned int a_szgroup = 0; a_szgroup < landings_per_szgroup.size(); a_szgroup++)
                         {
-                            a_cumul_weight_this_pop_this_vessel +=landings_per_szgroup[a_szgroup];
+                            a_cumul_weight_this_pop_this_vessel +=landings_per_szgroup[a_szgroup]; // land only
                         }
 
                     }
@@ -2986,6 +3015,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 a_cumul_weight_this_pop_this_vessel;
                         // "real-time" update, accounting for this last bit of catches
                         populations.at(pop)->set_landings_so_far(so_far);
+
+
+
                         // note that oth_land (per node) are also added to landings_so_far but at the start of each month.
 
                         dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << endl);
@@ -3016,12 +3048,24 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
-                                dout(cout  << "...and declare you are choked by " << pop << "!!! " << endl);
+                                dout(cout  << "...I declare I am choked by " << pop << "!!! " << endl);
                                 this->set_is_choked(pop, 1);
                                 populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
                                 // => back correction (disable if you want to know the discarded part in annual_indic.
                                 // ...i.e. discarded = so_far - current_tac)
                                 // what a waste !!...
+
+                                /* CHECK so_far!!
+                                cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+                                double land_so_far    = 0;
+                                vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+                                for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+                                {
+                                   land_so_far+=C_at_szgroup.at(sz);
+                                }
+                                cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << endl;
+                                */
+
                                 a_cumul_weight_this_pop_this_vessel=0;// discard all!
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
@@ -3058,7 +3102,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
-                    this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
+                    this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
                     // catches
                     cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
@@ -3073,7 +3117,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         totDiscThisEvent += discards_per_szgroup[sz];
                     }
                     this->cumdiscards+= totDiscThisEvent;
-                    this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    this->get_loc()->add_to_cumdiscards_per_pop(totDiscThisEvent, pop);
+
                     cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
@@ -3258,26 +3304,23 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             if(cpue!=0)
             {
                 // ON THIS NODE, cpue per hour, see the R code
-                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE;
+                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE; // cumul this vessel over the trip
                 ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE;
                 discards_pop_at_szgroup[pop][0] = 0;
 
+                landings_per_szgroup.at(0)=cpue*PING_RATE; // this event only
+                discards_per_szgroup.at(0)=0; // no assumption made here
 
+                double so_far=0.0;
+                so_far = (populations.at(pop)->get_landings_so_far()) +
+                        cpue*PING_RATE;
+                // "real-time" update, accounting for this last bit of catches
+                populations.at(pop)->set_landings_so_far(so_far);
 
-                // CUMUL
+                // CUMUL ON VESSEL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
                 this->cumdiscards+= discards_pop_at_szgroup[pop][0];
-                this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + catch_pop_at_szgroup[pop][0]);
-                this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + 0);
-                /*
-                if(pop==21 && (this->get_name())=="DNK000012028"){
-                    dout(cout << "cpue " <<cpue << endl);
-                    dout(cout << "catch_pop_at_szgroup[pop][0] " <<catch_pop_at_szgroup[pop][0] << endl);
-                        int a;
-                        dout(cout << "Pause: type a number to continue");
-                        cin >> a;
-                }
-                */
+
 
                 // update dynamic trip-based cumul for this node
                 // catches
@@ -3289,6 +3332,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // effort
                 cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
+
+                // contribute to accumulated catches on this node
+                this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
+                this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
             }
             else
             {
@@ -3299,10 +3346,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-        // contribute to accumulated catches on this node
-        this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
-        this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
-
 
         // collect and accumulate tot_C_at_szgroup at the end of the pop loop
         // (accumulate in szgroup 0 if implicit pop)
@@ -3310,11 +3353,23 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         vector <double> newTotD= populations.at(pop)->get_tot_D_at_szgroup();
         for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
         {
-           newTotC.at(szgroup) = newTotC.at(szgroup) + catch_pop_at_szgroup.at(pop).at(szgroup);
-           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_pop_at_szgroup.at(pop).at(szgroup);
+           newTotC.at(szgroup) = newTotC.at(szgroup) + landings_per_szgroup.at(szgroup);
+           newTotD.at(szgroup) = newTotD.at(szgroup) + discards_per_szgroup.at(szgroup);
         }
         populations.at(pop)->set_tot_C_at_szgroup(newTotC);
         populations.at(pop)->set_tot_D_at_szgroup(newTotD);
+
+
+        /* CHECK so_far!! i.e. should return the exact same value...
+        cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+        double land_so_far    = 0;
+        vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+        for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+        {
+           land_so_far+=C_at_szgroup.at(sz);
+        }
+        cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << endl;
+        */
 
     } // end pop
 
@@ -5291,7 +5346,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& population
          {
             if(dyn_alloc_sce.option(Options::fishing_credits))
             {
-                tout(cout << "What this vessel " << this->get_name() <<" has for remaining credits ? " << this->get_fishing_credits().at(0) << endl);
+                dout(cout << "What this vessel " << this->get_name() <<" has for remaining credits ? " << this->get_fishing_credits().at(0) << endl);
                 if(this->get_fishing_credits().at(0) <=0) still_some_quotas=0; // here, quota means credits
             }
             else
@@ -5499,7 +5554,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         {
 
             // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
-            cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+            dout(cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;)
             // => Then, imagine a mean to expand the range of these vessels....
 /*
             // e.g. look at what use to do some vessels sharing the same departure harbour!
@@ -5828,7 +5883,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //"lowestTariff"   // ChooseGround               => relevant only if fishing_credits Option is active
-        // avoidHighTariffAreas  // ChooseGround               => relevant only if fishing_credits Option is active
+        // tariffThisGroundIs  // ChooseGround               => relevant only if fishing_credits Option is active
         //=> TO DO: add the corresponding dtree evaluators...
 
         // cout << "traverse tree for ground " << ground << endl;
@@ -5898,9 +5953,23 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
       {
 
         freq_grds= this->get_freq_fgrounds();
-        for(int gr=0; gr < grds.size(); ++gr)
+        if(dyn_alloc_sce.option(Options::promote_high_tariffs))
         {
+           // promote visiting high tariff areas
+           for(int gr=0; gr < grds.size(); ++gr)
+           {
             freq_grds.at(gr)= freq_grds.at(gr) * nodes.at(grds.at(gr).toIndex())->get_tariffs().at(0); // probas weigthed by the tariffs
+           }
+        }
+        else
+        {
+           // promote avoiding high tariff areas
+            double denom=0.0;
+            for(int gr=0; gr < grds.size(); ++gr)
+            {
+             denom= nodes.at(grds.at(gr).toIndex())->get_tariffs().at(0);
+             if(denom!=0) freq_grds.at(gr)= freq_grds.at(gr) * 1/denom; // probas weigthed by the tariffs
+            }
         }
         freq_grds= scale_a_vector_to_1(freq_grds);
       }

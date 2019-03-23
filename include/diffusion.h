@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -49,10 +49,13 @@ typedef std::pair<box, unsigned> value;
 
 bool COMMONSSHARED_EXPORT diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes,
                                                                adjacency_map_t& adjacency_map, double coeff);
+bool COMMONSSHARED_EXPORT diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes,
+                                                               adjacency_map_t& adjacency_map, double coeff);
 bool COMMONSSHARED_EXPORT diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
                                                           adjacency_map_t& adjacency_map,
                                                           bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree,
                                                           double coeff);
+
 void COMMONSSHARED_EXPORT createRTreeFromNodes(vector<Node*>& nodes,
                                                bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree);
 

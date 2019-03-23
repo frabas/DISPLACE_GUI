@@ -66,6 +66,8 @@
      <addaction name="actionPhosphorus"/>
      <addaction name="actionOxygen"/>
      <addaction name="actionDissolvedCarbon"/>
+     <addaction name="actionShippingDensity"/>
+     <addaction name="actionSiltFraction"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -119,6 +121,7 @@
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
     <addaction name="actionCheck_for_isolated_subgraphs"/>
+    <addaction name="actionRemove_isolated_subgraphs"/>
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="actionLoadStockNames"/>
@@ -142,7 +145,6 @@
     <addaction name="actionCalcPopDistribution"/>
     <addaction name="separator"/>
     <addaction name="actionLink_Shortest_Path_Folder"/>
-    <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="menuFormats_conversion"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
@@ -259,7 +261,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -303,7 +305,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -361,7 +363,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -404,7 +406,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Catches per szgr in kg</string>
+                  <string>Landings per szgr in kg</string>
                  </property>
                 </item>
                 <item>
@@ -415,6 +417,11 @@
                 <item>
                  <property name="text">
                   <string>Fishing mortality F at age</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fishing mortality F at age (running average)</string>
                  </property>
                 </item>
                 <item>
@@ -450,6 +457,11 @@
                 <item>
                  <property name="text">
                   <string>Quotas (if TACs On)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Choking stocks (if TACs On)</string>
                  </property>
                 </item>
                 <item>
@@ -1512,7 +1524,7 @@
         <string>Setup</string>
        </property>
        <property name="icon">
-        <iconset resource="../objeditor/vesseleditor.qrc">
+        <iconset resource="qtgui.qrc">
          <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
        </property>
       </widget>
@@ -1767,7 +1779,7 @@ L3</string>
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1776,7 +1788,7 @@ L3</string>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -1785,7 +1797,7 @@ L3</string>
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1866,7 +1878,7 @@ L3</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1887,7 +1899,7 @@ L3</string>
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1913,7 +1925,7 @@ L3</string>
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1952,7 +1964,7 @@ L3</string>
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1966,7 +1978,7 @@ L3</string>
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -2039,7 +2051,7 @@ L3</string>
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -2058,7 +2070,7 @@ L3</string>
   </action>
   <action name="actionR_Console">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
    </property>
    <property name="text">
@@ -2260,6 +2272,29 @@ L3</string>
     <string>Values 0 to 1</string>
    </property>
   </action>
+  <action name="actionRemove_isolated_subgraphs">
+   <property name="text">
+    <string>Remove Isolated Subgraphs...</string>
+   </property>
+  </action>
+  <action name="actionShippingDensity">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/colors.png</normaloff>icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>ShippingDensity...</string>
+   </property>
+  </action>
+  <action name="actionSiltFraction">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>SiltFraction...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -2276,8 +2311,6 @@ L3</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../dteditor/dteditor.qrc"/>
-  <include location="../objeditor/vesseleditor.qrc"/>
   <include location="../qtcommons/qtcommons.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>

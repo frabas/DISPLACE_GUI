@@ -23,6 +23,9 @@ struct EnvironmentData {
     double phosphorus;
     double oxygen;
     double dissolvedcarbon;
+    double bathymetry;
+    double shippingdensity;
+    double siltfraction;
 };
 
 struct NodesPopData {

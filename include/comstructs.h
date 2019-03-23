@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ struct COMMONSSHARED_EXPORT Scenario {
     int nrow_coord;
     int nrow_graph;
     types::NodeId a_port;
-    double graph_res;
+    std::vector <double>  graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;
     bool use_dtrees;
@@ -51,6 +51,7 @@ struct COMMONSSHARED_EXPORT Scenario {
     std::vector <double> arbitary_breaks_for_tariff;
     int total_amount_credited;
     double tariff_annual_hcr_percent_change;
+    int update_tariffs_based_on_lpue_or_dpue_code;
 
     std::string dt_go_fishing;
     std::string dt_choose_ground;
@@ -73,7 +74,7 @@ struct COMMONSSHARED_EXPORT Scenario {
                 s1.nrow_coord == s2.nrow_coord &&
                 s1.nrow_graph == s2.nrow_graph &&
                 s1.a_port == s2.a_port &&
-                std::abs((double)(s1.graph_res - s2.graph_res)) < 1e-3 &&
+                check(s1.graph_res, s2.graph_res) &&
                 s1.is_individual_vessel_quotas == s2.is_individual_vessel_quotas &&
                 s1.check_all_stocks_before_going_fishing == s2.check_all_stocks_before_going_fishing &&
                 s1.use_dtrees == s2.use_dtrees &&
@@ -83,6 +84,7 @@ struct COMMONSSHARED_EXPORT Scenario {
                 check(s1.arbitary_breaks_for_tariff, s2.arbitary_breaks_for_tariff) &&
                 s1.total_amount_credited == s2.total_amount_credited &&
                 std::abs((double)(s1.tariff_annual_hcr_percent_change - s2.tariff_annual_hcr_percent_change)) < 1e-3 &&
+                s1.update_tariffs_based_on_lpue_or_dpue_code == s2.update_tariffs_based_on_lpue_or_dpue_code &&
 
                 s1.dt_go_fishing == s2.dt_go_fishing &&
                 s1.dt_choose_ground == s2.dt_choose_ground &&

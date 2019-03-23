@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -103,8 +103,8 @@ protected:
                                QCustomPlot *plot);
     void updateVesselStats(DisplaceModel *model, displace::plot::VesselsStat mSelectedVesselsStat,
                                QCustomPlot *plot);
-    void updateHarboursStats (DisplaceModel *model, QCustomPlot *plot);
-    void updateMetiersStats(DisplaceModel *model, QCustomPlot *plot);
+    void updateHarboursStats (DisplaceModel *model, displace::plot::HarboursStat stat, QCustomPlot *plot);
+    void updateMetiersStats(DisplaceModel *model, displace::plot::MetiersStat stat, QCustomPlot *plot);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat);

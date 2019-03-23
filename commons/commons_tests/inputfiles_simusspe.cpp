@@ -74,6 +74,7 @@ struct print_log_value<displace::commons::Scenario>
               s1.arbitary_breaks_for_tariff << "," <<
               s1.total_amount_credited << "," <<
               s1.tariff_annual_hcr_percent_change << "," <<
+              s1.update_tariffs_based_on_lpue_or_dpue_code << "," <<
               s1.dt_go_fishing << "," <<
               s1.dt_choose_ground << "," <<
               s1.dt_start_fishing << "," <<
@@ -96,13 +97,14 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
         DynAllocOptions(), PopSceOptions(), ClosureOptions(),
         "1", "2",
         1, 2, 56, 10140, 57555, types::NodeId(6),
-        7.1,
+        {7.1, 7},
         true, false, true,
         { 100, 101 },
         8,
         { 200.1, 200.2 },
         9,
         10.5,
+        1,
         "dt_go_fishing",
         "dt_choose_ground",
         "dt_start_fishing",
@@ -161,17 +163,19 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                            "# Use Dtrees\n"
                            "1\n"
                            "#tariff_pop\n"
-                           "100 101\n"
+                           "0 1\n"
                            "#Freq_update_tariff_code\n"
-                           "8\n"
+                           "2\n"
                            "#arbitrary_breaks_for_tariff\n"
-                           "200.1 200.2\n"
+                           "0 1 5 10\n"
                            "#total_amount_credited\n"
-                           "9\n"
+                           "100000\n"
                            "#tariff_annual_\n"
-                           "10.5\n"
+                           "10.0\n"
+                           "freq_update_tariffs_based_on_lpue_or_dpue_code\n"
+                           "1\n"
                            "# banned metiers\n"
-                           "90 91 92");
+                           "10 11 12");
 
     bool r = read_scenario_config_file(is, res);
     BOOST_CHECK(r);

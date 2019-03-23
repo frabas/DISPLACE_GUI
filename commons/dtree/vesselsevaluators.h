@@ -168,7 +168,15 @@ private:
 public:
     VesselEndOfTheDayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *vessel) const {
-              return ((int)((tstep % 24)+0.5) == vessel->getWorkDayEndHour() ? 0.0 : 1.0); // hardcoded return for daily trip after 10 p.m. //0: "true" node; 1: "false"
+              int current_hour= (int)((tstep % 24)+0.5);
+              return ((
+                      // caution: we expect getWorkDayEndHour to be within 0 and 23...(i.e. no 24)
+                      (vessel->getWorkDayEndHour() == 23 && current_hour == vessel->getWorkDayEndHour()-1) ||  // end of day is true if +/- 1 hour of the usual return hour (make flexible because the vessel might be steaming at the exact hour then not taking any stop fishing decision...)
+                      (current_hour == vessel->getWorkDayEndHour()) ||
+                      (current_hour == vessel->getWorkDayEndHour()+1) ||
+                      (vessel->get_timeatsea() > 20) // worst case, end of the day triggered as soon as trying to fish again within the next day...
+                      )
+                      ? 0.0 : 1.0); //0: "true" node; 1: "false"
           }
 };
 
@@ -302,9 +310,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         //auto the_grds = v->get_fgrounds();
         //int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        cout << "Tariff on this ground being evaluated..." << endl;
+        //cout << "Tariff on this ground being evaluated..." << endl;
         vector <double> tariffs_over_layers = v->get_map_of_nodes().at(fground)->get_tariffs(); // using the superpower of omniscience (which is anyway quite expected on tariffs!)
-        cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
+        //cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
         return  tariffs_over_layers.at(0) >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
     }
 };

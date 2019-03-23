@@ -106,10 +106,11 @@ enum Dyn_Alloc {
     shared_harbour_knowledge,
     twoFoldTACconstr,
     fishing_credits,
-    envt_variables_diffusion,
+    promote_high_tariffs,
     TechCreeping3Per,
     ExitVessels10Per,
-    DEBUG,
+    halfShippingDensity,
+    DEBUG_TAC,
 
     Dyn_Alloc_last
 };
@@ -118,14 +119,21 @@ enum Pop_Sce {
     pop_baseline,
     use_SMS,
     use_SMS_single,
-    diffuseN,
+    diffusePopN,
     avai_shuffler_on,
     avai_updater_on,
     white_noise_on_avai_deprecated,
     with_stochast_oth_land,
     stop_mig_35065,
-    impact_benthos_N,
+    includeForcingLayers,
+    diffuseBenthos,
+    modelBenthosInN,
+    modeldirectKillingOnBenthos,
+    modelResuspensionEffectOnBenthos,
+    modelShippingOnBenthos,
     sizeSpectra,
+    diffuseNutrients,
+    noHyperstability,
 
     Pop_Sce_last
 };

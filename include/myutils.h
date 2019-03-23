@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -267,6 +267,11 @@ bool COMMONSSHARED_EXPORT fill_from_Oxygen (istream& in, vector<double>& graph_p
 bool COMMONSSHARED_EXPORT fill_from_DissolvedCarbon (istream& in, vector<double>& graph_point_DissolvedCarbon,
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_bathymetry (istream& in, vector<double>& graph_point_bathymetry,
+                                      int nrow);
+bool COMMONSSHARED_EXPORT fill_from_shippingdensity (istream& in, vector<double>& graph_point_shippingdensity,
+                                      int nrow);
+
+bool COMMONSSHARED_EXPORT fill_from_siltfraction (istream& in, vector<double>& graph_point_siltfraction,
                                       int nrow);
 
 bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,

@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -216,6 +216,7 @@ public:
         OutLayerCumCatchesWithThreshold,
         OutLayerCumdiscards,
         OutLayerCumdiscardsRatio,
+        OutLayerNbChoked,
 
         OutLayerMax
 
@@ -238,6 +239,8 @@ public:
         EnvLayerOxygen,
         EnvLayerDissolvedCarbon,
         EnvLayerBathymetry,
+        EnvLayerShippingdensity,
+        EnvLayerSiltfraction,
 
      EnvLayerMax
     };
@@ -326,6 +329,8 @@ public:
 
     MapsDataProvider &getMapDataProvider(int model);
 
+    void delSelectedNodes(int model);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
@@ -334,7 +339,6 @@ protected:
     void addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
-    void delSelectedNodes(int model);
 
 protected slots:
     void geometryClicked(const Geometry *);
@@ -396,6 +400,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesWithThreshold[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscards[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscardsratio[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerNbchoked[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];
@@ -407,6 +412,8 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerOxygen[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerDissolvedCarbon[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBathymetry[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerShippingdensity[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSiltfraction[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 

@@ -161,17 +161,7 @@
     </widget>
    </item>
    <item row="11" column="1">
-    <widget class="QDoubleSpinBox" name="gridres">
-     <property name="suffix">
-      <string> km</string>
-     </property>
-     <property name="maximum">
-      <double>10000.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
-     </property>
-    </widget>
+    <widget class="QLineEdit" name="gridres"/>
    </item>
    <item row="12" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
@@ -372,7 +362,6 @@
   <tabstop>nrowcoord</tabstop>
   <tabstop>nrowgraph</tabstop>
   <tabstop>aport</tabstop>
-  <tabstop>gridres</tabstop>
  </tabstops>
  <resources/>
  <connections>

@@ -37,7 +37,6 @@ protected:
     NodeData *mNode;
     MapObjectsController *mController;
     int mModelIndex;
-    QSizeF mGrid;
 
     std::shared_ptr<types::EnvironmentData> getEnvtData();
 public:
@@ -69,7 +68,7 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 
     Type getType() const { return mType; }
-    double getValueForPop(int pop) const;
+    boost::optional<double> getValueForPop(int pop) const;
     QList<int> getInterestingList() const;
 
 private:
@@ -141,6 +140,16 @@ public:
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
+
+class NodeWithNbChokedGraphics : public NodeGraphics {
+public:
+    NodeWithNbChokedGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
 
 class NodeWithTariffs0Graphics : public NodeGraphics {
 public:
@@ -245,5 +254,24 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+
+class NodeWithShippingdensityGraphics : public NodeGraphics {
+public:
+    NodeWithShippingdensityGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
+class NodeWithSiltfractionGraphics : public NodeGraphics {
+public:
+    NodeWithSiltfractionGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
 
 #endif // NODEGRAPHICS_H

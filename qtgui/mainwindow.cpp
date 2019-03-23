@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mMemoryWatchTimer.start(2500);
 
-    cout << "Connect gui to simulator" << endl;
+    qDebug() << "Connect gui to simulator";
     mSimulation = new Simulator();
     mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -201,7 +201,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
-    cout << "Connect gui to simulator...OK" << endl;
+    qDebug() << "Connect gui to simulator...OK";
 
     ui->cmdProfileEnable->setChecked(false);
     ui->profilingOutput->setVisible(false);
@@ -222,7 +222,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
-    cout << "Connect map widget " << endl;
+    qDebug() << "Connect map widget ";
     map = ui->mapWidget;
     mMapController = new MapObjectsController(map);
     connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
@@ -235,52 +235,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map->setBackgroundColour(Qt::white);
 
-    cout << "Connect map widget...OK " << endl;
-
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
 
     /* Stats windows setup */
-    cout << "Connect Stats windows " << endl;
 
     mStatsController = new StatsController(this);
-    cout << "for Pop " << endl;
     mStatsController->setPopulationPlot(ui->plotPopulations, new GraphInteractionController(ui->plotPopulations, this));
-    cout << "for Pop...ok " << endl;
-    cout << "for Harbour " << endl;
-    mStatsController->setHarboursPlot(ui->plotHarbours);
-    cout << "for Harbour...ok " << endl;
-    cout << "for Nations " << endl;
-    mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
-    cout << "for Nations...ok " << endl;
-    cout << "for Vessels " << endl;
-    mStatsController->setVesselsStatsPlot(ui->plotVessels, vesselsStatsPlotController);
-    cout << "for Vessels...ok " << endl;
-    cout << "for Metiers " << endl;
-    mStatsController->setMetiersPlot(ui->plotMetiers);
-    cout << "for Metiers...ok " << endl;
-    cout << "for Benthos " << endl;
-    mStatsController->setBenthosPlot(ui->plotBenthos, benthosPlotController);
-    cout << "for Benthos...ok " << endl;
-    cout << "for Fishfarms " << endl;
-    mStatsController->setFishfarmsPlot(ui->plotFishfarms, fishfarmPlotController);
-    cout << "for Fishfarms...ok " << endl;
-    mStatsController->setWindfarmsPlot(ui->plotWindfarms, windfarmPlotController);
-    cout << "for Windfarms...ok " << endl;
-    mStatsController->setShipsPlot(ui->plotShips, shipPlotController);
-    cout << "for Ships...ok " << endl;
 
-    cout << "Connect Stats windows...OK " << endl;
+    mStatsController->setHarboursPlot(ui->plotHarbours);
+    mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
+    mStatsController->setVesselsStatsPlot(ui->plotVessels, vesselsStatsPlotController);
+    mStatsController->setMetiersPlot(ui->plotMetiers);
+    mStatsController->setBenthosPlot(ui->plotBenthos, benthosPlotController);
+    mStatsController->setFishfarmsPlot(ui->plotFishfarms, fishfarmPlotController);
+    mStatsController->setWindfarmsPlot(ui->plotWindfarms, windfarmPlotController);
+    mStatsController->setShipsPlot(ui->plotShips, shipPlotController);
 
     /* Tree model setup */
-    cout << "Tree model setup " << endl;
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
-
-    cout << "Tree model setup...OK " << endl;
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -459,10 +436,7 @@ void MainWindow::simulationEnded(int exitcode)
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)
 {
-    cout << "is simulator process state changed?" <<  endl;
-
     if (models[0] != 0) {
-        cout << "is there any model?" <<  endl;
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
         ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
@@ -473,12 +447,10 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
         }
     } else {
-        cout << "there is no model yet..." <<  endl;
         ui->cmdStart->setEnabled(false);
         ui->cmdStop->setEnabled(false);
         ui->cmdSetup->setEnabled(false);
         simulatorProcessStepChanged(-1);
-        cout << "and..." <<  endl;
     }
 }
 
@@ -490,6 +462,14 @@ void MainWindow::simulatorProcessStepChanged(int step)
         models[0]->commitNodesStatsFromSimu(step);
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
+    }
+
+
+    if (step != -1 && models[0] != nullptr)
+    {
+        int mtminus1 = models[0]->calendar()->getMonth(step-1);
+        int mt = models[0]->calendar()->getMonth(step);
+        if(mt!=mtminus1) models[0]->setCurrentStep(step); // update only if month starts
     }
 
     updateCalendarDisplay(step);
@@ -524,7 +504,6 @@ void MainWindow::shipMoved(int step, int idx, float x, float y, float course)
 
 void MainWindow::updateModelState()
 {
-    cout << "update model state" <<  endl;
     simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
     updateModelList();
 }
@@ -537,8 +516,9 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     try {
-    mMapController->updateNodes(0);
-    mStatsController->updateStats(models[0].get());
+        qDebug() << "Updating map to step " << models[0]->getCurrentStep();
+        mMapController->updateNodes(0);
+        mStatsController->updateStats(models[0].get());
     } catch (sqlite::SQLiteException &xcp) {
         qWarning() << "Error updating output: " << xcp.what();
     }
@@ -784,7 +764,6 @@ void MainWindow::centerMapOnHarbourId(int id)
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    std::cout << "id is " << id << endl;
     std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
@@ -1309,6 +1288,17 @@ void MainWindow::on_actionBathymetry_triggered()
     showPaletteDialog(BathyRole);
 }
 
+void MainWindow::on_actionShippingDensity_triggered()
+{
+    showPaletteDialog(ShippingdensityRole);
+}
+
+void MainWindow::on_actionSiltFraction_triggered()
+{
+    showPaletteDialog(SiltfractionRole);
+}
+
+
 void MainWindow::on_actionSalinity_triggered()
 {
     showPaletteDialog(SalinityRole);
@@ -1611,13 +1601,10 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
         return false;
     }
 
-    cout << "live model loaded..." << endl;
-
     /* Connect model */
+    qDebug() << "connecting outputParsed()";
     connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
     connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
-
-    cout << "current model connected..." << endl;
 
     mMapController->removeModel(model_idx);
 
@@ -1627,11 +1614,7 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
     ui->modelSelector->setCurrentIndex(model_idx);
     models[model_idx] = m;
 
-    cout << "create map objects from model..." << endl;
-
     mSimulation->linkModel(models[model_idx]);
-
-    cout << "link model to next simulation..." << endl;
 
     emit modelStateChanged();
 
@@ -1749,6 +1732,8 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString Oxygenpath = savedlg.getOxygenFilename();
         QString DissolvedCarbonpath = savedlg.getDissolvedCarbonFilename();
         QString bathymetrypath = savedlg.getBathymetryFilename();
+        QString shippingdensitypath = savedlg.getShippingdensityFilename();
+        QString siltfractionpath = savedlg.getSiltfractionFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1760,7 +1745,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath,
+                                 bathymetrypath, shippingdensitypath, siltfractionpath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
@@ -2764,6 +2749,8 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString Oxygenpath = dlg.getOxygenFilename();
         QString DissolvedCarbonpath = dlg.getDissolvedCarbonFilename();
         QString bathymetrypath = dlg.getBathymetryFilename();
+        QString shippingdensitypath = dlg.getShippingdensityFilename();
+        QString siltfractionpath = dlg.getSiltfractionFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2775,7 +2762,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath,
+                                 bathymetrypath, shippingdensitypath, siltfractionpath,
                                  benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
@@ -3163,6 +3150,26 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
     }
 }
 
+void MainWindow::on_actionRemove_isolated_subgraphs_triggered()
+{
+    IsolatedSubgraphChecker checker(currentModel.get());
+
+    if (checker.process()) {
+        QMessageBox::warning(this, tr("Subgraphs checking"), tr("There are isolated subgraphs."));
+        QList<int> isn = checker.getIsolatedNodes();
+
+        mMapController->clearNodeSelection(currentModelIdx);
+        mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
+
+        qDebug() << "Nb nodes to remove " << isn.size() << endl;
+        mMapController->delSelectedNodes(currentModelIdx);
+
+    } else {
+        QMessageBox::information(this, tr("Subgraphs checking"), tr("All isolated nodes have been removed."));
+    }
+}
+
+
 void MainWindow::on_actionR_Console_triggered()
 {
     RConsole *console = new RConsole();
@@ -3206,7 +3213,8 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Aggregate), r);
         exportPlot (out + QString("/pop_catch.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Catches), r);
         exportPlot (out + QString("/pop_discard.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Discards), r);
-        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
+        exportPlot (out + QString("/pop_ravF.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::RavFMortality), r);
+        exportPlot (out + QString("/pop_F.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
         exportPlot (out + QString("/pop_natmortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NatMortality), r);
         exportPlot (out + QString("/pop_numberatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NumberAtAge), r);
         exportPlot (out + QString("/pop_weightatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::WeightAtAge), r);
@@ -3214,6 +3222,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::SSB), r);
         exportPlot (out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
         exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);
+        exportPlot (out + QString("/pop_choking.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Choking), r);
         exportPlot (out + QString("/pop_ffmsy.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FFmsy), r);
         exportPlot (out + QString("/pop_propmature.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::PropMature), r);
         exportPlot (out + QString("/pop_fvseffort.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FvsEffort), r);
@@ -3285,6 +3294,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
 void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties)
 {
     QCustomPlot plot;
+
     plot.resize(properties.width, properties.height);
     plot.legend->setVisible(true);
     mStatsController->plotGraph(currentModel.get(), type, subtype, &plot);
@@ -3385,12 +3395,20 @@ void MainWindow::on_actionClear_configuration_triggered()
 void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
 {
     bool ok;
-    int sz = QInputDialog::getInt(this, tr("Set Node Symbol size"),
-                                  tr("Symbol size, in pixels:"),
+    int sz1 = QInputDialog::getInt(this, tr("Set Node Symbol size in x"),
+                                  tr("Symbol size in x, in pixels:"),
                                   NodeGraphics::pieh(), 1, 1000, 1, &ok);
 
+    int sz2=sz1;
     if (ok) {
-        NodeGraphics::setPieSize(sz, sz);
+     ok=false;
+     sz2 = QInputDialog::getInt(this, tr("Set Node Symbol size in y"),
+                                  tr("Symbol size in y, in pixels:"),
+                                  NodeGraphics::pieh(), 1, 1000, 1, &ok);
+    }
+
+    if (ok) {
+        NodeGraphics::setPieSize(sz1, sz2);
         QMessageBox::information(this, tr("Node Symbol Size"),
                                  tr("Nodes symbol size has changed, refresh the layers on the map"));
     }

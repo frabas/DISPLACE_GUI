@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ void createRTreeFromNodes(vector<Node*>& nodes, bgi::rtree< std::pair<point, int
 
 
 }
+
 
 bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
                                      adjacency_map_t& adjacency_map,
@@ -218,6 +219,89 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
 
   return 0;
 }
+
+
+
+bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff)
+{
+
+   cout << "start diffusion for Nitrogen...." << endl;
+
+    vector<types::NodeId> list_of_nodes_idx;
+    for (int n=0; n<list_of_nodes.size(); ++n)
+       {
+       list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
+       }
+    random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() );
+    for (int n=0; n<list_of_nodes_idx.size(); ++n)
+       {
+        auto idx_node=list_of_nodes_idx.at(n);
+
+
+        // get value on this node
+        vector<double> departure_Benthos = list_of_nodes.at(n)->get_benthos_biomass_per_funcgr();
+
+
+        // get the list of neighbouring nodes
+        //vector<types::NodeId> neighbour_nodes;
+        vector<int> neighbour_nodes;
+                vertex_t u = idx_node.toIndex();
+        // Visit each edge exiting u
+        for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
+             edge_iter != adjacency_map[u].end();
+             edge_iter++)
+        {
+            //neighbour_nodes.push_back(types::NodeId(edge_iter->target));
+            neighbour_nodes.push_back(edge_iter->target);
+        }
+
+
+        // apply unique
+        std::sort(neighbour_nodes.begin(), neighbour_nodes.end());
+        std::vector<int>::iterator last=std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
+        neighbour_nodes.erase(last, neighbour_nodes.end());
+
+
+        // displace a proportion of N from departure node to neighbours nodes
+        int count = neighbour_nodes.size();
+
+
+         vector<double> depB=departure_Benthos;
+
+         //if(idx_node.toIndex()==9006){
+         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << endl;
+         //    for(int i=0; i< neighbour_nodes.size();i++) cout <<  neighbour_nodes.at(i) << " ";
+         //    cout << endl;
+         //}
+               for (int nei=0; nei<count; ++nei)
+                  {
+                      vector<double> arrival_Benthos = list_of_nodes.at(neighbour_nodes.at(nei))->get_benthos_biomass_per_funcgr();
+                      for (int gr=0; gr<depB.size(); ++gr)
+                         {
+                         double exchanged       = ((coeff*depB.at(gr))/count);
+                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << endl;
+                         arrival_Benthos.at(gr)       = arrival_Benthos.at(gr) + exchanged;
+                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << endl;
+                         departure_Benthos.at(gr)     = departure_Benthos.at(gr) - exchanged;
+                        }
+                      list_of_nodes.at(neighbour_nodes.at(nei))->set_benthos_biomass_per_funcgr(arrival_Benthos);//update arrival
+                   }
+               list_of_nodes.at(idx_node.toIndex())->set_benthos_biomass_per_funcgr(departure_Benthos ); //update departure
+
+
+          //if(idx_node.toIndex()==9006){
+          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << endl;
+          //     cout << endl;
+          //}
+
+      } // node by node
+
+  cout << "stop diffusion Benthos for this node...." << endl;
+
+  return 0;
+}
+
+
 
 
 

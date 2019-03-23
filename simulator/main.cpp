@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019, 2018 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -186,11 +186,12 @@ int a_graph;
 types::NodeId a_port;
 int nrow_coord;
 int nrow_graph;
-double graph_res;
+vector <double> graph_res;
 bool is_individual_vessel_quotas;
 bool check_all_stocks_before_going_fishing;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
+int update_tariffs_based_on_lpue_or_dpue_code;
 int freq_do_growth;
 int freq_redispatch_the_pop;
 vector <double> arbitary_breaks_for_tariff;
@@ -201,7 +202,9 @@ bool is_tacs;
 bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
-bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
+bool is_direct_killing_on_benthos;
+bool is_resuspension_effect_on_benthos;
 double tech_creeping_multiplier=1;
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
@@ -657,6 +660,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         tariff_pop=scenario.tariff_pop;
         freq_update_tariff_code=scenario.freq_update_tariff_code;
+        update_tariffs_based_on_lpue_or_dpue_code=scenario.update_tariffs_based_on_lpue_or_dpue_code;
         arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
         total_amount_credited=scenario.total_amount_credited;
         tariff_annual_hcr_percent_change=scenario.tariff_annual_hcr_percent_change;
@@ -718,7 +722,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     outc(cout << "nrow_coord " << nrow_coord << endl);
     outc(cout << "nrow_graph " << nrow_graph << endl);
     outc(cout << "a_port " << a_port << endl);
-    outc(cout << "graph res in km " << graph_res << endl);
+    outc(cout << "graph res in km xy " << graph_res.at(0) << " " << graph_res.at(1) << endl);
     outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
     outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
 
@@ -726,6 +730,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
         outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
+        outc(cout << "update_tariffs_based_on_lpue_or_dpue_code " << update_tariffs_based_on_lpue_or_dpue_code << endl);
         outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
         outc(cout << "total_amount_credited " << total_amount_credited << endl);
         outc(cout << "tariff_annual_hcr_percent_change " << tariff_annual_hcr_percent_change << endl);
@@ -965,14 +970,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    if(dyn_pop_sce.option(Options::impact_benthos_N))
+    if(dyn_pop_sce.option(Options::modelBenthosInN))
     {
-        is_impact_benthos_N=1;
+        is_benthos_in_numbers=1;
     } else{
-        is_impact_benthos_N=0; // if not N then it impacts the benthos biomass by default
+        is_benthos_in_numbers=0; // if not N then it impacts the benthos biomass by default
     }
 
+    if(dyn_pop_sce.option(Options::modeldirectKillingOnBenthos))
+    {
+        is_direct_killing_on_benthos=1;
+    } else{
+        is_direct_killing_on_benthos=0; // direct fishing effect on benthos
+    }
 
+    if(dyn_pop_sce.option(Options::modelResuspensionEffectOnBenthos))
+    {
+        is_resuspension_effect_on_benthos=1;
+    } else{
+        is_resuspension_effect_on_benthos=0; // indirect fishing effect on benthos
+    }
 
     if (!OutputExporter::instantiate(outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
@@ -1148,7 +1165,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
           << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
     node.set_xy(2,2);
@@ -1173,6 +1190,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_oxygen.dat";
     string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_dissolvedcarbon.dat";
     string filename_bathymetry_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_bathymetry.dat";
+    string filename_shippingdensity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_shippingdensity.dat";
+    string filename_siltfraction_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_siltfraction.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 
@@ -1327,6 +1346,32 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 1;
     }
 
+    ifstream shippingdensity_graph;
+    shippingdensity_graph.open(filename_shippingdensity_graph.c_str());
+    if(shippingdensity_graph.fail())
+    {
+        open_file_error(filename_shippingdensity_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_shippingdensity;
+    if (!fill_from_shippingdensity(shippingdensity_graph, graph_point_shippingdensity, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_shippingdensity_graph << " Bad format\n";
+        return 1;
+    }
+
+    ifstream siltfraction_graph;
+    siltfraction_graph.open(filename_siltfraction_graph.c_str());
+    if(siltfraction_graph.fail())
+    {
+        open_file_error(filename_siltfraction_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_siltfraction;
+    if (!fill_from_siltfraction(siltfraction_graph, graph_point_siltfraction, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_siltfraction_graph << " Bad format\n";
+        return 1;
+    }
+
     vector<double> graph_point_landscape_norm(graph_coord_x.size(), 0);
     vector<double> graph_point_landscape_alpha(graph_coord_x.size(), 0);
     vector<double> graph_point_wind_norm(graph_coord_x.size(), 0);
@@ -1377,7 +1422,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // overwriting for GRAPH ENVT FORCING VARIABLES
-    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    if(dyn_pop_sce.option(Options::includeForcingLayers))
     {
        cout << "import environmental variables in one shoot..." << endl;
 
@@ -1412,6 +1457,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        //"oxygen" 23              "oxygen_norm" 24         "oxygen_alpha" 25
        //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
        //"bathymetry" 29
+       //"shippingdensity" 30
+       //"siltfraction" 31
 
        cout << "environment_on_coord.size() "<< environment_on_coord.size() << endl;
        for (unsigned int n=0; n<environment_on_coord.size(); n++)
@@ -1445,6 +1492,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           graph_point_DissolvedCarbon_norm.at(n)=environment_on_coord.at(n).dissolvedcarbon_norm;
           graph_point_DissolvedCarbon_alpha.at(n)=environment_on_coord.at(n).dissolvedcarbon_alpha;
           graph_point_bathymetry.at(n)=environment_on_coord.at(n).bathymetry; // 29
+          graph_point_shippingdensity.at(n)=environment_on_coord.at(n).shippingdensity; // 30
+          graph_point_siltfraction.at(n)=environment_on_coord.at(n).siltfraction; // 31
        }
 
        //check
@@ -1533,11 +1582,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // read fuel price (vessel size dependent for the time being)
             if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
             {
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
-            }
-            else
-            {
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
 
                 map<int,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -1549,6 +1594,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 {
                     outc(cout << pos->first << " " << pos->second);
                 }
+            }
+            else
+            {
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
 
             }
 
@@ -1589,6 +1638,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                        graph_point_DissolvedCarbon_norm[i],
                                        graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_bathymetry[i],
+                                       graph_point_shippingdensity[i],
+                                       graph_point_siltfraction[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // meanweight not set from a GIS layer....
@@ -1640,6 +1691,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     graph_point_DissolvedCarbon_norm[i],
                                     graph_point_DissolvedCarbon_alpha[i],
                                     graph_point_bathymetry[i],
+                                    graph_point_shippingdensity[i],
+                                    graph_point_siltfraction[i],
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....
@@ -1687,7 +1740,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
     multimap<int, double> prop_funcgr_biomass_per_node;
     multimap<int, double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-    if(dyn_pop_sce.option(Options::impact_benthos_N))
+    if(dyn_pop_sce.option(Options::modelBenthosInN))
     {
         prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
         benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
@@ -1730,7 +1783,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        if(dyn_pop_sce.option(Options::impact_benthos_N))
+        if(dyn_pop_sce.option(Options::modelBenthosInN))
         {
             multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
             multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
@@ -1767,8 +1820,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
             {
-                outc(cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
-                     ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl);
+                cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
+                     ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl;
                 int aa;
                 cin>>aa;
             }
@@ -1830,7 +1883,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                             init_recovery_rates_per_funcgr,
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                            is_impact_benthos_N,
+                                            is_benthos_in_numbers,
                                             init_h_betas_per_pop);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
@@ -1845,7 +1898,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
         {
-            cerr << "something wrong for benthos_tot_biomass here!" << endl;
+            cout << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again" << endl;
             int aa;
             cin >> aa;
         }
@@ -2276,7 +2329,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // input data
         multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
-        if(dyn_pop_sce.option(Options::diffuseN))
+        if(dyn_pop_sce.option(Options::diffusePopN))
         {
             cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
             field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
@@ -2318,7 +2371,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
         dout(cout << "overall migration has been read correctly" << endl);
 
-        double landings_so_far=0;
+        double landings_so_far=1.0;
 
         double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
         double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);
@@ -2564,6 +2617,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                  " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
         }
     }
+    else
+    {
+        // need to inform with a vector of three zeros at least
+        vector<double> init_tariffs(3, 0);
+        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+        {
+            nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+        }
+    }
 
 
     dout(cout  << "---------------------------" << endl);
@@ -2582,7 +2644,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                                                )
                                                                 );
     vector<vector<double> > searchVolMat(nbpops, vector<double> (NBSZGROUP));
-
+    vector<vector<double> > juveniles_diet_preference(nbpops, vector<double> (nbpops));
+    vector<vector<double> > adults_diet_preference(nbpops, vector<double> (nbpops));
+    int mat_cat=0; //init - split juveniles vs. adult categories
+    vector<int> mat_cats(nbpops, 0);
 
     if(dyn_pop_sce.option(Options::sizeSpectra))
     {
@@ -2590,6 +2655,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // compute a predKernel and a searchVol
         // predKernel.at(j).at(kprey).at(k).at(name_pop)
+
+        // read-in multimap on diet of stocks per stock
+        multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
+        multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
 
 
        cout << "compute Ws_at_szgroup..." << endl;
@@ -2636,7 +2705,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "compute PredKernel..." << endl;
         vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-        vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        //BEFORE 050320129 vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        vector<double> beta (nbpops, 80);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
         for (unsigned int prey=0; prey<nbpops; ++prey)
         {  // loop over prey
            for (unsigned int j=0; j<nbpops; ++j)
@@ -2676,19 +2746,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cin >> a;
         }
 
-  // parameters to compute the search volume (volumetric search rate)
-  cout << "read few parameters ..." << endl;
-  auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6);
-  double kappa  = std::get<0>(param);
-  double q      = std::get<1>(param);     // Scaling of search volume
-  double n      = std::get<2>(param);
-  double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
-  double lambda= 2+q-n;
-  cout << " reading kappa is " << kappa << endl;
-  cout << " reading q is " << q << endl;
-  cout << " reading n is " << n << endl;
-  cout << " reading f0est is " << f0est << endl;
-  cout << " reading lambda is " << lambda << endl;
 
   const string separator=";";
 
@@ -2709,13 +2766,45 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double,double, double, double> > biological_traits_params;
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, string> > biological_traits_params;
   bool r = read_biological_traits_params (is, separator, biological_traits_params);
+
+  //colnames:
+  //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
+  //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
+
+  // parameters to compute the search volume (volumetric search rate)
+  cout << "read few parameters ..." << endl;
+  //auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6); //TODO: AVOID HARDCODING FOR THESE BUNCH OF PARAMS
+  //double kappa  = std::get<0>(param);
+  //double q      = std::get<1>(param);     // Scaling of search volume
+  //double n      = std::get<2>(param);
+  //double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
+
 
   cout << "compute the searchVolMat..." << endl;
   for (unsigned int prey=0; prey<nbpops; ++prey)
   {  // loop over prey
-     double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
+
+
+      double kappa  = get<30>(biological_traits_params.at(prey));
+      double q      = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
+      double n      = get<32>(biological_traits_params.at(prey));
+      double f0est  = get<33>(biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
+      mat_cat       = get<28>(biological_traits_params.at(prey));
+      mat_cats.at(prey)=mat_cat;
+
+      double lambda= 2+q-n;
+      cout << " reading kappa is " << kappa << endl;
+      cout << " reading q is " << q << endl;
+      cout << " reading n is " << n << endl;
+      cout << " reading f0est is " << f0est << endl;
+      cout << " reading lambda is " << lambda << endl;
+
+      double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
 
      //cout << " this prey " << prey << " alphae is " << alphae << endl;
      //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(prey) is " << beta.at(prey) << " lambda is " << lambda << endl;
@@ -2723,11 +2812,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
      for (unsigned int j=0; j<nbpops; ++j)
      {  // loop over predators
          for (unsigned int k=0; k<NBSZGROUP; ++k)
-         {  // loop over predator sizes
+         {
+             // loop over predator sizes
             double Wk = get<2>(biological_traits_params.at(j));
             double Winf = get<1>(biological_traits_params.at(j));
             double h               = 3*Wk/(0.6*   pow(Winf,(-0.333333333))   ); // Calculate h from K
-            double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            // TODO input eta_m (specific to stock)
+            // TODO: double h               = (3/0.36)*Wk*pow(Winf,(0.25))*pow(eta_m,(-0.333333333)); // Calculate h from K
+            //BEFORE 05032019: double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            double gamma           = (f0est*h / (alphae*kappa*0.5*(1-f0est)));
             //cout << "j: " << j << " k: " << k << endl;
             //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
             //cout << "h: " << h << " gamma: " << gamma << endl;
@@ -2743,8 +2836,40 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   // we will instead assume feeding level at 0.6
   // this is why this loop over prey seems useless for now
 
+
+
+
   }
 
+
+
+  cout << "Read in the diet preference..." << endl;
+  for (unsigned int j=0; j<nbpops; ++j)
+  {  // loop over predators
+      multimap<int,double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
+      multimap<int,double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
+      multimap<int,double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(j);
+      multimap<int,double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(j);
+      vector<double> ad_diet_pref;
+      for (multimap<int, double>::iterator pos=lower_ia; pos != upper_ia; pos++)
+                ad_diet_pref.push_back(pos->second);
+      vector<double> juv_diet_pref;
+      for (multimap<int, double>::iterator pos=lower_ij; pos != upper_ij; pos++)
+                juv_diet_pref.push_back(pos->second);
+      if(ad_diet_pref.size()!=nbpops) cout << "error dim in input file for adults diet preference" << endl;
+      if(juv_diet_pref.size()!=nbpops) cout << "error dim in input file for juveniles diet preference" << endl;
+
+      for (unsigned int prey=0; prey<nbpops; ++prey)
+          {  // loop over prey
+          // assign diet info to this stock
+            adults_diet_preference.at(j).at(prey)= ad_diet_pref.at(prey);
+            juveniles_diet_preference.at(j).at(prey)= juv_diet_pref.at(prey);
+
+          // useless because getters not used
+          //populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
+          //populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
+          }
+   }
 
 
     cout << "Initial objects for sizeSpectra option...ok" << endl;
@@ -2782,6 +2907,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read metier gear width model type parameters....ok? " << endl;
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
 
+    // oth_land are not metier-specific by nature, but the reader is placed here for coherence...
+    vector< vector<double> > selectivity_per_stock_ogives_for_oth_land= read_selectivity_per_stock_ogives_for_oth_land(nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
 
     // get the name of the metiers
     // copy only unique elements into name_metiers
@@ -2822,6 +2949,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
+
 
         // metier_target_stocks for this particular metier
         multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
@@ -3178,7 +3306,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(dyn_alloc_sce.option(Options::fishing_credits))
         {
-            cout << "Read in fishing credits for this vessel " << vesselids[i] << endl;
+            tout(cout << "Read in fishing credits for this vessel " << vesselids[i] << endl);
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
             for (int icr=0; icr <spe_fishing_credits.size();++icr)
             {
@@ -3983,6 +4111,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumdiscardsratio.open(filename.c_str());
     std::string popnodes_cumdiscardsratio_filename = filename;
 
+    ofstream popnodes_nbchoked;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_nbchoked_"+namesimu+".dat";
+    popnodes_nbchoked.open(filename.c_str());
+    std::string popnodes_nbchoked_filename = filename;
+
     ofstream popnodes_tariffs;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
     popnodes_tariffs.open(filename.c_str());
@@ -4098,7 +4231,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // initial export at t=0
-    //if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    // if(dyn_pop_sce.option(Options::include_forcing_layers))
     //{
 
         // Flush and updates all statistics for nodes envt
@@ -4181,7 +4314,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        int biocheck = applyBiologicalModule2(tstep,
+        if(!applyBiologicalModule2(tstep,
+                                             a_month_i,
                                              namesimu,
                                              namefolderinput,
                                              namefolderoutput,
@@ -4201,6 +4335,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches_with_threshold,
                                              popnodes_cumdiscards,
                                              popnodes_cumdiscardsratio,
+                                             popnodes_nbchoked,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -4223,6 +4358,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches_with_threshold_filename,
                                              popnodes_cumdiscards_filename,
                                              popnodes_cumdiscardsratio_filename,
+                                             popnodes_nbchoked_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,
@@ -4232,6 +4368,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              tsteps_months,
                                              implicit_pops,
                                              calib_oth_landings,
+                                             selectivity_per_stock_ogives_for_oth_land,
                                              is_tacs,
                                              export_vmslike,
                                              freq_do_growth,
@@ -4245,12 +4382,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_alloc_sce,
                                              Ws_at_szgroup,
                                              predKernel,
-                                             searchVolMat
-                                           );
+                                             searchVolMat,
+                                             juveniles_diet_preference,
+                                             adults_diet_preference,
+                                             mat_cats
+                                           ) )
+                throw std::runtime_error("Error while executing: applyBiologicalModule2");
 
 
 
-        if(dyn_pop_sce.option(Options::diffuseN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+
+        if(dyn_pop_sce.option(Options::diffusePopN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
@@ -4892,6 +5034,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     stringstream out;
                     out << i;
 
+                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " << folder_name_parameterization << " " << inputfolder << endl;
+
                     // read a new spatial_availability
                     auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file,  type_of_avai_field_to_read);
                     auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, type_of_avai_field_to_read);
@@ -5383,17 +5527,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
                 cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
                         " given the target F " <<  ftarget_allpopav << "  and the assessed F averaged over tariff pops " <<  fbar_py_allpopav  << endl;
-                for (unsigned int icl=0; icl <tariff_pop.size();++icl)
+                for (unsigned int icl=0; icl <arbitary_breaks_for_tariff.size();++icl)
                 {
                     arbitary_breaks_for_tariff.at(icl) * fmultiplier;
                 }
 
                // 2 - Re-init vessel total credits
-                cout<< "Re-init vessel total credits..." << endl;
+                tout(cout<< "Re-init vessel total credits..." << endl);
                 fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {
-                   cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl;
+                   dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
                    vector <double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
                    for (int icr=0; icr <spe_fishing_credits.size();++icr)
                    {
@@ -5455,38 +5599,70 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //cout << endl;
 
 
-                // loop over to find out the mean lpue
-                double cumcatches = 0, cumeffort = 0, mean_lpue;
+                // loop over to find out the mean pue
+                double cumcatches = 0, cumdiscards = 0, cumeffort = 0, mean_pue;
                 for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
                 {
-                    for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                    if(update_tariffs_based_on_lpue_or_dpue_code==1)
                     {
+                       dout(cout << "Updating tariffs based on lpue" << endl);
+                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                       {
                         cumcatches+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                       }
                     }
+                    if(update_tariffs_based_on_lpue_or_dpue_code==2)
+                    {
+                       dout(cout << "Updating tariffs based on dpue" << endl);
+                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                        {
+                         cumdiscards+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                        }
+                    }
+
                     cumeffort+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                 }
                 //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
                 //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
                 if(cumeffort!=0){
-                    mean_lpue =cumcatches/cumeffort;
-                    dout(cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl);
+                    if(update_tariffs_based_on_lpue_or_dpue_code==1) mean_pue =cumcatches/cumeffort;
+                    if(update_tariffs_based_on_lpue_or_dpue_code==2) mean_pue =cumdiscards/cumeffort;
+                    dout(cout << " mean_pue of reference for the update is.... " << mean_pue << endl);
 
 
                     // loop over to scale the tariff (on each node) up or down (caution: by one category)
-                    double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
+                    double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
                     for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
                     {
                         tariff_this_node =  nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
                         effort_on_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                         double cumcatches_this_node=0;
-                        for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                        if(update_tariffs_based_on_lpue_or_dpue_code==1)
                         {
+                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                           {
                             cumcatches_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                           }
                         }
-                        node_lpue = cumcatches_this_node /effort_on_this_node;
+                        double cumdiscards_this_node=0;
+                        if(update_tariffs_based_on_lpue_or_dpue_code==2)
+                        {
+                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
+                           {
+                            cumdiscards_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                           }
+                        }
+                        if(update_tariffs_based_on_lpue_or_dpue_code==1) {
+                            node_pue = cumcatches_this_node /effort_on_this_node;
+                            nb_times_diff    =  node_pue/mean_pue;
+                        }
 
-                        nb_times_diff    =  node_lpue/mean_lpue;
+                        if(update_tariffs_based_on_lpue_or_dpue_code==2) {
+                            node_pue = cumdiscards_this_node /effort_on_this_node;
+                            nb_times_diff    =  node_pue/mean_pue;
+                        }
+
                         //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
 
 
@@ -5509,7 +5685,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             if((count2) >= arbitary_breaks_for_tariff.size()-1) break;
                             count2 = count2+1;
                         }
-                        if(count1>count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
+
+                        // if landing/effort or discard/effort increases we want to increase the tariff on this areas
+                        if(count1>count2 && ((count2+1) < arbitary_breaks_for_tariff.size()))  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
                         if(count1<count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2-1);
                         if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);
 
@@ -5720,7 +5898,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         ///------------------------------///
         ///------------------------------///
-        ///  THE QUOTA UPTAKES           ///
+        ///  THE QUOTA UPTAKES & CHOKING ///
         ///------------------------------///
         ///------------------------------///
 
@@ -5751,6 +5929,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    global_quotas_uptake.at(pop) << " " <<
                                      populations.at(pop)->get_tac()->get_current_tac() << endl;
 
+
+
+                   // if more than x% of vessels choked then declare this stock as choking fisheries
+                   int nbchoked=0;
+                   for (unsigned int v=0; v<vessels.size(); v++)
+                   {
+                       nbchoked+=vessels.at(v)->get_is_choked().at(pop);
+                   }
+                   // HARDCODED threshold...
+                   if(nbchoked>=ceil(0.3*vessels.size())) populations.at(pop)->set_is_choking_fisheries(1);
+
                 }
            }
         }
@@ -5762,7 +5951,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///  THE DIFFUSIVE ENVT          ///
         ///------------------------------///
         ///------------------------------///
-        if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+        if(dyn_pop_sce.option(Options::diffuseNutrients))
         {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
             if((tstep % numStepDiffusions) == (numStepDiffusions-1))
@@ -5807,7 +5996,99 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                }
           }
 
+          ///------------------------------///
+          ///------------------------------///
+          ///  THE DIFFUSIVE BENTHOS       ///
+          ///------------------------------///
+          ///------------------------------///
+          if(dyn_pop_sce.option(Options::diffuseBenthos))
+          {
+              int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
+              if((tstep % numStepDiffusions) == (numStepDiffusions-1))
+              {
 
+                 // naive diffusion
+                 double coeff_diffusion =0.01;
+                 bool r= diffuse_Benthos_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+
+                 // gradient diffusion
+                 // using the rtree
+                 // bool r=  diffuse_Benthos_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+
+
+
+
+
+              }
+            }
+
+
+
+
+          ///------------------------------///
+          ///------------------------------///
+          ///  SHIPPING DISTURBING BENTHOS ///
+          ///------------------------------///
+          ///------------------------------///
+
+       if(dyn_pop_sce.option(Options::modelShippingOnBenthos))
+        {
+          if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+          {
+              double shippingdensity=0;
+              double bathymetry=0;
+              for (unsigned int i=0; i<nodes.size(); i++)
+              {
+                 shippingdensity = nodes.at(i)->get_shippingdensity();
+                 if(dyn_alloc_sce.option(Options::halfShippingDensity)) shippingdensity=shippingdensity/2;
+                 if(shippingdensity>0)
+                 {
+                     bathymetry =nodes.at(i)->get_bathymetry();
+                     for (unsigned int funcid=0; funcid< nodes.at(i)->get_benthos_tot_biomass().size(); funcid++)
+                     {
+                        double scaling =1000;
+                        double loss_after_1_month_shipping_here = -1;
+                        if(bathymetry!=0) loss_after_1_month_shipping_here =(shippingdensity/12)/scaling *1/abs(bathymetry);
+                        //look at scaling range: 1-exp( (6000/12/(100:1000)) * 1/abs(-10)) // e.g at 10 m deep
+                        // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
+                        double decrease_factor_on_benthos_funcgroup=0;
+
+                        if(dyn_pop_sce.option(Options::modelBenthosInN))
+                        {
+                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
+                         double current_nb                    = nodes.at(i)->get_benthos_tot_number(funcid);
+                         double next_nb                       = current_nb*(1+decrease_factor_on_benthos_funcgroup);
+                         nodes.at(i)->set_benthos_tot_number(funcid, next_nb); // update
+                        }
+                        else
+                        { // impact on biomass instead...
+                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
+                         double current_bio                    = nodes.at(i)->get_benthos_tot_biomass(funcid);
+                         double next_bio                       = current_bio*(1+decrease_factor_on_benthos_funcgroup);
+                         nodes.at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
+                        }
+
+                     } // end funcid
+
+
+                 }
+              }
+          }
+        }
+
+          ///------------------------------///
+          ///------------------------------///
+          ///  REINIT SOME VALUES ON NODES ///
+          ///------------------------------///
+          ///------------------------------///
+
+          if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+          {
+              for (unsigned int i=0; i<nodes.size(); i++)
+              {
+              nodes.at(i)->set_nbchoked(0);
+              }
+          }
 
 
 

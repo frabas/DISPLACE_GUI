@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -34,30 +34,10 @@ NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(piew(), pieh()), 11, 7, 17),
       mNode(node),
       mController(controller),
-      mModelIndex(indx),
-      mGrid()
+      mModelIndex(indx)
 {
     int l = (mNode->get_marine_landscape() * 0x1000000) / 1000;
     c = QColor(QRgb(l & 0x00ffffff));
-
-    double res_km = mNode->getModel()->scenario().getGraph_res();
-
-    double psi = node->mNode->get_x() / 180.0 * M_PI;
-    double phi = node->mNode->get_y() / 180.0 * M_PI;
-
-    // one degree of latitude, in meters, is: 111132.954 - 559.822 cos (2 phi) + 1.175 cos (4 phi)
-    // one degree of longitude, in meter, is: pi / 180  *  6,367,449 * cos psi.
-
-    double dy = 1000.0 * res_km  / (111132.954 - 559.822 * std::cos(2.0 * phi) + 1.175 * std::cos(4.0 * phi));
-    double dx = 1000.0 * res_km  / (M_PI / 180.0 * 6367449 * std::cos(psi) );
-
-    PointWorldPx c2 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi - dx/2, phi - dy/2), baseZoom());
-    PointWorldPx c1 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi + dx/2, phi + dy/2), baseZoom());
-
-    mGrid.setHeight(c2.y() - c1.y());
-    mGrid.setWidth(c2.x() - c1.x() );
-
-    setSizePx(mGrid);
 }
 
 std::shared_ptr<types::EnvironmentData> NodeGraphics::getEnvtData()
@@ -108,7 +88,10 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     QList<int> ilist = getInterestingList();
 
     for (int i = 0; i < ilist.size(); ++i) {
-        tot += getValueForPop(ilist[i]);
+        auto v = getValueForPop(ilist[i]);
+        if (v.is_initialized()) {
+            tot += v.value();
+        }
     }
 
     int RADIUS = piew() / LastType * (LastType - mType);
@@ -116,13 +99,16 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     if (ilist.size() > 1) {
         if (tot > 1e-3) {
             double inc = 0.0;
-            double v;
+            boost::optional<double> v;
             for (int i = 0; i < ilist.size(); ++i) {
                 v = getValueForPop(ilist[i]);
-                v = v / tot * 360.0 * 16.0;
-                painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).color(ilist[i]));
-                painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
-                inc += v;
+
+                if (v.is_initialized()) {
+                    double vr = v.value() / tot * 360.0 * 16.0;
+                    painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).color(ilist[i]));
+                    painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (vr));
+                    inc += vr;
+                }
             }
         } else {
             /* Don't display "zero" values
@@ -132,9 +118,11 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
             */
         }
     } else if (ilist.size() == 1) {
-        double v = getValueForPop(ilist[0]);
-        painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(v));
-        painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+        boost::optional<double> v = getValueForPop(ilist[0]);
+        if (v.is_initialized()) {
+            painter.setBrush(mController->getPalette(mModelIndex, ValueRole).color(v.value()));
+            painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+        }
     } else {        // nothing to display.
         /*
         painter.setBrush(Qt::transparent);
@@ -144,7 +132,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     }
 }
 
-double NodeWithPopStatsGraphics::getValueForPop(int pop) const
+boost::optional<double> NodeWithPopStatsGraphics::getValueForPop(int pop) const
 {
     switch (mType) {
     case Population:
@@ -259,6 +247,14 @@ void NodeWithCumDiscardsRatioGraphics::drawShape(QPainter &painter, const qmapco
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
+void NodeWithNbChokedGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((double)mNode->get_nbchoked()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
 
 void NodeWithTariffs0Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
@@ -362,6 +358,31 @@ void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol:
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->bathymetry : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
+    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color(ca));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithShippingdensityGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->shippingdensity : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color((float)mNode->get_shippingdensity()));
+    painter.setBrush(mController->getPalette(mModelIndex,ShippingdensityRole).color(ca));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithSiltfractionGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->siltfraction : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color((float)mNode->get_siltfraction()));
+    painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }

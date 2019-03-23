@@ -2,7 +2,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ using namespace std;
 
 
 
-int applyBiologicalModule2(int tstep, const string &namesimu,
+bool applyBiologicalModule2(int tstep, int a_month_i, const string &namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,
@@ -57,6 +57,7 @@ int applyBiologicalModule2(int tstep, const string &namesimu,
                           ofstream &popnodes_cumcatches_with_threshold,
                           ofstream &popnodes_cumdiscards,
                           ofstream &popnodes_cumdiscardsratio,
+                          ofstream &popnodes_nbchoked,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
@@ -79,6 +80,7 @@ int applyBiologicalModule2(int tstep, const string &namesimu,
                           const string & popnodes_cumcatches_with_threshold_filename,
                           const string & popnodes_cumdiscards_filename,
                           const string & popnodes_cumdiscardsratio_filename,
+                          const string & popnodes_nbchoked_filename,
                           const string & popnodes_tariffs_filename,
                           const string & popnodes_benthos_biomass_filename,
                           const string & popnodes_benthos_number_filename,
@@ -86,6 +88,7 @@ int applyBiologicalModule2(int tstep, const string &namesimu,
                           const vector<int> & tsteps_years, const vector<int> & tsteps_months,
                           const vector<int> & implicit_pops,
                           const vector<double> & calib_oth_landings,
+                          vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
                           int export_vmslike,
                           int freq_do_growth,
@@ -99,7 +102,10 @@ int applyBiologicalModule2(int tstep, const string &namesimu,
                           const DynAllocOptions &dyn_alloc_sce,
                           vector<vector<double> > &Ws_at_szgroup,
                           vector<vector<vector<vector<double> > > > &predKernel,
-                          vector<vector<double> > &searchVolMat
+                          vector<vector<double> > &searchVolMat,
+                          vector<vector<double> > &juveniles_diet_preference,
+                          vector<vector<double> > &adults_diet_preference,
+                          vector<int> &  mat_cats
                            );
 
 

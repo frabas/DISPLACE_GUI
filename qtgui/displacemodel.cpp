@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ DisplaceModel::DisplaceModel()
       mSimuName("simu1"),
       mLinkedDbName(),
       mIndex(-1),
-      mSimulSteps(8761),
+      mSimulSteps(8762),
       mUseStaticPaths(0),
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
@@ -100,7 +100,10 @@ DisplaceModel::DisplaceModel()
 
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+    //connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+    connect (mOutputFileParser, &OutputFileParser::parseCompleted, [this]() {
+        emit outputParsed();
+    });
 
     mFuncGroups->setValuesFormatString(tr("Functional Group #%1"));
     mFuncGroups->addSpecialValue(tr("Total"));
@@ -595,6 +598,13 @@ void DisplaceModel::collectPopCumdiscardsratio(int step, int node_idx, double cu
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopNbchoked(int step, int node_idx, double nbchoked)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_nbchoked(nbchoked);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopTariffs(int step, int node_idx, vector<double> tariffs)
 {
     checkStatsCollection(step);
@@ -623,6 +633,21 @@ void DisplaceModel::collectBathymetry(int step, int node_idx,  double bathy)
     mNodes.at(node_idx)->setBathymetry(bathy);
     mNodesStatsDirty = true;
 }
+
+void DisplaceModel::collectShippingdensity(int step, int node_idx,  double shippingdensity)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setShippingdensity(shippingdensity);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectSiltfraction(int step, int node_idx,  double siltfraction)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setSiltfraction(siltfraction);
+    mNodesStatsDirty = true;
+}
+
 
 void DisplaceModel::collectWind(int step, int node_idx,  double wind)
 {
@@ -1061,7 +1086,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1118,7 +1143,17 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
     // update scenario nrow_coord, nrow_graph
     qDebug() << "1) Node " << node->get_idx_node().toIndex() << " has " << node.use_count() << " instances";
 
-    mNodes[node->get_idx_node().toIndex()].reset();       // removed
+    //mNodes[].reset();       // removed
+
+    auto idx = node->get_idx_node().toIndex();
+
+
+    // fix the node indexes
+    for (auto i = idx+1; i < mNodes.count(); ++i) {
+        mNodes.at(i)->mNode->setNodeIdx(types::NodeId{ static_cast<uint16_t>(i-1) });
+    }
+    mNodes.removeAt(idx);
+
     mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node().toIndex()).toStdString().c_str());
 
     OGRFeature *ftr;
@@ -1728,13 +1763,12 @@ void DisplaceModel::setCurrentStep(int step)
 {
     mCurrentStep = step;
     if (mDb) {
-        mDb->updateVesselsToStep(mCurrentStep, mVessels);
-        mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
-        mDb->updatePopValuesForNodesToStep(mCurrentStep, mNodes);
-
-        // re-loading Historical data is not needed!
-
-        /* TODO: Update here all other entries */
+        if (modelType() != ModelType::LiveModelType) {
+            // SHOULD NOT BE CALLED IN LIVE MODE
+            mDb->updateVesselsToStep(mCurrentStep, mVessels);
+            mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
+            mDb->updatePopValuesForNodesToStep(mCurrentStep, mNodes);
+        }
     }
 }
 
@@ -1895,6 +1929,12 @@ bool DisplaceModel::loadNodes()
 
     string filename_bathymetry_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_bathymetry.dat";
+
+    string filename_shippingdensity_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_shippingdensity.dat";
+
+    string filename_siltfraction_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_siltfraction.dat";
 
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
@@ -2057,6 +2097,33 @@ bool DisplaceModel::loadNodes()
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_bathymetry_graph.c_str()));
 
+    // input data, for the shippingdensity for each point of the graph
+    ifstream shippingdensity_graph;
+    shippingdensity_graph.open(filename_shippingdensity_graph.c_str());
+    if(shippingdensity_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_shippingdensity_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_shippingdensity;
+    if (!fill_from_shippingdensity(shippingdensity_graph, graph_point_shippingdensity, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_shippingdensity_graph.c_str()));
+
+    ifstream siltfraction_graph;
+    siltfraction_graph.open(filename_siltfraction_graph.c_str());
+    if(siltfraction_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_siltfraction_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_siltfraction;
+    if (!fill_from_siltfraction(siltfraction_graph, graph_point_siltfraction, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_siltfraction_graph.c_str()));
+
     vector<double> graph_point_landscape_norm(nrow_coord, 0);
     vector<double> graph_point_landscape_alpha(nrow_coord, 0);
     vector<double> graph_point_wind_norm(nrow_coord, 0);
@@ -2160,13 +2227,13 @@ bool DisplaceModel::loadNodes()
                                 "fuelprice_plus20percent"))
             {
                 cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
                 cout << "...OK" << endl;
             }
             else
             {
                 cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
                 map<int,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -2220,6 +2287,8 @@ bool DisplaceModel::loadNodes()
                                        graph_point_DissolvedCarbon_norm[i],
                                        graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_bathymetry[i],
+                                       graph_point_shippingdensity[i],
+                                       graph_point_siltfraction[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
@@ -2275,6 +2344,8 @@ bool DisplaceModel::loadNodes()
                                  graph_point_DissolvedCarbon_norm[i],
                                  graph_point_DissolvedCarbon_alpha[i],
                                  graph_point_bathymetry[i],
+                                 graph_point_shippingdensity[i],
+                                 graph_point_siltfraction[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer
@@ -2351,6 +2422,16 @@ bool DisplaceModel::loadNodes()
        }
 
     }
+    else
+    {
+        // need to inform with a vector of three zeros at least
+        vector<double> init_tariffs(3, 0);
+        for(size_t a_idx=0; a_idx<mNodes.size(); a_idx++)
+        {
+            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+        }
+    }
+
 
 
 

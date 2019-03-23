@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,8 @@ double _DissolvedCarbon,
 double _DissolvedCarbon_norm,
 double _DissolvedCarbon_alpha,
 double _bathymetry,
+double _shippingdensity,
+double _siltfraction,
 double _benthos_biomass,
 double _benthos_number,
 double _benthos_meanweight,
@@ -74,7 +76,7 @@ vector<double> _freq_usual_fgrounds)
         _Phosphorus, _Phosphorus_norm,  _Phosphorus_alpha,
         _Oxygen,  _Oxygen_norm,  _Oxygen_alpha,
         _DissolvedCarbon,  _DissolvedCarbon_norm,  _DissolvedCarbon_alpha,
-        _bathymetry,
+        _bathymetry, _shippingdensity, _siltfraction,
        _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
@@ -99,7 +101,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 {
 
 }

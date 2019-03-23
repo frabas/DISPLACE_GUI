@@ -70,7 +70,8 @@ bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
 
 
 
-        if(totN_this_pop!=0) SQLiteTable::insert (p->statement, std::make_tuple(
+     //   if(totN_this_pop!=0) SQLiteTable::insert (p->statement, std::make_tuple(
+            SQLiteTable::insert (p->statement, std::make_tuple(
                     (int)node->get_idx_node().toIndex(),
                     tstep,
                     (int)name_pop,
@@ -108,7 +109,7 @@ void PopTable::init()
                                                       sqlite::op::max(fldTStep)
                                                       )
                 .where (sqlite::op::le(fldTStep))
-                .groupBy (fldNodeId);
+                .groupBy (fldNodeId, fldPopId);
 
         p->allNodesQueryStatement = sqlite::SQLiteStatement(db(), sqlAllQuery);
     }

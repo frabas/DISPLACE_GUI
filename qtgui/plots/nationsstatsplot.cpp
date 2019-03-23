@@ -23,7 +23,7 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
 {
     if (theplot != nullptr) {
         // do not cache
-        update(theplot);
+        update(theplot, stat);
     } else {
         if (model != lastModel || stat != lastStat) {
             // need to properly update
@@ -32,14 +32,13 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
             invalidate();
         }
         if (isVisible())
-            update(nullptr);
+            update(plotNations, stat);
     }
 }
 
-void NationsStatsPlot::update(QCustomPlot *plot)
+void NationsStatsPlot::update(QCustomPlot *plot, displace::plot::NationsStat stat)
 {
     auto model = lastModel;
-    auto stat = lastStat;
 
     qDebug() << "NationsStatPlot UPDATE";
 
@@ -102,7 +101,9 @@ void NationsStatsPlot::update(QCustomPlot *plot)
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/finland-flag-round-icon-16.png")));
         if(nationName.toStdString()=="EE" || nationName.toStdString()=="EST")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/estonia-flag-round-icon-16.png")));
-        if(nationName.toStdString()=="LT" || nationName.toStdString()=="LTV")
+        if(nationName.toStdString()=="LTU")
+             graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/lithuania-flag-round-icon-16.png")));
+        if(nationName.toStdString()=="LVA")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/latvia-flag-round-icon-16.png")));
         if(nationName.toStdString()=="DNK" || nationName.toStdString()=="DEN")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/denmark-flag-round-icon-16.png")));
@@ -156,11 +157,11 @@ void NationsStatsPlot::update(QCustomPlot *plot)
         break;
     case NationsStat::SweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        plot->yAxis->setLabel(QObject::tr("Swept Area (m^2)"));
         break;
     case NationsStat::RevenuePerSweptArea:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/km^2)"));
         break;
     case NationsStat::GVA:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -314,5 +315,5 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
 
 void NationsStatsPlot::doUpdate()
 {
-    update(nullptr);
+    update(plotNations, lastStat);
 }

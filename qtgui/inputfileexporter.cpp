@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ InputFileExporter::InputFileExporter()
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
-                                    QString bathymetrypath,
+                                    QString bathymetrypath, QString shippingdensitypath,  QString siltfractionpath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -160,7 +160,30 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         bathymetrystream.setDevice(&bathymetryfile);
     }
 
+    QFile shippingdensityfile(shippingdensitypath);
+    QTextStream shippingdensitystream;
+    if (!shippingdensitypath.isEmpty()) {
+        if (!shippingdensityfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open shippingdensity file %1: %2"))
+                    .arg(shippingdensitypath).arg(shippingdensityfile.errorString());
+            return false;
+        }
+        shippingdensitystream.setDevice(&shippingdensityfile);
+    }
 
+
+    QFile siltfractionfile(siltfractionpath);
+    QTextStream siltfractionstream;
+    if (!siltfractionpath.isEmpty()) {
+        if (!siltfractionfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open siltfraction file %1: %2"))
+                    .arg(siltfractionpath).arg(siltfractionfile.errorString());
+            return false;
+        }
+        siltfractionstream.setDevice(&siltfractionfile);
+    }
 
 
     QFile bfile(benthospath);
@@ -243,6 +266,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 DissolvedCarbonstream << nd->get_DissolvedCarbon() << endl;
             if (bathymetryfile.isOpen())
                 bathymetrystream << nd->get_bathymetry() << endl;
+            if (shippingdensityfile.isOpen())
+                shippingdensitystream << nd->get_shippingdensity() << endl;
+            if (siltfractionfile.isOpen())
+                siltfractionstream << nd->get_siltfraction() << endl;
 
 
         }
@@ -276,6 +303,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     Oxygenfile.close();
     DissolvedCarbonfile.close();
     bathymetryfile.close();
+    shippingdensityfile.close();
+    siltfractionfile.close();
     bfile.close();
     bnbfile.close();
 

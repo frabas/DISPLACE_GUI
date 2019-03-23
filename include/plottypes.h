@@ -4,8 +4,8 @@
 namespace displace {
 namespace plot {
 
-enum class PopulationStat { Aggregate, Catches, Discards, Mortality, NatMortality, NumberAtAge, WeightAtAge, MaturityAtAge,
-                            SSB, QuotasUptake, Quotas, FFmsy, PropMature, FvsEffort };
+enum class PopulationStat { Aggregate, Catches, Discards, Mortality, RavFMortality, NatMortality, NumberAtAge, WeightAtAge, MaturityAtAge,
+                            SSB, QuotasUptake, Quotas, Choking, FFmsy, PropMature, FvsEffort };
 
 enum class BenthosStat { B_TotBiomass, B_Number, B_MeanWeight, B_TotBiomassOverK, B_NumberOverK};
 enum class FishfarmsStat { FF_FishMeanWeight, FF_FishHarvestedKg, FF_EggsHarvestedKg, FF_AnnualProfit,

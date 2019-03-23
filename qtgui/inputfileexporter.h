@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ public:
     InputFileExporter();
 
     bool exportGraph(QString graphpath, QString coordspath, QString landpath,  QString windpath, QString sstpath, QString salinitypath,
-                     QString Nitrogenpath, QString Phosporuspath, QString Oxygenpath, QString DissolvedCarbonpath, QString bathymetrypath,
-                     QString benthospath, QString benthosnbpath, QString areacodepath,
+                     QString Nitrogenpath, QString Phosporuspath, QString Oxygenpath, QString DissolvedCarbonpath, QString bathymetrypath, QString shippingdensitypath,
+                     QString siltfractionpath, QString benthospath, QString benthosnbpath, QString areacodepath,
                      QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:
     bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel,

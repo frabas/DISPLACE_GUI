@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -439,9 +439,10 @@ public:
         void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations,
                       std::vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
                       std::vector<int>& implicit_pops, vector<int>& grouped_tacs,
-                      int& tstep, double &graph_res,
+                      int& tstep, vector<double> &graph_res,
                       bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
-                      bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier, bool &is_fishing_credits, bool &is_impact_benthos_N);
+                      bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier, bool &is_fishing_credits,
+                      bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos, bool &is_benthos_in_numbers);
 		void clear_catch_pop_at_szgroup();
         void clear_ping_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();

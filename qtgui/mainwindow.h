@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -154,6 +154,8 @@ private slots:
     void on_actionPopulations_triggered();
     void on_actionTariffs_triggered();
     void on_actionBathymetry_triggered();
+    void on_actionShippingDensity_triggered();
+    void on_actionSiltFraction_triggered();
     void on_actionSalinity_triggered();
     void on_actionSST_triggered();
     void on_actionWind_triggered();
@@ -207,6 +209,8 @@ private slots:
     void on_actionLoadStockNames_triggered();
     void on_actionDecision_Trees_Editor_triggered();
     void on_actionCheck_for_isolated_subgraphs_triggered();
+    void on_actionRemove_isolated_subgraphs_triggered();
+
     void on_actionR_Console_triggered();
 
     void on_actionTime_Series_Editor_triggered();

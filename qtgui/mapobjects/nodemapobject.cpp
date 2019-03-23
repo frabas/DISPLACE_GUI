@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,10 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumDiscardsRatioGraphics(mNode.get(), mController, indx));
         break;
+    case GraphNodeWithNbChokedRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithNbChokedGraphics(mNode.get(), mController, indx));
+        break;
 
     case GraphNodeWithTariffs0:
         mGeometry = std::shared_ptr<NodeGraphics>(
@@ -169,6 +173,16 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
     case GraphNodeWithBathymetry:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithBathymetryGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithShippingdensity:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithShippingdensityGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithSiltfraction:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithSiltfractionGraphics(mNode.get(), mController, indx));
         break;
 
     default:
@@ -324,6 +338,16 @@ void NodeMapObject::updateProperties()
                 .arg(mNode->get_bathymetry());
         break;
 
+    case GraphNodeWithShippingdensity:
+        text += QString("<br/><b>Shipping density:</b> %1<br/>")
+                .arg(mNode->get_shippingdensity());
+        break;
+
+    case GraphNodeWithSiltfraction:
+        text += QString("<br/><b>Silt fraction:</b> %1<br/>")
+                .arg(mNode->get_siltfraction());
+        break;
+
     case GraphNodeWithCumFTimeRole:
         text += QString("<br/><b>Fishing Effort (hours):</b> %1<br/>")
                 .arg(mNode->get_cumftime());
@@ -358,6 +382,11 @@ void NodeMapObject::updateProperties()
         text += QString("<br/><b>Discards ratio:</b> %1<br/>")
                 .arg(mNode->get_cumdiscardsratio());
         break;
+
+    case GraphNodeWithNbChokedRole:
+        text += QString("<br/><b>Nb choked stks:</b> %1<br/>")
+                .arg(mNode->get_nbchoked());
+        break;
     }
 
     mWidget->setText(text);
@@ -370,8 +399,8 @@ QString NodeMapObject::updateStatText(QString prefix)
     QList<int> ilist = getInterestingList();
     double tot = 0.0;
 
-    foreach(int i, ilist) {
-        double val;
+    for(int i : ilist) {
+        boost::optional<double> val;
 
         switch (mRole) {
         case GraphNodeWithPopStatsRole:
@@ -402,8 +431,10 @@ QString NodeMapObject::updateStatText(QString prefix)
         text += QString("<b>%1 %2:</b> %3<br/>")
                 .arg(prefix)
                 .arg(i)
-                .arg(val);
-        tot += val;
+                .arg(val.is_initialized() ? QString::number(val.value()) : "-");
+        if (val.is_initialized()) {
+            tot += val.value();
+        }
     }
     text += QString("<b>Total:</b> %1<br/>")
             .arg(tot);

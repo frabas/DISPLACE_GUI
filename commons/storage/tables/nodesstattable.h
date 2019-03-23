@@ -33,6 +33,7 @@ private:
     FieldDef<FieldType::Real> cumCatchesThrshld = makeFieldDef("CumCatchesThrshld",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumDisc = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumDiscRatio = makeFieldDef("CumDiscardsRatio",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> nbChoked = makeFieldDef("NbChokedStks",FieldType::Real()).notNull();
 
     inline void init();
 public:
@@ -52,6 +53,7 @@ public:
         double cumcatchesthrshld;
         double cumdisc;
         double cumdiscratio;
+        double nbchoked;
     };
     void queryAllNodesAtStep(int tstep, std::function<bool(NodeStat stat)>);
 };

@@ -25,7 +25,7 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
 {
     if (theplot != nullptr) {
         // do not cache
-        update(theplot);
+        update(theplot, stat);
     } else {
         if (model != lastModel || stat != lastStat) {
             // need to properly update
@@ -45,7 +45,12 @@ void PopulationsStatPlot::doUpdate()
 
 void PopulationsStatPlot::update(QCustomPlot *theplot)
 {
-    qDebug() << "PopulationsStatPlot UPDATE";
+    update(theplot, lastStat);
+}
+
+void PopulationsStatPlot::update(QCustomPlot *theplot, displace::plot::PopulationStat stat)
+{
+    qDebug() << "PopulationsStatPlot UPDATE (Stat: " << static_cast<int>(stat) << ")";
 
     if (!theplot) {
         theplot = plot;
@@ -53,7 +58,6 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
     theplot->clearGraphs();
 
     auto model = lastModel;
-    auto stat = lastStat;
 
     QList<int> interPopList = model->getInterestingPops();
     QList<int> interSizeList = model->getInterestingSizes();
@@ -157,6 +161,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("kg"));
         break;
+    case PopulationStat::RavFMortality:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("av. annual F"));
+        break;
     case PopulationStat::Mortality:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("F"));
@@ -184,6 +192,10 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
     case PopulationStat::QuotasUptake:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Quota Uptake"));
+        break;
+    case PopulationStat::Choking:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Choking (0/1)"));
         break;
     case PopulationStat::Quotas:
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));

@@ -195,7 +195,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
 
     log.revenuePerSweptArea = 0;
     if(log.sweptArea>10) // i.e. at least 10 sqr meters
-          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea); // euro per m^2
+          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea/1e6); // euro per km^2
 
     log.GVA = v->get_GVA();
     log.GVAPerRevenue = v->get_GVAPerRevenue();
@@ -714,6 +714,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     FieldDef<FieldType::Integer> fldGroup("");
 
 
+
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
         fld = p->mPopDynTable->fldNz;
@@ -738,6 +739,13 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     case displace::plot::PopulationStat::Mortality:
         fld = p->mPopDynTable->fldF;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::RavFMortality:
+        fld = p->mPopDynTable->fldravF;
         name= p->mPopDynTable->name();
         fldTStep = p->mPopDynTable->fldTStep;
         fldPopId = p->mPopDynTable->fldPopId;
@@ -787,6 +795,13 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     case displace::plot::PopulationStat::Quotas:
         fld = p->mPopQuotasTable->fldQuotas;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Choking:
+        fld = p->mPopQuotasTable->fldChoking;
         name= p->mPopQuotasTable->name();
         fldTStep = p->mPopQuotasTable->fldTStep;
         fldPopId = p->mPopQuotasTable->fldPopId;

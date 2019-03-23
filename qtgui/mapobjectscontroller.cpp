@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -160,6 +160,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumdiscardsratio[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Discards Ratio (NodesStat CumDiscardsRatio)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumdiscardsRatio, mStatsLayerCumdiscardsratio[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerNbchoked[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Nb choked stocks (NodesStat NbChokedStks)")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerNbChoked, mStatsLayerNbchoked[model_n],type != DisplaceModel::LiveModelType ? false : false);
+
     mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerWind, mStatsLayerWind[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
@@ -183,6 +186,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     mStatsLayerBathymetry[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Bathymetry")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerBathymetry, mStatsLayerBathymetry[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerShippingdensity[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Shippingdensity")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerShippingdensity, mStatsLayerShippingdensity[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerSiltfraction[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Siltfraction")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerSiltfraction, mStatsLayerSiltfraction[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all (NodesTariffStat TariffAll)")).arg(model_n).toStdString()));
     addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
@@ -408,7 +417,8 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
     newlayer->addESRIShapefile(file);
-    addShapefileLayer(model_idx, layername, src, newlayer);
+    //addShapefileLayer(model_idx, layername, src, newlayer); // WRONG
+    addShapefileLayer(model_idx, path, src, newlayer);
 
     return true;
 }
@@ -493,6 +503,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerCumcatchesWithThreshold[model_n]->clearGeometries();
     mStatsLayerCumdiscards[model_n]->clearGeometries();
     mStatsLayerCumdiscardsratio[model_n]->clearGeometries();
+    mStatsLayerNbchoked[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerCumcatchesPerPop[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
@@ -510,6 +521,8 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerOxygen[model_n]->clearGeometries();
     mStatsLayerDissolvedCarbon[model_n]->clearGeometries();
     mStatsLayerBathymetry[model_n]->clearGeometries();
+    mStatsLayerShippingdensity[model_n]->clearGeometries();
+    mStatsLayerSiltfraction[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
 
@@ -596,6 +609,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumdiscardsratio[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithNbChokedRole, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerNbchoked[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
@@ -663,6 +680,14 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBathymetry, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBathymetry[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithShippingdensity, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerShippingdensity[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSiltfraction, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerSiltfraction[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
@@ -735,33 +760,36 @@ void MapObjectsController::delSelectedEdges(int model)
 
 void MapObjectsController::delSelectedNodes(int model)
 {
+    QList<NodeMapObject *> deleteList;
+
     foreach (NodeMapObject *node, mNodeSelection[model]) {
         std::shared_ptr<NodeData> nd = node->node();
-
-        // remove all adiacencies
+            // remove all adiacencies
         for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
             auto edge = nd->getAdiacencyByIdx(i);
 
             std::shared_ptr<NodeData> tg = edge->target.lock();
-            if(tg.get()) {
+            if (tg.get()) {
                 tg->removeAdiacencyByTarget(nd);
             }
         }
         // remove the node
-
-//        mGraphLayer[model]->removeGeometry();
         auto objs = mNodeObjects[model].remove(nd->get_idx_node());
-        foreach (NodeMapObject *obj, objs) {
-            if (obj) {
-                std::shared_ptr<qmapcontrol::Geometry> geom = obj->getGeometryEntity();
-                qmapcontrol::LayerGeometry *layer = geom->layer();
-                if (layer)
-                    layer->removeGeometry(geom);
-                delete obj;
-            }
-        }
+
+        deleteList.append(objs);
 
         mModels[model]->removeNode(nd);
+    }
+
+    foreach (NodeMapObject *obj, deleteList) {
+        if (obj) {
+            std::shared_ptr<qmapcontrol::Geometry> geom = obj->getGeometryEntity();
+            qmapcontrol::LayerGeometry *layer = geom->layer();
+            if (layer) {
+                layer->removeGeometry(geom);
+            }
+            delete obj;
+        }
     }
 
     mNodeSelection[model].clear();

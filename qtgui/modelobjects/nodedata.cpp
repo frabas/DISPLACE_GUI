@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -108,22 +108,22 @@ void NodeData::setPop(QList<double> v, double tot)
 {
 }
 
-double NodeData::getPop(int pop) const
+boost::optional<double> NodeData::getPop(int pop) const
 {
     auto v = getNodesData();
     if (v && pop < v->totN.size() && pop >= 0)
         return v->totN[pop];
 
-    return -1;
+    return boost::none;
 }
 
-double NodeData::getPopTot() const
+boost::optional<double> NodeData::getPopTot() const
 {
     auto v = getNodesData();
     if (v)
         return std::accumulate(v->totN.begin(), v->totN.end(), 0.0);
 
-    return -1;
+    return boost::none;
 }
 
 double NodeData::getPopWTot() const
@@ -135,22 +135,22 @@ double NodeData::getPopWTot() const
     return -1;
 }
 
-double NodeData::getImpact(int pop) const
+boost::optional<double> NodeData::getImpact(int pop) const
 {
     auto v = getNodesData();
     if (v && pop < v->impact.size() && pop >= 0)
         return v->impact[pop];
 
-    return -1;
+    return boost::none;
 }
 
-double NodeData::getCumcatchesPerPop(int pop)
+boost::optional<double> NodeData::getCumcatchesPerPop(int pop)
 {
     auto v = getNodesData();
     if (v && pop < v->cumC.size() && pop >= 0)
         return v->cumC[pop];
 
-    return -1;
+    return boost::none;
 }
 
 
@@ -166,13 +166,13 @@ void NodeData::setPopW(QList<double> v, double tot)
 {
 }
 
-double NodeData::getPopW(int pop) const
+boost::optional<double> NodeData::getPopW(int pop) const
 {
     auto v = getNodesData();
     if (v && pop < v->totW.size() && pop >= 0)
         return v->totW[pop];
 
-    return -1;
+    return boost::none;
 }
 
 void NodeData::setImpact(int pop, double impact)

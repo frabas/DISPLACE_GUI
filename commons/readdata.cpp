@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -153,9 +153,11 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         {13,"a_graph"},{15,"nrow_coord"},{17,"nrow_graph"},{19,"a_port"},{21,"graph_res"},
         {23,"is_individual_vessel_quotas"},{25,"check_all_stocks_before_going_fishing"},{27,"dt_go_fishing"},
         {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
-        {37,"dt_change_port"},{39,"use_dtrees"},{41,"tariff_pop"},{43,"freq_update_tariff_code"},
+        {37,"dt_change_port"},{39,"use_dtrees"},
+        {41,"tariff_pop"},{43,"freq_update_tariff_code"},
         {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
-        {51,"metier_closures"}
+        {51,"update_tariffs_based_on_lpue_or_dpue_code"},
+        {53,"metier_closures"}
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -196,7 +198,8 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         scenario.nrow_coord=reader.getAs<int>("nrow_coord");
         scenario.nrow_graph=reader.getAs<int>("nrow_graph");
         scenario.a_port=types::NodeId(reader.getAs<int>("a_port"));
-        scenario.graph_res=reader.getAs<double>("graph_res");
+        scenario.graph_res= displace::formats::utils::stringToVector<double>(reader.get("graph_res"), " ");
+        if(scenario.graph_res.size()==1) scenario.graph_res.push_back(scenario.graph_res.at(0)); //res x and y required
         scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
         scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
         scenario.dt_go_fishing=reader.get("dt_go_fishing");
@@ -213,6 +216,8 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
 
         scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
         scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
+        scenario.update_tariffs_based_on_lpue_or_dpue_code = reader.getAs<int>("update_tariffs_based_on_lpue_or_dpue_code", 0);
+
     } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
         cerr << x.what() << endl;
@@ -885,27 +890,41 @@ void read_pop_names_in_string(map<int, string>& pop_names,
 }
 
 
-void read_fuel_prices_per_vsize(map<int, double>& fuel_prices_per_vsize,
+void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter,
+                                map<int, double>& fuel_prices_per_vsize,
                                 string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
+    // casting sp into a string
+    stringstream out;
+    out << i.toIndex();
+
+    //input data, harbour characteristics
+    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_fuel_price_per_vessel_size.dat";
     ifstream file_fuel_prices_per_vsize;
     file_fuel_prices_per_vsize.open(filename.c_str());
     if(file_fuel_prices_per_vsize.fail())
     {
-        cout << "fail to load the file for price per pop per cat for this port" << endl;
-        open_file_error(filename.c_str());
+        cout << "fail to load the file for fuel price per vsize for this port...search in vesselspe instead..." << endl;
 
-    }
-    else
-    {
-        fill_map_from_specifications_i_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize,  inputfolder);
-        file_fuel_prices_per_vsize.close();
+       // by default:
+       filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
+       file_fuel_prices_per_vsize.open(filename.c_str());
+       if(file_fuel_prices_per_vsize.fail())
+       {
+           cout << "fail to load the file for fuel price in vesselspe..." << endl;
+           open_file_error(filename.c_str());
 
+       }
     }
+
+
+    fill_map_from_specifications_i_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize,  inputfolder);
+    file_fuel_prices_per_vsize.close();
+
+
+
 }
-
 
 int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
                                              multimap<int, double>& prices_per_harbour_each_species_per_cat,
@@ -2109,6 +2128,91 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
 
 
 
+multimap<int, double> read_adults_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/_adults_diet_preference_per_stock_allstks_biolsce"+biolsce+".dat";
+
+    //input data
+    ifstream file_adults_diet_preference_per_stock_allstks;
+    file_adults_diet_preference_per_stock_allstks.open(filename.c_str());
+    if(file_adults_diet_preference_per_stock_allstks.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/adults_diet_preference_per_stock_allstks_biolsce1.dat";
+        file_adults_diet_preference_per_stock_allstks.open(filename.c_str());
+    }
+    if(file_adults_diet_preference_per_stock_allstks.fail())
+    {
+        cout << "Unfortunately the adults_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> adults_diet_preference_per_stock_allstks;
+    fill_multimap_from_specifications_i_d(file_adults_diet_preference_per_stock_allstks,  adults_diet_preference_per_stock_allstks);
+    file_adults_diet_preference_per_stock_allstks.close();
+    // Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
+    // was creating access violation from pointers misuse, etc.
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator lower_init = adults_diet_preference_per_stock_allstks.lower_bound(0);
+    multimap<int,double>::iterator upper_init = adults_diet_preference_per_stock_allstks.upper_bound(0);
+    dout(cout << "adults_diet_preference_per_stock_allstks for pop0: ");
+    for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(adults_diet_preference_per_stock_allstks);
+}
+
+
+multimap<int, double> read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameterization,  string inputfolder, string biolsce)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/_juveniles_diet_preference_per_stock_allstks_biolsce"+biolsce+".dat";
+
+    //input data
+    ifstream file_juveniles_diet_preference_per_stock_allstks;
+    file_juveniles_diet_preference_per_stock_allstks.open(filename.c_str());
+    if(file_juveniles_diet_preference_per_stock_allstks.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/juveniles_diet_preference_per_stock_allstks_biolsce1.dat";
+        file_juveniles_diet_preference_per_stock_allstks.open(filename.c_str());
+    }
+    if(file_juveniles_diet_preference_per_stock_allstks.fail())
+    {
+        cout << "Unfortunately the juveniles_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> juveniles_diet_preference_per_stock_allstks;
+    fill_multimap_from_specifications_i_d(file_juveniles_diet_preference_per_stock_allstks,  juveniles_diet_preference_per_stock_allstks);
+    file_juveniles_diet_preference_per_stock_allstks.close();
+    // Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
+    // was creating access violation from pointers misuse, etc.
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator lower_init = juveniles_diet_preference_per_stock_allstks.lower_bound(0);
+    multimap<int,double>::iterator upper_init = juveniles_diet_preference_per_stock_allstks.upper_bound(0);
+    dout(cout << "juveniles_diet_preference_per_stock_allstks for pop0: ");
+    for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(juveniles_diet_preference_per_stock_allstks);
+}
+
+
+
 multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce)
 {
 
@@ -2758,6 +2862,8 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
         open_file_error(filename);
         //return 1;
     }
+    dout(cout << "filename for pop  " << a_pop << " is " << filename << endl;)
+
     multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop))
         throw std::runtime_error("Error while executing: fill_from_avai_szgroup_nodes_with_pop");
@@ -2970,10 +3076,15 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
 
 
 
-vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string fleetsce)
+vector< vector<double> > read_selectivity_per_stock_ogives(int a_met,
+                                                           int nbpops,
+                                                           int nbszgroup,
+                                                           string folder_name_parameterization,
+                                                           string inputfolder,
+                                                           string fleetsce)
 {
 
-    // casting a_pop into a string
+    // casting a_met into a string
     stringstream out;
     out << a_met;
     string a_met_s = out.str();
@@ -2996,6 +3107,30 @@ vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops
     return(selectivity_per_stock_ogives);
 }
 
+vector< vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpops,
+                                                                        int nbszgroup,
+                                                                        string folder_name_parameterization,
+                                                                        string inputfolder,
+                                                                        string fleetsce)
+{
+
+    string filename = inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_selectivity_per_stock_ogives_fleetsce"+fleetsce+"_for_oth_land.dat";
+
+    ifstream file_selectivity_per_stock_ogives_for_oth_land;
+    file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
+    if(file_selectivity_per_stock_ogives_for_oth_land.fail())
+    {
+        vector<vector <double> > selectivity_per_stock_ogives_for_oth_land;
+         return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
+    }
+    vector< vector<double> > selectivity_per_stock_ogives_for_oth_land(nbpops, vector<double>(nbszgroup));
+    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives_for_oth_land, selectivity_per_stock_ogives_for_oth_land))
+        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+
+    file_selectivity_per_stock_ogives_for_oth_land.close();
+
+    return(selectivity_per_stock_ogives_for_oth_land);
+}
 
 
 
@@ -3390,18 +3525,21 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 
 
 
-bool read_biological_traits_params(istream &stream, const std::string &separator, vector <std::tuple< string, double, double, double, double,
+bool read_biological_traits_params(istream &stream, const std::string &separator, std::vector <std::tuple< string, double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
-                                   double, double, double, double, double, double> > & biological_traits_params)
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, string> >  & biological_traits_params)
 {
     // Format:
-    // Stock Winf k  Linf K t0 a b L50 alpha beta r_age tac_tons fbar_age_min fbar_age_max F_target F_percent TAC_percent B_trigger FMSY"
-    // fbar_assessment ssb_assessment mls_cat mls
+    //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
+    //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
 
-    // TODO: FOR NOW, ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
+    // TODO: FOR NOW, more or less ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
 
     cout << "Reading biological_traits_params..." << endl;
 
@@ -3426,11 +3564,46 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
                                                double, double, double, double,
                                                double, double, double, double,
                                                double, double, double, double,
-                                               double, double, double, double, double, double > a_tuple;
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, string>  a_tuple;
 
             std::get<0>(a_tuple)=boost::lexical_cast<string>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
             std::get<2>(a_tuple)=boost::lexical_cast<double>(sr[2]);
+            std::get<3>(a_tuple)=boost::lexical_cast<double>(sr[3]);
+            std::get<4>(a_tuple)=boost::lexical_cast<double>(sr[4]);
+            std::get<5>(a_tuple)=boost::lexical_cast<double>(sr[5]);
+            std::get<6>(a_tuple)=boost::lexical_cast<double>(sr[6]);
+            std::get<7>(a_tuple)=boost::lexical_cast<double>(sr[7]);
+            std::get<8>(a_tuple)=boost::lexical_cast<double>(sr[8]);
+            std::get<9>(a_tuple)=boost::lexical_cast<double>(sr[9]);
+            std::get<10>(a_tuple)=boost::lexical_cast<double>(sr[10]);
+            std::get<11>(a_tuple)=boost::lexical_cast<double>(sr[11]);
+            std::get<12>(a_tuple)=boost::lexical_cast<double>(sr[12]);
+            std::get<13>(a_tuple)=boost::lexical_cast<double>(sr[13]);
+            std::get<14>(a_tuple)=boost::lexical_cast<double>(sr[14]);
+            std::get<15>(a_tuple)=boost::lexical_cast<double>(sr[15]);
+            std::get<16>(a_tuple)=boost::lexical_cast<double>(sr[16]);
+            std::get<17>(a_tuple)=boost::lexical_cast<double>(sr[17]);
+            std::get<18>(a_tuple)=boost::lexical_cast<double>(sr[18]);
+            std::get<19>(a_tuple)=boost::lexical_cast<double>(sr[19]);
+            std::get<20>(a_tuple)=boost::lexical_cast<double>(sr[20]);
+            std::get<21>(a_tuple)=boost::lexical_cast<double>(sr[21]);
+            std::get<22>(a_tuple)=boost::lexical_cast<double>(sr[22]);
+            std::get<23>(a_tuple)=boost::lexical_cast<double>(sr[23]);
+            std::get<24>(a_tuple)=boost::lexical_cast<double>(sr[24]);
+            std::get<25>(a_tuple)=boost::lexical_cast<double>(sr[25]);
+            std::get<26>(a_tuple)=boost::lexical_cast<double>(sr[26]);
+            std::get<27>(a_tuple)=boost::lexical_cast<double>(sr[27]);
+            std::get<28>(a_tuple)=boost::lexical_cast<double>(sr[28]);
+            std::get<29>(a_tuple)=boost::lexical_cast<double>(sr[29]);
+            std::get<30>(a_tuple)=boost::lexical_cast<double>(sr[30]);
+            std::get<31>(a_tuple)=boost::lexical_cast<double>(sr[31]);
+            std::get<32>(a_tuple)=boost::lexical_cast<double>(sr[32]);
+            std::get<33>(a_tuple)=boost::lexical_cast<double>(sr[33]);
+            std::get<34>(a_tuple)=boost::lexical_cast<string>(sr[34]);
 
             // check
             //cout << "0: " << std::get<0>(a_tuple) << endl;
@@ -3461,7 +3634,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
     //"x"                     "y"                     "harb"                  "pt_graph"              "code_area"             "landscapes_code"       "landscape_norm"
     //"landscape_alpha"       "sst"                   "sst_norm"              "sst_alpha"             "salinity"              "salinity_norm"         "salinity_alpha"        "nitrogen"
     //"nitrogen_norm"         "nitrogen_alpha"        "phosphorus"            "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"
-    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry"
+    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry" "shippingdensity" "siltfraction"
 
     cout << "Reading environment_on_coord..." << endl;
 
@@ -3513,6 +3686,8 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
             a_tuple.dissolvedcarbon_norm=boost::lexical_cast<double>(sr[27]);
             a_tuple.dissolvedcarbon_alpha= boost::lexical_cast<double>(sr[28]);
             a_tuple.bathymetry=boost::lexical_cast<double>(sr[29]);
+            a_tuple.shippingdensity=boost::lexical_cast<double>(sr[30]);
+            a_tuple.siltfraction=boost::lexical_cast<double>(sr[31]);
 
             // check
             //cout << "reading  environment_on_coord: " << endl;

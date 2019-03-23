@@ -114,6 +114,7 @@ vector< vector <double> > Metier::get_selectivity_per_stock_ogives() const
 }
 
 
+
 /*
 vector<double> Metier::get_discards_ogive()
 {

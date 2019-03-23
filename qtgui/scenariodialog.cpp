@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -49,17 +49,24 @@ static const char *dyn_alloc_options[] = {
     "FMSY",
     "FMSYrange",
     "fishing_credits",
-    "envt_variables_diffusion",
+    "promote_high_tariffs",
     "TechCreeping3Per",
     "ExitVessels10Per",
+    "halfShippingDensity",
 };
 
 static const char *dyn_pop_options[] = {
     "baseline",
-    "use_SMS",
-    "impact_benthos_N",
-    "diffuseN",
+    "includeForcingLayers",
+    "diffuseBenthos",
+    "modelBenthosInN",
+    "modeldirectKillingOnBenthos",
+    "modelResuspensionEffectOnBenthos",
+    "modelShippingOnBenthos",
+    "diffusePopN",
     "sizeSpectra",
+    "diffuseNutrients",
+    "noHyperstability",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
@@ -78,8 +85,8 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->agraph->setValue(mScen.getGraph());
     ui->freqDoGrowth->setValue(mScen.getFreqDoGrowth());
     ui->freqDispatchThePop->setValue(mScen.getFreqDispatchThePop());
-    ui->aport->setValue(mScen.getA_port().toIndex());
-    ui->gridres->setValue(mScen.getGraph_res());
+    ui->aport->setValue(mScen.getA_port().toIndex());  
+    for(int i=0 ; i < mScen.getGraph_res().length() ; i++) ui->gridres->setText(mScen.getGraph_res().at(i));
     ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
     ui->checkAllStocks->setChecked(mScen.getIs_check_all_stocks_before_going_fishing());
     ui->nrowcoord->setValue(mScen.getNrow_coord());
@@ -187,7 +194,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setFreqDoGrowth(ui->freqDoGrowth->value());
     mScen.setFreqDispatchThePop(ui->freqDispatchThePop->value());
     mScen.setA_port(types::NodeId(ui->aport->value()));
-    mScen.setGraph_res(ui->gridres->value());
+    mScen.setGraph_res( (QStringList)ui->gridres->text());
     mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());
     mScen.setIs_check_all_stocks_before_going_fishing(ui->checkAllStocks->isChecked());
     mScen.setNrow_coord(ui->nrowcoord->value());

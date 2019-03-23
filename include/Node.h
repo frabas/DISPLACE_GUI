@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -48,10 +48,10 @@ class COMMONSSHARED_EXPORT Node
               double _sst, double sst_norm, double sst_alpha,
               double _salinity, double _salinity_norm, double _salinity_alpha,
               double _Nitrogen, double _Nitrogen_norm, double _Nitrogen_alpha,
-              double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
+              double _Phosphorus, double _Phosphorus_norm, double _Phosphorus_alpha,
               double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
               double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
-              double _bathymetry,
+              double _bathymetry, double _shippingdensity, double _siltfraction,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
               int nbpops, int nbbenthospops,  int nbszgroups);
         /*
@@ -72,6 +72,8 @@ class COMMONSSHARED_EXPORT Node
 
         void lock() { mutex.lock(); }
         void unlock() { mutex.unlock(); }
+
+        void setNodeIdx(types::NodeId id) { idx_node = id; }
 
         types::NodeId get_idx_node() const;
 		int get_code_area() const;
@@ -203,6 +205,16 @@ class COMMONSSHARED_EXPORT Node
             bathymetry = depth;
         }
 
+        double get_shippingdensity() const;
+        void setShippingdensity(double density) {
+            shippingdensity = density;
+        }
+
+        double get_siltfraction() const;
+        void setSiltfraction(double fraction) {
+            siltfraction = fraction;
+        }
+
         // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual string get_name() const;
 		//virtual double get_prices(string met, int pop) ; // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
@@ -265,6 +277,7 @@ class COMMONSSHARED_EXPORT Node
         double get_cumcatches_with_threshold() const;
         double get_cumdiscards() const;
         double get_cumdiscardsratio() const;
+        double get_nbchoked() const;
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
@@ -288,6 +301,7 @@ class COMMONSSHARED_EXPORT Node
         void set_cumcatches_with_threshold(double tot);
         void set_cumdiscards(double tot);
         void set_cumdiscardsratio(double rat);
+        void set_nbchoked(double val);
         void add_to_cumftime(int delta_time);
         void add_to_cumsweptarea(double sweptarea);
         void add_to_cumsubsurfacesweptarea(double subsurfacesweptarea);
@@ -304,6 +318,7 @@ class COMMONSSHARED_EXPORT Node
         void set_benthos_tot_meanweight(int funcgr, double value);
         void set_benthos_tot_biomass_K(int funcgr, double value);
         void set_benthos_tot_number_K(int funcgr, double value);
+        void set_benthos_biomass_per_funcgr(vector<double> benthos);
         void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();
@@ -319,8 +334,14 @@ class COMMONSSHARED_EXPORT Node
         void clear_cumcatches_per_pop();
         void clear_cumdiscards_per_pop();
         void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
-        void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, const vector<vector<double> > & Ws_at_szgroup, const vector<vector<vector<vector<double> > > > & predkernel, const vector<vector<double> > & searchVolMat);
-        void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN, int will_I_discard_all);
+        void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,
+                                                                        const vector<vector<double> > & Ws_at_szgroup,
+                                                                        const vector<vector<vector<vector<double> > > > & predkernel,
+                                                                        const vector<vector<double> > & searchVolMat,
+                                                                        const vector<vector<double> > & juveniles_diet_preference,
+                                                                        const vector<vector<double> > & adults_diet_preference,
+                                                                        const vector<int> &mat_cats);
+        void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN, int will_I_discard_all, vector<vector<double> > &selectivity_per_stock_ogives_for_oth_land);
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);
 		void export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop);
@@ -332,6 +353,7 @@ class COMMONSSHARED_EXPORT Node
         void export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold);
         void export_popnodes_cumdiscards(ofstream& popnodes, int tstep);
         void export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep);
+        void export_popnodes_nbchoked(ofstream& popnodes, int tstep);
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_nodes_envt(ofstream& nodes_event, int tstep);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
@@ -408,6 +430,8 @@ private:
         double Oxygen, Oxygen_norm, Oxygen_alpha;
         double DissolvedCarbon, DissolvedCarbon_norm, DissolvedCarbon_alpha;
         double bathymetry;
+        double shippingdensity;
+        double siltfraction;
         int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file
@@ -422,6 +446,7 @@ private:
         double cumcatches_with_threshold;
         double cumdiscards;
         double cumdiscardsratio;
+        double nbchoked;
         vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;

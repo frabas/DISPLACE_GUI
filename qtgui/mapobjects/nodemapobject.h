@@ -56,6 +56,7 @@ public:
         GraphNodeWithCumCatchesWithThresholdRole,
         GraphNodeWithCumDiscardsRole,
         GraphNodeWithCumDiscardsRatioRole,
+        GraphNodeWithNbChokedRole,
         GraphNodeWithPopImpact,
         GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,
@@ -71,7 +72,9 @@ public:
         GraphNodeWithPhosphorus,
         GraphNodeWithOxygen,
         GraphNodeWithDissolvedCarbon,
-        GraphNodeWithBathymetry
+        GraphNodeWithBathymetry,
+        GraphNodeWithShippingdensity,
+        GraphNodeWithSiltfraction
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);

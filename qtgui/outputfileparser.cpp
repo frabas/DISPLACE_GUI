@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -67,6 +67,8 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopCumcatches(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumdiscardsratio_")) {
         parsePopCumdiscardsratio(&file, tstep, mModel, period);
+    } else if (name.startsWith("popnodes_nbchoked_")) {
+        parsePopNbchoked(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumdiscards_")) {
         parsePopCumdiscards(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_tariffs_")) {
@@ -93,6 +95,7 @@ void OutputFileParser::parse(QString path, int tstep, int period)
 
     mModel->endCollectingStats();
 
+    qDebug() << "parseCompleted()";
     emit parseCompleted();
 }
 
@@ -266,6 +269,35 @@ void OutputFileParser::parsePopCumdiscardsratio(QFile *file, int tstep, Displace
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step);
 }
+
+void OutputFileParser::parsePopNbchoked(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int id = fields[1].toInt();
+            double nbchoked = fields[4].toDouble();
+            model->collectPopNbchoked (step, id, nbchoked);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
+
 
 void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period)
 {
@@ -451,6 +483,8 @@ void OutputFileParser::parseNodesEnvt(QFile *file, int tstep, DisplaceModel *mod
             model->collectDissolvedCarbon( step, nodeid, dissolvedcarbon);
             double bathy = fields[10].toDouble();
             model->collectBathymetry( step, nodeid, bathy);
+            double shippingdensity = fields[11].toDouble();
+            model->collectShippingdensity(step, nodeid, shippingdensity);
         }
     }
 

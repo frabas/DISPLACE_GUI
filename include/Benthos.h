@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2019 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class COMMONSSHARED_EXPORT Benthos
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
             const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-            bool is_impact_benthos_N,
+            bool is_benthos_in_numbers,
             const vector<double> &h_betas_per_pop);
         virtual ~Benthos();
         int get_id() const;

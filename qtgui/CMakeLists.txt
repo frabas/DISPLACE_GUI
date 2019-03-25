@@ -68,7 +68,7 @@ if (WIN32)
     endif(CMAKE_BUILD_TYPE MATCHES Release)
 else(WIN32)
     list(APPEND EXTRA_LIBRARIES
-            ${CGAL_LIBRARIES}
+            CGAL::CGAL
             ${GeographicLib_LIBRARIES}
             sqlite3
             )

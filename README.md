@@ -14,13 +14,10 @@ Find your way with DISPLACE
 ## What for?
 
 
-DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement 
-integrating underlying fish population models, check out the paper 2014 in 
-Canadian Journal of Fisheries and Aquatic Sciences
-
-The DISPLACE project develops and provides a platform primarily for research purposes 
-to transform the fishermens detailed knowledge into models, evaluation tools, and methods 
-that can provide the fisheries with research and advice. 
+DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement 
+integrating underlying fish population models. The DISPLACE project develops and provides a 
+platform primarily for research purposes to transform the fishermens detailed knowledge into models,
+ evaluation tools, and methods that can provide the fisheries with research and advice. 
 The model intends to serve as a basis for decision support tools for (fishery) managers.
 
 
@@ -28,13 +25,16 @@ The model intends to serve as a basis for decision support tools for (fishery) m
 
 * Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
 spatial fishing planning and effort displacement - integrating underlying 
-fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386. 
-Available from: 10.1139/cjfas-2013-0126
+fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386.[link here](https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126#.XJs-ubh7nmE) 
 
 * Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
 Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions.  ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
+under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.[link here](https://academic.oup.com/icesjms/article/72/3/824/701817) 
 
+* Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M.,
+Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. 
+Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
+Ecosphere 8( 2):e01696.[link here](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 ## How to install
 

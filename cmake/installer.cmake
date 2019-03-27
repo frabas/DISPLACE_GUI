@@ -35,5 +35,16 @@ endif(APPLE)
 
 set (CPACK_BUNDLE_NAME "DisplaceProject")
 
+# Note Mac specific extension .app
+set(APPS "\${CMAKE_INSTALL_PREFIX}/${CPACK_BUNDLE_NAME}.app")
+
+# Directories to look for dependencies
+set(DIRS ${CMAKE_BINARY_DIR})
+
+install(CODE "include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+
+set(CPACK_GENERATOR "DRAGNDROP")
+
 include (CPack)
 

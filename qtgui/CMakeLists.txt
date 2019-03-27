@@ -83,6 +83,7 @@ if (APPLE)
 endif()
 
 add_executable(displacegui
+        MACOSX_BUNDLE
         ${SOURCES} ${HEADERS}
         qtgui.rc
         ${UIS} ${QRCS}
@@ -108,4 +109,6 @@ target_link_libraries(displacegui
         )
 
 # Set target directory
-install(TARGETS displacegui RUNTIME DESTINATION bin COMPONENT gui)
+install(TARGETS displacegui
+        BUNDLE DESTINATION . COMPONENT gui
+        RUNTIME DESTINATION bin COMPONENT gui)

@@ -85,6 +85,14 @@ or alternatively, look at the google drive for DISPLACE
 also hosting additional files
 
 
+How to compile
+============
+[compiling on Windows](docs/Building.win)
+[compiling on unix](docs/Building.unix)
+[compiling on MacOSX](docs/Building.MacOSX)
+
+
+
 GDAL Notes
 ==========
 

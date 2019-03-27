@@ -31,7 +31,7 @@ fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3
 Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
 under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
 
-François Bastardie, J. Rasmus Nielsen, Margit Eero, Federico Fuga, Anna Rindorf. 2017. Effects of changes
+* Bastardie, F., Nielsen, J. R., Eero, M., Fuga, F. Rindorf., A. 2017. Effects of changes
 in stock productivity and mixing on sustainable fishing and economic viability,
 ICES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551
 [link to free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
@@ -41,19 +41,25 @@ Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017.
 Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
 Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
+
 ## How to install
 
 
 Look at the Release section on the GitHub repository 
 to download an installer for Windows. 
 
-An example dataset is also available (DISPLACE_input)
+[Example datasets] (https://displace-project.org/blog/download/) are also available (DISPLACE_input_xx)
 
-or alternatively, look at the google drive for DISPLACE
+or alternatively, look at the [google drive for DISPLACE](https://drive.google.com/drive/folders/0ByuO_4j-1PxtfnZBblpQNmh2a2Z4SmpkRC16T1kwR0t1RWUyOVUxdHlEZzZwZWVpaVJac00)
 also hosting additional files
+
+Run the graphical user interface for DISPLACE with displacegui
+
+Quick start: Make sure your model objects is set to [0]. If yes then in the main menu do a "File">"Load a Scenario Model" and choose a scenario file (a .dat file) you´ll find in the \simusspe folder of your DISPLACE dataset.
 
 
 ## How to compile
+
 
 [compiling with CMake (preferred)](docs/Building-cmake.md)
 
@@ -64,7 +70,6 @@ also hosting additional files
 [compiling on unix deprecated)](docs/Building.unix)
 
 [compiling on MacOSX deprecated)](docs/Building.MacOSX)
-
 
 
 ## GDAL Notes

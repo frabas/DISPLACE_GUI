@@ -25,16 +25,21 @@ The model intends to serve as a basis for decision support tools for (fishery) m
 
 * Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
 spatial fishing planning and effort displacement - integrating underlying 
-fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386.[link here](https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126#.XJs-ubh7nmE) 
+fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386. [link here](https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126#.XJs-ubh7nmE) 
 
 * Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
 Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.[link here](https://academic.oup.com/icesjms/article/72/3/824/701817) 
+under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
+
+François Bastardie, J. Rasmus Nielsen, Margit Eero, Federico Fuga, Anna Rindorf. 2017. Effects of changes
+in stock productivity and mixing on sustainable fishing and economic viability,
+ICES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551
+[link to free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
 
 * Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M.,
 Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. 
 Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
-Ecosphere 8( 2):e01696.[link here](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
+Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 ## How to install
 
@@ -52,7 +57,7 @@ also hosting additional files
 
 [compiling with CMake (preferred)](docs/Building-cmake.md)
 
-[make the displace sdk (optional)](docs/Building.md)
+[make the displace sdk (optional)](docs/building.md)
 
 [compiling on Windows (deprecated)](docs/Building.win)
 

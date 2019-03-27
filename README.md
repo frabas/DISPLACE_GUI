@@ -1,17 +1,17 @@
-README
+Find your way with DISPLACE
 ======
 
-Summary
-- Rationale
-- How to cite
-- How to install
-- How to build
-- GDAL notes
+## Summary
+- [What for?](#what-for)
+- [How to cite](#how-to-cite)
+- [How to install and run](#how-to-install)
+- [How to compile from scratch](#how-to-compile)
+- [GDAL notes](#gdal-notes)
+- [Unit testing](#unit-testing)
 
 
 
-Rationale
-============
+## What for?
 
 
 DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement 
@@ -24,8 +24,7 @@ that can provide the fisheries with research and advice.
 The model intends to serve as a basis for decision support tools for (fishery) managers.
 
 
-How to cite
-============
+## How to cite
 
 * Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
 spatial fishing planning and effort displacement - integrating underlying 
@@ -37,8 +36,7 @@ Competition for marine space: modelling the Baltic Sea fisheries and effort disp
 under spatial restrictions.  ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
 
 
-How to install
-============
+## How to install
 
 
 Look at the Release section on the GitHub repository 
@@ -50,8 +48,8 @@ or alternatively, look at the google drive for DISPLACE
 also hosting additional files
 
 
-How to compile
-============
+## How to compile
+
 [compiling with CMake (preferred)](docs/Building-cmake.md)
 
 [make the displace sdk (optional)](docs/Building.md)
@@ -64,8 +62,8 @@ How to compile
 
 
 
-GDAL Notes
-==========
+## GDAL Notes
+
 
 Current version of QMapControl supports shapefiles loading ONLY for WGS84 Coordinates system. This is because QMapControl itself uses WGS84 coordinates.
 So you need to convert your shapefiles if not using this CRS.
@@ -76,8 +74,8 @@ $ ogr2ogr -t_srs WGS84 DEST.shp SRC.shp
 Note that DEST file is specified before the source!
 
 
-UNIT TESTING
-============
+## Unit testing
+
 
 Unit testing is performed using the Boost::Test framework. It can be compiled and linked in two ways:
 

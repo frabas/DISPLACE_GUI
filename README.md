@@ -13,50 +13,15 @@ Summary
 Rationale
 ============
 
-Dynamic Individual vessel-based Spatial fishing PLAnning and effort displaCEment
 
 DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement 
 integrating underlying fish population models, check out the paper 2014 in 
 Canadian Journal of Fisheries and Aquatic Sciences
 
 The DISPLACE project develops and provides a platform primarily for research purposes 
-to transform the fishermens detailed knowledge into models, evaluation tools, and methods 
+to transform the fishermens detailed knowledge into models, evaluation tools, and methods 
 that can provide the fisheries with research and advice. 
 The model intends to serve as a basis for decision support tools for (fishery) managers.
-
-Among other goals, economic benefit of stock replenishment and sustainable harvesting 
-can be demonstrated. This contributes to evaluate the combined ecological and economic impacts 
-of fishery management before its implementation (i.e. impact assessment).
-
-An individual-based model (IBM) on a per-vessel basis covering several fisheries and stocks 
-is a benchmark tool capable of integrating fishermens decision-making processes 
-when they face changes in fishery management, economic factors influencing the fishery, 
-economic viability, and underlying stock conditions, including spatial and 
-seasonal patterns in resource availability.
-
-DISPLACE operates with high resolution in time and space (spatio-temporal explicit). 
-It allows contributing to marine/maritime spatial planning for e.g. evaluating 
-the effects of smaller and larger marine area restrictions on stocks and fisheries, 
-i.e. impact assessment on stocks and fisheries of broader marine management. 
-The economic evaluation includes evaluation of spatial restrictions for the fishery 
-with particular emphasis to test if there are any economic benefits or 
-consequences from different area restrictions caused by e.g. renewable energy, conservation, etc.
-Also it evaluates whether these benefits compensate the additional costs of 
-the effort displaced to surrounding or new areas, i.e. the bio-economic consequences 
-of fishing effort displacement.
-
-This ultimately incorporates other utilization of the sea such as energy production, 
-transport, recreational use, etc., e.g. offshore windmill farms, 
-large marine constructions, NATURA 2000 areas, transport routes of 
-commercial shipping, pipelines, cables, etc.
-
-Fishermen communities have an obvious stake in using the sea to ensure food supply with seafood 
-and should not then be left out the maritime spatial planning process. 
-As a stakeholder once said if you are not at the table, you are on the menu! 
-While fishermen are therefore likely to gain at designing their own priorities areas, 
-the DISPLACE model should be a support for evaluating and balance these important areas 
-against other potential uses and the economic consequences 
-of spatial plans on fishermen´s living conditions.
 
 
 How to cite
@@ -87,9 +52,15 @@ also hosting additional files
 
 How to compile
 ============
-[compiling on Windows](docs/Building.win)
-[compiling on unix](docs/Building.unix)
-[compiling on MacOSX](docs/Building.MacOSX)
+[compiling with CMake (preferred)](docs/Building-cmake.md)
+
+[make the displace sdk (optional)](docs/Building.md)
+
+[compiling on Windows (deprecated)](docs/Building.win)
+
+[compiling on unix deprecated)](docs/Building.unix)
+
+[compiling on MacOSX deprecated)](docs/Building.MacOSX)
 
 
 

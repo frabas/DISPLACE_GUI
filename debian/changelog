@@ -1,3 +1,11 @@
+displace (0.9.22) bionic; urgency=medium
+
+  * New Version: added new options in bio model
+  * Live sumulation fixes
+  * Bug fixes
+
+ -- Federico Fuga <fuga@studiofuga.com>  Wed, 27 Mar 2019 10:50:09 +0100
+
 displace (0.9.15) bionic; urgency=medium
 
   * new on the fly path calculation using A* algorithm

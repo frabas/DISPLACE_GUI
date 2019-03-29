@@ -36,7 +36,9 @@ endif(APPLE)
 set (CPACK_BUNDLE_NAME "DisplaceProject")
 
 # Note Mac specific extension .app
-set(APPS "\${CMAKE_INSTALL_PREFIX}/${CPACK_BUNDLE_NAME}.app")
+set(APPS "${CMAKE_INSTALL_PREFIX}/${CPACK_BUNDLE_NAME}.app")
+
+message("CPACK BUNDLE DIR: ${APPS}")
 
 # Directories to look for dependencies
 set(DIRS ${CMAKE_BINARY_DIR})

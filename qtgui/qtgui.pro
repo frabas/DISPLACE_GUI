@@ -359,16 +359,19 @@ HEADERS += \
 
 ### mSQLiteCpp dependency
 
-DEFINES += BUILD_MSQLITECPP
-INCLUDEPATH += $$SRCROOT/mSqliteCpp/include
-SOURCES += $$SRCROOT/mSqliteCpp/src/*.cpp
-HEADERS += $$SRCROOT/mSqliteCpp/include/*.h
-!win32: LIBS += -lsqlite3
+#DEFINES += BUILD_MSQLITECPP
+#INCLUDEPATH += $$SRCROOT/mSqliteCpp/include
+#SOURCES += $$SRCROOT/mSqliteCpp/src/*.cpp
+#HEADERS += $$SRCROOT/mSqliteCpp/include/*.h
+#!win32: LIBS += -lsqlite3
 
-win32 {
-    DEFINES += EMBED_MSQLITECPP
-    SOURCES += ../commons/storage/sqlite3.c
-}
+LIBS += -lmsqlitecpp -lsqlite3
+
+
+#win32 {
+#    DEFINES += EMBED_MSQLITECPP
+#    SOURCES += ../commons/storage/sqlite3.c
+#}
 
 ### End mSqliteCpp Depedency
 

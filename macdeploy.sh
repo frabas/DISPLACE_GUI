@@ -98,7 +98,7 @@ copy_framework_qt()
 	src_file=`echo $WF | sed -e 's/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_file=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_lib=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\/.*\)$/\1/g'` 
-	#echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
@@ -118,7 +118,7 @@ copy_framework()
 	dst_lib=$3
 	BUNDLE=$4
 	
-	#echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
@@ -377,6 +377,8 @@ fi
 $QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
+QT_INSTALL_LIBS=~/Qt/5.12.0/clang_64/lib/
+QT_INSTALL_PLUGINS=~/Qt/5.12.0/clang_64/plugins/
 TOPDIR=$PWD
 DESTDIR=$PWD/build/$T/bin
 INSTALL=$PWD/build
@@ -386,7 +388,7 @@ APPBUNDLE=$DESTDIR/$APPNAME.app
 EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor objeditor"
 EXTRA_FRAMEWORKS=""
 # EXTRA_LIBS must be found as dependency in EXECUTABLES
-EXTRA_LIBS="libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
+EXTRA_LIBS="libmsqlitecpp libsqlite3 libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 # These INSTALL_EXTRA_LIBS will be installed regardless of the links

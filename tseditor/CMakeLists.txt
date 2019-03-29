@@ -1,7 +1,3 @@
-find_package(Qt5Core 5.6 REQUIRED)
-find_package(Qt5Widgets 5.6 REQUIRED)
-find_package(Qt5Concurrent 5.6 REQUIRED)
-
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons

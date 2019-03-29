@@ -21,32 +21,31 @@ set(CPACK_COMPONENT_libraries_DISPLAY_NAME "Displace Common Libraries")
 set(CPACK_COMPONENT_tools_DISPLAY_NAME "Displace Additional Tools")
 set(CPACK_COMPONENT_tests_DISPLAY_NAME "Unit and regression tests")
 
-set (CPACK_COMPONENT_gui_DEPENDS libraries)
-set (CPACK_COMPONENT_simulator_DEPENDS libraries)
-set (CPACK_COMPONENT_tools_DEPENDS libraries)
-set (CPACK_COMPONENT_tests_DEPENDS libraries)
+set(CPACK_COMPONENT_gui_DEPENDS libraries)
+set(CPACK_COMPONENT_simulator_DEPENDS libraries)
+set(CPACK_COMPONENT_tools_DEPENDS libraries)
+set(CPACK_COMPONENT_tests_DEPENDS libraries)
 
 if (APPLE)
-    set(CPACK_GENERATOR "Bundle")
     set(CPACK_BUNDLE_PLIST "${CMAKE_SOURCE_DIR}/qtgui/resources/Info.plist")
     set(CPACK_BUNDLE_ICON "${CMAKE_SOURCE_DIR}/qtgui/icons/displace.icns")
-endif(APPLE)
+endif (APPLE)
 
 
-set (CPACK_BUNDLE_NAME "DisplaceProject")
+if (APPLE)
+    set(CPACK_BUNDLE_NAME "DisplaceProject")
 
-# Note Mac specific extension .app
-set(APPS "${CMAKE_INSTALL_PREFIX}/${CPACK_BUNDLE_NAME}.app")
+    # Note Mac specific extension .app
+set(APPS "\${CMAKE_INSTALL_PREFIX}/${CPACK_BUNDLE_NAME}.app")
 
-message("CPACK BUNDLE DIR: ${APPS}")
+    # Directories to look for dependencies
+    set(DIRS ${CMAKE_BINARY_DIR})
 
-# Directories to look for dependencies
-set(DIRS ${CMAKE_BINARY_DIR})
+    install(CODE "include(BundleUtilities)
+        fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
 
-install(CODE "include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+    set(CPACK_GENERATOR "DRAGNDROP")
+endif (APPLE)
 
-set(CPACK_GENERATOR "DRAGNDROP")
-
-include (CPack)
+include(CPack)
 

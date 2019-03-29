@@ -1,4 +1,3 @@
-find_package(Qt5Core 5.6 REQUIRED)
 find_package(Boost REQUIRED
         COMPONENTS unit_test_framework
         )

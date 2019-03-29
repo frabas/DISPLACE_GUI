@@ -1,10 +1,3 @@
-find_package(Qt5Core 5.6 REQUIRED)
-find_package(Qt5Widgets 5.6 REQUIRED)
-find_package(Qt5Concurrent 5.6 REQUIRED)
-find_package(Qt5Sql 5.6 REQUIRED)
-find_package(Qt5Xml 5.6 REQUIRED)
-find_package(Qt5PrintSupport 5.6 REQUIRED)
-find_package(Qt5Network 5.6 REQUIRED)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
@@ -18,7 +11,7 @@ include_directories(
         ${Qt5PrintSupport_INCLUDE_DIRS}
 )
 
-file(GLOB SOURCES *.cpp 
+file(GLOB SOURCES *.cpp
         algo/*.cpp
         backgrounds/*.cpp
         dialogs/*.cpp
@@ -47,8 +40,8 @@ file(GLOB HEADERS *.h
         utils/*.h
         workers/*.h
         )
-        
-file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui )
+
+file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui)
 file(GLOB QRCS *.qrc)
 
 set(EXTRA_LIBRARIES
@@ -60,19 +53,19 @@ if (WIN32)
                 CGAL::CGAL
                 ${GeographicLib_LIBRARIES}
                 )
-    else(CMAKE_BUILD_TYPE MATCHES Release)
+    else (CMAKE_BUILD_TYPE MATCHES Release)
         list(APPEND EXTRA_LIBRARIES
                 CGAL::CGAL
                 ${GeographicLib_LIBRARIES}
                 )
-    endif(CMAKE_BUILD_TYPE MATCHES Release)
-else(WIN32)
+    endif (CMAKE_BUILD_TYPE MATCHES Release)
+else (WIN32)
     list(APPEND EXTRA_LIBRARIES
             CGAL::CGAL
             ${GeographicLib_LIBRARIES}
             sqlite3
             )
-endif(WIN32)
+endif (WIN32)
 
 if (NOT APPLE AND NOT WIN32)
     list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp rt)
@@ -80,7 +73,7 @@ endif (NOT APPLE AND NOT WIN32)
 
 if (APPLE)
     list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp)
-endif()
+endif ()
 
 add_executable(displacegui
         MACOSX_BUNDLE

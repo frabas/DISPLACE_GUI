@@ -1,8 +1,6 @@
 
 add_definitions(-DQMAPCONTROL_LIBRARY)
 
-find_package(Qt5 5.6 COMPONENTS Widgets Network REQUIRED)
-
 include_directories(
         .
         ${Qt5Widgets_INCLUDE_DIRS}

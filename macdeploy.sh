@@ -392,7 +392,7 @@ EXTRA_LIBS="libmsqlitecpp libsqlite3 libGeographic libCGAL libmpfr libgmp libboo
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 # These INSTALL_EXTRA_LIBS will be installed regardless of the links
-INSTALL_EXTRA_LIBS="/usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib"
+INSTALL_EXTRA_LIBS="/usr/local/lib/libmsqlitecpp.0.dylib /usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib"
 
 
 TOOLDIR=`dirname $0`

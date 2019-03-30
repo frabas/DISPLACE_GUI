@@ -377,8 +377,8 @@ fi
 $QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
-QT_INSTALL_LIBS=~/Qt/5.12.0/clang_64/lib/
-QT_INSTALL_PLUGINS=~/Qt/5.12.0/clang_64/plugins/
+QT_INSTALL_LIBS=~/Qt/5.12.2/clang_64/lib/
+QT_INSTALL_PLUGINS=~/Qt/5.12.2/clang_64/plugins/
 TOPDIR=$PWD
 DESTDIR=$PWD/build/$T/bin
 INSTALL=$PWD/build

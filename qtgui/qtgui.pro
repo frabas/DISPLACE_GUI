@@ -87,7 +87,7 @@ win32:LIBS += -L$$QMC_GDAL_LIB -lgdal_i
 # Add GDAL library path and library (unix).
 unix:LIBS += -lgdal
 
-macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
+#macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
 
 SOURCES += \
     main.cpp \

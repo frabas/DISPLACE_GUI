@@ -176,6 +176,8 @@ private:
         types::NodeId smartcatch;
         types::NodeId highpotentialcatch, notthatfar, lowesttariff, mosthistoricallyused; // some relevant grounds
 
+        double effort_multiplier;  //for EffortControl HCR
+
         std::mutex mutex;
 
 protected:
@@ -348,6 +350,7 @@ public:
         double get_CRBER() const;
         double get_NetPresentValue() const;
         int get_numTrips()const;
+        double get_effort_multiplier() const;
         void addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, double a_portion);
         void reinitDaysSpentInRestrictedAreaThisMonthtoZero();
         void set_map_of_nodes (const vector<Node* > &_map_of_nodes);
@@ -430,6 +433,7 @@ public:
         void set_nbfpingspertrip (int _nbfpingspertrip);
 		void set_xy (double _x, double _y);
 		void set_next_xy (double nx, double ny);
+        void set_effort_multiplier(double multi);
         void erode_roadmap ();
 		void move_to(double nx, double ny);
 		void move_to(Node* next_node);

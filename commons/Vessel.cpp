@@ -120,6 +120,7 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
     tankcapacity=20000;
     nbfpingspertrip=3;
     message=0;
+    effort_multiplier=1;
 
     init();
 }
@@ -217,6 +218,7 @@ Vessel::Vessel(Node* p_location, int a_idx_vessel, string a_name,  int nbpops, i
     message=0;					 // no message
     previous_harbour_idx=p_location->get_idx_node();
     targeting_non_tac_pop_only=1;// init at 1
+    effort_multiplier=1;
 
     // deduce the vessel nationality from the vessel name
     nationality = nationalityFromName(get_name());
@@ -1082,6 +1084,11 @@ double Vessel::getDaysSpentInRestrictedAreaThisMonth(int met_idx)
     return(daysSpentInRestrictedAreaThisMonth.at(met_idx));
 }
 
+double Vessel::get_effort_multiplier() const
+{
+    return(effort_multiplier);
+}
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -1669,6 +1676,11 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
 void Vessel::set_is_choked(int pop, int val)
 {
     is_choked.at(pop)=val;
+}
+
+void Vessel::set_effort_multiplier(double val)
+{
+    effort_multiplier=val;
 }
 
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep,

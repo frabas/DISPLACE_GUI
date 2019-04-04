@@ -17,6 +17,7 @@ set(SOURCES
         outputexporter.cpp
         getRSS.cpp
         biomodule2.cpp
+        fisheriesmanagmt.cpp
         )
 
 if (WIN32)

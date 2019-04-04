@@ -5393,7 +5393,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& population
                 // draw a random number [0,1) and compare with the value
 
                 // look if an ongoing effort control and alter the chance to go accordingly...
-                //the_value=the_value*this->get_effort_multiplier();
+                the_value=the_value*this->get_effort_multiplier();
 
                 if(unif_rand()<the_value) {
                     unlock();     // GO!

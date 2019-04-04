@@ -42,13 +42,26 @@ Spatial planning for fisheries in the Northern Adriatic: working toward viable a
 Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 
+
+## Requirements
+
+### MacOS
+
+In MacOS, [brew](https://brew.sh) is required to install and run the Gui.
+
+Refer to the Brew documentation on how to install it.
+
+The following packages must be installed in brew:
+
+- gdal
+
+
 ## How to install DISPLACE and run a simulation
 
 
 Look at the [Release section](https://github.com/frabas/DISPLACE_GUI/releases) on this GitHub repository 
 to download an installer for Windows or packages for Unix and MacOSX. or alternatively, look at the [google drive for DISPLACE](https://drive.google.com/drive/folders/0ByuO_4j-1PxtfnZBblpQNmh2a2Z4SmpkRC16T1kwR0t1RWUyOVUxdHlEZzZwZWVpaVJac00)
 also hosting additional files
- 
 
 [DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
 

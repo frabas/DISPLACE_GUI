@@ -70,12 +70,12 @@ macx {
     INCLUDEPATH += /usr/local/include
     INCLUDEPATH += /usr/local/Cellar/boost/1.65.1/include
     #Note: make a soft link in /usr/local/include/gdal pointing to
-    #INCLUDEPATH += /Library/Frameworks/GDAL.framework/Versions/1.11/unix/include
+    INCLUDEPATH += /Library/Frameworks/GDAL.framework/Versions/Current/unix/include
 
     LIBS += -L/usr/local/lib
     LIBS += -L/usr/local/Cellar/boost/1.65.1/lib
     #Note: make a soft link in /usr/local/lib pointing to libgdal.dylib in the following location:
-    #LIBS += /Library/Frameworks/GDAL.framework/Versions/1.11/unix/lib
+    LIBS += -L/Library/Frameworks/GDAL.framework/Versions/Current/unix/lib
     DEFINES +=
 
     APPDESTDIR=$$join(top_builddir,,,"/bin")

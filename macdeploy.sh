@@ -98,7 +98,7 @@ copy_framework_qt()
 	src_file=`echo $WF | sed -e 's/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_file=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_lib=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\/.*\)$/\1/g'` 
-	#echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
@@ -118,7 +118,7 @@ copy_framework()
 	dst_lib=$3
 	BUNDLE=$4
 	
-	#echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
@@ -209,8 +209,8 @@ update_links()
 
 fix_links() {
 	file=$1
-	
-	for lib in $EXTRA_LIBS $QTLIBS ; do
+
+	for lib in $EXECUTABLES $EXTRA_LIBS $QTLIBS ; do
 		update_links $file $lib $APPBUNDLE
 	done
 	for lib in $EXTRA_FRAMEWORKS; do
@@ -239,8 +239,12 @@ for app in $EXECUTABLES; do
                 copy_framework_qt $APPBUNDLE/Contents/MacOS/$app $QT_INSTALL_LIBS/$qtlib $APPBUNDLE
         done
 
+        for qtlib in $EXTRA_QT_FRAMEWORKS; do
+                copy_framework $QT_INSTALL_LIBS/$qtlib.framework $qtlib.framework $qtlib.framework/Versions/Current/$qtlib $APPBUNDLE
+        done        
+
         for fmw in $EXTRA_FRAMEWORKS ; do
-                copy_framework /Library/Frameworks/$fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
+                copy_framework $fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
         done
 
         for lib in $EXTRA_LIBS; do
@@ -302,6 +306,10 @@ done
 for i in chrono date_time atomic ; do
     install_name_tool -change /usr/local/opt/boost/lib/libboost_$i-mt.dylib @executable_path/../Frameworks/libboost_$i-mt.dylib $APPBUNDLE/Contents/Frameworks/libCGAL.13.dylib
 done
+
+# Fix program_options in displace
+
+install_name_tool -change /usr/local/opt/boost/lib/libboost_program_options.dylib @executable_path/../Frameworks/libboost_program_options.dylib $APPBUNDLE/Contents/MacOS/displace
 
 # Copy of R Scripts
 
@@ -377,6 +385,8 @@ fi
 $QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
+QT_INSTALL_LIBS=~/Qt/5.12.2/clang_64/lib/
+QT_INSTALL_PLUGINS=~/Qt/5.12.2/clang_64/plugins/
 TOPDIR=$PWD
 DESTDIR=$PWD/build/$T/bin
 INSTALL=$PWD/build
@@ -384,13 +394,14 @@ APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
 EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor objeditor"
+EXTRA_QT_FRAMEWORKS="QtDBus"
 EXTRA_FRAMEWORKS=""
 # EXTRA_LIBS must be found as dependency in EXECUTABLES
-EXTRA_LIBS="libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
+EXTRA_LIBS="libmsqlitecpp libsqlite3 libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 # These INSTALL_EXTRA_LIBS will be installed regardless of the links
-INSTALL_EXTRA_LIBS="/usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib"
+INSTALL_EXTRA_LIBS="/usr/local/lib/libmsqlitecpp.0.dylib /usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib /usr/local/opt/boost/lib/libboost_system-mt.dylib /usr/local/opt/boost/lib/libboost_program_options.dylib"
 
 
 TOOLDIR=`dirname $0`

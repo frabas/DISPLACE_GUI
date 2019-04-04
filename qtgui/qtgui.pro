@@ -87,7 +87,7 @@ win32:LIBS += -L$$QMC_GDAL_LIB -lgdal_i
 # Add GDAL library path and library (unix).
 unix:LIBS += -lgdal
 
-macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
+#macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
 
 SOURCES += \
     main.cpp \
@@ -359,16 +359,19 @@ HEADERS += \
 
 ### mSQLiteCpp dependency
 
-DEFINES += BUILD_MSQLITECPP
-INCLUDEPATH += $$SRCROOT/mSqliteCpp/include
-SOURCES += $$SRCROOT/mSqliteCpp/src/*.cpp
-HEADERS += $$SRCROOT/mSqliteCpp/include/*.h
-!win32: LIBS += -lsqlite3
+#DEFINES += BUILD_MSQLITECPP
+#INCLUDEPATH += $$SRCROOT/mSqliteCpp/include
+#SOURCES += $$SRCROOT/mSqliteCpp/src/*.cpp
+#HEADERS += $$SRCROOT/mSqliteCpp/include/*.h
+#!win32: LIBS += -lsqlite3
 
-win32 {
-    DEFINES += EMBED_MSQLITECPP
-    SOURCES += ../commons/storage/sqlite3.c
-}
+LIBS += -lmsqlitecpp -lsqlite3
+
+
+#win32 {
+#    DEFINES += EMBED_MSQLITECPP
+#    SOURCES += ../commons/storage/sqlite3.c
+#}
 
 ### End mSqliteCpp Depedency
 

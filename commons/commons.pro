@@ -180,14 +180,15 @@ HEADERS= \
     DEFINES += BUILD_MSQLITECPP
 }
 
-INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
-SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
-HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
-!win32: LIBS += -lsqlite3
+#INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+#SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
+#HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
 
-win32 {
-    SOURCES += storage/sqlite3.c
-}
+LIBS += -lmsqlitecpp -lsqlite3
+
+#win32 {
+#    SOURCES += storage/sqlite3.c
+#}
 
 ### End mSqliteCpp Depedency
 

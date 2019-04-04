@@ -2,7 +2,7 @@
 ._*.png
 debug/
 release/
-*.pro.user*
+*.user.*
 *.o
 *.so
 .vs/

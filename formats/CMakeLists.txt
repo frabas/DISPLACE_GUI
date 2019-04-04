@@ -1,5 +1,3 @@
-project(formats)
-
 add_definitions(-DFORMATS_LIBRARY)
 
 include_directories(

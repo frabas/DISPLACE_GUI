@@ -21,7 +21,7 @@ LIBS+= -L.. -ldisplacecommons -lformats
 !win32: -lsqlite3
 
 macx {
-    LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
+    #LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
     CONFIG -= app_bundle
 }
 

@@ -5867,6 +5867,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
         }
+
+        ///------------------------------///
+        ///------------------------------///
+        ///  THE EFFORT CONTROL          ///
+        ///------------------------------///
+        ///------------------------------///
+
+        //if(dyn_alloc_sce.option(Options::EffortControl))
+        // {
+        //   if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+        //    {
+        //         computeEffortMultiplier(); // will alter GoFishing dtree final leaf proba
+        //         for (unsigned int i =0; i < ve.size(); i++)
+        //         {
+        //            vessels[ i ]->set_effort_multiplier();
+        //         }
+        //      }
+        // }
+
+
         ///------------------------------///
         ///------------------------------///
         ///  THE FOR-LOOP OVER VESSELS   ///

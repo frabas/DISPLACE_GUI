@@ -1015,8 +1015,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                            fbar_py= populations.at(sp)->compute_fbar();
                            populations.at(sp)->set_fbar(fbar_py);
 
-
-                            if(dyn_alloc_sce.option(Options::TACs))
+                           if(dyn_alloc_sce.option(Options::TACs))
                             {
                                // compute a TAC for y+1 from a short-term forecast (STF)
                                // and a long-term management plan (LTMP)

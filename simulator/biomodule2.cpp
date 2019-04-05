@@ -236,7 +236,8 @@ int will_stop=0; // see Options::DEBUG_TAC
                        if(dyn_alloc_sce.option(Options::FMSY))
                           {
                           int multiOnTACconstraint=1.0;
-                          bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 2); // use for checking
+                          if(!computeTAC(populations, sp, tstep, multiOnTACconstraint, 2))
+                              throw std::runtime_error("Error while executing: computeTAC"); // use for checking
                           }
                      }
                  }

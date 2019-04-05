@@ -5880,14 +5880,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          {
            if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
             {
-        //     double  effort_multiplier=computeEffortMultiplier(); // will alter GoFishing dtree final leaf proba
-               double effort_multiplier=1.0;
-               // set same multiplier for all vessels....
-               for (unsigned int i =0; i < ve.size(); i++)
-                 {
-                    vessels[ i ]->set_effort_multiplier(effort_multiplier);
-                 }
-              }
+             int tgrtyear= 5; // target year for reaching the FMSY. HARDCODED FOR NOW
+             // will alter GoFishing dtree final leaf proba
+             if(!computeEffortMultiplier(populations,
+                                              vessels,
+                                              tgrtyear))
+                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+            }
          }
 
 

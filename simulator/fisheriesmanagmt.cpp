@@ -73,6 +73,15 @@ bool computeEffortMultiplier(vector<Population* >& populations,
 
     } // end sp
 
+    double effort_multiplier=1.0;
+    // set same multiplier for all vessels....
+    for (unsigned int i =0; i < vessels.size(); i++)
+      {
+         vessels[ i ]->set_effort_multiplier(effort_multiplier);
+      }
+
+
+
 return true;
 }
 

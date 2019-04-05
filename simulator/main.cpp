@@ -4265,6 +4265,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     int LastMonth=-1;
     int CurrentMonth=0;
+    int nb_y_left_to_tgrt_year=5; // init for EffortControl Option
 
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
@@ -5880,11 +5881,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          {
            if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
             {
-             int tgrtyear= 5; // target year for reaching the FMSY. HARDCODED FOR NOW
+             if(nb_y_left_to_tgrt_year>1) nb_y_left_to_tgrt_year= nb_y_left_to_tgrt_year-1; // target year for reaching the FMSY. HARDCODED FOR NOW
+
              // will alter GoFishing dtree final leaf proba
              if(!computeEffortMultiplier(populations,
                                               vessels,
-                                              tgrtyear))
+                                              nb_y_left_to_tgrt_year,
+                                              1))
                  throw std::runtime_error("Error while executing: computeEffortMultiplier");
             }
          }

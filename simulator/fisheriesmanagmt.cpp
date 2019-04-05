@@ -60,27 +60,53 @@ static void unlock()
 
 bool computeEffortMultiplier(vector<Population* >& populations,
                           vector<Vessel* >& vessels,
-                          int tgrtyear)
+                          int nb_y_left_to_tgrt_year,
+                          int HCR)
 {
+    double effort_multiplier=1.0;
+    vector<double> effort_multipliers;
 
     for(int sp=0; sp<populations.size();++sp)
     {
 
         // first, compute fbar, whatever the management regime will be...
-        double fbar_py=0.0;
-        fbar_py= populations.at(sp)->compute_fbar();
+        double fbar_py= populations.at(sp)->compute_fbar();
+        if(fbar_py>0 && fbar_py<2)
+        {
+           vector<double> fbar_ages_min_max =populations.at(sp)-> get_fbar_ages_min_max();
+           double FMSY = fbar_ages_min_max.at(6);
 
-
+           if(nb_y_left_to_tgrt_year!=0)
+           {
+            effort_multipliers.push_back((FMSY/fbar_py)/nb_y_left_to_tgrt_year);
+           }
+           else
+           {
+           effort_multipliers.push_back((FMSY/fbar_py));
+           }
+        }
     } // end sp
 
-    double effort_multiplier=1.0;
-    // set same multiplier for all vessels....
+    if(!effort_multipliers.empty())
+    {
+       // mixed fisheries issue:
+       // choose the min effort
+       if(HCR==1) effort_multiplier= *min_element(effort_multipliers.begin(), effort_multipliers.end());
+       // choose the max effort
+       if(HCR==2) effort_multiplier= *max_element(effort_multipliers.begin(), effort_multipliers.end());
+    }
+    else
+    {
+     effort_multiplier=1.0;
+    }
+
+    // set same multiplier for all vessels (for now)....
     for (unsigned int i =0; i < vessels.size(); i++)
       {
          vessels[ i ]->set_effort_multiplier(effort_multiplier);
       }
 
-
+    cout << "Effort control for next y: effort_multiplier set to " << effort_multiplier << endl;
 
 return true;
 }

@@ -40,7 +40,8 @@ using namespace std;
 
 bool computeEffortMultiplier(vector<Population* >& populations,
                           vector<Vessel* >& vessels,
-                          int tgrtyear);
+                          int nb_y_left_to_tgrt_year,
+                          int HCR);
 
 bool computeTAC(vector<Population* >& populations,
                 int sp,

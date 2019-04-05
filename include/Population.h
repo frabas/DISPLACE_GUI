@@ -194,9 +194,7 @@ class COMMONSSHARED_EXPORT Population
 		double compute_fbar();
         vector <double> compute_SSB();
         double compute_proportion_mature_fish();
-        void compute_TAC(int tstep, double multiOnTACconstraint, int HCR);
-								 // clear the cumul
-		void clear_tot_F_at_age();
+        void clear_tot_F_at_age();
         void clear_tot_M_at_age();
         void clear_tot_C_at_szgroup();
         void clear_tot_D_at_szgroup();

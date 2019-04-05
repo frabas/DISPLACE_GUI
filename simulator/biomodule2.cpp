@@ -27,6 +27,7 @@
 #include <options.h>
 #include <readdata.h>
 #include <helpers.h>
+#include <fisheriesmanagmt.h>
 #include <storage/sqliteoutputstorage.h>
 #include "storage/tables/poptable.h"
 #include "storage/tables/funcgroupstable.h"
@@ -235,7 +236,7 @@ int will_stop=0; // see Options::DEBUG_TAC
                        if(dyn_alloc_sce.option(Options::FMSY))
                           {
                           int multiOnTACconstraint=1.0;
-                          populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2); // use for checking
+                          bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 2); // use for checking
                           }
                      }
                  }
@@ -1033,33 +1034,33 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                if(dyn_alloc_sce.option(Options::LTMP)){
 
                                    try {
-                                       populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 1);
+                                       bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 1);
                                      } catch (runtime_error &) {
-                                         cout << "Fail in compute_TAC LTMP" << endl;
+                                         cout << "Fail in computeTAC LTMP" << endl;
                                          return false;
                                      }
                                } else{
                                    if(dyn_alloc_sce.option(Options::FMSY)){
 
                                        try {
-                                           populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 2);
+                                           bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 2);
                                          } catch (runtime_error &) {
-                                             cout << "Fail in compute_TAC FMSY" << endl;
+                                             cout << "Fail in computeTAC FMSY" << endl;
                                              return false;
                                          }
                                     } else{
                                        if(dyn_alloc_sce.option(Options::FMSYrange)){
                                            try {
-                                               populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 3);
+                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 3);
                                              } catch (runtime_error &) {
-                                                 cout << "Fail in compute_TAC FMSYrange" << endl;
+                                                 cout << "Fail in computeTAC FMSYrange" << endl;
                                                  return false;
                                              }
                                        } else{
                                            try {
-                                               populations.at(sp)->compute_TAC(tstep, multiOnTACconstraint, 4); // statuquo is default
+                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 4); // statuquo is default
                                              } catch (runtime_error &) {
-                                                 cout << "Fail in compute_TAC statuquo" << endl;
+                                                 cout << "Fail in computeTAC statuquo" << endl;
                                                  return false;
                                              }
                                        }

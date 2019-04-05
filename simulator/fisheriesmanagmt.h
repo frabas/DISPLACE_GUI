@@ -42,4 +42,11 @@ bool computeEffortMultiplier(vector<Population* >& populations,
                           vector<Vessel* >& vessels,
                           int tgrtyear);
 
+bool computeTAC(vector<Population* >& populations,
+                int sp,
+                int tstep,
+                double multiOnTACconstraint,
+                int HCR);
+
+
 #endif // FISHERIESMANAGMENT_H

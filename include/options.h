@@ -111,7 +111,8 @@ enum Dyn_Alloc {
     ExitVessels10Per,
     halfShippingDensity,
     DEBUG_TAC,
-    EffortControl,
+    EffortMinControl,
+    EffortMaxControl,
 
     Dyn_Alloc_last
 };

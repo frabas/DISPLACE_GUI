@@ -66,15 +66,19 @@ bool computeEffortMultiplier(vector<Population* >& populations,
     double effort_multiplier=1.0;
     vector<double> effort_multipliers;
 
+    cout << "EffortControl: HCR in use is HCR" << HCR << endl;
+
     for(int sp=0; sp<populations.size();++sp)
     {
 
-        // first, compute fbar, whatever the management regime will be...
-        double fbar_py= populations.at(sp)->compute_fbar();
+        // first, retrieve fbar for this pop (computed in biomodule2)...
+        double fbar_py= populations.at(sp)->get_fbar();
+
         if(fbar_py>0 && fbar_py<2)
         {
            vector<double> fbar_ages_min_max =populations.at(sp)-> get_fbar_ages_min_max();
            double FMSY = fbar_ages_min_max.at(6);
+           cout << "EffortControl: fbar_py this pop "<< sp << " is " <<fbar_py << ", while FMSY is " << FMSY << endl;
 
            if(nb_y_left_to_tgrt_year!=0)
            {

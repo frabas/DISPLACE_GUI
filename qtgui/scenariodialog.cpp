@@ -53,7 +53,8 @@ static const char *dyn_alloc_options[] = {
     "TechCreeping3Per",
     "ExitVessels10Per",
     "halfShippingDensity",
-    "EffortControl",
+    "EffortMinControl",
+    "EffortMaxControl",
 };
 
 static const char *dyn_pop_options[] = {

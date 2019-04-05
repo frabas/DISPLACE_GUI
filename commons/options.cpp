@@ -53,7 +53,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,ExitVessels10Per);
     O(mMap,halfShippingDensity);
     O(mMap,DEBUG_TAC);
-    O(mMap,EffortControl);
+    O(mMap,EffortMinControl);
+    O(mMap,EffortMaxControl);
 
 
 

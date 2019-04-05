@@ -5877,7 +5877,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if(dyn_alloc_sce.option(Options::EffortControl))
+        if(dyn_alloc_sce.option(Options::EffortMinControl))
          {
            if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
             {
@@ -5888,6 +5888,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                               vessels,
                                               nb_y_left_to_tgrt_year,
                                               1))
+                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+            }
+         }
+
+        if(dyn_alloc_sce.option(Options::EffortMaxControl))
+         {
+           if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+            {
+             if(nb_y_left_to_tgrt_year>1) nb_y_left_to_tgrt_year= nb_y_left_to_tgrt_year-1; // target year for reaching the FMSY. HARDCODED FOR NOW
+
+             // will alter GoFishing dtree final leaf proba
+             if(!computeEffortMultiplier(populations,
+                                              vessels,
+                                              nb_y_left_to_tgrt_year,
+                                              2))
                  throw std::runtime_error("Error while executing: computeEffortMultiplier");
             }
          }

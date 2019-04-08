@@ -42,20 +42,6 @@ Spatial planning for fisheries in the Northern Adriatic: working toward viable a
 Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 
-
-## Requirements
-
-### MacOS
-
-In MacOS, [brew](https://brew.sh) is required to install and run the Gui.
-
-Refer to the Brew documentation on how to install it.
-
-The following packages must be installed in brew:
-
-- gdal
-
-
 ## How to install DISPLACE and run a simulation
 
 

@@ -1,7 +1,7 @@
 How to build under Linux
 ========================
 
-At the time of writing, the following procedure is tested on Ubuntu 16.04LTS and, with minor adaptations, on Ubuntu 14.04 LTS.
+At the time of writing, the following procedure is tested on Ubuntu 18.04 LTS.
 Any recent linux distribution that satisfies the prerequisites should be able to compile and run Displace without issues.
 
 Note: Since displace needs support for c++14, Qt 5.6 or later is required!
@@ -14,17 +14,14 @@ gcc 4.8 and clang are compiling correctly.
 The following libraries, with development files (libraries and headers), are required to compile under linux:
 
 CGAL library version 4.6.1
-Gdal library version 1.11
+Gdal library version 2.3
 Boost 1.58 with the following components: Boost::Graph, Boost::RegEx
 GeographicLib 1.44
 
-To install prerequisites under Ubuntu 16.04:
+To install prerequisites under Ubuntu 18.04 LTS:
 
 ```
-$ sudo apt-get install libcgal11v5 libcgal-dev
-$ sudo apt-get install libgdal1i libgdal-dev
-$ sudo apt-get install libboost-all-dev
-$ sudo apt-get install libgeographic14 libgeographic-dev
+$ sudo apt install libgdal20 libgdal-dev libcgal13 libcgal-dev libboost1.65-all-dev libgeographic17 libqt5gui5 libqt5widgets5 libqt5xml5
 ```
 
 
@@ -52,26 +49,6 @@ NOTE: it may happen that the `GL/gl.h` file is missing. In this case, install th
 
 ```
 $ sudo apt-get install mesa-common-dev
-```
-
-* Ubuntu 18.04 LTS
-
-On Ubuntu 18.04, only gdal version 2 is available.
-
-Compatibility version are provided in a separate repository, or you can compile the sources by yourself.
-
-```
-libgdal1-dev_1.11.3+dfsg-3build2.1_all.deb
-libgdal1i_1.11.3+dfsg-3build2.1_amd64.deb
-libgdal-dev_1.11.3+dfsg-3build2.1_amd64.deb
-```
-
-To prevent the system from upgrading and disrupting the package system, put the packages on hold:
-
-```
-$ sudo apt-mark hold libgdal-dev
-$ sudo apt-mark hold libgdal1-dev
-$ sudo apt-mark hold libgdal1i
 ```
 
 * Building

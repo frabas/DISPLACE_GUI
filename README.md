@@ -19,8 +19,10 @@ Find your way with DISPLACE
 DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement 
 integrating underlying fish population models. The DISPLACE project develops and provides a 
 platform primarily for research purposes to transform the fishermens detailed knowledge into models,
- evaluation tools, and methods that can provide the fisheries with research and advice. 
-The model intends to serve as a basis for decision support tools for (fishery) managers.
+evaluation tools, and methods that can provide the fisheries with research and advice. 
+By conducting a ecological and socio-economic impact assessment the model intends to serve as an aid to decision-making for (fishery) managers.
+An impact assessment will help answering on what are the impacts of the different policy options and who will be affected.
+By quantifying the effects the assessment will measure how the different options compare, for example how different they perform to reach the objective(s) of the policy.
 
 
 ## How to cite
@@ -116,22 +118,34 @@ Any missing package should be automatically installed.
 
 [DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
 
+
 Run the graphical user interface for DISPLACE with e.g. displacegui
 
+
 Make sure your model objects is set to [0].
- 
+
+
 ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_select_model_0.png)
+
 
 If yes then in the main menu do a "File">"Load a Scenario Model"
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
 
+
  and choose a scenario file (a .dat file) you´ll find in the\simusspe folder of your DISPLACE dataset.
+
 
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
 
 
+ and click start for a DISPLACE simulation to start:
 
-## Simulation output formats
+
+ ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_click_start.png)
+
+
+
+ ## Simulation output formats
 
 
 Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation.

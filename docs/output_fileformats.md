@@ -143,7 +143,7 @@ vpuf/vapuf/ disc_rate_0 disc_rate_1/disc_rate_2/…/av_vapuf_month
 
 
 # (name of the app)_simu1_out.db 
-A SQlite database gathered several tables (including the data in listed text files above) 
+A SQlite database gathers several tables (including the data in listed text files above) 
 which can be read by DISPLACE itself, 
 or scrutinized with a SQL Browser e.g. the "DB Browser for SQlite" software
 

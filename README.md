@@ -4,8 +4,9 @@ Find your way with DISPLACE
 ## Summary
 - [What for?](#what-for)
 - [How to cite](#how-to-cite)
-- [How to install and run](#how-to-install)
-- [How to compile from scratch](#how-to-compile)
+- [How to install and run](#how-to-install-and-run)
+- [Simulation output formats](#simulation-output-formats)
+- [How to build from scratch](#How-to-build-from-scratch)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
 
@@ -46,9 +47,9 @@ Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wi
 
 
 Look at the [Release section](https://github.com/frabas/DISPLACE_GUI/releases) on this GitHub repository 
-to download an installer for Windows or packages for Unix and MacOSX. or alternatively, look at the 
+to download an installer for Windows, or alternatively, look at the 
 [google drive for DISPLACE](https://drive.google.com/drive/folders/0ByuO_4j-1PxtfnZBblpQNmh2a2Z4SmpkRC16T1kwR0t1RWUyOVUxdHlEZzZwZWVpaVJac00)
-also hosting additional files
+for packages for Unix and MacOSX and also hosting additional files.
 
 [DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
 
@@ -57,6 +58,12 @@ Run the graphical user interface for DISPLACE with e.g. displacegui
 Quick start fo running a DISPLACE simulation: Make sure your model objects is set to [0]. If yes then in the 
 main menu do a "File">"Load a Scenario Model" and choose a scenario file (a .dat file) you´ll find in the 
 \simusspe folder of your DISPLACE dataset.
+
+## Simulation output formats
+
+Look at the [file](https://github.com/frabas/DISPLACE_GUI/docs/output_fileformats) describing the list of files produced by a DISPLACE simulation.
+Simulation outcomes are also exported as a SQLite database that can be reload within DISPLACE in a Replay mode. The internal structure and simulated data
+can be further retrieved from the database when using an external SQLite DB browser. 
 
 ### Install on Windows
 

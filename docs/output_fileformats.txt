@@ -1,6 +1,6 @@
 Formats of output files
+written in /DISPLACE_outputs
 =======================
-
 
 
 Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/
@@ -10,17 +10,22 @@ Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/
 tstep / name / tstep_dep / x / y / course / cum_fuel / state
 
 
-* vmslikefpingonly_*.dat
--------------------
-tstep / name / tstep_dep / x / y / course / cum_fuel / state / popid/ catches (land+disc) sz0 / catches sz1 / ...
+* vmslikefpingsonly_*.dat
+--------------------
+tstep / vessel name /  start trip tstep / lon / lat/nodeid / course / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
 
 
 * popstats_*.dat
 ----------------------
-tstep / pop / N sz0 / N sz1 /.../ F age0/ F age1 /.../ SSB sz0/ SSB sz1/...
-N is in thousands of individuals and SSB is in kg
+tstep / stock/ N at szgroup (in thousands, for 14 szgrp)/  W at szgroup / SSB at size group 
+N are in thousands of individuals, W and SSB are in kg
 
 
+* popdyn_annual_indic_*.dat
+--------------------
+tstep / stock / oth mult / cpue mult / fbar / tot landings / tot discards / SSB / N at age / F at age /W at age / M at age
+
+ 
 * benthosnodes_tot_biomasses_*.dat or benthosnodes_tot_numbers_*.dat
 ----------------------
 Func gr id/ tstep / node / long / lat / number this func group id /biomass this func group id/ mean weight this func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K this funcgr 
@@ -71,11 +76,6 @@ tstep / node_idx / long / lat / cumdiscards
 tstep / node_idx / long / lat / cumcatches / threshold in percent
 
 
-* popdyn_annual_indic_*.dat
---------------------
-tstep / pop / oth_mult / cpue_mult / fbar / landings / tac / W at age/ M at age
-
-
 * popnodes_tariffs_*.dat
 --------------------
 tstep / node / long / lat /  tariffs
@@ -85,11 +85,6 @@ tstep / node / long / lat /  tariffs
 --------------------
 tstep / vessel name / departure tstep / popid / catches (landings only; unless discard ban) szgroup 0 /  szgroup 1 /... / 13
 
-
-* vmslikefpingsonly_*.dat
---------------------
-tstep / vessel name /  start trip tstep / lon / lat/nodeid / course / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
- ...note that combining vessel_name and start_trip_tstep will give a trip id.
 
 
 * export_individual_tac_*.dat
@@ -130,22 +125,52 @@ RoFTA
 BER
 CRBER
 NetPresentValue
+numTrips
+
+e.g. adding headers in R to the loglike data table:
+colnames (loglike) <- c('tstep_dep', 'tstep_arr', 'reason_back','cumsteaming', 'idx_node', 
+                        'idx_vessel', 'VE_REF', 'timeatsea', 'fuelcons', 'traveled_dist', 
+                         paste('pop.', 0:(general$nbpops-1), sep=''), 
+                         "freq_metiers", "revenue", "rev_from_av_prices", "rev_explicit_from_av_prices", 
+                         "fuelcost", "vpuf", "gav", "gradva", 
+                         "sweptr", "revpersweptarea",
+                         paste('disc.',  explicit_pops, sep=''), 
+                         "GVA", "GVAPerRevenue", "LabourSurplus", "GrossProfit", "NetProfit", 
+                         "NetProfitMargin", "GVAPerFTE", "RoFTA", "BER", "CRBER", "NetPresentValue", "numTrips")   
 
 
  * fishfarmlogs_*.dat
 ----------------------
-
 tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit /
 
 * shipslogs_*.dat
 ----------------------
-
 tstep / node / long / lat /shiptype / shipid / nb_units / fuel_use_h / NOx_emission_gperkW / SOx_emission_percentpertotalfuelmass / GHG_emission_gperkW / PME_emission_gperkW / fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission
+
 
 * windmillslogs_*.dat
 ----------------------
-
  tstep / node / long / lat / windfarmtype / windfarmid / kWh / kW_production
+
+
+* lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)
+----------------------	
+year.month / pop.0/ pop.1/ pop.2 /…/ disc.0/disc.1/disc.2/…/effort/cumsteaming/nbtrip/bwtrip/fuelcons/
+revenue/rev_from_av_prices/sweptr/revpersweptarea/fuelcost/gav/gradva/totland/totland_explicit/
+totland_implicit/rev_explicit_from_av_prices /av_effort/av_bwtrip/traveled_dist/
+vpuf/vapuf/ disc_rate_0 disc_rate_1/disc_rate_2/…/av_vapuf_month 
+
+
+* average_cumftime_layer.txt (obtained with postprocessing R routines)
+----------------------	
+	etc.
+
+
+* (name of the app)_simu1_out.db 
+----------------------	
+A SQlite database gathered several tables (including the data in listed text files above) 
+which can be read by DISPLACE itself, 
+or scrutinized with a SQL Browser e.g. the "DB Browser for SQlite" software
 
 
 

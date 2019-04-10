@@ -4,7 +4,8 @@ Find your way with DISPLACE
 ## Summary
 - [What for?](#what-for)
 - [How to cite](#how-to-cite)
-- [How to install and run](#how-to-install-and-run)
+- [How to install](#how-to-install)
+- [Quick start for running a DISPLACE simulation](#quick-start-for-running-a-displace-simulation)
 - [Simulation output formats](#simulation-output-formats)
 - [How to build from scratch](#how-to-build-from-scratch)
 - [GDAL notes](#gdal-notes)
@@ -43,38 +44,13 @@ Spatial planning for fisheries in the Northern Adriatic: working toward viable a
 Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 
-## How to install DISPLACE and run a simulation
+## How to install DISPLACE
 
 
 Look at the [Release section](https://github.com/frabas/DISPLACE_GUI/releases) on this GitHub repository 
 to download an installer for Windows, or alternatively, look at the 
 [google drive for DISPLACE](https://drive.google.com/drive/folders/0ByuO_4j-1PxtfnZBblpQNmh2a2Z4SmpkRC16T1kwR0t1RWUyOVUxdHlEZzZwZWVpaVJac00)
 for packages for Unix and MacOSX and also hosting additional files.
-
-[DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
-
-Run the graphical user interface for DISPLACE with e.g. displacegui
-
-Quick start for running a DISPLACE simulation:
-
-
-Make sure your model objects is set to [0]. 
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_select_model_0.png)
-If yes then in the 
-main menu do a "File">"Load a Scenario Model"
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
-and choose a scenario file (a .dat file) you´ll find in the 
-\simusspe folder of your DISPLACE dataset.
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
-
-
-
-## Simulation output formats
-
-
-Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation.
-Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
-can be further retrieved from the database when using an external SQLite DB browser. 
 
 
 ### Install on Windows
@@ -134,6 +110,34 @@ Any missing package should be automatically installed.
 [compiling on unix deprecated)](docs/Building.unix)
 
 [compiling on MacOSX deprecated)](docs/Building.MacOSX)
+
+
+## Quick start for running a DISPLACE simulation
+
+[DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
+
+Run the graphical user interface for DISPLACE with e.g. displacegui
+
+Make sure your model objects is set to [0].
+ 
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_select_model_0.png)
+
+If yes then in the main menu do a "File">"Load a Scenario Model"
+ ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
+
+ and choose a scenario file (a .dat file) you´ll find in the\simusspe folder of your DISPLACE dataset.
+
+ ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
+
+
+
+## Simulation output formats
+
+
+Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation.
+Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
+can be further retrieved from the database when using an external SQLite DB browser. 
+
 
 
 ## GDAL Notes

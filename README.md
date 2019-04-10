@@ -55,9 +55,18 @@ for packages for Unix and MacOSX and also hosting additional files.
 
 Run the graphical user interface for DISPLACE with e.g. displacegui
 
-Quick start fo running a DISPLACE simulation: Make sure your model objects is set to [0]. If yes then in the 
-main menu do a "File">"Load a Scenario Model" and choose a scenario file (a .dat file) you´ll find in the 
+Quick start for running a DISPLACE simulation:
+
+
+Make sure your model objects is set to [0]. 
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_select_model_0.png)
+If yes then in the 
+main menu do a "File">"Load a Scenario Model"
+ ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
+and choose a scenario file (a .dat file) you´ll find in the 
 \simusspe folder of your DISPLACE dataset.
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
+
 
 
 ## Simulation output formats

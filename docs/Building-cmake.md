@@ -53,3 +53,56 @@ $ cmake -DCMAKE_PREFIX_PATH=/opt/Qt/5.10.1/gcc_64/lib/cmake/
 
 In Windows, from the GUI, create a variable in the cache and put the path.
 
+
+### Windows compilation: inform the IDE for where to find CMake and the DISPLACE SDK
+
+First install Qt 5.12.0 https://www.qt.io/download and QtCreator that comes with.
+
+Alternatively, install JetBrains CLion, but the smooth edition of ui files will require QtCreator anyway.
+
+Install CMake on your computer.
+
+Unzip the Displace sdk e.g. vcpkg-export-20181211-212458.7z (build with https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017, 
+see Building.md, you will found the sdk on the DISPLACE_release\WindowsSupport on
+ google drive https://drive.google.com/drive/folders/0B7xTkBu0-QI5bnIxS3c4dy0tSUU ) in DISPLACE_GUI install and rename 
+the folder for e.g. displacesdk
+
+```bash
+cd <your sdk position>
+```
+
+Install Python 3  https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/python.html
+ and run the python >=3.7.0 script for a fix on hardcoded absolute paths with
+
+```bash
+python.exe <your-displace-position>/tools/vcpkg-fixup.py
+```
+
+ Open the DISPLACE project e.g. in QtCreator or CLion with the CMakeList.txt file
+
+ Configure CMake by adding a arg variable, for example:
+```bash
+CMAKE_TOOLCHAIN_FILE=C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\install\displacesdk\scripts\buildsystems\vcpkg.cmake
+```
+
+In QtCreator:
+
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CMAKE_TOOLCHAIN_FILE_in_QtCreator.png)
+
+In CLion:
+
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CMAKE_TOOLCHAIN_FILE_in_CLion.png)
+
+Clear or reset cache and re-run CMake
+
+Compile DISPLACE_GUI
+
+Set the Run on displacegui and run!
+
+(If CLion, Run displace first to Build it with CMake)
+
+on Windows, possibly check PATH for e.g.  C:\Qt\5.12.0\msvc2017_64\bin that should be in PATH
+
+
+
+

@@ -6,7 +6,7 @@ Find your way with DISPLACE
 - [How to cite](#how-to-cite)
 - [How to install and run](#how-to-install-and-run)
 - [Simulation output formats](#simulation-output-formats)
-- [How to build from scratch](#How-to-build-from-scratch)
+- [How to build from scratch](#how-to-build-from-scratch)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
 
@@ -59,11 +59,14 @@ Quick start fo running a DISPLACE simulation: Make sure your model objects is se
 main menu do a "File">"Load a Scenario Model" and choose a scenario file (a .dat file) you´ll find in the 
 \simusspe folder of your DISPLACE dataset.
 
+
 ## Simulation output formats
 
-Look at the [file](https://github.com/frabas/DISPLACE_GUI/docs/output_fileformats) describing the list of files produced by a DISPLACE simulation.
-Simulation outcomes are also exported as a SQLite database that can be reload within DISPLACE in a Replay mode. The internal structure and simulated data
+
+Look at the [description](https://github.com/frabas/DISPLACE_GUI/docs/output_fileformats.txt) of the list of files produced by a DISPLACE simulation.
+Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
 can be further retrieved from the database when using an external SQLite DB browser. 
+
 
 ### Install on Windows
 

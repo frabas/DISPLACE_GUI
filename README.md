@@ -106,7 +106,9 @@ Any missing package should be automatically installed.
 
 [compiling with CMake (preferred)](docs/Building-cmake.md)
 
-[make the displace sdk (optional)](docs/building.md)
+[compiling on HPC (simulator only)](docs/Building-on-hpc.md)
+
+[making the displace sdk (optional)](docs/building.md)
 
 [compiling on Windows (deprecated)](docs/Building.win)
 

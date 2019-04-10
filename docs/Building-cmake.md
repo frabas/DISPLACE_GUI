@@ -51,7 +51,7 @@ If Qt has been installed in `/opt/Qt/5.10.1`, for example, specify:
 $ cmake -DCMAKE_PREFIX_PATH=/opt/Qt/5.10.1/gcc_64/lib/cmake/
 ```
 
-In Windows, from the GUI, create a variable in the cache and put the path.
+In Windows, from the GUI, create a variable in the cache and put the path (see next section).
 
 
 ### Windows compilation: inform the IDE for where to find CMake and the DISPLACE SDK
@@ -59,6 +59,12 @@ In Windows, from the GUI, create a variable in the cache and put the path.
 First install Qt 5.12.0 https://www.qt.io/download and QtCreator that comes with.
 
 Alternatively, install JetBrains CLion, but the smooth edition of ui files will require QtCreator anyway.
+
+But remember to set et up CLion in Menu>File> settings
+For amd64 architecture because we are working in 64bits.
+
+![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CLion_for_amd64.png)
+
 
 Install CMake on your computer.
 

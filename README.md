@@ -63,7 +63,7 @@ main menu do a "File">"Load a Scenario Model" and choose a scenario file (a .dat
 ## Simulation output formats
 
 
-Look at the [description](https://github.com/frabas/DISPLACE_GUI/docs/output_fileformats.txt) of the list of files produced by a DISPLACE simulation.
+Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation.
 Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
 can be further retrieved from the database when using an external SQLite DB browser. 
 

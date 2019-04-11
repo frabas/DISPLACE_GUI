@@ -147,12 +147,17 @@ You can now click start in the DISPLACE command panel for a DISPLACE simulation 
 
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_click_start.png)
 
-After some object creation and initialization the time step window will shortly update and the simulation run to the end time step.
+After some object creation and initialization the time step window will shortly update and the simulation run to the end time step
+By default, 8762 hourly time steps will be simulated which is approx. the nb of hours in one year.
+in Setup menu this can be changed to up to 52586 for a maximal 6y horizon. 
+Because of the computation time running more than one year simulation and many replicates are better done on a HPC cluster.
+Automated shell scripts to run many DISPLACE simulations in parallel on a HPC cluster can be provided on request. 
 
  ## Simulation output formats
 
 
-Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation.
+Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation. 
+A [displaceplot](https://github.com/frabas/displaceplot/releases) R package has been developed to handle these output text files and produced some plots out of them. 
 Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
 can be further retrieved from the database when using an external SQLite DB browser. 
 

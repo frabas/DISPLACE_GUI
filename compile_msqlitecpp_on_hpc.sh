@@ -13,4 +13,3 @@ cd Build
 
 make DESTDIR="/zhome/fe/8/43283/local/mSqliteCpp/" install
 
-#-DENABLE_SQLITE_AMALGAMATION=ON -DSQLITE_SOURCE_PATH="/zhome/fe/8/43283/ibm_vessels_DISPLACE_GUI/commons/storage/" -DSQLITE_INCLUDE_PATH="zhome/fe/8/43283/ibm_vessels_DISPLACE_GUI/commons/storage/"

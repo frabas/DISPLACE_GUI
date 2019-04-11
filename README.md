@@ -34,17 +34,17 @@ fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3
 
 * Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
 Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
+under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to a free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
 
 * Bastardie, F., Nielsen, J. R., Eero, M., Fuga, F. Rindorf., A. 2017. Effects of changes
 in stock productivity and mixing on sustainable fishing and economic viability,
 ICES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551
-[link to free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
+[link to a free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
 
 * Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M.,
 Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. 
 Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
-Ecosphere 8( 2):e01696. [link to free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
+Ecosphere 8( 2):e01696. [link to a free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 
 
 ## How to install DISPLACE
@@ -115,12 +115,14 @@ Any missing package should be automatically installed.
 [compiling on MacOSX deprecated)](docs/Building.MacOSX)
 
 
-## Quick start for running a DISPLACE simulation
+## Quick start for running a basic DISPLACE simulation
 
-[DISPLACE Example datasets](https://displace-project.org/blog/download/) are available (DISPLACE_input_xx)
+[DISPLACE Example datasets](https://displace-project.org/blog/download/) are available for download. 
+You need to unzip the downloaded file to a folder that name the dataset with the pattern DISPLACE_input_xx,
+for example DISPLACE_input_minitest which is the minimal dataset typically used for demonstration purpose.
 
 
-Run the graphical user interface for DISPLACE with e.g. displacegui
+Run DISPLACE with e.g. displacegui
 
 
 By default the Model Objects is set to 4. If you want to run a scenario, first make sure your Model Objects is set to [0].
@@ -135,22 +137,22 @@ If yes then in the main menu do a "File">"Load a Scenario Model,
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
 
 
-and choose a scenario file (a .dat file) you´ll find in the\simusspe folder of your DISPLACE dataset.
+and choose a scenario file (a .dat file) you´ll find in the\simusspe subfolder of your DISPLACE dataset.
 Select the file, click Ok and wait to see the DISPLACE graph plotted on the map.
 
 
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
 
 
-You can now click start in the DISPLACE command panel for a DISPLACE simulation to start:
+You can now click Start in the DISPLACE command panel for a DISPLACE simulation to start:
 
 
  ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_click_start.png)
 
-After some object creation and initialization the time step window will shortly update and the simulation run to the end time step
-By default, 8762 hourly time steps will be simulated which is approx. the nb of hours in one year.
-in Setup menu this can be changed to up to 52586 for a maximal 6y horizon. 
-Because of the computation time running more than one year simulation and many replicates are better done on a HPC cluster.
+After some object creation and initialization the time step window will shortly update and the simulation run to the end time step. 
+By default, 8762 hourly time steps will be simulated which is approx. the number of hours in one year.
+in Setup menu the total number of time step can be changed to up to 52586 for a maximal 6-years horizon. 
+Because of the computation time, running more than one year simulation and many replicates are better done on a HPC cluster.
 Automated shell scripts to run many DISPLACE simulations in parallel on a HPC cluster can be provided on request. 
 
  ## Simulation output formats

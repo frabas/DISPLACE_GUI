@@ -1,0 +1,67 @@
+\hypertarget{classdtree_1_1_const_state_evaluator}{}\section{dtree\+::Const\+State\+Evaluator$<$ T $>$ Class Template Reference}
+\label{classdtree_1_1_const_state_evaluator}\index{dtree::ConstStateEvaluator$<$ T $>$@{dtree::ConstStateEvaluator$<$ T $>$}}
+
+
+A templated class that evaluates constant-\/valued variable.  
+
+
+
+
+{\ttfamily \#include $<$commonstateevaluators.\+h$>$}
+
+Inheritance diagram for dtree\+::Const\+State\+Evaluator$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{dd/d32/classdtree_1_1_const_state_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1_const_state_evaluator_a0f5769321b5312ed6d371ed157d25ff6}{Const\+State\+Evaluator}} (const T \&var)
+\item 
+double \mbox{\hyperlink{classdtree_1_1_const_state_evaluator_aaa06b99c86b4390cfdcdcfc43f210eb6}{evaluate}} (int, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class dtree\+::\+Const\+State\+Evaluator$<$ T $>$}
+
+A templated class that evaluates constant-\/valued variable. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1_const_state_evaluator_a0f5769321b5312ed6d371ed157d25ff6}\label{classdtree_1_1_const_state_evaluator_a0f5769321b5312ed6d371ed157d25ff6}} 
+\index{dtree::ConstStateEvaluator$<$ T $>$@{dtree::ConstStateEvaluator$<$ T $>$}!ConstStateEvaluator@{ConstStateEvaluator}}
+\index{ConstStateEvaluator@{ConstStateEvaluator}!dtree::ConstStateEvaluator$<$ T $>$@{dtree::ConstStateEvaluator$<$ T $>$}}
+\subsubsection{\texorpdfstring{ConstStateEvaluator()}{ConstStateEvaluator()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classdtree_1_1_const_state_evaluator}{dtree\+::\+Const\+State\+Evaluator}}$<$ T $>$\+::\mbox{\hyperlink{classdtree_1_1_const_state_evaluator}{Const\+State\+Evaluator}} (\begin{DoxyParamCaption}\item[{const T \&}]{var }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1_const_state_evaluator_aaa06b99c86b4390cfdcdcfc43f210eb6}\label{classdtree_1_1_const_state_evaluator_aaa06b99c86b4390cfdcdcfc43f210eb6}} 
+\index{dtree::ConstStateEvaluator$<$ T $>$@{dtree::ConstStateEvaluator$<$ T $>$}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!dtree::ConstStateEvaluator$<$ T $>$@{dtree::ConstStateEvaluator$<$ T $>$}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+double \mbox{\hyperlink{classdtree_1_1_const_state_evaluator}{dtree\+::\+Const\+State\+Evaluator}}$<$ T $>$\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{commonstateevaluators_8h}{commonstateevaluators.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,49 @@
+\hypertarget{structfts5__api}{}\section{fts5\+\_\+api Struct Reference}
+\label{structfts5__api}\index{fts5\_api@{fts5\_api}}
+
+
+{\ttfamily \#include $<$sqlite3.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structfts5__api_a3c338289abb33e1805da870172956a7c}{i\+Version}}
+\item 
+int($\ast$ \mbox{\hyperlink{structfts5__api_a7fe3663f85eab512d5c461e1674da129}{x\+Create\+Tokenizer}} )(\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$p\+Context, \mbox{\hyperlink{structfts5__tokenizer}{fts5\+\_\+tokenizer}} $\ast$p\+Tokenizer, void($\ast$x\+Destroy)(void $\ast$))
+\item 
+int($\ast$ \mbox{\hyperlink{structfts5__api_a20a23794695fa61e2892ad1243b16b67}{x\+Find\+Tokenizer}} )(\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$$\ast$pp\+Context, \mbox{\hyperlink{structfts5__tokenizer}{fts5\+\_\+tokenizer}} $\ast$p\+Tokenizer)
+\item 
+int($\ast$ \mbox{\hyperlink{structfts5__api_acf1a0612be3b91b908f38ecbc6735d17}{x\+Create\+Function}} )(\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$p\+Context, \mbox{\hyperlink{sqlite3_8h_a8a1df7b5a066b194f490be5936e85c17}{fts5\+\_\+extension\+\_\+function}} x\+Function, void($\ast$x\+Destroy)(void $\ast$))
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structfts5__api_a3c338289abb33e1805da870172956a7c}\label{structfts5__api_a3c338289abb33e1805da870172956a7c}} 
+\index{fts5\_api@{fts5\_api}!iVersion@{iVersion}}
+\index{iVersion@{iVersion}!fts5\_api@{fts5\_api}}
+\subsubsection{\texorpdfstring{iVersion}{iVersion}}
+{\footnotesize\ttfamily int fts5\+\_\+api\+::i\+Version}
+
+\mbox{\Hypertarget{structfts5__api_acf1a0612be3b91b908f38ecbc6735d17}\label{structfts5__api_acf1a0612be3b91b908f38ecbc6735d17}} 
+\index{fts5\_api@{fts5\_api}!xCreateFunction@{xCreateFunction}}
+\index{xCreateFunction@{xCreateFunction}!fts5\_api@{fts5\_api}}
+\subsubsection{\texorpdfstring{xCreateFunction}{xCreateFunction}}
+{\footnotesize\ttfamily int($\ast$ fts5\+\_\+api\+::x\+Create\+Function) (\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$p\+Context, \mbox{\hyperlink{sqlite3_8h_a8a1df7b5a066b194f490be5936e85c17}{fts5\+\_\+extension\+\_\+function}} x\+Function, void($\ast$x\+Destroy)(void $\ast$))}
+
+\mbox{\Hypertarget{structfts5__api_a7fe3663f85eab512d5c461e1674da129}\label{structfts5__api_a7fe3663f85eab512d5c461e1674da129}} 
+\index{fts5\_api@{fts5\_api}!xCreateTokenizer@{xCreateTokenizer}}
+\index{xCreateTokenizer@{xCreateTokenizer}!fts5\_api@{fts5\_api}}
+\subsubsection{\texorpdfstring{xCreateTokenizer}{xCreateTokenizer}}
+{\footnotesize\ttfamily int($\ast$ fts5\+\_\+api\+::x\+Create\+Tokenizer) (\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$p\+Context, \mbox{\hyperlink{structfts5__tokenizer}{fts5\+\_\+tokenizer}} $\ast$p\+Tokenizer, void($\ast$x\+Destroy)(void $\ast$))}
+
+\mbox{\Hypertarget{structfts5__api_a20a23794695fa61e2892ad1243b16b67}\label{structfts5__api_a20a23794695fa61e2892ad1243b16b67}} 
+\index{fts5\_api@{fts5\_api}!xFindTokenizer@{xFindTokenizer}}
+\index{xFindTokenizer@{xFindTokenizer}!fts5\_api@{fts5\_api}}
+\subsubsection{\texorpdfstring{xFindTokenizer}{xFindTokenizer}}
+{\footnotesize\ttfamily int($\ast$ fts5\+\_\+api\+::x\+Find\+Tokenizer) (\mbox{\hyperlink{structfts5__api}{fts5\+\_\+api}} $\ast$p\+Api, const char $\ast$z\+Name, void $\ast$$\ast$pp\+Context, \mbox{\hyperlink{structfts5__tokenizer}{fts5\+\_\+tokenizer}} $\ast$p\+Tokenizer)}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/\mbox{\hyperlink{sqlite3_8h}{sqlite3.\+h}}\end{DoxyCompactItemize}

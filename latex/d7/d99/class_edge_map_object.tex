@@ -1,0 +1,83 @@
+\hypertarget{class_edge_map_object}{}\section{Edge\+Map\+Object Class Reference}
+\label{class_edge_map_object}\index{EdgeMapObject@{EdgeMapObject}}
+
+
+{\ttfamily \#include $<$edgemapobject.\+h$>$}
+
+Inheritance diagram for Edge\+Map\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d7/d99/class_edge_map_object}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_edge_map_object_aa3e1087fc4df5083dc8fc0ad6010eeb7}{edge\+Selection\+Has\+Changed}} (\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$object)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_edge_map_object_a539163cd70096071278b18b1501e3838}{Edge\+Map\+Object}} (\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$controller, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node_data_1_1_edge}{Node\+Data\+::\+Edge}} $>$ \mbox{\hyperlink{structedge}{edge}})
+\item 
+std\+::shared\+\_\+ptr$<$ qmapcontrol\+::\+Geometry $>$ \mbox{\hyperlink{class_edge_map_object_a5a67249e9896a6931eb5e4819e069c00}{get\+Geometry\+Entity}} () const
+\item 
+bool \mbox{\hyperlink{class_edge_map_object_a4489e116b68b86423a0a9df62b682c17}{selected}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ \mbox{\hyperlink{class_edge_map_object_a7a50daac2d1455401e49d69db3cac61e}{node}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ \mbox{\hyperlink{class_edge_map_object_a471bebfdb702d8438d34c89a3158183f}{target}} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_edge_map_object_a539163cd70096071278b18b1501e3838}\label{class_edge_map_object_a539163cd70096071278b18b1501e3838}} 
+\index{EdgeMapObject@{EdgeMapObject}!EdgeMapObject@{EdgeMapObject}}
+\index{EdgeMapObject@{EdgeMapObject}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{EdgeMapObject()}{EdgeMapObject()}}
+{\footnotesize\ttfamily Edge\+Map\+Object\+::\+Edge\+Map\+Object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$}]{controller,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node_data_1_1_edge}{Node\+Data\+::\+Edge}} $>$}]{edge }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_edge_map_object_aa3e1087fc4df5083dc8fc0ad6010eeb7}\label{class_edge_map_object_aa3e1087fc4df5083dc8fc0ad6010eeb7}} 
+\index{EdgeMapObject@{EdgeMapObject}!edgeSelectionHasChanged@{edgeSelectionHasChanged}}
+\index{edgeSelectionHasChanged@{edgeSelectionHasChanged}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{edgeSelectionHasChanged}{edgeSelectionHasChanged}}
+{\footnotesize\ttfamily void Edge\+Map\+Object\+::edge\+Selection\+Has\+Changed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$}]{object }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_edge_map_object_a5a67249e9896a6931eb5e4819e069c00}\label{class_edge_map_object_a5a67249e9896a6931eb5e4819e069c00}} 
+\index{EdgeMapObject@{EdgeMapObject}!getGeometryEntity@{getGeometryEntity}}
+\index{getGeometryEntity@{getGeometryEntity}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{getGeometryEntity()}{getGeometryEntity()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$qmapcontrol\+::\+Geometry$>$ Edge\+Map\+Object\+::get\+Geometry\+Entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_map_object_a82e055e41c862ec8d80d5bfb137b3253}{Map\+Object}}.
+
+\mbox{\Hypertarget{class_edge_map_object_a7a50daac2d1455401e49d69db3cac61e}\label{class_edge_map_object_a7a50daac2d1455401e49d69db3cac61e}} 
+\index{EdgeMapObject@{EdgeMapObject}!node@{node}}
+\index{node@{node}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{node()}{node()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_node_data}{Node\+Data}}$>$ Edge\+Map\+Object\+::node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_edge_map_object_a4489e116b68b86423a0a9df62b682c17}\label{class_edge_map_object_a4489e116b68b86423a0a9df62b682c17}} 
+\index{EdgeMapObject@{EdgeMapObject}!selected@{selected}}
+\index{selected@{selected}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{selected()}{selected()}}
+{\footnotesize\ttfamily bool Edge\+Map\+Object\+::selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_edge_map_object_a471bebfdb702d8438d34c89a3158183f}\label{class_edge_map_object_a471bebfdb702d8438d34c89a3158183f}} 
+\index{EdgeMapObject@{EdgeMapObject}!target@{target}}
+\index{target@{target}!EdgeMapObject@{EdgeMapObject}}
+\subsubsection{\texorpdfstring{target()}{target()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_node_data}{Node\+Data}}$>$ Edge\+Map\+Object\+::target (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/mapobjects/\mbox{\hyperlink{edgemapobject_8h}{edgemapobject.\+h}}\item 
+qtgui/mapobjects/\mbox{\hyperlink{edgemapobject_8cpp}{edgemapobject.\+cpp}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__edgemapobject_8cpp}{moc\+\_\+edgemapobject.\+cpp}}\end{DoxyCompactItemize}

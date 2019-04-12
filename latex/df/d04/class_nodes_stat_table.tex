@@ -1,0 +1,74 @@
+\hypertarget{class_nodes_stat_table}{}\section{Nodes\+Stat\+Table Class Reference}
+\label{class_nodes_stat_table}\index{NodesStatTable@{NodesStatTable}}
+
+
+{\ttfamily \#include $<$nodesstattable.\+h$>$}
+
+Inheritance diagram for Nodes\+Stat\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/d04/class_nodes_stat_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_nodes_stat_table_1_1_impl}{Impl}}
+\item 
+struct \mbox{\hyperlink{struct_nodes_stat_table_1_1_node_stat}{Node\+Stat}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nodes_stat_table_a0634098ee5044cb1c45ee9f98ceda634}{Nodes\+Stat\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_nodes_stat_table_a760231eb30d44edb19df78f1744c38dd}{$\sim$\+Nodes\+Stat\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_nodes_stat_table_a867eaa1657a7125132dda8bdea8c0eae}{drop\+And\+Create}} ()
+\item 
+bool \mbox{\hyperlink{class_nodes_stat_table_a0799bc8fb3e753ed845f416065a81b6f}{insert}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_node}{Node}} $\ast$node)
+\item 
+void \mbox{\hyperlink{class_nodes_stat_table_a4af2ed624c3dcaaebd5ff55c735ade9e}{query\+All\+Nodes\+At\+Step}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, std\+::function$<$ bool(\mbox{\hyperlink{struct_nodes_stat_table_1_1_node_stat}{Node\+Stat}} stat)$>$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_nodes_stat_table_a0634098ee5044cb1c45ee9f98ceda634}\label{class_nodes_stat_table_a0634098ee5044cb1c45ee9f98ceda634}} 
+\index{NodesStatTable@{NodesStatTable}!NodesStatTable@{NodesStatTable}}
+\index{NodesStatTable@{NodesStatTable}!NodesStatTable@{NodesStatTable}}
+\subsubsection{\texorpdfstring{NodesStatTable()}{NodesStatTable()}}
+{\footnotesize\ttfamily Nodes\+Stat\+Table\+::\+Nodes\+Stat\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_stat_table_a760231eb30d44edb19df78f1744c38dd}\label{class_nodes_stat_table_a760231eb30d44edb19df78f1744c38dd}} 
+\index{NodesStatTable@{NodesStatTable}!````~NodesStatTable@{$\sim$NodesStatTable}}
+\index{````~NodesStatTable@{$\sim$NodesStatTable}!NodesStatTable@{NodesStatTable}}
+\subsubsection{\texorpdfstring{$\sim$NodesStatTable()}{~NodesStatTable()}}
+{\footnotesize\ttfamily Nodes\+Stat\+Table\+::$\sim$\+Nodes\+Stat\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_nodes_stat_table_a867eaa1657a7125132dda8bdea8c0eae}\label{class_nodes_stat_table_a867eaa1657a7125132dda8bdea8c0eae}} 
+\index{NodesStatTable@{NodesStatTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!NodesStatTable@{NodesStatTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Nodes\+Stat\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_stat_table_a0799bc8fb3e753ed845f416065a81b6f}\label{class_nodes_stat_table_a0799bc8fb3e753ed845f416065a81b6f}} 
+\index{NodesStatTable@{NodesStatTable}!insert@{insert}}
+\index{insert@{insert}!NodesStatTable@{NodesStatTable}}
+\subsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily bool Nodes\+Stat\+Table\+::insert (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_stat_table_a4af2ed624c3dcaaebd5ff55c735ade9e}\label{class_nodes_stat_table_a4af2ed624c3dcaaebd5ff55c735ade9e}} 
+\index{NodesStatTable@{NodesStatTable}!queryAllNodesAtStep@{queryAllNodesAtStep}}
+\index{queryAllNodesAtStep@{queryAllNodesAtStep}!NodesStatTable@{NodesStatTable}}
+\subsubsection{\texorpdfstring{queryAllNodesAtStep()}{queryAllNodesAtStep()}}
+{\footnotesize\ttfamily void Nodes\+Stat\+Table\+::query\+All\+Nodes\+At\+Step (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{std\+::function$<$ bool(\mbox{\hyperlink{struct_nodes_stat_table_1_1_node_stat}{Node\+Stat}} stat)$>$}]{ }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{nodesstattable_8h}{nodesstattable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{nodesstattable_8cpp}{nodesstattable.\+cpp}}\end{DoxyCompactItemize}

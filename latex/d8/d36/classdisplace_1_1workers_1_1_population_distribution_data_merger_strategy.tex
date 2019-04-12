@@ -1,0 +1,188 @@
+\hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy}{}\section{displace\+::workers\+::Population\+Distribution\+Data\+Merger\+Strategy Class Reference}
+\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy}\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+
+
+{\ttfamily \#include $<$populationdistributiondatamergerstrategy.\+h$>$}
+
+Inheritance diagram for displace\+::workers\+::Population\+Distribution\+Data\+Merger\+Strategy\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d8/d36/classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a4351887c2f02288ce8d6ac878e96256b}{Population\+Distribution\+Data\+Merger\+Strategy}} (\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model)
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a91d2c393f913bed2f4b276fbddb2c4c8}{attach}} (\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger}{Data\+Merger}} $\ast$merger) override
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a6ffc92cb6a4864e061f22212d3a4ee23}{process\+Header\+Field}} (Q\+String field, int i) override
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9b777133a622972bb5d8008753b3b6df}{post\+Header\+Processed}} () override
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_af69e684d518d2a441c726eb7d8a21501}{process\+Line}} (int linenum, Q\+String line) override
+\begin{DoxyCompactList}\small\item\em process a single line of the file \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a5fb32f900e449b7740b3ce4618b068c9}{save\+Output}} (Q\+String out) override
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9f379a5cbb42faa0feacdffb6cf3fb4c}{set\+Stocks}} (Q\+String\+List stocks)
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a32215a2cff2db50cc1823d75da6ecba7}{set\+Groups}} (Q\+List$<$ int $>$ groups)
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_acfacb6d8cc4e2c51a005ccc77b417ab5}{set\+Population\+Output\+File\+Name}} (Q\+String name)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a37c7981669f8d80aca2753b2ea4e2937}{Year\+Field}} = \char`\"{}Year\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_ad2891462147b8c60d9acbc29927eec4c}{Semester\+Field}} = \char`\"{}Semester\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a581d7fa0714a75e0242c2388580c86d7}{Lat\+Field}} = \char`\"{}Shoot\+Lat\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a347da574cc40a787ae4d6298d872bce3}{Long\+Field}} = \char`\"{}Shoot\+Lon\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a10f1aed9f287d21b82aa9d954a94173c}{Stock\+Field}} = \char`\"{}Stock\+Id\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a1334a0f21e71b4c9a4054ec481cadfda}{Indiv\+Field\+Pattern}} = \char`\"{}nb\+\_\+indiv.\char`\"{}
+\item 
+static const char $\ast$const \mbox{\hyperlink{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a805acac19607dc1d29bfed9874ae44dd}{Size\+Field\+Beginning}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a4351887c2f02288ce8d6ac878e96256b}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a4351887c2f02288ce8d6ac878e96256b}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!PopulationDistributionDataMergerStrategy@{PopulationDistributionDataMergerStrategy}}
+\index{PopulationDistributionDataMergerStrategy@{PopulationDistributionDataMergerStrategy}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{PopulationDistributionDataMergerStrategy()}{PopulationDistributionDataMergerStrategy()}}
+{\footnotesize\ttfamily Population\+Distribution\+Data\+Merger\+Strategy\+::\+Population\+Distribution\+Data\+Merger\+Strategy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a91d2c393f913bed2f4b276fbddb2c4c8}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a91d2c393f913bed2f4b276fbddb2c4c8}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!attach@{attach}}
+\index{attach@{attach}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{attach()}{attach()}}
+{\footnotesize\ttfamily void Population\+Distribution\+Data\+Merger\+Strategy\+::attach (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger}{Data\+Merger}} $\ast$}]{merger }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy_a00af0dfbcdec7b2c65a2533b261fdfd1}{displace\+::workers\+::\+Data\+Merger\+::\+Strategy}}.
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9b777133a622972bb5d8008753b3b6df}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9b777133a622972bb5d8008753b3b6df}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!postHeaderProcessed@{postHeaderProcessed}}
+\index{postHeaderProcessed@{postHeaderProcessed}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{postHeaderProcessed()}{postHeaderProcessed()}}
+{\footnotesize\ttfamily bool Population\+Distribution\+Data\+Merger\+Strategy\+::post\+Header\+Processed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy_a2ef649650a70b8f1b60ccfe432e6ab5e}{displace\+::workers\+::\+Data\+Merger\+::\+Strategy}}.
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a6ffc92cb6a4864e061f22212d3a4ee23}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a6ffc92cb6a4864e061f22212d3a4ee23}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!processHeaderField@{processHeaderField}}
+\index{processHeaderField@{processHeaderField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{processHeaderField()}{processHeaderField()}}
+{\footnotesize\ttfamily bool Population\+Distribution\+Data\+Merger\+Strategy\+::process\+Header\+Field (\begin{DoxyParamCaption}\item[{Q\+String}]{field,  }\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy_a00c094e55d6d8413710368af55c55224}{displace\+::workers\+::\+Data\+Merger\+::\+Strategy}}.
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_af69e684d518d2a441c726eb7d8a21501}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_af69e684d518d2a441c726eb7d8a21501}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!processLine@{processLine}}
+\index{processLine@{processLine}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{processLine()}{processLine()}}
+{\footnotesize\ttfamily void Population\+Distribution\+Data\+Merger\+Strategy\+::process\+Line (\begin{DoxyParamCaption}\item[{int}]{linenum,  }\item[{Q\+String}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+process a single line of the file 
+
+\begin{DoxyNote}{Note}
+this is executed from within multiple thread, so it must be thread-\/safe. 
+\end{DoxyNote}
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy_affc6b82b186a4e8fbe2c8adf0a3d136a}{displace\+::workers\+::\+Data\+Merger\+::\+Strategy}}.
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a5fb32f900e449b7740b3ce4618b068c9}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a5fb32f900e449b7740b3ce4618b068c9}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!saveOutput@{saveOutput}}
+\index{saveOutput@{saveOutput}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{saveOutput()}{saveOutput()}}
+{\footnotesize\ttfamily bool Population\+Distribution\+Data\+Merger\+Strategy\+::save\+Output (\begin{DoxyParamCaption}\item[{Q\+String}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy_a789b4eee626c5947091e5153e450c91a}{displace\+::workers\+::\+Data\+Merger\+::\+Strategy}}.
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a32215a2cff2db50cc1823d75da6ecba7}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a32215a2cff2db50cc1823d75da6ecba7}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!setGroups@{setGroups}}
+\index{setGroups@{setGroups}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{setGroups()}{setGroups()}}
+{\footnotesize\ttfamily void Population\+Distribution\+Data\+Merger\+Strategy\+::set\+Groups (\begin{DoxyParamCaption}\item[{Q\+List$<$ int $>$}]{groups }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_acfacb6d8cc4e2c51a005ccc77b417ab5}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_acfacb6d8cc4e2c51a005ccc77b417ab5}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!setPopulationOutputFileName@{setPopulationOutputFileName}}
+\index{setPopulationOutputFileName@{setPopulationOutputFileName}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{setPopulationOutputFileName()}{setPopulationOutputFileName()}}
+{\footnotesize\ttfamily void Population\+Distribution\+Data\+Merger\+Strategy\+::set\+Population\+Output\+File\+Name (\begin{DoxyParamCaption}\item[{Q\+String}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9f379a5cbb42faa0feacdffb6cf3fb4c}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a9f379a5cbb42faa0feacdffb6cf3fb4c}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!setStocks@{setStocks}}
+\index{setStocks@{setStocks}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{setStocks()}{setStocks()}}
+{\footnotesize\ttfamily void Population\+Distribution\+Data\+Merger\+Strategy\+::set\+Stocks (\begin{DoxyParamCaption}\item[{Q\+String\+List}]{stocks }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a1334a0f21e71b4c9a4054ec481cadfda}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a1334a0f21e71b4c9a4054ec481cadfda}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!IndivFieldPattern@{IndivFieldPattern}}
+\index{IndivFieldPattern@{IndivFieldPattern}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{IndivFieldPattern}{IndivFieldPattern}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Indiv\+Field\+Pattern = \char`\"{}nb\+\_\+indiv.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a581d7fa0714a75e0242c2388580c86d7}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a581d7fa0714a75e0242c2388580c86d7}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!LatField@{LatField}}
+\index{LatField@{LatField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{LatField}{LatField}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Lat\+Field = \char`\"{}Shoot\+Lat\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a347da574cc40a787ae4d6298d872bce3}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a347da574cc40a787ae4d6298d872bce3}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!LongField@{LongField}}
+\index{LongField@{LongField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{LongField}{LongField}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Long\+Field = \char`\"{}Shoot\+Lon\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_ad2891462147b8c60d9acbc29927eec4c}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_ad2891462147b8c60d9acbc29927eec4c}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!SemesterField@{SemesterField}}
+\index{SemesterField@{SemesterField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{SemesterField}{SemesterField}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Semester\+Field = \char`\"{}Semester\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a805acac19607dc1d29bfed9874ae44dd}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a805acac19607dc1d29bfed9874ae44dd}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!SizeFieldBeginning@{SizeFieldBeginning}}
+\index{SizeFieldBeginning@{SizeFieldBeginning}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{SizeFieldBeginning}{SizeFieldBeginning}}
+{\footnotesize\ttfamily const char$\ast$ const displace\+::workers\+::\+Population\+Distribution\+Data\+Merger\+Strategy\+::\+Size\+Field\+Beginning\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a10f1aed9f287d21b82aa9d954a94173c}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a10f1aed9f287d21b82aa9d954a94173c}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!StockField@{StockField}}
+\index{StockField@{StockField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{StockField}{StockField}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Stock\+Field = \char`\"{}Stock\+Id\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a37c7981669f8d80aca2753b2ea4e2937}\label{classdisplace_1_1workers_1_1_population_distribution_data_merger_strategy_a37c7981669f8d80aca2753b2ea4e2937}} 
+\index{displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}!YearField@{YearField}}
+\index{YearField@{YearField}!displace::workers::PopulationDistributionDataMergerStrategy@{displace::workers::PopulationDistributionDataMergerStrategy}}
+\subsubsection{\texorpdfstring{YearField}{YearField}}
+{\footnotesize\ttfamily const char $\ast$const Population\+Distribution\+Data\+Merger\+Strategy\+::\+Year\+Field = \char`\"{}Year\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/workers/\mbox{\hyperlink{populationdistributiondatamergerstrategy_8h}{populationdistributiondatamergerstrategy.\+h}}\item 
+qtgui/workers/\mbox{\hyperlink{populationdistributiondatamergerstrategy_8cpp}{populationdistributiondatamergerstrategy.\+cpp}}\end{DoxyCompactItemize}

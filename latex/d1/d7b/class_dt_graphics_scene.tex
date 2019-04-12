@@ -1,0 +1,157 @@
+\hypertarget{class_dt_graphics_scene}{}\section{Dt\+Graphics\+Scene Class Reference}
+\label{class_dt_graphics_scene}\index{DtGraphicsScene@{DtGraphicsScene}}
+
+
+{\ttfamily \#include $<$dtgraphicsscene.\+h$>$}
+
+Inheritance diagram for Dt\+Graphics\+Scene\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d7b/class_dt_graphics_scene}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_ad5ebd850cf2cfd9b79230ea34ac7f9b3}{start\+Add\+Node}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{dtree\+::\+Node}} $>$)
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_ae61bf9979e8470d74d08d0fea8dac739}{end\+Mode}} ()
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a977a724dee6c2a1f89853dc3506440f0}{node\+Added}} (\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$)
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a050d0c4a0b8516314f42ab4b5f3e0606}{mouse\+Mode\+Ended}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_dt_graphics_scene_a1d5b3a478ffdac60c0a6c85f50123aa6}{Dt\+Graphics\+Scene}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$ tree, Q\+Object $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a1fa041b4c7acb828f5eb525fd5d26de8}{clear}} ()
+\item 
+bool \mbox{\hyperlink{class_dt_graphics_scene_a9242cd023eace508f093bc15adbc236b}{requires\+Children\+Highlight}} () const
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a0864c9ffbae4f81223173131194efa49}{node\+Child\+Entered}} (\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$item, int child\+Id)
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a8276855fdb1369e62504f559cb519877}{node\+Child\+Exited}} ()
+\item 
+\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$ \mbox{\hyperlink{class_dt_graphics_scene_a5f716cbdd6ce35d0e8bf5e46c2119795}{root}} () const
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a609f35deb80018bf48f3b8c5d3d19d6b}{add\+Item\+As\+Root}} (\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$item)
+\item 
+void \mbox{\hyperlink{class_dt_graphics_scene_a5a87dbd9ad60029387bfcef34b299034}{remove\+Nodes}} (Q\+List$<$ \mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$ $>$items)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_dt_graphics_scene_a886a903486f15de7f4e571cb2c2abf36}{mouse\+Move\+Event}} (Q\+Graphics\+Scene\+Mouse\+Event $\ast$event) override
+\item 
+virtual void \mbox{\hyperlink{class_dt_graphics_scene_a7ecab6ba9478527cabd5c06606375703}{mouse\+Release\+Event}} (Q\+Graphics\+Scene\+Mouse\+Event $\ast$event) override
+\item 
+virtual void \mbox{\hyperlink{class_dt_graphics_scene_a68ed8c9c3767f39543a17c8879931787}{key\+Press\+Event}} (Q\+Key\+Event $\ast$key\+Event) override
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_dt_graphics_scene_a1d5b3a478ffdac60c0a6c85f50123aa6}\label{class_dt_graphics_scene_a1d5b3a478ffdac60c0a6c85f50123aa6}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!DtGraphicsScene@{DtGraphicsScene}}
+\index{DtGraphicsScene@{DtGraphicsScene}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{DtGraphicsScene()}{DtGraphicsScene()}}
+{\footnotesize\ttfamily Dt\+Graphics\+Scene\+::\+Dt\+Graphics\+Scene (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$}]{tree,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_dt_graphics_scene_a609f35deb80018bf48f3b8c5d3d19d6b}\label{class_dt_graphics_scene_a609f35deb80018bf48f3b8c5d3d19d6b}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!addItemAsRoot@{addItemAsRoot}}
+\index{addItemAsRoot@{addItemAsRoot}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{addItemAsRoot()}{addItemAsRoot()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::add\+Item\+As\+Root (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$}]{item }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a1fa041b4c7acb828f5eb525fd5d26de8}\label{class_dt_graphics_scene_a1fa041b4c7acb828f5eb525fd5d26de8}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!clear@{clear}}
+\index{clear@{clear}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_ae61bf9979e8470d74d08d0fea8dac739}\label{class_dt_graphics_scene_ae61bf9979e8470d74d08d0fea8dac739}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!endMode@{endMode}}
+\index{endMode@{endMode}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{endMode}{endMode}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::end\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a68ed8c9c3767f39543a17c8879931787}\label{class_dt_graphics_scene_a68ed8c9c3767f39543a17c8879931787}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!keyPressEvent@{keyPressEvent}}
+\index{keyPressEvent@{keyPressEvent}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{keyPressEvent()}{keyPressEvent()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::key\+Press\+Event (\begin{DoxyParamCaption}\item[{Q\+Key\+Event $\ast$}]{key\+Event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a050d0c4a0b8516314f42ab4b5f3e0606}\label{class_dt_graphics_scene_a050d0c4a0b8516314f42ab4b5f3e0606}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!mouseModeEnded@{mouseModeEnded}}
+\index{mouseModeEnded@{mouseModeEnded}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{mouseModeEnded}{mouseModeEnded}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::mouse\+Mode\+Ended (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a886a903486f15de7f4e571cb2c2abf36}\label{class_dt_graphics_scene_a886a903486f15de7f4e571cb2c2abf36}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!mouseMoveEvent@{mouseMoveEvent}}
+\index{mouseMoveEvent@{mouseMoveEvent}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{mouseMoveEvent()}{mouseMoveEvent()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::mouse\+Move\+Event (\begin{DoxyParamCaption}\item[{Q\+Graphics\+Scene\+Mouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a7ecab6ba9478527cabd5c06606375703}\label{class_dt_graphics_scene_a7ecab6ba9478527cabd5c06606375703}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!mouseReleaseEvent@{mouseReleaseEvent}}
+\index{mouseReleaseEvent@{mouseReleaseEvent}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{mouseReleaseEvent()}{mouseReleaseEvent()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::mouse\+Release\+Event (\begin{DoxyParamCaption}\item[{Q\+Graphics\+Scene\+Mouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a977a724dee6c2a1f89853dc3506440f0}\label{class_dt_graphics_scene_a977a724dee6c2a1f89853dc3506440f0}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!nodeAdded@{nodeAdded}}
+\index{nodeAdded@{nodeAdded}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{nodeAdded}{nodeAdded}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::node\+Added (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a0864c9ffbae4f81223173131194efa49}\label{class_dt_graphics_scene_a0864c9ffbae4f81223173131194efa49}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!nodeChildEntered@{nodeChildEntered}}
+\index{nodeChildEntered@{nodeChildEntered}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{nodeChildEntered()}{nodeChildEntered()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::node\+Child\+Entered (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$}]{item,  }\item[{int}]{child\+Id }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a8276855fdb1369e62504f559cb519877}\label{class_dt_graphics_scene_a8276855fdb1369e62504f559cb519877}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!nodeChildExited@{nodeChildExited}}
+\index{nodeChildExited@{nodeChildExited}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{nodeChildExited()}{nodeChildExited()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::node\+Child\+Exited (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a5a87dbd9ad60029387bfcef34b299034}\label{class_dt_graphics_scene_a5a87dbd9ad60029387bfcef34b299034}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!removeNodes@{removeNodes}}
+\index{removeNodes@{removeNodes}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{removeNodes()}{removeNodes()}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::remove\+Nodes (\begin{DoxyParamCaption}\item[{Q\+List$<$ \mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}} $\ast$ $>$}]{items }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a9242cd023eace508f093bc15adbc236b}\label{class_dt_graphics_scene_a9242cd023eace508f093bc15adbc236b}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!requiresChildrenHighlight@{requiresChildrenHighlight}}
+\index{requiresChildrenHighlight@{requiresChildrenHighlight}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{requiresChildrenHighlight()}{requiresChildrenHighlight()}}
+{\footnotesize\ttfamily bool Dt\+Graphics\+Scene\+::requires\+Children\+Highlight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_a5f716cbdd6ce35d0e8bf5e46c2119795}\label{class_dt_graphics_scene_a5f716cbdd6ce35d0e8bf5e46c2119795}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!root@{root}}
+\index{root@{root}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{root()}{root()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_graph_node_item}{Graph\+Node\+Item}}$\ast$ Dt\+Graphics\+Scene\+::root (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_dt_graphics_scene_ad5ebd850cf2cfd9b79230ea34ac7f9b3}\label{class_dt_graphics_scene_ad5ebd850cf2cfd9b79230ea34ac7f9b3}} 
+\index{DtGraphicsScene@{DtGraphicsScene}!startAddNode@{startAddNode}}
+\index{startAddNode@{startAddNode}!DtGraphicsScene@{DtGraphicsScene}}
+\subsubsection{\texorpdfstring{startAddNode}{startAddNode}}
+{\footnotesize\ttfamily void Dt\+Graphics\+Scene\+::start\+Add\+Node (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{dtree\+::\+Node}} $>$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dteditor/\mbox{\hyperlink{dtgraphicsscene_8h}{dtgraphicsscene.\+h}}\item 
+dteditor/\mbox{\hyperlink{dtgraphicsscene_8cpp}{dtgraphicsscene.\+cpp}}\item 
+dteditor/moc/\mbox{\hyperlink{moc__dtgraphicsscene_8cpp}{moc\+\_\+dtgraphicsscene.\+cpp}}\end{DoxyCompactItemize}

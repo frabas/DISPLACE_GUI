@@ -1,0 +1,227 @@
+\hypertarget{class_merge_population_plugin_component_1_1_table_model}{}\section{Merge\+Population\+Plugin\+Component\+::Table\+Model Class Reference}
+\label{class_merge_population_plugin_component_1_1_table_model}\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+
+
+{\ttfamily \#include $<$mergepopulationplugincomponent.\+h$>$}
+
+Inheritance diagram for Merge\+Population\+Plugin\+Component\+::Table\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d4/d64/class_merge_population_plugin_component_1_1_table_model}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Type}} \{ \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a0a9e395b0ade6fbda8d302a8eb0b6a80}{Stocks}}, 
+\mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a252feb6cfeae0e05b32044292ee80d8e}{Sizes}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_af54523426b049f4749c4bb6aab0a38d4}{Table\+Model}} (\mbox{\hyperlink{class_merge_population_plugin_component}{Merge\+Population\+Plugin\+Component}} $\ast$owner, \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Type}} type, Q\+Object $\ast$parent=0)
+\item 
+int \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aeb55e818c622767750ff0a51e34c69e1}{row\+Count}} (const Q\+Model\+Index \&parent) const
+\item 
+int \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a0b54558494c9992d90e0f5178a632a88}{column\+Count}} (const Q\+Model\+Index \&parent) const
+\item 
+Q\+Variant \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a6e33ec16c60aa70c6a43a93d79cff618}{data}} (const Q\+Model\+Index \&index, int role) const
+\item 
+bool \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aae3a1ec7b80e1dbb5131b610991fbbac}{set\+Data}} (const Q\+Model\+Index \&index, const Q\+Variant \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}, int role)
+\item 
+Q\+Variant \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a8272b6910df0ece9c18a9c62c47fac84}{header\+Data}} (int section, Qt\+::\+Orientation orientation, int role) const
+\item 
+Qt\+::\+Item\+Flags \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a66ad29a0328e86269f45d045ef4a3c96}{flags}} (const Q\+Model\+Index \&index) const
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_af569b191caa1de7d87c6783fee0eb618}{load}} (Q\+String\+List list, Q\+List$<$ bool $>$ selection)
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a70a803baa9ffe0815e5ec46254a599cf}{set\+Data\+Collection}} (Q\+String\+List list)
+\item 
+int \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aeea735796f55d2588af88d50cd536c67}{get\+Selection\+Count}} () const
+\item 
+Q\+String\+List \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a9a7558301c9b16f82cbcaa716bb2c182}{get\+Selection}} () const
+\item 
+Q\+List$<$ int $>$ \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a558b7ad773908355ef158bc26717f93a}{get\+Selection\+Indexes}} () const
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a18b61f965d36a9afc4510ec3568779de}{stock\+Selection\+Number\+Changed}} ()
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a199a8b39809d9701a470b58f769a5b0b}{select\+All}} ()
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a951dbe976b18c5dc4379cbbf0e66dccb}{select\+None}} ()
+\item 
+void \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a17997fa6ae97b91f29166d537f96a40c}{inv\+Selection}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_merge_population_plugin_component}{Merge\+Population\+Plugin\+Component}} $\ast$ \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a3647f1410a1660c8a600452f209ad0ac}{m\+Owner}} = 0
+\item 
+\mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Type}} \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a4615c664a4c2130cca4ee14b30106a51}{m\+Type}}
+\item 
+int \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_ae304857ac7d588874f3ad65cfd2b0bff}{m\+Num\+Selected}} = 0
+\item 
+Q\+String\+List \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a45f105705a6a1ac16e0f5982701bdc0e}{m\+List}}
+\item 
+Q\+List$<$ bool $>$ \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_a0ce02205ce77fa10cba1a571d736c07a}{m\+List\+Selection}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}\label{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!Type@{Type}}
+\index{Type@{Type}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{Type}{Type}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::\+Type}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Stocks@{Stocks}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!Stocks@{Stocks}}}\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a0a9e395b0ade6fbda8d302a8eb0b6a80}\label{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a0a9e395b0ade6fbda8d302a8eb0b6a80}} 
+Stocks&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sizes@{Sizes}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!Sizes@{Sizes}}}\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a252feb6cfeae0e05b32044292ee80d8e}\label{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258a252feb6cfeae0e05b32044292ee80d8e}} 
+Sizes&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_af54523426b049f4749c4bb6aab0a38d4}\label{class_merge_population_plugin_component_1_1_table_model_af54523426b049f4749c4bb6aab0a38d4}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!TableModel@{TableModel}}
+\index{TableModel@{TableModel}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{TableModel()}{TableModel()}}
+{\footnotesize\ttfamily Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::\+Table\+Model (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_merge_population_plugin_component}{Merge\+Population\+Plugin\+Component}} $\ast$}]{owner,  }\item[{\mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Type}}}]{type,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a0b54558494c9992d90e0f5178a632a88}\label{class_merge_population_plugin_component_1_1_table_model_a0b54558494c9992d90e0f5178a632a88}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!columnCount@{columnCount}}
+\index{columnCount@{columnCount}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{columnCount()}{columnCount()}}
+{\footnotesize\ttfamily int Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::column\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a6e33ec16c60aa70c6a43a93d79cff618}\label{class_merge_population_plugin_component_1_1_table_model_a6e33ec16c60aa70c6a43a93d79cff618}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!data@{data}}
+\index{data@{data}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily Q\+Variant Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{int}]{role }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a66ad29a0328e86269f45d045ef4a3c96}\label{class_merge_population_plugin_component_1_1_table_model_a66ad29a0328e86269f45d045ef4a3c96}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!flags@{flags}}
+\index{flags@{flags}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{flags()}{flags()}}
+{\footnotesize\ttfamily Qt\+::\+Item\+Flags Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::flags (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a9a7558301c9b16f82cbcaa716bb2c182}\label{class_merge_population_plugin_component_1_1_table_model_a9a7558301c9b16f82cbcaa716bb2c182}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!getSelection@{getSelection}}
+\index{getSelection@{getSelection}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{getSelection()}{getSelection()}}
+{\footnotesize\ttfamily Q\+String\+List Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::get\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aeea735796f55d2588af88d50cd536c67}\label{class_merge_population_plugin_component_1_1_table_model_aeea735796f55d2588af88d50cd536c67}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!getSelectionCount@{getSelectionCount}}
+\index{getSelectionCount@{getSelectionCount}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{getSelectionCount()}{getSelectionCount()}}
+{\footnotesize\ttfamily int Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::get\+Selection\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a558b7ad773908355ef158bc26717f93a}\label{class_merge_population_plugin_component_1_1_table_model_a558b7ad773908355ef158bc26717f93a}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!getSelectionIndexes@{getSelectionIndexes}}
+\index{getSelectionIndexes@{getSelectionIndexes}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{getSelectionIndexes()}{getSelectionIndexes()}}
+{\footnotesize\ttfamily Q\+List$<$ int $>$ Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::get\+Selection\+Indexes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a8272b6910df0ece9c18a9c62c47fac84}\label{class_merge_population_plugin_component_1_1_table_model_a8272b6910df0ece9c18a9c62c47fac84}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!headerData@{headerData}}
+\index{headerData@{headerData}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{headerData()}{headerData()}}
+{\footnotesize\ttfamily Q\+Variant Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::header\+Data (\begin{DoxyParamCaption}\item[{int}]{section,  }\item[{Qt\+::\+Orientation}]{orientation,  }\item[{int}]{role }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a17997fa6ae97b91f29166d537f96a40c}\label{class_merge_population_plugin_component_1_1_table_model_a17997fa6ae97b91f29166d537f96a40c}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!invSelection@{invSelection}}
+\index{invSelection@{invSelection}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{invSelection()}{invSelection()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::inv\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_af569b191caa1de7d87c6783fee0eb618}\label{class_merge_population_plugin_component_1_1_table_model_af569b191caa1de7d87c6783fee0eb618}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!load@{load}}
+\index{load@{load}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::load (\begin{DoxyParamCaption}\item[{Q\+String\+List}]{list,  }\item[{Q\+List$<$ bool $>$}]{selection }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aeb55e818c622767750ff0a51e34c69e1}\label{class_merge_population_plugin_component_1_1_table_model_aeb55e818c622767750ff0a51e34c69e1}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!rowCount@{rowCount}}
+\index{rowCount@{rowCount}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{rowCount()}{rowCount()}}
+{\footnotesize\ttfamily int Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::row\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a199a8b39809d9701a470b58f769a5b0b}\label{class_merge_population_plugin_component_1_1_table_model_a199a8b39809d9701a470b58f769a5b0b}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!selectAll@{selectAll}}
+\index{selectAll@{selectAll}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{selectAll()}{selectAll()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::select\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a951dbe976b18c5dc4379cbbf0e66dccb}\label{class_merge_population_plugin_component_1_1_table_model_a951dbe976b18c5dc4379cbbf0e66dccb}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!selectNone@{selectNone}}
+\index{selectNone@{selectNone}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{selectNone()}{selectNone()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::select\+None (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_aae3a1ec7b80e1dbb5131b610991fbbac}\label{class_merge_population_plugin_component_1_1_table_model_aae3a1ec7b80e1dbb5131b610991fbbac}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!setData@{setData}}
+\index{setData@{setData}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{setData()}{setData()}}
+{\footnotesize\ttfamily bool Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::set\+Data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{const Q\+Variant \&}]{value,  }\item[{int}]{role }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a70a803baa9ffe0815e5ec46254a599cf}\label{class_merge_population_plugin_component_1_1_table_model_a70a803baa9ffe0815e5ec46254a599cf}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!setDataCollection@{setDataCollection}}
+\index{setDataCollection@{setDataCollection}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{setDataCollection()}{setDataCollection()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::set\+Data\+Collection (\begin{DoxyParamCaption}\item[{Q\+String\+List}]{list }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a18b61f965d36a9afc4510ec3568779de}\label{class_merge_population_plugin_component_1_1_table_model_a18b61f965d36a9afc4510ec3568779de}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!stockSelectionNumberChanged@{stockSelectionNumberChanged}}
+\index{stockSelectionNumberChanged@{stockSelectionNumberChanged}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{stockSelectionNumberChanged()}{stockSelectionNumberChanged()}}
+{\footnotesize\ttfamily void Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::stock\+Selection\+Number\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a45f105705a6a1ac16e0f5982701bdc0e}\label{class_merge_population_plugin_component_1_1_table_model_a45f105705a6a1ac16e0f5982701bdc0e}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!mList@{mList}}
+\index{mList@{mList}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{mList}{mList}}
+{\footnotesize\ttfamily Q\+String\+List Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::m\+List\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a0ce02205ce77fa10cba1a571d736c07a}\label{class_merge_population_plugin_component_1_1_table_model_a0ce02205ce77fa10cba1a571d736c07a}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!mListSelection@{mListSelection}}
+\index{mListSelection@{mListSelection}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{mListSelection}{mListSelection}}
+{\footnotesize\ttfamily Q\+List$<$bool$>$ Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::m\+List\+Selection\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_ae304857ac7d588874f3ad65cfd2b0bff}\label{class_merge_population_plugin_component_1_1_table_model_ae304857ac7d588874f3ad65cfd2b0bff}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!mNumSelected@{mNumSelected}}
+\index{mNumSelected@{mNumSelected}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{mNumSelected}{mNumSelected}}
+{\footnotesize\ttfamily int Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::m\+Num\+Selected = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a3647f1410a1660c8a600452f209ad0ac}\label{class_merge_population_plugin_component_1_1_table_model_a3647f1410a1660c8a600452f209ad0ac}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!mOwner@{mOwner}}
+\index{mOwner@{mOwner}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{mOwner}{mOwner}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_merge_population_plugin_component}{Merge\+Population\+Plugin\+Component}}$\ast$ Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::m\+Owner = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_merge_population_plugin_component_1_1_table_model_a4615c664a4c2130cca4ee14b30106a51}\label{class_merge_population_plugin_component_1_1_table_model_a4615c664a4c2130cca4ee14b30106a51}} 
+\index{MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}!mType@{mType}}
+\index{mType@{mType}!MergePopulationPluginComponent::TableModel@{MergePopulationPluginComponent::TableModel}}
+\subsubsection{\texorpdfstring{mType}{mType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_merge_population_plugin_component_1_1_table_model_aedcae9b9dcacd928610323861dcb1258}{Type}} Merge\+Population\+Plugin\+Component\+::\+Table\+Model\+::m\+Type\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{mergepopulationplugincomponent_8h}{mergepopulationplugincomponent.\+h}}\item 
+qtgui/\mbox{\hyperlink{mergepopulationplugincomponent_8cpp}{mergepopulationplugincomponent.\+cpp}}\end{DoxyCompactItemize}

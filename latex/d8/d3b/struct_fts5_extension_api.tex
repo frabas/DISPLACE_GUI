@@ -1,0 +1,177 @@
+\hypertarget{struct_fts5_extension_api}{}\section{Fts5\+Extension\+Api Struct Reference}
+\label{struct_fts5_extension_api}\index{Fts5ExtensionApi@{Fts5ExtensionApi}}
+
+
+{\ttfamily \#include $<$sqlite3.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{struct_fts5_extension_api_af9c8f09c2e6f1373e6bce57ec9861682}{i\+Version}}
+\item 
+void $\ast$($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a8e651288d8e0cf25f20f2b838f47ac34}{x\+User\+Data}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a427409c50da4e179c8f2d36b22a4ba21}{x\+Column\+Count}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_ae1eb7ad1d3c131a09376134ecc099568}{x\+Row\+Count}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}} $\ast$pn\+Row)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a096e79406ae03df9796a2082d0ac8269}{x\+Column\+Total\+Size}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, \mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}} $\ast$pn\+Token)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a670af0d7715f69834376f8df187dcf30}{x\+Tokenize}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, const char $\ast$p\+Text, int n\+Text, void $\ast$p\+Ctx, int($\ast$x\+Token)(void $\ast$, int, const char $\ast$, int, int, int))
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a3ba0207080a9ca498625eefcc120bf1e}{x\+Phrase\+Count}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_aeda6faa66f47f9116c9ceba882aaedd2}{x\+Phrase\+Size}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_af57aff7a8aa8402bb37a77892c4daf45}{x\+Inst\+Count}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int $\ast$pn\+Inst)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a85e17f20db782b20b503f1d803a47a9e}{x\+Inst}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Idx, int $\ast$pi\+Phrase, int $\ast$pi\+Col, int $\ast$pi\+Off)
+\item 
+\mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}}($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_acc4336c9f7bf39defa1acbdbf5df0020}{x\+Rowid}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a03c7fcd31a751fc34d25e5288045f91d}{x\+Column\+Text}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, const char $\ast$$\ast$pz, int $\ast$pn)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_aefe6eb4685546e58f056a61da39a2bcb}{x\+Column\+Size}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, int $\ast$pn\+Token)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a8f6dcf0a1d246b235f98f5bbb214e28d}{x\+Query\+Phrase}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, void $\ast$p\+User\+Data, int($\ast$)(const \mbox{\hyperlink{struct_fts5_extension_api}{Fts5\+Extension\+Api}} $\ast$, \mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, void $\ast$))
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a0f59a6c383a478ed95efdb7e4a95de80}{x\+Set\+Auxdata}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, void $\ast$p\+Aux, void($\ast$x\+Delete)(void $\ast$))
+\item 
+void $\ast$($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_a63ba9aaf30fe9fe5fbcd1541ff38abff}{x\+Get\+Auxdata}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int b\+Clear)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_ae2584a3afa2a70504847600e609d43ad}{x\+Phrase\+First}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$, int $\ast$)
+\item 
+void($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_ac46faf7ccccf6a02454069b296dc1877}{x\+Phrase\+Next}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$pi\+Col, int $\ast$pi\+Off)
+\item 
+int($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_ac57daf9650e3f0c25432bbe348bc124f}{x\+Phrase\+First\+Column}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$)
+\item 
+void($\ast$ \mbox{\hyperlink{struct_fts5_extension_api_ae699a91c958cbac92a2ae8000670ef89}{x\+Phrase\+Next\+Column}} )(\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$pi\+Col)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_fts5_extension_api_af9c8f09c2e6f1373e6bce57ec9861682}\label{struct_fts5_extension_api_af9c8f09c2e6f1373e6bce57ec9861682}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!iVersion@{iVersion}}
+\index{iVersion@{iVersion}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{iVersion}{iVersion}}
+{\footnotesize\ttfamily int Fts5\+Extension\+Api\+::i\+Version}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a427409c50da4e179c8f2d36b22a4ba21}\label{struct_fts5_extension_api_a427409c50da4e179c8f2d36b22a4ba21}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xColumnCount@{xColumnCount}}
+\index{xColumnCount@{xColumnCount}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xColumnCount}{xColumnCount}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Column\+Count) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_aefe6eb4685546e58f056a61da39a2bcb}\label{struct_fts5_extension_api_aefe6eb4685546e58f056a61da39a2bcb}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xColumnSize@{xColumnSize}}
+\index{xColumnSize@{xColumnSize}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xColumnSize}{xColumnSize}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Column\+Size) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, int $\ast$pn\+Token)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a03c7fcd31a751fc34d25e5288045f91d}\label{struct_fts5_extension_api_a03c7fcd31a751fc34d25e5288045f91d}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xColumnText@{xColumnText}}
+\index{xColumnText@{xColumnText}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xColumnText}{xColumnText}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Column\+Text) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, const char $\ast$$\ast$pz, int $\ast$pn)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a096e79406ae03df9796a2082d0ac8269}\label{struct_fts5_extension_api_a096e79406ae03df9796a2082d0ac8269}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xColumnTotalSize@{xColumnTotalSize}}
+\index{xColumnTotalSize@{xColumnTotalSize}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xColumnTotalSize}{xColumnTotalSize}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Column\+Total\+Size) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Col, \mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}} $\ast$pn\+Token)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a63ba9aaf30fe9fe5fbcd1541ff38abff}\label{struct_fts5_extension_api_a63ba9aaf30fe9fe5fbcd1541ff38abff}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xGetAuxdata@{xGetAuxdata}}
+\index{xGetAuxdata@{xGetAuxdata}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xGetAuxdata}{xGetAuxdata}}
+{\footnotesize\ttfamily void$\ast$($\ast$ Fts5\+Extension\+Api\+::x\+Get\+Auxdata) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int b\+Clear)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a85e17f20db782b20b503f1d803a47a9e}\label{struct_fts5_extension_api_a85e17f20db782b20b503f1d803a47a9e}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xInst@{xInst}}
+\index{xInst@{xInst}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xInst}{xInst}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Inst) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Idx, int $\ast$pi\+Phrase, int $\ast$pi\+Col, int $\ast$pi\+Off)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_af57aff7a8aa8402bb37a77892c4daf45}\label{struct_fts5_extension_api_af57aff7a8aa8402bb37a77892c4daf45}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xInstCount@{xInstCount}}
+\index{xInstCount@{xInstCount}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xInstCount}{xInstCount}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Inst\+Count) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int $\ast$pn\+Inst)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a3ba0207080a9ca498625eefcc120bf1e}\label{struct_fts5_extension_api_a3ba0207080a9ca498625eefcc120bf1e}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseCount@{xPhraseCount}}
+\index{xPhraseCount@{xPhraseCount}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseCount}{xPhraseCount}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+Count) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_ae2584a3afa2a70504847600e609d43ad}\label{struct_fts5_extension_api_ae2584a3afa2a70504847600e609d43ad}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseFirst@{xPhraseFirst}}
+\index{xPhraseFirst@{xPhraseFirst}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseFirst}{xPhraseFirst}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+First) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$, int $\ast$)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_ac57daf9650e3f0c25432bbe348bc124f}\label{struct_fts5_extension_api_ac57daf9650e3f0c25432bbe348bc124f}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseFirstColumn@{xPhraseFirstColumn}}
+\index{xPhraseFirstColumn@{xPhraseFirstColumn}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseFirstColumn}{xPhraseFirstColumn}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+First\+Column) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_ac46faf7ccccf6a02454069b296dc1877}\label{struct_fts5_extension_api_ac46faf7ccccf6a02454069b296dc1877}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseNext@{xPhraseNext}}
+\index{xPhraseNext@{xPhraseNext}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseNext}{xPhraseNext}}
+{\footnotesize\ttfamily void($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+Next) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$pi\+Col, int $\ast$pi\+Off)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_ae699a91c958cbac92a2ae8000670ef89}\label{struct_fts5_extension_api_ae699a91c958cbac92a2ae8000670ef89}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseNextColumn@{xPhraseNextColumn}}
+\index{xPhraseNextColumn@{xPhraseNextColumn}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseNextColumn}{xPhraseNextColumn}}
+{\footnotesize\ttfamily void($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+Next\+Column) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{struct_fts5_phrase_iter}{Fts5\+Phrase\+Iter}} $\ast$, int $\ast$pi\+Col)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_aeda6faa66f47f9116c9ceba882aaedd2}\label{struct_fts5_extension_api_aeda6faa66f47f9116c9ceba882aaedd2}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xPhraseSize@{xPhraseSize}}
+\index{xPhraseSize@{xPhraseSize}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xPhraseSize}{xPhraseSize}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Phrase\+Size) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a8f6dcf0a1d246b235f98f5bbb214e28d}\label{struct_fts5_extension_api_a8f6dcf0a1d246b235f98f5bbb214e28d}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xQueryPhrase@{xQueryPhrase}}
+\index{xQueryPhrase@{xQueryPhrase}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xQueryPhrase}{xQueryPhrase}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Query\+Phrase) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, int i\+Phrase, void $\ast$p\+User\+Data, int($\ast$)(const \mbox{\hyperlink{struct_fts5_extension_api}{Fts5\+Extension\+Api}} $\ast$, \mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, void $\ast$))}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_ae1eb7ad1d3c131a09376134ecc099568}\label{struct_fts5_extension_api_ae1eb7ad1d3c131a09376134ecc099568}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xRowCount@{xRowCount}}
+\index{xRowCount@{xRowCount}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xRowCount}{xRowCount}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Row\+Count) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, \mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}} $\ast$pn\+Row)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_acc4336c9f7bf39defa1acbdbf5df0020}\label{struct_fts5_extension_api_acc4336c9f7bf39defa1acbdbf5df0020}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xRowid@{xRowid}}
+\index{xRowid@{xRowid}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xRowid}{xRowid}}
+{\footnotesize\ttfamily \mbox{\hyperlink{sqlite3_8h_a0a4d3e6c1ad46f90e746b920ab6ca0d2}{sqlite3\+\_\+int64}}($\ast$ Fts5\+Extension\+Api\+::x\+Rowid) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a0f59a6c383a478ed95efdb7e4a95de80}\label{struct_fts5_extension_api_a0f59a6c383a478ed95efdb7e4a95de80}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xSetAuxdata@{xSetAuxdata}}
+\index{xSetAuxdata@{xSetAuxdata}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xSetAuxdata}{xSetAuxdata}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Set\+Auxdata) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, void $\ast$p\+Aux, void($\ast$x\+Delete)(void $\ast$))}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a670af0d7715f69834376f8df187dcf30}\label{struct_fts5_extension_api_a670af0d7715f69834376f8df187dcf30}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xTokenize@{xTokenize}}
+\index{xTokenize@{xTokenize}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xTokenize}{xTokenize}}
+{\footnotesize\ttfamily int($\ast$ Fts5\+Extension\+Api\+::x\+Tokenize) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$, const char $\ast$p\+Text, int n\+Text, void $\ast$p\+Ctx, int($\ast$x\+Token)(void $\ast$, int, const char $\ast$, int, int, int))}
+
+\mbox{\Hypertarget{struct_fts5_extension_api_a8e651288d8e0cf25f20f2b838f47ac34}\label{struct_fts5_extension_api_a8e651288d8e0cf25f20f2b838f47ac34}} 
+\index{Fts5ExtensionApi@{Fts5ExtensionApi}!xUserData@{xUserData}}
+\index{xUserData@{xUserData}!Fts5ExtensionApi@{Fts5ExtensionApi}}
+\subsubsection{\texorpdfstring{xUserData}{xUserData}}
+{\footnotesize\ttfamily void$\ast$($\ast$ Fts5\+Extension\+Api\+::x\+User\+Data) (\mbox{\hyperlink{sqlite3_8h_a97821b95ebebd43db901977ffd5b26bc}{Fts5\+Context}} $\ast$)}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/\mbox{\hyperlink{sqlite3_8h}{sqlite3.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,79 @@
+\hypertarget{class_simulator_ipc_manager}{}\section{Simulator\+Ipc\+Manager Class Reference}
+\label{class_simulator_ipc_manager}\index{SimulatorIpcManager@{SimulatorIpcManager}}
+
+
+{\ttfamily \#include $<$simulatoripcmanager.\+h$>$}
+
+Inheritance diagram for Simulator\+Ipc\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/d0b/class_simulator_ipc_manager}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_simulator_ipc_manager_a806046f2e643daee3be9a9a40392b245}{received\+Coded\+Line}} (Q\+String)
+\item 
+void \mbox{\hyperlink{class_simulator_ipc_manager_a1cb0cc4a00ce9b3db4ddfc218e78486a}{vessel\+Moved}} (int laststep, int idx, float x, float y, float course, float fuel, int state)
+\item 
+void \mbox{\hyperlink{class_simulator_ipc_manager_a68341f7f6daa4c81f1479ce1a03da5f8}{ship\+Moved}} (int laststep, int idx, float x, float y, float course)
+\item 
+void \mbox{\hyperlink{class_simulator_ipc_manager_ae4fa10519f329a23a6f7c92d03fa025c}{vessel\+Logbook\+Received}} (\mbox{\hyperlink{class_vessel_stats}{Vessel\+Stats}})
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_simulator_ipc_manager_a92985d9a50cd120f06b12659e8f773f7}{Simulator\+Ipc\+Manager}} (Q\+Thread $\ast$thread, Q\+Object $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{class_simulator_ipc_manager_ae924508d5f2da56186f50cf3dc1eec63}{force\+Exit}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_simulator_ipc_manager_a92985d9a50cd120f06b12659e8f773f7}\label{class_simulator_ipc_manager_a92985d9a50cd120f06b12659e8f773f7}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!SimulatorIpcManager@{SimulatorIpcManager}}
+\index{SimulatorIpcManager@{SimulatorIpcManager}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{SimulatorIpcManager()}{SimulatorIpcManager()}}
+{\footnotesize\ttfamily Simulator\+Ipc\+Manager\+::\+Simulator\+Ipc\+Manager (\begin{DoxyParamCaption}\item[{Q\+Thread $\ast$}]{thread,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_simulator_ipc_manager_ae924508d5f2da56186f50cf3dc1eec63}\label{class_simulator_ipc_manager_ae924508d5f2da56186f50cf3dc1eec63}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!forceExit@{forceExit}}
+\index{forceExit@{forceExit}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{forceExit()}{forceExit()}}
+{\footnotesize\ttfamily void Simulator\+Ipc\+Manager\+::force\+Exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_ipc_manager_a806046f2e643daee3be9a9a40392b245}\label{class_simulator_ipc_manager_a806046f2e643daee3be9a9a40392b245}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!receivedCodedLine@{receivedCodedLine}}
+\index{receivedCodedLine@{receivedCodedLine}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{receivedCodedLine}{receivedCodedLine}}
+{\footnotesize\ttfamily void Simulator\+Ipc\+Manager\+::received\+Coded\+Line (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_ipc_manager_a68341f7f6daa4c81f1479ce1a03da5f8}\label{class_simulator_ipc_manager_a68341f7f6daa4c81f1479ce1a03da5f8}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!shipMoved@{shipMoved}}
+\index{shipMoved@{shipMoved}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{shipMoved}{shipMoved}}
+{\footnotesize\ttfamily void Simulator\+Ipc\+Manager\+::ship\+Moved (\begin{DoxyParamCaption}\item[{int}]{laststep,  }\item[{int}]{idx,  }\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{course }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_ipc_manager_ae4fa10519f329a23a6f7c92d03fa025c}\label{class_simulator_ipc_manager_ae4fa10519f329a23a6f7c92d03fa025c}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!vesselLogbookReceived@{vesselLogbookReceived}}
+\index{vesselLogbookReceived@{vesselLogbookReceived}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{vesselLogbookReceived}{vesselLogbookReceived}}
+{\footnotesize\ttfamily void Simulator\+Ipc\+Manager\+::vessel\+Logbook\+Received (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_vessel_stats}{Vessel\+Stats}}}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_ipc_manager_a1cb0cc4a00ce9b3db4ddfc218e78486a}\label{class_simulator_ipc_manager_a1cb0cc4a00ce9b3db4ddfc218e78486a}} 
+\index{SimulatorIpcManager@{SimulatorIpcManager}!vesselMoved@{vesselMoved}}
+\index{vesselMoved@{vesselMoved}!SimulatorIpcManager@{SimulatorIpcManager}}
+\subsubsection{\texorpdfstring{vesselMoved}{vesselMoved}}
+{\footnotesize\ttfamily void Simulator\+Ipc\+Manager\+::vessel\+Moved (\begin{DoxyParamCaption}\item[{int}]{laststep,  }\item[{int}]{idx,  }\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{course,  }\item[{float}]{fuel,  }\item[{int}]{state }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{simulatoripcmanager_8h}{simulatoripcmanager.\+h}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__simulatoripcmanager_8cpp}{moc\+\_\+simulatoripcmanager.\+cpp}}\item 
+qtgui/\mbox{\hyperlink{simulatoripcmanager_8cpp}{simulatoripcmanager.\+cpp}}\end{DoxyCompactItemize}

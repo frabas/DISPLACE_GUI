@@ -1,0 +1,449 @@
+\hypertarget{class_s_q_lite_output_storage}{}\section{S\+Q\+Lite\+Output\+Storage Class Reference}
+\label{class_s_q_lite_output_storage}\index{SQLiteOutputStorage@{SQLiteOutputStorage}}
+
+
+{\ttfamily \#include $<$sqliteoutputstorage.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_s_q_lite_output_storage_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}} \{ \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebab8b1f4b524e0a85b91a4f9f4ef81c05e}{Sum}}, 
+\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaa2a9b954b647d8f5136d242018c342aa}{Average}}, 
+\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaeeda5e71a994454d7b3412f17e1e027c}{Count}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_q_lite_output_storage_a1c2f9b1b795665bcec521f4963509071}{S\+Q\+Lite\+Output\+Storage}} (std\+::string path)
+\item 
+\mbox{\hyperlink{class_s_q_lite_output_storage_a66f4a8a5ccd66b819640c7bb00a15a6b}{$\sim$\+S\+Q\+Lite\+Output\+Storage}} () noexcept
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_accb747707fd50419cea2568acb3f68ba}{open}} ()
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ad3506c2ad743ed965e7e6cbf08d846d0}{close}} ()
+\begin{DoxyCompactList}\small\item\em Get the current db version number from the metadata table. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_s_q_lite_output_storage_abe6f44858849f2aa51ef7ea27b782447}{version\+Number}} ()
+\begin{DoxyCompactList}\small\item\em Get the current supported db version number schema. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_s_q_lite_output_storage_a9493d87f401aac870c55e6c1ccc361c7}{current\+Schema\+Number}} ()
+\item 
+bool \mbox{\hyperlink{class_s_q_lite_output_storage_adad2107c8e0ed61de81afa4bad915679}{is\+Outdated}} ()
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ab56e30576907da1eb48a2287678363c5}{start\+Day\+Loop}} ()
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ab78ec887182f12c0819ee48375071c64}{end\+Day\+Loop}} ()
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a957caed87bd56570b9261b76a83ce32e}{create\+All\+Tables}} ()
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a36bb007364e487bb94677f4b744140ef}{create\+All\+Indexes}} ()
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_def_table}{Vessel\+Def\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a9d5775767c84794b9963301844d8177d}{get\+Vessel\+Def\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessels_loglike_table}{Vessels\+Loglike\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a977e6ceb02291855cdef83cccb66f3a9}{get\+Vessel\+Loglike\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_vms_like_table}{Vessel\+Vms\+Like\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a228a4768d65e3363df180d8b9e556696}{get\+Vessel\+Vms\+Like\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_vms_like_f_pings_only_table}{Vessel\+Vms\+Like\+F\+Pings\+Only\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_aecf6b7dff5309665248abcbc037aa762}{get\+Vessel\+Vms\+Like\+F\+Pings\+Only\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_def_table}{Nodes\+Def\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a182efeb3f844008fe576016ebeccb1fc}{get\+Nodes\+Def\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_envt_table}{Nodes\+Envt\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_ae46fbee2513b45860f9f310a089ba87f}{get\+Nodes\+Envt\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_stat_table}{Nodes\+Stat\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_ab29b6e0c9169e04f67f19f5b09ae3dff}{get\+Nodes\+Stat\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_tariff_stat_table}{Nodes\+Tariff\+Stat\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a820656892a8258bbda69f70d56701347}{get\+Nodes\+Tariff\+Stat\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_pop_table}{Pop\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a0764d947298bdd4c9a9eb2451573ce39}{get\+Pop\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_func_groups_table}{Func\+Groups\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a81a6dd6bdf2e3f23017965853824099a}{get\+Func\+Groups\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_windfarms_table}{Windfarms\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a60df9d35d3dfb8b5be5d6825d599ac0a}{get\+Windfarm\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_fish_farms_def_table}{Fish\+Farms\+Def\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a936436b2b0a76fa889c1193bc302c236}{get\+Fishfarm\+Def\+Table}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_metadata_table}{Metadata\+Table}} $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a168924d56024d59c38f6ff7f383a92f2}{metadata}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a0a4e7c7bdbb73b59a28991657768aa79}{get\+Db}} () const
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a2731d3d98f84fa12e91dfb06061448b8}{export\+Fishfarm\+Def}} (const \mbox{\hyperlink{class_fishfarm}{Fishfarm}} \&fishfarm)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a22848a682fdd77dac3444f07a75079f5}{export\+Fishfarm\+Log}} (\mbox{\hyperlink{class_fishfarm}{Fishfarm}} $\ast$fishfarm, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a7d415c5a0459b81b43c47649d3f0d349}{export\+Windmills\+Log}} (\mbox{\hyperlink{class_windmill}{Windmill}} $\ast$windmill, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a3800a1fa7ec6fd2a4d567ee45c839918}{export\+Pop\+Nodes}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_node}{Node}} $\ast$node)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ae344ba008d0b7d73c62a4bb57f643ec0}{export\+Envt\+Nodes}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_node}{Node}} $\ast$node)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a46e7b80c24e629cb8a8223e4a71a96d7}{export\+Tariff\+Nodes}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_node}{Node}} $\ast$node)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_aee00c8202df05f6d084e21ebc93ea096}{export\+Pop\+Stat}} (\mbox{\hyperlink{class_population}{Population}} $\ast$pop, int popid, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a3e017d586cf80142baef2fdc1e7318ef}{export\+Pop\+Quotas}} (\mbox{\hyperlink{class_population}{Population}} $\ast$pop, int popid, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ab7d95ccbd7baf589d2c65ef0539bac08}{export\+Log\+Like}} (\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$v, const std\+::vector$<$ double $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, const std\+::vector$<$ double $>$ \&discards, unsigned int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a4393d923aa9f3a01c3d259c8a30eee88}{export\+Calendar}} (const std\+::vector$<$ int $>$ \&tsteps\+\_\+months, const std\+::vector$<$ int $>$ \&tsteps\+\_\+quarters, const std\+::vector$<$ int $>$ \&tsteps\+\_\+semesters, const std\+::vector$<$ int $>$ \&tsteps\+\_\+years)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_ab963baf95a340d450b308cdf7e48e34a}{export\+Ship}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_ship}{Ship}} $\ast$ship)
+\item 
+void \mbox{\hyperlink{class_s_q_lite_output_storage_a90df0d3b8e9c4ddbd6e899160403a14e}{import\+Calendar}} (std\+::vector$<$ int $>$ \&tsteps\+\_\+months, std\+::vector$<$ int $>$ \&tsteps\+\_\+quarters, std\+::vector$<$ int $>$ \&tsteps\+\_\+semesters, std\+::vector$<$ int $>$ \&tsteps\+\_\+years)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a18aba30ce88988bb86cb79fe20a9e0f9}{get\+Vessel\+Loglike\+Data\+By\+Nation}} (\mbox{\hyperlink{namespacedisplace_1_1plot_ab7b96ae3ae291a71823f371d77f27d98}{displace\+::plot\+::\+Nations\+Stat}} stattype, std\+::string nation, \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}} op)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a22263f77a737990d78c5606cac61d0d4}{get\+Vessel\+Loglike\+Data\+By\+Vessel}} (\mbox{\hyperlink{namespacedisplace_1_1plot_aa453098d286017edd5b0ff3f15ba1013}{displace\+::plot\+::\+Vessels\+Stat}} stattype, std\+::string vessel, \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}} op)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a41abcf70b12fcc6762558afbec357f9e}{get\+Vessel\+Loglike\+Data\+By\+Harbour}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a006fcde9bb7e602d977226ff75cb67aa}{displace\+::plot\+::\+Harbours\+Stat}} stattype, int harbourid, \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}} op)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a4f84767e2d052a7566e5c24e09d9c0d6}{get\+Vessel\+Loglike\+Data\+By\+Metier}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a673bbc813b7f03be3dc76ae7fd087516}{displace\+::plot\+::\+Metiers\+Stat}} stattype, int metierid, \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}} op)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a6b3820c96847dff0982b7f075312b2d7}{get\+Population\+Stat\+Data}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a523612c6239ff69acc3e5b7c5b40b618}{displace\+::plot\+::\+Population\+Stat}} stat, \mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}} aggtype, int popid, std\+::vector$<$ int $>$ szid)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_aea0e285a8d0b0e3fc9ed095d8daef966}{get\+Benthos\+Stat\+Data}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a3a91ceda6f3e5855d0e7cf97e8dea045}{displace\+::plot\+::\+Benthos\+Stat}} stattype, \mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}} aggtype, int grpid, const std\+::vector$<$ int $>$ \&btype)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_ade2be014ca467951f61fd6e11b6bcb85}{get\+Ships\+Stat\+Data}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a8c50b4d54cafba744b1b5b51b53407e0}{displace\+::plot\+::\+Ships\+Stat}} stattype, \mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}} aggtype, int shipid, std\+::vector$<$ int $>$ shiptypeid)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_s_q_lite_output_storage_a9fcb77eceee6c2ba83d5cba617ad652c}{get\+Fish\+Farm\+Stat\+Data}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a4746af73ffe0625cf87b8fb07fd5bfa4}{displace\+::plot\+::\+Fishfarms\+Stat}} stattype, \mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}} aggtype, int ffid, std\+::vector$<$ int $>$ ftypes)
+\item 
+size\+\_\+t \mbox{\hyperlink{class_s_q_lite_output_storage_a96847e7bf25f616eeb97fcfd3f3997ff}{get\+Nb\+Pops}} ()
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_ac901bca6c4b571781e3f7ced6789e405}{get\+Nations\+List}} ()
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_s_q_lite_output_storage_a55731ffc5f72f6570900a10728674154}{get\+Populations\+List}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}\label{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!Operation@{Operation}}
+\index{Operation@{Operation}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{Operation}{Operation}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{S\+Q\+Lite\+Output\+Storage\+::\+Operation}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sum@{Sum}!SQLiteOutputStorage@{SQLiteOutputStorage}}\index{SQLiteOutputStorage@{SQLiteOutputStorage}!Sum@{Sum}}}\mbox{\Hypertarget{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebab8b1f4b524e0a85b91a4f9f4ef81c05e}\label{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebab8b1f4b524e0a85b91a4f9f4ef81c05e}} 
+Sum&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Average@{Average}!SQLiteOutputStorage@{SQLiteOutputStorage}}\index{SQLiteOutputStorage@{SQLiteOutputStorage}!Average@{Average}}}\mbox{\Hypertarget{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaa2a9b954b647d8f5136d242018c342aa}\label{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaa2a9b954b647d8f5136d242018c342aa}} 
+Average&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Count@{Count}!SQLiteOutputStorage@{SQLiteOutputStorage}}\index{SQLiteOutputStorage@{SQLiteOutputStorage}!Count@{Count}}}\mbox{\Hypertarget{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaeeda5e71a994454d7b3412f17e1e027c}\label{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222ebaeeda5e71a994454d7b3412f17e1e027c}} 
+Count&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a1c2f9b1b795665bcec521f4963509071}\label{class_s_q_lite_output_storage_a1c2f9b1b795665bcec521f4963509071}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{SQLiteOutputStorage()}{SQLiteOutputStorage()}}
+{\footnotesize\ttfamily S\+Q\+Lite\+Output\+Storage\+::\+S\+Q\+Lite\+Output\+Storage (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a66f4a8a5ccd66b819640c7bb00a15a6b}\label{class_s_q_lite_output_storage_a66f4a8a5ccd66b819640c7bb00a15a6b}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!````~SQLiteOutputStorage@{$\sim$SQLiteOutputStorage}}
+\index{````~SQLiteOutputStorage@{$\sim$SQLiteOutputStorage}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{$\sim$SQLiteOutputStorage()}{~SQLiteOutputStorage()}}
+{\footnotesize\ttfamily S\+Q\+Lite\+Output\+Storage\+::$\sim$\+S\+Q\+Lite\+Output\+Storage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ad3506c2ad743ed965e7e6cbf08d846d0}\label{class_s_q_lite_output_storage_ad3506c2ad743ed965e7e6cbf08d846d0}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!close@{close}}
+\index{close@{close}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the current db version number from the metadata table. 
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a36bb007364e487bb94677f4b744140ef}\label{class_s_q_lite_output_storage_a36bb007364e487bb94677f4b744140ef}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!createAllIndexes@{createAllIndexes}}
+\index{createAllIndexes@{createAllIndexes}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{createAllIndexes()}{createAllIndexes()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::create\+All\+Indexes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a957caed87bd56570b9261b76a83ce32e}\label{class_s_q_lite_output_storage_a957caed87bd56570b9261b76a83ce32e}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!createAllTables@{createAllTables}}
+\index{createAllTables@{createAllTables}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{createAllTables()}{createAllTables()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::create\+All\+Tables (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a9493d87f401aac870c55e6c1ccc361c7}\label{class_s_q_lite_output_storage_a9493d87f401aac870c55e6c1ccc361c7}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!currentSchemaNumber@{currentSchemaNumber}}
+\index{currentSchemaNumber@{currentSchemaNumber}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{currentSchemaNumber()}{currentSchemaNumber()}}
+{\footnotesize\ttfamily int S\+Q\+Lite\+Output\+Storage\+::current\+Schema\+Number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ab78ec887182f12c0819ee48375071c64}\label{class_s_q_lite_output_storage_ab78ec887182f12c0819ee48375071c64}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!endDayLoop@{endDayLoop}}
+\index{endDayLoop@{endDayLoop}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{endDayLoop()}{endDayLoop()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::end\+Day\+Loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a4393d923aa9f3a01c3d259c8a30eee88}\label{class_s_q_lite_output_storage_a4393d923aa9f3a01c3d259c8a30eee88}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportCalendar@{exportCalendar}}
+\index{exportCalendar@{exportCalendar}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportCalendar()}{exportCalendar()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Calendar (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+months,  }\item[{const std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+quarters,  }\item[{const std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+semesters,  }\item[{const std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+years }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ae344ba008d0b7d73c62a4bb57f643ec0}\label{class_s_q_lite_output_storage_ae344ba008d0b7d73c62a4bb57f643ec0}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportEnvtNodes@{exportEnvtNodes}}
+\index{exportEnvtNodes@{exportEnvtNodes}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportEnvtNodes()}{exportEnvtNodes()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Envt\+Nodes (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a2731d3d98f84fa12e91dfb06061448b8}\label{class_s_q_lite_output_storage_a2731d3d98f84fa12e91dfb06061448b8}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportFishfarmDef@{exportFishfarmDef}}
+\index{exportFishfarmDef@{exportFishfarmDef}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportFishfarmDef()}{exportFishfarmDef()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Fishfarm\+Def (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_fishfarm}{Fishfarm}} \&}]{fishfarm }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a22848a682fdd77dac3444f07a75079f5}\label{class_s_q_lite_output_storage_a22848a682fdd77dac3444f07a75079f5}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportFishfarmLog@{exportFishfarmLog}}
+\index{exportFishfarmLog@{exportFishfarmLog}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportFishfarmLog()}{exportFishfarmLog()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Fishfarm\+Log (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_fishfarm}{Fishfarm}} $\ast$}]{fishfarm,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ab7d95ccbd7baf589d2c65ef0539bac08}\label{class_s_q_lite_output_storage_ab7d95ccbd7baf589d2c65ef0539bac08}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportLogLike@{exportLogLike}}
+\index{exportLogLike@{exportLogLike}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportLogLike()}{exportLogLike()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Log\+Like (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{v,  }\item[{const std\+::vector$<$ double $>$ \&}]{populations,  }\item[{const std\+::vector$<$ double $>$ \&}]{discards,  }\item[{unsigned int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a3800a1fa7ec6fd2a4d567ee45c839918}\label{class_s_q_lite_output_storage_a3800a1fa7ec6fd2a4d567ee45c839918}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportPopNodes@{exportPopNodes}}
+\index{exportPopNodes@{exportPopNodes}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportPopNodes()}{exportPopNodes()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Pop\+Nodes (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a3e017d586cf80142baef2fdc1e7318ef}\label{class_s_q_lite_output_storage_a3e017d586cf80142baef2fdc1e7318ef}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportPopQuotas@{exportPopQuotas}}
+\index{exportPopQuotas@{exportPopQuotas}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportPopQuotas()}{exportPopQuotas()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Pop\+Quotas (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_population}{Population}} $\ast$}]{pop,  }\item[{int}]{popid,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_aee00c8202df05f6d084e21ebc93ea096}\label{class_s_q_lite_output_storage_aee00c8202df05f6d084e21ebc93ea096}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportPopStat@{exportPopStat}}
+\index{exportPopStat@{exportPopStat}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportPopStat()}{exportPopStat()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Pop\+Stat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_population}{Population}} $\ast$}]{pop,  }\item[{int}]{popid,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ab963baf95a340d450b308cdf7e48e34a}\label{class_s_q_lite_output_storage_ab963baf95a340d450b308cdf7e48e34a}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportShip@{exportShip}}
+\index{exportShip@{exportShip}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportShip()}{exportShip()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Ship (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_ship}{Ship}} $\ast$}]{ship }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a46e7b80c24e629cb8a8223e4a71a96d7}\label{class_s_q_lite_output_storage_a46e7b80c24e629cb8a8223e4a71a96d7}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportTariffNodes@{exportTariffNodes}}
+\index{exportTariffNodes@{exportTariffNodes}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportTariffNodes()}{exportTariffNodes()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Tariff\+Nodes (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a7d415c5a0459b81b43c47649d3f0d349}\label{class_s_q_lite_output_storage_a7d415c5a0459b81b43c47649d3f0d349}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!exportWindmillsLog@{exportWindmillsLog}}
+\index{exportWindmillsLog@{exportWindmillsLog}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{exportWindmillsLog()}{exportWindmillsLog()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::export\+Windmills\+Log (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_windmill}{Windmill}} $\ast$}]{windmill,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_aea0e285a8d0b0e3fc9ed095d8daef966}\label{class_s_q_lite_output_storage_aea0e285a8d0b0e3fc9ed095d8daef966}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getBenthosStatData@{getBenthosStatData}}
+\index{getBenthosStatData@{getBenthosStatData}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getBenthosStatData()}{getBenthosStatData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Benthos\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a3a91ceda6f3e5855d0e7cf97e8dea045}{displace\+::plot\+::\+Benthos\+Stat}}}]{stattype,  }\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}}}]{aggtype,  }\item[{int}]{grpid,  }\item[{const std\+::vector$<$ int $>$ \&}]{btype }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a0a4e7c7bdbb73b59a28991657768aa79}\label{class_s_q_lite_output_storage_a0a4e7c7bdbb73b59a28991657768aa79}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getDb@{getDb}}
+\index{getDb@{getDb}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getDb()}{getDb()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ S\+Q\+Lite\+Storage $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Db (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a936436b2b0a76fa889c1193bc302c236}\label{class_s_q_lite_output_storage_a936436b2b0a76fa889c1193bc302c236}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getFishfarmDefTable@{getFishfarmDefTable}}
+\index{getFishfarmDefTable@{getFishfarmDefTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getFishfarmDefTable()}{getFishfarmDefTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_fish_farms_def_table}{Fish\+Farms\+Def\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Fishfarm\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a9fcb77eceee6c2ba83d5cba617ad652c}\label{class_s_q_lite_output_storage_a9fcb77eceee6c2ba83d5cba617ad652c}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getFishFarmStatData@{getFishFarmStatData}}
+\index{getFishFarmStatData@{getFishFarmStatData}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getFishFarmStatData()}{getFishFarmStatData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Fish\+Farm\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a4746af73ffe0625cf87b8fb07fd5bfa4}{displace\+::plot\+::\+Fishfarms\+Stat}}}]{stattype,  }\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}}}]{aggtype,  }\item[{int}]{ffid,  }\item[{std\+::vector$<$ int $>$}]{ftypes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a81a6dd6bdf2e3f23017965853824099a}\label{class_s_q_lite_output_storage_a81a6dd6bdf2e3f23017965853824099a}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getFuncGroupsTable@{getFuncGroupsTable}}
+\index{getFuncGroupsTable@{getFuncGroupsTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getFuncGroupsTable()}{getFuncGroupsTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_func_groups_table}{Func\+Groups\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Func\+Groups\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ac901bca6c4b571781e3f7ced6789e405}\label{class_s_q_lite_output_storage_ac901bca6c4b571781e3f7ced6789e405}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNationsList@{getNationsList}}
+\index{getNationsList@{getNationsList}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNationsList()}{getNationsList()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Nations\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a96847e7bf25f616eeb97fcfd3f3997ff}\label{class_s_q_lite_output_storage_a96847e7bf25f616eeb97fcfd3f3997ff}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNbPops@{getNbPops}}
+\index{getNbPops@{getNbPops}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNbPops()}{getNbPops()}}
+{\footnotesize\ttfamily size\+\_\+t S\+Q\+Lite\+Output\+Storage\+::get\+Nb\+Pops (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a182efeb3f844008fe576016ebeccb1fc}\label{class_s_q_lite_output_storage_a182efeb3f844008fe576016ebeccb1fc}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNodesDefTable@{getNodesDefTable}}
+\index{getNodesDefTable@{getNodesDefTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNodesDefTable()}{getNodesDefTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_def_table}{Nodes\+Def\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Nodes\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ae46fbee2513b45860f9f310a089ba87f}\label{class_s_q_lite_output_storage_ae46fbee2513b45860f9f310a089ba87f}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNodesEnvtTable@{getNodesEnvtTable}}
+\index{getNodesEnvtTable@{getNodesEnvtTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNodesEnvtTable()}{getNodesEnvtTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_envt_table}{Nodes\+Envt\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Nodes\+Envt\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ab29b6e0c9169e04f67f19f5b09ae3dff}\label{class_s_q_lite_output_storage_ab29b6e0c9169e04f67f19f5b09ae3dff}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNodesStatTable@{getNodesStatTable}}
+\index{getNodesStatTable@{getNodesStatTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNodesStatTable()}{getNodesStatTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_stat_table}{Nodes\+Stat\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Nodes\+Stat\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a820656892a8258bbda69f70d56701347}\label{class_s_q_lite_output_storage_a820656892a8258bbda69f70d56701347}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getNodesTariffStatTable@{getNodesTariffStatTable}}
+\index{getNodesTariffStatTable@{getNodesTariffStatTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getNodesTariffStatTable()}{getNodesTariffStatTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_nodes_tariff_stat_table}{Nodes\+Tariff\+Stat\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Nodes\+Tariff\+Stat\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a0764d947298bdd4c9a9eb2451573ce39}\label{class_s_q_lite_output_storage_a0764d947298bdd4c9a9eb2451573ce39}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getPopTable@{getPopTable}}
+\index{getPopTable@{getPopTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getPopTable()}{getPopTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_pop_table}{Pop\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Pop\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a55731ffc5f72f6570900a10728674154}\label{class_s_q_lite_output_storage_a55731ffc5f72f6570900a10728674154}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getPopulationsList@{getPopulationsList}}
+\index{getPopulationsList@{getPopulationsList}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getPopulationsList()}{getPopulationsList()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ S\+Q\+Lite\+Output\+Storage\+::get\+Populations\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a6b3820c96847dff0982b7f075312b2d7}\label{class_s_q_lite_output_storage_a6b3820c96847dff0982b7f075312b2d7}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getPopulationStatData@{getPopulationStatData}}
+\index{getPopulationStatData@{getPopulationStatData}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getPopulationStatData()}{getPopulationStatData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Population\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a523612c6239ff69acc3e5b7c5b40b618}{displace\+::plot\+::\+Population\+Stat}}}]{stat,  }\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}}}]{aggtype,  }\item[{int}]{popid,  }\item[{std\+::vector$<$ int $>$}]{szid }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ade2be014ca467951f61fd6e11b6bcb85}\label{class_s_q_lite_output_storage_ade2be014ca467951f61fd6e11b6bcb85}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getShipsStatData@{getShipsStatData}}
+\index{getShipsStatData@{getShipsStatData}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getShipsStatData()}{getShipsStatData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Ships\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a8c50b4d54cafba744b1b5b51b53407e0}{displace\+::plot\+::\+Ships\+Stat}}}]{stattype,  }\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}}}]{aggtype,  }\item[{int}]{shipid,  }\item[{std\+::vector$<$ int $>$}]{shiptypeid }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a9d5775767c84794b9963301844d8177d}\label{class_s_q_lite_output_storage_a9d5775767c84794b9963301844d8177d}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselDefTable@{getVesselDefTable}}
+\index{getVesselDefTable@{getVesselDefTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselDefTable()}{getVesselDefTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_def_table}{Vessel\+Def\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a41abcf70b12fcc6762558afbec357f9e}\label{class_s_q_lite_output_storage_a41abcf70b12fcc6762558afbec357f9e}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselLoglikeDataByHarbour@{getVesselLoglikeDataByHarbour}}
+\index{getVesselLoglikeDataByHarbour@{getVesselLoglikeDataByHarbour}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselLoglikeDataByHarbour()}{getVesselLoglikeDataByHarbour()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Loglike\+Data\+By\+Harbour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a006fcde9bb7e602d977226ff75cb67aa}{displace\+::plot\+::\+Harbours\+Stat}}}]{stattype,  }\item[{int}]{harbourid,  }\item[{\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}}}]{op }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a4f84767e2d052a7566e5c24e09d9c0d6}\label{class_s_q_lite_output_storage_a4f84767e2d052a7566e5c24e09d9c0d6}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselLoglikeDataByMetier@{getVesselLoglikeDataByMetier}}
+\index{getVesselLoglikeDataByMetier@{getVesselLoglikeDataByMetier}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselLoglikeDataByMetier()}{getVesselLoglikeDataByMetier()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Loglike\+Data\+By\+Metier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a673bbc813b7f03be3dc76ae7fd087516}{displace\+::plot\+::\+Metiers\+Stat}}}]{stattype,  }\item[{int}]{metierid,  }\item[{\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}}}]{op }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a18aba30ce88988bb86cb79fe20a9e0f9}\label{class_s_q_lite_output_storage_a18aba30ce88988bb86cb79fe20a9e0f9}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselLoglikeDataByNation@{getVesselLoglikeDataByNation}}
+\index{getVesselLoglikeDataByNation@{getVesselLoglikeDataByNation}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselLoglikeDataByNation()}{getVesselLoglikeDataByNation()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Loglike\+Data\+By\+Nation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_ab7b96ae3ae291a71823f371d77f27d98}{displace\+::plot\+::\+Nations\+Stat}}}]{stattype,  }\item[{std\+::string}]{nation,  }\item[{\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}}}]{op }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a22263f77a737990d78c5606cac61d0d4}\label{class_s_q_lite_output_storage_a22263f77a737990d78c5606cac61d0d4}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselLoglikeDataByVessel@{getVesselLoglikeDataByVessel}}
+\index{getVesselLoglikeDataByVessel@{getVesselLoglikeDataByVessel}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselLoglikeDataByVessel()}{getVesselLoglikeDataByVessel()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Loglike\+Data\+By\+Vessel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_aa453098d286017edd5b0ff3f15ba1013}{displace\+::plot\+::\+Vessels\+Stat}}}]{stattype,  }\item[{std\+::string}]{vessel,  }\item[{\mbox{\hyperlink{class_s_q_lite_output_storage_aa3928d8e7ab04aafef854a63a94222eb}{Operation}}}]{op }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a977e6ceb02291855cdef83cccb66f3a9}\label{class_s_q_lite_output_storage_a977e6ceb02291855cdef83cccb66f3a9}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselLoglikeTable@{getVesselLoglikeTable}}
+\index{getVesselLoglikeTable@{getVesselLoglikeTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselLoglikeTable()}{getVesselLoglikeTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessels_loglike_table}{Vessels\+Loglike\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Loglike\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_aecf6b7dff5309665248abcbc037aa762}\label{class_s_q_lite_output_storage_aecf6b7dff5309665248abcbc037aa762}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselVmsLikeFPingsOnlyTable@{getVesselVmsLikeFPingsOnlyTable}}
+\index{getVesselVmsLikeFPingsOnlyTable@{getVesselVmsLikeFPingsOnlyTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselVmsLikeFPingsOnlyTable()}{getVesselVmsLikeFPingsOnlyTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_vms_like_f_pings_only_table}{Vessel\+Vms\+Like\+F\+Pings\+Only\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Vms\+Like\+F\+Pings\+Only\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a228a4768d65e3363df180d8b9e556696}\label{class_s_q_lite_output_storage_a228a4768d65e3363df180d8b9e556696}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getVesselVmsLikeTable@{getVesselVmsLikeTable}}
+\index{getVesselVmsLikeTable@{getVesselVmsLikeTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getVesselVmsLikeTable()}{getVesselVmsLikeTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_vms_like_table}{Vessel\+Vms\+Like\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Vessel\+Vms\+Like\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a60df9d35d3dfb8b5be5d6825d599ac0a}\label{class_s_q_lite_output_storage_a60df9d35d3dfb8b5be5d6825d599ac0a}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!getWindfarmTable@{getWindfarmTable}}
+\index{getWindfarmTable@{getWindfarmTable}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{getWindfarmTable()}{getWindfarmTable()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_windfarms_table}{Windfarms\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::get\+Windfarm\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a90df0d3b8e9c4ddbd6e899160403a14e}\label{class_s_q_lite_output_storage_a90df0d3b8e9c4ddbd6e899160403a14e}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!importCalendar@{importCalendar}}
+\index{importCalendar@{importCalendar}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{importCalendar()}{importCalendar()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::import\+Calendar (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+months,  }\item[{std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+quarters,  }\item[{std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+semesters,  }\item[{std\+::vector$<$ int $>$ \&}]{tsteps\+\_\+years }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_adad2107c8e0ed61de81afa4bad915679}\label{class_s_q_lite_output_storage_adad2107c8e0ed61de81afa4bad915679}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!isOutdated@{isOutdated}}
+\index{isOutdated@{isOutdated}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{isOutdated()}{isOutdated()}}
+{\footnotesize\ttfamily bool S\+Q\+Lite\+Output\+Storage\+::is\+Outdated (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_a168924d56024d59c38f6ff7f383a92f2}\label{class_s_q_lite_output_storage_a168924d56024d59c38f6ff7f383a92f2}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!metadata@{metadata}}
+\index{metadata@{metadata}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{metadata()}{metadata()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_metadata_table}{Metadata\+Table}} $>$ S\+Q\+Lite\+Output\+Storage\+::metadata (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_accb747707fd50419cea2568acb3f68ba}\label{class_s_q_lite_output_storage_accb747707fd50419cea2568acb3f68ba}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!open@{open}}
+\index{open@{open}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{open()}{open()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_ab56e30576907da1eb48a2287678363c5}\label{class_s_q_lite_output_storage_ab56e30576907da1eb48a2287678363c5}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!startDayLoop@{startDayLoop}}
+\index{startDayLoop@{startDayLoop}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{startDayLoop()}{startDayLoop()}}
+{\footnotesize\ttfamily void S\+Q\+Lite\+Output\+Storage\+::start\+Day\+Loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_s_q_lite_output_storage_abe6f44858849f2aa51ef7ea27b782447}\label{class_s_q_lite_output_storage_abe6f44858849f2aa51ef7ea27b782447}} 
+\index{SQLiteOutputStorage@{SQLiteOutputStorage}!versionNumber@{versionNumber}}
+\index{versionNumber@{versionNumber}!SQLiteOutputStorage@{SQLiteOutputStorage}}
+\subsubsection{\texorpdfstring{versionNumber()}{versionNumber()}}
+{\footnotesize\ttfamily int S\+Q\+Lite\+Output\+Storage\+::version\+Number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the current supported db version number schema. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/\mbox{\hyperlink{sqliteoutputstorage_8h}{sqliteoutputstorage.\+h}}\item 
+commons/storage/\mbox{\hyperlink{sqliteoutputstorage_8cpp}{sqliteoutputstorage.\+cpp}}\end{DoxyCompactItemize}

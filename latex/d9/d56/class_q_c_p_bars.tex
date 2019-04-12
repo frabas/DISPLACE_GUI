@@ -1,0 +1,594 @@
+\hypertarget{class_q_c_p_bars}{}\section{Q\+C\+P\+Bars Class Reference}
+\label{class_q_c_p_bars}\index{QCPBars@{QCPBars}}
+
+
+A plottable representing a bar chart in a plot.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+Inheritance diagram for Q\+C\+P\+Bars\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{d9/d56/class_q_c_p_bars}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} \{ \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649ab74315c9aa77df593c58dd25dfc0de35}{wt\+Absolute}}, 
+\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649a90bc09899361ad3422ff277f7c790ffe}{wt\+Axis\+Rect\+Ratio}}, 
+\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649aad3cc60ae1bfb1160a30237bee9eaf10}{wt\+Plot\+Coords}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_bars_a64006999ad9dff308f40df41cef176ad}{Q\+C\+P\+Bars}} (\mbox{\hyperlink{class_q_c_p_axis}{Q\+C\+P\+Axis}} $\ast$\mbox{\hyperlink{class_q_c_p_abstract_plottable_a2cdd6f0dd5e9a979037f86b4000d9cfe}{key\+Axis}}, \mbox{\hyperlink{class_q_c_p_axis}{Q\+C\+P\+Axis}} $\ast$\mbox{\hyperlink{class_q_c_p_abstract_plottable_af47809a644a68ffd955fb30b01fb4f2f}{value\+Axis}})
+\item 
+virtual \mbox{\hyperlink{class_q_c_p_bars_a4d880e28031ef120603f543379be2f22}{$\sim$\+Q\+C\+P\+Bars}} ()
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_abe7eb3987d8711f45829db879aee2280}{width}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} \mbox{\hyperlink{class_q_c_p_bars_a4c103fb405a45f47853e0345f0c6e708}{width\+Type}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}} $\ast$ \mbox{\hyperlink{class_q_c_p_bars_a5eef59840b68d205df4e0c3df5f97633}{bars\+Group}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_a29a7b3b86f80b2a04bd1f9ec0ebaf422}{base\+Value}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_a2e6192fa9c16df7ba94cd50c0c9ec7ce}{stacking\+Gap}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$ \mbox{\hyperlink{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}{bar\+Below}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$ \mbox{\hyperlink{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}{bar\+Above}} () const
+\item 
+Q\+Shared\+Pointer$<$ \mbox{\hyperlink{qcustomplot_8h_a52bf589c9fce1baa36c1d40d69785d46}{Q\+C\+P\+Bars\+Data\+Container}} $>$ \mbox{\hyperlink{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}{data}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a6dc562ec7120a8521e1061f2134367e4}{set\+Data}} (Q\+Shared\+Pointer$<$ \mbox{\hyperlink{qcustomplot_8h_a52bf589c9fce1baa36c1d40d69785d46}{Q\+C\+P\+Bars\+Data\+Container}} $>$ \mbox{\hyperlink{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}{data}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a2a88cd5b16ec7b71e5a590f95b50c5ce}{set\+Data}} (const Q\+Vector$<$ double $>$ \&keys, const Q\+Vector$<$ double $>$ \&values, bool already\+Sorted=false)
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}{set\+Width}} (double \mbox{\hyperlink{class_q_c_p_bars_abe7eb3987d8711f45829db879aee2280}{width}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}{set\+Width\+Type}} (\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} \mbox{\hyperlink{class_q_c_p_bars_a4c103fb405a45f47853e0345f0c6e708}{width\+Type}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_aedd1709061f0b307c47ddb45e172ef9a}{set\+Bars\+Group}} (\mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}} $\ast$\mbox{\hyperlink{class_q_c_p_bars_a5eef59840b68d205df4e0c3df5f97633}{bars\+Group}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a574ec7eb7537566df1a28ff085d75623}{set\+Base\+Value}} (double \mbox{\hyperlink{class_q_c_p_bars_a29a7b3b86f80b2a04bd1f9ec0ebaf422}{base\+Value}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_aeacf7561afb1c70284b22822b57c7bb5}{set\+Stacking\+Gap}} (double pixels)
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}{add\+Data}} (const Q\+Vector$<$ double $>$ \&keys, const Q\+Vector$<$ double $>$ \&values, bool already\+Sorted=false)
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a684dd105403a5497fda42f2094fecbb7}{add\+Data}} (double key, double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}{move\+Below}} (\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$bars)
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}{move\+Above}} (\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$bars)
+\item 
+virtual \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_bars_ab03bb6125c3e983b89d694f75ce6b3d5}{select\+Test\+Rect}} (const Q\+RectF \&rect, bool only\+Selectable) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+virtual double \mbox{\hyperlink{class_q_c_p_bars_a121f899c27af3186fe93dcd0eb98f49b}{select\+Test}} (const Q\+PointF \&pos, bool only\+Selectable, Q\+Variant $\ast$details=0) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+virtual \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \mbox{\hyperlink{class_q_c_p_bars_ac5a3854774d9d9cd129b1eae1426de2d}{get\+Key\+Range}} (bool \&found\+Range, \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9}{Q\+C\+P\+::\+Sign\+Domain}} in\+Sign\+Domain=\mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}}) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+virtual \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \mbox{\hyperlink{class_q_c_p_bars_a02cee4bf94d48a1e5f6fc185d9a10477}{get\+Value\+Range}} (bool \&found\+Range, \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9}{Q\+C\+P\+::\+Sign\+Domain}} in\+Sign\+Domain=\mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}}, const \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \&in\+Key\+Range=\mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}}()) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+virtual Q\+PointF \mbox{\hyperlink{class_q_c_p_bars_a55cdaf565cd3384158d1f7f89533bc2d}{data\+Pixel\+Position}} (int index) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_q_c_p_bars_aa267c20650d55084c3f47cb2f8fac9dc}{draw}} (\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$painter) \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+virtual void \mbox{\hyperlink{class_q_c_p_bars_aee7c3e1763fd6b504c45baa8775be7b7}{draw\+Legend\+Icon}} (\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$painter, const Q\+RectF \&rect) const \mbox{\hyperlink{qcustomplot_8h_a42cc5eaeb25b85f8b52d2a4b94c56f55}{Q\+\_\+\+D\+E\+C\+L\+\_\+\+O\+V\+E\+R\+R\+I\+DE}}
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_ac8b6b514a665a7bff4fb080413ba996a}{get\+Visible\+Data\+Bounds}} (\mbox{\hyperlink{class_q_c_p_data_container_ae40a91f5cb0bcac61d727427449b7d15}{Q\+C\+P\+Bars\+Data\+Container\+::const\+\_\+iterator}} \&begin, \mbox{\hyperlink{class_q_c_p_data_container_ae40a91f5cb0bcac61d727427449b7d15}{Q\+C\+P\+Bars\+Data\+Container\+::const\+\_\+iterator}} \&\mbox{\hyperlink{myutils_8h_a64d77caddefed4b96fa62e3f5f73c9a2}{end}}) const
+\item 
+Q\+RectF \mbox{\hyperlink{class_q_c_p_bars_a01b87e38e5d5089d214646d2af7896ea}{get\+Bar\+Rect}} (double key, double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}) const
+\item 
+void \mbox{\hyperlink{class_q_c_p_bars_ad87586cc5e9806740bc0e867667da409}{get\+Pixel\+Width}} (double key, double \&lower, double \&upper) const
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_a0ffd6e043876e13e89eaa54e9f8a04b9}{get\+Stacked\+Base\+Value}} (double key, bool positive) const
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_q_c_p_bars_a6ea37802cd22f97235cab614b14b9f19}{connect\+Bars}} (\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$lower, \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$upper)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_a7c4e0f2246f8133f48a9c3f24cf5b920}{m\+Width}}
+\item 
+\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} \mbox{\hyperlink{class_q_c_p_bars_a94dba1309496c7601d01e2c59715cbb3}{m\+Width\+Type}}
+\item 
+\mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}} $\ast$ \mbox{\hyperlink{class_q_c_p_bars_a9f59c255f3739182ca9744dff75beaa9}{m\+Bars\+Group}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_aa0515cf47fa6044cc28e59b1ae5ec759}{m\+Base\+Value}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_bars_a2022ddbcf8b464a05d434700a666da18}{m\+Stacking\+Gap}}
+\item 
+Q\+Pointer$<$ \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $>$ \mbox{\hyperlink{class_q_c_p_bars_ad51db970eed7e286f2753b0216fc56de}{m\+Bar\+Below}}
+\item 
+Q\+Pointer$<$ \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $>$ \mbox{\hyperlink{class_q_c_p_bars_a0c1c46076c41a478dbb373cfd35929aa}{m\+Bar\+Above}}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_q_c_p_bars_a1cdf9df76adcfae45261690aa0ca2198}{Q\+Custom\+Plot}}
+\item 
+class \mbox{\hyperlink{class_q_c_p_bars_a8429035e7adfbd7f05805a6530ad5e3b}{Q\+C\+P\+Legend}}
+\item 
+class \mbox{\hyperlink{class_q_c_p_bars_ae1051b4d58a2786cb420367a586e2fee}{Q\+C\+P\+Bars\+Group}}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+A plottable representing a bar chart in a plot. 
+
+
+
+To plot data, assign it with the \mbox{\hyperlink{class_q_c_p_bars_a6dc562ec7120a8521e1061f2134367e4}{set\+Data}} or \mbox{\hyperlink{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}{add\+Data}} functions.\hypertarget{class_q_c_p_bars_qcpbars-appearance}{}\subsection{Changing the appearance}\label{class_q_c_p_bars_qcpbars-appearance}
+The appearance of the bars is determined by the pen and the brush (\mbox{\hyperlink{class_q_c_p_abstract_plottable_ab74b09ae4c0e7e13142fe4b5bf46cac7}{set\+Pen}}, \mbox{\hyperlink{class_q_c_p_abstract_plottable_a7a4b92144dca6453a1f0f210e27edc74}{set\+Brush}}). The width of the individual bars can be controlled with \mbox{\hyperlink{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}{set\+Width\+Type}} and \mbox{\hyperlink{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}{set\+Width}}.
+
+Bar charts are stackable. This means, two \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} plottables can be placed on top of each other (see \mbox{\hyperlink{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}{Q\+C\+P\+Bars\+::move\+Above}}). So when two bars are at the same key position, they will appear stacked.
+
+If you would like to group multiple \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} plottables together so they appear side by side as shown below, use \mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}}.
+
+\hypertarget{class_q_c_p_bars_qcpbars-usage}{}\subsection{Usage}\label{class_q_c_p_bars_qcpbars-usage}
+Like all data representing objects in \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}}, the \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} is a plottable (\mbox{\hyperlink{class_q_c_p_abstract_plottable}{Q\+C\+P\+Abstract\+Plottable}}). So the plottable-\/interface of \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} applies (\mbox{\hyperlink{class_q_custom_plot_a32de81ff53e263e785b83b52ecd99d6f}{Q\+Custom\+Plot\+::plottable}}, \mbox{\hyperlink{class_q_custom_plot_af3dafd56884208474f311d6226513ab2}{Q\+Custom\+Plot\+::remove\+Plottable}}, etc.)
+
+Usually, you first create an instance\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+which registers it with the \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} instance of the passed axes. Note that this \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} instance takes ownership of the plottable, so do not delete it manually but use \mbox{\hyperlink{class_q_custom_plot_af3dafd56884208474f311d6226513ab2}{Q\+Custom\+Plot\+::remove\+Plottable()}} instead. The newly created plottable can be modified, e.\+g.\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}\label{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}} 
+\index{QCPBars@{QCPBars}!WidthType@{WidthType}}
+\index{WidthType@{WidthType}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{WidthType}{WidthType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Q\+C\+P\+Bars\+::\+Width\+Type}}}
+
+Defines the ways the width of the bar can be specified. Thus it defines what the number passed to \mbox{\hyperlink{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}{set\+Width}} actually means.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}{set\+Width\+Type}}, \mbox{\hyperlink{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}{set\+Width}} 
+\end{DoxySeeAlso}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{wtAbsolute@{wtAbsolute}!QCPBars@{QCPBars}}\index{QCPBars@{QCPBars}!wtAbsolute@{wtAbsolute}}}\mbox{\Hypertarget{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649ab74315c9aa77df593c58dd25dfc0de35}\label{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649ab74315c9aa77df593c58dd25dfc0de35}} 
+wt\+Absolute&Bar width is in absolute pixels. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{wtAxisRectRatio@{wtAxisRectRatio}!QCPBars@{QCPBars}}\index{QCPBars@{QCPBars}!wtAxisRectRatio@{wtAxisRectRatio}}}\mbox{\Hypertarget{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649a90bc09899361ad3422ff277f7c790ffe}\label{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649a90bc09899361ad3422ff277f7c790ffe}} 
+wt\+Axis\+Rect\+Ratio&Bar width is given by a fraction of the axis rect size. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{wtPlotCoords@{wtPlotCoords}!QCPBars@{QCPBars}}\index{QCPBars@{QCPBars}!wtPlotCoords@{wtPlotCoords}}}\mbox{\Hypertarget{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649aad3cc60ae1bfb1160a30237bee9eaf10}\label{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649aad3cc60ae1bfb1160a30237bee9eaf10}} 
+wt\+Plot\+Coords&Bar width is in key coordinates and thus scales with the key axis range. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_bars_a64006999ad9dff308f40df41cef176ad}\label{class_q_c_p_bars_a64006999ad9dff308f40df41cef176ad}} 
+\index{QCPBars@{QCPBars}!QCPBars@{QCPBars}}
+\index{QCPBars@{QCPBars}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{QCPBars()}{QCPBars()}}
+{\footnotesize\ttfamily Q\+C\+P\+Bars\+::\+Q\+C\+P\+Bars (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_axis}{Q\+C\+P\+Axis}} $\ast$}]{key\+Axis,  }\item[{\mbox{\hyperlink{class_q_c_p_axis}{Q\+C\+P\+Axis}} $\ast$}]{value\+Axis }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Constructs a bar chart which uses {\itshape key\+Axis} as its key axis (\char`\"{}x\char`\"{}) and {\itshape value\+Axis} as its value axis (\char`\"{}y\char`\"{}). {\itshape key\+Axis} and {\itshape value\+Axis} must reside in the same \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} instance and not have the same orientation. If either of these restrictions is violated, a corresponding message is printed to the debug output (q\+Debug), the construction is not aborted, though.
+
+The created \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} is automatically registered with the \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} instance inferred from {\itshape key\+Axis}. This \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} instance takes ownership of the \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}}, so do not delete it manually but use \mbox{\hyperlink{class_q_custom_plot_af3dafd56884208474f311d6226513ab2}{Q\+Custom\+Plot\+::remove\+Plottable()}} instead. \mbox{\Hypertarget{class_q_c_p_bars_a4d880e28031ef120603f543379be2f22}\label{class_q_c_p_bars_a4d880e28031ef120603f543379be2f22}} 
+\index{QCPBars@{QCPBars}!````~QCPBars@{$\sim$QCPBars}}
+\index{````~QCPBars@{$\sim$QCPBars}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{$\sim$QCPBars()}{~QCPBars()}}
+{\footnotesize\ttfamily Q\+C\+P\+Bars\+::$\sim$\+Q\+C\+P\+Bars (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}\label{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}} 
+\index{QCPBars@{QCPBars}!addData@{addData}}
+\index{addData@{addData}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{addData()}{addData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::add\+Data (\begin{DoxyParamCaption}\item[{const Q\+Vector$<$ double $>$ \&}]{keys,  }\item[{const Q\+Vector$<$ double $>$ \&}]{values,  }\item[{bool}]{already\+Sorted = {\ttfamily false} }\end{DoxyParamCaption})}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+Adds the provided points in {\itshape keys} and {\itshape values} to the current data. The provided vectors should have equal length. Else, the number of added points will be the size of the smallest vector.
+
+If you can guarantee that the passed data points are sorted by {\itshape keys} in ascending order, you can set {\itshape already\+Sorted} to true, to improve performance by saving a sorting run.
+
+Alternatively, you can also access and modify the data directly via the \mbox{\hyperlink{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}{data}} method, which returns a pointer to the internal data container. \mbox{\Hypertarget{class_q_c_p_bars_a684dd105403a5497fda42f2094fecbb7}\label{class_q_c_p_bars_a684dd105403a5497fda42f2094fecbb7}} 
+\index{QCPBars@{QCPBars}!addData@{addData}}
+\index{addData@{addData}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{addData()}{addData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::add\+Data (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{double}]{value }\end{DoxyParamCaption})}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Adds the provided data point as {\itshape key} and {\itshape value} to the current data.
+
+Alternatively, you can also access and modify the data directly via the \mbox{\hyperlink{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}{data}} method, which returns a pointer to the internal data container. \mbox{\Hypertarget{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}\label{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}} 
+\index{QCPBars@{QCPBars}!barAbove@{barAbove}}
+\index{barAbove@{barAbove}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{barAbove()}{barAbove()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$ Q\+C\+P\+Bars\+::bar\+Above (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the bars plottable that is directly above this bars plottable. If there is no such plottable, returns 0.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}{bar\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}{move\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}{move\+Above}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}\label{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}} 
+\index{QCPBars@{QCPBars}!barBelow@{barBelow}}
+\index{barBelow@{barBelow}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{barBelow()}{barBelow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$ Q\+C\+P\+Bars\+::bar\+Below (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the bars plottable that is directly below this bars plottable. If there is no such plottable, returns 0.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}{bar\+Above}}, \mbox{\hyperlink{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}{move\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}{move\+Above}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a5eef59840b68d205df4e0c3df5f97633}\label{class_q_c_p_bars_a5eef59840b68d205df4e0c3df5f97633}} 
+\index{QCPBars@{QCPBars}!barsGroup@{barsGroup}}
+\index{barsGroup@{barsGroup}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{barsGroup()}{barsGroup()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}}$\ast$ Q\+C\+P\+Bars\+::bars\+Group (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a29a7b3b86f80b2a04bd1f9ec0ebaf422}\label{class_q_c_p_bars_a29a7b3b86f80b2a04bd1f9ec0ebaf422}} 
+\index{QCPBars@{QCPBars}!baseValue@{baseValue}}
+\index{baseValue@{baseValue}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{baseValue()}{baseValue()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::base\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a6ea37802cd22f97235cab614b14b9f19}\label{class_q_c_p_bars_a6ea37802cd22f97235cab614b14b9f19}} 
+\index{QCPBars@{QCPBars}!connectBars@{connectBars}}
+\index{connectBars@{connectBars}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{connectBars()}{connectBars()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::connect\+Bars (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$}]{lower,  }\item[{\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$}]{upper }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}\label{class_q_c_p_bars_a7e373a534d82e18ed27b3fafd1f08fae}} 
+\index{QCPBars@{QCPBars}!data@{data}}
+\index{data@{data}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily Q\+Shared\+Pointer$<$ \mbox{\hyperlink{qcustomplot_8h_a52bf589c9fce1baa36c1d40d69785d46}{Q\+C\+P\+Bars\+Data\+Container}} $>$ Q\+C\+P\+Bars\+::data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a shared pointer to the internal data storage of type \mbox{\hyperlink{qcustomplot_8h_a52bf589c9fce1baa36c1d40d69785d46}{Q\+C\+P\+Bars\+Data\+Container}}. You may use it to directly manipulate the data, which may be more convenient and faster than using the regular \mbox{\hyperlink{class_q_c_p_bars_a6dc562ec7120a8521e1061f2134367e4}{set\+Data}} or \mbox{\hyperlink{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}{add\+Data}} methods. \mbox{\Hypertarget{class_q_c_p_bars_a55cdaf565cd3384158d1f7f89533bc2d}\label{class_q_c_p_bars_a55cdaf565cd3384158d1f7f89533bc2d}} 
+\index{QCPBars@{QCPBars}!dataPixelPosition@{dataPixelPosition}}
+\index{dataPixelPosition@{dataPixelPosition}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{dataPixelPosition()}{dataPixelPosition()}}
+{\footnotesize\ttfamily Q\+PointF Q\+C\+P\+Bars\+::data\+Pixel\+Position (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+
+
+Returns the pixel position on the widget surface at which the data point at the given {\itshape index} appears.
+
+Usually this corresponds to the point of data\+Main\+Key/ data\+Main\+Value, in pixel coordinates. However, depending on the plottable, this might be a different apparent position than just a coord-\/to-\/pixel transform of those values. For example, \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} apparent data values can be shifted depending on their stacking, bar grouping or configured base value. 
+
+Reimplemented from \mbox{\hyperlink{class_q_c_p_abstract_plottable1_d_a6ca0699a6af5f25a7565de7c50ce13b2}{Q\+C\+P\+Abstract\+Plottable1\+D$<$ Q\+C\+P\+Bars\+Data $>$}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_aa267c20650d55084c3f47cb2f8fac9dc}\label{class_q_c_p_bars_aa267c20650d55084c3f47cb2f8fac9dc}} 
+\index{QCPBars@{QCPBars}!draw@{draw}}
+\index{draw@{draw}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$}]{painter }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_q_c_p_abstract_plottable_a453f676a5cee7bf846c5f0fa05ea84b3}{Q\+C\+P\+Abstract\+Plottable}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_aee7c3e1763fd6b504c45baa8775be7b7}\label{class_q_c_p_bars_aee7c3e1763fd6b504c45baa8775be7b7}} 
+\index{QCPBars@{QCPBars}!drawLegendIcon@{drawLegendIcon}}
+\index{drawLegendIcon@{drawLegendIcon}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{drawLegendIcon()}{drawLegendIcon()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::draw\+Legend\+Icon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$}]{painter,  }\item[{const Q\+RectF \&}]{rect }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_q_c_p_abstract_plottable_a9a450783fd9ed539e589999fd390cdf7}{Q\+C\+P\+Abstract\+Plottable}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_a01b87e38e5d5089d214646d2af7896ea}\label{class_q_c_p_bars_a01b87e38e5d5089d214646d2af7896ea}} 
+\index{QCPBars@{QCPBars}!getBarRect@{getBarRect}}
+\index{getBarRect@{getBarRect}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getBarRect()}{getBarRect()}}
+{\footnotesize\ttfamily Q\+RectF Q\+C\+P\+Bars\+::get\+Bar\+Rect (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{double}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_ac5a3854774d9d9cd129b1eae1426de2d}\label{class_q_c_p_bars_ac5a3854774d9d9cd129b1eae1426de2d}} 
+\index{QCPBars@{QCPBars}!getKeyRange@{getKeyRange}}
+\index{getKeyRange@{getKeyRange}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getKeyRange()}{getKeyRange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} Q\+C\+P\+Bars\+::get\+Key\+Range (\begin{DoxyParamCaption}\item[{bool \&}]{found\+Range,  }\item[{\mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9}{Q\+C\+P\+::\+Sign\+Domain}}}]{in\+Sign\+Domain = {\ttfamily \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns the coordinate range that all data in this plottable span in the key axis dimension. For logarithmic plots, one can set {\itshape in\+Sign\+Domain} to either \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a2d18af0bc58f6528d1e82ce699fe4829}{Q\+C\+P\+::sd\+Negative}} or \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a584784b75fb816abcc627cf743bb699f}{Q\+C\+P\+::sd\+Positive}} in order to restrict the returned range to that sign domain. E.\+g. when only negative range is wanted, set {\itshape in\+Sign\+Domain} to \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a2d18af0bc58f6528d1e82ce699fe4829}{Q\+C\+P\+::sd\+Negative}} and all positive points will be ignored for range calculation. For no restriction, just set {\itshape in\+Sign\+Domain} to \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}} (default). {\itshape found\+Range} is an output parameter that indicates whether a range could be found or not. If this is false, you shouldn\textquotesingle{}t use the returned range (e.\+g. no points in data).
+
+Note that {\itshape found\+Range} is not the same as \mbox{\hyperlink{class_q_c_p_range_ab38bd4841c77c7bb86c9eea0f142dcc0}{Q\+C\+P\+Range\+::valid\+Range}}, since the range returned by this function may have size zero (e.\+g. when there is only one data point). In this case {\itshape found\+Range} would return true, but the returned range is not a valid range in terms of \mbox{\hyperlink{class_q_c_p_range_ab38bd4841c77c7bb86c9eea0f142dcc0}{Q\+C\+P\+Range\+::valid\+Range}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_abstract_plottable_a1491c4a606bccd2d09e65e11b79eb882}{rescale\+Axes}}, \mbox{\hyperlink{class_q_c_p_bars_a02cee4bf94d48a1e5f6fc185d9a10477}{get\+Value\+Range}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_q_c_p_abstract_plottable_a4da16d3cd4b509e1104a9b0275623c96}{Q\+C\+P\+Abstract\+Plottable}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_ad87586cc5e9806740bc0e867667da409}\label{class_q_c_p_bars_ad87586cc5e9806740bc0e867667da409}} 
+\index{QCPBars@{QCPBars}!getPixelWidth@{getPixelWidth}}
+\index{getPixelWidth@{getPixelWidth}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getPixelWidth()}{getPixelWidth()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::get\+Pixel\+Width (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{double \&}]{lower,  }\item[{double \&}]{upper }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a0ffd6e043876e13e89eaa54e9f8a04b9}\label{class_q_c_p_bars_a0ffd6e043876e13e89eaa54e9f8a04b9}} 
+\index{QCPBars@{QCPBars}!getStackedBaseValue@{getStackedBaseValue}}
+\index{getStackedBaseValue@{getStackedBaseValue}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getStackedBaseValue()}{getStackedBaseValue()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::get\+Stacked\+Base\+Value (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{bool}]{positive }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a02cee4bf94d48a1e5f6fc185d9a10477}\label{class_q_c_p_bars_a02cee4bf94d48a1e5f6fc185d9a10477}} 
+\index{QCPBars@{QCPBars}!getValueRange@{getValueRange}}
+\index{getValueRange@{getValueRange}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getValueRange()}{getValueRange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} Q\+C\+P\+Bars\+::get\+Value\+Range (\begin{DoxyParamCaption}\item[{bool \&}]{found\+Range,  }\item[{\mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9}{Q\+C\+P\+::\+Sign\+Domain}}}]{in\+Sign\+Domain = {\ttfamily \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}}},  }\item[{const \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \&}]{in\+Key\+Range = {\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}}()} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns the coordinate range that the data points in the specified key range ({\itshape in\+Key\+Range}) span in the value axis dimension. For logarithmic plots, one can set {\itshape in\+Sign\+Domain} to either \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a2d18af0bc58f6528d1e82ce699fe4829}{Q\+C\+P\+::sd\+Negative}} or \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a584784b75fb816abcc627cf743bb699f}{Q\+C\+P\+::sd\+Positive}} in order to restrict the returned range to that sign domain. E.\+g. when only negative range is wanted, set {\itshape in\+Sign\+Domain} to \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9a2d18af0bc58f6528d1e82ce699fe4829}{Q\+C\+P\+::sd\+Negative}} and all positive points will be ignored for range calculation. For no restriction, just set {\itshape in\+Sign\+Domain} to \mbox{\hyperlink{namespace_q_c_p_afd50e7cf431af385614987d8553ff8a9aa38352ef02d51ddfa4399d9551566e24}{Q\+C\+P\+::sd\+Both}} (default). {\itshape found\+Range} is an output parameter that indicates whether a range could be found or not. If this is false, you shouldn\textquotesingle{}t use the returned range (e.\+g. no points in data).
+
+If {\itshape in\+Key\+Range} has both lower and upper bound set to zero (is equal to {\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range()}}}), all data points are considered, without any restriction on the keys.
+
+Note that {\itshape found\+Range} is not the same as \mbox{\hyperlink{class_q_c_p_range_ab38bd4841c77c7bb86c9eea0f142dcc0}{Q\+C\+P\+Range\+::valid\+Range}}, since the range returned by this function may have size zero (e.\+g. when there is only one data point). In this case {\itshape found\+Range} would return true, but the returned range is not a valid range in terms of \mbox{\hyperlink{class_q_c_p_range_ab38bd4841c77c7bb86c9eea0f142dcc0}{Q\+C\+P\+Range\+::valid\+Range}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_abstract_plottable_a1491c4a606bccd2d09e65e11b79eb882}{rescale\+Axes}}, \mbox{\hyperlink{class_q_c_p_bars_ac5a3854774d9d9cd129b1eae1426de2d}{get\+Key\+Range}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_q_c_p_abstract_plottable_a4de773988b21ed090fddd27c6a3a3dcb}{Q\+C\+P\+Abstract\+Plottable}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_ac8b6b514a665a7bff4fb080413ba996a}\label{class_q_c_p_bars_ac8b6b514a665a7bff4fb080413ba996a}} 
+\index{QCPBars@{QCPBars}!getVisibleDataBounds@{getVisibleDataBounds}}
+\index{getVisibleDataBounds@{getVisibleDataBounds}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{getVisibleDataBounds()}{getVisibleDataBounds()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::get\+Visible\+Data\+Bounds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_data_container_ae40a91f5cb0bcac61d727427449b7d15}{Q\+C\+P\+Bars\+Data\+Container\+::const\+\_\+iterator}} \&}]{begin,  }\item[{\mbox{\hyperlink{class_q_c_p_data_container_ae40a91f5cb0bcac61d727427449b7d15}{Q\+C\+P\+Bars\+Data\+Container\+::const\+\_\+iterator}} \&}]{end }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}\label{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}} 
+\index{QCPBars@{QCPBars}!moveAbove@{moveAbove}}
+\index{moveAbove@{moveAbove}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{moveAbove()}{moveAbove()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::move\+Above (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$}]{bars }\end{DoxyParamCaption})}
+
+Moves this bars plottable above {\itshape bars}. In other words, the bars of this plottable will appear above the bars of {\itshape bars}. The move target {\itshape bars} must use the same key and value axis as this plottable.
+
+Inserting into and removing from existing bar stacking is handled gracefully. If {\itshape bars} already has a bars object above itself, this bars object is inserted between the two. If this bars object is already between two other bars, the two other bars will be stacked on top of each other after the operation.
+
+To remove this bars plottable from any stacking, set {\itshape bars} to 0.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}{move\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}{bar\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}{bar\+Above}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}\label{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}} 
+\index{QCPBars@{QCPBars}!moveBelow@{moveBelow}}
+\index{moveBelow@{moveBelow}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{moveBelow()}{moveBelow()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::move\+Below (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} $\ast$}]{bars }\end{DoxyParamCaption})}
+
+Moves this bars plottable below {\itshape bars}. In other words, the bars of this plottable will appear below the bars of {\itshape bars}. The move target {\itshape bars} must use the same key and value axis as this plottable.
+
+Inserting into and removing from existing bar stacking is handled gracefully. If {\itshape bars} already has a bars object below itself, this bars object is inserted between the two. If this bars object is already between two other bars, the two other bars will be stacked on top of each other after the operation.
+
+To remove this bars plottable from any stacking, set {\itshape bars} to 0.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_a69fc371346980f19177c3d1ecdad78ee}{move\+Below}}, \mbox{\hyperlink{class_q_c_p_bars_ab97f2acd9f6cb40d2cc3c33d278f0e78}{bar\+Above}}, \mbox{\hyperlink{class_q_c_p_bars_a1b58664864b141f45e02044a855b3213}{bar\+Below}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a121f899c27af3186fe93dcd0eb98f49b}\label{class_q_c_p_bars_a121f899c27af3186fe93dcd0eb98f49b}} 
+\index{QCPBars@{QCPBars}!selectTest@{selectTest}}
+\index{selectTest@{selectTest}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{selectTest()}{selectTest()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::select\+Test (\begin{DoxyParamCaption}\item[{const Q\+PointF \&}]{pos,  }\item[{bool}]{only\+Selectable,  }\item[{Q\+Variant $\ast$}]{details = {\ttfamily 0} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Implements a point-\/selection algorithm assuming the data (accessed via the 1D data interface) is point-\/like. Most subclasses will want to reimplement this method again, to provide a more accurate hit test based on the true data visualization geometry.
+
+\textbackslash{}seebaseclassmethod 
+
+Reimplemented from \mbox{\hyperlink{class_q_c_p_abstract_plottable1_d_a4611b43bcb6441b2154eb4f4e0a33db2}{Q\+C\+P\+Abstract\+Plottable1\+D$<$ Q\+C\+P\+Bars\+Data $>$}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_ab03bb6125c3e983b89d694f75ce6b3d5}\label{class_q_c_p_bars_ab03bb6125c3e983b89d694f75ce6b3d5}} 
+\index{QCPBars@{QCPBars}!selectTestRect@{selectTestRect}}
+\index{selectTestRect@{selectTestRect}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{selectTestRect()}{selectTestRect()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} Q\+C\+P\+Bars\+::select\+Test\+Rect (\begin{DoxyParamCaption}\item[{const Q\+RectF \&}]{rect,  }\item[{bool}]{only\+Selectable }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+
+
+Returns a data selection containing all the data points of this plottable which are contained (or hit by) {\itshape rect}. This is used mainly in the selection rect interaction for data selection (data selection mechanism).
+
+If {\itshape only\+Selectable} is true, an empty \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} is returned if this plottable is not selectable (i.\+e. if \mbox{\hyperlink{class_q_c_p_abstract_plottable_ac238d6e910f976f1f30d41c2bca44ac3}{Q\+C\+P\+Abstract\+Plottable\+::set\+Selectable}} is \mbox{\hyperlink{namespace_q_c_p_ac6cb9db26a564b27feda362a438db038aa64628e338a2dd1e6f0dc84dec0b63fe}{Q\+C\+P\+::st\+None}}).
+
+\begin{DoxyNote}{Note}
+{\itshape rect} must be a normalized rect (positive or zero width and height). This is especially important when using the rect of \mbox{\hyperlink{class_q_c_p_selection_rect_a15a43542e1f7b953a44c260b419e6d2c}{Q\+C\+P\+Selection\+Rect\+::accepted}}, which is not necessarily normalized. Use {\ttfamily Q\+Rect\+::normalized()} when passing a rect which might not be normalized. 
+\end{DoxyNote}
+
+
+Reimplemented from \mbox{\hyperlink{class_q_c_p_abstract_plottable1_d_a22377bf6e57ab7eedbc9e489250c6ded}{Q\+C\+P\+Abstract\+Plottable1\+D$<$ Q\+C\+P\+Bars\+Data $>$}}.
+
+\mbox{\Hypertarget{class_q_c_p_bars_aedd1709061f0b307c47ddb45e172ef9a}\label{class_q_c_p_bars_aedd1709061f0b307c47ddb45e172ef9a}} 
+\index{QCPBars@{QCPBars}!setBarsGroup@{setBarsGroup}}
+\index{setBarsGroup@{setBarsGroup}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setBarsGroup()}{setBarsGroup()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Bars\+Group (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}} $\ast$}]{bars\+Group }\end{DoxyParamCaption})}
+
+Sets to which \mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}} this \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} instance belongs to. Alternatively, you can also use \mbox{\hyperlink{class_q_c_p_bars_group_a809ed63cc4ff7cd5b0b8c96b470163d3}{Q\+C\+P\+Bars\+Group\+::append}}.
+
+To remove this \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} from any group, set {\itshape bars\+Group} to 0. \mbox{\Hypertarget{class_q_c_p_bars_a574ec7eb7537566df1a28ff085d75623}\label{class_q_c_p_bars_a574ec7eb7537566df1a28ff085d75623}} 
+\index{QCPBars@{QCPBars}!setBaseValue@{setBaseValue}}
+\index{setBaseValue@{setBaseValue}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setBaseValue()}{setBaseValue()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Base\+Value (\begin{DoxyParamCaption}\item[{double}]{base\+Value }\end{DoxyParamCaption})}
+
+Sets the base value of this bars plottable.
+
+The base value defines where on the value coordinate the bars start. How far the bars extend from the base value is given by their individual value data. For example, if the base value is set to 1, a bar with data value 2 will have its lowest point at value coordinate 1 and highest point at 3.
+
+For stacked bars, only the base value of the bottom-\/most \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} has meaning.
+
+The default base value is 0. \mbox{\Hypertarget{class_q_c_p_bars_a6dc562ec7120a8521e1061f2134367e4}\label{class_q_c_p_bars_a6dc562ec7120a8521e1061f2134367e4}} 
+\index{QCPBars@{QCPBars}!setData@{setData}}
+\index{setData@{setData}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setData()}{setData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Data (\begin{DoxyParamCaption}\item[{Q\+Shared\+Pointer$<$ \mbox{\hyperlink{qcustomplot_8h_a52bf589c9fce1baa36c1d40d69785d46}{Q\+C\+P\+Bars\+Data\+Container}} $>$}]{data }\end{DoxyParamCaption})}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+Replaces the current data container with the provided {\itshape data} container.
+
+Since a Q\+Shared\+Pointer is used, multiple \mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}} may share the same data container safely. Modifying the data in the container will then affect all bars that share the container. Sharing can be achieved by simply exchanging the data containers wrapped in shared pointers\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+ If you do not wish to share containers, but create a copy from an existing container, rather use the \mbox{\hyperlink{class_q_c_p_data_container_ae7042bd534fc3ce7befa2ce3f790b5bf}{Q\+C\+P\+Data\+Container$<$\+Data\+Type$>$\+::set}} method on the bar\textquotesingle{}s data container directly\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+ \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}{add\+Data}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a2a88cd5b16ec7b71e5a590f95b50c5ce}\label{class_q_c_p_bars_a2a88cd5b16ec7b71e5a590f95b50c5ce}} 
+\index{QCPBars@{QCPBars}!setData@{setData}}
+\index{setData@{setData}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setData()}{setData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Data (\begin{DoxyParamCaption}\item[{const Q\+Vector$<$ double $>$ \&}]{keys,  }\item[{const Q\+Vector$<$ double $>$ \&}]{values,  }\item[{bool}]{already\+Sorted = {\ttfamily false} }\end{DoxyParamCaption})}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+Replaces the current data with the provided points in {\itshape keys} and {\itshape values}. The provided vectors should have equal length. Else, the number of added points will be the size of the smallest vector.
+
+If you can guarantee that the passed data points are sorted by {\itshape keys} in ascending order, you can set {\itshape already\+Sorted} to true, to improve performance by saving a sorting run.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_a323d6970d6d6e3166d89916a7f60f733}{add\+Data}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_aeacf7561afb1c70284b22822b57c7bb5}\label{class_q_c_p_bars_aeacf7561afb1c70284b22822b57c7bb5}} 
+\index{QCPBars@{QCPBars}!setStackingGap@{setStackingGap}}
+\index{setStackingGap@{setStackingGap}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setStackingGap()}{setStackingGap()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Stacking\+Gap (\begin{DoxyParamCaption}\item[{double}]{pixels }\end{DoxyParamCaption})}
+
+If this bars plottable is stacked on top of another bars plottable (\mbox{\hyperlink{class_q_c_p_bars_ac22e00a6a41509538c21b04f0a57318c}{move\+Above}}), this method allows specifying a distance in {\itshape pixels}, by which the drawn bar rectangles will be separated by the bars below it. \mbox{\Hypertarget{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}\label{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}} 
+\index{QCPBars@{QCPBars}!setWidth@{setWidth}}
+\index{setWidth@{setWidth}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setWidth()}{setWidth()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Width (\begin{DoxyParamCaption}\item[{double}]{width }\end{DoxyParamCaption})}
+
+Sets the width of the bars.
+
+How the number passed as {\itshape width} is interpreted (e.\+g. screen pixels, plot coordinates,...), depends on the currently set width type, see \mbox{\hyperlink{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}{set\+Width\+Type}} and \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}}. \mbox{\Hypertarget{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}\label{class_q_c_p_bars_adcaa3b41281bb2c0f7949b341592fcc0}} 
+\index{QCPBars@{QCPBars}!setWidthType@{setWidthType}}
+\index{setWidthType@{setWidthType}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{setWidthType()}{setWidthType()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Bars\+::set\+Width\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Q\+C\+P\+Bars\+::\+Width\+Type}}}]{width\+Type }\end{DoxyParamCaption})}
+
+Sets how the width of the bars is defined. See the documentation of \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} for an explanation of the possible values for {\itshape width\+Type}.
+
+The default value is \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649aad3cc60ae1bfb1160a30237bee9eaf10}{wt\+Plot\+Coords}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_bars_afec6116579d44d5b706e0fa5e5332507}{set\+Width}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_bars_a2e6192fa9c16df7ba94cd50c0c9ec7ce}\label{class_q_c_p_bars_a2e6192fa9c16df7ba94cd50c0c9ec7ce}} 
+\index{QCPBars@{QCPBars}!stackingGap@{stackingGap}}
+\index{stackingGap@{stackingGap}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{stackingGap()}{stackingGap()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::stacking\+Gap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_abe7eb3987d8711f45829db879aee2280}\label{class_q_c_p_bars_abe7eb3987d8711f45829db879aee2280}} 
+\index{QCPBars@{QCPBars}!width@{width}}
+\index{width@{width}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{width()}{width()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a4c103fb405a45f47853e0345f0c6e708}\label{class_q_c_p_bars_a4c103fb405a45f47853e0345f0c6e708}} 
+\index{QCPBars@{QCPBars}!widthType@{widthType}}
+\index{widthType@{widthType}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{widthType()}{widthType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} Q\+C\+P\+Bars\+::width\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_bars_ae1051b4d58a2786cb420367a586e2fee}\label{class_q_c_p_bars_ae1051b4d58a2786cb420367a586e2fee}} 
+\index{QCPBars@{QCPBars}!QCPBarsGroup@{QCPBarsGroup}}
+\index{QCPBarsGroup@{QCPBarsGroup}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{QCPBarsGroup}{QCPBarsGroup}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a8429035e7adfbd7f05805a6530ad5e3b}\label{class_q_c_p_bars_a8429035e7adfbd7f05805a6530ad5e3b}} 
+\index{QCPBars@{QCPBars}!QCPLegend@{QCPLegend}}
+\index{QCPLegend@{QCPLegend}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{QCPLegend}{QCPLegend}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{class_q_c_p_legend}{Q\+C\+P\+Legend}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a1cdf9df76adcfae45261690aa0ca2198}\label{class_q_c_p_bars_a1cdf9df76adcfae45261690aa0ca2198}} 
+\index{QCPBars@{QCPBars}!QCustomPlot@{QCustomPlot}}
+\index{QCustomPlot@{QCustomPlot}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{QCustomPlot}{QCustomPlot}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_c_p_bars_a0c1c46076c41a478dbb373cfd35929aa}\label{class_q_c_p_bars_a0c1c46076c41a478dbb373cfd35929aa}} 
+\index{QCPBars@{QCPBars}!mBarAbove@{mBarAbove}}
+\index{mBarAbove@{mBarAbove}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mBarAbove}{mBarAbove}}
+{\footnotesize\ttfamily Q\+Pointer$<$\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}}$>$ Q\+C\+P\+Bars\+::m\+Bar\+Above\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_ad51db970eed7e286f2753b0216fc56de}\label{class_q_c_p_bars_ad51db970eed7e286f2753b0216fc56de}} 
+\index{QCPBars@{QCPBars}!mBarBelow@{mBarBelow}}
+\index{mBarBelow@{mBarBelow}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mBarBelow}{mBarBelow}}
+{\footnotesize\ttfamily Q\+Pointer$<$\mbox{\hyperlink{class_q_c_p_bars}{Q\+C\+P\+Bars}}$>$ Q\+C\+P\+Bars\+::m\+Bar\+Below\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a9f59c255f3739182ca9744dff75beaa9}\label{class_q_c_p_bars_a9f59c255f3739182ca9744dff75beaa9}} 
+\index{QCPBars@{QCPBars}!mBarsGroup@{mBarsGroup}}
+\index{mBarsGroup@{mBarsGroup}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mBarsGroup}{mBarsGroup}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars_group}{Q\+C\+P\+Bars\+Group}}$\ast$ Q\+C\+P\+Bars\+::m\+Bars\+Group\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_aa0515cf47fa6044cc28e59b1ae5ec759}\label{class_q_c_p_bars_aa0515cf47fa6044cc28e59b1ae5ec759}} 
+\index{QCPBars@{QCPBars}!mBaseValue@{mBaseValue}}
+\index{mBaseValue@{mBaseValue}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mBaseValue}{mBaseValue}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::m\+Base\+Value\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a2022ddbcf8b464a05d434700a666da18}\label{class_q_c_p_bars_a2022ddbcf8b464a05d434700a666da18}} 
+\index{QCPBars@{QCPBars}!mStackingGap@{mStackingGap}}
+\index{mStackingGap@{mStackingGap}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mStackingGap}{mStackingGap}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::m\+Stacking\+Gap\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a7c4e0f2246f8133f48a9c3f24cf5b920}\label{class_q_c_p_bars_a7c4e0f2246f8133f48a9c3f24cf5b920}} 
+\index{QCPBars@{QCPBars}!mWidth@{mWidth}}
+\index{mWidth@{mWidth}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mWidth}{mWidth}}
+{\footnotesize\ttfamily double Q\+C\+P\+Bars\+::m\+Width\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_bars_a94dba1309496c7601d01e2c59715cbb3}\label{class_q_c_p_bars_a94dba1309496c7601d01e2c59715cbb3}} 
+\index{QCPBars@{QCPBars}!mWidthType@{mWidthType}}
+\index{mWidthType@{mWidthType}!QCPBars@{QCPBars}}
+\subsubsection{\texorpdfstring{mWidthType}{mWidthType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_bars_a65dbbf1ab41cbe993d71521096ed4649}{Width\+Type}} Q\+C\+P\+Bars\+::m\+Width\+Type\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,64 @@
+\hypertarget{_crash_handler_8cpp}{}\section{commons/utils/\+Crash\+Handler.cpp File Reference}
+\label{_crash_handler_8cpp}\index{commons/utils/CrashHandler.cpp@{commons/utils/CrashHandler.cpp}}
+{\ttfamily \#include \char`\"{}Crash\+Handler.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$execinfo.\+h$>$}\newline
+{\ttfamily \#include $<$signal.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$ucontext.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$boost/format.\+hpp$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$cxxabi.\+h$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__sig__ucontext}{\+\_\+sig\+\_\+ucontext}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_crash_handler_8cpp_a404ec2d616e121b4d98eb12c50e83f08}{B\+O\+O\+S\+T\+\_\+\+C\+H\+R\+O\+N\+O\+\_\+\+V\+E\+R\+S\+I\+ON}}~2
+\item 
+\#define \mbox{\hyperlink{_crash_handler_8cpp_a369266c24eacffb87046522897a570d5}{\+\_\+\+G\+N\+U\+\_\+\+S\+O\+U\+R\+CE}}
+\item 
+\#define \mbox{\hyperlink{_crash_handler_8cpp_adc4cc5c67b56f34138d786ef6331e3f4}{\+\_\+\+\_\+\+U\+S\+E\+\_\+\+G\+NU}}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{struct__sig__ucontext}{\+\_\+sig\+\_\+ucontext}} \mbox{\hyperlink{_crash_handler_8cpp_a40ab0181c3ff08e07842ea99bdb3f8cb}{sig\+\_\+ucontext\+\_\+t}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_crash_handler_8cpp_adc4cc5c67b56f34138d786ef6331e3f4}\label{_crash_handler_8cpp_adc4cc5c67b56f34138d786ef6331e3f4}} 
+\index{CrashHandler.cpp@{CrashHandler.cpp}!\_\_USE\_GNU@{\_\_USE\_GNU}}
+\index{\_\_USE\_GNU@{\_\_USE\_GNU}!CrashHandler.cpp@{CrashHandler.cpp}}
+\subsubsection{\texorpdfstring{\_\_USE\_GNU}{\_\_USE\_GNU}}
+{\footnotesize\ttfamily \#define \+\_\+\+\_\+\+U\+S\+E\+\_\+\+G\+NU}
+
+\mbox{\Hypertarget{_crash_handler_8cpp_a369266c24eacffb87046522897a570d5}\label{_crash_handler_8cpp_a369266c24eacffb87046522897a570d5}} 
+\index{CrashHandler.cpp@{CrashHandler.cpp}!\_GNU\_SOURCE@{\_GNU\_SOURCE}}
+\index{\_GNU\_SOURCE@{\_GNU\_SOURCE}!CrashHandler.cpp@{CrashHandler.cpp}}
+\subsubsection{\texorpdfstring{\_GNU\_SOURCE}{\_GNU\_SOURCE}}
+{\footnotesize\ttfamily \#define \+\_\+\+G\+N\+U\+\_\+\+S\+O\+U\+R\+CE}
+
+\mbox{\Hypertarget{_crash_handler_8cpp_a404ec2d616e121b4d98eb12c50e83f08}\label{_crash_handler_8cpp_a404ec2d616e121b4d98eb12c50e83f08}} 
+\index{CrashHandler.cpp@{CrashHandler.cpp}!BOOST\_CHRONO\_VERSION@{BOOST\_CHRONO\_VERSION}}
+\index{BOOST\_CHRONO\_VERSION@{BOOST\_CHRONO\_VERSION}!CrashHandler.cpp@{CrashHandler.cpp}}
+\subsubsection{\texorpdfstring{BOOST\_CHRONO\_VERSION}{BOOST\_CHRONO\_VERSION}}
+{\footnotesize\ttfamily \#define B\+O\+O\+S\+T\+\_\+\+C\+H\+R\+O\+N\+O\+\_\+\+V\+E\+R\+S\+I\+ON~2}
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{_crash_handler_8cpp_a40ab0181c3ff08e07842ea99bdb3f8cb}\label{_crash_handler_8cpp_a40ab0181c3ff08e07842ea99bdb3f8cb}} 
+\index{CrashHandler.cpp@{CrashHandler.cpp}!sig\_ucontext\_t@{sig\_ucontext\_t}}
+\index{sig\_ucontext\_t@{sig\_ucontext\_t}!CrashHandler.cpp@{CrashHandler.cpp}}
+\subsubsection{\texorpdfstring{sig\_ucontext\_t}{sig\_ucontext\_t}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__sig__ucontext}{\+\_\+sig\+\_\+ucontext}}  \mbox{\hyperlink{_crash_handler_8cpp_a40ab0181c3ff08e07842ea99bdb3f8cb}{sig\+\_\+ucontext\+\_\+t}}}
+

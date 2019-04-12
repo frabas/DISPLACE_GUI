@@ -1,0 +1,254 @@
+\hypertarget{class_vessel_def_table}{}\section{Vessel\+Def\+Table Class Reference}
+\label{class_vessel_def_table}\index{VesselDefTable@{VesselDefTable}}
+
+
+{\ttfamily \#include $<$vesseldeftable.\+h$>$}
+
+Inheritance diagram for Vessel\+Def\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d0/dcf/class_vessel_def_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_vessel_def_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_vessel_def_table_ae53e48fba0d34fd040f76ab129f74c90}{Vessel\+Def\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_vessel_def_table_aa5e4705621fdc032c63afc31da38e4f5}{$\sim$\+Vessel\+Def\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_vessel_def_table_a6ae7ee3294cd0e3a883781d5de8ac504}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_vessel_def_table_a75db0406caf2900444c902109054927a}{feed\+Vessels\+Def\+Table}} (\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$vessel)
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_vessel_def_table_a6434d5f3e6bf8e8bc4e776902dbcdf3d}{get\+Nations\+List}} ()
+\item 
+void \mbox{\hyperlink{class_vessel_def_table_afd5c05850c8845cecad71a26afd3ab8f}{query\+All\+Vessels}} (std\+::function$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$(int id)$>$ getnode, std\+::function$<$ bool(std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $>$)$>$ op)
+\begin{DoxyCompactList}\small\item\em Returns a list of all loaded vessel We use two functors here\+: \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_vessel_def_table_a8709b9d8fb2aedcc726ebfcc65f041d9}{create\+Index}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_vessel_def_table_a4563302a8e9e40017c14b0298920fcf3}{fld\+Id}} = make\+Field\+Def(\char`\"{}Vessel\+Id\char`\"{}, Field\+Type\+::\+Integer()).primary\+Key()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_vessel_def_table_ad7f7871d2d5b43453915b68ae905a2d4}{fld\+Node}} = make\+Field\+Def(\char`\"{}Vessel\+Initial\+Node\+Id\char`\"{}, Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Text $>$ \mbox{\hyperlink{class_vessel_def_table_a0a97ab7cbc9575cc30e20b4731bf3604}{fld\+Name}} = make\+Field\+Def(\char`\"{}Vessel\+Name\char`\"{},Field\+Type\+::\+Text()).unique().not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Text $>$ \mbox{\hyperlink{class_vessel_def_table_a86ae9328894bba7a8d1720e636634433}{fld\+Nationality}} = make\+Field\+Def(\char`\"{}Nationality\char`\"{},Field\+Type\+::\+Text())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a34714bb93169ad9f570b1f8cb7a68b3d}{fld\+Speeds}} = make\+Field\+Def(\char`\"{}Id\+Speeds\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_aa6dcc37cdc8bfd22f59e2e171705daa5}{fld\+Fuelcons}} = make\+Field\+Def(\char`\"{}Fuelcons\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_af5536458974e15523e5c01fef0fb6d94}{fld\+Lengths}} = make\+Field\+Def(\char`\"{}Lengths\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a196a7ed569bb463dc08a442facfae121}{fld\+V\+K\+Ws}} = make\+Field\+Def(\char`\"{}V\+K\+Ws\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_ac67fb77a644568c1a806ffbb8630c7c4}{fld\+Carrycapacities}} = make\+Field\+Def(\char`\"{}Carrycapacities\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_aa699fd40e4fb67ca89350cd34c77fe4b}{fld\+Tankcapacities}} = make\+Field\+Def(\char`\"{}Tankcapacities\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_aa90a3f02e8dce0a41b7cde977d1619e5}{fld\+Nbfpingspertrips}} = make\+Field\+Def(\char`\"{}Nbfpingspertrips\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_ae22adb79e5172a486bd77b25fe9b7533}{fld\+Resttime\+\_\+par1s}} = make\+Field\+Def(\char`\"{}Resttime\+\_\+par1s\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a5a653e96fac17d4c5efe2711daef73c3}{fld\+Resttime\+\_\+par2s}} = make\+Field\+Def(\char`\"{}Resttime\+\_\+par2s\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a92834078ff76e4576ff0c9aa957d225f}{fld\+Av\+\_\+trip\+\_\+duration}} = make\+Field\+Def(\char`\"{}Av\+\_\+trip\+\_\+duration\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a062621fbd795bb47650695d86fee82b9}{fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+steaming}} = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+steaming\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a78f056421dff23cfc9b70b164ed7e243}{fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+fishing}} = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+fishing\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_a6ca37f68050b3b4b4e26637281466637}{fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+returning}} = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+returning\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_vessel_def_table_ab3e2b62fd03a9911b1e7cd37413fafe0}{fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+inactive}} = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+inactive\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_vessel_def_table_a789bc419a1e80d8e6b7b0d96c2215d90}{fld\+Firm\+\_\+ids}} = make\+Field\+Def(\char`\"{}Firm\char`\"{},Field\+Type\+::\+Integer())
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_vessel_def_table_ae53e48fba0d34fd040f76ab129f74c90}\label{class_vessel_def_table_ae53e48fba0d34fd040f76ab129f74c90}} 
+\index{VesselDefTable@{VesselDefTable}!VesselDefTable@{VesselDefTable}}
+\index{VesselDefTable@{VesselDefTable}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{VesselDefTable()}{VesselDefTable()}}
+{\footnotesize\ttfamily Vessel\+Def\+Table\+::\+Vessel\+Def\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_vessel_def_table_aa5e4705621fdc032c63afc31da38e4f5}\label{class_vessel_def_table_aa5e4705621fdc032c63afc31da38e4f5}} 
+\index{VesselDefTable@{VesselDefTable}!````~VesselDefTable@{$\sim$VesselDefTable}}
+\index{````~VesselDefTable@{$\sim$VesselDefTable}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{$\sim$VesselDefTable()}{~VesselDefTable()}}
+{\footnotesize\ttfamily Vessel\+Def\+Table\+::$\sim$\+Vessel\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_vessel_def_table_a8709b9d8fb2aedcc726ebfcc65f041d9}\label{class_vessel_def_table_a8709b9d8fb2aedcc726ebfcc65f041d9}} 
+\index{VesselDefTable@{VesselDefTable}!createIndex@{createIndex}}
+\index{createIndex@{createIndex}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{createIndex()}{createIndex()}}
+{\footnotesize\ttfamily void Vessel\+Def\+Table\+::create\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_vessel_def_table_a6ae7ee3294cd0e3a883781d5de8ac504}\label{class_vessel_def_table_a6ae7ee3294cd0e3a883781d5de8ac504}} 
+\index{VesselDefTable@{VesselDefTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Vessel\+Def\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_vessel_def_table_a75db0406caf2900444c902109054927a}\label{class_vessel_def_table_a75db0406caf2900444c902109054927a}} 
+\index{VesselDefTable@{VesselDefTable}!feedVesselsDefTable@{feedVesselsDefTable}}
+\index{feedVesselsDefTable@{feedVesselsDefTable}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{feedVesselsDefTable()}{feedVesselsDefTable()}}
+{\footnotesize\ttfamily void Vessel\+Def\+Table\+::feed\+Vessels\+Def\+Table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_vessel_def_table_a6434d5f3e6bf8e8bc4e776902dbcdf3d}\label{class_vessel_def_table_a6434d5f3e6bf8e8bc4e776902dbcdf3d}} 
+\index{VesselDefTable@{VesselDefTable}!getNationsList@{getNationsList}}
+\index{getNationsList@{getNationsList}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{getNationsList()}{getNationsList()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ Vessel\+Def\+Table\+::get\+Nations\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_vessel_def_table_afd5c05850c8845cecad71a26afd3ab8f}\label{class_vessel_def_table_afd5c05850c8845cecad71a26afd3ab8f}} 
+\index{VesselDefTable@{VesselDefTable}!queryAllVessels@{queryAllVessels}}
+\index{queryAllVessels@{queryAllVessels}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{queryAllVessels()}{queryAllVessels()}}
+{\footnotesize\ttfamily void Vessel\+Def\+Table\+::query\+All\+Vessels (\begin{DoxyParamCaption}\item[{std\+::function$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$(int id)$>$}]{getnode,  }\item[{std\+::function$<$ bool(std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $>$)$>$}]{op }\end{DoxyParamCaption})}
+
+
+
+Returns a list of all loaded vessel We use two functors here\+: 
+
+
+\begin{DoxyItemize}
+\item getnode to retrieve the node from the id, and
+\item op to use the data just loaded This is a Hack because the client code (displacemodel) uses a different structure definition to keep the Nodes data (struct \mbox{\hyperlink{class_node_data}{Node\+Data}}) that is on another library that depends on this library. 
+\end{DoxyItemize}
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_vessel_def_table_a92834078ff76e4576ff0c9aa957d225f}\label{class_vessel_def_table_a92834078ff76e4576ff0c9aa957d225f}} 
+\index{VesselDefTable@{VesselDefTable}!fldAv\_trip\_duration@{fldAv\_trip\_duration}}
+\index{fldAv\_trip\_duration@{fldAv\_trip\_duration}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldAv\_trip\_duration}{fldAv\_trip\_duration}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Av\+\_\+trip\+\_\+duration = make\+Field\+Def(\char`\"{}Av\+\_\+trip\+\_\+duration\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_ac67fb77a644568c1a806ffbb8630c7c4}\label{class_vessel_def_table_ac67fb77a644568c1a806ffbb8630c7c4}} 
+\index{VesselDefTable@{VesselDefTable}!fldCarrycapacities@{fldCarrycapacities}}
+\index{fldCarrycapacities@{fldCarrycapacities}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldCarrycapacities}{fldCarrycapacities}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Carrycapacities = make\+Field\+Def(\char`\"{}Carrycapacities\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a789bc419a1e80d8e6b7b0d96c2215d90}\label{class_vessel_def_table_a789bc419a1e80d8e6b7b0d96c2215d90}} 
+\index{VesselDefTable@{VesselDefTable}!fldFirm\_ids@{fldFirm\_ids}}
+\index{fldFirm\_ids@{fldFirm\_ids}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldFirm\_ids}{fldFirm\_ids}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Def\+Table\+::fld\+Firm\+\_\+ids = make\+Field\+Def(\char`\"{}Firm\char`\"{},Field\+Type\+::\+Integer())}
+
+\mbox{\Hypertarget{class_vessel_def_table_aa6dcc37cdc8bfd22f59e2e171705daa5}\label{class_vessel_def_table_aa6dcc37cdc8bfd22f59e2e171705daa5}} 
+\index{VesselDefTable@{VesselDefTable}!fldFuelcons@{fldFuelcons}}
+\index{fldFuelcons@{fldFuelcons}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldFuelcons}{fldFuelcons}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Fuelcons = make\+Field\+Def(\char`\"{}Fuelcons\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a4563302a8e9e40017c14b0298920fcf3}\label{class_vessel_def_table_a4563302a8e9e40017c14b0298920fcf3}} 
+\index{VesselDefTable@{VesselDefTable}!fldId@{fldId}}
+\index{fldId@{fldId}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldId}{fldId}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Def\+Table\+::fld\+Id = make\+Field\+Def(\char`\"{}Vessel\+Id\char`\"{}, Field\+Type\+::\+Integer()).primary\+Key()}
+
+\mbox{\Hypertarget{class_vessel_def_table_af5536458974e15523e5c01fef0fb6d94}\label{class_vessel_def_table_af5536458974e15523e5c01fef0fb6d94}} 
+\index{VesselDefTable@{VesselDefTable}!fldLengths@{fldLengths}}
+\index{fldLengths@{fldLengths}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldLengths}{fldLengths}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Lengths = make\+Field\+Def(\char`\"{}Lengths\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a78f056421dff23cfc9b70b164ed7e243}\label{class_vessel_def_table_a78f056421dff23cfc9b70b164ed7e243}} 
+\index{VesselDefTable@{VesselDefTable}!fldMult\_fuelcons\_when\_fishing@{fldMult\_fuelcons\_when\_fishing}}
+\index{fldMult\_fuelcons\_when\_fishing@{fldMult\_fuelcons\_when\_fishing}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldMult\_fuelcons\_when\_fishing}{fldMult\_fuelcons\_when\_fishing}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+fishing = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+fishing\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_ab3e2b62fd03a9911b1e7cd37413fafe0}\label{class_vessel_def_table_ab3e2b62fd03a9911b1e7cd37413fafe0}} 
+\index{VesselDefTable@{VesselDefTable}!fldMult\_fuelcons\_when\_inactive@{fldMult\_fuelcons\_when\_inactive}}
+\index{fldMult\_fuelcons\_when\_inactive@{fldMult\_fuelcons\_when\_inactive}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldMult\_fuelcons\_when\_inactive}{fldMult\_fuelcons\_when\_inactive}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+inactive = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+inactive\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a6ca37f68050b3b4b4e26637281466637}\label{class_vessel_def_table_a6ca37f68050b3b4b4e26637281466637}} 
+\index{VesselDefTable@{VesselDefTable}!fldMult\_fuelcons\_when\_returning@{fldMult\_fuelcons\_when\_returning}}
+\index{fldMult\_fuelcons\_when\_returning@{fldMult\_fuelcons\_when\_returning}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldMult\_fuelcons\_when\_returning}{fldMult\_fuelcons\_when\_returning}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+returning = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+returning\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a062621fbd795bb47650695d86fee82b9}\label{class_vessel_def_table_a062621fbd795bb47650695d86fee82b9}} 
+\index{VesselDefTable@{VesselDefTable}!fldMult\_fuelcons\_when\_steaming@{fldMult\_fuelcons\_when\_steaming}}
+\index{fldMult\_fuelcons\_when\_steaming@{fldMult\_fuelcons\_when\_steaming}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldMult\_fuelcons\_when\_steaming}{fldMult\_fuelcons\_when\_steaming}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Mult\+\_\+fuelcons\+\_\+when\+\_\+steaming = make\+Field\+Def(\char`\"{}Mult\+\_\+fuelcons\+\_\+when\+\_\+steaming\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a0a97ab7cbc9575cc30e20b4731bf3604}\label{class_vessel_def_table_a0a97ab7cbc9575cc30e20b4731bf3604}} 
+\index{VesselDefTable@{VesselDefTable}!fldName@{fldName}}
+\index{fldName@{fldName}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldName}{fldName}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Text$>$ Vessel\+Def\+Table\+::fld\+Name = make\+Field\+Def(\char`\"{}Vessel\+Name\char`\"{},Field\+Type\+::\+Text()).unique().not\+Null()}
+
+\mbox{\Hypertarget{class_vessel_def_table_a86ae9328894bba7a8d1720e636634433}\label{class_vessel_def_table_a86ae9328894bba7a8d1720e636634433}} 
+\index{VesselDefTable@{VesselDefTable}!fldNationality@{fldNationality}}
+\index{fldNationality@{fldNationality}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldNationality}{fldNationality}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Text$>$ Vessel\+Def\+Table\+::fld\+Nationality = make\+Field\+Def(\char`\"{}Nationality\char`\"{},Field\+Type\+::\+Text())}
+
+\mbox{\Hypertarget{class_vessel_def_table_aa90a3f02e8dce0a41b7cde977d1619e5}\label{class_vessel_def_table_aa90a3f02e8dce0a41b7cde977d1619e5}} 
+\index{VesselDefTable@{VesselDefTable}!fldNbfpingspertrips@{fldNbfpingspertrips}}
+\index{fldNbfpingspertrips@{fldNbfpingspertrips}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldNbfpingspertrips}{fldNbfpingspertrips}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Nbfpingspertrips = make\+Field\+Def(\char`\"{}Nbfpingspertrips\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_ad7f7871d2d5b43453915b68ae905a2d4}\label{class_vessel_def_table_ad7f7871d2d5b43453915b68ae905a2d4}} 
+\index{VesselDefTable@{VesselDefTable}!fldNode@{fldNode}}
+\index{fldNode@{fldNode}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldNode}{fldNode}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Def\+Table\+::fld\+Node = make\+Field\+Def(\char`\"{}Vessel\+Initial\+Node\+Id\char`\"{}, Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_vessel_def_table_ae22adb79e5172a486bd77b25fe9b7533}\label{class_vessel_def_table_ae22adb79e5172a486bd77b25fe9b7533}} 
+\index{VesselDefTable@{VesselDefTable}!fldResttime\_par1s@{fldResttime\_par1s}}
+\index{fldResttime\_par1s@{fldResttime\_par1s}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldResttime\_par1s}{fldResttime\_par1s}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Resttime\+\_\+par1s = make\+Field\+Def(\char`\"{}Resttime\+\_\+par1s\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a5a653e96fac17d4c5efe2711daef73c3}\label{class_vessel_def_table_a5a653e96fac17d4c5efe2711daef73c3}} 
+\index{VesselDefTable@{VesselDefTable}!fldResttime\_par2s@{fldResttime\_par2s}}
+\index{fldResttime\_par2s@{fldResttime\_par2s}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldResttime\_par2s}{fldResttime\_par2s}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Resttime\+\_\+par2s = make\+Field\+Def(\char`\"{}Resttime\+\_\+par2s\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a34714bb93169ad9f570b1f8cb7a68b3d}\label{class_vessel_def_table_a34714bb93169ad9f570b1f8cb7a68b3d}} 
+\index{VesselDefTable@{VesselDefTable}!fldSpeeds@{fldSpeeds}}
+\index{fldSpeeds@{fldSpeeds}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldSpeeds}{fldSpeeds}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Speeds = make\+Field\+Def(\char`\"{}Id\+Speeds\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_aa699fd40e4fb67ca89350cd34c77fe4b}\label{class_vessel_def_table_aa699fd40e4fb67ca89350cd34c77fe4b}} 
+\index{VesselDefTable@{VesselDefTable}!fldTankcapacities@{fldTankcapacities}}
+\index{fldTankcapacities@{fldTankcapacities}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldTankcapacities}{fldTankcapacities}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+Tankcapacities = make\+Field\+Def(\char`\"{}Tankcapacities\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_vessel_def_table_a196a7ed569bb463dc08a442facfae121}\label{class_vessel_def_table_a196a7ed569bb463dc08a442facfae121}} 
+\index{VesselDefTable@{VesselDefTable}!fldVKWs@{fldVKWs}}
+\index{fldVKWs@{fldVKWs}!VesselDefTable@{VesselDefTable}}
+\subsubsection{\texorpdfstring{fldVKWs}{fldVKWs}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Def\+Table\+::fld\+V\+K\+Ws = make\+Field\+Def(\char`\"{}V\+K\+Ws\char`\"{},Field\+Type\+::\+Real())}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{vesseldeftable_8h}{vesseldeftable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{vesseldeftable_8cpp}{vesseldeftable.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,189 @@
+\hypertarget{class_benthos}{}\section{Benthos Class Reference}
+\label{class_benthos}\index{Benthos@{Benthos}}
+
+
+{\ttfamily \#include $<$Benthos.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_benthos_a5030be8685944dc189b9980fb9fa3ae6}{Benthos}} (int id, int marine\+\_\+landscape, const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, const vector$<$ double $>$ \&prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node, const vector$<$ double $>$ \&prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node, const vector$<$ double $>$ \&meanw\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node, const vector$<$ double $>$ \&recovery\+\_\+rates\+\_\+per\+\_\+funcgr, const vector$<$ double $>$ \&benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr, const vector$<$ double $>$ \&benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr, bool \mbox{\hyperlink{thread__vessels_8cpp_a18eba4224a5ba1903a19868de715cf93}{is\+\_\+benthos\+\_\+in\+\_\+numbers}}, const vector$<$ double $>$ \&h\+\_\+betas\+\_\+per\+\_\+pop)
+\item 
+virtual \mbox{\hyperlink{class_benthos_a172b056d9a8a28735649d66a0d86b2f8}{$\sim$\+Benthos}} ()
+\item 
+int \mbox{\hyperlink{class_benthos_a893fc51faf9c73ddeb91eb548c9bed48}{get\+\_\+id}} () const
+\item 
+int \mbox{\hyperlink{class_benthos_a6c3358bc1443a3f3826575cae2cdf46b}{get\+\_\+marine\+\_\+landscape}} () const
+\item 
+const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& \mbox{\hyperlink{class_benthos_a5c95a9ded9dccd92bdc568ceee2c7d76}{get\+\_\+list\+\_\+nodes}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_aa2f8979325d5948c2c68c2d630c54c7e}{get\+\_\+prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_a7f8007882d4f950f6037e5fb57a316af}{get\+\_\+prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_aded64c31ec08e3c09673970ecb23697b}{get\+\_\+meanw\+\_\+funcgr\+\_\+per\+\_\+node}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_ac04ce2803897d9f3f6ab54ba14a88124}{get\+\_\+recovery\+\_\+rates\+\_\+per\+\_\+funcgr}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_afa2fc8a56fc192d4451448a4c619b9d5}{get\+\_\+benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_a81cc29213885d1d3a1b7b754bde8631d}{get\+\_\+benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr}} () const
+\item 
+void \mbox{\hyperlink{class_benthos_a7652f786e6ca8209c755c64c5482ee56}{recover\+\_\+benthos\+\_\+tot\+\_\+biomass\+\_\+per\+\_\+funcgroup}} ()
+\item 
+void \mbox{\hyperlink{class_benthos_af3d98be2f4b763a1bbbd96b6bf9b9f6d}{recover\+\_\+benthos\+\_\+tot\+\_\+number\+\_\+per\+\_\+funcgroup}} ()
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_benthos_ae659a0c8e7de285446a63c6a15fd0321}{get\+\_\+h\+\_\+betas\+\_\+per\+\_\+pop}} () const
+\item 
+\mbox{\hyperlink{class_benthos_a7b0ab728546fbbc4075f920d05eedd69}{Benthos}} (int id)
+\item 
+int \mbox{\hyperlink{class_benthos_a5aa8261a598fdaab9d85bc4922e1c073}{get\+Id}} () const
+\item 
+const Q\+List$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$ $>$ \mbox{\hyperlink{class_benthos_af9e82bc7dc4f64a6f7542b8c133036bf}{get\+Nodes}} () const
+\item 
+void \mbox{\hyperlink{class_benthos_a808d6b54f6bb55dd1ec201e67a582968}{set\+Nodes}} (const Q\+List$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+void \mbox{\hyperlink{class_benthos_ab700a035260220d5da905d78b8ac083e}{append\+Node}} (\mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$node)
+\item 
+int \mbox{\hyperlink{class_benthos_a0d382b6cf7ad6069b0841b1b13256639}{get\+Idx}} () const
+\item 
+void \mbox{\hyperlink{class_benthos_ab7cc01304c1a22b2cdbce3fbf75f5258}{set\+Idx}} (int idx)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_benthos_a5030be8685944dc189b9980fb9fa3ae6}\label{class_benthos_a5030be8685944dc189b9980fb9fa3ae6}} 
+\index{Benthos@{Benthos}!Benthos@{Benthos}}
+\index{Benthos@{Benthos}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{Benthos()}{Benthos()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Benthos\+::\+Benthos (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{int}]{marine\+\_\+landscape,  }\item[{const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{const vector$<$ double $>$ \&}]{prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node,  }\item[{const vector$<$ double $>$ \&}]{prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node,  }\item[{const vector$<$ double $>$ \&}]{meanw\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node,  }\item[{const vector$<$ double $>$ \&}]{recovery\+\_\+rates\+\_\+per\+\_\+funcgr,  }\item[{const vector$<$ double $>$ \&}]{benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr,  }\item[{const vector$<$ double $>$ \&}]{benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr,  }\item[{bool}]{is\+\_\+benthos\+\_\+in\+\_\+numbers,  }\item[{const vector$<$ double $>$ \&}]{h\+\_\+betas\+\_\+per\+\_\+pop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_benthos_a172b056d9a8a28735649d66a0d86b2f8}\label{class_benthos_a172b056d9a8a28735649d66a0d86b2f8}} 
+\index{Benthos@{Benthos}!````~Benthos@{$\sim$Benthos}}
+\index{````~Benthos@{$\sim$Benthos}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{$\sim$Benthos()}{~Benthos()}}
+{\footnotesize\ttfamily Benthos\+::$\sim$\+Benthos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_benthos_a7b0ab728546fbbc4075f920d05eedd69}\label{class_benthos_a7b0ab728546fbbc4075f920d05eedd69}} 
+\index{Benthos@{Benthos}!Benthos@{Benthos}}
+\index{Benthos@{Benthos}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{Benthos()}{Benthos()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Benthos\+::\+Benthos (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_benthos_ab700a035260220d5da905d78b8ac083e}\label{class_benthos_ab700a035260220d5da905d78b8ac083e}} 
+\index{Benthos@{Benthos}!appendNode@{appendNode}}
+\index{appendNode@{appendNode}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{appendNode()}{appendNode()}}
+{\footnotesize\ttfamily void Benthos\+::append\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_benthos_afa2fc8a56fc192d4451448a4c619b9d5}\label{class_benthos_afa2fc8a56fc192d4451448a4c619b9d5}} 
+\index{Benthos@{Benthos}!get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}}
+\index{get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}{get\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a81cc29213885d1d3a1b7b754bde8631d}\label{class_benthos_a81cc29213885d1d3a1b7b754bde8631d}} 
+\index{Benthos@{Benthos}!get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}}
+\index{get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}{get\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_ae659a0c8e7de285446a63c6a15fd0321}\label{class_benthos_ae659a0c8e7de285446a63c6a15fd0321}} 
+\index{Benthos@{Benthos}!get\_h\_betas\_per\_pop@{get\_h\_betas\_per\_pop}}
+\index{get\_h\_betas\_per\_pop@{get\_h\_betas\_per\_pop}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_h\_betas\_per\_pop()}{get\_h\_betas\_per\_pop()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+h\+\_\+betas\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a893fc51faf9c73ddeb91eb548c9bed48}\label{class_benthos_a893fc51faf9c73ddeb91eb548c9bed48}} 
+\index{Benthos@{Benthos}!get\_id@{get\_id}}
+\index{get\_id@{get\_id}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_id()}{get\_id()}}
+{\footnotesize\ttfamily int Benthos\+::get\+\_\+id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a5c95a9ded9dccd92bdc568ceee2c7d76}\label{class_benthos_a5c95a9ded9dccd92bdc568ceee2c7d76}} 
+\index{Benthos@{Benthos}!get\_list\_nodes@{get\_list\_nodes}}
+\index{get\_list\_nodes@{get\_list\_nodes}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_list\_nodes()}{get\_list\_nodes()}}
+{\footnotesize\ttfamily const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& Benthos\+::get\+\_\+list\+\_\+nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a6c3358bc1443a3f3826575cae2cdf46b}\label{class_benthos_a6c3358bc1443a3f3826575cae2cdf46b}} 
+\index{Benthos@{Benthos}!get\_marine\_landscape@{get\_marine\_landscape}}
+\index{get\_marine\_landscape@{get\_marine\_landscape}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_marine\_landscape()}{get\_marine\_landscape()}}
+{\footnotesize\ttfamily int Benthos\+::get\+\_\+marine\+\_\+landscape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_aded64c31ec08e3c09673970ecb23697b}\label{class_benthos_aded64c31ec08e3c09673970ecb23697b}} 
+\index{Benthos@{Benthos}!get\_meanw\_funcgr\_per\_node@{get\_meanw\_funcgr\_per\_node}}
+\index{get\_meanw\_funcgr\_per\_node@{get\_meanw\_funcgr\_per\_node}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_meanw\_funcgr\_per\_node()}{get\_meanw\_funcgr\_per\_node()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+meanw\+\_\+funcgr\+\_\+per\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_aa2f8979325d5948c2c68c2d630c54c7e}\label{class_benthos_aa2f8979325d5948c2c68c2d630c54c7e}} 
+\index{Benthos@{Benthos}!get\_prop\_funcgr\_biomass\_per\_node@{get\_prop\_funcgr\_biomass\_per\_node}}
+\index{get\_prop\_funcgr\_biomass\_per\_node@{get\_prop\_funcgr\_biomass\_per\_node}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_prop\_funcgr\_biomass\_per\_node()}{get\_prop\_funcgr\_biomass\_per\_node()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a7f8007882d4f950f6037e5fb57a316af}\label{class_benthos_a7f8007882d4f950f6037e5fb57a316af}} 
+\index{Benthos@{Benthos}!get\_prop\_funcgr\_number\_per\_node@{get\_prop\_funcgr\_number\_per\_node}}
+\index{get\_prop\_funcgr\_number\_per\_node@{get\_prop\_funcgr\_number\_per\_node}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_prop\_funcgr\_number\_per\_node()}{get\_prop\_funcgr\_number\_per\_node()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_ac04ce2803897d9f3f6ab54ba14a88124}\label{class_benthos_ac04ce2803897d9f3f6ab54ba14a88124}} 
+\index{Benthos@{Benthos}!get\_recovery\_rates\_per\_funcgr@{get\_recovery\_rates\_per\_funcgr}}
+\index{get\_recovery\_rates\_per\_funcgr@{get\_recovery\_rates\_per\_funcgr}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{get\_recovery\_rates\_per\_funcgr()}{get\_recovery\_rates\_per\_funcgr()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Benthos\+::get\+\_\+recovery\+\_\+rates\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_a5aa8261a598fdaab9d85bc4922e1c073}\label{class_benthos_a5aa8261a598fdaab9d85bc4922e1c073}} 
+\index{Benthos@{Benthos}!getId@{getId}}
+\index{getId@{getId}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{getId()}{getId()}}
+{\footnotesize\ttfamily int Benthos\+::get\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_benthos_a0d382b6cf7ad6069b0841b1b13256639}\label{class_benthos_a0d382b6cf7ad6069b0841b1b13256639}} 
+\index{Benthos@{Benthos}!getIdx@{getIdx}}
+\index{getIdx@{getIdx}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{getIdx()}{getIdx()}}
+{\footnotesize\ttfamily int Benthos\+::get\+Idx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_benthos_af9e82bc7dc4f64a6f7542b8c133036bf}\label{class_benthos_af9e82bc7dc4f64a6f7542b8c133036bf}} 
+\index{Benthos@{Benthos}!getNodes@{getNodes}}
+\index{getNodes@{getNodes}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{getNodes()}{getNodes()}}
+{\footnotesize\ttfamily const Q\+List$<$\mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$$>$ Benthos\+::get\+Nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_benthos_a7652f786e6ca8209c755c64c5482ee56}\label{class_benthos_a7652f786e6ca8209c755c64c5482ee56}} 
+\index{Benthos@{Benthos}!recover\_benthos\_tot\_biomass\_per\_funcgroup@{recover\_benthos\_tot\_biomass\_per\_funcgroup}}
+\index{recover\_benthos\_tot\_biomass\_per\_funcgroup@{recover\_benthos\_tot\_biomass\_per\_funcgroup}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{recover\_benthos\_tot\_biomass\_per\_funcgroup()}{recover\_benthos\_tot\_biomass\_per\_funcgroup()}}
+{\footnotesize\ttfamily void Benthos\+::recover\+\_\+benthos\+\_\+tot\+\_\+biomass\+\_\+per\+\_\+funcgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_benthos_af3d98be2f4b763a1bbbd96b6bf9b9f6d}\label{class_benthos_af3d98be2f4b763a1bbbd96b6bf9b9f6d}} 
+\index{Benthos@{Benthos}!recover\_benthos\_tot\_number\_per\_funcgroup@{recover\_benthos\_tot\_number\_per\_funcgroup}}
+\index{recover\_benthos\_tot\_number\_per\_funcgroup@{recover\_benthos\_tot\_number\_per\_funcgroup}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{recover\_benthos\_tot\_number\_per\_funcgroup()}{recover\_benthos\_tot\_number\_per\_funcgroup()}}
+{\footnotesize\ttfamily void Benthos\+::recover\+\_\+benthos\+\_\+tot\+\_\+number\+\_\+per\+\_\+funcgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_benthos_ab7cc01304c1a22b2cdbce3fbf75f5258}\label{class_benthos_ab7cc01304c1a22b2cdbce3fbf75f5258}} 
+\index{Benthos@{Benthos}!setIdx@{setIdx}}
+\index{setIdx@{setIdx}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{setIdx()}{setIdx()}}
+{\footnotesize\ttfamily void Benthos\+::set\+Idx (\begin{DoxyParamCaption}\item[{int}]{idx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_benthos_a808d6b54f6bb55dd1ec201e67a582968}\label{class_benthos_a808d6b54f6bb55dd1ec201e67a582968}} 
+\index{Benthos@{Benthos}!setNodes@{setNodes}}
+\index{setNodes@{setNodes}!Benthos@{Benthos}}
+\subsubsection{\texorpdfstring{setNodes()}{setNodes()}}
+{\footnotesize\ttfamily void Benthos\+::set\+Nodes (\begin{DoxyParamCaption}\item[{const Q\+List$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $\ast$ $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{include_2_benthos_8h}{Benthos.\+h}}\item 
+commons/\mbox{\hyperlink{commons_2_benthos_8cpp}{Benthos.\+cpp}}\end{DoxyCompactItemize}

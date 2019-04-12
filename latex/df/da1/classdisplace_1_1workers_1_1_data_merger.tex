@@ -1,0 +1,150 @@
+\hypertarget{classdisplace_1_1workers_1_1_data_merger}{}\section{displace\+::workers\+::Data\+Merger Class Reference}
+\label{classdisplace_1_1workers_1_1_data_merger}\index{displace::workers::DataMerger@{displace::workers::DataMerger}}
+
+
+{\ttfamily \#include $<$datamerger.\+h$>$}
+
+Inheritance diagram for displace\+::workers\+::Data\+Merger\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/da1/classdisplace_1_1workers_1_1_data_merger}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy}{Strategy}}
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_aae9f7ad27c89e67c07ab0a285198afaa}{completed}} (\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger}{Data\+Merger}} $\ast$merger)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a7fba60bcda4bf09e0abed25bd541a828}{Data\+Merger}} (\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy}{Strategy}} $\ast$strategy, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model)
+\item 
+\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_aaf089ecdf095a33d201f29afc08f9aee}{$\sim$\+Data\+Merger}} ()
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a65d073255b885c3a9e310be667f9b5e5}{set\+Wait\+Dialog}} (\mbox{\hyperlink{class_wait_dialog}{Wait\+Dialog}} $\ast$dlg)
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_ade4192def5a204bbe4430b0363271286}{set\+Distance}} (double km)
+\item 
+double \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a36e7e47d2a982fb27f62062b6f87e200}{distance}} () const
+\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a5068538e1910ff25af664f2688ba0ff5}{start}} (Q\+String in, Q\+String out)
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a54a48f439d76ecc9ebf6cfd55facee69}{check\+Result}} ()
+\begin{DoxyCompactList}\small\item\em this function returns true. The purpose of this function is simply calling Q\+Future\+::result() to check whether an \mbox{\hyperlink{classdisplace_1_1_displace_exception}{displace\+::\+Displace\+Exception}} was raised. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_aeebbad040f2c93ca6c7df74e11774d38}{set\+Separator}} (Q\+Char sep)
+\item 
+Q\+Char \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a4d0e7798450a8fa822600c4a9afe05f7}{separator}} () const
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a62c381a858158b73c29eb241ce9e3967}{must\+Exit}} () const
+\item 
+Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a951c8ad8be5d8a352a7896d6f27b5abf}{get\+All\+Nodes\+Within}} (Q\+PointF pt, double \mbox{\hyperlink{my_rutils_8h_adce57df8ac5e5faa57d86a66535fdd92}{dist}}) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const char \mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_a3cc15967d51577d68151d7a4afc8d6fc}{Field\+Separator}} = \textquotesingle{} \textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a7fba60bcda4bf09e0abed25bd541a828}\label{classdisplace_1_1workers_1_1_data_merger_a7fba60bcda4bf09e0abed25bd541a828}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!DataMerger@{DataMerger}}
+\index{DataMerger@{DataMerger}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{DataMerger()}{DataMerger()}}
+{\footnotesize\ttfamily Data\+Merger\+::\+Data\+Merger (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger_1_1_strategy}{Strategy}} $\ast$}]{strategy,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_aaf089ecdf095a33d201f29afc08f9aee}\label{classdisplace_1_1workers_1_1_data_merger_aaf089ecdf095a33d201f29afc08f9aee}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!````~DataMerger@{$\sim$DataMerger}}
+\index{````~DataMerger@{$\sim$DataMerger}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{$\sim$DataMerger()}{~DataMerger()}}
+{\footnotesize\ttfamily Data\+Merger\+::$\sim$\+Data\+Merger (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a54a48f439d76ecc9ebf6cfd55facee69}\label{classdisplace_1_1workers_1_1_data_merger_a54a48f439d76ecc9ebf6cfd55facee69}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!checkResult@{checkResult}}
+\index{checkResult@{checkResult}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{checkResult()}{checkResult()}}
+{\footnotesize\ttfamily bool Data\+Merger\+::check\+Result (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+this function returns true. The purpose of this function is simply calling Q\+Future\+::result() to check whether an \mbox{\hyperlink{classdisplace_1_1_displace_exception}{displace\+::\+Displace\+Exception}} was raised. 
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_aae9f7ad27c89e67c07ab0a285198afaa}\label{classdisplace_1_1workers_1_1_data_merger_aae9f7ad27c89e67c07ab0a285198afaa}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!completed@{completed}}
+\index{completed@{completed}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{completed}{completed}}
+{\footnotesize\ttfamily void displace\+::workers\+::\+Data\+Merger\+::completed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdisplace_1_1workers_1_1_data_merger}{Data\+Merger}} $\ast$}]{merger }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a36e7e47d2a982fb27f62062b6f87e200}\label{classdisplace_1_1workers_1_1_data_merger_a36e7e47d2a982fb27f62062b6f87e200}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!distance@{distance}}
+\index{distance@{distance}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{distance()}{distance()}}
+{\footnotesize\ttfamily double displace\+::workers\+::\+Data\+Merger\+::distance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a951c8ad8be5d8a352a7896d6f27b5abf}\label{classdisplace_1_1workers_1_1_data_merger_a951c8ad8be5d8a352a7896d6f27b5abf}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!getAllNodesWithin@{getAllNodesWithin}}
+\index{getAllNodesWithin@{getAllNodesWithin}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{getAllNodesWithin()}{getAllNodesWithin()}}
+{\footnotesize\ttfamily Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ Data\+Merger\+::get\+All\+Nodes\+Within (\begin{DoxyParamCaption}\item[{Q\+PointF}]{pt,  }\item[{double}]{dist }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a62c381a858158b73c29eb241ce9e3967}\label{classdisplace_1_1workers_1_1_data_merger_a62c381a858158b73c29eb241ce9e3967}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!mustExit@{mustExit}}
+\index{mustExit@{mustExit}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{mustExit()}{mustExit()}}
+{\footnotesize\ttfamily bool displace\+::workers\+::\+Data\+Merger\+::must\+Exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a4d0e7798450a8fa822600c4a9afe05f7}\label{classdisplace_1_1workers_1_1_data_merger_a4d0e7798450a8fa822600c4a9afe05f7}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!separator@{separator}}
+\index{separator@{separator}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{separator()}{separator()}}
+{\footnotesize\ttfamily Q\+Char displace\+::workers\+::\+Data\+Merger\+::separator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_ade4192def5a204bbe4430b0363271286}\label{classdisplace_1_1workers_1_1_data_merger_ade4192def5a204bbe4430b0363271286}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!setDistance@{setDistance}}
+\index{setDistance@{setDistance}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{setDistance()}{setDistance()}}
+{\footnotesize\ttfamily void displace\+::workers\+::\+Data\+Merger\+::set\+Distance (\begin{DoxyParamCaption}\item[{double}]{km }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_aeebbad040f2c93ca6c7df74e11774d38}\label{classdisplace_1_1workers_1_1_data_merger_aeebbad040f2c93ca6c7df74e11774d38}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!setSeparator@{setSeparator}}
+\index{setSeparator@{setSeparator}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{setSeparator()}{setSeparator()}}
+{\footnotesize\ttfamily void displace\+::workers\+::\+Data\+Merger\+::set\+Separator (\begin{DoxyParamCaption}\item[{Q\+Char}]{sep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a65d073255b885c3a9e310be667f9b5e5}\label{classdisplace_1_1workers_1_1_data_merger_a65d073255b885c3a9e310be667f9b5e5}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!setWaitDialog@{setWaitDialog}}
+\index{setWaitDialog@{setWaitDialog}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{setWaitDialog()}{setWaitDialog()}}
+{\footnotesize\ttfamily void displace\+::workers\+::\+Data\+Merger\+::set\+Wait\+Dialog (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_wait_dialog}{Wait\+Dialog}} $\ast$}]{dlg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a5068538e1910ff25af664f2688ba0ff5}\label{classdisplace_1_1workers_1_1_data_merger_a5068538e1910ff25af664f2688ba0ff5}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!start@{start}}
+\index{start@{start}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Data\+Merger\+::start (\begin{DoxyParamCaption}\item[{Q\+String}]{in,  }\item[{Q\+String}]{out }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classdisplace_1_1workers_1_1_data_merger_a3cc15967d51577d68151d7a4afc8d6fc}\label{classdisplace_1_1workers_1_1_data_merger_a3cc15967d51577d68151d7a4afc8d6fc}} 
+\index{displace::workers::DataMerger@{displace::workers::DataMerger}!FieldSeparator@{FieldSeparator}}
+\index{FieldSeparator@{FieldSeparator}!displace::workers::DataMerger@{displace::workers::DataMerger}}
+\subsubsection{\texorpdfstring{FieldSeparator}{FieldSeparator}}
+{\footnotesize\ttfamily const char Data\+Merger\+::\+Field\+Separator = \textquotesingle{} \textquotesingle{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/workers/\mbox{\hyperlink{datamerger_8h}{datamerger.\+h}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__datamerger_8cpp}{moc\+\_\+datamerger.\+cpp}}\item 
+qtgui/workers/\mbox{\hyperlink{datamerger_8cpp}{datamerger.\+cpp}}\end{DoxyCompactItemize}

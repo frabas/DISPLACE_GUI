@@ -1,0 +1,25 @@
+var structsqlite3__vfs =
+[
+    [ "iVersion", "d3/d36/structsqlite3__vfs.html#a694dd264949bd163545fe174510ed019", null ],
+    [ "mxPathname", "d3/d36/structsqlite3__vfs.html#adb2d82c74891b00b5529fb94e7710135", null ],
+    [ "pAppData", "d3/d36/structsqlite3__vfs.html#a1ba832cf207fe59c1fc8eb436524bc35", null ],
+    [ "pNext", "d3/d36/structsqlite3__vfs.html#ae795a4417697ecd35163f6cdf0069073", null ],
+    [ "szOsFile", "d3/d36/structsqlite3__vfs.html#a549399081342d61134b6398562a0a997", null ],
+    [ "xAccess", "d3/d36/structsqlite3__vfs.html#a3a5cc43f1b8a88747eb77db730ce4f69", null ],
+    [ "xCurrentTime", "d3/d36/structsqlite3__vfs.html#a925aa81bcf67f2daf50ad59de850ef41", null ],
+    [ "xCurrentTimeInt64", "d3/d36/structsqlite3__vfs.html#a2a344dbc5e4625343d992546fbff5421", null ],
+    [ "xDelete", "d3/d36/structsqlite3__vfs.html#a9a84baca80b7ab2da9fb147cb40c73d2", null ],
+    [ "xDlClose", "d3/d36/structsqlite3__vfs.html#a0cbdab1584e0e2a80b32b2c335f17f99", null ],
+    [ "xDlError", "d3/d36/structsqlite3__vfs.html#ace296f3efa5d1a490c892069891f37c0", null ],
+    [ "xDlOpen", "d3/d36/structsqlite3__vfs.html#a4de0324cd74c8ec98e4605d432f16e0a", null ],
+    [ "xDlSym", "d3/d36/structsqlite3__vfs.html#a847ba7d9a80164138031aacef1d01507", null ],
+    [ "xFullPathname", "d3/d36/structsqlite3__vfs.html#ae6573ffda4c4f014960b0ec3a1522dfa", null ],
+    [ "xGetLastError", "d3/d36/structsqlite3__vfs.html#ae90895f142cc41801f515ae5e339a3d7", null ],
+    [ "xGetSystemCall", "d3/d36/structsqlite3__vfs.html#a1bf78a1603ab605cd92d146e3f810727", null ],
+    [ "xNextSystemCall", "d3/d36/structsqlite3__vfs.html#afbd158883d9bb7954fa7ecd595fe3c2b", null ],
+    [ "xOpen", "d3/d36/structsqlite3__vfs.html#ab106b445eb5d372266a1108fc982a9aa", null ],
+    [ "xRandomness", "d3/d36/structsqlite3__vfs.html#ac74c20a91cbd440ed72b11de4c4333ea", null ],
+    [ "xSetSystemCall", "d3/d36/structsqlite3__vfs.html#a444cd80f79ea4994f72551bb9f403866", null ],
+    [ "xSleep", "d3/d36/structsqlite3__vfs.html#abd36ce64a27bd6c1b57a6f2c7031ff65", null ],
+    [ "zName", "d3/d36/structsqlite3__vfs.html#a0f06a27ac2201ea04c0623ef19e5d73e", null ]
+];

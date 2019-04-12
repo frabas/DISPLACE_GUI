@@ -1,0 +1,363 @@
+\hypertarget{class_q_c_p_vector2_d}{}\section{Q\+C\+P\+Vector2D Class Reference}
+\label{class_q_c_p_vector2_d}\index{QCPVector2D@{QCPVector2D}}
+
+
+Represents two doubles as a mathematical 2D vector.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d_a04c90748c3623044c79fa20788ffbcc6}{Q\+C\+P\+Vector2D}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d_a47bd86cebc5588dad6ec84349d9098d4}{Q\+C\+P\+Vector2D}} (double \mbox{\hyperlink{class_q_c_p_vector2_d_a4a099e1f9788d52cb46deb8139aa6195}{x}}, double \mbox{\hyperlink{class_q_c_p_vector2_d_a6398fb643ba380d7961a4b208f4eecf1}{y}})
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d_ad8f30a064dc37c90a7ba5e6732ceb5bb}{Q\+C\+P\+Vector2D}} (const Q\+Point \&\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}})
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d_a3c16eba1006c210ffc3299253fef2339}{Q\+C\+P\+Vector2D}} (const Q\+PointF \&\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}})
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a4a099e1f9788d52cb46deb8139aa6195}{x}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a6398fb643ba380d7961a4b208f4eecf1}{y}} () const
+\item 
+double \& \mbox{\hyperlink{class_q_c_p_vector2_d_a1516252dac9eb5ffb7ddb17fb26e60e0}{rx}} ()
+\item 
+double \& \mbox{\hyperlink{class_q_c_p_vector2_d_aa8f59a5b54aec8be8e4d1f39db892fea}{ry}} ()
+\item 
+void \mbox{\hyperlink{class_q_c_p_vector2_d_ab4249e6ce7bfc37be56f014c54b761ae}{setX}} (double \mbox{\hyperlink{class_q_c_p_vector2_d_a4a099e1f9788d52cb46deb8139aa6195}{x}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_vector2_d_ada288019aa8cd51e3b30acfc07b461dc}{setY}} (double \mbox{\hyperlink{class_q_c_p_vector2_d_a6398fb643ba380d7961a4b208f4eecf1}{y}})
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}{length}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}{length\+Squared}} () const
+\item 
+Q\+Point \mbox{\hyperlink{class_q_c_p_vector2_d_add3edf75de9b7bf1abc693b973b2e906}{to\+Point}} () const
+\item 
+Q\+PointF \mbox{\hyperlink{class_q_c_p_vector2_d_acd7af3f4a62833ada58be3f3021dbbac}{to\+PointF}} () const
+\item 
+bool \mbox{\hyperlink{class_q_c_p_vector2_d_ace99f200b347b14864808213eef16593}{is\+Null}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_vector2_d_ad83268be370685c2a0630acc0fb1a425}{normalize}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a707bb3af3b1f9331a2450ec75eaf7eb0}{normalized}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a0e08d09f9027784237e302e32290b001}{perpendicular}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a39f8d28db7dbffcca6aa63a1f1f6e176}{dot}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec) const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a14840cd3da80cfee4eb3f8977cab89ab}{distance\+Squared\+To\+Line}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&start, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&\mbox{\hyperlink{myutils_8h_a64d77caddefed4b96fa62e3f5f73c9a2}{end}}) const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_a0c44ca97d46ee04feec32c1c57e70831}{distance\+Squared\+To\+Line}} (const Q\+LineF \&line) const
+\item 
+double \mbox{\hyperlink{class_q_c_p_vector2_d_ae240b845c3744e43a5d0aa7b2bb66c19}{distance\+To\+Straight\+Line}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&base, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&direction) const
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& \mbox{\hyperlink{class_q_c_p_vector2_d_a079f1159ca74168b52904392a7bf304c}{operator $\ast$=}} (double factor)
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& \mbox{\hyperlink{class_q_c_p_vector2_d_aefa55eb9282c066a330ca281881e0ec0}{operator/=}} (double divisor)
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& \mbox{\hyperlink{class_q_c_p_vector2_d_aa2c34754ce8839b2d074dec741783c5e}{operator+=}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vector)
+\item 
+\mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& \mbox{\hyperlink{class_q_c_p_vector2_d_a3a2e906bb924983bb801e89f28a3d566}{operator-\/=}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vector)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a7fdd50278959df14c8fdbcbaa16e6073}{operator $\ast$}} (double factor, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec)
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a5d2819b8e6c9566f916a2091a2eb07de}{operator $\ast$}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec, double factor)
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_aa69909afc8c656999a2ea292ea01244b}{operator/}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec, double divisor)
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a24cc5985429b12dbed4d0d3c5a917d20}{operator+}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec1, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec2)
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a9e01331d8debf0877ee4cba9abd83605}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec1, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec2)
+\item 
+const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \mbox{\hyperlink{class_q_c_p_vector2_d_a14c807d345ee3f22d6809bb5a4137b52}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec)
+\end{DoxyCompactItemize}
+\subsection*{Related Functions}
+(Note that these are not member functions.) \begin{DoxyCompactItemize}
+\item 
+Q\+Debug \mbox{\hyperlink{class_q_c_p_vector2_d_a6c757af9671d925af4a36c2f58fb7234}{operator$<$$<$}} (Q\+Debug d, const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&vec)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents two doubles as a mathematical 2D vector. 
+
+This class acts as a replacement for Q\+Vector2D with the advantage of double precision instead of single, and some convenience methods tailored for the \mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} library. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a04c90748c3623044c79fa20788ffbcc6}\label{class_q_c_p_vector2_d_a04c90748c3623044c79fa20788ffbcc6}} 
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{QCPVector2D()}{QCPVector2D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily Q\+C\+P\+Vector2\+D\+::\+Q\+C\+P\+Vector2D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Creates a \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} object and initializes the x and y coordinates to 0. \mbox{\Hypertarget{class_q_c_p_vector2_d_a47bd86cebc5588dad6ec84349d9098d4}\label{class_q_c_p_vector2_d_a47bd86cebc5588dad6ec84349d9098d4}} 
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{QCPVector2D()}{QCPVector2D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily Q\+C\+P\+Vector2\+D\+::\+Q\+C\+P\+Vector2D (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})}
+
+Creates a \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} object and initializes the {\itshape x} and {\itshape y} coordinates with the specified values. \mbox{\Hypertarget{class_q_c_p_vector2_d_ad8f30a064dc37c90a7ba5e6732ceb5bb}\label{class_q_c_p_vector2_d_ad8f30a064dc37c90a7ba5e6732ceb5bb}} 
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{QCPVector2D()}{QCPVector2D()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily Q\+C\+P\+Vector2\+D\+::\+Q\+C\+P\+Vector2D (\begin{DoxyParamCaption}\item[{const Q\+Point \&}]{point }\end{DoxyParamCaption})}
+
+Creates a \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} object and initializes the x and y coordinates respective coordinates of the specified {\itshape point}. \mbox{\Hypertarget{class_q_c_p_vector2_d_a3c16eba1006c210ffc3299253fef2339}\label{class_q_c_p_vector2_d_a3c16eba1006c210ffc3299253fef2339}} 
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\index{QCPVector2D@{QCPVector2D}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{QCPVector2D()}{QCPVector2D()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily Q\+C\+P\+Vector2\+D\+::\+Q\+C\+P\+Vector2D (\begin{DoxyParamCaption}\item[{const Q\+PointF \&}]{point }\end{DoxyParamCaption})}
+
+Creates a \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} object and initializes the x and y coordinates respective coordinates of the specified {\itshape point}. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a14840cd3da80cfee4eb3f8977cab89ab}\label{class_q_c_p_vector2_d_a14840cd3da80cfee4eb3f8977cab89ab}} 
+\index{QCPVector2D@{QCPVector2D}!distanceSquaredToLine@{distanceSquaredToLine}}
+\index{distanceSquaredToLine@{distanceSquaredToLine}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{distanceSquaredToLine()}{distanceSquaredToLine()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::distance\+Squared\+To\+Line (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{start,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{end }\end{DoxyParamCaption}) const}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+Returns the squared shortest distance of this vector (interpreted as a point) to the finite line segment given by {\itshape start} and {\itshape end}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_ae240b845c3744e43a5d0aa7b2bb66c19}{distance\+To\+Straight\+Line}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a0c44ca97d46ee04feec32c1c57e70831}\label{class_q_c_p_vector2_d_a0c44ca97d46ee04feec32c1c57e70831}} 
+\index{QCPVector2D@{QCPVector2D}!distanceSquaredToLine@{distanceSquaredToLine}}
+\index{distanceSquaredToLine@{distanceSquaredToLine}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{distanceSquaredToLine()}{distanceSquaredToLine()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::distance\+Squared\+To\+Line (\begin{DoxyParamCaption}\item[{const Q\+LineF \&}]{line }\end{DoxyParamCaption}) const}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+Returns the squared shortest distance of this vector (interpreted as a point) to the finite line segment given by {\itshape line}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_ae240b845c3744e43a5d0aa7b2bb66c19}{distance\+To\+Straight\+Line}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_ae240b845c3744e43a5d0aa7b2bb66c19}\label{class_q_c_p_vector2_d_ae240b845c3744e43a5d0aa7b2bb66c19}} 
+\index{QCPVector2D@{QCPVector2D}!distanceToStraightLine@{distanceToStraightLine}}
+\index{distanceToStraightLine@{distanceToStraightLine}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{distanceToStraightLine()}{distanceToStraightLine()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::distance\+To\+Straight\+Line (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{base,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{direction }\end{DoxyParamCaption}) const}
+
+Returns the shortest distance of this vector (interpreted as a point) to the infinite straight line given by a {\itshape base} point and a {\itshape direction} vector.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_a14840cd3da80cfee4eb3f8977cab89ab}{distance\+Squared\+To\+Line}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a39f8d28db7dbffcca6aa63a1f1f6e176}\label{class_q_c_p_vector2_d_a39f8d28db7dbffcca6aa63a1f1f6e176}} 
+\index{QCPVector2D@{QCPVector2D}!dot@{dot}}
+\index{dot@{dot}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{dot()}{dot()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::dot (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the dot/scalar product of this vector with the specified vector {\itshape vec}. \mbox{\Hypertarget{class_q_c_p_vector2_d_ace99f200b347b14864808213eef16593}\label{class_q_c_p_vector2_d_ace99f200b347b14864808213eef16593}} 
+\index{QCPVector2D@{QCPVector2D}!isNull@{isNull}}
+\index{isNull@{isNull}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{isNull()}{isNull()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Vector2\+D\+::is\+Null (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this vector is null. A vector is null if {\ttfamily q\+Is\+Null} returns true for both x and y coordinates, i.\+e. if both are binary equal to 0. \mbox{\Hypertarget{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}\label{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}} 
+\index{QCPVector2D@{QCPVector2D}!length@{length}}
+\index{length@{length}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{length()}{length()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::length (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the length of this vector.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}{length\+Squared}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}\label{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}} 
+\index{QCPVector2D@{QCPVector2D}!lengthSquared@{lengthSquared}}
+\index{lengthSquared@{lengthSquared}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{lengthSquared()}{lengthSquared()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::length\+Squared (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the squared length of this vector. In some situations, e.\+g. when just trying to find the shortest vector of a group, this is faster than calculating \mbox{\hyperlink{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}{length}}, because it avoids calculation of a square root.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}{length}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_ad83268be370685c2a0630acc0fb1a425}\label{class_q_c_p_vector2_d_ad83268be370685c2a0630acc0fb1a425}} 
+\index{QCPVector2D@{QCPVector2D}!normalize@{normalize}}
+\index{normalize@{normalize}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{normalize()}{normalize()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Vector2\+D\+::normalize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Normalizes this vector. After this operation, the length of the vector is equal to 1.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_a707bb3af3b1f9331a2450ec75eaf7eb0}{normalized}}, \mbox{\hyperlink{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}{length}}, \mbox{\hyperlink{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}{length\+Squared}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a707bb3af3b1f9331a2450ec75eaf7eb0}\label{class_q_c_p_vector2_d_a707bb3af3b1f9331a2450ec75eaf7eb0}} 
+\index{QCPVector2D@{QCPVector2D}!normalized@{normalized}}
+\index{normalized@{normalized}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{normalized()}{normalized()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} Q\+C\+P\+Vector2\+D\+::normalized (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Returns a normalized version of this vector. The length of the returned vector is equal to 1.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_ad83268be370685c2a0630acc0fb1a425}{normalize}}, \mbox{\hyperlink{class_q_c_p_vector2_d_a10adb5ab031fe94f0b64a3c5aefb552e}{length}}, \mbox{\hyperlink{class_q_c_p_vector2_d_a766585459d84cb149334fda1a498b2e5}{length\+Squared}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a079f1159ca74168b52904392a7bf304c}\label{class_q_c_p_vector2_d_a079f1159ca74168b52904392a7bf304c}} 
+\index{QCPVector2D@{QCPVector2D}!operator $\ast$=@{operator $\ast$=}}
+\index{operator $\ast$=@{operator $\ast$=}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator $\ast$=()}{operator *=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& Q\+C\+P\+Vector2\+D\+::operator $\ast$= (\begin{DoxyParamCaption}\item[{double}]{factor }\end{DoxyParamCaption})}
+
+Scales this vector by the given {\itshape factor}, i.\+e. the x and y components are multiplied by {\itshape factor}. \mbox{\Hypertarget{class_q_c_p_vector2_d_aa2c34754ce8839b2d074dec741783c5e}\label{class_q_c_p_vector2_d_aa2c34754ce8839b2d074dec741783c5e}} 
+\index{QCPVector2D@{QCPVector2D}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& Q\+C\+P\+Vector2\+D\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vector }\end{DoxyParamCaption})}
+
+Adds the given {\itshape vector} to this vector component-\/wise. \mbox{\Hypertarget{class_q_c_p_vector2_d_a3a2e906bb924983bb801e89f28a3d566}\label{class_q_c_p_vector2_d_a3a2e906bb924983bb801e89f28a3d566}} 
+\index{QCPVector2D@{QCPVector2D}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& Q\+C\+P\+Vector2\+D\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vector }\end{DoxyParamCaption})}
+
+subtracts the given {\itshape vector} from this vector component-\/wise. \mbox{\Hypertarget{class_q_c_p_vector2_d_aefa55eb9282c066a330ca281881e0ec0}\label{class_q_c_p_vector2_d_aefa55eb9282c066a330ca281881e0ec0}} 
+\index{QCPVector2D@{QCPVector2D}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator/=()}{operator/=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \& Q\+C\+P\+Vector2\+D\+::operator/= (\begin{DoxyParamCaption}\item[{double}]{divisor }\end{DoxyParamCaption})}
+
+Scales this vector by the given {\itshape divisor}, i.\+e. the x and y components are divided by {\itshape divisor}. \mbox{\Hypertarget{class_q_c_p_vector2_d_a0e08d09f9027784237e302e32290b001}\label{class_q_c_p_vector2_d_a0e08d09f9027784237e302e32290b001}} 
+\index{QCPVector2D@{QCPVector2D}!perpendicular@{perpendicular}}
+\index{perpendicular@{perpendicular}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{perpendicular()}{perpendicular()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} Q\+C\+P\+Vector2\+D\+::perpendicular (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a vector perpendicular to this vector, with the same length. \mbox{\Hypertarget{class_q_c_p_vector2_d_a1516252dac9eb5ffb7ddb17fb26e60e0}\label{class_q_c_p_vector2_d_a1516252dac9eb5ffb7ddb17fb26e60e0}} 
+\index{QCPVector2D@{QCPVector2D}!rx@{rx}}
+\index{rx@{rx}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{rx()}{rx()}}
+{\footnotesize\ttfamily double\& Q\+C\+P\+Vector2\+D\+::rx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_aa8f59a5b54aec8be8e4d1f39db892fea}\label{class_q_c_p_vector2_d_aa8f59a5b54aec8be8e4d1f39db892fea}} 
+\index{QCPVector2D@{QCPVector2D}!ry@{ry}}
+\index{ry@{ry}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{ry()}{ry()}}
+{\footnotesize\ttfamily double\& Q\+C\+P\+Vector2\+D\+::ry (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_ab4249e6ce7bfc37be56f014c54b761ae}\label{class_q_c_p_vector2_d_ab4249e6ce7bfc37be56f014c54b761ae}} 
+\index{QCPVector2D@{QCPVector2D}!setX@{setX}}
+\index{setX@{setX}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{setX()}{setX()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Vector2\+D\+::setX (\begin{DoxyParamCaption}\item[{double}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the x coordinate of this vector to {\itshape x}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_ada288019aa8cd51e3b30acfc07b461dc}{setY}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_ada288019aa8cd51e3b30acfc07b461dc}\label{class_q_c_p_vector2_d_ada288019aa8cd51e3b30acfc07b461dc}} 
+\index{QCPVector2D@{QCPVector2D}!setY@{setY}}
+\index{setY@{setY}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{setY()}{setY()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Vector2\+D\+::setY (\begin{DoxyParamCaption}\item[{double}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the y coordinate of this vector to {\itshape y}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_ab4249e6ce7bfc37be56f014c54b761ae}{setX}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_add3edf75de9b7bf1abc693b973b2e906}\label{class_q_c_p_vector2_d_add3edf75de9b7bf1abc693b973b2e906}} 
+\index{QCPVector2D@{QCPVector2D}!toPoint@{toPoint}}
+\index{toPoint@{toPoint}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{toPoint()}{toPoint()}}
+{\footnotesize\ttfamily Q\+Point Q\+C\+P\+Vector2\+D\+::to\+Point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a Q\+Point which has the x and y coordinates of this vector, truncating any floating point information.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_acd7af3f4a62833ada58be3f3021dbbac}{to\+PointF}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_acd7af3f4a62833ada58be3f3021dbbac}\label{class_q_c_p_vector2_d_acd7af3f4a62833ada58be3f3021dbbac}} 
+\index{QCPVector2D@{QCPVector2D}!toPointF@{toPointF}}
+\index{toPointF@{toPointF}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{toPointF()}{toPointF()}}
+{\footnotesize\ttfamily Q\+PointF Q\+C\+P\+Vector2\+D\+::to\+PointF (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a Q\+PointF which has the x and y coordinates of this vector.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_vector2_d_add3edf75de9b7bf1abc693b973b2e906}{to\+Point}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a4a099e1f9788d52cb46deb8139aa6195}\label{class_q_c_p_vector2_d_a4a099e1f9788d52cb46deb8139aa6195}} 
+\index{QCPVector2D@{QCPVector2D}!x@{x}}
+\index{x@{x}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{x()}{x()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a6398fb643ba380d7961a4b208f4eecf1}\label{class_q_c_p_vector2_d_a6398fb643ba380d7961a4b208f4eecf1}} 
+\index{QCPVector2D@{QCPVector2D}!y@{y}}
+\index{y@{y}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{y()}{y()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Vector2\+D\+::y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a7fdd50278959df14c8fdbcbaa16e6073}\label{class_q_c_p_vector2_d_a7fdd50278959df14c8fdbcbaa16e6073}} 
+\index{QCPVector2D@{QCPVector2D}!operator $\ast$@{operator $\ast$}}
+\index{operator $\ast$@{operator $\ast$}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator $\ast$}{operator *}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator $\ast$ (\begin{DoxyParamCaption}\item[{double}]{factor,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a5d2819b8e6c9566f916a2091a2eb07de}\label{class_q_c_p_vector2_d_a5d2819b8e6c9566f916a2091a2eb07de}} 
+\index{QCPVector2D@{QCPVector2D}!operator $\ast$@{operator $\ast$}}
+\index{operator $\ast$@{operator $\ast$}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator $\ast$}{operator *}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator $\ast$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec,  }\item[{double}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a24cc5985429b12dbed4d0d3c5a917d20}\label{class_q_c_p_vector2_d_a24cc5985429b12dbed4d0d3c5a917d20}} 
+\index{QCPVector2D@{QCPVector2D}!operator+@{operator+}}
+\index{operator+@{operator+}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator+}{operator+}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec1,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a9e01331d8debf0877ee4cba9abd83605}\label{class_q_c_p_vector2_d_a9e01331d8debf0877ee4cba9abd83605}} 
+\index{QCPVector2D@{QCPVector2D}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec1,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a14c807d345ee3f22d6809bb5a4137b52}\label{class_q_c_p_vector2_d_a14c807d345ee3f22d6809bb5a4137b52}} 
+\index{QCPVector2D@{QCPVector2D}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_aa69909afc8c656999a2ea292ea01244b}\label{class_q_c_p_vector2_d_aa69909afc8c656999a2ea292ea01244b}} 
+\index{QCPVector2D@{QCPVector2D}!operator/@{operator/}}
+\index{operator/@{operator/}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator/}{operator/}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec,  }\item[{double}]{divisor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_q_c_p_vector2_d_a6c757af9671d925af4a36c2f58fb7234}\label{class_q_c_p_vector2_d_a6c757af9671d925af4a36c2f58fb7234}} 
+\index{QCPVector2D@{QCPVector2D}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!QCPVector2D@{QCPVector2D}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily Q\+Debug operator$<$$<$ (\begin{DoxyParamCaption}\item[{Q\+Debug}]{d,  }\item[{const \mbox{\hyperlink{class_q_c_p_vector2_d}{Q\+C\+P\+Vector2D}} \&}]{vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [related]}}
+
+Prints {\itshape vec} in a human readable format to the q\+Debug output. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

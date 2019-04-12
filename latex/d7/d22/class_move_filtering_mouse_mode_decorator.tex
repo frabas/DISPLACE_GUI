@@ -1,0 +1,155 @@
+\hypertarget{class_move_filtering_mouse_mode_decorator}{}\section{Move\+Filtering\+Mouse\+Mode\+Decorator Class Reference}
+\label{class_move_filtering_mouse_mode_decorator}\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+
+
+{\ttfamily \#include $<$movefilteringmousemodedecorator.\+h$>$}
+
+Inheritance diagram for Move\+Filtering\+Mouse\+Mode\+Decorator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d7/d22/class_move_filtering_mouse_mode_decorator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_a8b339146a2755779bf8c93e0ddf96d33}{Move\+Filtering\+Mouse\+Mode\+Decorator}} (\mbox{\hyperlink{class_mouse_mode}{Mouse\+Mode}} $\ast$mode)
+\item 
+virtual bool \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_a78748a2dffb39087c8a5a16859b73615}{press\+Event}} (const Q\+PointF \&\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}})
+\begin{DoxyCompactList}\small\item\em signals a mouse press event. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_a331745d728889576d415a0e6f20aa236}{release\+Event}} (const Q\+PointF \&\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}})
+\begin{DoxyCompactList}\small\item\em signals a mouse release event. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_a9755a8c9d311a388199be9402d8f5e71}{move\+Event}} (const Q\+PointF \&\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}})
+\begin{DoxyCompactList}\small\item\em signals a mouse move event. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_af24ae14f9b096c26d94ff0e51b716c46}{begin\+Mode}} ()
+\begin{DoxyCompactList}\small\item\em Starts the mouse mode. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_a3986dc8532f8e483444c875d5e050c3b}{end\+Mode}} (bool success)
+\begin{DoxyCompactList}\small\item\em Completes the mouse mode. \end{DoxyCompactList}\item 
+Q\+String \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_ae66c9e6988302358b19aa7c8259edbdd}{get\+Mode\+Description}} () const
+\item 
+void \mbox{\hyperlink{class_move_filtering_mouse_mode_decorator_ab275ef7f3f65b4f1c58c937e167c55d3}{set\+Mouse\+Mode\+Interface}} (\mbox{\hyperlink{class_mouse_mode_interface}{Mouse\+Mode\+Interface}} $\ast$ifc)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_a8b339146a2755779bf8c93e0ddf96d33}\label{class_move_filtering_mouse_mode_decorator_a8b339146a2755779bf8c93e0ddf96d33}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{MoveFilteringMouseModeDecorator()}{MoveFilteringMouseModeDecorator()}}
+{\footnotesize\ttfamily Move\+Filtering\+Mouse\+Mode\+Decorator\+::\+Move\+Filtering\+Mouse\+Mode\+Decorator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_mouse_mode}{Mouse\+Mode}} $\ast$}]{mode }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_af24ae14f9b096c26d94ff0e51b716c46}\label{class_move_filtering_mouse_mode_decorator_af24ae14f9b096c26d94ff0e51b716c46}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!beginMode@{beginMode}}
+\index{beginMode@{beginMode}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{beginMode()}{beginMode()}}
+{\footnotesize\ttfamily bool Move\+Filtering\+Mouse\+Mode\+Decorator\+::begin\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Starts the mouse mode. 
+
+\begin{DoxyReturn}{Returns}
+false if the mouse mode must be aborted, true otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_mouse_mode_a32f232953a46467d2fe636df8907bd74}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_a3986dc8532f8e483444c875d5e050c3b}\label{class_move_filtering_mouse_mode_decorator_a3986dc8532f8e483444c875d5e050c3b}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!endMode@{endMode}}
+\index{endMode@{endMode}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{endMode()}{endMode()}}
+{\footnotesize\ttfamily bool Move\+Filtering\+Mouse\+Mode\+Decorator\+::end\+Mode (\begin{DoxyParamCaption}\item[{bool}]{success }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Completes the mouse mode. 
+
+\begin{DoxyReturn}{Returns}
+false if the mouse mode must be aborted, true otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_mouse_mode_ad88ebf649b48364a343c86c14513039e}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_ae66c9e6988302358b19aa7c8259edbdd}\label{class_move_filtering_mouse_mode_decorator_ae66c9e6988302358b19aa7c8259edbdd}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!getModeDescription@{getModeDescription}}
+\index{getModeDescription@{getModeDescription}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{getModeDescription()}{getModeDescription()}}
+{\footnotesize\ttfamily Q\+String Move\+Filtering\+Mouse\+Mode\+Decorator\+::get\+Mode\+Description (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_mouse_mode_aa442d3058243efe81e8052a137c2072e}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_a9755a8c9d311a388199be9402d8f5e71}\label{class_move_filtering_mouse_mode_decorator_a9755a8c9d311a388199be9402d8f5e71}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!moveEvent@{moveEvent}}
+\index{moveEvent@{moveEvent}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{moveEvent()}{moveEvent()}}
+{\footnotesize\ttfamily bool Move\+Filtering\+Mouse\+Mode\+Decorator\+::move\+Event (\begin{DoxyParamCaption}\item[{const Q\+PointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+signals a mouse move event. 
+
+\begin{DoxyReturn}{Returns}
+false if the mouse mode must be aborted, true otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_mouse_mode_adb2e2afbb2ac1793a665f1d227e12ce6}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_a78748a2dffb39087c8a5a16859b73615}\label{class_move_filtering_mouse_mode_decorator_a78748a2dffb39087c8a5a16859b73615}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!pressEvent@{pressEvent}}
+\index{pressEvent@{pressEvent}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{pressEvent()}{pressEvent()}}
+{\footnotesize\ttfamily bool Move\+Filtering\+Mouse\+Mode\+Decorator\+::press\+Event (\begin{DoxyParamCaption}\item[{const Q\+PointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+signals a mouse press event. 
+
+\begin{DoxyReturn}{Returns}
+false if the mouse mode must be aborted, true otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_mouse_mode_ac726911a60e2cbd733d6d6a55d2ceba9}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_a331745d728889576d415a0e6f20aa236}\label{class_move_filtering_mouse_mode_decorator_a331745d728889576d415a0e6f20aa236}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!releaseEvent@{releaseEvent}}
+\index{releaseEvent@{releaseEvent}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{releaseEvent()}{releaseEvent()}}
+{\footnotesize\ttfamily bool Move\+Filtering\+Mouse\+Mode\+Decorator\+::release\+Event (\begin{DoxyParamCaption}\item[{const Q\+PointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+signals a mouse release event. 
+
+\begin{DoxyReturn}{Returns}
+false if the mouse mode must be aborted, true otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_mouse_mode_a9515661d7c29ab234b7e70d0fe7e5db0}{Mouse\+Mode}}.
+
+\mbox{\Hypertarget{class_move_filtering_mouse_mode_decorator_ab275ef7f3f65b4f1c58c937e167c55d3}\label{class_move_filtering_mouse_mode_decorator_ab275ef7f3f65b4f1c58c937e167c55d3}} 
+\index{MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}!setMouseModeInterface@{setMouseModeInterface}}
+\index{setMouseModeInterface@{setMouseModeInterface}!MoveFilteringMouseModeDecorator@{MoveFilteringMouseModeDecorator}}
+\subsubsection{\texorpdfstring{setMouseModeInterface()}{setMouseModeInterface()}}
+{\footnotesize\ttfamily void Move\+Filtering\+Mouse\+Mode\+Decorator\+::set\+Mouse\+Mode\+Interface (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_mouse_mode_interface}{Mouse\+Mode\+Interface}} $\ast$}]{ifc }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_mouse_mode_acb2cde6c1de5c6e3ac065bcf45604c98}{Mouse\+Mode}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/mousemode/\mbox{\hyperlink{movefilteringmousemodedecorator_8h}{movefilteringmousemodedecorator.\+h}}\item 
+qtgui/mousemode/\mbox{\hyperlink{movefilteringmousemodedecorator_8cpp}{movefilteringmousemodedecorator.\+cpp}}\end{DoxyCompactItemize}

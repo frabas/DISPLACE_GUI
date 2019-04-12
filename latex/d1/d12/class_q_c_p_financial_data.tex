@@ -1,0 +1,163 @@
+\hypertarget{class_q_c_p_financial_data}{}\section{Q\+C\+P\+Financial\+Data Class Reference}
+\label{class_q_c_p_financial_data}\index{QCPFinancialData@{QCPFinancialData}}
+
+
+Holds the data of one single data point for \mbox{\hyperlink{class_q_c_p_financial}{Q\+C\+P\+Financial}}.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_financial_data_a1ca53b3a9ae4e9658a4fd1ca57d76ba4}{Q\+C\+P\+Financial\+Data}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_financial_data_a069b72c514dfd4fc8e1d5df811e54ca4}{Q\+C\+P\+Financial\+Data}} (double \mbox{\hyperlink{class_q_c_p_financial_data_a18bc92126f28c214b05b0161e5f5958b}{key}}, double \mbox{\hyperlink{class_q_c_p_financial_data_a3059e1e1fbcb9fd243fde0450f238032}{open}}, double \mbox{\hyperlink{class_q_c_p_financial_data_a299a4b241296fb6cd1baf5ab03f7126a}{high}}, double \mbox{\hyperlink{class_q_c_p_financial_data_aecce0fb45a115e3f3a25eea78491ac16}{low}}, double \mbox{\hyperlink{class_q_c_p_financial_data_a45e9b96944c4a08ea6c82a72d3d22df2}{close}})
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_ab378e8ef6aef482735aba69115cb442e}{sort\+Key}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_af6ed6349c65d938fabd2e4dd2cd499ff}{main\+Key}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_a65206c76b6f31a57e04dc7da88c9be60}{main\+Value}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \mbox{\hyperlink{class_q_c_p_financial_data_a164d5584eeeb9ba48b4b595ac2ac7fcf}{value\+Range}} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_q_c_p_financial_data}{Q\+C\+P\+Financial\+Data}} \mbox{\hyperlink{class_q_c_p_financial_data_a54a0ca7ee7fd7713972477e8e2533ce5}{from\+Sort\+Key}} (double \mbox{\hyperlink{class_q_c_p_financial_data_ab378e8ef6aef482735aba69115cb442e}{sort\+Key}})
+\item 
+static bool \mbox{\hyperlink{class_q_c_p_financial_data_a1121db9420a7694144f6a99b09257a5f}{sort\+Key\+Is\+Main\+Key}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_a18bc92126f28c214b05b0161e5f5958b}{key}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_a3059e1e1fbcb9fd243fde0450f238032}{open}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_a299a4b241296fb6cd1baf5ab03f7126a}{high}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_aecce0fb45a115e3f3a25eea78491ac16}{low}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_financial_data_a45e9b96944c4a08ea6c82a72d3d22df2}{close}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Holds the data of one single data point for \mbox{\hyperlink{class_q_c_p_financial}{Q\+C\+P\+Financial}}. 
+
+The stored data is\+: \begin{DoxyItemize}
+\item {\itshape key\+:} coordinate on the key axis of this data point (this is the {\itshape main\+Key} and the {\itshape sort\+Key}) \item {\itshape open\+:} The opening value at the data point (this is the {\itshape main\+Value}) \item {\itshape high\+:} The high/maximum value at the data point \item {\itshape low\+:} The low/minimum value at the data point \item {\itshape close\+:} The closing value at the data point\end{DoxyItemize}
+The container for storing multiple data points is \mbox{\hyperlink{qcustomplot_8h_ae36e482e04f19a54782f01ab38c354a6}{Q\+C\+P\+Financial\+Data\+Container}}. It is a typedef for \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}} with \mbox{\hyperlink{class_q_c_p_financial_data}{Q\+C\+P\+Financial\+Data}} as the Data\+Type template parameter. See the documentation there for an explanation regarding the data type\textquotesingle{}s generic methods.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{qcustomplot_8h_ae36e482e04f19a54782f01ab38c354a6}{Q\+C\+P\+Financial\+Data\+Container}} 
+\end{DoxySeeAlso}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_financial_data_a1ca53b3a9ae4e9658a4fd1ca57d76ba4}\label{class_q_c_p_financial_data_a1ca53b3a9ae4e9658a4fd1ca57d76ba4}} 
+\index{QCPFinancialData@{QCPFinancialData}!QCPFinancialData@{QCPFinancialData}}
+\index{QCPFinancialData@{QCPFinancialData}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{QCPFinancialData()}{QCPFinancialData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Financial\+Data\+::\+Q\+C\+P\+Financial\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructs a data point with key and all values set to zero. \mbox{\Hypertarget{class_q_c_p_financial_data_a069b72c514dfd4fc8e1d5df811e54ca4}\label{class_q_c_p_financial_data_a069b72c514dfd4fc8e1d5df811e54ca4}} 
+\index{QCPFinancialData@{QCPFinancialData}!QCPFinancialData@{QCPFinancialData}}
+\index{QCPFinancialData@{QCPFinancialData}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{QCPFinancialData()}{QCPFinancialData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Financial\+Data\+::\+Q\+C\+P\+Financial\+Data (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{double}]{open,  }\item[{double}]{high,  }\item[{double}]{low,  }\item[{double}]{close }\end{DoxyParamCaption})}
+
+Constructs a data point with the specified {\itshape key} and O\+H\+LC values. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_financial_data_a54a0ca7ee7fd7713972477e8e2533ce5}\label{class_q_c_p_financial_data_a54a0ca7ee7fd7713972477e8e2533ce5}} 
+\index{QCPFinancialData@{QCPFinancialData}!fromSortKey@{fromSortKey}}
+\index{fromSortKey@{fromSortKey}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{fromSortKey()}{fromSortKey()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_q_c_p_financial_data}{Q\+C\+P\+Financial\+Data}} Q\+C\+P\+Financial\+Data\+::from\+Sort\+Key (\begin{DoxyParamCaption}\item[{double}]{sort\+Key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Returns a data point with the specified {\itshape sort\+Key}. All other members are set to zero.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_financial_data_af6ed6349c65d938fabd2e4dd2cd499ff}\label{class_q_c_p_financial_data_af6ed6349c65d938fabd2e4dd2cd499ff}} 
+\index{QCPFinancialData@{QCPFinancialData}!mainKey@{mainKey}}
+\index{mainKey@{mainKey}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{mainKey()}{mainKey()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::main\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape key} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_financial_data_a65206c76b6f31a57e04dc7da88c9be60}\label{class_q_c_p_financial_data_a65206c76b6f31a57e04dc7da88c9be60}} 
+\index{QCPFinancialData@{QCPFinancialData}!mainValue@{mainValue}}
+\index{mainValue@{mainValue}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{mainValue()}{mainValue()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::main\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape open} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_financial_data_ab378e8ef6aef482735aba69115cb442e}\label{class_q_c_p_financial_data_ab378e8ef6aef482735aba69115cb442e}} 
+\index{QCPFinancialData@{QCPFinancialData}!sortKey@{sortKey}}
+\index{sortKey@{sortKey}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{sortKey()}{sortKey()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::sort\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape key} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_financial_data_a1121db9420a7694144f6a99b09257a5f}\label{class_q_c_p_financial_data_a1121db9420a7694144f6a99b09257a5f}} 
+\index{QCPFinancialData@{QCPFinancialData}!sortKeyIsMainKey@{sortKeyIsMainKey}}
+\index{sortKeyIsMainKey@{sortKeyIsMainKey}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{sortKeyIsMainKey()}{sortKeyIsMainKey()}}
+{\footnotesize\ttfamily static static bool Q\+C\+P\+Financial\+Data\+::sort\+Key\+Is\+Main\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Since the member {\itshape key} is both the data point key coordinate and the data ordering parameter, this method returns true.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_financial_data_a164d5584eeeb9ba48b4b595ac2ac7fcf}\label{class_q_c_p_financial_data_a164d5584eeeb9ba48b4b595ac2ac7fcf}} 
+\index{QCPFinancialData@{QCPFinancialData}!valueRange@{valueRange}}
+\index{valueRange@{valueRange}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{valueRange()}{valueRange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} Q\+C\+P\+Financial\+Data\+::value\+Range (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} spanning from the {\itshape low} to the {\itshape high} value of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_c_p_financial_data_a45e9b96944c4a08ea6c82a72d3d22df2}\label{class_q_c_p_financial_data_a45e9b96944c4a08ea6c82a72d3d22df2}} 
+\index{QCPFinancialData@{QCPFinancialData}!close@{close}}
+\index{close@{close}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{close}{close}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::close}
+
+\mbox{\Hypertarget{class_q_c_p_financial_data_a299a4b241296fb6cd1baf5ab03f7126a}\label{class_q_c_p_financial_data_a299a4b241296fb6cd1baf5ab03f7126a}} 
+\index{QCPFinancialData@{QCPFinancialData}!high@{high}}
+\index{high@{high}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{high}{high}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::high}
+
+\mbox{\Hypertarget{class_q_c_p_financial_data_a18bc92126f28c214b05b0161e5f5958b}\label{class_q_c_p_financial_data_a18bc92126f28c214b05b0161e5f5958b}} 
+\index{QCPFinancialData@{QCPFinancialData}!key@{key}}
+\index{key@{key}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{key}{key}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::key}
+
+\mbox{\Hypertarget{class_q_c_p_financial_data_aecce0fb45a115e3f3a25eea78491ac16}\label{class_q_c_p_financial_data_aecce0fb45a115e3f3a25eea78491ac16}} 
+\index{QCPFinancialData@{QCPFinancialData}!low@{low}}
+\index{low@{low}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{low}{low}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::low}
+
+\mbox{\Hypertarget{class_q_c_p_financial_data_a3059e1e1fbcb9fd243fde0450f238032}\label{class_q_c_p_financial_data_a3059e1e1fbcb9fd243fde0450f238032}} 
+\index{QCPFinancialData@{QCPFinancialData}!open@{open}}
+\index{open@{open}!QCPFinancialData@{QCPFinancialData}}
+\subsubsection{\texorpdfstring{open}{open}}
+{\footnotesize\ttfamily double Q\+C\+P\+Financial\+Data\+::open}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,96 @@
+\hypertarget{class_shortest_path_builder}{}\section{Shortest\+Path\+Builder Class Reference}
+\label{class_shortest_path_builder}\index{ShortestPathBuilder@{ShortestPathBuilder}}
+
+
+{\ttfamily \#include $<$shortestpathbuilder.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_shortest_path_builder_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}{Algo\+Type}} \{ \mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a052d7289884a0d0dae24aa88a7e62e83}{Algo\+Type\+::\+Dijkstra}}, 
+\mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a5dd57ad2903b807a288f1519c98dfc29}{Algo\+Type\+::\+A\+Star}}
+ \}
+\item 
+enum \mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}{Format}} \{ \mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73adfe54cf287abea5248d8b43f1cde7860}{Binary}}, 
+\mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73a7eb68795d2fcaeb3c6e39b87d9dfac3f}{Text}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_shortest_path_builder_a1f2ab2e63d5d8c2611fbb348039d0648}{Shortest\+Path\+Builder}} (\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, \mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}{Algo\+Type}} type)
+\item 
+virtual \mbox{\hyperlink{class_shortest_path_builder_a0e231e5bfd3fce5e5ee9c33458673ba9}{$\sim$\+Shortest\+Path\+Builder}} () noexcept
+\item 
+void \mbox{\hyperlink{class_shortest_path_builder_a9b6bae6c671b09614e31e10da8083786}{create}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ node, Q\+String path, bool simplify, const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&relevant\+Nodes, \mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}{Format}} format=\mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73adfe54cf287abea5248d8b43f1cde7860}{Binary}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}\label{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}} 
+\index{ShortestPathBuilder@{ShortestPathBuilder}!AlgoType@{AlgoType}}
+\index{AlgoType@{AlgoType}!ShortestPathBuilder@{ShortestPathBuilder}}
+\subsubsection{\texorpdfstring{AlgoType}{AlgoType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}{Shortest\+Path\+Builder\+::\+Algo\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Dijkstra@{Dijkstra}!ShortestPathBuilder@{ShortestPathBuilder}}\index{ShortestPathBuilder@{ShortestPathBuilder}!Dijkstra@{Dijkstra}}}\mbox{\Hypertarget{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a052d7289884a0d0dae24aa88a7e62e83}\label{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a052d7289884a0d0dae24aa88a7e62e83}} 
+Dijkstra&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AStar@{AStar}!ShortestPathBuilder@{ShortestPathBuilder}}\index{ShortestPathBuilder@{ShortestPathBuilder}!AStar@{AStar}}}\mbox{\Hypertarget{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a5dd57ad2903b807a288f1519c98dfc29}\label{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13a5dd57ad2903b807a288f1519c98dfc29}} 
+A\+Star&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}\label{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}} 
+\index{ShortestPathBuilder@{ShortestPathBuilder}!Format@{Format}}
+\index{Format@{Format}!ShortestPathBuilder@{ShortestPathBuilder}}
+\subsubsection{\texorpdfstring{Format}{Format}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}{Shortest\+Path\+Builder\+::\+Format}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Binary@{Binary}!ShortestPathBuilder@{ShortestPathBuilder}}\index{ShortestPathBuilder@{ShortestPathBuilder}!Binary@{Binary}}}\mbox{\Hypertarget{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73adfe54cf287abea5248d8b43f1cde7860}\label{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73adfe54cf287abea5248d8b43f1cde7860}} 
+Binary&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Text@{Text}!ShortestPathBuilder@{ShortestPathBuilder}}\index{ShortestPathBuilder@{ShortestPathBuilder}!Text@{Text}}}\mbox{\Hypertarget{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73a7eb68795d2fcaeb3c6e39b87d9dfac3f}\label{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73a7eb68795d2fcaeb3c6e39b87d9dfac3f}} 
+Text&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_shortest_path_builder_a1f2ab2e63d5d8c2611fbb348039d0648}\label{class_shortest_path_builder_a1f2ab2e63d5d8c2611fbb348039d0648}} 
+\index{ShortestPathBuilder@{ShortestPathBuilder}!ShortestPathBuilder@{ShortestPathBuilder}}
+\index{ShortestPathBuilder@{ShortestPathBuilder}!ShortestPathBuilder@{ShortestPathBuilder}}
+\subsubsection{\texorpdfstring{ShortestPathBuilder()}{ShortestPathBuilder()}}
+{\footnotesize\ttfamily Shortest\+Path\+Builder\+::\+Shortest\+Path\+Builder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{\mbox{\hyperlink{class_shortest_path_builder_a1ba5dda0ad139bf12f34e1eb552bcb13}{Algo\+Type}}}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_shortest_path_builder_a0e231e5bfd3fce5e5ee9c33458673ba9}\label{class_shortest_path_builder_a0e231e5bfd3fce5e5ee9c33458673ba9}} 
+\index{ShortestPathBuilder@{ShortestPathBuilder}!````~ShortestPathBuilder@{$\sim$ShortestPathBuilder}}
+\index{````~ShortestPathBuilder@{$\sim$ShortestPathBuilder}!ShortestPathBuilder@{ShortestPathBuilder}}
+\subsubsection{\texorpdfstring{$\sim$ShortestPathBuilder()}{~ShortestPathBuilder()}}
+{\footnotesize\ttfamily Shortest\+Path\+Builder\+::$\sim$\+Shortest\+Path\+Builder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_shortest_path_builder_a9b6bae6c671b09614e31e10da8083786}\label{class_shortest_path_builder_a9b6bae6c671b09614e31e10da8083786}} 
+\index{ShortestPathBuilder@{ShortestPathBuilder}!create@{create}}
+\index{create@{create}!ShortestPathBuilder@{ShortestPathBuilder}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily void Shortest\+Path\+Builder\+::create (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$}]{node,  }\item[{Q\+String}]{path,  }\item[{bool}]{simplify,  }\item[{const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{relevant\+Nodes,  }\item[{\mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73}{Format}}}]{format = {\ttfamily \mbox{\hyperlink{class_shortest_path_builder_afd1e54ec63b4266aed503c6fb3bb7a73adfe54cf287abea5248d8b43f1cde7860}{Binary}}} }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{shortestpathbuilder_8h}{shortestpathbuilder.\+h}}\item 
+qtgui/\mbox{\hyperlink{shortestpathbuilder_8cpp}{shortestpathbuilder.\+cpp}}\end{DoxyCompactItemize}

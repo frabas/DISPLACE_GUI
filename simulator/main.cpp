@@ -18,6 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+
+/*! \mainpage A spatial model of fisheries to help sustainable fishing and maritime spatial planning
+ *
+ * \section intro_sec Introduction
+ *
+ * DISPLACE is a dynamic, individual-based model for spatial fishing planning and effort displacement
+ * integrating underlying fish population models. The DISPLACE project develops and provides a
+ * platform primarily for research purposes to transform the fishermen detailed knowledge into models,
+ * evaluation tools, and methods that can provide the fisheries with research and advice.
+ * By conducting a ecological and socio-economic impact assessment the model intends to serve as an aid to decision-making for (fishery) managers.
+ * An impact assessment will help answering on what are the impacts of the different policy options and who will be affected.
+ * By quantifying the effects the assessment will measure how the different options compare, for example
+ * how different the options perform in achieving the objective(s) of the policy.
+ *
+ * \section Installation
+ *
+ * The DISPLACE software is available for download at www.displace-project.org.
+ * Installation procedures for windows, Linux and iOS platforms are briefly described on this web site.
+ *
+ */
+
+
 #include <idtypes.h>
 
 #include "sqlitestorage.h"
@@ -742,190 +764,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // so the dynamic of these pops are not truly simulated but vessels can do some catches on them in any cases
     // using vessel and species-specific historic cpue data... (just like in paper Bastardie et al 2010)
 
-    // set fixed seed (for max. 30 runs, random seed otherwise)
+    // set a fixed seed
     int a_rand= rand() % 10000;
     // to avoid chosing the seed in the same second!
     for (int waste=0; waste< a_rand; waste++)
     {
     }
 
-    if(namesimu=="simu1")
-    {
-        srand ( 101 );			 // set always the same seed
-    }
-    if(namesimu=="simu2")
-    {
-        srand ( 102 );			 // set always the same seed
-    }
-    if(namesimu=="simu3")
-    {
-        srand ( 103 );			 // set always the same seed
-    }
-    if(namesimu=="simu4")
-    {
-        srand ( 104 );			 // set always the same seed
-    }
-    if(namesimu=="simu5")
-    {
-        srand ( 105 );			 // set always the same seed
-    }
-    if(namesimu=="simu6")
-    {
-        srand ( 106 );			 // set always the same seed
-    }
-    if(namesimu=="simu7")
-    {
-        srand ( 107 );			 // set always the same seed
-    }
-    if(namesimu=="simu8")
-    {
-        srand ( 108 );			 // set always the same seed
-    }
-    if(namesimu=="simu9")
-    {
-        srand ( 109 );			 // set always the same seed
-    }
-    if(namesimu=="simu10")
-    {
-        srand ( 110 );			 // set always the same seed
-    }
-    if(namesimu=="simu11")
-    {
-        srand ( 111 );			 // set always the same seed
-    }
-    if(namesimu=="simu12")
-    {
-        srand ( 112 );			 // set always the same seed
-    }
-    if(namesimu=="simu13")
-    {
-        srand ( 113 );			 // set always the same seed
-    }
-    if(namesimu=="simu14")
-    {
-        srand ( 114 );			 // set always the same seed
-    }
-    if(namesimu=="simu15")
-    {
-        srand ( 115 );			 // set always the same seed
-    }
-    if(namesimu=="simu16")
-    {
-        srand ( 116 );			 // set always the same seed
-    }
-    if(namesimu=="simu17")
-    {
-        srand ( 117 );			 // set always the same seed
-    }
-    {
-        srand ( 124 );			 // set always the same seed
-    }
-    if(namesimu=="simu25")
-    {
-        srand ( 125 );			 // set always the same seed
-    }
-    if(namesimu=="simu26")
-    {
-        srand ( 126 );			 // set always the same seed
-    }
-    if(namesimu=="simu27")
-    {
-        srand ( 127 );			 // set always the same seed
-    }
-    if(namesimu=="simu28")
-    {
-        srand ( 128 );			 // set always the same seed
-    }
-    if(namesimu=="simu29")
-    {
-        srand ( 129 );			 // set always the same seed
-    }
-    if(namesimu=="simu30")
-    {
-        srand ( 130 );			 // set always the same seed
-    }
-    if(namesimu=="simu31")
-    {
-        srand ( 131 );			 // set always the same seed
-    }
-    if(namesimu=="simu32")
-    {
-        srand ( 132 );			 // set always the same seed
-    }
-    if(namesimu=="simu33")
-    {
-        srand ( 133 );			 // set always the same seed
-    }
-    if(namesimu=="simu34")
-    {
-        srand ( 134 );			 // set always the same seed
-    }
-    if(namesimu=="simu35")
-    {
-        srand ( 135 );			 // set always the same seed
-    }
-    if(namesimu=="simu36")
-    {
-        srand ( 136 );			 // set always the same seed
-    }
-    if(namesimu=="simu37")
-    {
-        srand ( 137 );			 // set always the same seed
-    }
-    if(namesimu=="simu38")
-    {
-        srand ( 138 );			 // set always the same seed
-    }
-    if(namesimu=="simu39")
-    {
-        srand ( 139 );			 // set always the same seed
-    }
-    if(namesimu=="simu40")
-    {
-        srand ( 140 );			 // set always the same seed
-    }
-    if(namesimu=="simu41")
-    {
-        srand ( 141 );			 // set always the same seed
-    }
-    if(namesimu=="simu42")
-    {
-        srand ( 142 );			 // set always the same seed
-    }
-    if(namesimu=="simu43")
-    {
-        srand ( 143 );			 // set always the same seed
-    }
-    if(namesimu=="simu44")
-    {
-        srand ( 144 );			 // set always the same seed
-    }
-    if(namesimu=="simu45")
-    {
-        srand ( 145 );			 // set always the same seed
-    }
-    if(namesimu=="simu46")
-    {
-        srand ( 146 );			 // set always the same seed
-    }
-    if(namesimu=="simu47")
-    {
-        srand ( 147 );			 // set always the same seed
-    }
-    if(namesimu=="simu48")
-    {
-        srand ( 148 );			 // set always the same seed
-    }
-    if(namesimu=="simu49")
-    {
-        srand ( 149 );			 // set always the same seed
-    }
-    if(namesimu=="simu50")
-    {
-        srand ( 150 );			 // set always the same seed
-    }
+    // detect a integer in the name of the simu
+    size_t iii = 0;
+    for (; iii < namesimu.length(); iii++ ){ if ( isdigit(namesimu[iii]) ) break; }
 
-    // special case for ramdom stochastic spatial pop distribution
+    // remove the first chars, which aren't digits
+    string str = namesimu.substr(iii, namesimu.length() - iii );
+
+    // convert the remaining text to an integer
+    int a_seed = atoi(str.c_str());
+
+    // print the result
+    std::cout << "The random seed is set to: " << a_seed << std::endl;
+
+    // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
+    srand (a_seed);
+
+
+    // special case for random stochastic spatial pop distribution
     if(dyn_pop_sce.option(Options::white_noise_on_avai_deprecated))
     {
         // pick up a file name randomly later on

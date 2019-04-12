@@ -1,0 +1,192 @@
+\hypertarget{classdtree_1_1_decision_tree_manager}{}\section{dtree\+::Decision\+Tree\+Manager Class Reference}
+\label{classdtree_1_1_decision_tree_manager}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+
+
+A class that implements a Singleton for managing the Decision Trees for vessels.  
+
+
+
+
+{\ttfamily \#include $<$decisiontreemanager.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} \{ \newline
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da6d72e105dac483a77ada13fbe1bb35b6}{Invalid\+Tree\+Type}} = -\/1, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dae4df7decc2cf8c9c24c32bce3e59b72d}{Go\+Fishing}}, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daee1d36300aad0b14e8abef741266c672}{Choose\+Ground}}, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da1b7c3790e536ce6f1528a53de57a6177}{Start\+Fishing}}, 
+\newline
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8905c8b73d327ff91b53e058f03d7d04}{Change\+Ground}}, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dafa865ff8e1a19addaebb8311112c431e}{Stop\+Fishing}}, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daebc709cbe2257ea04de9cd1aa40dff92}{Choose\+Port}}, 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8148eeaedca84ba8d3b56d6483e1d203}{S\+I\+ZE}}
+ \}
+\begin{DoxyCompactList}\small\item\em An enumerated type to identify which tree to refer. They are internally used as index to various container classes (mostly vectors) so don\textquotesingle{}t change the integer values, especially for Invalid\+Tree\+Type and S\+I\+ZE (that must be the last). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_afffc6c22eead268bef29b980e298dc82}{read\+From\+Directory}} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em Read all the dtrees in a directory, returning the number of loaded trees. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a881d41c8c321734312bb2aa7382de08a}{read\+From\+Scenario}} (std\+::string path, \mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \mbox{\hyperlink{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}{scenario}})
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$ \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_aa1aea06810d8236a5224e7565f4453bc}{tree}} (\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} type)
+\begin{DoxyCompactList}\small\item\em Returns a reference to the specified tree. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a85595249e752ebde0b18422b232ff3ab}{has\+Tree}} (\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} type)
+\item 
+bool \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a8429a7681b0a62ec015dcaabff330d29}{has\+Tree\+Variable}} (\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} type, \mbox{\hyperlink{namespacedtree_a79fe30831a14df904319f9e783b3189b}{dtree\+::\+Variable}} variable) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classdtree_1_1_decision_tree_manager}{Decision\+Tree\+Manager}} $\ast$ \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a35ea592ac00794339323dcc295f63b0c}{manager}} ()
+\begin{DoxyCompactList}\small\item\em returns the instance of the singleton. Uses lazy initialization to proper initialize the instance. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a18ebb2b8fb040aec991a99c802ea29af}{tree\+Type\+Code}} (\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} type)
+\item 
+static \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Tree\+Type}} \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_aba3d26531d22ef36993e535ec0bf9b26}{tree\+Type\+From\+Code}} (std\+::string code)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a5ae8a7074f148056d13051c484974bf6}{read\+File}} (std\+::string filename)
+\begin{DoxyCompactList}\small\item\em Loads a specific file, creating the dtree and allocating it to the type specified in the file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_ae1c3dba103715e7d3c8a20cff575efd8}{read\+Scenario\+File\+If\+Available}} (std\+::string path, std\+::string scenarioname)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class that implements a Singleton for managing the Decision Trees for vessels. 
+
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!TreeType@{TreeType}}
+\index{TreeType@{TreeType}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{TreeType}{TreeType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{dtree\+::\+Decision\+Tree\+Manager\+::\+Tree\+Type}}}
+
+
+
+An enumerated type to identify which tree to refer. They are internally used as index to various container classes (mostly vectors) so don\textquotesingle{}t change the integer values, especially for Invalid\+Tree\+Type and S\+I\+ZE (that must be the last). 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{InvalidTreeType@{InvalidTreeType}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!InvalidTreeType@{InvalidTreeType}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da6d72e105dac483a77ada13fbe1bb35b6}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da6d72e105dac483a77ada13fbe1bb35b6}} 
+Invalid\+Tree\+Type&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GoFishing@{GoFishing}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!GoFishing@{GoFishing}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dae4df7decc2cf8c9c24c32bce3e59b72d}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dae4df7decc2cf8c9c24c32bce3e59b72d}} 
+Go\+Fishing&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ChooseGround@{ChooseGround}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!ChooseGround@{ChooseGround}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daee1d36300aad0b14e8abef741266c672}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daee1d36300aad0b14e8abef741266c672}} 
+Choose\+Ground&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{StartFishing@{StartFishing}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!StartFishing@{StartFishing}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da1b7c3790e536ce6f1528a53de57a6177}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da1b7c3790e536ce6f1528a53de57a6177}} 
+Start\+Fishing&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ChangeGround@{ChangeGround}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!ChangeGround@{ChangeGround}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8905c8b73d327ff91b53e058f03d7d04}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8905c8b73d327ff91b53e058f03d7d04}} 
+Change\+Ground&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{StopFishing@{StopFishing}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!StopFishing@{StopFishing}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dafa865ff8e1a19addaebb8311112c431e}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846dafa865ff8e1a19addaebb8311112c431e}} 
+Stop\+Fishing&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ChoosePort@{ChoosePort}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!ChoosePort@{ChoosePort}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daebc709cbe2257ea04de9cd1aa40dff92}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846daebc709cbe2257ea04de9cd1aa40dff92}} 
+Choose\+Port&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SIZE@{SIZE}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!SIZE@{SIZE}}}\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8148eeaedca84ba8d3b56d6483e1d203}\label{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846da8148eeaedca84ba8d3b56d6483e1d203}} 
+S\+I\+ZE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a85595249e752ebde0b18422b232ff3ab}\label{classdtree_1_1_decision_tree_manager_a85595249e752ebde0b18422b232ff3ab}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!hasTree@{hasTree}}
+\index{hasTree@{hasTree}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{hasTree()}{hasTree()}}
+{\footnotesize\ttfamily bool Decision\+Tree\+Manager\+::has\+Tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a8429a7681b0a62ec015dcaabff330d29}\label{classdtree_1_1_decision_tree_manager_a8429a7681b0a62ec015dcaabff330d29}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!hasTreeVariable@{hasTreeVariable}}
+\index{hasTreeVariable@{hasTreeVariable}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{hasTreeVariable()}{hasTreeVariable()}}
+{\footnotesize\ttfamily bool Decision\+Tree\+Manager\+::has\+Tree\+Variable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}}}]{type,  }\item[{\mbox{\hyperlink{namespacedtree_a79fe30831a14df904319f9e783b3189b}{dtree\+::\+Variable}}}]{variable }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a35ea592ac00794339323dcc295f63b0c}\label{classdtree_1_1_decision_tree_manager_a35ea592ac00794339323dcc295f63b0c}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!manager@{manager}}
+\index{manager@{manager}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{manager()}{manager()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classdtree_1_1_decision_tree_manager}{Decision\+Tree\+Manager}}$\ast$ dtree\+::\+Decision\+Tree\+Manager\+::manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+returns the instance of the singleton. Uses lazy initialization to proper initialize the instance. 
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a5ae8a7074f148056d13051c484974bf6}\label{classdtree_1_1_decision_tree_manager_a5ae8a7074f148056d13051c484974bf6}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!readFile@{readFile}}
+\index{readFile@{readFile}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{readFile()}{readFile()}}
+{\footnotesize\ttfamily bool Decision\+Tree\+Manager\+::read\+File (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Loads a specific file, creating the dtree and allocating it to the type specified in the file. 
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_afffc6c22eead268bef29b980e298dc82}\label{classdtree_1_1_decision_tree_manager_afffc6c22eead268bef29b980e298dc82}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!readFromDirectory@{readFromDirectory}}
+\index{readFromDirectory@{readFromDirectory}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{readFromDirectory()}{readFromDirectory()}}
+{\footnotesize\ttfamily int Decision\+Tree\+Manager\+::read\+From\+Directory (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})}
+
+
+
+Read all the dtrees in a directory, returning the number of loaded trees. 
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a881d41c8c321734312bb2aa7382de08a}\label{classdtree_1_1_decision_tree_manager_a881d41c8c321734312bb2aa7382de08a}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!readFromScenario@{readFromScenario}}
+\index{readFromScenario@{readFromScenario}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{readFromScenario()}{readFromScenario()}}
+{\footnotesize\ttfamily int Decision\+Tree\+Manager\+::read\+From\+Scenario (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{\mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}}}]{scenario }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_ae1c3dba103715e7d3c8a20cff575efd8}\label{classdtree_1_1_decision_tree_manager_ae1c3dba103715e7d3c8a20cff575efd8}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!readScenarioFileIfAvailable@{readScenarioFileIfAvailable}}
+\index{readScenarioFileIfAvailable@{readScenarioFileIfAvailable}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{readScenarioFileIfAvailable()}{readScenarioFileIfAvailable()}}
+{\footnotesize\ttfamily void Decision\+Tree\+Manager\+::read\+Scenario\+File\+If\+Available (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{std\+::string}]{scenarioname }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_aa1aea06810d8236a5224e7565f4453bc}\label{classdtree_1_1_decision_tree_manager_aa1aea06810d8236a5224e7565f4453bc}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!tree@{tree}}
+\index{tree@{tree}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{tree()}{tree()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$ Decision\+Tree\+Manager\+::tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}}}]{type }\end{DoxyParamCaption})}
+
+
+
+Returns a reference to the specified tree. 
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_a18ebb2b8fb040aec991a99c802ea29af}\label{classdtree_1_1_decision_tree_manager_a18ebb2b8fb040aec991a99c802ea29af}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!treeTypeCode@{treeTypeCode}}
+\index{treeTypeCode@{treeTypeCode}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{treeTypeCode()}{treeTypeCode()}}
+{\footnotesize\ttfamily std\+::string Decision\+Tree\+Manager\+::tree\+Type\+Code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}}}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_manager_aba3d26531d22ef36993e535ec0bf9b26}\label{classdtree_1_1_decision_tree_manager_aba3d26531d22ef36993e535ec0bf9b26}} 
+\index{dtree::DecisionTreeManager@{dtree::DecisionTreeManager}!treeTypeFromCode@{treeTypeFromCode}}
+\index{treeTypeFromCode@{treeTypeFromCode}!dtree::DecisionTreeManager@{dtree::DecisionTreeManager}}
+\subsubsection{\texorpdfstring{treeTypeFromCode()}{treeTypeFromCode()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}} Decision\+Tree\+Manager\+::tree\+Type\+From\+Code (\begin{DoxyParamCaption}\item[{std\+::string}]{code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{decisiontreemanager_8h}{decisiontreemanager.\+h}}\item 
+commons/dtree/\mbox{\hyperlink{decisiontreemanager_8cpp}{decisiontreemanager.\+cpp}}\end{DoxyCompactItemize}

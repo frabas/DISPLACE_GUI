@@ -1,0 +1,83 @@
+\hypertarget{class_edge_layer}{}\section{Edge\+Layer Class Reference}
+\label{class_edge_layer}\index{EdgeLayer@{EdgeLayer}}
+
+
+{\ttfamily \#include $<$edgelayer.\+h$>$}
+
+Inheritance diagram for Edge\+Layer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/d9a/class_edge_layer}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_edge_layer_acca0dfa633a088706a345989706d393b}{Edge\+Layer}} (\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$controller, const Q\+String \&name, Q\+Object $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{class_edge_layer_ae39ae5f22c968da3cd3ee9c46f23445a}{set\+Visible}} (bool vi)
+\item 
+void \mbox{\hyperlink{class_edge_layer_af93684a3bab8c30d7e1217dea684e482}{add\+Edge}} (\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$\mbox{\hyperlink{structedge}{edge}}, bool disable\+\_\+redraw=false)
+\item 
+void \mbox{\hyperlink{class_edge_layer_a1deb9a1fb86ee4a110a1db31b75f9eec}{remove\+Edge}} (\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$\mbox{\hyperlink{structedge}{edge}})
+\item 
+void \mbox{\hyperlink{class_edge_layer_a197118a7833836e192db17cfb34930a5}{clear}} ()
+\item 
+std\+::shared\+\_\+ptr$<$ qmapcontrol\+::\+Layer\+Geometry $>$ \mbox{\hyperlink{class_edge_layer_a6e02228b0ad8714991aa496d26064a44}{layer}} () const
+\item 
+const Q\+List$<$ \mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$ $>$ \mbox{\hyperlink{class_edge_layer_a03a5e20611e50c658094e6c75094e857}{selection}} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_edge_layer_acca0dfa633a088706a345989706d393b}\label{class_edge_layer_acca0dfa633a088706a345989706d393b}} 
+\index{EdgeLayer@{EdgeLayer}!EdgeLayer@{EdgeLayer}}
+\index{EdgeLayer@{EdgeLayer}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{EdgeLayer()}{EdgeLayer()}}
+{\footnotesize\ttfamily Edge\+Layer\+::\+Edge\+Layer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$}]{controller,  }\item[{const Q\+String \&}]{name,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_edge_layer_af93684a3bab8c30d7e1217dea684e482}\label{class_edge_layer_af93684a3bab8c30d7e1217dea684e482}} 
+\index{EdgeLayer@{EdgeLayer}!addEdge@{addEdge}}
+\index{addEdge@{addEdge}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{addEdge()}{addEdge()}}
+{\footnotesize\ttfamily void Edge\+Layer\+::add\+Edge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$}]{edge,  }\item[{bool}]{disable\+\_\+redraw = {\ttfamily false} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_edge_layer_a197118a7833836e192db17cfb34930a5}\label{class_edge_layer_a197118a7833836e192db17cfb34930a5}} 
+\index{EdgeLayer@{EdgeLayer}!clear@{clear}}
+\index{clear@{clear}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Edge\+Layer\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_edge_layer_a6e02228b0ad8714991aa496d26064a44}\label{class_edge_layer_a6e02228b0ad8714991aa496d26064a44}} 
+\index{EdgeLayer@{EdgeLayer}!layer@{layer}}
+\index{layer@{layer}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{layer()}{layer()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$qmapcontrol\+::\+Layer\+Geometry$>$ Edge\+Layer\+::layer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_edge_layer_a1deb9a1fb86ee4a110a1db31b75f9eec}\label{class_edge_layer_a1deb9a1fb86ee4a110a1db31b75f9eec}} 
+\index{EdgeLayer@{EdgeLayer}!removeEdge@{removeEdge}}
+\index{removeEdge@{removeEdge}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{removeEdge()}{removeEdge()}}
+{\footnotesize\ttfamily void Edge\+Layer\+::remove\+Edge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$}]{edge }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_edge_layer_a03a5e20611e50c658094e6c75094e857}\label{class_edge_layer_a03a5e20611e50c658094e6c75094e857}} 
+\index{EdgeLayer@{EdgeLayer}!selection@{selection}}
+\index{selection@{selection}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{selection()}{selection()}}
+{\footnotesize\ttfamily const Q\+List$<$\mbox{\hyperlink{class_edge_map_object}{Edge\+Map\+Object}} $\ast$$>$ Edge\+Layer\+::selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_edge_layer_ae39ae5f22c968da3cd3ee9c46f23445a}\label{class_edge_layer_ae39ae5f22c968da3cd3ee9c46f23445a}} 
+\index{EdgeLayer@{EdgeLayer}!setVisible@{setVisible}}
+\index{setVisible@{setVisible}!EdgeLayer@{EdgeLayer}}
+\subsubsection{\texorpdfstring{setVisible()}{setVisible()}}
+{\footnotesize\ttfamily void Edge\+Layer\+::set\+Visible (\begin{DoxyParamCaption}\item[{bool}]{vi }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/mapobjects/\mbox{\hyperlink{edgelayer_8h}{edgelayer.\+h}}\item 
+qtgui/mapobjects/\mbox{\hyperlink{edgelayer_8cpp}{edgelayer.\+cpp}}\end{DoxyCompactItemize}

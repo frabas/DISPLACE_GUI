@@ -1,0 +1,176 @@
+\hypertarget{class_db_helper}{}\section{Db\+Helper Class Reference}
+\label{class_db_helper}\index{DbHelper@{DbHelper}}
+
+
+{\ttfamily \#include $<$dbhelper.\+h$>$}
+
+Inheritance diagram for Db\+Helper\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d2/d3d/class_db_helper}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_db_helper_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_db_helper_ad5a6885723180ba8891634870af52a93}{Db\+Helper}} ()
+\item 
+\mbox{\hyperlink{class_db_helper_a1602442e5c1c0a55c5733ac52253fc05}{$\sim$\+Db\+Helper}} () noexcept
+\item 
+bool \mbox{\hyperlink{class_db_helper_a908260fddcd1fec10e10bdb551a710f8}{attach\+Db}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_q_lite_output_storage}{S\+Q\+Lite\+Output\+Storage}} $>$ storage)
+\item 
+Q\+String \mbox{\hyperlink{class_db_helper_a969d9830aa0bf62dfc2740efe280311a}{last\+Db\+Error}} () const
+\item 
+bool Q\+\_\+\+D\+E\+C\+L\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED \mbox{\hyperlink{class_db_helper_ad7def03594fbc3514f8cf118ee15d8a5}{load\+Config}} (\mbox{\hyperlink{class_config}{Config}} \&)
+\item 
+bool Q\+\_\+\+D\+E\+C\+L\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED \mbox{\hyperlink{class_db_helper_a3b86278040357ab06d5988ee8a424a59}{save\+Config}} (const \mbox{\hyperlink{class_config}{Config}} \&)
+\item 
+bool Q\+\_\+\+D\+E\+C\+L\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED \mbox{\hyperlink{class_db_helper_a90de247f0d65d1d6f07806ad12ea17dc}{load\+Scenario}} (\mbox{\hyperlink{class_scenario}{Scenario}} \&)
+\item 
+bool Q\+\_\+\+D\+E\+C\+L\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED \mbox{\hyperlink{class_db_helper_ab77155de4a3599820b1c077f1b893098}{save\+Scenario}} (const \mbox{\hyperlink{class_scenario}{Scenario}} \&)
+\item 
+bool \mbox{\hyperlink{class_db_helper_a71be4973234a93536184797396dfd3af}{load\+Nodes}} (Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour_data}{Harbour\+Data}} $>$ $>$ \&harbours, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model)
+\item 
+bool \mbox{\hyperlink{class_db_helper_aaab0c72319c3007b41e56563bcc8539e}{load\+Vessels}} (const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}{vessels}})
+\item 
+bool \mbox{\hyperlink{class_db_helper_ade6c4c084b6076cc6d207690c0f47121}{load\+Fish\+Farms}} (const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_fishfarm_data}{Fishfarm\+Data}} $>$$>$ \&\mbox{\hyperlink{simulator_2main_8cpp_a2c8b011098d3755d1d7580bbd2c0ed26}{fishfarms}})
+\item 
+bool \mbox{\hyperlink{class_db_helper_a9ac40eb29893a6e33fed981d490c037b}{update\+Vessels\+To\+Step}} (int steps, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}{vessels}})
+\item 
+bool \mbox{\hyperlink{class_db_helper_a4dea6149cb96f9da25635278d7cd9fa0}{update\+Stats\+For\+Nodes\+To\+Step}} (int step, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+bool \mbox{\hyperlink{class_db_helper_af78f6e35dd87d9b0729925aeae977e2c}{update\+Pop\+Values\+For\+Nodes\+To\+Step}} (int step, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+\mbox{\hyperlink{class_harbour_stats}{Harbour\+Stats}} \mbox{\hyperlink{class_db_helper_a89a83b296e55826579decec1d9cbb260}{get\+Harbour\+Stats\+At\+Step}} (int idx, int step)
+\item 
+void \mbox{\hyperlink{class_db_helper_a9702ee4b770976d71c21d3ba1f5c888e}{set\+Metadata}} (Q\+String key, Q\+String \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+Q\+String \mbox{\hyperlink{class_db_helper_a84b8f8be38a78f95449c2c1b3f3f59f4}{get\+Metadata}} (Q\+String key)
+\item 
+int \mbox{\hyperlink{class_db_helper_ae893a2d28952f0762b2c34648c39888c}{get\+Last\+Known\+Step}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_db_helper_ad5a6885723180ba8891634870af52a93}\label{class_db_helper_ad5a6885723180ba8891634870af52a93}} 
+\index{DbHelper@{DbHelper}!DbHelper@{DbHelper}}
+\index{DbHelper@{DbHelper}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{DbHelper()}{DbHelper()}}
+{\footnotesize\ttfamily Db\+Helper\+::\+Db\+Helper (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a1602442e5c1c0a55c5733ac52253fc05}\label{class_db_helper_a1602442e5c1c0a55c5733ac52253fc05}} 
+\index{DbHelper@{DbHelper}!````~DbHelper@{$\sim$DbHelper}}
+\index{````~DbHelper@{$\sim$DbHelper}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{$\sim$DbHelper()}{~DbHelper()}}
+{\footnotesize\ttfamily Db\+Helper\+::$\sim$\+Db\+Helper (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_db_helper_a908260fddcd1fec10e10bdb551a710f8}\label{class_db_helper_a908260fddcd1fec10e10bdb551a710f8}} 
+\index{DbHelper@{DbHelper}!attachDb@{attachDb}}
+\index{attachDb@{attachDb}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{attachDb()}{attachDb()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::attach\+Db (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_q_lite_output_storage}{S\+Q\+Lite\+Output\+Storage}} $>$}]{storage }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a89a83b296e55826579decec1d9cbb260}\label{class_db_helper_a89a83b296e55826579decec1d9cbb260}} 
+\index{DbHelper@{DbHelper}!getHarbourStatsAtStep@{getHarbourStatsAtStep}}
+\index{getHarbourStatsAtStep@{getHarbourStatsAtStep}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{getHarbourStatsAtStep()}{getHarbourStatsAtStep()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_harbour_stats}{Harbour\+Stats}} Db\+Helper\+::get\+Harbour\+Stats\+At\+Step (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{int}]{step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_ae893a2d28952f0762b2c34648c39888c}\label{class_db_helper_ae893a2d28952f0762b2c34648c39888c}} 
+\index{DbHelper@{DbHelper}!getLastKnownStep@{getLastKnownStep}}
+\index{getLastKnownStep@{getLastKnownStep}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{getLastKnownStep()}{getLastKnownStep()}}
+{\footnotesize\ttfamily int Db\+Helper\+::get\+Last\+Known\+Step (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a84b8f8be38a78f95449c2c1b3f3f59f4}\label{class_db_helper_a84b8f8be38a78f95449c2c1b3f3f59f4}} 
+\index{DbHelper@{DbHelper}!getMetadata@{getMetadata}}
+\index{getMetadata@{getMetadata}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{getMetadata()}{getMetadata()}}
+{\footnotesize\ttfamily Q\+String Db\+Helper\+::get\+Metadata (\begin{DoxyParamCaption}\item[{Q\+String}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a969d9830aa0bf62dfc2740efe280311a}\label{class_db_helper_a969d9830aa0bf62dfc2740efe280311a}} 
+\index{DbHelper@{DbHelper}!lastDbError@{lastDbError}}
+\index{lastDbError@{lastDbError}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{lastDbError()}{lastDbError()}}
+{\footnotesize\ttfamily Q\+String Db\+Helper\+::last\+Db\+Error (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_db_helper_ad7def03594fbc3514f8cf118ee15d8a5}\label{class_db_helper_ad7def03594fbc3514f8cf118ee15d8a5}} 
+\index{DbHelper@{DbHelper}!loadConfig@{loadConfig}}
+\index{loadConfig@{loadConfig}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{loadConfig()}{loadConfig()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::load\+Config (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_config}{Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_ade6c4c084b6076cc6d207690c0f47121}\label{class_db_helper_ade6c4c084b6076cc6d207690c0f47121}} 
+\index{DbHelper@{DbHelper}!loadFishFarms@{loadFishFarms}}
+\index{loadFishFarms@{loadFishFarms}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{loadFishFarms()}{loadFishFarms()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::load\+Fish\+Farms (\begin{DoxyParamCaption}\item[{const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{nodes,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_fishfarm_data}{Fishfarm\+Data}} $>$$>$ \&}]{fishfarms }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a71be4973234a93536184797396dfd3af}\label{class_db_helper_a71be4973234a93536184797396dfd3af}} 
+\index{DbHelper@{DbHelper}!loadNodes@{loadNodes}}
+\index{loadNodes@{loadNodes}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{loadNodes()}{loadNodes()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::load\+Nodes (\begin{DoxyParamCaption}\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{nodes,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour_data}{Harbour\+Data}} $>$ $>$ \&}]{harbours,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a90de247f0d65d1d6f07806ad12ea17dc}\label{class_db_helper_a90de247f0d65d1d6f07806ad12ea17dc}} 
+\index{DbHelper@{DbHelper}!loadScenario@{loadScenario}}
+\index{loadScenario@{loadScenario}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{loadScenario()}{loadScenario()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::load\+Scenario (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_scenario}{Scenario}} \&}]{sce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_aaab0c72319c3007b41e56563bcc8539e}\label{class_db_helper_aaab0c72319c3007b41e56563bcc8539e}} 
+\index{DbHelper@{DbHelper}!loadVessels@{loadVessels}}
+\index{loadVessels@{loadVessels}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{loadVessels()}{loadVessels()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::load\+Vessels (\begin{DoxyParamCaption}\item[{const Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{nodes,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $>$ $>$ \&}]{vessels }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a3b86278040357ab06d5988ee8a424a59}\label{class_db_helper_a3b86278040357ab06d5988ee8a424a59}} 
+\index{DbHelper@{DbHelper}!saveConfig@{saveConfig}}
+\index{saveConfig@{saveConfig}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{saveConfig()}{saveConfig()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::save\+Config (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_config}{Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_ab77155de4a3599820b1c077f1b893098}\label{class_db_helper_ab77155de4a3599820b1c077f1b893098}} 
+\index{DbHelper@{DbHelper}!saveScenario@{saveScenario}}
+\index{saveScenario@{saveScenario}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{saveScenario()}{saveScenario()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::save\+Scenario (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_scenario}{Scenario}} \&}]{sce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a9702ee4b770976d71c21d3ba1f5c888e}\label{class_db_helper_a9702ee4b770976d71c21d3ba1f5c888e}} 
+\index{DbHelper@{DbHelper}!setMetadata@{setMetadata}}
+\index{setMetadata@{setMetadata}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{setMetadata()}{setMetadata()}}
+{\footnotesize\ttfamily void Db\+Helper\+::set\+Metadata (\begin{DoxyParamCaption}\item[{Q\+String}]{key,  }\item[{Q\+String}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_af78f6e35dd87d9b0729925aeae977e2c}\label{class_db_helper_af78f6e35dd87d9b0729925aeae977e2c}} 
+\index{DbHelper@{DbHelper}!updatePopValuesForNodesToStep@{updatePopValuesForNodesToStep}}
+\index{updatePopValuesForNodesToStep@{updatePopValuesForNodesToStep}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{updatePopValuesForNodesToStep()}{updatePopValuesForNodesToStep()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::update\+Pop\+Values\+For\+Nodes\+To\+Step (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a4dea6149cb96f9da25635278d7cd9fa0}\label{class_db_helper_a4dea6149cb96f9da25635278d7cd9fa0}} 
+\index{DbHelper@{DbHelper}!updateStatsForNodesToStep@{updateStatsForNodesToStep}}
+\index{updateStatsForNodesToStep@{updateStatsForNodesToStep}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{updateStatsForNodesToStep()}{updateStatsForNodesToStep()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::update\+Stats\+For\+Nodes\+To\+Step (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_db_helper_a9ac40eb29893a6e33fed981d490c037b}\label{class_db_helper_a9ac40eb29893a6e33fed981d490c037b}} 
+\index{DbHelper@{DbHelper}!updateVesselsToStep@{updateVesselsToStep}}
+\index{updateVesselsToStep@{updateVesselsToStep}!DbHelper@{DbHelper}}
+\subsubsection{\texorpdfstring{updateVesselsToStep()}{updateVesselsToStep()}}
+{\footnotesize\ttfamily bool Db\+Helper\+::update\+Vessels\+To\+Step (\begin{DoxyParamCaption}\item[{int}]{steps,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $>$ $>$ \&}]{vessels }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{dbhelper_8h}{dbhelper.\+h}}\item 
+qtgui/\mbox{\hyperlink{dbhelper_8cpp}{dbhelper.\+cpp}}\end{DoxyCompactItemize}

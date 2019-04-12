@@ -1,0 +1,59 @@
+\hypertarget{fisheriesmanagmt_8cpp}{}\section{simulator/fisheriesmanagmt.cpp File Reference}
+\label{fisheriesmanagmt_8cpp}\index{simulator/fisheriesmanagmt.cpp@{simulator/fisheriesmanagmt.cpp}}
+{\ttfamily \#include $<$Population.\+h$>$}\newline
+{\ttfamily \#include $<$Vessel.\+h$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$helpers.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{fisheriesmanagmt_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}{Get\+Current\+Dir}}~getcwd
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{fisheriesmanagmt_8cpp_aaf3dda640f94269ce33b397a1e467f11}{compute\+Effort\+Multiplier}} (vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, vector$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}{vessels}}, int nb\+\_\+y\+\_\+left\+\_\+to\+\_\+tgrt\+\_\+year, int H\+CR)
+\item 
+bool \mbox{\hyperlink{fisheriesmanagmt_8cpp_ac933679fef16cdf67e450635dc96f63a}{compute\+T\+AC}} (vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, int sp, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, double multi\+On\+T\+A\+Cconstraint, int H\+CR)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::mutex \mbox{\hyperlink{fisheriesmanagmt_8cpp_a34717756bdf48565d8ac931fdc22f1bb}{glob\+\_\+mutex}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{fisheriesmanagmt_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}\label{fisheriesmanagmt_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}} 
+\index{fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}!GetCurrentDir@{GetCurrentDir}}
+\index{GetCurrentDir@{GetCurrentDir}!fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}}
+\subsubsection{\texorpdfstring{GetCurrentDir}{GetCurrentDir}}
+{\footnotesize\ttfamily \#define Get\+Current\+Dir~getcwd}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{fisheriesmanagmt_8cpp_aaf3dda640f94269ce33b397a1e467f11}\label{fisheriesmanagmt_8cpp_aaf3dda640f94269ce33b397a1e467f11}} 
+\index{fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}!computeEffortMultiplier@{computeEffortMultiplier}}
+\index{computeEffortMultiplier@{computeEffortMultiplier}!fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}}
+\subsubsection{\texorpdfstring{computeEffortMultiplier()}{computeEffortMultiplier()}}
+{\footnotesize\ttfamily bool compute\+Effort\+Multiplier (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{vector$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$ $>$ \&}]{vessels,  }\item[{int}]{nb\+\_\+y\+\_\+left\+\_\+to\+\_\+tgrt\+\_\+year,  }\item[{int}]{H\+CR }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{fisheriesmanagmt_8cpp_ac933679fef16cdf67e450635dc96f63a}\label{fisheriesmanagmt_8cpp_ac933679fef16cdf67e450635dc96f63a}} 
+\index{fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}!computeTAC@{computeTAC}}
+\index{computeTAC@{computeTAC}!fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}}
+\subsubsection{\texorpdfstring{computeTAC()}{computeTAC()}}
+{\footnotesize\ttfamily bool compute\+T\+AC (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{int}]{sp,  }\item[{int}]{tstep,  }\item[{double}]{multi\+On\+T\+A\+Cconstraint,  }\item[{int}]{H\+CR }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{fisheriesmanagmt_8cpp_a34717756bdf48565d8ac931fdc22f1bb}\label{fisheriesmanagmt_8cpp_a34717756bdf48565d8ac931fdc22f1bb}} 
+\index{fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}!glob\_mutex@{glob\_mutex}}
+\index{glob\_mutex@{glob\_mutex}!fisheriesmanagmt.cpp@{fisheriesmanagmt.cpp}}
+\subsubsection{\texorpdfstring{glob\_mutex}{glob\_mutex}}
+{\footnotesize\ttfamily std\+::mutex glob\+\_\+mutex}
+

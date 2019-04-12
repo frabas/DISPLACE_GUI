@@ -1,0 +1,1117 @@
+\hypertarget{class_population}{}\section{Population Class Reference}
+\label{class_population}\index{Population@{Population}}
+
+
+{\ttfamily \#include $<$Population.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_population_a25d653ae9ea3b940e0df5b10d2d3213a}{Population}} (int name, string pop\+\_\+name, double \+\_\+avai0\+\_\+beta, double \+\_\+avai2\+\_\+beta, double \+\_\+avai3\+\_\+beta, double \+\_\+avai5\+\_\+beta, double \+\_\+avai7\+\_\+beta, const vector$<$ int $>$ \&selected\+\_\+szgroups, const vector$<$ double $>$ \&init\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup, const vector$<$ double $>$ \&init\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup, const vector$<$ double $>$ \&init\+\_\+fecundity\+\_\+at\+\_\+szgroup, vector$<$ double $>$ init\+\_\+weight\+\_\+at\+\_\+szgroup, const vector$<$ int $>$ \&init\+\_\+comcat\+\_\+at\+\_\+szgroup, const vector$<$ double $>$ \&init\+\_\+maturity\+\_\+at\+\_\+szgroup, vector$<$ double $>$ init\+\_\+\+M\+\_\+at\+\_\+szgroup, const vector$<$ double $>$ \&init\+\_\+proprecru\+\_\+at\+\_\+szgroup, const vector$<$ double $>$ \&param\+\_\+sr, const multimap$<$ int, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&lst\+\_\+idx\+\_\+nodes\+\_\+per\+\_\+pop, const multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&full\+\_\+spatial\+\_\+availability, const multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop, const map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&oth\+\_\+land, const multimap$<$ int, double $>$ \&overall\+\_\+migration\+\_\+fluxes, const map$<$ string, double $>$ \&relative\+\_\+stability\+\_\+key, const vector$<$ vector$<$ double $>$ $>$ \&percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix, const vector$<$ vector$<$ double $>$ $>$ \&percent\+\_\+age\+\_\+perszgroup\+\_\+matrix, const vector$<$ vector$<$ double $>$ $>$ \&growth\+\_\+transition\+\_\+matrix, const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, const vector$<$ double $>$ \&fbar\+\_\+ages\+\_\+min\+\_\+max, const vector$<$ double $>$ \&init\+\_\+tac, double tac\+\_\+percent\+\_\+simulated, double hyperstability\+\_\+param, double landings\+\_\+so\+\_\+far, double a\+\_\+calib\+\_\+cpue\+\_\+multiplier, double a\+\_\+calib\+\_\+weight\+\_\+at\+\_\+szgroup)
+\item 
+\mbox{\hyperlink{class_population_a54eb24ca89470eebe0c27bcb03a0ceae}{Population}} ()
+\item 
+virtual \mbox{\hyperlink{class_population_a4c8cedd0f038e41746fb6084639f5616}{$\sim$\+Population}} ()
+\item 
+int \mbox{\hyperlink{class_population_a60dfa66b65b6146ea6f2f49a40667d0c}{get\+\_\+name}} () const
+\item 
+string \mbox{\hyperlink{class_population_ab297cd923f7361ac308d25467536db77}{get\+\_\+pop\+\_\+name}} () const
+\item 
+int \mbox{\hyperlink{class_population_aea1eba0e5aaab417352b9821b36f650d}{get\+\_\+nb\+\_\+szgroups}} () const
+\item 
+int \mbox{\hyperlink{class_population_a1a8f8cdab0d8527983d4cf2c72292ca0}{get\+\_\+nb\+\_\+ages}} () const
+\item 
+const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& \mbox{\hyperlink{class_population_aa0a1faaf348f64c4f279c4eb8ebc6438}{get\+\_\+list\+\_\+nodes}} () const
+\item 
+const vector$<$ int $>$ \& \mbox{\hyperlink{class_population_a15281fffe73cc53524f119a20d8a4762}{get\+\_\+selected\+\_\+szgroups}} () const
+\item 
+double \mbox{\hyperlink{class_population_a32115ccdce71ca9cf4a7e610d2812af8}{get\+\_\+avai0\+\_\+beta}} () const
+\item 
+double \mbox{\hyperlink{class_population_aa5250248f8643d26b3c5c26c1e53413d}{get\+\_\+avai2\+\_\+beta}} () const
+\item 
+double \mbox{\hyperlink{class_population_a5e14b47bc170ad8ed99abfa4b59897c1}{get\+\_\+avai3\+\_\+beta}} () const
+\item 
+double \mbox{\hyperlink{class_population_ab4ce37e8b52472dfe746a71bb306aabb}{get\+\_\+avai5\+\_\+beta}} () const
+\item 
+double \mbox{\hyperlink{class_population_ab4444e97f3bfd8cea8cda408894d789a}{get\+\_\+avai7\+\_\+beta}} () const
+\item 
+double \mbox{\hyperlink{class_population_a08709c449a6cb68b7e6cd5cfcd35e6e8}{get\+\_\+cpue\+\_\+multiplier}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a9f2f01dc06493d6b534db38a3251b70e}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a581b6357727756ecf9bc103034dacdfa}{get\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_ac404f9f743ec8bc167e363498aa40c04}{get\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aaa50918cd90d97e8e9bfadb7f216a218}{get\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aa0aba8f408b3ebdbf48b775efb6f0f8a}{get\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_af5b3468bd3ecb69030f2f6a59e10253a}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a0cacac923ccbd019c7d397a0c6e1bff4}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aa96c7a424f8288c20b65ac193f7ae498}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a473a41f6a98055de0e65786f15fde216}{get\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a513cd369ddc2d0f523b68cb9cee54a29}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aa05fb7270fafc2cc10c5280fa5a6d8d5}{get\+\_\+perceived\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a0b8d93dced62bc25ff70be9e1159230d}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aa78f4be248f6d2febb02b4bfbbce12ba}{get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a4169ce7af337dcc8551957e3b51040ce}{get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a17c2aca418aa72a6bde1e17439a71067}{get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a415f89aaf403711da3eda91f5aed1c21}{get\+\_\+perceived\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aaab9bd4e9065d855854360f3545d18fc}{get\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_af7478d805116695ff97d0f5807a0fac3}{get\+\_\+tot\+\_\+\+W\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a00ebf8857a53212013ca327623a7d729}{get\+\_\+tot\+\_\+\+Mat\+\_\+at\+\_\+age}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a814f822599b32e19568a3e1f2b98bb94}{get\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aea95227073a7345f0b2237ad90b854e1}{get\+\_\+maturity\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_aa6b1d67e670b56b7f303ee11a204ecc7}{get\+\_\+fecundity\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a4ac1d18b27bc6a29bc1bf9b39bd150dc}{get\+\_\+weight\+\_\+at\+\_\+szgroup}} () const
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_population_ae14300183899b72220d777805c4f1865}{get\+\_\+comcat\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a5d99b48d185a8c0476853561b5b8743c}{get\+\_\+\+M\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a25243972da373b5d43507b5d532ced35}{get\+\_\+proprecru\+\_\+at\+\_\+szgroup}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a539011e43cd2730b55bff9b6e9067460}{get\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup}} () const
+\item 
+double \mbox{\hyperlink{class_population_a8d5f00e07f966275471f0326dd05ca76}{get\+\_\+\+S\+SB}} () const
+\item 
+double \mbox{\hyperlink{class_population_a22059e8a5b9aafc8d20b4e1b79a9ea66}{get\+\_\+fbar}} () const
+\item 
+double \mbox{\hyperlink{class_population_a0425f54c30084fdc60e2824c3bc185e7}{get\+\_\+proportion\+\_\+mature\+\_\+fish}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a5796212d35e49684c3a9f8ae230e881d}{get\+\_\+\+F\+Fmsy}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_a2c670f47448dd0614a2f8b1fce052f99}{get\+\_\+param\+\_\+sr}} () const
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{class_population_afbc52323c78ba9532bb469a244c04f62}{get\+\_\+growth\+\_\+transition\+\_\+matrix}} () const
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{class_population_ae049b91e1359f11caf562a4ccc4dd772}{get\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix}} () const
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{class_population_a65d1bb492f962ad54e890c7f7e43a561}{get\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix}} () const
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{class_population_a9d785272507fa047776832df0e78199a}{get\+\_\+full\+\_\+spatial\+\_\+availability}} () const
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{class_population_ac19b4f16a221c1a72c18f34ffa5a4b45}{get\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop}} () const
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{class_population_ae73e867311e89c73428bddc207c8814f}{get\+\_\+overall\+\_\+migration\+\_\+fluxes}} () const
+\item 
+map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{class_population_a93b6a5ebf600f94d89ea891af150d2ba}{get\+\_\+oth\+\_\+land}} () const
+\item 
+double \mbox{\hyperlink{class_population_a67bfacbeaf03d738b523b07a380bbdf6}{get\+\_\+hyperstability\+\_\+param}} () const
+\item 
+double \mbox{\hyperlink{class_population_a80d0207764d0664c56d6a254b37fac68}{get\+\_\+oth\+\_\+land\+\_\+multiplier}} () const
+\item 
+\mbox{\hyperlink{class_tac}{Tac}} $\ast$ \mbox{\hyperlink{class_population_a3d71e85f11c809a36f98b21f0ecc5fda}{get\+\_\+tac}} () const
+\item 
+double \mbox{\hyperlink{class_population_a796affd235f53baa7a3aa6093726a6dc}{get\+\_\+quota}} () const
+\item 
+double \mbox{\hyperlink{class_population_a22fee0ab6062785e1ac22cdfd435c99e}{get\+\_\+quota\+\_\+uptake}} () const
+\item 
+int \mbox{\hyperlink{class_population_a1272bf327ac3730b3a381fb4fa4a3bf0}{get\+\_\+is\+\_\+choking\+\_\+fisheries}} () const
+\item 
+double \mbox{\hyperlink{class_population_afa14273ce155674e6842390336d45056}{get\+\_\+landings\+\_\+so\+\_\+far}} () const
+\item 
+double \mbox{\hyperlink{class_population_a063d604c1f6a28fe3c4b12732f6f1fe8}{get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age0}} () const
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_population_ae4e58ced64ec6b922e84a746c8366b0c}{get\+\_\+landings\+\_\+at\+\_\+end\+\_\+of\+\_\+years}} () const
+\item 
+void \mbox{\hyperlink{class_population_a30c90339519ca9978759e9aff63ea74d}{set\+\_\+quota}} (double \+\_\+quota)
+\item 
+void \mbox{\hyperlink{class_population_a794ee0f30fa3216c39ccd47e5db05574}{set\+\_\+quota\+\_\+uptake}} (double \+\_\+quota\+\_\+uptake)
+\item 
+void \mbox{\hyperlink{class_population_a3b30c29f483a2fc6c5f024a497fb6f93}{set\+\_\+selected\+\_\+szgroups}} (vector$<$ int $>$ selected\+\_\+szgroups)
+\item 
+void \mbox{\hyperlink{class_population_af7162106eadd591efe14813b8cd8000d}{set\+\_\+avai0\+\_\+beta}} (double \+\_\+avai0\+\_\+beta)
+\item 
+void \mbox{\hyperlink{class_population_a254b6196bc625b6a1046bbb82fb4d9f3}{set\+\_\+avai2\+\_\+beta}} (double \+\_\+avai2\+\_\+beta)
+\item 
+void \mbox{\hyperlink{class_population_a99efd92bcfa1d272e21e7fe89fb66d8d}{set\+\_\+avai3\+\_\+beta}} (double \+\_\+avai3\+\_\+beta)
+\item 
+void \mbox{\hyperlink{class_population_a59678099e8db0d210b1ec2ab97ac1028}{set\+\_\+avai5\+\_\+beta}} (double \+\_\+avai5\+\_\+beta)
+\item 
+void \mbox{\hyperlink{class_population_ac3c20fa4ed3d7d4b0cfdee30b97ab15d}{set\+\_\+avai7\+\_\+beta}} (double \+\_\+avai7\+\_\+beta)
+\item 
+void \mbox{\hyperlink{class_population_a55aef29cf0f834568f2ca8841d925362}{set\+\_\+cpue\+\_\+multiplier}} (double \+\_\+cpue\+\_\+multiplier)
+\item 
+void \mbox{\hyperlink{class_population_a9406d88c38e04dc2a99b2958fda841d1}{set\+\_\+hyperstability\+\_\+param}} (double \+\_\+hyperstability\+\_\+param)
+\item 
+void \mbox{\hyperlink{class_population_ab2b125b67c0162045ef57d4a852a334c}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a35ab8cd314f77601b3f7fa0a7112a1c3}{set\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+\+C\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a36b73df25c14a2b829a650cb1cb9a749}{set\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+\+D\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a1e9f13e5b19815245325c9b4f1b8dcf8}{set\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_abb9b63e8de5e4f35e07267cdf318a8f3}{set\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+prop\+\_\+migrants\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a5e98fe6080d34a611c67b10cf0139beb}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution)
+\item 
+void \mbox{\hyperlink{class_population_a1df1cac131a4fd1610b9b471eee767ea}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1)
+\item 
+void \mbox{\hyperlink{class_population_a1dc336f602f0e0dfc6fd4219cc0e3b05}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1)
+\item 
+void \mbox{\hyperlink{class_population_add02af66e78668224dfbacc8a4ddf704}{set\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M}} (const vector$<$ double $>$ \&\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M)
+\item 
+void \mbox{\hyperlink{class_population_a3444d96e560758bf888e3f571d5e22a2}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_a0b0d9da60bfdf7f5130bfccaacb5a701}{set\+\_\+perceived\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+perceived\+\_\+\+N\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_aff05fe4dc6b58ef517e5515a91cb369d}{set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter}} (const vector$<$ double $>$ \&\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter)
+\item 
+void \mbox{\hyperlink{class_population_aa909babf9ec946ecd7c3cdd7ba3f682b}{set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+\+F\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_a55a897b6756a38aa2f8ec28a308653f4}{set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average}} (const vector$<$ double $>$ \&\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average)
+\item 
+void \mbox{\hyperlink{class_population_a406395c451553a74cb8057b522b92dba}{set\+\_\+perceived\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+perceived\+\_\+\+F\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_abeba579dcfb507b851e9289162aa66ac}{set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter}} (const vector$<$ double $>$ \&\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter)
+\item 
+void \mbox{\hyperlink{class_population_af83edcec617cc363dad6ff33cafda0e6}{set\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+\+M\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_a2db609afbba5d88acb379b2c15e76ff6}{set\+\_\+tot\+\_\+\+W\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+\+W\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_a41c03a9d39741527eb2cf6bfd6d96b99}{set\+\_\+tot\+\_\+\+Mat\+\_\+at\+\_\+age}} (const vector$<$ double $>$ \&\+\_\+\+Mat\+\_\+at\+\_\+age)
+\item 
+void \mbox{\hyperlink{class_population_ae6110f8d8c552f5ee9b905941861880a}{set\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock}} (const vector$<$ double $>$ \&\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock)
+\item 
+void \mbox{\hyperlink{class_population_a66752f64f8fa4da941f22030b3196cb3}{set\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock}} (const vector$<$ double $>$ \&\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock)
+\item 
+void \mbox{\hyperlink{class_population_acb3b8344976ea406a39a0125d3375d7e}{set\+\_\+maturity\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+maturity\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a5ac5539c89af87a8388f126a319741a9}{set\+\_\+fecundity\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+fecundity\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a74eb37544d99f1288d4d5f089d044c59}{set\+\_\+weight\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+weight\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a7830822885d1da429c415d46fdca1de7}{set\+\_\+comcat\+\_\+at\+\_\+szgroup}} (vector$<$ int $>$ \+\_\+comcat\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a7006a7a5ffbe9b2d998fe5612b8aec1a}{set\+\_\+\+M\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+\+M\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a8d993fd969c98589ec829c5ade305148}{set\+\_\+proprecru\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+proprecru\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_ab3a76f6f7cd4ba9424c761a675fbd9ab}{set\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup}} (const vector$<$ double $>$ \&\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup)
+\item 
+void \mbox{\hyperlink{class_population_a806afc3b2b1d3abbcddafe0d2df2822e}{set\+\_\+\+S\+SB}} (double \+\_\+\+S\+SB)
+\item 
+void \mbox{\hyperlink{class_population_aadd6481dcab8e0a35e73b03b0e5e82c1}{set\+\_\+fbar}} (double \+\_\+fbar)
+\item 
+void \mbox{\hyperlink{class_population_ab0aa3da4fff8dfce23d6c39ddd5c0cee}{set\+\_\+\+F\+Fmsy}} (const vector$<$ double $>$ \&\+\_\+\+F\+Fmsy)
+\item 
+void \mbox{\hyperlink{class_population_a4b67e1bdf4faa2f7bd139ea7192a2223}{set\+\_\+is\+\_\+choking\+\_\+fisheries}} (int is\+\_\+choking\+\_\+fisheries)
+\item 
+void \mbox{\hyperlink{class_population_a89e01ecdc70dc056b177e9fddf97fd97}{set\+\_\+proportion\+\_\+mature\+\_\+fish}} (double \+\_\+proportion\+\_\+mature\+\_\+fish)
+\item 
+void \mbox{\hyperlink{class_population_ab72ccfca22cb62d0cc71771250b1f5f7}{set\+\_\+landings\+\_\+so\+\_\+far}} (double \+\_\+landings\+\_\+so\+\_\+far)
+\item 
+void \mbox{\hyperlink{class_population_aa86257dc84558f3506c013d9279eee73}{add\+\_\+to\+\_\+landings\+\_\+at\+\_\+end\+\_\+of\+\_\+years}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_population_a1053e532a1864da186cf4e7648dbe969}{set\+\_\+param\+\_\+sr}} (const vector$<$ double $>$ \&\+\_\+param\+\_\+sr)
+\item 
+void \mbox{\hyperlink{class_population_ad994160916721d5d96c33a4db702e90b}{set\+\_\+full\+\_\+spatial\+\_\+availability}} (multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \+\_\+full\+\_\+spatial\+\_\+availability)
+\item 
+void \mbox{\hyperlink{class_population_a1db1433c65156a90fc910bb11e5cdcca}{set\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop}} (multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop)
+\item 
+void \mbox{\hyperlink{class_population_a73f27952336c2f075a51f6be3c48e9ae}{set\+\_\+overall\+\_\+migration\+\_\+fluxes}} (multimap$<$ int, double $>$ \+\_\+overall\+\_\+migration\+\_\+fluxes)
+\item 
+void \mbox{\hyperlink{class_population_a4cb661707a980ccb2ce2762af6028ecd}{set\+\_\+oth\+\_\+land}} (map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \+\_\+oth\+\_\+land)
+\item 
+void \mbox{\hyperlink{class_population_a6fa5538be71c4a81a2810d19c454f872}{set\+\_\+oth\+\_\+land\+\_\+multiplier}} (double \+\_\+a\+\_\+multiplier)
+\item 
+void \mbox{\hyperlink{class_population_afb8707dda108ce991159066714b4466c}{set\+\_\+list\+\_\+nodes}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \+\_\+list\+\_\+nodes)
+\item 
+void \mbox{\hyperlink{class_population_a74bfbe305219943ffd5602522dee560d}{distribute\+\_\+N}} ()
+\item 
+void \mbox{\hyperlink{class_population_a46938d98d5c48398f90a95f48ed47ee7}{aggregate\+\_\+N}} ()
+\item 
+void \mbox{\hyperlink{class_population_a02d833abb4f7964cbbbb284cfa9ef7bd}{diffuse\+\_\+\+N\+\_\+from\+\_\+field}} (\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}})
+\item 
+void \mbox{\hyperlink{class_population_afd955edc34d65c1d75dd13fce5921b15}{compute\+\_\+tot\+\_\+\+N\+\_\+and\+\_\+\+F\+\_\+and\+\_\+\+W\+\_\+at\+\_\+age}} (int a\+\_\+month\+\_\+i)
+\item 
+void \mbox{\hyperlink{class_population_a488c03ba52c1d02d71f4e3a164c0ae8f}{compute\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age}} ()
+\item 
+double \mbox{\hyperlink{class_population_a07c919c348429c55bcfdadb80bf9927b}{compute\+\_\+fbar}} ()
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_population_a2e8e32eaa8932724f5eec702b6ebc96f}{compute\+\_\+\+S\+SB}} ()
+\item 
+double \mbox{\hyperlink{class_population_a9bd54eb05f4b4e4bb1c1203428389d3e}{compute\+\_\+proportion\+\_\+mature\+\_\+fish}} ()
+\item 
+void \mbox{\hyperlink{class_population_a6526e780c4db4034a1b719099daabaf4}{clear\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age}} ()
+\item 
+void \mbox{\hyperlink{class_population_a5082ae70cba9d5cd25e6fbd0302ff243}{clear\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age}} ()
+\item 
+void \mbox{\hyperlink{class_population_a76b64f23119ccb0f397a98a6a41f980a}{clear\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup}} ()
+\item 
+void \mbox{\hyperlink{class_population_a635315f1caef18e1dc73e2f25feb16b2}{clear\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup}} ()
+\item 
+void \mbox{\hyperlink{class_population_a208537e5f8ca4de371198c1b7fd2893a}{do\+\_\+growth}} ()
+\item 
+void \mbox{\hyperlink{class_population_aaa602f9f37a968aabe3c257b67d994a6}{apply\+\_\+overall\+\_\+migration\+\_\+fluxes}} (vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}})
+\item 
+void \mbox{\hyperlink{class_population_a9fb81b9aa9174083b46850b86414385f}{add\+\_\+recruits\+\_\+from\+\_\+eggs}} ()
+\item 
+void \mbox{\hyperlink{class_population_a2442fa5a3dc6f5220f3a1ae28e25c29c}{add\+\_\+recruits\+\_\+from\+\_\+\+SR}} ()
+\item 
+void \mbox{\hyperlink{class_population_ae74135dea99ae62bf197d28126ee17a9}{add\+\_\+recruits\+\_\+from\+\_\+a\+\_\+fixed\+\_\+number}} ()
+\item 
+void \mbox{\hyperlink{class_population_af9cd47dc018969d1ff738f96f298b3c9}{apply\+\_\+natural\+\_\+mortality}} ()
+\item 
+void \mbox{\hyperlink{class_population_ac3adee0c049e09e744bdfbf9e8e239c9}{export\+\_\+popdyn\+\_\+N}} (ofstream \&popdyn\+\_\+N, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_population_a73a285cf9f2d242a571990c9bef1d565}{export\+\_\+popdyn\+\_\+F}} (ofstream \&popdyn\+\_\+F, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_population_a6bc9eb96686a050e5c02f6a976c28542}{export\+\_\+popdyn\+\_\+\+S\+SB}} (ofstream \&popdyn\+\_\+\+S\+SB, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_population_ae73b0dda66c7b3c97521289f79e628aa}{export\+\_\+popdyn\+\_\+annual\+\_\+indic}} (ofstream \&popdyn\+\_\+annual\+\_\+indic, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, const \mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} \&\mbox{\hyperlink{thread__vessels_8cpp_a8389f6b9261a2039cabeecc230207043}{dyn\+\_\+alloc\+\_\+sce}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_population_a25d653ae9ea3b940e0df5b10d2d3213a}\label{class_population_a25d653ae9ea3b940e0df5b10d2d3213a}} 
+\index{Population@{Population}!Population@{Population}}
+\index{Population@{Population}!Population@{Population}}
+\subsubsection{\texorpdfstring{Population()}{Population()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Population\+::\+Population (\begin{DoxyParamCaption}\item[{int}]{name,  }\item[{string}]{pop\+\_\+name,  }\item[{double}]{\+\_\+avai0\+\_\+beta,  }\item[{double}]{\+\_\+avai2\+\_\+beta,  }\item[{double}]{\+\_\+avai3\+\_\+beta,  }\item[{double}]{\+\_\+avai5\+\_\+beta,  }\item[{double}]{\+\_\+avai7\+\_\+beta,  }\item[{const vector$<$ int $>$ \&}]{selected\+\_\+szgroups,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+fecundity\+\_\+at\+\_\+szgroup,  }\item[{vector$<$ double $>$}]{init\+\_\+weight\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ int $>$ \&}]{init\+\_\+comcat\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+maturity\+\_\+at\+\_\+szgroup,  }\item[{vector$<$ double $>$}]{init\+\_\+\+M\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+proprecru\+\_\+at\+\_\+szgroup,  }\item[{const vector$<$ double $>$ \&}]{param\+\_\+sr,  }\item[{const multimap$<$ int, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&}]{lst\+\_\+idx\+\_\+nodes\+\_\+per\+\_\+pop,  }\item[{const multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{full\+\_\+spatial\+\_\+availability,  }\item[{const multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop,  }\item[{const map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{oth\+\_\+land,  }\item[{const multimap$<$ int, double $>$ \&}]{overall\+\_\+migration\+\_\+fluxes,  }\item[{const map$<$ string, double $>$ \&}]{relative\+\_\+stability\+\_\+key,  }\item[{const vector$<$ vector$<$ double $>$ $>$ \&}]{percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix,  }\item[{const vector$<$ vector$<$ double $>$ $>$ \&}]{percent\+\_\+age\+\_\+perszgroup\+\_\+matrix,  }\item[{const vector$<$ vector$<$ double $>$ $>$ \&}]{growth\+\_\+transition\+\_\+matrix,  }\item[{const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{const vector$<$ double $>$ \&}]{fbar\+\_\+ages\+\_\+min\+\_\+max,  }\item[{const vector$<$ double $>$ \&}]{init\+\_\+tac,  }\item[{double}]{tac\+\_\+percent\+\_\+simulated,  }\item[{double}]{hyperstability\+\_\+param,  }\item[{double}]{landings\+\_\+so\+\_\+far,  }\item[{double}]{a\+\_\+calib\+\_\+cpue\+\_\+multiplier,  }\item[{double}]{a\+\_\+calib\+\_\+weight\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a54eb24ca89470eebe0c27bcb03a0ceae}\label{class_population_a54eb24ca89470eebe0c27bcb03a0ceae}} 
+\index{Population@{Population}!Population@{Population}}
+\index{Population@{Population}!Population@{Population}}
+\subsubsection{\texorpdfstring{Population()}{Population()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Population\+::\+Population (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a4c8cedd0f038e41746fb6084639f5616}\label{class_population_a4c8cedd0f038e41746fb6084639f5616}} 
+\index{Population@{Population}!````~Population@{$\sim$Population}}
+\index{````~Population@{$\sim$Population}!Population@{Population}}
+\subsubsection{\texorpdfstring{$\sim$Population()}{~Population()}}
+{\footnotesize\ttfamily Population\+::$\sim$\+Population (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_population_ae74135dea99ae62bf197d28126ee17a9}\label{class_population_ae74135dea99ae62bf197d28126ee17a9}} 
+\index{Population@{Population}!add\_recruits\_from\_a\_fixed\_number@{add\_recruits\_from\_a\_fixed\_number}}
+\index{add\_recruits\_from\_a\_fixed\_number@{add\_recruits\_from\_a\_fixed\_number}!Population@{Population}}
+\subsubsection{\texorpdfstring{add\_recruits\_from\_a\_fixed\_number()}{add\_recruits\_from\_a\_fixed\_number()}}
+{\footnotesize\ttfamily void Population\+::add\+\_\+recruits\+\_\+from\+\_\+a\+\_\+fixed\+\_\+number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a9fb81b9aa9174083b46850b86414385f}\label{class_population_a9fb81b9aa9174083b46850b86414385f}} 
+\index{Population@{Population}!add\_recruits\_from\_eggs@{add\_recruits\_from\_eggs}}
+\index{add\_recruits\_from\_eggs@{add\_recruits\_from\_eggs}!Population@{Population}}
+\subsubsection{\texorpdfstring{add\_recruits\_from\_eggs()}{add\_recruits\_from\_eggs()}}
+{\footnotesize\ttfamily void Population\+::add\+\_\+recruits\+\_\+from\+\_\+eggs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a2442fa5a3dc6f5220f3a1ae28e25c29c}\label{class_population_a2442fa5a3dc6f5220f3a1ae28e25c29c}} 
+\index{Population@{Population}!add\_recruits\_from\_SR@{add\_recruits\_from\_SR}}
+\index{add\_recruits\_from\_SR@{add\_recruits\_from\_SR}!Population@{Population}}
+\subsubsection{\texorpdfstring{add\_recruits\_from\_SR()}{add\_recruits\_from\_SR()}}
+{\footnotesize\ttfamily void Population\+::add\+\_\+recruits\+\_\+from\+\_\+\+SR (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_aa86257dc84558f3506c013d9279eee73}\label{class_population_aa86257dc84558f3506c013d9279eee73}} 
+\index{Population@{Population}!add\_to\_landings\_at\_end\_of\_years@{add\_to\_landings\_at\_end\_of\_years}}
+\index{add\_to\_landings\_at\_end\_of\_years@{add\_to\_landings\_at\_end\_of\_years}!Population@{Population}}
+\subsubsection{\texorpdfstring{add\_to\_landings\_at\_end\_of\_years()}{add\_to\_landings\_at\_end\_of\_years()}}
+{\footnotesize\ttfamily void Population\+::add\+\_\+to\+\_\+landings\+\_\+at\+\_\+end\+\_\+of\+\_\+years (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a46938d98d5c48398f90a95f48ed47ee7}\label{class_population_a46938d98d5c48398f90a95f48ed47ee7}} 
+\index{Population@{Population}!aggregate\_N@{aggregate\_N}}
+\index{aggregate\_N@{aggregate\_N}!Population@{Population}}
+\subsubsection{\texorpdfstring{aggregate\_N()}{aggregate\_N()}}
+{\footnotesize\ttfamily void Population\+::aggregate\+\_\+N (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_af9cd47dc018969d1ff738f96f298b3c9}\label{class_population_af9cd47dc018969d1ff738f96f298b3c9}} 
+\index{Population@{Population}!apply\_natural\_mortality@{apply\_natural\_mortality}}
+\index{apply\_natural\_mortality@{apply\_natural\_mortality}!Population@{Population}}
+\subsubsection{\texorpdfstring{apply\_natural\_mortality()}{apply\_natural\_mortality()}}
+{\footnotesize\ttfamily void Population\+::apply\+\_\+natural\+\_\+mortality (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_aaa602f9f37a968aabe3c257b67d994a6}\label{class_population_aaa602f9f37a968aabe3c257b67d994a6}} 
+\index{Population@{Population}!apply\_overall\_migration\_fluxes@{apply\_overall\_migration\_fluxes}}
+\index{apply\_overall\_migration\_fluxes@{apply\_overall\_migration\_fluxes}!Population@{Population}}
+\subsubsection{\texorpdfstring{apply\_overall\_migration\_fluxes()}{apply\_overall\_migration\_fluxes()}}
+{\footnotesize\ttfamily void Population\+::apply\+\_\+overall\+\_\+migration\+\_\+fluxes (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a76b64f23119ccb0f397a98a6a41f980a}\label{class_population_a76b64f23119ccb0f397a98a6a41f980a}} 
+\index{Population@{Population}!clear\_tot\_C\_at\_szgroup@{clear\_tot\_C\_at\_szgroup}}
+\index{clear\_tot\_C\_at\_szgroup@{clear\_tot\_C\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{clear\_tot\_C\_at\_szgroup()}{clear\_tot\_C\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::clear\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a635315f1caef18e1dc73e2f25feb16b2}\label{class_population_a635315f1caef18e1dc73e2f25feb16b2}} 
+\index{Population@{Population}!clear\_tot\_D\_at\_szgroup@{clear\_tot\_D\_at\_szgroup}}
+\index{clear\_tot\_D\_at\_szgroup@{clear\_tot\_D\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{clear\_tot\_D\_at\_szgroup()}{clear\_tot\_D\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::clear\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a6526e780c4db4034a1b719099daabaf4}\label{class_population_a6526e780c4db4034a1b719099daabaf4}} 
+\index{Population@{Population}!clear\_tot\_F\_at\_age@{clear\_tot\_F\_at\_age}}
+\index{clear\_tot\_F\_at\_age@{clear\_tot\_F\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{clear\_tot\_F\_at\_age()}{clear\_tot\_F\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::clear\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a5082ae70cba9d5cd25e6fbd0302ff243}\label{class_population_a5082ae70cba9d5cd25e6fbd0302ff243}} 
+\index{Population@{Population}!clear\_tot\_M\_at\_age@{clear\_tot\_M\_at\_age}}
+\index{clear\_tot\_M\_at\_age@{clear\_tot\_M\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{clear\_tot\_M\_at\_age()}{clear\_tot\_M\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::clear\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a07c919c348429c55bcfdadb80bf9927b}\label{class_population_a07c919c348429c55bcfdadb80bf9927b}} 
+\index{Population@{Population}!compute\_fbar@{compute\_fbar}}
+\index{compute\_fbar@{compute\_fbar}!Population@{Population}}
+\subsubsection{\texorpdfstring{compute\_fbar()}{compute\_fbar()}}
+{\footnotesize\ttfamily double Population\+::compute\+\_\+fbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a9bd54eb05f4b4e4bb1c1203428389d3e}\label{class_population_a9bd54eb05f4b4e4bb1c1203428389d3e}} 
+\index{Population@{Population}!compute\_proportion\_mature\_fish@{compute\_proportion\_mature\_fish}}
+\index{compute\_proportion\_mature\_fish@{compute\_proportion\_mature\_fish}!Population@{Population}}
+\subsubsection{\texorpdfstring{compute\_proportion\_mature\_fish()}{compute\_proportion\_mature\_fish()}}
+{\footnotesize\ttfamily double Population\+::compute\+\_\+proportion\+\_\+mature\+\_\+fish (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a2e8e32eaa8932724f5eec702b6ebc96f}\label{class_population_a2e8e32eaa8932724f5eec702b6ebc96f}} 
+\index{Population@{Population}!compute\_SSB@{compute\_SSB}}
+\index{compute\_SSB@{compute\_SSB}!Population@{Population}}
+\subsubsection{\texorpdfstring{compute\_SSB()}{compute\_SSB()}}
+{\footnotesize\ttfamily vector$<$ double $>$ Population\+::compute\+\_\+\+S\+SB (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a488c03ba52c1d02d71f4e3a164c0ae8f}\label{class_population_a488c03ba52c1d02d71f4e3a164c0ae8f}} 
+\index{Population@{Population}!compute\_tot\_M\_at\_age@{compute\_tot\_M\_at\_age}}
+\index{compute\_tot\_M\_at\_age@{compute\_tot\_M\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{compute\_tot\_M\_at\_age()}{compute\_tot\_M\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::compute\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_afd955edc34d65c1d75dd13fce5921b15}\label{class_population_afd955edc34d65c1d75dd13fce5921b15}} 
+\index{Population@{Population}!compute\_tot\_N\_and\_F\_and\_W\_at\_age@{compute\_tot\_N\_and\_F\_and\_W\_at\_age}}
+\index{compute\_tot\_N\_and\_F\_and\_W\_at\_age@{compute\_tot\_N\_and\_F\_and\_W\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{compute\_tot\_N\_and\_F\_and\_W\_at\_age()}{compute\_tot\_N\_and\_F\_and\_W\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::compute\+\_\+tot\+\_\+\+N\+\_\+and\+\_\+\+F\+\_\+and\+\_\+\+W\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+month\+\_\+i }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a02d833abb4f7964cbbbb284cfa9ef7bd}\label{class_population_a02d833abb4f7964cbbbb284cfa9ef7bd}} 
+\index{Population@{Population}!diffuse\_N\_from\_field@{diffuse\_N\_from\_field}}
+\index{diffuse\_N\_from\_field@{diffuse\_N\_from\_field}!Population@{Population}}
+\subsubsection{\texorpdfstring{diffuse\_N\_from\_field()}{diffuse\_N\_from\_field()}}
+{\footnotesize\ttfamily void Population\+::diffuse\+\_\+\+N\+\_\+from\+\_\+field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a74bfbe305219943ffd5602522dee560d}\label{class_population_a74bfbe305219943ffd5602522dee560d}} 
+\index{Population@{Population}!distribute\_N@{distribute\_N}}
+\index{distribute\_N@{distribute\_N}!Population@{Population}}
+\subsubsection{\texorpdfstring{distribute\_N()}{distribute\_N()}}
+{\footnotesize\ttfamily void Population\+::distribute\+\_\+N (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a208537e5f8ca4de371198c1b7fd2893a}\label{class_population_a208537e5f8ca4de371198c1b7fd2893a}} 
+\index{Population@{Population}!do\_growth@{do\_growth}}
+\index{do\_growth@{do\_growth}!Population@{Population}}
+\subsubsection{\texorpdfstring{do\_growth()}{do\_growth()}}
+{\footnotesize\ttfamily void Population\+::do\+\_\+growth (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ae73b0dda66c7b3c97521289f79e628aa}\label{class_population_ae73b0dda66c7b3c97521289f79e628aa}} 
+\index{Population@{Population}!export\_popdyn\_annual\_indic@{export\_popdyn\_annual\_indic}}
+\index{export\_popdyn\_annual\_indic@{export\_popdyn\_annual\_indic}!Population@{Population}}
+\subsubsection{\texorpdfstring{export\_popdyn\_annual\_indic()}{export\_popdyn\_annual\_indic()}}
+{\footnotesize\ttfamily void Population\+::export\+\_\+popdyn\+\_\+annual\+\_\+indic (\begin{DoxyParamCaption}\item[{ofstream \&}]{popdyn\+\_\+annual\+\_\+indic,  }\item[{int}]{tstep,  }\item[{const \mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} \&}]{dyn\+\_\+alloc\+\_\+sce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a73a285cf9f2d242a571990c9bef1d565}\label{class_population_a73a285cf9f2d242a571990c9bef1d565}} 
+\index{Population@{Population}!export\_popdyn\_F@{export\_popdyn\_F}}
+\index{export\_popdyn\_F@{export\_popdyn\_F}!Population@{Population}}
+\subsubsection{\texorpdfstring{export\_popdyn\_F()}{export\_popdyn\_F()}}
+{\footnotesize\ttfamily void Population\+::export\+\_\+popdyn\+\_\+F (\begin{DoxyParamCaption}\item[{ofstream \&}]{popdyn\+\_\+F,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ac3adee0c049e09e744bdfbf9e8e239c9}\label{class_population_ac3adee0c049e09e744bdfbf9e8e239c9}} 
+\index{Population@{Population}!export\_popdyn\_N@{export\_popdyn\_N}}
+\index{export\_popdyn\_N@{export\_popdyn\_N}!Population@{Population}}
+\subsubsection{\texorpdfstring{export\_popdyn\_N()}{export\_popdyn\_N()}}
+{\footnotesize\ttfamily void Population\+::export\+\_\+popdyn\+\_\+N (\begin{DoxyParamCaption}\item[{ofstream \&}]{popdyn\+\_\+N,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a6bc9eb96686a050e5c02f6a976c28542}\label{class_population_a6bc9eb96686a050e5c02f6a976c28542}} 
+\index{Population@{Population}!export\_popdyn\_SSB@{export\_popdyn\_SSB}}
+\index{export\_popdyn\_SSB@{export\_popdyn\_SSB}!Population@{Population}}
+\subsubsection{\texorpdfstring{export\_popdyn\_SSB()}{export\_popdyn\_SSB()}}
+{\footnotesize\ttfamily void Population\+::export\+\_\+popdyn\+\_\+\+S\+SB (\begin{DoxyParamCaption}\item[{ofstream \&}]{popdyn\+\_\+\+S\+SB,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a473a41f6a98055de0e65786f15fde216}\label{class_population_a473a41f6a98055de0e65786f15fde216}} 
+\index{Population@{Population}!get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M@{get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M}}
+\index{get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M@{get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M()}{get\_a\_tot\_N\_at\_szgroup\_before\_applying\_M()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a32115ccdce71ca9cf4a7e610d2812af8}\label{class_population_a32115ccdce71ca9cf4a7e610d2812af8}} 
+\index{Population@{Population}!get\_avai0\_beta@{get\_avai0\_beta}}
+\index{get\_avai0\_beta@{get\_avai0\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_avai0\_beta()}{get\_avai0\_beta()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+avai0\+\_\+beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa5250248f8643d26b3c5c26c1e53413d}\label{class_population_aa5250248f8643d26b3c5c26c1e53413d}} 
+\index{Population@{Population}!get\_avai2\_beta@{get\_avai2\_beta}}
+\index{get\_avai2\_beta@{get\_avai2\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_avai2\_beta()}{get\_avai2\_beta()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+avai2\+\_\+beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a5e14b47bc170ad8ed99abfa4b59897c1}\label{class_population_a5e14b47bc170ad8ed99abfa4b59897c1}} 
+\index{Population@{Population}!get\_avai3\_beta@{get\_avai3\_beta}}
+\index{get\_avai3\_beta@{get\_avai3\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_avai3\_beta()}{get\_avai3\_beta()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+avai3\+\_\+beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ab4ce37e8b52472dfe746a71bb306aabb}\label{class_population_ab4ce37e8b52472dfe746a71bb306aabb}} 
+\index{Population@{Population}!get\_avai5\_beta@{get\_avai5\_beta}}
+\index{get\_avai5\_beta@{get\_avai5\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_avai5\_beta()}{get\_avai5\_beta()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+avai5\+\_\+beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ab4444e97f3bfd8cea8cda408894d789a}\label{class_population_ab4444e97f3bfd8cea8cda408894d789a}} 
+\index{Population@{Population}!get\_avai7\_beta@{get\_avai7\_beta}}
+\index{get\_avai7\_beta@{get\_avai7\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_avai7\_beta()}{get\_avai7\_beta()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+avai7\+\_\+beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ae14300183899b72220d777805c4f1865}\label{class_population_ae14300183899b72220d777805c4f1865}} 
+\index{Population@{Population}!get\_comcat\_at\_szgroup@{get\_comcat\_at\_szgroup}}
+\index{get\_comcat\_at\_szgroup@{get\_comcat\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_comcat\_at\_szgroup()}{get\_comcat\_at\_szgroup()}}
+{\footnotesize\ttfamily vector$<$ int $>$ Population\+::get\+\_\+comcat\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a08709c449a6cb68b7e6cd5cfcd35e6e8}\label{class_population_a08709c449a6cb68b7e6cd5cfcd35e6e8}} 
+\index{Population@{Population}!get\_cpue\_multiplier@{get\_cpue\_multiplier}}
+\index{get\_cpue\_multiplier@{get\_cpue\_multiplier}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_cpue\_multiplier()}{get\_cpue\_multiplier()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+cpue\+\_\+multiplier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a22059e8a5b9aafc8d20b4e1b79a9ea66}\label{class_population_a22059e8a5b9aafc8d20b4e1b79a9ea66}} 
+\index{Population@{Population}!get\_fbar@{get\_fbar}}
+\index{get\_fbar@{get\_fbar}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_fbar()}{get\_fbar()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+fbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a814f822599b32e19568a3e1f2b98bb94}\label{class_population_a814f822599b32e19568a3e1f2b98bb94}} 
+\index{Population@{Population}!get\_fbar\_ages\_min\_max@{get\_fbar\_ages\_min\_max}}
+\index{get\_fbar\_ages\_min\_max@{get\_fbar\_ages\_min\_max}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_fbar\_ages\_min\_max()}{get\_fbar\_ages\_min\_max()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa6b1d67e670b56b7f303ee11a204ecc7}\label{class_population_aa6b1d67e670b56b7f303ee11a204ecc7}} 
+\index{Population@{Population}!get\_fecundity\_at\_szgroup@{get\_fecundity\_at\_szgroup}}
+\index{get\_fecundity\_at\_szgroup@{get\_fecundity\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_fecundity\_at\_szgroup()}{get\_fecundity\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+fecundity\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a5796212d35e49684c3a9f8ae230e881d}\label{class_population_a5796212d35e49684c3a9f8ae230e881d}} 
+\index{Population@{Population}!get\_FFmsy@{get\_FFmsy}}
+\index{get\_FFmsy@{get\_FFmsy}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_FFmsy()}{get\_FFmsy()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+\+F\+Fmsy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ac19b4f16a221c1a72c18f34ffa5a4b45}\label{class_population_ac19b4f16a221c1a72c18f34ffa5a4b45}} 
+\index{Population@{Population}!get\_field\_of\_coeff\_diffusion\_this\_pop@{get\_field\_of\_coeff\_diffusion\_this\_pop}}
+\index{get\_field\_of\_coeff\_diffusion\_this\_pop@{get\_field\_of\_coeff\_diffusion\_this\_pop}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_field\_of\_coeff\_diffusion\_this\_pop()}{get\_field\_of\_coeff\_diffusion\_this\_pop()}}
+{\footnotesize\ttfamily multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ Population\+::get\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a9d785272507fa047776832df0e78199a}\label{class_population_a9d785272507fa047776832df0e78199a}} 
+\index{Population@{Population}!get\_full\_spatial\_availability@{get\_full\_spatial\_availability}}
+\index{get\_full\_spatial\_availability@{get\_full\_spatial\_availability}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_full\_spatial\_availability()}{get\_full\_spatial\_availability()}}
+{\footnotesize\ttfamily multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ Population\+::get\+\_\+full\+\_\+spatial\+\_\+availability (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_afbc52323c78ba9532bb469a244c04f62}\label{class_population_afbc52323c78ba9532bb469a244c04f62}} 
+\index{Population@{Population}!get\_growth\_transition\_matrix@{get\_growth\_transition\_matrix}}
+\index{get\_growth\_transition\_matrix@{get\_growth\_transition\_matrix}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_growth\_transition\_matrix()}{get\_growth\_transition\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$ double $>$ $>$ Population\+::get\+\_\+growth\+\_\+transition\+\_\+matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a67bfacbeaf03d738b523b07a380bbdf6}\label{class_population_a67bfacbeaf03d738b523b07a380bbdf6}} 
+\index{Population@{Population}!get\_hyperstability\_param@{get\_hyperstability\_param}}
+\index{get\_hyperstability\_param@{get\_hyperstability\_param}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_hyperstability\_param()}{get\_hyperstability\_param()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+hyperstability\+\_\+param (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a1272bf327ac3730b3a381fb4fa4a3bf0}\label{class_population_a1272bf327ac3730b3a381fb4fa4a3bf0}} 
+\index{Population@{Population}!get\_is\_choking\_fisheries@{get\_is\_choking\_fisheries}}
+\index{get\_is\_choking\_fisheries@{get\_is\_choking\_fisheries}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_is\_choking\_fisheries()}{get\_is\_choking\_fisheries()}}
+{\footnotesize\ttfamily int Population\+::get\+\_\+is\+\_\+choking\+\_\+fisheries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ae4e58ced64ec6b922e84a746c8366b0c}\label{class_population_ae4e58ced64ec6b922e84a746c8366b0c}} 
+\index{Population@{Population}!get\_landings\_at\_end\_of\_years@{get\_landings\_at\_end\_of\_years}}
+\index{get\_landings\_at\_end\_of\_years@{get\_landings\_at\_end\_of\_years}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_landings\_at\_end\_of\_years()}{get\_landings\_at\_end\_of\_years()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+landings\+\_\+at\+\_\+end\+\_\+of\+\_\+years (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_afa14273ce155674e6842390336d45056}\label{class_population_afa14273ce155674e6842390336d45056}} 
+\index{Population@{Population}!get\_landings\_so\_far@{get\_landings\_so\_far}}
+\index{get\_landings\_so\_far@{get\_landings\_so\_far}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_landings\_so\_far()}{get\_landings\_so\_far()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+landings\+\_\+so\+\_\+far (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa0a1faaf348f64c4f279c4eb8ebc6438}\label{class_population_aa0a1faaf348f64c4f279c4eb8ebc6438}} 
+\index{Population@{Population}!get\_list\_nodes@{get\_list\_nodes}}
+\index{get\_list\_nodes@{get\_list\_nodes}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_list\_nodes()}{get\_list\_nodes()}}
+{\footnotesize\ttfamily const vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& Population\+::get\+\_\+list\+\_\+nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a5d99b48d185a8c0476853561b5b8743c}\label{class_population_a5d99b48d185a8c0476853561b5b8743c}} 
+\index{Population@{Population}!get\_M\_at\_szgroup@{get\_M\_at\_szgroup}}
+\index{get\_M\_at\_szgroup@{get\_M\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_M\_at\_szgroup()}{get\_M\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+\+M\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aea95227073a7345f0b2237ad90b854e1}\label{class_population_aea95227073a7345f0b2237ad90b854e1}} 
+\index{Population@{Population}!get\_maturity\_at\_szgroup@{get\_maturity\_at\_szgroup}}
+\index{get\_maturity\_at\_szgroup@{get\_maturity\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_maturity\_at\_szgroup()}{get\_maturity\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+maturity\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a60dfa66b65b6146ea6f2f49a40667d0c}\label{class_population_a60dfa66b65b6146ea6f2f49a40667d0c}} 
+\index{Population@{Population}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily int Population\+::get\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a1a8f8cdab0d8527983d4cf2c72292ca0}\label{class_population_a1a8f8cdab0d8527983d4cf2c72292ca0}} 
+\index{Population@{Population}!get\_nb\_ages@{get\_nb\_ages}}
+\index{get\_nb\_ages@{get\_nb\_ages}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_nb\_ages()}{get\_nb\_ages()}}
+{\footnotesize\ttfamily int Population\+::get\+\_\+nb\+\_\+ages (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aea1eba0e5aaab417352b9821b36f650d}\label{class_population_aea1eba0e5aaab417352b9821b36f650d}} 
+\index{Population@{Population}!get\_nb\_szgroups@{get\_nb\_szgroups}}
+\index{get\_nb\_szgroups@{get\_nb\_szgroups}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_nb\_szgroups()}{get\_nb\_szgroups()}}
+{\footnotesize\ttfamily int Population\+::get\+\_\+nb\+\_\+szgroups (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a93b6a5ebf600f94d89ea891af150d2ba}\label{class_population_a93b6a5ebf600f94d89ea891af150d2ba}} 
+\index{Population@{Population}!get\_oth\_land@{get\_oth\_land}}
+\index{get\_oth\_land@{get\_oth\_land}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_oth\_land()}{get\_oth\_land()}}
+{\footnotesize\ttfamily map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ Population\+::get\+\_\+oth\+\_\+land (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a80d0207764d0664c56d6a254b37fac68}\label{class_population_a80d0207764d0664c56d6a254b37fac68}} 
+\index{Population@{Population}!get\_oth\_land\_multiplier@{get\_oth\_land\_multiplier}}
+\index{get\_oth\_land\_multiplier@{get\_oth\_land\_multiplier}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_oth\_land\_multiplier()}{get\_oth\_land\_multiplier()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+oth\+\_\+land\+\_\+multiplier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ae73e867311e89c73428bddc207c8814f}\label{class_population_ae73e867311e89c73428bddc207c8814f}} 
+\index{Population@{Population}!get\_overall\_migration\_fluxes@{get\_overall\_migration\_fluxes}}
+\index{get\_overall\_migration\_fluxes@{get\_overall\_migration\_fluxes}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_overall\_migration\_fluxes()}{get\_overall\_migration\_fluxes()}}
+{\footnotesize\ttfamily multimap$<$ int, double $>$ Population\+::get\+\_\+overall\+\_\+migration\+\_\+fluxes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a2c670f47448dd0614a2f8b1fce052f99}\label{class_population_a2c670f47448dd0614a2f8b1fce052f99}} 
+\index{Population@{Population}!get\_param\_sr@{get\_param\_sr}}
+\index{get\_param\_sr@{get\_param\_sr}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_param\_sr()}{get\_param\_sr()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+param\+\_\+sr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a415f89aaf403711da3eda91f5aed1c21}\label{class_population_a415f89aaf403711da3eda91f5aed1c21}} 
+\index{Population@{Population}!get\_perceived\_tot\_F\_at\_age@{get\_perceived\_tot\_F\_at\_age}}
+\index{get\_perceived\_tot\_F\_at\_age@{get\_perceived\_tot\_F\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_perceived\_tot\_F\_at\_age()}{get\_perceived\_tot\_F\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+perceived\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa05fb7270fafc2cc10c5280fa5a6d8d5}\label{class_population_aa05fb7270fafc2cc10c5280fa5a6d8d5}} 
+\index{Population@{Population}!get\_perceived\_tot\_N\_at\_age@{get\_perceived\_tot\_N\_at\_age}}
+\index{get\_perceived\_tot\_N\_at\_age@{get\_perceived\_tot\_N\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_perceived\_tot\_N\_at\_age()}{get\_perceived\_tot\_N\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+perceived\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a65d1bb492f962ad54e890c7f7e43a561}\label{class_population_a65d1bb492f962ad54e890c7f7e43a561}} 
+\index{Population@{Population}!get\_percent\_age\_per\_szgroup\_matrix@{get\_percent\_age\_per\_szgroup\_matrix}}
+\index{get\_percent\_age\_per\_szgroup\_matrix@{get\_percent\_age\_per\_szgroup\_matrix}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_percent\_age\_per\_szgroup\_matrix()}{get\_percent\_age\_per\_szgroup\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$ double $>$ $>$ Population\+::get\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ae049b91e1359f11caf562a4ccc4dd772}\label{class_population_ae049b91e1359f11caf562a4ccc4dd772}} 
+\index{Population@{Population}!get\_percent\_szgroup\_per\_age\_matrix@{get\_percent\_szgroup\_per\_age\_matrix}}
+\index{get\_percent\_szgroup\_per\_age\_matrix@{get\_percent\_szgroup\_per\_age\_matrix}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_percent\_szgroup\_per\_age\_matrix()}{get\_percent\_szgroup\_per\_age\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$ double $>$ $>$ Population\+::get\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ab297cd923f7361ac308d25467536db77}\label{class_population_ab297cd923f7361ac308d25467536db77}} 
+\index{Population@{Population}!get\_pop\_name@{get\_pop\_name}}
+\index{get\_pop\_name@{get\_pop\_name}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_pop\_name()}{get\_pop\_name()}}
+{\footnotesize\ttfamily string Population\+::get\+\_\+pop\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa0aba8f408b3ebdbf48b775efb6f0f8a}\label{class_population_aa0aba8f408b3ebdbf48b775efb6f0f8a}} 
+\index{Population@{Population}!get\_prop\_migrants\_in\_tot\_N\_at\_szgroup@{get\_prop\_migrants\_in\_tot\_N\_at\_szgroup}}
+\index{get\_prop\_migrants\_in\_tot\_N\_at\_szgroup@{get\_prop\_migrants\_in\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_prop\_migrants\_in\_tot\_N\_at\_szgroup()}{get\_prop\_migrants\_in\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a0425f54c30084fdc60e2824c3bc185e7}\label{class_population_a0425f54c30084fdc60e2824c3bc185e7}} 
+\index{Population@{Population}!get\_proportion\_mature\_fish@{get\_proportion\_mature\_fish}}
+\index{get\_proportion\_mature\_fish@{get\_proportion\_mature\_fish}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_proportion\_mature\_fish()}{get\_proportion\_mature\_fish()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+proportion\+\_\+mature\+\_\+fish (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a25243972da373b5d43507b5d532ced35}\label{class_population_a25243972da373b5d43507b5d532ced35}} 
+\index{Population@{Population}!get\_proprecru\_at\_szgroup@{get\_proprecru\_at\_szgroup}}
+\index{get\_proprecru\_at\_szgroup@{get\_proprecru\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_proprecru\_at\_szgroup()}{get\_proprecru\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+proprecru\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a796affd235f53baa7a3aa6093726a6dc}\label{class_population_a796affd235f53baa7a3aa6093726a6dc}} 
+\index{Population@{Population}!get\_quota@{get\_quota}}
+\index{get\_quota@{get\_quota}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_quota()}{get\_quota()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+quota (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a22fee0ab6062785e1ac22cdfd435c99e}\label{class_population_a22fee0ab6062785e1ac22cdfd435c99e}} 
+\index{Population@{Population}!get\_quota\_uptake@{get\_quota\_uptake}}
+\index{get\_quota\_uptake@{get\_quota\_uptake}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_quota\_uptake()}{get\_quota\_uptake()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+quota\+\_\+uptake (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a15281fffe73cc53524f119a20d8a4762}\label{class_population_a15281fffe73cc53524f119a20d8a4762}} 
+\index{Population@{Population}!get\_selected\_szgroups@{get\_selected\_szgroups}}
+\index{get\_selected\_szgroups@{get\_selected\_szgroups}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_selected\_szgroups()}{get\_selected\_szgroups()}}
+{\footnotesize\ttfamily const vector$<$ int $>$ \& Population\+::get\+\_\+selected\+\_\+szgroups (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a8d5f00e07f966275471f0326dd05ca76}\label{class_population_a8d5f00e07f966275471f0326dd05ca76}} 
+\index{Population@{Population}!get\_SSB@{get\_SSB}}
+\index{get\_SSB@{get\_SSB}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_SSB()}{get\_SSB()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+\+S\+SB (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a539011e43cd2730b55bff9b6e9067460}\label{class_population_a539011e43cd2730b55bff9b6e9067460}} 
+\index{Population@{Population}!get\_SSB\_at\_szgroup@{get\_SSB\_at\_szgroup}}
+\index{get\_SSB\_at\_szgroup@{get\_SSB\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_SSB\_at\_szgroup()}{get\_SSB\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a3d71e85f11c809a36f98b21f0ecc5fda}\label{class_population_a3d71e85f11c809a36f98b21f0ecc5fda}} 
+\index{Population@{Population}!get\_tac@{get\_tac}}
+\index{get\_tac@{get\_tac}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tac()}{get\_tac()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tac}{Tac}} $\ast$ Population\+::get\+\_\+tac (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a581b6357727756ecf9bc103034dacdfa}\label{class_population_a581b6357727756ecf9bc103034dacdfa}} 
+\index{Population@{Population}!get\_tot\_C\_at\_szgroup@{get\_tot\_C\_at\_szgroup}}
+\index{get\_tot\_C\_at\_szgroup@{get\_tot\_C\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_C\_at\_szgroup()}{get\_tot\_C\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_ac404f9f743ec8bc167e363498aa40c04}\label{class_population_ac404f9f743ec8bc167e363498aa40c04}} 
+\index{Population@{Population}!get\_tot\_D\_at\_szgroup@{get\_tot\_D\_at\_szgroup}}
+\index{get\_tot\_D\_at\_szgroup@{get\_tot\_D\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_D\_at\_szgroup()}{get\_tot\_D\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa78f4be248f6d2febb02b4bfbbce12ba}\label{class_population_aa78f4be248f6d2febb02b4bfbbce12ba}} 
+\index{Population@{Population}!get\_tot\_F\_at\_age@{get\_tot\_F\_at\_age}}
+\index{get\_tot\_F\_at\_age@{get\_tot\_F\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_F\_at\_age()}{get\_tot\_F\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a17c2aca418aa72a6bde1e17439a71067}\label{class_population_a17c2aca418aa72a6bde1e17439a71067}} 
+\index{Population@{Population}!get\_tot\_F\_at\_age\_last\_quarter@{get\_tot\_F\_at\_age\_last\_quarter}}
+\index{get\_tot\_F\_at\_age\_last\_quarter@{get\_tot\_F\_at\_age\_last\_quarter}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_F\_at\_age\_last\_quarter()}{get\_tot\_F\_at\_age\_last\_quarter()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a4169ce7af337dcc8551957e3b51040ce}\label{class_population_a4169ce7af337dcc8551957e3b51040ce}} 
+\index{Population@{Population}!get\_tot\_F\_at\_age\_running\_average@{get\_tot\_F\_at\_age\_running\_average}}
+\index{get\_tot\_F\_at\_age\_running\_average@{get\_tot\_F\_at\_age\_running\_average}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_F\_at\_age\_running\_average()}{get\_tot\_F\_at\_age\_running\_average()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aaab9bd4e9065d855854360f3545d18fc}\label{class_population_aaab9bd4e9065d855854360f3545d18fc}} 
+\index{Population@{Population}!get\_tot\_M\_at\_age@{get\_tot\_M\_at\_age}}
+\index{get\_tot\_M\_at\_age@{get\_tot\_M\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_M\_at\_age()}{get\_tot\_M\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a00ebf8857a53212013ca327623a7d729}\label{class_population_a00ebf8857a53212013ca327623a7d729}} 
+\index{Population@{Population}!get\_tot\_Mat\_at\_age@{get\_tot\_Mat\_at\_age}}
+\index{get\_tot\_Mat\_at\_age@{get\_tot\_Mat\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_Mat\_at\_age()}{get\_tot\_Mat\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+Mat\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a513cd369ddc2d0f523b68cb9cee54a29}\label{class_population_a513cd369ddc2d0f523b68cb9cee54a29}} 
+\index{Population@{Population}!get\_tot\_N\_at\_age@{get\_tot\_N\_at\_age}}
+\index{get\_tot\_N\_at\_age@{get\_tot\_N\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_age()}{get\_tot\_N\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a063d604c1f6a28fe3c4b12732f6f1fe8}\label{class_population_a063d604c1f6a28fe3c4b12732f6f1fe8}} 
+\index{Population@{Population}!get\_tot\_N\_at\_age0@{get\_tot\_N\_at\_age0}}
+\index{get\_tot\_N\_at\_age0@{get\_tot\_N\_at\_age0}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_age0()}{get\_tot\_N\_at\_age0()}}
+{\footnotesize\ttfamily double Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age0 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a0b8d93dced62bc25ff70be9e1159230d}\label{class_population_a0b8d93dced62bc25ff70be9e1159230d}} 
+\index{Population@{Population}!get\_tot\_N\_at\_age\_last\_quarter@{get\_tot\_N\_at\_age\_last\_quarter}}
+\index{get\_tot\_N\_at\_age\_last\_quarter@{get\_tot\_N\_at\_age\_last\_quarter}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_age\_last\_quarter()}{get\_tot\_N\_at\_age\_last\_quarter()}}
+{\footnotesize\ttfamily const vector$<$double$>$\& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a9f2f01dc06493d6b534db38a3251b70e}\label{class_population_a9f2f01dc06493d6b534db38a3251b70e}} 
+\index{Population@{Population}!get\_tot\_N\_at\_szgroup@{get\_tot\_N\_at\_szgroup}}
+\index{get\_tot\_N\_at\_szgroup@{get\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_szgroup()}{get\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_af5b3468bd3ecb69030f2f6a59e10253a}\label{class_population_af5b3468bd3ecb69030f2f6a59e10253a}} 
+\index{Population@{Population}!get\_tot\_N\_at\_szgroup\_just\_after\_redistribution@{get\_tot\_N\_at\_szgroup\_just\_after\_redistribution}}
+\index{get\_tot\_N\_at\_szgroup\_just\_after\_redistribution@{get\_tot\_N\_at\_szgroup\_just\_after\_redistribution}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_szgroup\_just\_after\_redistribution()}{get\_tot\_N\_at\_szgroup\_just\_after\_redistribution()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a0cacac923ccbd019c7d397a0c6e1bff4}\label{class_population_a0cacac923ccbd019c7d397a0c6e1bff4}} 
+\index{Population@{Population}!get\_tot\_N\_at\_szgroup\_month\_minus\_1@{get\_tot\_N\_at\_szgroup\_month\_minus\_1}}
+\index{get\_tot\_N\_at\_szgroup\_month\_minus\_1@{get\_tot\_N\_at\_szgroup\_month\_minus\_1}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_szgroup\_month\_minus\_1()}{get\_tot\_N\_at\_szgroup\_month\_minus\_1()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aa96c7a424f8288c20b65ac193f7ae498}\label{class_population_aa96c7a424f8288c20b65ac193f7ae498}} 
+\index{Population@{Population}!get\_tot\_N\_at\_szgroup\_year\_minus\_1@{get\_tot\_N\_at\_szgroup\_year\_minus\_1}}
+\index{get\_tot\_N\_at\_szgroup\_year\_minus\_1@{get\_tot\_N\_at\_szgroup\_year\_minus\_1}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_N\_at\_szgroup\_year\_minus\_1()}{get\_tot\_N\_at\_szgroup\_year\_minus\_1()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_af7478d805116695ff97d0f5807a0fac3}\label{class_population_af7478d805116695ff97d0f5807a0fac3}} 
+\index{Population@{Population}!get\_tot\_W\_at\_age@{get\_tot\_W\_at\_age}}
+\index{get\_tot\_W\_at\_age@{get\_tot\_W\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_tot\_W\_at\_age()}{get\_tot\_W\_at\_age()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+tot\+\_\+\+W\+\_\+at\+\_\+age (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_aaa50918cd90d97e8e9bfadb7f216a218}\label{class_population_aaa50918cd90d97e8e9bfadb7f216a218}} 
+\index{Population@{Population}!get\_true\_tot\_N\_at\_szgroup@{get\_true\_tot\_N\_at\_szgroup}}
+\index{get\_true\_tot\_N\_at\_szgroup@{get\_true\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_true\_tot\_N\_at\_szgroup()}{get\_true\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_a4ac1d18b27bc6a29bc1bf9b39bd150dc}\label{class_population_a4ac1d18b27bc6a29bc1bf9b39bd150dc}} 
+\index{Population@{Population}!get\_weight\_at\_szgroup@{get\_weight\_at\_szgroup}}
+\index{get\_weight\_at\_szgroup@{get\_weight\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{get\_weight\_at\_szgroup()}{get\_weight\_at\_szgroup()}}
+{\footnotesize\ttfamily const vector$<$ double $>$ \& Population\+::get\+\_\+weight\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_population_add02af66e78668224dfbacc8a4ddf704}\label{class_population_add02af66e78668224dfbacc8a4ddf704}} 
+\index{Population@{Population}!set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M@{set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M}}
+\index{set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M@{set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M()}{set\_a\_tot\_N\_at\_szgroup\_before\_applying\_M()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+a\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+before\+\_\+applying\+\_\+M }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ae6110f8d8c552f5ee9b905941861880a}\label{class_population_ae6110f8d8c552f5ee9b905941861880a}} 
+\index{Population@{Population}!set\_adults\_diet\_preference\_per\_stock@{set\_adults\_diet\_preference\_per\_stock}}
+\index{set\_adults\_diet\_preference\_per\_stock@{set\_adults\_diet\_preference\_per\_stock}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_adults\_diet\_preference\_per\_stock()}{set\_adults\_diet\_preference\_per\_stock()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_af7162106eadd591efe14813b8cd8000d}\label{class_population_af7162106eadd591efe14813b8cd8000d}} 
+\index{Population@{Population}!set\_avai0\_beta@{set\_avai0\_beta}}
+\index{set\_avai0\_beta@{set\_avai0\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_avai0\_beta()}{set\_avai0\_beta()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+avai0\+\_\+beta (\begin{DoxyParamCaption}\item[{double}]{\+\_\+avai0\+\_\+beta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a254b6196bc625b6a1046bbb82fb4d9f3}\label{class_population_a254b6196bc625b6a1046bbb82fb4d9f3}} 
+\index{Population@{Population}!set\_avai2\_beta@{set\_avai2\_beta}}
+\index{set\_avai2\_beta@{set\_avai2\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_avai2\_beta()}{set\_avai2\_beta()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+avai2\+\_\+beta (\begin{DoxyParamCaption}\item[{double}]{\+\_\+avai2\+\_\+beta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a99efd92bcfa1d272e21e7fe89fb66d8d}\label{class_population_a99efd92bcfa1d272e21e7fe89fb66d8d}} 
+\index{Population@{Population}!set\_avai3\_beta@{set\_avai3\_beta}}
+\index{set\_avai3\_beta@{set\_avai3\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_avai3\_beta()}{set\_avai3\_beta()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+avai3\+\_\+beta (\begin{DoxyParamCaption}\item[{double}]{\+\_\+avai3\+\_\+beta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a59678099e8db0d210b1ec2ab97ac1028}\label{class_population_a59678099e8db0d210b1ec2ab97ac1028}} 
+\index{Population@{Population}!set\_avai5\_beta@{set\_avai5\_beta}}
+\index{set\_avai5\_beta@{set\_avai5\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_avai5\_beta()}{set\_avai5\_beta()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+avai5\+\_\+beta (\begin{DoxyParamCaption}\item[{double}]{\+\_\+avai5\+\_\+beta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ac3c20fa4ed3d7d4b0cfdee30b97ab15d}\label{class_population_ac3c20fa4ed3d7d4b0cfdee30b97ab15d}} 
+\index{Population@{Population}!set\_avai7\_beta@{set\_avai7\_beta}}
+\index{set\_avai7\_beta@{set\_avai7\_beta}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_avai7\_beta()}{set\_avai7\_beta()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+avai7\+\_\+beta (\begin{DoxyParamCaption}\item[{double}]{\+\_\+avai7\+\_\+beta }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a7830822885d1da429c415d46fdca1de7}\label{class_population_a7830822885d1da429c415d46fdca1de7}} 
+\index{Population@{Population}!set\_comcat\_at\_szgroup@{set\_comcat\_at\_szgroup}}
+\index{set\_comcat\_at\_szgroup@{set\_comcat\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_comcat\_at\_szgroup()}{set\_comcat\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+comcat\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{vector$<$ int $>$}]{\+\_\+comcat\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a55aef29cf0f834568f2ca8841d925362}\label{class_population_a55aef29cf0f834568f2ca8841d925362}} 
+\index{Population@{Population}!set\_cpue\_multiplier@{set\_cpue\_multiplier}}
+\index{set\_cpue\_multiplier@{set\_cpue\_multiplier}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_cpue\_multiplier()}{set\_cpue\_multiplier()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+cpue\+\_\+multiplier (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cpue\+\_\+multiplier }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_aadd6481dcab8e0a35e73b03b0e5e82c1}\label{class_population_aadd6481dcab8e0a35e73b03b0e5e82c1}} 
+\index{Population@{Population}!set\_fbar@{set\_fbar}}
+\index{set\_fbar@{set\_fbar}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_fbar()}{set\_fbar()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+fbar (\begin{DoxyParamCaption}\item[{double}]{\+\_\+fbar }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a5ac5539c89af87a8388f126a319741a9}\label{class_population_a5ac5539c89af87a8388f126a319741a9}} 
+\index{Population@{Population}!set\_fecundity\_at\_szgroup@{set\_fecundity\_at\_szgroup}}
+\index{set\_fecundity\_at\_szgroup@{set\_fecundity\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_fecundity\_at\_szgroup()}{set\_fecundity\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+fecundity\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+fecundity\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ab0aa3da4fff8dfce23d6c39ddd5c0cee}\label{class_population_ab0aa3da4fff8dfce23d6c39ddd5c0cee}} 
+\index{Population@{Population}!set\_FFmsy@{set\_FFmsy}}
+\index{set\_FFmsy@{set\_FFmsy}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_FFmsy()}{set\_FFmsy()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+\+F\+Fmsy (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+F\+Fmsy }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a1db1433c65156a90fc910bb11e5cdcca}\label{class_population_a1db1433c65156a90fc910bb11e5cdcca}} 
+\index{Population@{Population}!set\_field\_of\_coeff\_diffusion\_this\_pop@{set\_field\_of\_coeff\_diffusion\_this\_pop}}
+\index{set\_field\_of\_coeff\_diffusion\_this\_pop@{set\_field\_of\_coeff\_diffusion\_this\_pop}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_field\_of\_coeff\_diffusion\_this\_pop()}{set\_field\_of\_coeff\_diffusion\_this\_pop()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop (\begin{DoxyParamCaption}\item[{multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$}]{\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ad994160916721d5d96c33a4db702e90b}\label{class_population_ad994160916721d5d96c33a4db702e90b}} 
+\index{Population@{Population}!set\_full\_spatial\_availability@{set\_full\_spatial\_availability}}
+\index{set\_full\_spatial\_availability@{set\_full\_spatial\_availability}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_full\_spatial\_availability()}{set\_full\_spatial\_availability()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+full\+\_\+spatial\+\_\+availability (\begin{DoxyParamCaption}\item[{multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$}]{\+\_\+full\+\_\+spatial\+\_\+availability }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a9406d88c38e04dc2a99b2958fda841d1}\label{class_population_a9406d88c38e04dc2a99b2958fda841d1}} 
+\index{Population@{Population}!set\_hyperstability\_param@{set\_hyperstability\_param}}
+\index{set\_hyperstability\_param@{set\_hyperstability\_param}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_hyperstability\_param()}{set\_hyperstability\_param()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+hyperstability\+\_\+param (\begin{DoxyParamCaption}\item[{double}]{\+\_\+hyperstability\+\_\+param }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a4b67e1bdf4faa2f7bd139ea7192a2223}\label{class_population_a4b67e1bdf4faa2f7bd139ea7192a2223}} 
+\index{Population@{Population}!set\_is\_choking\_fisheries@{set\_is\_choking\_fisheries}}
+\index{set\_is\_choking\_fisheries@{set\_is\_choking\_fisheries}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_is\_choking\_fisheries()}{set\_is\_choking\_fisheries()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+is\+\_\+choking\+\_\+fisheries (\begin{DoxyParamCaption}\item[{int}]{is\+\_\+choking\+\_\+fisheries }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a66752f64f8fa4da941f22030b3196cb3}\label{class_population_a66752f64f8fa4da941f22030b3196cb3}} 
+\index{Population@{Population}!set\_juveniles\_diet\_preference\_per\_stock@{set\_juveniles\_diet\_preference\_per\_stock}}
+\index{set\_juveniles\_diet\_preference\_per\_stock@{set\_juveniles\_diet\_preference\_per\_stock}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_juveniles\_diet\_preference\_per\_stock()}{set\_juveniles\_diet\_preference\_per\_stock()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ab72ccfca22cb62d0cc71771250b1f5f7}\label{class_population_ab72ccfca22cb62d0cc71771250b1f5f7}} 
+\index{Population@{Population}!set\_landings\_so\_far@{set\_landings\_so\_far}}
+\index{set\_landings\_so\_far@{set\_landings\_so\_far}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_landings\_so\_far()}{set\_landings\_so\_far()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+landings\+\_\+so\+\_\+far (\begin{DoxyParamCaption}\item[{double}]{\+\_\+landings\+\_\+so\+\_\+far }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_afb8707dda108ce991159066714b4466c}\label{class_population_afb8707dda108ce991159066714b4466c}} 
+\index{Population@{Population}!set\_list\_nodes@{set\_list\_nodes}}
+\index{set\_list\_nodes@{set\_list\_nodes}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_list\_nodes()}{set\_list\_nodes()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+list\+\_\+nodes (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$}]{\+\_\+list\+\_\+nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a7006a7a5ffbe9b2d998fe5612b8aec1a}\label{class_population_a7006a7a5ffbe9b2d998fe5612b8aec1a}} 
+\index{Population@{Population}!set\_M\_at\_szgroup@{set\_M\_at\_szgroup}}
+\index{set\_M\_at\_szgroup@{set\_M\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_M\_at\_szgroup()}{set\_M\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+\+M\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+M\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_acb3b8344976ea406a39a0125d3375d7e}\label{class_population_acb3b8344976ea406a39a0125d3375d7e}} 
+\index{Population@{Population}!set\_maturity\_at\_szgroup@{set\_maturity\_at\_szgroup}}
+\index{set\_maturity\_at\_szgroup@{set\_maturity\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_maturity\_at\_szgroup()}{set\_maturity\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+maturity\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+maturity\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a4cb661707a980ccb2ce2762af6028ecd}\label{class_population_a4cb661707a980ccb2ce2762af6028ecd}} 
+\index{Population@{Population}!set\_oth\_land@{set\_oth\_land}}
+\index{set\_oth\_land@{set\_oth\_land}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_oth\_land()}{set\_oth\_land()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+oth\+\_\+land (\begin{DoxyParamCaption}\item[{map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$}]{\+\_\+oth\+\_\+land }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a6fa5538be71c4a81a2810d19c454f872}\label{class_population_a6fa5538be71c4a81a2810d19c454f872}} 
+\index{Population@{Population}!set\_oth\_land\_multiplier@{set\_oth\_land\_multiplier}}
+\index{set\_oth\_land\_multiplier@{set\_oth\_land\_multiplier}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_oth\_land\_multiplier()}{set\_oth\_land\_multiplier()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+oth\+\_\+land\+\_\+multiplier (\begin{DoxyParamCaption}\item[{double}]{\+\_\+a\+\_\+multiplier }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a73f27952336c2f075a51f6be3c48e9ae}\label{class_population_a73f27952336c2f075a51f6be3c48e9ae}} 
+\index{Population@{Population}!set\_overall\_migration\_fluxes@{set\_overall\_migration\_fluxes}}
+\index{set\_overall\_migration\_fluxes@{set\_overall\_migration\_fluxes}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_overall\_migration\_fluxes()}{set\_overall\_migration\_fluxes()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+overall\+\_\+migration\+\_\+fluxes (\begin{DoxyParamCaption}\item[{multimap$<$ int, double $>$}]{\+\_\+overall\+\_\+migration\+\_\+fluxes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a1053e532a1864da186cf4e7648dbe969}\label{class_population_a1053e532a1864da186cf4e7648dbe969}} 
+\index{Population@{Population}!set\_param\_sr@{set\_param\_sr}}
+\index{set\_param\_sr@{set\_param\_sr}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_param\_sr()}{set\_param\_sr()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+param\+\_\+sr (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+param\+\_\+sr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a406395c451553a74cb8057b522b92dba}\label{class_population_a406395c451553a74cb8057b522b92dba}} 
+\index{Population@{Population}!set\_perceived\_tot\_F\_at\_age@{set\_perceived\_tot\_F\_at\_age}}
+\index{set\_perceived\_tot\_F\_at\_age@{set\_perceived\_tot\_F\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_perceived\_tot\_F\_at\_age()}{set\_perceived\_tot\_F\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+perceived\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+perceived\+\_\+\+F\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a0b0d9da60bfdf7f5130bfccaacb5a701}\label{class_population_a0b0d9da60bfdf7f5130bfccaacb5a701}} 
+\index{Population@{Population}!set\_perceived\_tot\_N\_at\_age@{set\_perceived\_tot\_N\_at\_age}}
+\index{set\_perceived\_tot\_N\_at\_age@{set\_perceived\_tot\_N\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_perceived\_tot\_N\_at\_age()}{set\_perceived\_tot\_N\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+perceived\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+perceived\+\_\+\+N\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_abb9b63e8de5e4f35e07267cdf318a8f3}\label{class_population_abb9b63e8de5e4f35e07267cdf318a8f3}} 
+\index{Population@{Population}!set\_prop\_migrants\_in\_tot\_N\_at\_szgroup@{set\_prop\_migrants\_in\_tot\_N\_at\_szgroup}}
+\index{set\_prop\_migrants\_in\_tot\_N\_at\_szgroup@{set\_prop\_migrants\_in\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_prop\_migrants\_in\_tot\_N\_at\_szgroup()}{set\_prop\_migrants\_in\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+prop\+\_\+migrants\+\_\+in\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+prop\+\_\+migrants\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a89e01ecdc70dc056b177e9fddf97fd97}\label{class_population_a89e01ecdc70dc056b177e9fddf97fd97}} 
+\index{Population@{Population}!set\_proportion\_mature\_fish@{set\_proportion\_mature\_fish}}
+\index{set\_proportion\_mature\_fish@{set\_proportion\_mature\_fish}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_proportion\_mature\_fish()}{set\_proportion\_mature\_fish()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+proportion\+\_\+mature\+\_\+fish (\begin{DoxyParamCaption}\item[{double}]{\+\_\+proportion\+\_\+mature\+\_\+fish }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a8d993fd969c98589ec829c5ade305148}\label{class_population_a8d993fd969c98589ec829c5ade305148}} 
+\index{Population@{Population}!set\_proprecru\_at\_szgroup@{set\_proprecru\_at\_szgroup}}
+\index{set\_proprecru\_at\_szgroup@{set\_proprecru\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_proprecru\_at\_szgroup()}{set\_proprecru\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+proprecru\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+proprecru\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a30c90339519ca9978759e9aff63ea74d}\label{class_population_a30c90339519ca9978759e9aff63ea74d}} 
+\index{Population@{Population}!set\_quota@{set\_quota}}
+\index{set\_quota@{set\_quota}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_quota()}{set\_quota()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+quota (\begin{DoxyParamCaption}\item[{double}]{\+\_\+quota }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a794ee0f30fa3216c39ccd47e5db05574}\label{class_population_a794ee0f30fa3216c39ccd47e5db05574}} 
+\index{Population@{Population}!set\_quota\_uptake@{set\_quota\_uptake}}
+\index{set\_quota\_uptake@{set\_quota\_uptake}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_quota\_uptake()}{set\_quota\_uptake()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+quota\+\_\+uptake (\begin{DoxyParamCaption}\item[{double}]{\+\_\+quota\+\_\+uptake }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a3b30c29f483a2fc6c5f024a497fb6f93}\label{class_population_a3b30c29f483a2fc6c5f024a497fb6f93}} 
+\index{Population@{Population}!set\_selected\_szgroups@{set\_selected\_szgroups}}
+\index{set\_selected\_szgroups@{set\_selected\_szgroups}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_selected\_szgroups()}{set\_selected\_szgroups()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+selected\+\_\+szgroups (\begin{DoxyParamCaption}\item[{vector$<$ int $>$}]{selected\+\_\+szgroups }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a806afc3b2b1d3abbcddafe0d2df2822e}\label{class_population_a806afc3b2b1d3abbcddafe0d2df2822e}} 
+\index{Population@{Population}!set\_SSB@{set\_SSB}}
+\index{set\_SSB@{set\_SSB}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_SSB()}{set\_SSB()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+\+S\+SB (\begin{DoxyParamCaption}\item[{double}]{\+\_\+\+S\+SB }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ab3a76f6f7cd4ba9424c761a675fbd9ab}\label{class_population_ab3a76f6f7cd4ba9424c761a675fbd9ab}} 
+\index{Population@{Population}!set\_SSB\_at\_szgroup@{set\_SSB\_at\_szgroup}}
+\index{set\_SSB\_at\_szgroup@{set\_SSB\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_SSB\_at\_szgroup()}{set\_SSB\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+S\+S\+B\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a35ab8cd314f77601b3f7fa0a7112a1c3}\label{class_population_a35ab8cd314f77601b3f7fa0a7112a1c3}} 
+\index{Population@{Population}!set\_tot\_C\_at\_szgroup@{set\_tot\_C\_at\_szgroup}}
+\index{set\_tot\_C\_at\_szgroup@{set\_tot\_C\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_C\_at\_szgroup()}{set\_tot\_C\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+C\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+C\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a36b73df25c14a2b829a650cb1cb9a749}\label{class_population_a36b73df25c14a2b829a650cb1cb9a749}} 
+\index{Population@{Population}!set\_tot\_D\_at\_szgroup@{set\_tot\_D\_at\_szgroup}}
+\index{set\_tot\_D\_at\_szgroup@{set\_tot\_D\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_D\_at\_szgroup()}{set\_tot\_D\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+D\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+D\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_aa909babf9ec946ecd7c3cdd7ba3f682b}\label{class_population_aa909babf9ec946ecd7c3cdd7ba3f682b}} 
+\index{Population@{Population}!set\_tot\_F\_at\_age@{set\_tot\_F\_at\_age}}
+\index{set\_tot\_F\_at\_age@{set\_tot\_F\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_F\_at\_age()}{set\_tot\_F\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+F\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_abeba579dcfb507b851e9289162aa66ac}\label{class_population_abeba579dcfb507b851e9289162aa66ac}} 
+\index{Population@{Population}!set\_tot\_F\_at\_age\_last\_quarter@{set\_tot\_F\_at\_age\_last\_quarter}}
+\index{set\_tot\_F\_at\_age\_last\_quarter@{set\_tot\_F\_at\_age\_last\_quarter}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_F\_at\_age\_last\_quarter()}{set\_tot\_F\_at\_age\_last\_quarter()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a55a897b6756a38aa2f8ec28a308653f4}\label{class_population_a55a897b6756a38aa2f8ec28a308653f4}} 
+\index{Population@{Population}!set\_tot\_F\_at\_age\_running\_average@{set\_tot\_F\_at\_age\_running\_average}}
+\index{set\_tot\_F\_at\_age\_running\_average@{set\_tot\_F\_at\_age\_running\_average}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_F\_at\_age\_running\_average()}{set\_tot\_F\_at\_age\_running\_average()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+tot\+\_\+\+F\+\_\+at\+\_\+age\+\_\+running\+\_\+average }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_af83edcec617cc363dad6ff33cafda0e6}\label{class_population_af83edcec617cc363dad6ff33cafda0e6}} 
+\index{Population@{Population}!set\_tot\_M\_at\_age@{set\_tot\_M\_at\_age}}
+\index{set\_tot\_M\_at\_age@{set\_tot\_M\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_M\_at\_age()}{set\_tot\_M\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+M\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+M\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a41c03a9d39741527eb2cf6bfd6d96b99}\label{class_population_a41c03a9d39741527eb2cf6bfd6d96b99}} 
+\index{Population@{Population}!set\_tot\_Mat\_at\_age@{set\_tot\_Mat\_at\_age}}
+\index{set\_tot\_Mat\_at\_age@{set\_tot\_Mat\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_Mat\_at\_age()}{set\_tot\_Mat\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+Mat\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+Mat\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a3444d96e560758bf888e3f571d5e22a2}\label{class_population_a3444d96e560758bf888e3f571d5e22a2}} 
+\index{Population@{Population}!set\_tot\_N\_at\_age@{set\_tot\_N\_at\_age}}
+\index{set\_tot\_N\_at\_age@{set\_tot\_N\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_age()}{set\_tot\_N\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_aff05fe4dc6b58ef517e5515a91cb369d}\label{class_population_aff05fe4dc6b58ef517e5515a91cb369d}} 
+\index{Population@{Population}!set\_tot\_N\_at\_age\_last\_quarter@{set\_tot\_N\_at\_age\_last\_quarter}}
+\index{set\_tot\_N\_at\_age\_last\_quarter@{set\_tot\_N\_at\_age\_last\_quarter}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_age\_last\_quarter()}{set\_tot\_N\_at\_age\_last\_quarter()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+age\+\_\+last\+\_\+quarter }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_ab2b125b67c0162045ef57d4a852a334c}\label{class_population_ab2b125b67c0162045ef57d4a852a334c}} 
+\index{Population@{Population}!set\_tot\_N\_at\_szgroup@{set\_tot\_N\_at\_szgroup}}
+\index{set\_tot\_N\_at\_szgroup@{set\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_szgroup()}{set\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a5e98fe6080d34a611c67b10cf0139beb}\label{class_population_a5e98fe6080d34a611c67b10cf0139beb}} 
+\index{Population@{Population}!set\_tot\_N\_at\_szgroup\_just\_after\_redistribution@{set\_tot\_N\_at\_szgroup\_just\_after\_redistribution}}
+\index{set\_tot\_N\_at\_szgroup\_just\_after\_redistribution@{set\_tot\_N\_at\_szgroup\_just\_after\_redistribution}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_szgroup\_just\_after\_redistribution()}{set\_tot\_N\_at\_szgroup\_just\_after\_redistribution()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+just\+\_\+after\+\_\+redistribution }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a1df1cac131a4fd1610b9b471eee767ea}\label{class_population_a1df1cac131a4fd1610b9b471eee767ea}} 
+\index{Population@{Population}!set\_tot\_N\_at\_szgroup\_month\_minus\_1@{set\_tot\_N\_at\_szgroup\_month\_minus\_1}}
+\index{set\_tot\_N\_at\_szgroup\_month\_minus\_1@{set\_tot\_N\_at\_szgroup\_month\_minus\_1}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_szgroup\_month\_minus\_1()}{set\_tot\_N\_at\_szgroup\_month\_minus\_1()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1 (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+month\+\_\+minus\+\_\+1 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a1dc336f602f0e0dfc6fd4219cc0e3b05}\label{class_population_a1dc336f602f0e0dfc6fd4219cc0e3b05}} 
+\index{Population@{Population}!set\_tot\_N\_at\_szgroup\_year\_minus\_1@{set\_tot\_N\_at\_szgroup\_year\_minus\_1}}
+\index{set\_tot\_N\_at\_szgroup\_year\_minus\_1@{set\_tot\_N\_at\_szgroup\_year\_minus\_1}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_N\_at\_szgroup\_year\_minus\_1()}{set\_tot\_N\_at\_szgroup\_year\_minus\_1()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1 (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+N\+\_\+at\+\_\+szgroup\+\_\+year\+\_\+minus\+\_\+1 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a2db609afbba5d88acb379b2c15e76ff6}\label{class_population_a2db609afbba5d88acb379b2c15e76ff6}} 
+\index{Population@{Population}!set\_tot\_W\_at\_age@{set\_tot\_W\_at\_age}}
+\index{set\_tot\_W\_at\_age@{set\_tot\_W\_at\_age}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_tot\_W\_at\_age()}{set\_tot\_W\_at\_age()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+tot\+\_\+\+W\+\_\+at\+\_\+age (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+\+W\+\_\+at\+\_\+age }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a1e9f13e5b19815245325c9b4f1b8dcf8}\label{class_population_a1e9f13e5b19815245325c9b4f1b8dcf8}} 
+\index{Population@{Population}!set\_true\_tot\_N\_at\_szgroup@{set\_true\_tot\_N\_at\_szgroup}}
+\index{set\_true\_tot\_N\_at\_szgroup@{set\_true\_tot\_N\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_true\_tot\_N\_at\_szgroup()}{set\_true\_tot\_N\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+true\+\_\+tot\+\_\+\+N\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_population_a74eb37544d99f1288d4d5f089d044c59}\label{class_population_a74eb37544d99f1288d4d5f089d044c59}} 
+\index{Population@{Population}!set\_weight\_at\_szgroup@{set\_weight\_at\_szgroup}}
+\index{set\_weight\_at\_szgroup@{set\_weight\_at\_szgroup}!Population@{Population}}
+\subsubsection{\texorpdfstring{set\_weight\_at\_szgroup()}{set\_weight\_at\_szgroup()}}
+{\footnotesize\ttfamily void Population\+::set\+\_\+weight\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const vector$<$ double $>$ \&}]{\+\_\+weight\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_population_8h}{Population.\+h}}\item 
+commons/\mbox{\hyperlink{_population_8cpp}{Population.\+cpp}}\end{DoxyCompactItemize}

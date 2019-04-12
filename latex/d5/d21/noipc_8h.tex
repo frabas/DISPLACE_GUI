@@ -1,0 +1,87 @@
+\hypertarget{noipc_8h}{}\section{simulator/messages/noipc.h File Reference}
+\label{noipc_8h}\index{simulator/messages/noipc.h@{simulator/messages/noipc.h}}
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_output_message}{Output\+Message}}
+\begin{DoxyCompactList}\small\item\em an abstract class to serialize outputs through the \mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_move_ship_output_message}{Move\+Ship\+Output\+Message}}
+\item 
+class \mbox{\hyperlink{class_vessel_logbook_output_message}{Vessel\+Logbook\+Output\+Message}}
+\item 
+class \mbox{\hyperlink{class_move_vessel_output_message}{Move\+Vessel\+Output\+Message}}
+\item 
+class \mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}}
+\begin{DoxyCompactList}\small\item\em A manager for the outputs from all the other simulator threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{noipc_8h_acaa6710ff61da9715db98f31d1c7302c}{init\+Ipc\+Queue}} ()
+\item 
+void \mbox{\hyperlink{noipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}{finalize\+Ipc\+Queue}} ()
+\item 
+void \mbox{\hyperlink{noipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}{gui\+Send\+Current\+Step}} (unsigned int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{noipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}{gui\+Send\+Update\+Command}} (const std\+::string \&filename, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{noipc_8h_a471979147bdcfc53fae734eebd41e098}{gui\+Send\+Memory\+Info}} (const \mbox{\hyperlink{class_memory_info}{Memory\+Info}} \&info)
+\item 
+void \mbox{\hyperlink{noipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}{gui\+Send\+Capture}} (bool on)
+\item 
+void \mbox{\hyperlink{noipc_8h_a58af31948cc3d6bcb9ae1c19b432f909}{gui\+Send\+Terminal\+Message}} (const string \&ss)
+\item 
+void \mbox{\hyperlink{noipc_8h_acb72707bd578d84a180672e722faa697}{gui\+Send\+Output\+Info}} (std\+::string)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{noipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}\label{noipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}} 
+\index{noipc.h@{noipc.h}!finalizeIpcQueue@{finalizeIpcQueue}}
+\index{finalizeIpcQueue@{finalizeIpcQueue}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{finalizeIpcQueue()}{finalizeIpcQueue()}}
+{\footnotesize\ttfamily void finalize\+Ipc\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}\label{noipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}} 
+\index{noipc.h@{noipc.h}!guiSendCapture@{guiSendCapture}}
+\index{guiSendCapture@{guiSendCapture}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendCapture()}{guiSendCapture()}}
+{\footnotesize\ttfamily void gui\+Send\+Capture (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}\label{noipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}} 
+\index{noipc.h@{noipc.h}!guiSendCurrentStep@{guiSendCurrentStep}}
+\index{guiSendCurrentStep@{guiSendCurrentStep}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendCurrentStep()}{guiSendCurrentStep()}}
+{\footnotesize\ttfamily void gui\+Send\+Current\+Step (\begin{DoxyParamCaption}\item[{unsigned int}]{tstep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_a471979147bdcfc53fae734eebd41e098}\label{noipc_8h_a471979147bdcfc53fae734eebd41e098}} 
+\index{noipc.h@{noipc.h}!guiSendMemoryInfo@{guiSendMemoryInfo}}
+\index{guiSendMemoryInfo@{guiSendMemoryInfo}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendMemoryInfo()}{guiSendMemoryInfo()}}
+{\footnotesize\ttfamily void gui\+Send\+Memory\+Info (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_memory_info}{Memory\+Info}} \&}]{info }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_acb72707bd578d84a180672e722faa697}\label{noipc_8h_acb72707bd578d84a180672e722faa697}} 
+\index{noipc.h@{noipc.h}!guiSendOutputInfo@{guiSendOutputInfo}}
+\index{guiSendOutputInfo@{guiSendOutputInfo}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendOutputInfo()}{guiSendOutputInfo()}}
+{\footnotesize\ttfamily void gui\+Send\+Output\+Info (\begin{DoxyParamCaption}\item[{std\+::string}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_a58af31948cc3d6bcb9ae1c19b432f909}\label{noipc_8h_a58af31948cc3d6bcb9ae1c19b432f909}} 
+\index{noipc.h@{noipc.h}!guiSendTerminalMessage@{guiSendTerminalMessage}}
+\index{guiSendTerminalMessage@{guiSendTerminalMessage}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendTerminalMessage()}{guiSendTerminalMessage()}}
+{\footnotesize\ttfamily void gui\+Send\+Terminal\+Message (\begin{DoxyParamCaption}\item[{const string \&}]{ss }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}\label{noipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}} 
+\index{noipc.h@{noipc.h}!guiSendUpdateCommand@{guiSendUpdateCommand}}
+\index{guiSendUpdateCommand@{guiSendUpdateCommand}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{guiSendUpdateCommand()}{guiSendUpdateCommand()}}
+{\footnotesize\ttfamily void gui\+Send\+Update\+Command (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename,  }\item[{int}]{tstep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{noipc_8h_acaa6710ff61da9715db98f31d1c7302c}\label{noipc_8h_acaa6710ff61da9715db98f31d1c7302c}} 
+\index{noipc.h@{noipc.h}!initIpcQueue@{initIpcQueue}}
+\index{initIpcQueue@{initIpcQueue}!noipc.h@{noipc.h}}
+\subsubsection{\texorpdfstring{initIpcQueue()}{initIpcQueue()}}
+{\footnotesize\ttfamily void init\+Ipc\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

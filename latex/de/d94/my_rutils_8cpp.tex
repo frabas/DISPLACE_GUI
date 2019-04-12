@@ -1,0 +1,159 @@
+\hypertarget{my_rutils_8cpp}{}\section{commons/my\+Rutils.cpp File Reference}
+\label{my_rutils_8cpp}\index{commons/myRutils.cpp@{commons/myRutils.cpp}}
+{\ttfamily \#include $<$commons\+\_\+global.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include $<$helpers.\+h$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{my_rutils_8cpp_a88f47a79aa968bbb4c64a245c2c14437}{repeat}}~for(;;)
+\item 
+\#define \mbox{\hyperlink{my_rutils_8cpp_a44779f18d87e71c78fc9fbf9dc88537d}{C1}}~0.\+398942280401433
+\item 
+\#define \mbox{\hyperlink{my_rutils_8cpp_ad6fc13322a4f1c314332ff34aa8b3fa0}{C2}}~0.\+180025191068563
+\item 
+\#define \mbox{\hyperlink{my_rutils_8cpp_a22da07d2825526c618062b683dfa3eb7}{g}}(x)~(\mbox{\hyperlink{my_rutils_8cpp_a44779f18d87e71c78fc9fbf9dc88537d}{C1}}$\ast$exp(-\/x$\ast$x/2.\+0)-\/\mbox{\hyperlink{my_rutils_8cpp_ad6fc13322a4f1c314332ff34aa8b3fa0}{C2}}$\ast$(A-\/x))
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a9c5c320f892bacc854e660a893d22f09}{set\+\_\+seed}} (unsigned int i1, unsigned int i2)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a802d893635ffc99948cffb24dba15b12}{get\+\_\+seed}} (unsigned int $\ast$i1, unsigned int $\ast$i2)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a828793cd3deb975081dcb32b5fca5311}{unif\+\_\+rand}} (void)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a24f86dced12ba055000a2a84e3c74630}{revsort}} (double $\ast$a, int $\ast$ib, int n)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_ac4f50a8ba7ed1ca5a500da7861d69f65}{Prob\+Sample\+Replace}} (int nval, double $\ast$proba, int $\ast$perm, int nans, int $\ast$ans)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_afdc7c334aec49b16d0da54b5b46e34fe}{do\+\_\+sample}} (int n, int nval, const std\+::vector$<$ int $>$ \&val, const std\+::vector$<$ double $>$ \&proba)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a8bb78fceaf0ce14b845f32817253137f}{exp\+\_\+rand}} (void)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a5eacd0b9f5ef5a5d5441dc33e547628a}{fmax2}} (double x, double y)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a344806ffe9ecc7654d42c8376b7d9091}{fmin2}} (double x, double y)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_af6b11eff7230a281b329fbd2c0562e15}{norm\+\_\+rand}} (void)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_ad8c2c258ce223b6b1af9c50044c8481e}{rgamma}} (double a, double scale)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a450f67f1917bf16875802b775c961817}{rnorm}} (double mu, double sigma)
+\item 
+double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{my_rutils_8cpp_a0f17073b5d6c8d005c69309f5e3f7238}{rlnorm}} (double meanlog, double sdlog)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{my_rutils_8cpp_a44779f18d87e71c78fc9fbf9dc88537d}\label{my_rutils_8cpp_a44779f18d87e71c78fc9fbf9dc88537d}} 
+\index{myRutils.cpp@{myRutils.cpp}!C1@{C1}}
+\index{C1@{C1}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{C1}{C1}}
+{\footnotesize\ttfamily \#define C1~0.\+398942280401433}
+
+\mbox{\Hypertarget{my_rutils_8cpp_ad6fc13322a4f1c314332ff34aa8b3fa0}\label{my_rutils_8cpp_ad6fc13322a4f1c314332ff34aa8b3fa0}} 
+\index{myRutils.cpp@{myRutils.cpp}!C2@{C2}}
+\index{C2@{C2}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{C2}{C2}}
+{\footnotesize\ttfamily \#define C2~0.\+180025191068563}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a22da07d2825526c618062b683dfa3eb7}\label{my_rutils_8cpp_a22da07d2825526c618062b683dfa3eb7}} 
+\index{myRutils.cpp@{myRutils.cpp}!g@{g}}
+\index{g@{g}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{g}{g}}
+{\footnotesize\ttfamily \#define g(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~(\mbox{\hyperlink{my_rutils_8cpp_a44779f18d87e71c78fc9fbf9dc88537d}{C1}}$\ast$exp(-\/x$\ast$x/2.\+0)-\/\mbox{\hyperlink{my_rutils_8cpp_ad6fc13322a4f1c314332ff34aa8b3fa0}{C2}}$\ast$(A-\/x))}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a88f47a79aa968bbb4c64a245c2c14437}\label{my_rutils_8cpp_a88f47a79aa968bbb4c64a245c2c14437}} 
+\index{myRutils.cpp@{myRutils.cpp}!repeat@{repeat}}
+\index{repeat@{repeat}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{repeat}{repeat}}
+{\footnotesize\ttfamily \#define repeat~for(;;)}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{my_rutils_8cpp_afdc7c334aec49b16d0da54b5b46e34fe}\label{my_rutils_8cpp_afdc7c334aec49b16d0da54b5b46e34fe}} 
+\index{myRutils.cpp@{myRutils.cpp}!do\_sample@{do\_sample}}
+\index{do\_sample@{do\_sample}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{do\_sample()}{do\_sample()}}
+{\footnotesize\ttfamily vector$<$int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} do\+\_\+sample (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{int}]{nval,  }\item[{const std\+::vector$<$ int $>$ \&}]{val,  }\item[{const std\+::vector$<$ double $>$ \&}]{proba }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a8bb78fceaf0ce14b845f32817253137f}\label{my_rutils_8cpp_a8bb78fceaf0ce14b845f32817253137f}} 
+\index{myRutils.cpp@{myRutils.cpp}!exp\_rand@{exp\_rand}}
+\index{exp\_rand@{exp\_rand}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{exp\_rand()}{exp\_rand()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} exp\+\_\+rand (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a5eacd0b9f5ef5a5d5441dc33e547628a}\label{my_rutils_8cpp_a5eacd0b9f5ef5a5d5441dc33e547628a}} 
+\index{myRutils.cpp@{myRutils.cpp}!fmax2@{fmax2}}
+\index{fmax2@{fmax2}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{fmax2()}{fmax2()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} fmax2 (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a344806ffe9ecc7654d42c8376b7d9091}\label{my_rutils_8cpp_a344806ffe9ecc7654d42c8376b7d9091}} 
+\index{myRutils.cpp@{myRutils.cpp}!fmin2@{fmin2}}
+\index{fmin2@{fmin2}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{fmin2()}{fmin2()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} fmin2 (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a802d893635ffc99948cffb24dba15b12}\label{my_rutils_8cpp_a802d893635ffc99948cffb24dba15b12}} 
+\index{myRutils.cpp@{myRutils.cpp}!get\_seed@{get\_seed}}
+\index{get\_seed@{get\_seed}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{get\_seed()}{get\_seed()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} get\+\_\+seed (\begin{DoxyParamCaption}\item[{unsigned int $\ast$}]{i1,  }\item[{unsigned int $\ast$}]{i2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_af6b11eff7230a281b329fbd2c0562e15}\label{my_rutils_8cpp_af6b11eff7230a281b329fbd2c0562e15}} 
+\index{myRutils.cpp@{myRutils.cpp}!norm\_rand@{norm\_rand}}
+\index{norm\_rand@{norm\_rand}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{norm\_rand()}{norm\_rand()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} norm\+\_\+rand (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_ac4f50a8ba7ed1ca5a500da7861d69f65}\label{my_rutils_8cpp_ac4f50a8ba7ed1ca5a500da7861d69f65}} 
+\index{myRutils.cpp@{myRutils.cpp}!ProbSampleReplace@{ProbSampleReplace}}
+\index{ProbSampleReplace@{ProbSampleReplace}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{ProbSampleReplace()}{ProbSampleReplace()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} Prob\+Sample\+Replace (\begin{DoxyParamCaption}\item[{int}]{nval,  }\item[{double $\ast$}]{proba,  }\item[{int $\ast$}]{perm,  }\item[{int}]{nans,  }\item[{int $\ast$}]{ans }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a24f86dced12ba055000a2a84e3c74630}\label{my_rutils_8cpp_a24f86dced12ba055000a2a84e3c74630}} 
+\index{myRutils.cpp@{myRutils.cpp}!revsort@{revsort}}
+\index{revsort@{revsort}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{revsort()}{revsort()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} revsort (\begin{DoxyParamCaption}\item[{double $\ast$}]{a,  }\item[{int $\ast$}]{ib,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_ad8c2c258ce223b6b1af9c50044c8481e}\label{my_rutils_8cpp_ad8c2c258ce223b6b1af9c50044c8481e}} 
+\index{myRutils.cpp@{myRutils.cpp}!rgamma@{rgamma}}
+\index{rgamma@{rgamma}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{rgamma()}{rgamma()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} rgamma (\begin{DoxyParamCaption}\item[{double}]{a,  }\item[{double}]{scale }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a0f17073b5d6c8d005c69309f5e3f7238}\label{my_rutils_8cpp_a0f17073b5d6c8d005c69309f5e3f7238}} 
+\index{myRutils.cpp@{myRutils.cpp}!rlnorm@{rlnorm}}
+\index{rlnorm@{rlnorm}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{rlnorm()}{rlnorm()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} rlnorm (\begin{DoxyParamCaption}\item[{double}]{meanlog,  }\item[{double}]{sdlog }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a450f67f1917bf16875802b775c961817}\label{my_rutils_8cpp_a450f67f1917bf16875802b775c961817}} 
+\index{myRutils.cpp@{myRutils.cpp}!rnorm@{rnorm}}
+\index{rnorm@{rnorm}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{rnorm()}{rnorm()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} rnorm (\begin{DoxyParamCaption}\item[{double}]{mu,  }\item[{double}]{sigma }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a9c5c320f892bacc854e660a893d22f09}\label{my_rutils_8cpp_a9c5c320f892bacc854e660a893d22f09}} 
+\index{myRutils.cpp@{myRutils.cpp}!set\_seed@{set\_seed}}
+\index{set\_seed@{set\_seed}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{set\_seed()}{set\_seed()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} set\+\_\+seed (\begin{DoxyParamCaption}\item[{unsigned int}]{i1,  }\item[{unsigned int}]{i2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{my_rutils_8cpp_a828793cd3deb975081dcb32b5fca5311}\label{my_rutils_8cpp_a828793cd3deb975081dcb32b5fca5311}} 
+\index{myRutils.cpp@{myRutils.cpp}!unif\_rand@{unif\_rand}}
+\index{unif\_rand@{unif\_rand}!myRutils.cpp@{myRutils.cpp}}
+\subsubsection{\texorpdfstring{unif\_rand()}{unif\_rand()}}
+{\footnotesize\ttfamily double \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} unif\+\_\+rand (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+

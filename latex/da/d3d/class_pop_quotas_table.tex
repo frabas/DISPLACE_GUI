@@ -1,0 +1,118 @@
+\hypertarget{class_pop_quotas_table}{}\section{Pop\+Quotas\+Table Class Reference}
+\label{class_pop_quotas_table}\index{PopQuotasTable@{PopQuotasTable}}
+
+
+{\ttfamily \#include $<$popquotastable.\+h$>$}
+
+Inheritance diagram for Pop\+Quotas\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{da/d3d/class_pop_quotas_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_pop_quotas_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pop_quotas_table_a23ca08dbe563b58539bb3fba22e85c2f}{Pop\+Quotas\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_pop_quotas_table_a5cb1ceac7abc81063857498ddd015a2f}{$\sim$\+Pop\+Quotas\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_pop_quotas_table_aa071b6a77b49537f11f9d55ad626e9c0}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_pop_quotas_table_ac5ed71c6d9c37686f61838cc3e8fd3fc}{insert}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, int popid, \mbox{\hyperlink{class_population}{Population}} $\ast$pop)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_quotas_table_ab62d5f68e254c679ffc29d317fbd991f}{fld\+T\+Step}} = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_quotas_table_a374b48f1c1d08d15f3a9b2be8e0f5ee1}{fld\+Pop\+Id}} = make\+Field\+Def(\char`\"{}Pop\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_quotas_table_abde16e0cd8921f485613a30c363c55f9}{fld\+Group}} = make\+Field\+Def(\char`\"{}Pop\+Group\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_quotas_table_aef5f5346d2024b2bffa996eb723e275d}{fld\+Quotas\+Uptake}} = make\+Field\+Def(\char`\"{}Quotas\+Uptake\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_quotas_table_a6fd6c75e8c5965fd6eb23cf3ca04621e}{fld\+Quotas}} = make\+Field\+Def(\char`\"{}Quotas\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_quotas_table_aba83cb577e0868d51e4f2d6c7c12427f}{fld\+Choking}} = make\+Field\+Def(\char`\"{}Choking\char`\"{},Field\+Type\+::\+Real())
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_pop_quotas_table_a23ca08dbe563b58539bb3fba22e85c2f}\label{class_pop_quotas_table_a23ca08dbe563b58539bb3fba22e85c2f}} 
+\index{PopQuotasTable@{PopQuotasTable}!PopQuotasTable@{PopQuotasTable}}
+\index{PopQuotasTable@{PopQuotasTable}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{PopQuotasTable()}{PopQuotasTable()}}
+{\footnotesize\ttfamily Pop\+Quotas\+Table\+::\+Pop\+Quotas\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_pop_quotas_table_a5cb1ceac7abc81063857498ddd015a2f}\label{class_pop_quotas_table_a5cb1ceac7abc81063857498ddd015a2f}} 
+\index{PopQuotasTable@{PopQuotasTable}!````~PopQuotasTable@{$\sim$PopQuotasTable}}
+\index{````~PopQuotasTable@{$\sim$PopQuotasTable}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{$\sim$PopQuotasTable()}{~PopQuotasTable()}}
+{\footnotesize\ttfamily Pop\+Quotas\+Table\+::$\sim$\+Pop\+Quotas\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_pop_quotas_table_aa071b6a77b49537f11f9d55ad626e9c0}\label{class_pop_quotas_table_aa071b6a77b49537f11f9d55ad626e9c0}} 
+\index{PopQuotasTable@{PopQuotasTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Pop\+Quotas\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_pop_quotas_table_ac5ed71c6d9c37686f61838cc3e8fd3fc}\label{class_pop_quotas_table_ac5ed71c6d9c37686f61838cc3e8fd3fc}} 
+\index{PopQuotasTable@{PopQuotasTable}!insert@{insert}}
+\index{insert@{insert}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Pop\+Quotas\+Table\+::insert (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{int}]{popid,  }\item[{\mbox{\hyperlink{class_population}{Population}} $\ast$}]{pop }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_pop_quotas_table_aba83cb577e0868d51e4f2d6c7c12427f}\label{class_pop_quotas_table_aba83cb577e0868d51e4f2d6c7c12427f}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldChoking@{fldChoking}}
+\index{fldChoking@{fldChoking}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldChoking}{fldChoking}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Quotas\+Table\+::fld\+Choking = make\+Field\+Def(\char`\"{}Choking\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_quotas_table_abde16e0cd8921f485613a30c363c55f9}\label{class_pop_quotas_table_abde16e0cd8921f485613a30c363c55f9}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldGroup@{fldGroup}}
+\index{fldGroup@{fldGroup}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldGroup}{fldGroup}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Quotas\+Table\+::fld\+Group = make\+Field\+Def(\char`\"{}Pop\+Group\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_pop_quotas_table_a374b48f1c1d08d15f3a9b2be8e0f5ee1}\label{class_pop_quotas_table_a374b48f1c1d08d15f3a9b2be8e0f5ee1}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldPopId@{fldPopId}}
+\index{fldPopId@{fldPopId}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldPopId}{fldPopId}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Quotas\+Table\+::fld\+Pop\+Id = make\+Field\+Def(\char`\"{}Pop\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_pop_quotas_table_a6fd6c75e8c5965fd6eb23cf3ca04621e}\label{class_pop_quotas_table_a6fd6c75e8c5965fd6eb23cf3ca04621e}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldQuotas@{fldQuotas}}
+\index{fldQuotas@{fldQuotas}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldQuotas}{fldQuotas}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Quotas\+Table\+::fld\+Quotas = make\+Field\+Def(\char`\"{}Quotas\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_quotas_table_aef5f5346d2024b2bffa996eb723e275d}\label{class_pop_quotas_table_aef5f5346d2024b2bffa996eb723e275d}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldQuotasUptake@{fldQuotasUptake}}
+\index{fldQuotasUptake@{fldQuotasUptake}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldQuotasUptake}{fldQuotasUptake}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Quotas\+Table\+::fld\+Quotas\+Uptake = make\+Field\+Def(\char`\"{}Quotas\+Uptake\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_quotas_table_ab62d5f68e254c679ffc29d317fbd991f}\label{class_pop_quotas_table_ab62d5f68e254c679ffc29d317fbd991f}} 
+\index{PopQuotasTable@{PopQuotasTable}!fldTStep@{fldTStep}}
+\index{fldTStep@{fldTStep}!PopQuotasTable@{PopQuotasTable}}
+\subsubsection{\texorpdfstring{fldTStep}{fldTStep}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Quotas\+Table\+::fld\+T\+Step = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{popquotastable_8h}{popquotastable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{popquotastable_8cpp}{popquotastable.\+cpp}}\end{DoxyCompactItemize}

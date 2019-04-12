@@ -1,0 +1,509 @@
+\hypertarget{class_ship}{}\section{Ship Class Reference}
+\label{class_ship}\index{Ship@{Ship}}
+
+
+{\ttfamily \#include $<$Ship.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_ship_ac888d178c7dee8201424a36bc2c13e20}{Ship}} (int idx, string name, int is\+\_\+active, double imo, double yearbuild, string flag, string type, double typecode, double loa, double KW, double breadth, double grosstonnage, double nbunits, double fueluse, double N\+Ox\+Emission\+\_\+gper\+K\+Wh, double S\+Ox\+Emission\+\_\+percentpertotalfuelmass, double a\+\_\+\+G\+H\+G\+Emission\+\_\+gper\+K\+Wh, double a\+\_\+\+P\+M\+E\+Emission\+\_\+gper\+K\+Wh, double vmax, double vcruise, vector$<$ double $>$ lats, vector$<$ double $>$ longs)
+\item 
+\mbox{\hyperlink{class_ship_ab7608fcfc4d27c678aacaf9bfd68a462}{Ship}} ()
+\item 
+\mbox{\hyperlink{class_ship_a43cd6eeaffc11b49239b091621963a65}{$\sim$\+Ship}} ()
+\item 
+void \mbox{\hyperlink{class_ship_a21d38a209adf9d1828fbefb85b4ecf1d}{lock}} ()
+\item 
+void \mbox{\hyperlink{class_ship_af47301f512437a323b5750684e5df992}{unlock}} ()
+\item 
+string \mbox{\hyperlink{class_ship_a748ddbd6c38b534c9aeb16c53dc4fdc3}{get\+\_\+name}} () const
+\item 
+int \mbox{\hyperlink{class_ship_a2bb4533c2d9ccd6c92668ff3d7132f43}{get\+\_\+idx}} () const
+\item 
+int \mbox{\hyperlink{class_ship_a363fe0b03679729aed983b12c55ac68b}{get\+\_\+is\+\_\+active}} () const
+\item 
+int \mbox{\hyperlink{class_ship_aa0706edc7c2ab74ec335088d5fb89337}{get\+\_\+count}} () const
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_ship_a9ea443d338a4eef825f745bc5a4f8096}{get\+\_\+lats}} () const
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_ship_a84638f50c84bfbb6b07bd73d028e97fe}{get\+\_\+longs}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a8a27995643103791ae161daff47b2e68}{get\+\_\+origin\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_ship_acefd31c97b2109ff2d02dcef6c4d52d0}{get\+\_\+origin\+\_\+y}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a42817642d3c98dc0c73b1e59cf6f4ede}{get\+\_\+end\+\_\+point\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_ship_ab18f349fe24009bae6acbeb93f3374f1}{get\+\_\+end\+\_\+point\+\_\+y}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a3ae4ab1dee931dfe6e3b8ccedea54f8a}{get\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a7a60d5c792ede19acd19f487a1336568}{get\+\_\+y}} () const
+\item 
+string \mbox{\hyperlink{class_ship_aebaeb01a662f1f7e931b98cdea0c53e9}{get\+\_\+type}} () const
+\item 
+string \mbox{\hyperlink{class_ship_a901e3a79889183f5b52b0c5efaf191c9}{get\+\_\+flag}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a3b33ce198d3e5db2e5a06a8606d99df9}{get\+\_\+imo}} () const
+\item 
+double \mbox{\hyperlink{class_ship_aef1503d801ea6d480de882893ca1f492}{get\+\_\+typecode}} () const
+\item 
+double \mbox{\hyperlink{class_ship_aa3f9fa5e1ac6eba7b4608ba437c110ff}{get\+\_\+grosstonnage}} () const
+\item 
+double \mbox{\hyperlink{class_ship_aba267883849eb02822480b2564919cdc}{get\+\_\+loa}} () const
+\item 
+double \mbox{\hyperlink{class_ship_af2069867a366ae1c419abc83c8997525}{get\+\_\+\+KW}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a7fcbd35c60b95c56e7f963709cbefc26}{get\+\_\+breadth}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a6b424d1428e06721e0496fff8b5583fc}{get\+\_\+nbunits}} () const
+\item 
+double \mbox{\hyperlink{class_ship_ada93b23a03f80baa2e148cc24d628a7d}{get\+\_\+fueluse}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a96eb0a840c25f7ccd567437990acf2a3}{get\+\_\+\+N\+Ox\+Emission\+\_\+gper\+K\+Wh}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a998e0000dd910bc994fd12f4aaf563b0}{get\+\_\+\+S\+Ox\+Emission\+\_\+percentpertotalfuelmass}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a80885b4891a72f091848642fee017054}{get\+\_\+\+G\+H\+G\+Emission\+\_\+gper\+K\+Wh}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a34ec4da6b3f3494592ce0fb67d24c09c}{get\+\_\+\+P\+M\+E\+Emission\+\_\+gper\+K\+Wh}} () const
+\item 
+double \mbox{\hyperlink{class_ship_add2c961edae22bc6590dde7289e158b8}{get\+\_\+yearbuild}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a18d96c836dffd4e9bb756014e0469bee}{get\+\_\+vmax}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a4eb1d4b2502b0aa5a5d4d18fbcdb4af0}{get\+\_\+vcruise}} () const
+\item 
+double \mbox{\hyperlink{class_ship_abe76a5439f140ce8c8819bcdebe6d2a8}{get\+\_\+course}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a3341ae3493ea474573cef1ee4050c06a}{get\+\_\+fuel\+\_\+use\+\_\+litre}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a51334458c7e56cfd6fb64340dced977c}{get\+\_\+nb\+\_\+transported\+\_\+units}} () const
+\item 
+double \mbox{\hyperlink{class_ship_aed6705dc37c07d1ca009ba2b9ca4a150}{get\+\_\+\+N\+Ox\+Emission}} () const
+\item 
+double \mbox{\hyperlink{class_ship_a07c4f505be69cf3093bbdafa00131dcc}{get\+\_\+\+S\+Ox\+Emission}} () const
+\item 
+double \mbox{\hyperlink{class_ship_af556bb0ce92e950e16eec928f3d18300}{get\+\_\+\+G\+H\+G\+Emission}} () const
+\item 
+double \mbox{\hyperlink{class_ship_ab626df07c2a45cc09fa7b3c98e8e2a9c}{get\+\_\+\+P\+M\+E\+Emission}} () const
+\item 
+void \mbox{\hyperlink{class_ship_a1fb49123ca111896ee2e61f15e106bd6}{set\+\_\+idx\+\_\+ship}} (int val)
+\item 
+void \mbox{\hyperlink{class_ship_a6233340d0e09dcc5518572538a2042d5}{set\+\_\+count}} (int val)
+\item 
+void \mbox{\hyperlink{class_ship_aa8cac550988f1bb1ce13cb5420860bd6}{set\+\_\+vmax}} (double val)
+\item 
+void \mbox{\hyperlink{class_ship_a6bf88532d109acb4bad7540a5d28a38f}{set\+\_\+vcruise}} (double val)
+\item 
+void \mbox{\hyperlink{class_ship_a655322cd5330201cfe7e52505a51a1bf}{set\+\_\+course}} (double val)
+\item 
+void \mbox{\hyperlink{class_ship_afa49566bec8c627b559d81d2ae8aee2a}{set\+\_\+lats}} (vector$<$ double $>$ \+\_\+lats)
+\item 
+void \mbox{\hyperlink{class_ship_ae2ad397d3d52205c5cf9ee0f19ad2b12}{set\+\_\+longs}} (vector$<$ double $>$ \+\_\+longs)
+\item 
+void \mbox{\hyperlink{class_ship_a66be1579e64ee188b0a5f4f77f4490e0}{set\+\_\+xy}} (double \+\_\+x, double \+\_\+y)
+\item 
+void \mbox{\hyperlink{class_ship_a2729dc6f1951abf423f8a8e2fe898f01}{set\+\_\+xy}} (vector$<$ double $>$ \+\_\+xy)
+\item 
+void \mbox{\hyperlink{class_ship_a131d5e3de4dc210a89e53c6c39dbaa29}{set\+\_\+end\+\_\+point\+\_\+xy}} (double \+\_\+x, double \+\_\+y)
+\item 
+void \mbox{\hyperlink{class_ship_a53699692b9cb3fa78cbe05c5e6d0f5e8}{set\+\_\+lane}} (vector$<$ double $>$ \+\_\+longs, vector$<$ double $>$ \+\_\+lats)
+\item 
+void \mbox{\hyperlink{class_ship_a78811fbbb53086b1c336ec758480140b}{set\+\_\+fuel\+\_\+use\+\_\+litre}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_a152241416d67988ce67ce8353e83bee9}{set\+\_\+nb\+\_\+transported\+\_\+units}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_a368187285b4d3a5f9e3c9e873505b4cf}{set\+\_\+\+N\+Ox\+Emission}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_aeea91e3f1b6252ae8737738f1cc71985}{set\+\_\+\+S\+Ox\+Emission}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_a5a5d9299ad16c3ccc82ee597d7416187}{set\+\_\+\+G\+H\+G\+Emission}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_a7f47f560d3545d0eae8a89c54b4e0e2c}{set\+\_\+\+P\+M\+E\+Emission}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_ship_a20a5c250b9503f8452d17bd4db0caa59}{move}} ()
+\item 
+void \mbox{\hyperlink{class_ship_a548c2595985e159dca37da2e1397972e}{compute\+\_\+emissions\+\_\+in\+\_\+ship}} ()
+\item 
+void \mbox{\hyperlink{class_ship_ae3b28abc6c66777fd31603bc737e5247}{export\+\_\+ships\+\_\+indicators}} (ofstream \&shiplogs, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_ship_ac888d178c7dee8201424a36bc2c13e20}\label{class_ship_ac888d178c7dee8201424a36bc2c13e20}} 
+\index{Ship@{Ship}!Ship@{Ship}}
+\index{Ship@{Ship}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{Ship()}{Ship()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Ship\+::\+Ship (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{string}]{name,  }\item[{int}]{is\+\_\+active,  }\item[{double}]{imo,  }\item[{double}]{yearbuild,  }\item[{string}]{flag,  }\item[{string}]{type,  }\item[{double}]{typecode,  }\item[{double}]{loa,  }\item[{double}]{KW,  }\item[{double}]{breadth,  }\item[{double}]{grosstonnage,  }\item[{double}]{nbunits,  }\item[{double}]{fueluse,  }\item[{double}]{N\+Ox\+Emission\+\_\+gper\+K\+Wh,  }\item[{double}]{S\+Ox\+Emission\+\_\+percentpertotalfuelmass,  }\item[{double}]{a\+\_\+\+G\+H\+G\+Emission\+\_\+gper\+K\+Wh,  }\item[{double}]{a\+\_\+\+P\+M\+E\+Emission\+\_\+gper\+K\+Wh,  }\item[{double}]{vmax,  }\item[{double}]{vcruise,  }\item[{vector$<$ double $>$}]{lats,  }\item[{vector$<$ double $>$}]{longs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_ab7608fcfc4d27c678aacaf9bfd68a462}\label{class_ship_ab7608fcfc4d27c678aacaf9bfd68a462}} 
+\index{Ship@{Ship}!Ship@{Ship}}
+\index{Ship@{Ship}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{Ship()}{Ship()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Ship\+::\+Ship (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a43cd6eeaffc11b49239b091621963a65}\label{class_ship_a43cd6eeaffc11b49239b091621963a65}} 
+\index{Ship@{Ship}!````~Ship@{$\sim$Ship}}
+\index{````~Ship@{$\sim$Ship}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{$\sim$Ship()}{~Ship()}}
+{\footnotesize\ttfamily Ship\+::$\sim$\+Ship (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_ship_a548c2595985e159dca37da2e1397972e}\label{class_ship_a548c2595985e159dca37da2e1397972e}} 
+\index{Ship@{Ship}!compute\_emissions\_in\_ship@{compute\_emissions\_in\_ship}}
+\index{compute\_emissions\_in\_ship@{compute\_emissions\_in\_ship}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{compute\_emissions\_in\_ship()}{compute\_emissions\_in\_ship()}}
+{\footnotesize\ttfamily void Ship\+::compute\+\_\+emissions\+\_\+in\+\_\+ship (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_ae3b28abc6c66777fd31603bc737e5247}\label{class_ship_ae3b28abc6c66777fd31603bc737e5247}} 
+\index{Ship@{Ship}!export\_ships\_indicators@{export\_ships\_indicators}}
+\index{export\_ships\_indicators@{export\_ships\_indicators}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{export\_ships\_indicators()}{export\_ships\_indicators()}}
+{\footnotesize\ttfamily void Ship\+::export\+\_\+ships\+\_\+indicators (\begin{DoxyParamCaption}\item[{ofstream \&}]{shiplogs,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a7fcbd35c60b95c56e7f963709cbefc26}\label{class_ship_a7fcbd35c60b95c56e7f963709cbefc26}} 
+\index{Ship@{Ship}!get\_breadth@{get\_breadth}}
+\index{get\_breadth@{get\_breadth}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_breadth()}{get\_breadth()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+breadth (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aa0706edc7c2ab74ec335088d5fb89337}\label{class_ship_aa0706edc7c2ab74ec335088d5fb89337}} 
+\index{Ship@{Ship}!get\_count@{get\_count}}
+\index{get\_count@{get\_count}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_count()}{get\_count()}}
+{\footnotesize\ttfamily int Ship\+::get\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_abe76a5439f140ce8c8819bcdebe6d2a8}\label{class_ship_abe76a5439f140ce8c8819bcdebe6d2a8}} 
+\index{Ship@{Ship}!get\_course@{get\_course}}
+\index{get\_course@{get\_course}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_course()}{get\_course()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+course (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a42817642d3c98dc0c73b1e59cf6f4ede}\label{class_ship_a42817642d3c98dc0c73b1e59cf6f4ede}} 
+\index{Ship@{Ship}!get\_end\_point\_x@{get\_end\_point\_x}}
+\index{get\_end\_point\_x@{get\_end\_point\_x}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_end\_point\_x()}{get\_end\_point\_x()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+end\+\_\+point\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_ab18f349fe24009bae6acbeb93f3374f1}\label{class_ship_ab18f349fe24009bae6acbeb93f3374f1}} 
+\index{Ship@{Ship}!get\_end\_point\_y@{get\_end\_point\_y}}
+\index{get\_end\_point\_y@{get\_end\_point\_y}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_end\_point\_y()}{get\_end\_point\_y()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+end\+\_\+point\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a901e3a79889183f5b52b0c5efaf191c9}\label{class_ship_a901e3a79889183f5b52b0c5efaf191c9}} 
+\index{Ship@{Ship}!get\_flag@{get\_flag}}
+\index{get\_flag@{get\_flag}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_flag()}{get\_flag()}}
+{\footnotesize\ttfamily string Ship\+::get\+\_\+flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a3341ae3493ea474573cef1ee4050c06a}\label{class_ship_a3341ae3493ea474573cef1ee4050c06a}} 
+\index{Ship@{Ship}!get\_fuel\_use\_litre@{get\_fuel\_use\_litre}}
+\index{get\_fuel\_use\_litre@{get\_fuel\_use\_litre}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_fuel\_use\_litre()}{get\_fuel\_use\_litre()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+fuel\+\_\+use\+\_\+litre (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_ada93b23a03f80baa2e148cc24d628a7d}\label{class_ship_ada93b23a03f80baa2e148cc24d628a7d}} 
+\index{Ship@{Ship}!get\_fueluse@{get\_fueluse}}
+\index{get\_fueluse@{get\_fueluse}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_fueluse()}{get\_fueluse()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+fueluse (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_af556bb0ce92e950e16eec928f3d18300}\label{class_ship_af556bb0ce92e950e16eec928f3d18300}} 
+\index{Ship@{Ship}!get\_GHGEmission@{get\_GHGEmission}}
+\index{get\_GHGEmission@{get\_GHGEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_GHGEmission()}{get\_GHGEmission()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+G\+H\+G\+Emission (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a80885b4891a72f091848642fee017054}\label{class_ship_a80885b4891a72f091848642fee017054}} 
+\index{Ship@{Ship}!get\_GHGEmission\_gperKWh@{get\_GHGEmission\_gperKWh}}
+\index{get\_GHGEmission\_gperKWh@{get\_GHGEmission\_gperKWh}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_GHGEmission\_gperKWh()}{get\_GHGEmission\_gperKWh()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+G\+H\+G\+Emission\+\_\+gper\+K\+Wh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aa3f9fa5e1ac6eba7b4608ba437c110ff}\label{class_ship_aa3f9fa5e1ac6eba7b4608ba437c110ff}} 
+\index{Ship@{Ship}!get\_grosstonnage@{get\_grosstonnage}}
+\index{get\_grosstonnage@{get\_grosstonnage}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_grosstonnage()}{get\_grosstonnage()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+grosstonnage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a2bb4533c2d9ccd6c92668ff3d7132f43}\label{class_ship_a2bb4533c2d9ccd6c92668ff3d7132f43}} 
+\index{Ship@{Ship}!get\_idx@{get\_idx}}
+\index{get\_idx@{get\_idx}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_idx()}{get\_idx()}}
+{\footnotesize\ttfamily int Ship\+::get\+\_\+idx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a3b33ce198d3e5db2e5a06a8606d99df9}\label{class_ship_a3b33ce198d3e5db2e5a06a8606d99df9}} 
+\index{Ship@{Ship}!get\_imo@{get\_imo}}
+\index{get\_imo@{get\_imo}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_imo()}{get\_imo()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+imo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a363fe0b03679729aed983b12c55ac68b}\label{class_ship_a363fe0b03679729aed983b12c55ac68b}} 
+\index{Ship@{Ship}!get\_is\_active@{get\_is\_active}}
+\index{get\_is\_active@{get\_is\_active}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_is\_active()}{get\_is\_active()}}
+{\footnotesize\ttfamily int Ship\+::get\+\_\+is\+\_\+active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_af2069867a366ae1c419abc83c8997525}\label{class_ship_af2069867a366ae1c419abc83c8997525}} 
+\index{Ship@{Ship}!get\_KW@{get\_KW}}
+\index{get\_KW@{get\_KW}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_KW()}{get\_KW()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+KW (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a9ea443d338a4eef825f745bc5a4f8096}\label{class_ship_a9ea443d338a4eef825f745bc5a4f8096}} 
+\index{Ship@{Ship}!get\_lats@{get\_lats}}
+\index{get\_lats@{get\_lats}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_lats()}{get\_lats()}}
+{\footnotesize\ttfamily vector$<$ double $>$ Ship\+::get\+\_\+lats (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aba267883849eb02822480b2564919cdc}\label{class_ship_aba267883849eb02822480b2564919cdc}} 
+\index{Ship@{Ship}!get\_loa@{get\_loa}}
+\index{get\_loa@{get\_loa}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_loa()}{get\_loa()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+loa (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a84638f50c84bfbb6b07bd73d028e97fe}\label{class_ship_a84638f50c84bfbb6b07bd73d028e97fe}} 
+\index{Ship@{Ship}!get\_longs@{get\_longs}}
+\index{get\_longs@{get\_longs}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_longs()}{get\_longs()}}
+{\footnotesize\ttfamily vector$<$ double $>$ Ship\+::get\+\_\+longs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a748ddbd6c38b534c9aeb16c53dc4fdc3}\label{class_ship_a748ddbd6c38b534c9aeb16c53dc4fdc3}} 
+\index{Ship@{Ship}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily string Ship\+::get\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a51334458c7e56cfd6fb64340dced977c}\label{class_ship_a51334458c7e56cfd6fb64340dced977c}} 
+\index{Ship@{Ship}!get\_nb\_transported\_units@{get\_nb\_transported\_units}}
+\index{get\_nb\_transported\_units@{get\_nb\_transported\_units}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_nb\_transported\_units()}{get\_nb\_transported\_units()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+nb\+\_\+transported\+\_\+units (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a6b424d1428e06721e0496fff8b5583fc}\label{class_ship_a6b424d1428e06721e0496fff8b5583fc}} 
+\index{Ship@{Ship}!get\_nbunits@{get\_nbunits}}
+\index{get\_nbunits@{get\_nbunits}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_nbunits()}{get\_nbunits()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+nbunits (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aed6705dc37c07d1ca009ba2b9ca4a150}\label{class_ship_aed6705dc37c07d1ca009ba2b9ca4a150}} 
+\index{Ship@{Ship}!get\_NOxEmission@{get\_NOxEmission}}
+\index{get\_NOxEmission@{get\_NOxEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_NOxEmission()}{get\_NOxEmission()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+N\+Ox\+Emission (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a96eb0a840c25f7ccd567437990acf2a3}\label{class_ship_a96eb0a840c25f7ccd567437990acf2a3}} 
+\index{Ship@{Ship}!get\_NOxEmission\_gperKWh@{get\_NOxEmission\_gperKWh}}
+\index{get\_NOxEmission\_gperKWh@{get\_NOxEmission\_gperKWh}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_NOxEmission\_gperKWh()}{get\_NOxEmission\_gperKWh()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+N\+Ox\+Emission\+\_\+gper\+K\+Wh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a8a27995643103791ae161daff47b2e68}\label{class_ship_a8a27995643103791ae161daff47b2e68}} 
+\index{Ship@{Ship}!get\_origin\_x@{get\_origin\_x}}
+\index{get\_origin\_x@{get\_origin\_x}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_origin\_x()}{get\_origin\_x()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+origin\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_acefd31c97b2109ff2d02dcef6c4d52d0}\label{class_ship_acefd31c97b2109ff2d02dcef6c4d52d0}} 
+\index{Ship@{Ship}!get\_origin\_y@{get\_origin\_y}}
+\index{get\_origin\_y@{get\_origin\_y}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_origin\_y()}{get\_origin\_y()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+origin\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_ab626df07c2a45cc09fa7b3c98e8e2a9c}\label{class_ship_ab626df07c2a45cc09fa7b3c98e8e2a9c}} 
+\index{Ship@{Ship}!get\_PMEEmission@{get\_PMEEmission}}
+\index{get\_PMEEmission@{get\_PMEEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_PMEEmission()}{get\_PMEEmission()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+P\+M\+E\+Emission (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a34ec4da6b3f3494592ce0fb67d24c09c}\label{class_ship_a34ec4da6b3f3494592ce0fb67d24c09c}} 
+\index{Ship@{Ship}!get\_PMEEmission\_gperKWh@{get\_PMEEmission\_gperKWh}}
+\index{get\_PMEEmission\_gperKWh@{get\_PMEEmission\_gperKWh}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_PMEEmission\_gperKWh()}{get\_PMEEmission\_gperKWh()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+P\+M\+E\+Emission\+\_\+gper\+K\+Wh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a07c4f505be69cf3093bbdafa00131dcc}\label{class_ship_a07c4f505be69cf3093bbdafa00131dcc}} 
+\index{Ship@{Ship}!get\_SOxEmission@{get\_SOxEmission}}
+\index{get\_SOxEmission@{get\_SOxEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_SOxEmission()}{get\_SOxEmission()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+S\+Ox\+Emission (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a998e0000dd910bc994fd12f4aaf563b0}\label{class_ship_a998e0000dd910bc994fd12f4aaf563b0}} 
+\index{Ship@{Ship}!get\_SOxEmission\_percentpertotalfuelmass@{get\_SOxEmission\_percentpertotalfuelmass}}
+\index{get\_SOxEmission\_percentpertotalfuelmass@{get\_SOxEmission\_percentpertotalfuelmass}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_SOxEmission\_percentpertotalfuelmass()}{get\_SOxEmission\_percentpertotalfuelmass()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+\+S\+Ox\+Emission\+\_\+percentpertotalfuelmass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aebaeb01a662f1f7e931b98cdea0c53e9}\label{class_ship_aebaeb01a662f1f7e931b98cdea0c53e9}} 
+\index{Ship@{Ship}!get\_type@{get\_type}}
+\index{get\_type@{get\_type}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_type()}{get\_type()}}
+{\footnotesize\ttfamily string Ship\+::get\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_aef1503d801ea6d480de882893ca1f492}\label{class_ship_aef1503d801ea6d480de882893ca1f492}} 
+\index{Ship@{Ship}!get\_typecode@{get\_typecode}}
+\index{get\_typecode@{get\_typecode}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_typecode()}{get\_typecode()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+typecode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a4eb1d4b2502b0aa5a5d4d18fbcdb4af0}\label{class_ship_a4eb1d4b2502b0aa5a5d4d18fbcdb4af0}} 
+\index{Ship@{Ship}!get\_vcruise@{get\_vcruise}}
+\index{get\_vcruise@{get\_vcruise}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_vcruise()}{get\_vcruise()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+vcruise (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a18d96c836dffd4e9bb756014e0469bee}\label{class_ship_a18d96c836dffd4e9bb756014e0469bee}} 
+\index{Ship@{Ship}!get\_vmax@{get\_vmax}}
+\index{get\_vmax@{get\_vmax}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_vmax()}{get\_vmax()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+vmax (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a3ae4ab1dee931dfe6e3b8ccedea54f8a}\label{class_ship_a3ae4ab1dee931dfe6e3b8ccedea54f8a}} 
+\index{Ship@{Ship}!get\_x@{get\_x}}
+\index{get\_x@{get\_x}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_x()}{get\_x()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a7a60d5c792ede19acd19f487a1336568}\label{class_ship_a7a60d5c792ede19acd19f487a1336568}} 
+\index{Ship@{Ship}!get\_y@{get\_y}}
+\index{get\_y@{get\_y}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_y()}{get\_y()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_add2c961edae22bc6590dde7289e158b8}\label{class_ship_add2c961edae22bc6590dde7289e158b8}} 
+\index{Ship@{Ship}!get\_yearbuild@{get\_yearbuild}}
+\index{get\_yearbuild@{get\_yearbuild}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{get\_yearbuild()}{get\_yearbuild()}}
+{\footnotesize\ttfamily double Ship\+::get\+\_\+yearbuild (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_ship_a21d38a209adf9d1828fbefb85b4ecf1d}\label{class_ship_a21d38a209adf9d1828fbefb85b4ecf1d}} 
+\index{Ship@{Ship}!lock@{lock}}
+\index{lock@{lock}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{lock()}{lock()}}
+{\footnotesize\ttfamily void Ship\+::lock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_ship_a20a5c250b9503f8452d17bd4db0caa59}\label{class_ship_a20a5c250b9503f8452d17bd4db0caa59}} 
+\index{Ship@{Ship}!move@{move}}
+\index{move@{move}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void Ship\+::move (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a6233340d0e09dcc5518572538a2042d5}\label{class_ship_a6233340d0e09dcc5518572538a2042d5}} 
+\index{Ship@{Ship}!set\_count@{set\_count}}
+\index{set\_count@{set\_count}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_count()}{set\_count()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+count (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a655322cd5330201cfe7e52505a51a1bf}\label{class_ship_a655322cd5330201cfe7e52505a51a1bf}} 
+\index{Ship@{Ship}!set\_course@{set\_course}}
+\index{set\_course@{set\_course}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_course()}{set\_course()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+course (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a131d5e3de4dc210a89e53c6c39dbaa29}\label{class_ship_a131d5e3de4dc210a89e53c6c39dbaa29}} 
+\index{Ship@{Ship}!set\_end\_point\_xy@{set\_end\_point\_xy}}
+\index{set\_end\_point\_xy@{set\_end\_point\_xy}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_end\_point\_xy()}{set\_end\_point\_xy()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+end\+\_\+point\+\_\+xy (\begin{DoxyParamCaption}\item[{double}]{\+\_\+x,  }\item[{double}]{\+\_\+y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a78811fbbb53086b1c336ec758480140b}\label{class_ship_a78811fbbb53086b1c336ec758480140b}} 
+\index{Ship@{Ship}!set\_fuel\_use\_litre@{set\_fuel\_use\_litre}}
+\index{set\_fuel\_use\_litre@{set\_fuel\_use\_litre}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_fuel\_use\_litre()}{set\_fuel\_use\_litre()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+fuel\+\_\+use\+\_\+litre (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a5a5d9299ad16c3ccc82ee597d7416187}\label{class_ship_a5a5d9299ad16c3ccc82ee597d7416187}} 
+\index{Ship@{Ship}!set\_GHGEmission@{set\_GHGEmission}}
+\index{set\_GHGEmission@{set\_GHGEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_GHGEmission()}{set\_GHGEmission()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+\+G\+H\+G\+Emission (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a1fb49123ca111896ee2e61f15e106bd6}\label{class_ship_a1fb49123ca111896ee2e61f15e106bd6}} 
+\index{Ship@{Ship}!set\_idx\_ship@{set\_idx\_ship}}
+\index{set\_idx\_ship@{set\_idx\_ship}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_idx\_ship()}{set\_idx\_ship()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+idx\+\_\+ship (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a53699692b9cb3fa78cbe05c5e6d0f5e8}\label{class_ship_a53699692b9cb3fa78cbe05c5e6d0f5e8}} 
+\index{Ship@{Ship}!set\_lane@{set\_lane}}
+\index{set\_lane@{set\_lane}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_lane()}{set\_lane()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+lane (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{\+\_\+longs,  }\item[{vector$<$ double $>$}]{\+\_\+lats }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_afa49566bec8c627b559d81d2ae8aee2a}\label{class_ship_afa49566bec8c627b559d81d2ae8aee2a}} 
+\index{Ship@{Ship}!set\_lats@{set\_lats}}
+\index{set\_lats@{set\_lats}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_lats()}{set\_lats()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+lats (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{\+\_\+lats }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_ae2ad397d3d52205c5cf9ee0f19ad2b12}\label{class_ship_ae2ad397d3d52205c5cf9ee0f19ad2b12}} 
+\index{Ship@{Ship}!set\_longs@{set\_longs}}
+\index{set\_longs@{set\_longs}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_longs()}{set\_longs()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+longs (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{\+\_\+longs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a152241416d67988ce67ce8353e83bee9}\label{class_ship_a152241416d67988ce67ce8353e83bee9}} 
+\index{Ship@{Ship}!set\_nb\_transported\_units@{set\_nb\_transported\_units}}
+\index{set\_nb\_transported\_units@{set\_nb\_transported\_units}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_nb\_transported\_units()}{set\_nb\_transported\_units()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+nb\+\_\+transported\+\_\+units (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a368187285b4d3a5f9e3c9e873505b4cf}\label{class_ship_a368187285b4d3a5f9e3c9e873505b4cf}} 
+\index{Ship@{Ship}!set\_NOxEmission@{set\_NOxEmission}}
+\index{set\_NOxEmission@{set\_NOxEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_NOxEmission()}{set\_NOxEmission()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+\+N\+Ox\+Emission (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a7f47f560d3545d0eae8a89c54b4e0e2c}\label{class_ship_a7f47f560d3545d0eae8a89c54b4e0e2c}} 
+\index{Ship@{Ship}!set\_PMEEmission@{set\_PMEEmission}}
+\index{set\_PMEEmission@{set\_PMEEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_PMEEmission()}{set\_PMEEmission()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+\+P\+M\+E\+Emission (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_aeea91e3f1b6252ae8737738f1cc71985}\label{class_ship_aeea91e3f1b6252ae8737738f1cc71985}} 
+\index{Ship@{Ship}!set\_SOxEmission@{set\_SOxEmission}}
+\index{set\_SOxEmission@{set\_SOxEmission}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_SOxEmission()}{set\_SOxEmission()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+\+S\+Ox\+Emission (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a6bf88532d109acb4bad7540a5d28a38f}\label{class_ship_a6bf88532d109acb4bad7540a5d28a38f}} 
+\index{Ship@{Ship}!set\_vcruise@{set\_vcruise}}
+\index{set\_vcruise@{set\_vcruise}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_vcruise()}{set\_vcruise()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+vcruise (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_aa8cac550988f1bb1ce13cb5420860bd6}\label{class_ship_aa8cac550988f1bb1ce13cb5420860bd6}} 
+\index{Ship@{Ship}!set\_vmax@{set\_vmax}}
+\index{set\_vmax@{set\_vmax}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_vmax()}{set\_vmax()}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+vmax (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a66be1579e64ee188b0a5f4f77f4490e0}\label{class_ship_a66be1579e64ee188b0a5f4f77f4490e0}} 
+\index{Ship@{Ship}!set\_xy@{set\_xy}}
+\index{set\_xy@{set\_xy}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_xy()}{set\_xy()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+xy (\begin{DoxyParamCaption}\item[{double}]{\+\_\+x,  }\item[{double}]{\+\_\+y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_a2729dc6f1951abf423f8a8e2fe898f01}\label{class_ship_a2729dc6f1951abf423f8a8e2fe898f01}} 
+\index{Ship@{Ship}!set\_xy@{set\_xy}}
+\index{set\_xy@{set\_xy}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{set\_xy()}{set\_xy()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Ship\+::set\+\_\+xy (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{\+\_\+xy }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ship_af47301f512437a323b5750684e5df992}\label{class_ship_af47301f512437a323b5750684e5df992}} 
+\index{Ship@{Ship}!unlock@{unlock}}
+\index{unlock@{unlock}!Ship@{Ship}}
+\subsubsection{\texorpdfstring{unlock()}{unlock()}}
+{\footnotesize\ttfamily void Ship\+::unlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_ship_8h}{Ship.\+h}}\item 
+commons/\mbox{\hyperlink{_ship_8cpp}{Ship.\+cpp}}\end{DoxyCompactItemize}

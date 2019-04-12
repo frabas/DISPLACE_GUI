@@ -1,0 +1,190 @@
+\hypertarget{class_pop_dyn_table}{}\section{Pop\+Dyn\+Table Class Reference}
+\label{class_pop_dyn_table}\index{PopDynTable@{PopDynTable}}
+
+
+{\ttfamily \#include $<$popdyntable.\+h$>$}
+
+Inheritance diagram for Pop\+Dyn\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{db/d7f/class_pop_dyn_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_pop_dyn_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pop_dyn_table_a3c6b649dde4a86af47b4c0ad66e02fc0}{Pop\+Dyn\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_pop_dyn_table_ac5a3c3a5c49cd20bb887224a4a4b819e}{$\sim$\+Pop\+Dyn\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_pop_dyn_table_a05cc504648b685a254f978cb904e37f5}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_pop_dyn_table_abb5f086db207701c5a7eb4547666b203}{insert}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, int popid, \mbox{\hyperlink{class_population}{Population}} $\ast$pop)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_dyn_table_a552686556395ac42a807469d61122283}{fld\+T\+Step}} = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_dyn_table_ad51d99b3177df980d855e64ec2b41929}{fld\+Pop\+Id}} = make\+Field\+Def(\char`\"{}Pop\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_pop_dyn_table_a3e43d6c14cadec8feb0dcdec3b202939}{fld\+Group}} = make\+Field\+Def(\char`\"{}Pop\+Group\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_aab077b5a51bb261726bf9c76417169d4}{fld\+Nz}} = make\+Field\+Def(\char`\"{}Nz\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a73d859709ce0ee0cab4040d6e985da13}{fldC}} = make\+Field\+Def(\char`\"{}Catch\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_acc39c279338d923ddf4a70c66dab64e3}{fldD}} = make\+Field\+Def(\char`\"{}Discard\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a75abd6249f9a3d69609698e12cdf17f6}{fldravF}} = make\+Field\+Def(\char`\"{}RunningF\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a50d22b3fd3483b1c237b5322f7dc11dc}{fldF}} = make\+Field\+Def(\char`\"{}F\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a74145c3391e6498542d468bf063c3d01}{fldM}} = make\+Field\+Def(\char`\"{}M\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_ab25ca20a0efce5852a7163e55c3fbcf1}{fld\+Na}} = make\+Field\+Def(\char`\"{}Na\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_ab53c52a14f297070f8d9425d4ac48a71}{fldW}} = make\+Field\+Def(\char`\"{}W\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_aa2b80bf86f409ef0f59a606948ed04e9}{fld\+Mat}} = make\+Field\+Def(\char`\"{}Mat\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a3dc24fac681a019c8cd9ae57457691aa}{fld\+S\+SB}} = make\+Field\+Def(\char`\"{}S\+SB\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a62af20a0049e86c3e963d0825700cf0d}{fld\+F\+Fmsy}} = make\+Field\+Def(\char`\"{}F\+Fmsy\char`\"{},Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_pop_dyn_table_a72338a05a2e3d98b7ee92238ddbfdc67}{fld\+Prop\+Mature}} = make\+Field\+Def(\char`\"{}Prop\+Mature\char`\"{},Field\+Type\+::\+Real())
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_pop_dyn_table_a3c6b649dde4a86af47b4c0ad66e02fc0}\label{class_pop_dyn_table_a3c6b649dde4a86af47b4c0ad66e02fc0}} 
+\index{PopDynTable@{PopDynTable}!PopDynTable@{PopDynTable}}
+\index{PopDynTable@{PopDynTable}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{PopDynTable()}{PopDynTable()}}
+{\footnotesize\ttfamily Pop\+Dyn\+Table\+::\+Pop\+Dyn\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_pop_dyn_table_ac5a3c3a5c49cd20bb887224a4a4b819e}\label{class_pop_dyn_table_ac5a3c3a5c49cd20bb887224a4a4b819e}} 
+\index{PopDynTable@{PopDynTable}!````~PopDynTable@{$\sim$PopDynTable}}
+\index{````~PopDynTable@{$\sim$PopDynTable}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{$\sim$PopDynTable()}{~PopDynTable()}}
+{\footnotesize\ttfamily Pop\+Dyn\+Table\+::$\sim$\+Pop\+Dyn\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_pop_dyn_table_a05cc504648b685a254f978cb904e37f5}\label{class_pop_dyn_table_a05cc504648b685a254f978cb904e37f5}} 
+\index{PopDynTable@{PopDynTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Pop\+Dyn\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_pop_dyn_table_abb5f086db207701c5a7eb4547666b203}\label{class_pop_dyn_table_abb5f086db207701c5a7eb4547666b203}} 
+\index{PopDynTable@{PopDynTable}!insert@{insert}}
+\index{insert@{insert}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Pop\+Dyn\+Table\+::insert (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{int}]{popid,  }\item[{\mbox{\hyperlink{class_population}{Population}} $\ast$}]{pop }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_pop_dyn_table_a73d859709ce0ee0cab4040d6e985da13}\label{class_pop_dyn_table_a73d859709ce0ee0cab4040d6e985da13}} 
+\index{PopDynTable@{PopDynTable}!fldC@{fldC}}
+\index{fldC@{fldC}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldC}{fldC}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldC = make\+Field\+Def(\char`\"{}Catch\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_acc39c279338d923ddf4a70c66dab64e3}\label{class_pop_dyn_table_acc39c279338d923ddf4a70c66dab64e3}} 
+\index{PopDynTable@{PopDynTable}!fldD@{fldD}}
+\index{fldD@{fldD}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldD}{fldD}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldD = make\+Field\+Def(\char`\"{}Discard\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a50d22b3fd3483b1c237b5322f7dc11dc}\label{class_pop_dyn_table_a50d22b3fd3483b1c237b5322f7dc11dc}} 
+\index{PopDynTable@{PopDynTable}!fldF@{fldF}}
+\index{fldF@{fldF}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldF}{fldF}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldF = make\+Field\+Def(\char`\"{}F\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a62af20a0049e86c3e963d0825700cf0d}\label{class_pop_dyn_table_a62af20a0049e86c3e963d0825700cf0d}} 
+\index{PopDynTable@{PopDynTable}!fldFFmsy@{fldFFmsy}}
+\index{fldFFmsy@{fldFFmsy}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldFFmsy}{fldFFmsy}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+F\+Fmsy = make\+Field\+Def(\char`\"{}F\+Fmsy\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a3e43d6c14cadec8feb0dcdec3b202939}\label{class_pop_dyn_table_a3e43d6c14cadec8feb0dcdec3b202939}} 
+\index{PopDynTable@{PopDynTable}!fldGroup@{fldGroup}}
+\index{fldGroup@{fldGroup}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldGroup}{fldGroup}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Dyn\+Table\+::fld\+Group = make\+Field\+Def(\char`\"{}Pop\+Group\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a74145c3391e6498542d468bf063c3d01}\label{class_pop_dyn_table_a74145c3391e6498542d468bf063c3d01}} 
+\index{PopDynTable@{PopDynTable}!fldM@{fldM}}
+\index{fldM@{fldM}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldM}{fldM}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldM = make\+Field\+Def(\char`\"{}M\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_aa2b80bf86f409ef0f59a606948ed04e9}\label{class_pop_dyn_table_aa2b80bf86f409ef0f59a606948ed04e9}} 
+\index{PopDynTable@{PopDynTable}!fldMat@{fldMat}}
+\index{fldMat@{fldMat}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldMat}{fldMat}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+Mat = make\+Field\+Def(\char`\"{}Mat\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_ab25ca20a0efce5852a7163e55c3fbcf1}\label{class_pop_dyn_table_ab25ca20a0efce5852a7163e55c3fbcf1}} 
+\index{PopDynTable@{PopDynTable}!fldNa@{fldNa}}
+\index{fldNa@{fldNa}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldNa}{fldNa}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+Na = make\+Field\+Def(\char`\"{}Na\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_aab077b5a51bb261726bf9c76417169d4}\label{class_pop_dyn_table_aab077b5a51bb261726bf9c76417169d4}} 
+\index{PopDynTable@{PopDynTable}!fldNz@{fldNz}}
+\index{fldNz@{fldNz}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldNz}{fldNz}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+Nz = make\+Field\+Def(\char`\"{}Nz\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_ad51d99b3177df980d855e64ec2b41929}\label{class_pop_dyn_table_ad51d99b3177df980d855e64ec2b41929}} 
+\index{PopDynTable@{PopDynTable}!fldPopId@{fldPopId}}
+\index{fldPopId@{fldPopId}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldPopId}{fldPopId}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Dyn\+Table\+::fld\+Pop\+Id = make\+Field\+Def(\char`\"{}Pop\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a72338a05a2e3d98b7ee92238ddbfdc67}\label{class_pop_dyn_table_a72338a05a2e3d98b7ee92238ddbfdc67}} 
+\index{PopDynTable@{PopDynTable}!fldPropMature@{fldPropMature}}
+\index{fldPropMature@{fldPropMature}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldPropMature}{fldPropMature}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+Prop\+Mature = make\+Field\+Def(\char`\"{}Prop\+Mature\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a75abd6249f9a3d69609698e12cdf17f6}\label{class_pop_dyn_table_a75abd6249f9a3d69609698e12cdf17f6}} 
+\index{PopDynTable@{PopDynTable}!fldravF@{fldravF}}
+\index{fldravF@{fldravF}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldravF}{fldravF}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldravF = make\+Field\+Def(\char`\"{}RunningF\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a3dc24fac681a019c8cd9ae57457691aa}\label{class_pop_dyn_table_a3dc24fac681a019c8cd9ae57457691aa}} 
+\index{PopDynTable@{PopDynTable}!fldSSB@{fldSSB}}
+\index{fldSSB@{fldSSB}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldSSB}{fldSSB}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fld\+S\+SB = make\+Field\+Def(\char`\"{}S\+SB\char`\"{},Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_pop_dyn_table_a552686556395ac42a807469d61122283}\label{class_pop_dyn_table_a552686556395ac42a807469d61122283}} 
+\index{PopDynTable@{PopDynTable}!fldTStep@{fldTStep}}
+\index{fldTStep@{fldTStep}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldTStep}{fldTStep}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Pop\+Dyn\+Table\+::fld\+T\+Step = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_pop_dyn_table_ab53c52a14f297070f8d9425d4ac48a71}\label{class_pop_dyn_table_ab53c52a14f297070f8d9425d4ac48a71}} 
+\index{PopDynTable@{PopDynTable}!fldW@{fldW}}
+\index{fldW@{fldW}!PopDynTable@{PopDynTable}}
+\subsubsection{\texorpdfstring{fldW}{fldW}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Pop\+Dyn\+Table\+::fldW = make\+Field\+Def(\char`\"{}W\char`\"{},Field\+Type\+::\+Real())}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{popdyntable_8h}{popdyntable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{popdyntable_8cpp}{popdyntable.\+cpp}}\end{DoxyCompactItemize}

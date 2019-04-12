@@ -1,0 +1,25 @@
+var class_simulation_setup_dialog =
+[
+    [ "SimulationSetupDialog", "d2/d3a/class_simulation_setup_dialog.html#a335840ce4453718ba812eac74a2d4939", null ],
+    [ "~SimulationSetupDialog", "d2/d3a/class_simulation_setup_dialog.html#ab47d97ccdfc0f328e8b16d6424bd3e3d", null ],
+    [ "getMoveVesselsOption", "d2/d3a/class_simulation_setup_dialog.html#acf600fd17cea42d34c64ad00182ce358", null ],
+    [ "getNumThreads", "d2/d3a/class_simulation_setup_dialog.html#a7645ae9b927ad850319521ef336255a5", null ],
+    [ "getOutDir", "d2/d3a/class_simulation_setup_dialog.html#a752c7e1666e62f03f26c50332b878759", null ],
+    [ "getPreexistingPathsShop", "d2/d3a/class_simulation_setup_dialog.html#a970678edb5a427cfb932aba52c506b80", null ],
+    [ "getSimulationName", "d2/d3a/class_simulation_setup_dialog.html#ae66e58148255fae03204cc4946fa27ab", null ],
+    [ "getSimulationOutputName", "d2/d3a/class_simulation_setup_dialog.html#a28862916c3e54ee4d21e214214768201", null ],
+    [ "getSimulationSteps", "d2/d3a/class_simulation_setup_dialog.html#a7f747d753edac855918d94d2f49c5989", null ],
+    [ "getUseStaticPaths", "d2/d3a/class_simulation_setup_dialog.html#abe5652dc5074d47f9d368657d06bad39", null ],
+    [ "getVerbosityLevel", "d2/d3a/class_simulation_setup_dialog.html#a89e83c85e2cea94233ee989395144110", null ],
+    [ "getVesselMoveDisplayUpdateRate", "d2/d3a/class_simulation_setup_dialog.html#abd48937bab0b02d711126ee60f080fff", null ],
+    [ "setMoveVesselsOption", "d2/d3a/class_simulation_setup_dialog.html#a1c0d8a255b6f66f63c195207fcf080c9", null ],
+    [ "setNumThreads", "d2/d3a/class_simulation_setup_dialog.html#abd0869a1f998f3ecf226adc3621d0ebf", null ],
+    [ "setOutDir", "d2/d3a/class_simulation_setup_dialog.html#ae0fdf5c99745d09c7ab484e9c30e6573", null ],
+    [ "setPreexistingPathsShop", "d2/d3a/class_simulation_setup_dialog.html#a2d86519a9e486d088de8681857db8e00", null ],
+    [ "setSimulationName", "d2/d3a/class_simulation_setup_dialog.html#a236a81d194ed709185d2c799d6c7ccf3", null ],
+    [ "setSimulationOutputName", "d2/d3a/class_simulation_setup_dialog.html#a5805195d6e2267b3a1fb06deab2458cf", null ],
+    [ "setSimulationSteps", "d2/d3a/class_simulation_setup_dialog.html#aa1be4c5a5c279bda5a26f9d901dcae9c", null ],
+    [ "setUseStaticPaths", "d2/d3a/class_simulation_setup_dialog.html#ad520ec887eec793453ccc4820be9f35f", null ],
+    [ "setVerbosityLevel", "d2/d3a/class_simulation_setup_dialog.html#a5781c5f92780939509a0a50717c8cc72", null ],
+    [ "setVesselMoveDisplayUpdateRate", "d2/d3a/class_simulation_setup_dialog.html#a6dafa75cf3ae80647804b90304aa31e9", null ]
+];

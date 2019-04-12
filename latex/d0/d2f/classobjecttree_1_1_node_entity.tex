@@ -1,0 +1,163 @@
+\hypertarget{classobjecttree_1_1_node_entity}{}\section{objecttree\+::Node\+Entity Class Reference}
+\label{classobjecttree_1_1_node_entity}\index{objecttree::NodeEntity@{objecttree::NodeEntity}}
+
+
+{\ttfamily \#include $<$nodeentity.\+h$>$}
+
+Inheritance diagram for objecttree\+::Node\+Entity\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d0/d2f/classobjecttree_1_1_node_entity}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classobjecttree_1_1_node_entity_a6338fd028cc29a193c11efd0a1ae3e24}{on\+Action\+Search\+By\+Id}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classobjecttree_1_1_node_entity_ad70df4ceddd7e79f626f62c37e12fca3}{Node\+Entity}} (\mbox{\hyperlink{class_object_tree_model}{Object\+Tree\+Model}} $\ast$\+\_\+model, int id=-\/1)
+\item 
+virtual \mbox{\hyperlink{class_object_tree_model_a379e9d6b0d381853785adf62095ba4e3}{Object\+Tree\+Model\+::\+Category}} \mbox{\hyperlink{classobjecttree_1_1_node_entity_abb9330a2e5bc9a6afc6b035d07a3b149}{get\+Category}} () const override
+\item 
+virtual Q\+Model\+Index \mbox{\hyperlink{classobjecttree_1_1_node_entity_aa55851c6cec05dad2f9e4b0705eafa68}{parent}} (const Q\+Model\+Index \&parent) const override
+\item 
+virtual Q\+Model\+Index \mbox{\hyperlink{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}{index}} (int row, int column, const Q\+Model\+Index \&\mbox{\hyperlink{classobjecttree_1_1_node_entity_aa55851c6cec05dad2f9e4b0705eafa68}{parent}}) const override
+\item 
+virtual int \mbox{\hyperlink{classobjecttree_1_1_node_entity_a0cb1dcb7837edb77b42fb2d758d5c286}{row\+Count}} () const override
+\item 
+virtual int \mbox{\hyperlink{classobjecttree_1_1_node_entity_a9429614bf6e56a4a1bcc67403f7733b0}{column\+Count}} () const override
+\item 
+virtual Q\+Variant \mbox{\hyperlink{classobjecttree_1_1_node_entity_af154f5a4972a033ac7303225aeae81cc}{data}} (const Q\+Model\+Index \&\mbox{\hyperlink{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}{index}}, int role) const override
+\item 
+virtual Qt\+::\+Item\+Flags \mbox{\hyperlink{classobjecttree_1_1_node_entity_ac710602e9c61c23ebf718c815044eff7}{flags}} (Qt\+::\+Item\+Flags defflags, const Q\+Model\+Index \&\mbox{\hyperlink{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}{index}}) const override
+\item 
+virtual bool \mbox{\hyperlink{classobjecttree_1_1_node_entity_a0ea396d5931c5e5984a1d4c8188163ea}{set\+Data}} (const Q\+Model\+Index \&\mbox{\hyperlink{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}{index}}, const Q\+Variant \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}, int role) override
+\item 
+int \mbox{\hyperlink{classobjecttree_1_1_node_entity_a9466fa14a33aee9c2953fb57313b0735}{get\+Node\+Id}} () const
+\item 
+virtual Q\+Menu $\ast$ \mbox{\hyperlink{classobjecttree_1_1_node_entity_a03445bba05e894cefaa96aeb49abeacc}{context\+Menu}} () const override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_ad70df4ceddd7e79f626f62c37e12fca3}\label{classobjecttree_1_1_node_entity_ad70df4ceddd7e79f626f62c37e12fca3}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!NodeEntity@{NodeEntity}}
+\index{NodeEntity@{NodeEntity}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{NodeEntity()}{NodeEntity()}}
+{\footnotesize\ttfamily objecttree\+::\+Node\+Entity\+::\+Node\+Entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_object_tree_model}{Object\+Tree\+Model}} $\ast$}]{\+\_\+model,  }\item[{int}]{id = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a9429614bf6e56a4a1bcc67403f7733b0}\label{classobjecttree_1_1_node_entity_a9429614bf6e56a4a1bcc67403f7733b0}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!columnCount@{columnCount}}
+\index{columnCount@{columnCount}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{columnCount()}{columnCount()}}
+{\footnotesize\ttfamily int objecttree\+::\+Node\+Entity\+::column\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a70fd25eccf88b305e9db15fbe3daeae8}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a03445bba05e894cefaa96aeb49abeacc}\label{classobjecttree_1_1_node_entity_a03445bba05e894cefaa96aeb49abeacc}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!contextMenu@{contextMenu}}
+\index{contextMenu@{contextMenu}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{contextMenu()}{contextMenu()}}
+{\footnotesize\ttfamily Q\+Menu $\ast$ objecttree\+::\+Node\+Entity\+::context\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a0dd10b6074f96af281b6f7a68c492b75}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_af154f5a4972a033ac7303225aeae81cc}\label{classobjecttree_1_1_node_entity_af154f5a4972a033ac7303225aeae81cc}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!data@{data}}
+\index{data@{data}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily Q\+Variant objecttree\+::\+Node\+Entity\+::data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{int}]{role }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a2413c6573de18b451d97eb3800f10f35}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_ac710602e9c61c23ebf718c815044eff7}\label{classobjecttree_1_1_node_entity_ac710602e9c61c23ebf718c815044eff7}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!flags@{flags}}
+\index{flags@{flags}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{flags()}{flags()}}
+{\footnotesize\ttfamily Qt\+::\+Item\+Flags objecttree\+::\+Node\+Entity\+::flags (\begin{DoxyParamCaption}\item[{Qt\+::\+Item\+Flags}]{defflags,  }\item[{const Q\+Model\+Index \&}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a71042bfb5a8328bcbde9d283c0b1b28c}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_abb9330a2e5bc9a6afc6b035d07a3b149}\label{classobjecttree_1_1_node_entity_abb9330a2e5bc9a6afc6b035d07a3b149}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!getCategory@{getCategory}}
+\index{getCategory@{getCategory}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{getCategory()}{getCategory()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{class_object_tree_model_a379e9d6b0d381853785adf62095ba4e3}{Object\+Tree\+Model\+::\+Category}} objecttree\+::\+Node\+Entity\+::get\+Category (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_aa4e80e7fa80672c1b9902add665abc77}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a9466fa14a33aee9c2953fb57313b0735}\label{classobjecttree_1_1_node_entity_a9466fa14a33aee9c2953fb57313b0735}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!getNodeId@{getNodeId}}
+\index{getNodeId@{getNodeId}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{getNodeId()}{getNodeId()}}
+{\footnotesize\ttfamily int objecttree\+::\+Node\+Entity\+::get\+Node\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}\label{classobjecttree_1_1_node_entity_a2ad069b13c5ce29c4239acd2c4eeda24}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!index@{index}}
+\index{index@{index}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{index()}{index()}}
+{\footnotesize\ttfamily Q\+Model\+Index objecttree\+::\+Node\+Entity\+::index (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a9ccaab3b27e65b1ed8b22f00c57a1082}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a6338fd028cc29a193c11efd0a1ae3e24}\label{classobjecttree_1_1_node_entity_a6338fd028cc29a193c11efd0a1ae3e24}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!onActionSearchById@{onActionSearchById}}
+\index{onActionSearchById@{onActionSearchById}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{onActionSearchById}{onActionSearchById}}
+{\footnotesize\ttfamily void objecttree\+::\+Node\+Entity\+::on\+Action\+Search\+By\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_aa55851c6cec05dad2f9e4b0705eafa68}\label{classobjecttree_1_1_node_entity_aa55851c6cec05dad2f9e4b0705eafa68}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!parent@{parent}}
+\index{parent@{parent}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{parent()}{parent()}}
+{\footnotesize\ttfamily Q\+Model\+Index objecttree\+::\+Node\+Entity\+::parent (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a2d1b13c056476f87637aacd7e99e7305}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a0cb1dcb7837edb77b42fb2d758d5c286}\label{classobjecttree_1_1_node_entity_a0cb1dcb7837edb77b42fb2d758d5c286}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!rowCount@{rowCount}}
+\index{rowCount@{rowCount}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{rowCount()}{rowCount()}}
+{\footnotesize\ttfamily int objecttree\+::\+Node\+Entity\+::row\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_a82c626bb28c55dcfce11cf7ec3368588}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+\mbox{\Hypertarget{classobjecttree_1_1_node_entity_a0ea396d5931c5e5984a1d4c8188163ea}\label{classobjecttree_1_1_node_entity_a0ea396d5931c5e5984a1d4c8188163ea}} 
+\index{objecttree::NodeEntity@{objecttree::NodeEntity}!setData@{setData}}
+\index{setData@{setData}!objecttree::NodeEntity@{objecttree::NodeEntity}}
+\subsubsection{\texorpdfstring{setData()}{setData()}}
+{\footnotesize\ttfamily bool objecttree\+::\+Node\+Entity\+::set\+Data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{const Q\+Variant \&}]{value,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classobjecttree_1_1_object_tree_entity_ab6742194e637093cb1571998bee88ff5}{objecttree\+::\+Object\+Tree\+Entity}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/objects/\mbox{\hyperlink{nodeentity_8h}{nodeentity.\+h}}\item 
+qtgui/objects/\mbox{\hyperlink{nodeentity_8cpp}{nodeentity.\+cpp}}\end{DoxyCompactItemize}

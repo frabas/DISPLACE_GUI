@@ -1,0 +1,142 @@
+\hypertarget{class_dt_editor_window}{}\section{Dt\+Editor\+Window Class Reference}
+\label{class_dt_editor_window}\index{DtEditorWindow@{DtEditorWindow}}
+
+
+{\ttfamily \#include $<$dteditorwindow.\+h$>$}
+
+Inheritance diagram for Dt\+Editor\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{da/da2/class_dt_editor_window}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_dt_editor_window_a667a7c1012a535991d7e6d9a81f9b560}{Dt\+Editor\+Window}} (Q\+Widget $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_dt_editor_window_a2cadbed53f5467119b28446ca07e2e09}{$\sim$\+Dt\+Editor\+Window}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a97dd77748bef76c2b4502ed91d8edcf3}{update\+Gui}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a5788c87ca0e893c0d60cc866d50b065b}{save}} (Q\+String filename)
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_afe4694a03730635f386fc4271ddb50f7}{open}} (Q\+String filename)
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a3d3195899ad3cbbf8c9fc5f3ee2ccf6d}{update\+Title\+Bar}} ()
+\item 
+bool \mbox{\hyperlink{class_dt_editor_window_a12b72477540c9a5f9b261dd46ec865ae}{check\+For\+D\+Tree\+Before\+Saving}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_ae45d5775844c3cc795b70e5a97e682a7}{create\+Scene}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$ tree)
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a778de6912976dad3734821938e5a4058}{undo}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a14790e0d43a17db238e7c73690796d28}{redo}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_ab7a3269c8ed4eb4d81f39246cc3c4dbb}{execute}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_command}{Command}} $>$ command)
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_ae3b30ca62f07f0d8e731ecb3c425a679}{clear\+Undo\+Redo\+Stacks}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_a502ffef938d35087b00cc1728a294997}{update\+Undo\+Gui\+Status}} ()
+\item 
+void \mbox{\hyperlink{class_dt_editor_window_aafce6f85dd9803cca88d982226ad37aa}{close\+Event}} (Q\+Close\+Event $\ast$event)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_dt_editor_window_a667a7c1012a535991d7e6d9a81f9b560}\label{class_dt_editor_window_a667a7c1012a535991d7e6d9a81f9b560}} 
+\index{DtEditorWindow@{DtEditorWindow}!DtEditorWindow@{DtEditorWindow}}
+\index{DtEditorWindow@{DtEditorWindow}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{DtEditorWindow()}{DtEditorWindow()}}
+{\footnotesize\ttfamily Dt\+Editor\+Window\+::\+Dt\+Editor\+Window (\begin{DoxyParamCaption}\item[{Q\+Widget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a2cadbed53f5467119b28446ca07e2e09}\label{class_dt_editor_window_a2cadbed53f5467119b28446ca07e2e09}} 
+\index{DtEditorWindow@{DtEditorWindow}!````~DtEditorWindow@{$\sim$DtEditorWindow}}
+\index{````~DtEditorWindow@{$\sim$DtEditorWindow}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{$\sim$DtEditorWindow()}{~DtEditorWindow()}}
+{\footnotesize\ttfamily Dt\+Editor\+Window\+::$\sim$\+Dt\+Editor\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_dt_editor_window_a12b72477540c9a5f9b261dd46ec865ae}\label{class_dt_editor_window_a12b72477540c9a5f9b261dd46ec865ae}} 
+\index{DtEditorWindow@{DtEditorWindow}!checkForDTreeBeforeSaving@{checkForDTreeBeforeSaving}}
+\index{checkForDTreeBeforeSaving@{checkForDTreeBeforeSaving}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{checkForDTreeBeforeSaving()}{checkForDTreeBeforeSaving()}}
+{\footnotesize\ttfamily bool Dt\+Editor\+Window\+::check\+For\+D\+Tree\+Before\+Saving (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_ae3b30ca62f07f0d8e731ecb3c425a679}\label{class_dt_editor_window_ae3b30ca62f07f0d8e731ecb3c425a679}} 
+\index{DtEditorWindow@{DtEditorWindow}!clearUndoRedoStacks@{clearUndoRedoStacks}}
+\index{clearUndoRedoStacks@{clearUndoRedoStacks}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{clearUndoRedoStacks()}{clearUndoRedoStacks()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::clear\+Undo\+Redo\+Stacks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_aafce6f85dd9803cca88d982226ad37aa}\label{class_dt_editor_window_aafce6f85dd9803cca88d982226ad37aa}} 
+\index{DtEditorWindow@{DtEditorWindow}!closeEvent@{closeEvent}}
+\index{closeEvent@{closeEvent}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{closeEvent()}{closeEvent()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::close\+Event (\begin{DoxyParamCaption}\item[{Q\+Close\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_ae45d5775844c3cc795b70e5a97e682a7}\label{class_dt_editor_window_ae45d5775844c3cc795b70e5a97e682a7}} 
+\index{DtEditorWindow@{DtEditorWindow}!createScene@{createScene}}
+\index{createScene@{createScene}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{createScene()}{createScene()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::create\+Scene (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_decision_tree}{dtree\+::\+Decision\+Tree}} $>$}]{tree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_ab7a3269c8ed4eb4d81f39246cc3c4dbb}\label{class_dt_editor_window_ab7a3269c8ed4eb4d81f39246cc3c4dbb}} 
+\index{DtEditorWindow@{DtEditorWindow}!execute@{execute}}
+\index{execute@{execute}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::execute (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_command}{Command}} $>$}]{command }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_afe4694a03730635f386fc4271ddb50f7}\label{class_dt_editor_window_afe4694a03730635f386fc4271ddb50f7}} 
+\index{DtEditorWindow@{DtEditorWindow}!open@{open}}
+\index{open@{open}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{open()}{open()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::open (\begin{DoxyParamCaption}\item[{Q\+String}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a14790e0d43a17db238e7c73690796d28}\label{class_dt_editor_window_a14790e0d43a17db238e7c73690796d28}} 
+\index{DtEditorWindow@{DtEditorWindow}!redo@{redo}}
+\index{redo@{redo}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{redo()}{redo()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a5788c87ca0e893c0d60cc866d50b065b}\label{class_dt_editor_window_a5788c87ca0e893c0d60cc866d50b065b}} 
+\index{DtEditorWindow@{DtEditorWindow}!save@{save}}
+\index{save@{save}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::save (\begin{DoxyParamCaption}\item[{Q\+String}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a778de6912976dad3734821938e5a4058}\label{class_dt_editor_window_a778de6912976dad3734821938e5a4058}} 
+\index{DtEditorWindow@{DtEditorWindow}!undo@{undo}}
+\index{undo@{undo}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{undo()}{undo()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a97dd77748bef76c2b4502ed91d8edcf3}\label{class_dt_editor_window_a97dd77748bef76c2b4502ed91d8edcf3}} 
+\index{DtEditorWindow@{DtEditorWindow}!updateGui@{updateGui}}
+\index{updateGui@{updateGui}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{updateGui()}{updateGui()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::update\+Gui (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_dt_editor_window_a3d3195899ad3cbbf8c9fc5f3ee2ccf6d}\label{class_dt_editor_window_a3d3195899ad3cbbf8c9fc5f3ee2ccf6d}} 
+\index{DtEditorWindow@{DtEditorWindow}!updateTitleBar@{updateTitleBar}}
+\index{updateTitleBar@{updateTitleBar}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{updateTitleBar()}{updateTitleBar()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::update\+Title\+Bar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_dt_editor_window_a502ffef938d35087b00cc1728a294997}\label{class_dt_editor_window_a502ffef938d35087b00cc1728a294997}} 
+\index{DtEditorWindow@{DtEditorWindow}!updateUndoGuiStatus@{updateUndoGuiStatus}}
+\index{updateUndoGuiStatus@{updateUndoGuiStatus}!DtEditorWindow@{DtEditorWindow}}
+\subsubsection{\texorpdfstring{updateUndoGuiStatus()}{updateUndoGuiStatus()}}
+{\footnotesize\ttfamily void Dt\+Editor\+Window\+::update\+Undo\+Gui\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dteditor/\mbox{\hyperlink{dteditorwindow_8h}{dteditorwindow.\+h}}\item 
+dteditor/\mbox{\hyperlink{dteditorwindow_8cpp}{dteditorwindow.\+cpp}}\end{DoxyCompactItemize}

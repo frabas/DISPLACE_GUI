@@ -1,0 +1,86 @@
+\hypertarget{class_output_queue_manager}{}\section{Output\+Queue\+Manager Class Reference}
+\label{class_output_queue_manager}\index{OutputQueueManager@{OutputQueueManager}}
+
+
+A manager for the outputs from all the other simulator threads.  
+
+
+
+
+{\ttfamily \#include $<$noipc.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_output_queue_manager_a56584d3f134b6b82d89966ff279b5ad3}{enqueue}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_output_message}{Output\+Message}} $>$)
+\item 
+\mbox{\hyperlink{class_output_queue_manager_ac43a9d5c192f146af0e616b5dfddda0f}{Output\+Queue\+Manager}} ()
+\item 
+\mbox{\hyperlink{class_output_queue_manager_a2a4013a7feaab6dae760946b383ff3da}{Output\+Queue\+Manager}} (std\+::ostream \&stream)
+\item 
+void \mbox{\hyperlink{class_output_queue_manager_a245cad36d3ca48fa0eb94bed6825e1ed}{disable\+Ipc\+Queue}} ()
+\item 
+void \mbox{\hyperlink{class_output_queue_manager_a750683e13f885589c99763eb93a8488f}{start}} ()
+\item 
+void \mbox{\hyperlink{class_output_queue_manager_abc1a72e97cdcd113097e3498ce4dfef1}{finish}} ()
+\item 
+void \mbox{\hyperlink{class_output_queue_manager_abcd58c0a7cfa9f8b5e74f3dd0ab65c2f}{enqueue}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_output_message}{Output\+Message}} $>$ msg)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A manager for the outputs from all the other simulator threads. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_output_queue_manager_ac43a9d5c192f146af0e616b5dfddda0f}\label{class_output_queue_manager_ac43a9d5c192f146af0e616b5dfddda0f}} 
+\index{OutputQueueManager@{OutputQueueManager}!OutputQueueManager@{OutputQueueManager}}
+\index{OutputQueueManager@{OutputQueueManager}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{OutputQueueManager()}{OutputQueueManager()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Output\+Queue\+Manager\+::\+Output\+Queue\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_output_queue_manager_a2a4013a7feaab6dae760946b383ff3da}\label{class_output_queue_manager_a2a4013a7feaab6dae760946b383ff3da}} 
+\index{OutputQueueManager@{OutputQueueManager}!OutputQueueManager@{OutputQueueManager}}
+\index{OutputQueueManager@{OutputQueueManager}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{OutputQueueManager()}{OutputQueueManager()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Output\+Queue\+Manager\+::\+Output\+Queue\+Manager (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_output_queue_manager_a245cad36d3ca48fa0eb94bed6825e1ed}\label{class_output_queue_manager_a245cad36d3ca48fa0eb94bed6825e1ed}} 
+\index{OutputQueueManager@{OutputQueueManager}!disableIpcQueue@{disableIpcQueue}}
+\index{disableIpcQueue@{disableIpcQueue}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{disableIpcQueue()}{disableIpcQueue()}}
+{\footnotesize\ttfamily void Output\+Queue\+Manager\+::disable\+Ipc\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_output_queue_manager_a56584d3f134b6b82d89966ff279b5ad3}\label{class_output_queue_manager_a56584d3f134b6b82d89966ff279b5ad3}} 
+\index{OutputQueueManager@{OutputQueueManager}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{enqueue()}{enqueue()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Output\+Queue\+Manager\+::enqueue (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_output_message}{Output\+Message}} $>$}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_output_queue_manager_abcd58c0a7cfa9f8b5e74f3dd0ab65c2f}\label{class_output_queue_manager_abcd58c0a7cfa9f8b5e74f3dd0ab65c2f}} 
+\index{OutputQueueManager@{OutputQueueManager}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{enqueue()}{enqueue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Output\+Queue\+Manager\+::enqueue (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_output_message}{Output\+Message}} $>$}]{msg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_output_queue_manager_abc1a72e97cdcd113097e3498ce4dfef1}\label{class_output_queue_manager_abc1a72e97cdcd113097e3498ce4dfef1}} 
+\index{OutputQueueManager@{OutputQueueManager}!finish@{finish}}
+\index{finish@{finish}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{finish()}{finish()}}
+{\footnotesize\ttfamily void Output\+Queue\+Manager\+::finish (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_output_queue_manager_a750683e13f885589c99763eb93a8488f}\label{class_output_queue_manager_a750683e13f885589c99763eb93a8488f}} 
+\index{OutputQueueManager@{OutputQueueManager}!start@{start}}
+\index{start@{start}!OutputQueueManager@{OutputQueueManager}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Output\+Queue\+Manager\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+simulator/messages/\mbox{\hyperlink{noipc_8h}{noipc.\+h}}\item 
+simulator/\mbox{\hyperlink{outputqueuemanager_8h}{outputqueuemanager.\+h}}\item 
+simulator/\mbox{\hyperlink{outputqueuemanager_8cpp}{outputqueuemanager.\+cpp}}\end{DoxyCompactItemize}

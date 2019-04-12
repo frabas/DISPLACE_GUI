@@ -1,0 +1,101 @@
+\hypertarget{class_input_file_parser}{}\section{Input\+File\+Parser Class Reference}
+\label{class_input_file_parser}\index{InputFileParser@{InputFileParser}}
+
+
+{\ttfamily \#include $<$inputfileparser.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_input_file_parser_a7235f2dc37c08ecc5b8ffbd7a9c38b63}{Input\+File\+Parser}} ()
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a707a7dab7ad1d7aa3da6f25b2ce41d48}{parse\+Harbour\+File}} (const Q\+String \&path, Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour_data}{Harbour\+Data}} $>$ $>$ \&list, Q\+String $\ast$error)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a8bc5aa995e3259f3ad09003316ae6533}{parse\+Shortest\+Path}} (const Q\+String \&path, int nodeid, Q\+List$<$ Q\+Pair$<$ int, int $>$ $>$ \&graph)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a05314529d0ec1dcea25c5bc558438845}{is\+Shortest\+Path\+Present}} (const Q\+String \&path, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} nodeid)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a4ba538032394832a80a3b837b3c8ba9a}{parse\+Graph}} (const Q\+String \&graphpath, const Q\+String \&coords\+Path, Q\+List$<$ \mbox{\hyperlink{class_graph_builder_1_1_node}{Graph\+Builder\+::\+Node}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, Q\+String $\ast$error)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a140a7650651f70f31a3a58538facd8f5}{path\+Parse\+Relevant\+Nodes}} (const Q\+String \&refpath, Q\+String \&fnode\+Path, Q\+String \&harb\+Path)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a9fdb282b6eb601148bfda85edf1c0ca3}{path\+Parse\+Relevant\+Inter\+Nodes}} (const Q\+String \&refpath, Q\+String \&fnode\+Path, Q\+String \&harb\+Path)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_aa2be819bdc5012f0c3f1e63d27b2a1bf}{parse\+Relevant\+Nodes}} (const Q\+String \&file, Q\+Set$<$ int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_a72c61d399c4a239b2d8a76a5cdfbbc5a}{parse\+Relevant\+Inter\+Nodes}} (const Q\+String \&file, Q\+Vector$<$ int $>$ \&nodeids)
+\item 
+bool \mbox{\hyperlink{class_input_file_parser_ae2073f6d4a7791b757a170d5f1fbfad2}{parse\+Stock\+Names\+File}} (const Q\+String \&path, Q\+Map$<$ Q\+String, int $>$ \&names)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_input_file_parser_a7235f2dc37c08ecc5b8ffbd7a9c38b63}\label{class_input_file_parser_a7235f2dc37c08ecc5b8ffbd7a9c38b63}} 
+\index{InputFileParser@{InputFileParser}!InputFileParser@{InputFileParser}}
+\index{InputFileParser@{InputFileParser}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{InputFileParser()}{InputFileParser()}}
+{\footnotesize\ttfamily Input\+File\+Parser\+::\+Input\+File\+Parser (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_input_file_parser_a05314529d0ec1dcea25c5bc558438845}\label{class_input_file_parser_a05314529d0ec1dcea25c5bc558438845}} 
+\index{InputFileParser@{InputFileParser}!isShortestPathPresent@{isShortestPathPresent}}
+\index{isShortestPathPresent@{isShortestPathPresent}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{isShortestPathPresent()}{isShortestPathPresent()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::is\+Shortest\+Path\+Present (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{path,  }\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{nodeid }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a4ba538032394832a80a3b837b3c8ba9a}\label{class_input_file_parser_a4ba538032394832a80a3b837b3c8ba9a}} 
+\index{InputFileParser@{InputFileParser}!parseGraph@{parseGraph}}
+\index{parseGraph@{parseGraph}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseGraph()}{parseGraph()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Graph (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{graphpath,  }\item[{const Q\+String \&}]{coords\+Path,  }\item[{Q\+List$<$ \mbox{\hyperlink{class_graph_builder_1_1_node}{Graph\+Builder\+::\+Node}} $>$ \&}]{nodes,  }\item[{Q\+String $\ast$}]{error }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a707a7dab7ad1d7aa3da6f25b2ce41d48}\label{class_input_file_parser_a707a7dab7ad1d7aa3da6f25b2ce41d48}} 
+\index{InputFileParser@{InputFileParser}!parseHarbourFile@{parseHarbourFile}}
+\index{parseHarbourFile@{parseHarbourFile}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseHarbourFile()}{parseHarbourFile()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Harbour\+File (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{path,  }\item[{Q\+List$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour_data}{Harbour\+Data}} $>$ $>$ \&}]{list,  }\item[{Q\+String $\ast$}]{error }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a72c61d399c4a239b2d8a76a5cdfbbc5a}\label{class_input_file_parser_a72c61d399c4a239b2d8a76a5cdfbbc5a}} 
+\index{InputFileParser@{InputFileParser}!parseRelevantInterNodes@{parseRelevantInterNodes}}
+\index{parseRelevantInterNodes@{parseRelevantInterNodes}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseRelevantInterNodes()}{parseRelevantInterNodes()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Relevant\+Inter\+Nodes (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{file,  }\item[{Q\+Vector$<$ int $>$ \&}]{nodeids }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_aa2be819bdc5012f0c3f1e63d27b2a1bf}\label{class_input_file_parser_aa2be819bdc5012f0c3f1e63d27b2a1bf}} 
+\index{InputFileParser@{InputFileParser}!parseRelevantNodes@{parseRelevantNodes}}
+\index{parseRelevantNodes@{parseRelevantNodes}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseRelevantNodes()}{parseRelevantNodes()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Relevant\+Nodes (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{file,  }\item[{Q\+Set$<$ int $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a8bc5aa995e3259f3ad09003316ae6533}\label{class_input_file_parser_a8bc5aa995e3259f3ad09003316ae6533}} 
+\index{InputFileParser@{InputFileParser}!parseShortestPath@{parseShortestPath}}
+\index{parseShortestPath@{parseShortestPath}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseShortestPath()}{parseShortestPath()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Shortest\+Path (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{path,  }\item[{int}]{nodeid,  }\item[{Q\+List$<$ Q\+Pair$<$ int, int $>$ $>$ \&}]{graph }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_ae2073f6d4a7791b757a170d5f1fbfad2}\label{class_input_file_parser_ae2073f6d4a7791b757a170d5f1fbfad2}} 
+\index{InputFileParser@{InputFileParser}!parseStockNamesFile@{parseStockNamesFile}}
+\index{parseStockNamesFile@{parseStockNamesFile}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{parseStockNamesFile()}{parseStockNamesFile()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::parse\+Stock\+Names\+File (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{path,  }\item[{Q\+Map$<$ Q\+String, int $>$ \&}]{names }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a9fdb282b6eb601148bfda85edf1c0ca3}\label{class_input_file_parser_a9fdb282b6eb601148bfda85edf1c0ca3}} 
+\index{InputFileParser@{InputFileParser}!pathParseRelevantInterNodes@{pathParseRelevantInterNodes}}
+\index{pathParseRelevantInterNodes@{pathParseRelevantInterNodes}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{pathParseRelevantInterNodes()}{pathParseRelevantInterNodes()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::path\+Parse\+Relevant\+Inter\+Nodes (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{refpath,  }\item[{Q\+String \&}]{fnode\+Path,  }\item[{Q\+String \&}]{harb\+Path }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_input_file_parser_a140a7650651f70f31a3a58538facd8f5}\label{class_input_file_parser_a140a7650651f70f31a3a58538facd8f5}} 
+\index{InputFileParser@{InputFileParser}!pathParseRelevantNodes@{pathParseRelevantNodes}}
+\index{pathParseRelevantNodes@{pathParseRelevantNodes}!InputFileParser@{InputFileParser}}
+\subsubsection{\texorpdfstring{pathParseRelevantNodes()}{pathParseRelevantNodes()}}
+{\footnotesize\ttfamily bool Input\+File\+Parser\+::path\+Parse\+Relevant\+Nodes (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{refpath,  }\item[{Q\+String \&}]{fnode\+Path,  }\item[{Q\+String \&}]{harb\+Path }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{inputfileparser_8h}{inputfileparser.\+h}}\item 
+qtgui/\mbox{\hyperlink{inputfileparser_8cpp}{inputfileparser.\+cpp}}\end{DoxyCompactItemize}

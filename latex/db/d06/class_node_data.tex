@@ -1,0 +1,1124 @@
+\hypertarget{class_node_data}{}\section{Node\+Data Class Reference}
+\label{class_node_data}\index{NodeData@{NodeData}}
+
+
+an extension class for \mbox{\hyperlink{class_node}{Node}}  
+
+
+
+
+{\ttfamily \#include $<$nodedata.\+h$>$}
+
+Inheritance diagram for Node\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{db/d06/class_node_data}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_node_data_1_1_edge}{Edge}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef Q\+Vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node_data_1_1_edge}{Edge}} $>$ $>$ \mbox{\hyperlink{class_node_data_a18f3494d8d83ab4c6831ea211f4cbf09}{Adiacency\+List}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_node_data_a7a67b993f0da15663ef1b3ce61c9f8c3}{Node\+Data}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ nd, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model)
+\item 
+virtual \mbox{\hyperlink{class_node_data_ad870d466c40b9be96ad79adccab79038}{$\sim$\+Node\+Data}} ()
+\item 
+\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} \mbox{\hyperlink{class_node_data_a98838954da8e59f1f91729e61f44608f}{get\+\_\+idx\+\_\+node}} () const
+\item 
+int \mbox{\hyperlink{class_node_data_a56ca73b90c6526c96359cd0869358ccc}{get\+\_\+marine\+\_\+landscape}} () const
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_node_data_a2e9b8cef08c76eea064d9be28b89494b}{get\+\_\+ff\+\_\+names\+\_\+on\+\_\+node}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_aecd2dde5e4c1f3b43cca85cb5b545b86}{get\+\_\+wind}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_ab0fb11992feff6f3d4aeba901c5c984e}{get\+\_\+sst}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_ad53e5051fbf129cc8cfd0ab82fa5dc56}{get\+\_\+salinity}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_ac2040a1fe8fc6cf3b43cd0b3039dcd04}{get\+\_\+\+Nitrogen}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_aec0cbbc536ba9e5dd1987197cb9fe73b}{get\+\_\+\+Phosphorus}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a6eda02c831e328accfda9d0dcab7051f}{get\+\_\+\+Oxygen}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a09704839d81a8a5f1b2ac63484708e27}{get\+\_\+\+Dissolved\+Carbon}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a1f6857f859ac1fecf79db94b7ede82c2}{get\+\_\+bathymetry}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a2ae0509c1ad36427721cef2946d0e53f}{get\+\_\+shippingdensity}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a29fed1328e789db030143d1eab31f4b4}{get\+\_\+siltfraction}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a4bb58802c3b1607a9483a6adac4b2b06}{get\+\_\+init\+\_\+benthos\+\_\+biomass}} () const
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_node_data_a335784d1f1c0392f54480c4736101bda}{get\+\_\+benthos\+\_\+biomass\+\_\+per\+\_\+funcgr}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a83a21fc5bd066b25f7454b7a133a4d0d}{get\+\_\+init\+\_\+benthos\+\_\+number}} () const
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_node_data_a91f8cb85d8f0783003bdbde2774791fc}{get\+\_\+benthos\+\_\+number\+\_\+per\+\_\+funcgr}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_ae3a0fcc6c143f8a0d5188a45293c8044}{get\+\_\+init\+\_\+benthos\+\_\+meanweight}} () const
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_node_data_a26f984f842b7665aed7a771b6dd97a97}{get\+\_\+benthos\+\_\+meanweight\+\_\+per\+\_\+funcgr}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_aade4b2d620f642cdcb4a60135ce07ac3}{set\+Marine\+Landscape}} (int id)
+\item 
+void \mbox{\hyperlink{class_node_data_a4aa6a415cd96ce607564cdf91c9a83a4}{set\+Wind}} (double w)
+\item 
+void \mbox{\hyperlink{class_node_data_a2b9440fd8903a222c1f56e1b347db808}{set\+S\+ST}} (double t)
+\item 
+void \mbox{\hyperlink{class_node_data_ab7d939f860a614f7b479c73ba57da8c8}{set\+Salinity}} (double s)
+\item 
+void \mbox{\hyperlink{class_node_data_afa127c82afea0d675bcf60e8c5f71418}{set\+Nitrogen}} (double n)
+\item 
+void \mbox{\hyperlink{class_node_data_aef48d6de31c265f3ec94a3c4fc81e7e1}{set\+Phosphorus}} (double p)
+\item 
+void \mbox{\hyperlink{class_node_data_a72f671ec13a3eb8fa0c060296ac5925a}{set\+Oxygen}} (double o)
+\item 
+void \mbox{\hyperlink{class_node_data_a5381d3a639eae6dfa29fd66dfeb7fd63}{set\+Dissolved\+Carbon}} (double dc)
+\item 
+void \mbox{\hyperlink{class_node_data_a92d3e674a17f3a431818e34de395f487}{set\+Bathymetry}} (double b)
+\item 
+void \mbox{\hyperlink{class_node_data_a8fcad2b33b0e6d8b27fb330e0ac9dc87}{set\+Shippingdensity}} (double val)
+\item 
+void \mbox{\hyperlink{class_node_data_a1bc687cd7cfcfc9dcfb0b28ed0018cc5}{set\+Siltfraction}} (double val)
+\item 
+void \mbox{\hyperlink{class_node_data_ae4ac6a1f32878111da6890804628bc09}{set\+Benthos\+Biomass}} (double val)
+\item 
+void \mbox{\hyperlink{class_node_data_a7ffda826e25b84bd34ff2182484f10dc}{set\+Benthos\+Number}} (double val)
+\item 
+void \mbox{\hyperlink{class_node_data_a60a20553a3f5eb184bf7e418bef3a551}{set\+Benthos\+Meanweight}} (double val)
+\item 
+int \mbox{\hyperlink{class_node_data_adf22932c2a5d4b38dabe1acbea605577}{get\+\_\+code\+\_\+area}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a2e935f0c3eab83e69d46561a157b02aa}{set\+Code\+Area}} (int id)
+\item 
+virtual string \mbox{\hyperlink{class_node_data_a2b2db7fa4779d369f8c667171d18dbad}{get\+\_\+name}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a259535df3dd8738ac27e966a57dcd412}{get\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a005e2c27397f6c65c778cc740d96c838}{get\+\_\+y}} () const
+\item 
+int \mbox{\hyperlink{class_node_data_aaf8c095237f5d54deeb01340995d7023}{get\+\_\+harbour}} () const
+\item 
+bool \mbox{\hyperlink{class_node_data_a349a5b2e3705663d25fb82b591e3ca0e}{get\+\_\+is\+\_\+harbour}} () const
+\item 
+int \mbox{\hyperlink{class_node_data_a0f76ebd98a02531a3b2483b3558652e0}{get\+\_\+cumftime}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_ae43f6669e46c7a072326c30e2e06ea7a}{set\+\_\+cumftime}} (int i)
+\item 
+double \mbox{\hyperlink{class_node_data_ae92845c304b2b48e91bd85d2783254bf}{get\+\_\+cumsweptarea}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a273d0cf57afd478995096541d4fbbace}{set\+\_\+cumsweptarea}} (int i)
+\item 
+double \mbox{\hyperlink{class_node_data_a425f8df06888e7a11ba0677a7069d0cd}{get\+\_\+cumsubsurfacesweptarea}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a6e42f6df786bb22c5ecf9ed6409ef620}{set\+\_\+cumsubsurfacesweptarea}} (int i)
+\item 
+double \mbox{\hyperlink{class_node_data_a72fdd0a26b6b8394848e85a35f3ffd6c}{get\+\_\+cumcatches}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_af0c4f0aadd5269e87e146096aa319c9d}{get\+\_\+cumcatches\+\_\+with\+\_\+threshold}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_a9c6feaee560aef467102f8be89b2be9f}{get\+\_\+cumdiscards}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_ac2ad586d1abdeb855720eef7a53c9d7d}{get\+\_\+cumdiscardsratio}} () const
+\item 
+double \mbox{\hyperlink{class_node_data_abb730bf1ca3746720aee82026c412188}{get\+\_\+nbchoked}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a66410e73ac03ea7d1dacfe0bdc99a219}{set\+\_\+cumcatches}} (double v)
+\item 
+void \mbox{\hyperlink{class_node_data_a37af34b399035d586105099d768136cf}{set\+\_\+cumcatches\+\_\+with\+\_\+threshold}} (int v)
+\item 
+void \mbox{\hyperlink{class_node_data_afa19226bbecab1af627ac9a3bd4f030f}{set\+\_\+cumdiscards}} (double v)
+\item 
+void \mbox{\hyperlink{class_node_data_a7bd35e19d00d6bc27412d62f9d208bd6}{set\+\_\+cumdiscardsratio}} (double v)
+\item 
+void \mbox{\hyperlink{class_node_data_a6736522e19331356abc9a0d6ed8882fb}{set\+\_\+nbchoked}} (double v)
+\item 
+void \mbox{\hyperlink{class_node_data_a0848066e27e3cb766039ee852d4c3f18}{set\+\_\+tot\+Ns\+\_\+per\+\_\+pop}} (int pop, int v)
+\item 
+void \mbox{\hyperlink{class_node_data_aaeb6976e27f095a06820ac6836abf4e3}{set\+\_\+tot\+Ws\+\_\+per\+\_\+pop}} (int pop, int v)
+\item 
+void \mbox{\hyperlink{class_node_data_a705fd203c73f82893f72474fd991a9c1}{set\+\_\+cumcatches\+\_\+per\+\_\+pop}} (int pop, int v)
+\item 
+void \mbox{\hyperlink{class_node_data_a3b112825113087ec9652de40df191b84}{set\+\_\+cumdiscards\+\_\+per\+\_\+pop}} (int pop, int v)
+\item 
+void \mbox{\hyperlink{class_node_data_a148595b384448cdc8a2dff4f8b9b7e9a}{set\+\_\+impact\+\_\+per\+\_\+pop}} (int pop, int v)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{class_node_data_a57ef519f6170d871e72eae0adde81912}{get\+\_\+tariffs}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_ae36ac9e76218d533a01501c8b67dc3de}{set\+\_\+tariffs}} (vector$<$ double $>$ tariffs)
+\item 
+const vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \& \mbox{\hyperlink{class_node_data_a280457f06e40d8c6dd86008e9de756b2}{get\+\_\+usual\+\_\+fgrounds}} ()
+\item 
+void \mbox{\hyperlink{class_node_data_a8bd37a5138e6ae24633994cc55d4596b}{set\+\_\+usual\+\_\+fgrounds}} (vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ usual\+\_\+fgrounds)
+\item 
+const vector$<$ double $>$ \& \mbox{\hyperlink{class_node_data_af64b8f1fb2066a00c1f24a9618970647}{get\+\_\+freq\+\_\+usual\+\_\+fgrounds}} ()
+\item 
+void \mbox{\hyperlink{class_node_data_a17b4f94bb1ca20d974e800138606ae95}{set\+\_\+freq\+\_\+usual\+\_\+fgrounds}} (vector$<$ double $>$ freq\+\_\+usual\+\_\+fgrounds)
+\item 
+int \mbox{\hyperlink{class_node_data_ac1a8b1d3946f4103ccbb1a131ca0e87a}{evaluate\+Area\+Type}} ()
+\item 
+\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$ \mbox{\hyperlink{class_node_data_a31b3b6b6111544d59918226d84ff2d88}{get\+Model}} () const
+\item 
+int \mbox{\hyperlink{class_node_data_af5fd5c15f587de431fbe7241c60392c2}{get\+Pop\+Count}} () const
+\item 
+int \mbox{\hyperlink{class_node_data_aac4449825ea3eb54fb679a0de01316d4}{get\+Benthos\+Pop\+Count}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_adca5c23e611e9a1011e889cdba0adb14}{set\+Pop}} (int pop, double v)
+\item 
+void \mbox{\hyperlink{class_node_data_ad47e9ef6b7b0dd39c74d2996f83dcce5}{set\+Pop\+Tot}} (double tot)
+\item 
+void \mbox{\hyperlink{class_node_data_aa0c51ea85c2127e9b1feb9dd93be963d}{set\+Pop}} (Q\+List$<$ double $>$ v, double tot)
+\item 
+boost\+::optional$<$ double $>$ \mbox{\hyperlink{class_node_data_a3847bd4ee9c48cd7f7ef0352c5eee5fd}{get\+Pop}} (int pop) const
+\item 
+boost\+::optional$<$ double $>$ \mbox{\hyperlink{class_node_data_ab2c09a7a14aeb151ad1cabb8d009ea92}{get\+Pop\+Tot}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a519177cacb6e51ae623555a092a5f2b3}{set\+PopW}} (int pop, double val)
+\item 
+void \mbox{\hyperlink{class_node_data_a52d72c44656a8828f03ade2e3f4342ea}{set\+Pop\+W\+Tot}} (double tot)
+\item 
+void \mbox{\hyperlink{class_node_data_a6af682956531adb5a57b0513f1deaffd}{set\+PopW}} (Q\+List$<$ double $>$ v, double tot)
+\item 
+boost\+::optional$<$ double $>$ \mbox{\hyperlink{class_node_data_ac2d689c2bbe1a915b88be7cd7c12cf63}{get\+PopW}} (int pop) const
+\item 
+double \mbox{\hyperlink{class_node_data_a5903c8c233f8892f1b29baa26f361288}{get\+Pop\+W\+Tot}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a3df40665aa9d86d290a978a660c06427}{set\+Impact}} (int pop, double impact)
+\item 
+boost\+::optional$<$ double $>$ \mbox{\hyperlink{class_node_data_a0c669fe7f991d0aaef02814c054b25c5}{get\+Impact}} (int pop) const
+\item 
+void \mbox{\hyperlink{class_node_data_a40f50700065a9323e9589f31d2ab57e0}{set\+Cumcatches\+Per\+Pop}} (int pop, double cumcatchesperpop)
+\item 
+boost\+::optional$<$ double $>$ \mbox{\hyperlink{class_node_data_a2f7c4588c7c8807775058443db8a4987}{get\+Cumcatches\+Per\+Pop}} (int pop)
+\item 
+void \mbox{\hyperlink{class_node_data_a0e0010c7341b91c1074336c55bb519ac}{set\+Cumdiscards\+Per\+Pop}} (int pop, double cumdiscardsperpop)
+\item 
+double \mbox{\hyperlink{class_node_data_a4a3d0a7a616a7e7eb4f7fa1fc627c7a5}{get\+Cumdiscards\+Per\+Pop}} (int pop)
+\item 
+void \mbox{\hyperlink{class_node_data_a8cb0783f063c00339e45cf25e1724112}{set\+Benthos\+Biomass}} (int func, double benthosbiomass)
+\item 
+double \mbox{\hyperlink{class_node_data_aab5a8f959b02082435507410e0822603}{get\+Benthos\+Biomass}} (int func) const
+\item 
+void \mbox{\hyperlink{class_node_data_a858944519250709f8f13244947067fb9}{set\+Benthos\+Number}} (int func, double benthosnumber)
+\item 
+double \mbox{\hyperlink{class_node_data_aa7c2effc9b13c99c159f533f157afbc7}{get\+Benthos\+Number}} (int func) const
+\item 
+void \mbox{\hyperlink{class_node_data_a44d5979737b1f4ff1c6c8b64e2f9ed77}{set\+Benthos\+Meanweight}} (int func, double benthosmeanweight)
+\item 
+double \mbox{\hyperlink{class_node_data_abdeb1b6139a106095176afc642093f84}{get\+Benthos\+Meanweight}} (int func) const
+\item 
+void \mbox{\hyperlink{class_node_data_af1476c229f470b93181304ea0d9206c4}{set\+Benthos\+Biomass\+OverK}} (int func, double benthosbiomassoverK)
+\item 
+double \mbox{\hyperlink{class_node_data_a91277a282736a954314de11c5555e2b4}{get\+Benthos\+Biomass\+OverK}} (int func) const
+\item 
+void \mbox{\hyperlink{class_node_data_ae740bb9dcafae45bcd5bd3f00d592c0e}{set\+Benthos\+Number\+OverK}} (int func, double benthosnumberoverK)
+\item 
+double \mbox{\hyperlink{class_node_data_a4e4503446ae7b004aa9e83d1851441ee}{get\+Benthos\+Number\+OverK}} (int func) const
+\item 
+void \mbox{\hyperlink{class_node_data_ac37ac9705ee216314bef2042008dc3a4}{set\+Fishfarm\+Fish\+Mean\+Weight}} (int farmid, double meanw\+\_\+kg)
+\item 
+double \mbox{\hyperlink{class_node_data_a9d3fa7a18dde95e27f5bdb30cbb6d5b4}{get\+Fishfarm\+Fish\+Mean\+Weight}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a761da675ad9067e9c13f75c1f0f2d268}{set\+Fishfarm\+Fish\+Harvested\+Kg}} (int farmid, double fish\+\_\+harvested\+\_\+kg)
+\item 
+double \mbox{\hyperlink{class_node_data_a69e8c2c82c870caf36a1dbd7a06e53f8}{get\+Fishfarm\+Fish\+Harvested\+Kg}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a948b2c7ae9c22e0aa5fb0e5d88d4fac2}{set\+Fishfarm\+Eggs\+Harvested\+Kg}} (int farmid, double eggs\+\_\+harvested\+\_\+kg)
+\item 
+double \mbox{\hyperlink{class_node_data_a1a846d56eb78c9ba55cc630bff5e4528}{get\+Fishfarm\+Eggs\+Harvested\+Kg}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a50c5b5b85c44fe7b2bedc1fb7ff5994a}{set\+Fishfarm\+Annual\+Profit}} (int farmid, double fishfarm\+\_\+annualprofit)
+\item 
+double \mbox{\hyperlink{class_node_data_a546461c56ed647c70c39eb0dad1c26cc}{get\+Fishfarm\+Annual\+Profit}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a4f83b327f42474a893ac884c155c711a}{set\+Fishfarm\+Net\+DischargeN}} (int farmid, double fishfarm\+\_\+netdischargeN)
+\item 
+double \mbox{\hyperlink{class_node_data_af488cc8bc5898aba67e3151de55b96f8}{get\+Fishfarm\+Net\+DischargeN}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_ac37c193019be503886c443c359f65972}{set\+Fishfarm\+Net\+DischargeP}} (int farmid, double fishfarm\+\_\+netdischargeP)
+\item 
+double \mbox{\hyperlink{class_node_data_a8279b49def32d5fb15cd2c641367232a}{get\+Fishfarm\+Net\+DischargeP}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a28faba9ef597ec271a5bf8393f750126}{set\+Fishfarm\+Cumul\+Net\+DischargeN}} (int farmid, double fishfarm\+\_\+cumulnetdischargeN)
+\item 
+double \mbox{\hyperlink{class_node_data_ae80bdd94bcbda4d5a887a8d923eefe06}{get\+Fishfarm\+Cumul\+Net\+DischargeN}} (int farm) const
+\item 
+void \mbox{\hyperlink{class_node_data_a0c4ab1157b518fc6f688deb3defbb4a3}{set\+Fishfarm\+Cumul\+Net\+DischargeP}} (int farmid, double fishfarm\+\_\+cumulnetdischargeP)
+\item 
+double \mbox{\hyperlink{class_node_data_af12fbce8ac960cdc648eade107699a82}{get\+Fishfarm\+Cumul\+Net\+DischargeP}} (int farm) const
+\item 
+int \mbox{\hyperlink{class_node_data_ae061a5d82a3dca53bf57702fa0c35d02}{get\+Harbour\+Id}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a4e6336f20ffda13091cd79becaca6e30}{set\+Harbour\+Id}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+int \mbox{\hyperlink{class_node_data_aa74aee107185352987907fc2e9f06e4a}{append\+Adiancency}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ target, double weight)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_node_data_aa74aee107185352987907fc2e9f06e4a}{Node\+Data\+::append\+Adiancency}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_data_a75b19599e6278c1f397cd9389499dc02}{remove\+Adiacency\+By\+Idx}} (int idx)
+\item 
+void \mbox{\hyperlink{class_node_data_a3b3e9de6c5a6787b729991e89b336505}{remove\+Adiacency\+By\+Target}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$ target)
+\item 
+void \mbox{\hyperlink{class_node_data_adb3003193e0baccc7baf25beb6dbbb98}{remove\+All\+Adiacencies}} ()
+\item 
+int \mbox{\hyperlink{class_node_data_af3dfaeb5d55486bc12673ae2bfdc77f3}{get\+Adiacency\+Count}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node_data_1_1_edge}{Edge}} $>$ \mbox{\hyperlink{class_node_data_ae1dc0dbfdfd10a0e0c971cba66323e6d}{get\+Adiacency\+By\+Idx}} (int idx) const
+\item 
+double \mbox{\hyperlink{class_node_data_a41a9b0462f79e35150ae30a834c2d22f}{get\+Adiacency\+Weight}} (int idx) const
+\item 
+void \mbox{\hyperlink{class_node_data_a255e84f7e45de45c0e1eb36389f6eeb4}{set\+Adiacency\+Weight}} (int idx, double w)
+\item 
+void \mbox{\hyperlink{class_node_data_a688abf167edcf253ecb6438459bef7e7}{set\+Area\+Type}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+bool \mbox{\hyperlink{class_node_data_a1839982b09f3e47302aa9c36ab507cb7}{is\+Deleted}} () const
+\item 
+void \mbox{\hyperlink{class_node_data_a19a754aa6d35992e0ae81f98c837f6ea}{set\+Deleted}} (bool \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}=true)
+\item 
+void \mbox{\hyperlink{class_node_data_abee818d778ab25cde47c3675d4376803}{set\+Relevant}} (bool relevant=true)
+\item 
+bool \mbox{\hyperlink{class_node_data_a43aa00e322ea393d87cd3887d2b6d018}{is\+Relevant}} () const
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ \mbox{\hyperlink{class_node_data_ac51bb052329667bc790179278eb035d8}{m\+Node}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+an extension class for \mbox{\hyperlink{class_node}{Node}} 
+
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_node_data_a18f3494d8d83ab4c6831ea211f4cbf09}\label{class_node_data_a18f3494d8d83ab4c6831ea211f4cbf09}} 
+\index{NodeData@{NodeData}!AdiacencyList@{AdiacencyList}}
+\index{AdiacencyList@{AdiacencyList}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{AdiacencyList}{AdiacencyList}}
+{\footnotesize\ttfamily typedef Q\+Vector$<$std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_node_data_1_1_edge}{Edge}}$>$ $>$ \mbox{\hyperlink{class_node_data_a18f3494d8d83ab4c6831ea211f4cbf09}{Node\+Data\+::\+Adiacency\+List}}}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_node_data_a7a67b993f0da15663ef1b3ce61c9f8c3}\label{class_node_data_a7a67b993f0da15663ef1b3ce61c9f8c3}} 
+\index{NodeData@{NodeData}!NodeData@{NodeData}}
+\index{NodeData@{NodeData}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{NodeData()}{NodeData()}}
+{\footnotesize\ttfamily Node\+Data\+::\+Node\+Data (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{nd,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_node_data_ad870d466c40b9be96ad79adccab79038}\label{class_node_data_ad870d466c40b9be96ad79adccab79038}} 
+\index{NodeData@{NodeData}!````~NodeData@{$\sim$NodeData}}
+\index{````~NodeData@{$\sim$NodeData}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{$\sim$NodeData()}{~NodeData()}}
+{\footnotesize\ttfamily Node\+Data\+::$\sim$\+Node\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_node_data_aa74aee107185352987907fc2e9f06e4a}\label{class_node_data_aa74aee107185352987907fc2e9f06e4a}} 
+\index{NodeData@{NodeData}!appendAdiancency@{appendAdiancency}}
+\index{appendAdiancency@{appendAdiancency}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{appendAdiancency()}{appendAdiancency()}}
+{\footnotesize\ttfamily int Node\+Data\+::append\+Adiancency (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$}]{target,  }\item[{double}]{weight }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_node_data_aa74aee107185352987907fc2e9f06e4a}{Node\+Data\+::append\+Adiancency}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+\_\+id} & \\
+\hline
+{\em weight} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of the appended adiacency 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_data_ac1a8b1d3946f4103ccbb1a131ca0e87a}\label{class_node_data_ac1a8b1d3946f4103ccbb1a131ca0e87a}} 
+\index{NodeData@{NodeData}!evaluateAreaType@{evaluateAreaType}}
+\index{evaluateAreaType@{evaluateAreaType}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{evaluateAreaType()}{evaluateAreaType()}}
+{\footnotesize\ttfamily int Node\+Data\+::evaluate\+Area\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a1f6857f859ac1fecf79db94b7ede82c2}\label{class_node_data_a1f6857f859ac1fecf79db94b7ede82c2}} 
+\index{NodeData@{NodeData}!get\_bathymetry@{get\_bathymetry}}
+\index{get\_bathymetry@{get\_bathymetry}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_bathymetry()}{get\_bathymetry()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+bathymetry (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a335784d1f1c0392f54480c4736101bda}\label{class_node_data_a335784d1f1c0392f54480c4736101bda}} 
+\index{NodeData@{NodeData}!get\_benthos\_biomass\_per\_funcgr@{get\_benthos\_biomass\_per\_funcgr}}
+\index{get\_benthos\_biomass\_per\_funcgr@{get\_benthos\_biomass\_per\_funcgr}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_benthos\_biomass\_per\_funcgr()}{get\_benthos\_biomass\_per\_funcgr()}}
+{\footnotesize\ttfamily vector$<$double$>$ Node\+Data\+::get\+\_\+benthos\+\_\+biomass\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a26f984f842b7665aed7a771b6dd97a97}\label{class_node_data_a26f984f842b7665aed7a771b6dd97a97}} 
+\index{NodeData@{NodeData}!get\_benthos\_meanweight\_per\_funcgr@{get\_benthos\_meanweight\_per\_funcgr}}
+\index{get\_benthos\_meanweight\_per\_funcgr@{get\_benthos\_meanweight\_per\_funcgr}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_benthos\_meanweight\_per\_funcgr()}{get\_benthos\_meanweight\_per\_funcgr()}}
+{\footnotesize\ttfamily vector$<$double$>$ Node\+Data\+::get\+\_\+benthos\+\_\+meanweight\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a91f8cb85d8f0783003bdbde2774791fc}\label{class_node_data_a91f8cb85d8f0783003bdbde2774791fc}} 
+\index{NodeData@{NodeData}!get\_benthos\_number\_per\_funcgr@{get\_benthos\_number\_per\_funcgr}}
+\index{get\_benthos\_number\_per\_funcgr@{get\_benthos\_number\_per\_funcgr}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_benthos\_number\_per\_funcgr()}{get\_benthos\_number\_per\_funcgr()}}
+{\footnotesize\ttfamily vector$<$double$>$ Node\+Data\+::get\+\_\+benthos\+\_\+number\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_adf22932c2a5d4b38dabe1acbea605577}\label{class_node_data_adf22932c2a5d4b38dabe1acbea605577}} 
+\index{NodeData@{NodeData}!get\_code\_area@{get\_code\_area}}
+\index{get\_code\_area@{get\_code\_area}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_code\_area()}{get\_code\_area()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+\_\+code\+\_\+area (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a72fdd0a26b6b8394848e85a35f3ffd6c}\label{class_node_data_a72fdd0a26b6b8394848e85a35f3ffd6c}} 
+\index{NodeData@{NodeData}!get\_cumcatches@{get\_cumcatches}}
+\index{get\_cumcatches@{get\_cumcatches}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumcatches()}{get\_cumcatches()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumcatches (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_af0c4f0aadd5269e87e146096aa319c9d}\label{class_node_data_af0c4f0aadd5269e87e146096aa319c9d}} 
+\index{NodeData@{NodeData}!get\_cumcatches\_with\_threshold@{get\_cumcatches\_with\_threshold}}
+\index{get\_cumcatches\_with\_threshold@{get\_cumcatches\_with\_threshold}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumcatches\_with\_threshold()}{get\_cumcatches\_with\_threshold()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumcatches\+\_\+with\+\_\+threshold (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a9c6feaee560aef467102f8be89b2be9f}\label{class_node_data_a9c6feaee560aef467102f8be89b2be9f}} 
+\index{NodeData@{NodeData}!get\_cumdiscards@{get\_cumdiscards}}
+\index{get\_cumdiscards@{get\_cumdiscards}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumdiscards()}{get\_cumdiscards()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumdiscards (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ac2ad586d1abdeb855720eef7a53c9d7d}\label{class_node_data_ac2ad586d1abdeb855720eef7a53c9d7d}} 
+\index{NodeData@{NodeData}!get\_cumdiscardsratio@{get\_cumdiscardsratio}}
+\index{get\_cumdiscardsratio@{get\_cumdiscardsratio}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumdiscardsratio()}{get\_cumdiscardsratio()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumdiscardsratio (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a0f76ebd98a02531a3b2483b3558652e0}\label{class_node_data_a0f76ebd98a02531a3b2483b3558652e0}} 
+\index{NodeData@{NodeData}!get\_cumftime@{get\_cumftime}}
+\index{get\_cumftime@{get\_cumftime}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumftime()}{get\_cumftime()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+\_\+cumftime (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a425f8df06888e7a11ba0677a7069d0cd}\label{class_node_data_a425f8df06888e7a11ba0677a7069d0cd}} 
+\index{NodeData@{NodeData}!get\_cumsubsurfacesweptarea@{get\_cumsubsurfacesweptarea}}
+\index{get\_cumsubsurfacesweptarea@{get\_cumsubsurfacesweptarea}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumsubsurfacesweptarea()}{get\_cumsubsurfacesweptarea()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumsubsurfacesweptarea (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae92845c304b2b48e91bd85d2783254bf}\label{class_node_data_ae92845c304b2b48e91bd85d2783254bf}} 
+\index{NodeData@{NodeData}!get\_cumsweptarea@{get\_cumsweptarea}}
+\index{get\_cumsweptarea@{get\_cumsweptarea}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_cumsweptarea()}{get\_cumsweptarea()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+cumsweptarea (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a09704839d81a8a5f1b2ac63484708e27}\label{class_node_data_a09704839d81a8a5f1b2ac63484708e27}} 
+\index{NodeData@{NodeData}!get\_DissolvedCarbon@{get\_DissolvedCarbon}}
+\index{get\_DissolvedCarbon@{get\_DissolvedCarbon}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_DissolvedCarbon()}{get\_DissolvedCarbon()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+\+Dissolved\+Carbon (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a2e9b8cef08c76eea064d9be28b89494b}\label{class_node_data_a2e9b8cef08c76eea064d9be28b89494b}} 
+\index{NodeData@{NodeData}!get\_ff\_names\_on\_node@{get\_ff\_names\_on\_node}}
+\index{get\_ff\_names\_on\_node@{get\_ff\_names\_on\_node}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_ff\_names\_on\_node()}{get\_ff\_names\_on\_node()}}
+{\footnotesize\ttfamily vector$<$int$>$ Node\+Data\+::get\+\_\+ff\+\_\+names\+\_\+on\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_af64b8f1fb2066a00c1f24a9618970647}\label{class_node_data_af64b8f1fb2066a00c1f24a9618970647}} 
+\index{NodeData@{NodeData}!get\_freq\_usual\_fgrounds@{get\_freq\_usual\_fgrounds}}
+\index{get\_freq\_usual\_fgrounds@{get\_freq\_usual\_fgrounds}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_freq\_usual\_fgrounds()}{get\_freq\_usual\_fgrounds()}}
+{\footnotesize\ttfamily const vector$<$double$>$\& Node\+Data\+::get\+\_\+freq\+\_\+usual\+\_\+fgrounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_aaf8c095237f5d54deeb01340995d7023}\label{class_node_data_aaf8c095237f5d54deeb01340995d7023}} 
+\index{NodeData@{NodeData}!get\_harbour@{get\_harbour}}
+\index{get\_harbour@{get\_harbour}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_harbour()}{get\_harbour()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+\_\+harbour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a98838954da8e59f1f91729e61f44608f}\label{class_node_data_a98838954da8e59f1f91729e61f44608f}} 
+\index{NodeData@{NodeData}!get\_idx\_node@{get\_idx\_node}}
+\index{get\_idx\_node@{get\_idx\_node}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_idx\_node()}{get\_idx\_node()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} Node\+Data\+::get\+\_\+idx\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a4bb58802c3b1607a9483a6adac4b2b06}\label{class_node_data_a4bb58802c3b1607a9483a6adac4b2b06}} 
+\index{NodeData@{NodeData}!get\_init\_benthos\_biomass@{get\_init\_benthos\_biomass}}
+\index{get\_init\_benthos\_biomass@{get\_init\_benthos\_biomass}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_init\_benthos\_biomass()}{get\_init\_benthos\_biomass()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+init\+\_\+benthos\+\_\+biomass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae3a0fcc6c143f8a0d5188a45293c8044}\label{class_node_data_ae3a0fcc6c143f8a0d5188a45293c8044}} 
+\index{NodeData@{NodeData}!get\_init\_benthos\_meanweight@{get\_init\_benthos\_meanweight}}
+\index{get\_init\_benthos\_meanweight@{get\_init\_benthos\_meanweight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_init\_benthos\_meanweight()}{get\_init\_benthos\_meanweight()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+init\+\_\+benthos\+\_\+meanweight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a83a21fc5bd066b25f7454b7a133a4d0d}\label{class_node_data_a83a21fc5bd066b25f7454b7a133a4d0d}} 
+\index{NodeData@{NodeData}!get\_init\_benthos\_number@{get\_init\_benthos\_number}}
+\index{get\_init\_benthos\_number@{get\_init\_benthos\_number}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_init\_benthos\_number()}{get\_init\_benthos\_number()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+init\+\_\+benthos\+\_\+number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a349a5b2e3705663d25fb82b591e3ca0e}\label{class_node_data_a349a5b2e3705663d25fb82b591e3ca0e}} 
+\index{NodeData@{NodeData}!get\_is\_harbour@{get\_is\_harbour}}
+\index{get\_is\_harbour@{get\_is\_harbour}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_is\_harbour()}{get\_is\_harbour()}}
+{\footnotesize\ttfamily bool Node\+Data\+::get\+\_\+is\+\_\+harbour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a56ca73b90c6526c96359cd0869358ccc}\label{class_node_data_a56ca73b90c6526c96359cd0869358ccc}} 
+\index{NodeData@{NodeData}!get\_marine\_landscape@{get\_marine\_landscape}}
+\index{get\_marine\_landscape@{get\_marine\_landscape}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_marine\_landscape()}{get\_marine\_landscape()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+\_\+marine\+\_\+landscape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a2b2db7fa4779d369f8c667171d18dbad}\label{class_node_data_a2b2db7fa4779d369f8c667171d18dbad}} 
+\index{NodeData@{NodeData}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily virtual string Node\+Data\+::get\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_node_data_abb730bf1ca3746720aee82026c412188}\label{class_node_data_abb730bf1ca3746720aee82026c412188}} 
+\index{NodeData@{NodeData}!get\_nbchoked@{get\_nbchoked}}
+\index{get\_nbchoked@{get\_nbchoked}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_nbchoked()}{get\_nbchoked()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+nbchoked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ac2040a1fe8fc6cf3b43cd0b3039dcd04}\label{class_node_data_ac2040a1fe8fc6cf3b43cd0b3039dcd04}} 
+\index{NodeData@{NodeData}!get\_Nitrogen@{get\_Nitrogen}}
+\index{get\_Nitrogen@{get\_Nitrogen}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_Nitrogen()}{get\_Nitrogen()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+\+Nitrogen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a6eda02c831e328accfda9d0dcab7051f}\label{class_node_data_a6eda02c831e328accfda9d0dcab7051f}} 
+\index{NodeData@{NodeData}!get\_Oxygen@{get\_Oxygen}}
+\index{get\_Oxygen@{get\_Oxygen}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_Oxygen()}{get\_Oxygen()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+\+Oxygen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_aec0cbbc536ba9e5dd1987197cb9fe73b}\label{class_node_data_aec0cbbc536ba9e5dd1987197cb9fe73b}} 
+\index{NodeData@{NodeData}!get\_Phosphorus@{get\_Phosphorus}}
+\index{get\_Phosphorus@{get\_Phosphorus}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_Phosphorus()}{get\_Phosphorus()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+\+Phosphorus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ad53e5051fbf129cc8cfd0ab82fa5dc56}\label{class_node_data_ad53e5051fbf129cc8cfd0ab82fa5dc56}} 
+\index{NodeData@{NodeData}!get\_salinity@{get\_salinity}}
+\index{get\_salinity@{get\_salinity}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_salinity()}{get\_salinity()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+salinity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a2ae0509c1ad36427721cef2946d0e53f}\label{class_node_data_a2ae0509c1ad36427721cef2946d0e53f}} 
+\index{NodeData@{NodeData}!get\_shippingdensity@{get\_shippingdensity}}
+\index{get\_shippingdensity@{get\_shippingdensity}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_shippingdensity()}{get\_shippingdensity()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+shippingdensity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a29fed1328e789db030143d1eab31f4b4}\label{class_node_data_a29fed1328e789db030143d1eab31f4b4}} 
+\index{NodeData@{NodeData}!get\_siltfraction@{get\_siltfraction}}
+\index{get\_siltfraction@{get\_siltfraction}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_siltfraction()}{get\_siltfraction()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+siltfraction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ab0fb11992feff6f3d4aeba901c5c984e}\label{class_node_data_ab0fb11992feff6f3d4aeba901c5c984e}} 
+\index{NodeData@{NodeData}!get\_sst@{get\_sst}}
+\index{get\_sst@{get\_sst}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_sst()}{get\_sst()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+sst (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a57ef519f6170d871e72eae0adde81912}\label{class_node_data_a57ef519f6170d871e72eae0adde81912}} 
+\index{NodeData@{NodeData}!get\_tariffs@{get\_tariffs}}
+\index{get\_tariffs@{get\_tariffs}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_tariffs()}{get\_tariffs()}}
+{\footnotesize\ttfamily vector$<$double$>$ Node\+Data\+::get\+\_\+tariffs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a280457f06e40d8c6dd86008e9de756b2}\label{class_node_data_a280457f06e40d8c6dd86008e9de756b2}} 
+\index{NodeData@{NodeData}!get\_usual\_fgrounds@{get\_usual\_fgrounds}}
+\index{get\_usual\_fgrounds@{get\_usual\_fgrounds}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_usual\_fgrounds()}{get\_usual\_fgrounds()}}
+{\footnotesize\ttfamily const vector$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$\& Node\+Data\+::get\+\_\+usual\+\_\+fgrounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_aecd2dde5e4c1f3b43cca85cb5b545b86}\label{class_node_data_aecd2dde5e4c1f3b43cca85cb5b545b86}} 
+\index{NodeData@{NodeData}!get\_wind@{get\_wind}}
+\index{get\_wind@{get\_wind}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_wind()}{get\_wind()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+wind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a259535df3dd8738ac27e966a57dcd412}\label{class_node_data_a259535df3dd8738ac27e966a57dcd412}} 
+\index{NodeData@{NodeData}!get\_x@{get\_x}}
+\index{get\_x@{get\_x}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_x()}{get\_x()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a005e2c27397f6c65c778cc740d96c838}\label{class_node_data_a005e2c27397f6c65c778cc740d96c838}} 
+\index{NodeData@{NodeData}!get\_y@{get\_y}}
+\index{get\_y@{get\_y}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{get\_y()}{get\_y()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae1dc0dbfdfd10a0e0c971cba66323e6d}\label{class_node_data_ae1dc0dbfdfd10a0e0c971cba66323e6d}} 
+\index{NodeData@{NodeData}!getAdiacencyByIdx@{getAdiacencyByIdx}}
+\index{getAdiacencyByIdx@{getAdiacencyByIdx}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getAdiacencyByIdx()}{getAdiacencyByIdx()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_node_data_1_1_edge}{Node\+Data\+::\+Edge}} $>$ Node\+Data\+::get\+Adiacency\+By\+Idx (\begin{DoxyParamCaption}\item[{int}]{idx }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_af3dfaeb5d55486bc12673ae2bfdc77f3}\label{class_node_data_af3dfaeb5d55486bc12673ae2bfdc77f3}} 
+\index{NodeData@{NodeData}!getAdiacencyCount@{getAdiacencyCount}}
+\index{getAdiacencyCount@{getAdiacencyCount}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getAdiacencyCount()}{getAdiacencyCount()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+Adiacency\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a41a9b0462f79e35150ae30a834c2d22f}\label{class_node_data_a41a9b0462f79e35150ae30a834c2d22f}} 
+\index{NodeData@{NodeData}!getAdiacencyWeight@{getAdiacencyWeight}}
+\index{getAdiacencyWeight@{getAdiacencyWeight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getAdiacencyWeight()}{getAdiacencyWeight()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Adiacency\+Weight (\begin{DoxyParamCaption}\item[{int}]{idx }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_aab5a8f959b02082435507410e0822603}\label{class_node_data_aab5a8f959b02082435507410e0822603}} 
+\index{NodeData@{NodeData}!getBenthosBiomass@{getBenthosBiomass}}
+\index{getBenthosBiomass@{getBenthosBiomass}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosBiomass()}{getBenthosBiomass()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Benthos\+Biomass (\begin{DoxyParamCaption}\item[{int}]{func }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a91277a282736a954314de11c5555e2b4}\label{class_node_data_a91277a282736a954314de11c5555e2b4}} 
+\index{NodeData@{NodeData}!getBenthosBiomassOverK@{getBenthosBiomassOverK}}
+\index{getBenthosBiomassOverK@{getBenthosBiomassOverK}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosBiomassOverK()}{getBenthosBiomassOverK()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Benthos\+Biomass\+OverK (\begin{DoxyParamCaption}\item[{int}]{func }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_abdeb1b6139a106095176afc642093f84}\label{class_node_data_abdeb1b6139a106095176afc642093f84}} 
+\index{NodeData@{NodeData}!getBenthosMeanweight@{getBenthosMeanweight}}
+\index{getBenthosMeanweight@{getBenthosMeanweight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosMeanweight()}{getBenthosMeanweight()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Benthos\+Meanweight (\begin{DoxyParamCaption}\item[{int}]{func }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_aa7c2effc9b13c99c159f533f157afbc7}\label{class_node_data_aa7c2effc9b13c99c159f533f157afbc7}} 
+\index{NodeData@{NodeData}!getBenthosNumber@{getBenthosNumber}}
+\index{getBenthosNumber@{getBenthosNumber}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosNumber()}{getBenthosNumber()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Benthos\+Number (\begin{DoxyParamCaption}\item[{int}]{func }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a4e4503446ae7b004aa9e83d1851441ee}\label{class_node_data_a4e4503446ae7b004aa9e83d1851441ee}} 
+\index{NodeData@{NodeData}!getBenthosNumberOverK@{getBenthosNumberOverK}}
+\index{getBenthosNumberOverK@{getBenthosNumberOverK}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosNumberOverK()}{getBenthosNumberOverK()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Benthos\+Number\+OverK (\begin{DoxyParamCaption}\item[{int}]{func }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_aac4449825ea3eb54fb679a0de01316d4}\label{class_node_data_aac4449825ea3eb54fb679a0de01316d4}} 
+\index{NodeData@{NodeData}!getBenthosPopCount@{getBenthosPopCount}}
+\index{getBenthosPopCount@{getBenthosPopCount}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getBenthosPopCount()}{getBenthosPopCount()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+Benthos\+Pop\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a2f7c4588c7c8807775058443db8a4987}\label{class_node_data_a2f7c4588c7c8807775058443db8a4987}} 
+\index{NodeData@{NodeData}!getCumcatchesPerPop@{getCumcatchesPerPop}}
+\index{getCumcatchesPerPop@{getCumcatchesPerPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getCumcatchesPerPop()}{getCumcatchesPerPop()}}
+{\footnotesize\ttfamily boost\+::optional$<$ double $>$ Node\+Data\+::get\+Cumcatches\+Per\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a4a3d0a7a616a7e7eb4f7fa1fc627c7a5}\label{class_node_data_a4a3d0a7a616a7e7eb4f7fa1fc627c7a5}} 
+\index{NodeData@{NodeData}!getCumdiscardsPerPop@{getCumdiscardsPerPop}}
+\index{getCumdiscardsPerPop@{getCumdiscardsPerPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getCumdiscardsPerPop()}{getCumdiscardsPerPop()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Cumdiscards\+Per\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a546461c56ed647c70c39eb0dad1c26cc}\label{class_node_data_a546461c56ed647c70c39eb0dad1c26cc}} 
+\index{NodeData@{NodeData}!getFishfarmAnnualProfit@{getFishfarmAnnualProfit}}
+\index{getFishfarmAnnualProfit@{getFishfarmAnnualProfit}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmAnnualProfit()}{getFishfarmAnnualProfit()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Annual\+Profit (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae80bdd94bcbda4d5a887a8d923eefe06}\label{class_node_data_ae80bdd94bcbda4d5a887a8d923eefe06}} 
+\index{NodeData@{NodeData}!getFishfarmCumulNetDischargeN@{getFishfarmCumulNetDischargeN}}
+\index{getFishfarmCumulNetDischargeN@{getFishfarmCumulNetDischargeN}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmCumulNetDischargeN()}{getFishfarmCumulNetDischargeN()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Cumul\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_af12fbce8ac960cdc648eade107699a82}\label{class_node_data_af12fbce8ac960cdc648eade107699a82}} 
+\index{NodeData@{NodeData}!getFishfarmCumulNetDischargeP@{getFishfarmCumulNetDischargeP}}
+\index{getFishfarmCumulNetDischargeP@{getFishfarmCumulNetDischargeP}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmCumulNetDischargeP()}{getFishfarmCumulNetDischargeP()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Cumul\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a1a846d56eb78c9ba55cc630bff5e4528}\label{class_node_data_a1a846d56eb78c9ba55cc630bff5e4528}} 
+\index{NodeData@{NodeData}!getFishfarmEggsHarvestedKg@{getFishfarmEggsHarvestedKg}}
+\index{getFishfarmEggsHarvestedKg@{getFishfarmEggsHarvestedKg}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmEggsHarvestedKg()}{getFishfarmEggsHarvestedKg()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Eggs\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a69e8c2c82c870caf36a1dbd7a06e53f8}\label{class_node_data_a69e8c2c82c870caf36a1dbd7a06e53f8}} 
+\index{NodeData@{NodeData}!getFishfarmFishHarvestedKg@{getFishfarmFishHarvestedKg}}
+\index{getFishfarmFishHarvestedKg@{getFishfarmFishHarvestedKg}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmFishHarvestedKg()}{getFishfarmFishHarvestedKg()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Fish\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a9d3fa7a18dde95e27f5bdb30cbb6d5b4}\label{class_node_data_a9d3fa7a18dde95e27f5bdb30cbb6d5b4}} 
+\index{NodeData@{NodeData}!getFishfarmFishMeanWeight@{getFishfarmFishMeanWeight}}
+\index{getFishfarmFishMeanWeight@{getFishfarmFishMeanWeight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmFishMeanWeight()}{getFishfarmFishMeanWeight()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Fish\+Mean\+Weight (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_af488cc8bc5898aba67e3151de55b96f8}\label{class_node_data_af488cc8bc5898aba67e3151de55b96f8}} 
+\index{NodeData@{NodeData}!getFishfarmNetDischargeN@{getFishfarmNetDischargeN}}
+\index{getFishfarmNetDischargeN@{getFishfarmNetDischargeN}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmNetDischargeN()}{getFishfarmNetDischargeN()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a8279b49def32d5fb15cd2c641367232a}\label{class_node_data_a8279b49def32d5fb15cd2c641367232a}} 
+\index{NodeData@{NodeData}!getFishfarmNetDischargeP@{getFishfarmNetDischargeP}}
+\index{getFishfarmNetDischargeP@{getFishfarmNetDischargeP}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getFishfarmNetDischargeP()}{getFishfarmNetDischargeP()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Fishfarm\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{farm }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae061a5d82a3dca53bf57702fa0c35d02}\label{class_node_data_ae061a5d82a3dca53bf57702fa0c35d02}} 
+\index{NodeData@{NodeData}!getHarbourId@{getHarbourId}}
+\index{getHarbourId@{getHarbourId}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getHarbourId()}{getHarbourId()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+Harbour\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a0c669fe7f991d0aaef02814c054b25c5}\label{class_node_data_a0c669fe7f991d0aaef02814c054b25c5}} 
+\index{NodeData@{NodeData}!getImpact@{getImpact}}
+\index{getImpact@{getImpact}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getImpact()}{getImpact()}}
+{\footnotesize\ttfamily boost\+::optional$<$ double $>$ Node\+Data\+::get\+Impact (\begin{DoxyParamCaption}\item[{int}]{pop }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a31b3b6b6111544d59918226d84ff2d88}\label{class_node_data_a31b3b6b6111544d59918226d84ff2d88}} 
+\index{NodeData@{NodeData}!getModel@{getModel}}
+\index{getModel@{getModel}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getModel()}{getModel()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_displace_model}{Displace\+Model}}$\ast$ Node\+Data\+::get\+Model (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a3847bd4ee9c48cd7f7ef0352c5eee5fd}\label{class_node_data_a3847bd4ee9c48cd7f7ef0352c5eee5fd}} 
+\index{NodeData@{NodeData}!getPop@{getPop}}
+\index{getPop@{getPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getPop()}{getPop()}}
+{\footnotesize\ttfamily boost\+::optional$<$ double $>$ Node\+Data\+::get\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_af5fd5c15f587de431fbe7241c60392c2}\label{class_node_data_af5fd5c15f587de431fbe7241c60392c2}} 
+\index{NodeData@{NodeData}!getPopCount@{getPopCount}}
+\index{getPopCount@{getPopCount}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getPopCount()}{getPopCount()}}
+{\footnotesize\ttfamily int Node\+Data\+::get\+Pop\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_ab2c09a7a14aeb151ad1cabb8d009ea92}\label{class_node_data_ab2c09a7a14aeb151ad1cabb8d009ea92}} 
+\index{NodeData@{NodeData}!getPopTot@{getPopTot}}
+\index{getPopTot@{getPopTot}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getPopTot()}{getPopTot()}}
+{\footnotesize\ttfamily boost\+::optional$<$ double $>$ Node\+Data\+::get\+Pop\+Tot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_ac2d689c2bbe1a915b88be7cd7c12cf63}\label{class_node_data_ac2d689c2bbe1a915b88be7cd7c12cf63}} 
+\index{NodeData@{NodeData}!getPopW@{getPopW}}
+\index{getPopW@{getPopW}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getPopW()}{getPopW()}}
+{\footnotesize\ttfamily boost\+::optional$<$ double $>$ Node\+Data\+::get\+PopW (\begin{DoxyParamCaption}\item[{int}]{pop }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a5903c8c233f8892f1b29baa26f361288}\label{class_node_data_a5903c8c233f8892f1b29baa26f361288}} 
+\index{NodeData@{NodeData}!getPopWTot@{getPopWTot}}
+\index{getPopWTot@{getPopWTot}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{getPopWTot()}{getPopWTot()}}
+{\footnotesize\ttfamily double Node\+Data\+::get\+Pop\+W\+Tot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a1839982b09f3e47302aa9c36ab507cb7}\label{class_node_data_a1839982b09f3e47302aa9c36ab507cb7}} 
+\index{NodeData@{NodeData}!isDeleted@{isDeleted}}
+\index{isDeleted@{isDeleted}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{isDeleted()}{isDeleted()}}
+{\footnotesize\ttfamily bool Node\+Data\+::is\+Deleted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_data_a43aa00e322ea393d87cd3887d2b6d018}\label{class_node_data_a43aa00e322ea393d87cd3887d2b6d018}} 
+\index{NodeData@{NodeData}!isRelevant@{isRelevant}}
+\index{isRelevant@{isRelevant}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{isRelevant()}{isRelevant()}}
+{\footnotesize\ttfamily bool Node\+Data\+::is\+Relevant (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a75b19599e6278c1f397cd9389499dc02}\label{class_node_data_a75b19599e6278c1f397cd9389499dc02}} 
+\index{NodeData@{NodeData}!removeAdiacencyByIdx@{removeAdiacencyByIdx}}
+\index{removeAdiacencyByIdx@{removeAdiacencyByIdx}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{removeAdiacencyByIdx()}{removeAdiacencyByIdx()}}
+{\footnotesize\ttfamily void Node\+Data\+::remove\+Adiacency\+By\+Idx (\begin{DoxyParamCaption}\item[{int}]{idx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a3b3e9de6c5a6787b729991e89b336505}\label{class_node_data_a3b3e9de6c5a6787b729991e89b336505}} 
+\index{NodeData@{NodeData}!removeAdiacencyByTarget@{removeAdiacencyByTarget}}
+\index{removeAdiacencyByTarget@{removeAdiacencyByTarget}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{removeAdiacencyByTarget()}{removeAdiacencyByTarget()}}
+{\footnotesize\ttfamily void Node\+Data\+::remove\+Adiacency\+By\+Target (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node_data}{Node\+Data}} $>$}]{target }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_adb3003193e0baccc7baf25beb6dbbb98}\label{class_node_data_adb3003193e0baccc7baf25beb6dbbb98}} 
+\index{NodeData@{NodeData}!removeAllAdiacencies@{removeAllAdiacencies}}
+\index{removeAllAdiacencies@{removeAllAdiacencies}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{removeAllAdiacencies()}{removeAllAdiacencies()}}
+{\footnotesize\ttfamily void Node\+Data\+::remove\+All\+Adiacencies (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a66410e73ac03ea7d1dacfe0bdc99a219}\label{class_node_data_a66410e73ac03ea7d1dacfe0bdc99a219}} 
+\index{NodeData@{NodeData}!set\_cumcatches@{set\_cumcatches}}
+\index{set\_cumcatches@{set\_cumcatches}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumcatches()}{set\_cumcatches()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumcatches (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a705fd203c73f82893f72474fd991a9c1}\label{class_node_data_a705fd203c73f82893f72474fd991a9c1}} 
+\index{NodeData@{NodeData}!set\_cumcatches\_per\_pop@{set\_cumcatches\_per\_pop}}
+\index{set\_cumcatches\_per\_pop@{set\_cumcatches\_per\_pop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumcatches\_per\_pop()}{set\_cumcatches\_per\_pop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumcatches\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a37af34b399035d586105099d768136cf}\label{class_node_data_a37af34b399035d586105099d768136cf}} 
+\index{NodeData@{NodeData}!set\_cumcatches\_with\_threshold@{set\_cumcatches\_with\_threshold}}
+\index{set\_cumcatches\_with\_threshold@{set\_cumcatches\_with\_threshold}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumcatches\_with\_threshold()}{set\_cumcatches\_with\_threshold()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumcatches\+\_\+with\+\_\+threshold (\begin{DoxyParamCaption}\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_afa19226bbecab1af627ac9a3bd4f030f}\label{class_node_data_afa19226bbecab1af627ac9a3bd4f030f}} 
+\index{NodeData@{NodeData}!set\_cumdiscards@{set\_cumdiscards}}
+\index{set\_cumdiscards@{set\_cumdiscards}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumdiscards()}{set\_cumdiscards()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumdiscards (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a3b112825113087ec9652de40df191b84}\label{class_node_data_a3b112825113087ec9652de40df191b84}} 
+\index{NodeData@{NodeData}!set\_cumdiscards\_per\_pop@{set\_cumdiscards\_per\_pop}}
+\index{set\_cumdiscards\_per\_pop@{set\_cumdiscards\_per\_pop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumdiscards\_per\_pop()}{set\_cumdiscards\_per\_pop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumdiscards\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a7bd35e19d00d6bc27412d62f9d208bd6}\label{class_node_data_a7bd35e19d00d6bc27412d62f9d208bd6}} 
+\index{NodeData@{NodeData}!set\_cumdiscardsratio@{set\_cumdiscardsratio}}
+\index{set\_cumdiscardsratio@{set\_cumdiscardsratio}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumdiscardsratio()}{set\_cumdiscardsratio()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumdiscardsratio (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae43f6669e46c7a072326c30e2e06ea7a}\label{class_node_data_ae43f6669e46c7a072326c30e2e06ea7a}} 
+\index{NodeData@{NodeData}!set\_cumftime@{set\_cumftime}}
+\index{set\_cumftime@{set\_cumftime}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumftime()}{set\_cumftime()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumftime (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a6e42f6df786bb22c5ecf9ed6409ef620}\label{class_node_data_a6e42f6df786bb22c5ecf9ed6409ef620}} 
+\index{NodeData@{NodeData}!set\_cumsubsurfacesweptarea@{set\_cumsubsurfacesweptarea}}
+\index{set\_cumsubsurfacesweptarea@{set\_cumsubsurfacesweptarea}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumsubsurfacesweptarea()}{set\_cumsubsurfacesweptarea()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumsubsurfacesweptarea (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a273d0cf57afd478995096541d4fbbace}\label{class_node_data_a273d0cf57afd478995096541d4fbbace}} 
+\index{NodeData@{NodeData}!set\_cumsweptarea@{set\_cumsweptarea}}
+\index{set\_cumsweptarea@{set\_cumsweptarea}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_cumsweptarea()}{set\_cumsweptarea()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+cumsweptarea (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a17b4f94bb1ca20d974e800138606ae95}\label{class_node_data_a17b4f94bb1ca20d974e800138606ae95}} 
+\index{NodeData@{NodeData}!set\_freq\_usual\_fgrounds@{set\_freq\_usual\_fgrounds}}
+\index{set\_freq\_usual\_fgrounds@{set\_freq\_usual\_fgrounds}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_freq\_usual\_fgrounds()}{set\_freq\_usual\_fgrounds()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+freq\+\_\+usual\+\_\+fgrounds (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{freq\+\_\+usual\+\_\+fgrounds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a148595b384448cdc8a2dff4f8b9b7e9a}\label{class_node_data_a148595b384448cdc8a2dff4f8b9b7e9a}} 
+\index{NodeData@{NodeData}!set\_impact\_per\_pop@{set\_impact\_per\_pop}}
+\index{set\_impact\_per\_pop@{set\_impact\_per\_pop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_impact\_per\_pop()}{set\_impact\_per\_pop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+impact\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a6736522e19331356abc9a0d6ed8882fb}\label{class_node_data_a6736522e19331356abc9a0d6ed8882fb}} 
+\index{NodeData@{NodeData}!set\_nbchoked@{set\_nbchoked}}
+\index{set\_nbchoked@{set\_nbchoked}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_nbchoked()}{set\_nbchoked()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+nbchoked (\begin{DoxyParamCaption}\item[{double}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae36ac9e76218d533a01501c8b67dc3de}\label{class_node_data_ae36ac9e76218d533a01501c8b67dc3de}} 
+\index{NodeData@{NodeData}!set\_tariffs@{set\_tariffs}}
+\index{set\_tariffs@{set\_tariffs}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_tariffs()}{set\_tariffs()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+tariffs (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{tariffs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a0848066e27e3cb766039ee852d4c3f18}\label{class_node_data_a0848066e27e3cb766039ee852d4c3f18}} 
+\index{NodeData@{NodeData}!set\_totNs\_per\_pop@{set\_totNs\_per\_pop}}
+\index{set\_totNs\_per\_pop@{set\_totNs\_per\_pop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_totNs\_per\_pop()}{set\_totNs\_per\_pop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+tot\+Ns\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_aaeb6976e27f095a06820ac6836abf4e3}\label{class_node_data_aaeb6976e27f095a06820ac6836abf4e3}} 
+\index{NodeData@{NodeData}!set\_totWs\_per\_pop@{set\_totWs\_per\_pop}}
+\index{set\_totWs\_per\_pop@{set\_totWs\_per\_pop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_totWs\_per\_pop()}{set\_totWs\_per\_pop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+tot\+Ws\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a8bd37a5138e6ae24633994cc55d4596b}\label{class_node_data_a8bd37a5138e6ae24633994cc55d4596b}} 
+\index{NodeData@{NodeData}!set\_usual\_fgrounds@{set\_usual\_fgrounds}}
+\index{set\_usual\_fgrounds@{set\_usual\_fgrounds}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{set\_usual\_fgrounds()}{set\_usual\_fgrounds()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+\_\+usual\+\_\+fgrounds (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$}]{usual\+\_\+fgrounds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a255e84f7e45de45c0e1eb36389f6eeb4}\label{class_node_data_a255e84f7e45de45c0e1eb36389f6eeb4}} 
+\index{NodeData@{NodeData}!setAdiacencyWeight@{setAdiacencyWeight}}
+\index{setAdiacencyWeight@{setAdiacencyWeight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setAdiacencyWeight()}{setAdiacencyWeight()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Adiacency\+Weight (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{double}]{w }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a688abf167edcf253ecb6438459bef7e7}\label{class_node_data_a688abf167edcf253ecb6438459bef7e7}} 
+\index{NodeData@{NodeData}!setAreaType@{setAreaType}}
+\index{setAreaType@{setAreaType}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setAreaType()}{setAreaType()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Area\+Type (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a92d3e674a17f3a431818e34de395f487}\label{class_node_data_a92d3e674a17f3a431818e34de395f487}} 
+\index{NodeData@{NodeData}!setBathymetry@{setBathymetry}}
+\index{setBathymetry@{setBathymetry}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBathymetry()}{setBathymetry()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Bathymetry (\begin{DoxyParamCaption}\item[{double}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ae4ac6a1f32878111da6890804628bc09}\label{class_node_data_ae4ac6a1f32878111da6890804628bc09}} 
+\index{NodeData@{NodeData}!setBenthosBiomass@{setBenthosBiomass}}
+\index{setBenthosBiomass@{setBenthosBiomass}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosBiomass()}{setBenthosBiomass()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Biomass (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a8cb0783f063c00339e45cf25e1724112}\label{class_node_data_a8cb0783f063c00339e45cf25e1724112}} 
+\index{NodeData@{NodeData}!setBenthosBiomass@{setBenthosBiomass}}
+\index{setBenthosBiomass@{setBenthosBiomass}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosBiomass()}{setBenthosBiomass()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Biomass (\begin{DoxyParamCaption}\item[{int}]{func,  }\item[{double}]{benthosbiomass }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_af1476c229f470b93181304ea0d9206c4}\label{class_node_data_af1476c229f470b93181304ea0d9206c4}} 
+\index{NodeData@{NodeData}!setBenthosBiomassOverK@{setBenthosBiomassOverK}}
+\index{setBenthosBiomassOverK@{setBenthosBiomassOverK}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosBiomassOverK()}{setBenthosBiomassOverK()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Biomass\+OverK (\begin{DoxyParamCaption}\item[{int}]{func,  }\item[{double}]{benthosbiomassoverK }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a60a20553a3f5eb184bf7e418bef3a551}\label{class_node_data_a60a20553a3f5eb184bf7e418bef3a551}} 
+\index{NodeData@{NodeData}!setBenthosMeanweight@{setBenthosMeanweight}}
+\index{setBenthosMeanweight@{setBenthosMeanweight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosMeanweight()}{setBenthosMeanweight()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Meanweight (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a44d5979737b1f4ff1c6c8b64e2f9ed77}\label{class_node_data_a44d5979737b1f4ff1c6c8b64e2f9ed77}} 
+\index{NodeData@{NodeData}!setBenthosMeanweight@{setBenthosMeanweight}}
+\index{setBenthosMeanweight@{setBenthosMeanweight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosMeanweight()}{setBenthosMeanweight()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Meanweight (\begin{DoxyParamCaption}\item[{int}]{func,  }\item[{double}]{benthosmeanweight }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a7ffda826e25b84bd34ff2182484f10dc}\label{class_node_data_a7ffda826e25b84bd34ff2182484f10dc}} 
+\index{NodeData@{NodeData}!setBenthosNumber@{setBenthosNumber}}
+\index{setBenthosNumber@{setBenthosNumber}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosNumber()}{setBenthosNumber()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Number (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a858944519250709f8f13244947067fb9}\label{class_node_data_a858944519250709f8f13244947067fb9}} 
+\index{NodeData@{NodeData}!setBenthosNumber@{setBenthosNumber}}
+\index{setBenthosNumber@{setBenthosNumber}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosNumber()}{setBenthosNumber()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Number (\begin{DoxyParamCaption}\item[{int}]{func,  }\item[{double}]{benthosnumber }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_ae740bb9dcafae45bcd5bd3f00d592c0e}\label{class_node_data_ae740bb9dcafae45bcd5bd3f00d592c0e}} 
+\index{NodeData@{NodeData}!setBenthosNumberOverK@{setBenthosNumberOverK}}
+\index{setBenthosNumberOverK@{setBenthosNumberOverK}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setBenthosNumberOverK()}{setBenthosNumberOverK()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Benthos\+Number\+OverK (\begin{DoxyParamCaption}\item[{int}]{func,  }\item[{double}]{benthosnumberoverK }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a2e935f0c3eab83e69d46561a157b02aa}\label{class_node_data_a2e935f0c3eab83e69d46561a157b02aa}} 
+\index{NodeData@{NodeData}!setCodeArea@{setCodeArea}}
+\index{setCodeArea@{setCodeArea}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setCodeArea()}{setCodeArea()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Code\+Area (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a40f50700065a9323e9589f31d2ab57e0}\label{class_node_data_a40f50700065a9323e9589f31d2ab57e0}} 
+\index{NodeData@{NodeData}!setCumcatchesPerPop@{setCumcatchesPerPop}}
+\index{setCumcatchesPerPop@{setCumcatchesPerPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setCumcatchesPerPop()}{setCumcatchesPerPop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Cumcatches\+Per\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{double}]{cumcatchesperpop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a0e0010c7341b91c1074336c55bb519ac}\label{class_node_data_a0e0010c7341b91c1074336c55bb519ac}} 
+\index{NodeData@{NodeData}!setCumdiscardsPerPop@{setCumdiscardsPerPop}}
+\index{setCumdiscardsPerPop@{setCumdiscardsPerPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setCumdiscardsPerPop()}{setCumdiscardsPerPop()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Cumdiscards\+Per\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{double}]{cumdiscardsperpop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a19a754aa6d35992e0ae81f98c837f6ea}\label{class_node_data_a19a754aa6d35992e0ae81f98c837f6ea}} 
+\index{NodeData@{NodeData}!setDeleted@{setDeleted}}
+\index{setDeleted@{setDeleted}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setDeleted()}{setDeleted()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Deleted (\begin{DoxyParamCaption}\item[{bool}]{value = {\ttfamily true} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a5381d3a639eae6dfa29fd66dfeb7fd63}\label{class_node_data_a5381d3a639eae6dfa29fd66dfeb7fd63}} 
+\index{NodeData@{NodeData}!setDissolvedCarbon@{setDissolvedCarbon}}
+\index{setDissolvedCarbon@{setDissolvedCarbon}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setDissolvedCarbon()}{setDissolvedCarbon()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Dissolved\+Carbon (\begin{DoxyParamCaption}\item[{double}]{dc }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a50c5b5b85c44fe7b2bedc1fb7ff5994a}\label{class_node_data_a50c5b5b85c44fe7b2bedc1fb7ff5994a}} 
+\index{NodeData@{NodeData}!setFishfarmAnnualProfit@{setFishfarmAnnualProfit}}
+\index{setFishfarmAnnualProfit@{setFishfarmAnnualProfit}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmAnnualProfit()}{setFishfarmAnnualProfit()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Annual\+Profit (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fishfarm\+\_\+annualprofit }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a28faba9ef597ec271a5bf8393f750126}\label{class_node_data_a28faba9ef597ec271a5bf8393f750126}} 
+\index{NodeData@{NodeData}!setFishfarmCumulNetDischargeN@{setFishfarmCumulNetDischargeN}}
+\index{setFishfarmCumulNetDischargeN@{setFishfarmCumulNetDischargeN}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmCumulNetDischargeN()}{setFishfarmCumulNetDischargeN()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Cumul\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fishfarm\+\_\+cumulnetdischargeN }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a0c4ab1157b518fc6f688deb3defbb4a3}\label{class_node_data_a0c4ab1157b518fc6f688deb3defbb4a3}} 
+\index{NodeData@{NodeData}!setFishfarmCumulNetDischargeP@{setFishfarmCumulNetDischargeP}}
+\index{setFishfarmCumulNetDischargeP@{setFishfarmCumulNetDischargeP}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmCumulNetDischargeP()}{setFishfarmCumulNetDischargeP()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Cumul\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fishfarm\+\_\+cumulnetdischargeP }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a948b2c7ae9c22e0aa5fb0e5d88d4fac2}\label{class_node_data_a948b2c7ae9c22e0aa5fb0e5d88d4fac2}} 
+\index{NodeData@{NodeData}!setFishfarmEggsHarvestedKg@{setFishfarmEggsHarvestedKg}}
+\index{setFishfarmEggsHarvestedKg@{setFishfarmEggsHarvestedKg}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmEggsHarvestedKg()}{setFishfarmEggsHarvestedKg()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Eggs\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{eggs\+\_\+harvested\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a761da675ad9067e9c13f75c1f0f2d268}\label{class_node_data_a761da675ad9067e9c13f75c1f0f2d268}} 
+\index{NodeData@{NodeData}!setFishfarmFishHarvestedKg@{setFishfarmFishHarvestedKg}}
+\index{setFishfarmFishHarvestedKg@{setFishfarmFishHarvestedKg}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmFishHarvestedKg()}{setFishfarmFishHarvestedKg()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Fish\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fish\+\_\+harvested\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_ac37ac9705ee216314bef2042008dc3a4}\label{class_node_data_ac37ac9705ee216314bef2042008dc3a4}} 
+\index{NodeData@{NodeData}!setFishfarmFishMeanWeight@{setFishfarmFishMeanWeight}}
+\index{setFishfarmFishMeanWeight@{setFishfarmFishMeanWeight}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmFishMeanWeight()}{setFishfarmFishMeanWeight()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Fish\+Mean\+Weight (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{meanw\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a4f83b327f42474a893ac884c155c711a}\label{class_node_data_a4f83b327f42474a893ac884c155c711a}} 
+\index{NodeData@{NodeData}!setFishfarmNetDischargeN@{setFishfarmNetDischargeN}}
+\index{setFishfarmNetDischargeN@{setFishfarmNetDischargeN}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmNetDischargeN()}{setFishfarmNetDischargeN()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fishfarm\+\_\+netdischargeN }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_ac37c193019be503886c443c359f65972}\label{class_node_data_ac37c193019be503886c443c359f65972}} 
+\index{NodeData@{NodeData}!setFishfarmNetDischargeP@{setFishfarmNetDischargeP}}
+\index{setFishfarmNetDischargeP@{setFishfarmNetDischargeP}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setFishfarmNetDischargeP()}{setFishfarmNetDischargeP()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Fishfarm\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{double}]{fishfarm\+\_\+netdischargeP }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a4e6336f20ffda13091cd79becaca6e30}\label{class_node_data_a4e6336f20ffda13091cd79becaca6e30}} 
+\index{NodeData@{NodeData}!setHarbourId@{setHarbourId}}
+\index{setHarbourId@{setHarbourId}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setHarbourId()}{setHarbourId()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Harbour\+Id (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a3df40665aa9d86d290a978a660c06427}\label{class_node_data_a3df40665aa9d86d290a978a660c06427}} 
+\index{NodeData@{NodeData}!setImpact@{setImpact}}
+\index{setImpact@{setImpact}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setImpact()}{setImpact()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Impact (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{double}]{impact }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_aade4b2d620f642cdcb4a60135ce07ac3}\label{class_node_data_aade4b2d620f642cdcb4a60135ce07ac3}} 
+\index{NodeData@{NodeData}!setMarineLandscape@{setMarineLandscape}}
+\index{setMarineLandscape@{setMarineLandscape}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setMarineLandscape()}{setMarineLandscape()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Marine\+Landscape (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_afa127c82afea0d675bcf60e8c5f71418}\label{class_node_data_afa127c82afea0d675bcf60e8c5f71418}} 
+\index{NodeData@{NodeData}!setNitrogen@{setNitrogen}}
+\index{setNitrogen@{setNitrogen}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setNitrogen()}{setNitrogen()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Nitrogen (\begin{DoxyParamCaption}\item[{double}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a72f671ec13a3eb8fa0c060296ac5925a}\label{class_node_data_a72f671ec13a3eb8fa0c060296ac5925a}} 
+\index{NodeData@{NodeData}!setOxygen@{setOxygen}}
+\index{setOxygen@{setOxygen}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setOxygen()}{setOxygen()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Oxygen (\begin{DoxyParamCaption}\item[{double}]{o }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_aef48d6de31c265f3ec94a3c4fc81e7e1}\label{class_node_data_aef48d6de31c265f3ec94a3c4fc81e7e1}} 
+\index{NodeData@{NodeData}!setPhosphorus@{setPhosphorus}}
+\index{setPhosphorus@{setPhosphorus}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPhosphorus()}{setPhosphorus()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Phosphorus (\begin{DoxyParamCaption}\item[{double}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_adca5c23e611e9a1011e889cdba0adb14}\label{class_node_data_adca5c23e611e9a1011e889cdba0adb14}} 
+\index{NodeData@{NodeData}!setPop@{setPop}}
+\index{setPop@{setPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPop()}{setPop()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Pop (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{double}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_aa0c51ea85c2127e9b1feb9dd93be963d}\label{class_node_data_aa0c51ea85c2127e9b1feb9dd93be963d}} 
+\index{NodeData@{NodeData}!setPop@{setPop}}
+\index{setPop@{setPop}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPop()}{setPop()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Pop (\begin{DoxyParamCaption}\item[{Q\+List$<$ double $>$}]{v,  }\item[{double}]{tot }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_ad47e9ef6b7b0dd39c74d2996f83dcce5}\label{class_node_data_ad47e9ef6b7b0dd39c74d2996f83dcce5}} 
+\index{NodeData@{NodeData}!setPopTot@{setPopTot}}
+\index{setPopTot@{setPopTot}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPopTot()}{setPopTot()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Pop\+Tot (\begin{DoxyParamCaption}\item[{double}]{tot }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a519177cacb6e51ae623555a092a5f2b3}\label{class_node_data_a519177cacb6e51ae623555a092a5f2b3}} 
+\index{NodeData@{NodeData}!setPopW@{setPopW}}
+\index{setPopW@{setPopW}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPopW()}{setPopW()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+PopW (\begin{DoxyParamCaption}\item[{int}]{pop,  }\item[{double}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a6af682956531adb5a57b0513f1deaffd}\label{class_node_data_a6af682956531adb5a57b0513f1deaffd}} 
+\index{NodeData@{NodeData}!setPopW@{setPopW}}
+\index{setPopW@{setPopW}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPopW()}{setPopW()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+PopW (\begin{DoxyParamCaption}\item[{Q\+List$<$ double $>$}]{v,  }\item[{double}]{tot }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_a52d72c44656a8828f03ade2e3f4342ea}\label{class_node_data_a52d72c44656a8828f03ade2e3f4342ea}} 
+\index{NodeData@{NodeData}!setPopWTot@{setPopWTot}}
+\index{setPopWTot@{setPopWTot}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setPopWTot()}{setPopWTot()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Pop\+W\+Tot (\begin{DoxyParamCaption}\item[{double}]{tot }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_node_data_abee818d778ab25cde47c3675d4376803}\label{class_node_data_abee818d778ab25cde47c3675d4376803}} 
+\index{NodeData@{NodeData}!setRelevant@{setRelevant}}
+\index{setRelevant@{setRelevant}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setRelevant()}{setRelevant()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Relevant (\begin{DoxyParamCaption}\item[{bool}]{relevant = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_ab7d939f860a614f7b479c73ba57da8c8}\label{class_node_data_ab7d939f860a614f7b479c73ba57da8c8}} 
+\index{NodeData@{NodeData}!setSalinity@{setSalinity}}
+\index{setSalinity@{setSalinity}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setSalinity()}{setSalinity()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Salinity (\begin{DoxyParamCaption}\item[{double}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a8fcad2b33b0e6d8b27fb330e0ac9dc87}\label{class_node_data_a8fcad2b33b0e6d8b27fb330e0ac9dc87}} 
+\index{NodeData@{NodeData}!setShippingdensity@{setShippingdensity}}
+\index{setShippingdensity@{setShippingdensity}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setShippingdensity()}{setShippingdensity()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Shippingdensity (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a1bc687cd7cfcfc9dcfb0b28ed0018cc5}\label{class_node_data_a1bc687cd7cfcfc9dcfb0b28ed0018cc5}} 
+\index{NodeData@{NodeData}!setSiltfraction@{setSiltfraction}}
+\index{setSiltfraction@{setSiltfraction}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setSiltfraction()}{setSiltfraction()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Siltfraction (\begin{DoxyParamCaption}\item[{double}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a2b9440fd8903a222c1f56e1b347db808}\label{class_node_data_a2b9440fd8903a222c1f56e1b347db808}} 
+\index{NodeData@{NodeData}!setSST@{setSST}}
+\index{setSST@{setSST}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setSST()}{setSST()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+S\+ST (\begin{DoxyParamCaption}\item[{double}]{t }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_data_a4aa6a415cd96ce607564cdf91c9a83a4}\label{class_node_data_a4aa6a415cd96ce607564cdf91c9a83a4}} 
+\index{NodeData@{NodeData}!setWind@{setWind}}
+\index{setWind@{setWind}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{setWind()}{setWind()}}
+{\footnotesize\ttfamily void Node\+Data\+::set\+Wind (\begin{DoxyParamCaption}\item[{double}]{w }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_node_data_ac51bb052329667bc790179278eb035d8}\label{class_node_data_ac51bb052329667bc790179278eb035d8}} 
+\index{NodeData@{NodeData}!mNode@{mNode}}
+\index{mNode@{mNode}!NodeData@{NodeData}}
+\subsubsection{\texorpdfstring{mNode}{mNode}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_node}{Node}}$>$ Node\+Data\+::m\+Node}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/modelobjects/\mbox{\hyperlink{nodedata_8h}{nodedata.\+h}}\item 
+qtgui/modelobjects/\mbox{\hyperlink{nodedata_8cpp}{nodedata.\+cpp}}\end{DoxyCompactItemize}

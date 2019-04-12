@@ -1,0 +1,138 @@
+\hypertarget{class_wait_dialog}{}\section{Wait\+Dialog Class Reference}
+\label{class_wait_dialog}\index{WaitDialog@{WaitDialog}}
+
+
+{\ttfamily \#include $<$waitdialog.\+h$>$}
+
+Inheritance diagram for Wait\+Dialog\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d4/daa/class_wait_dialog}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_wait_dialog_aba0d21b4a9c919dbd3d1da7715b190a2}{set\+Format}} (Q\+String format)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_ad85c079019be4a00fb92c4c5bf9c809d}{set\+Text}} (Q\+String text)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_a87ad218e617189494f147d92795e0631}{set\+Progress}} (bool shown, int max)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_afaf2e714ddeff8f6bea99471f576f489}{set\+Progress}} (int pos, int max)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_a40523d825231c1b8838389618026ab87}{set\+Total}} (int max)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_ab7ea862a3fc19b1cc3586f7bf3fb67ef}{enable\+Abort}} (bool enable)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_aa159c59b6bc1b6388e7fefc2c77f5a9c}{set\+Progression}} (int level)
+\item 
+void \mbox{\hyperlink{class_wait_dialog_a01963c2c1fb1347312dd49dcf5a7485b}{set\+Eta}} (Q\+String txt)
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_wait_dialog_ab10b3b29a26766060425e76bdd5f983c}{aborted}} ()
+\item 
+void \mbox{\hyperlink{class_wait_dialog_a7af3286633d36f4c1e84b64dbcdd24f4}{self\+\_\+set\+\_\+progression}} (int)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_wait_dialog_ad3f283fe9282bf9375d9dd6b7fa1347f}{Wait\+Dialog}} (Q\+Widget $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_wait_dialog_aba6a51c0919ceace4caba12be14e5015}{$\sim$\+Wait\+Dialog}} ()
+\item 
+void \mbox{\hyperlink{class_wait_dialog_a3734bb8b41bd6758b8b4c185e7f42d62}{set\+On\+Abort\+Listener}} (\mbox{\hyperlink{class_abort_listener}{Abort\+Listener}} $\ast$listener)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_wait_dialog_ad3f283fe9282bf9375d9dd6b7fa1347f}\label{class_wait_dialog_ad3f283fe9282bf9375d9dd6b7fa1347f}} 
+\index{WaitDialog@{WaitDialog}!WaitDialog@{WaitDialog}}
+\index{WaitDialog@{WaitDialog}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{WaitDialog()}{WaitDialog()}}
+{\footnotesize\ttfamily Wait\+Dialog\+::\+Wait\+Dialog (\begin{DoxyParamCaption}\item[{Q\+Widget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{class_wait_dialog_aba6a51c0919ceace4caba12be14e5015}\label{class_wait_dialog_aba6a51c0919ceace4caba12be14e5015}} 
+\index{WaitDialog@{WaitDialog}!````~WaitDialog@{$\sim$WaitDialog}}
+\index{````~WaitDialog@{$\sim$WaitDialog}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{$\sim$WaitDialog()}{~WaitDialog()}}
+{\footnotesize\ttfamily Wait\+Dialog\+::$\sim$\+Wait\+Dialog (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_wait_dialog_ab10b3b29a26766060425e76bdd5f983c}\label{class_wait_dialog_ab10b3b29a26766060425e76bdd5f983c}} 
+\index{WaitDialog@{WaitDialog}!aborted@{aborted}}
+\index{aborted@{aborted}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{aborted}{aborted}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::aborted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_wait_dialog_ab7ea862a3fc19b1cc3586f7bf3fb67ef}\label{class_wait_dialog_ab7ea862a3fc19b1cc3586f7bf3fb67ef}} 
+\index{WaitDialog@{WaitDialog}!enableAbort@{enableAbort}}
+\index{enableAbort@{enableAbort}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{enableAbort}{enableAbort}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::enable\+Abort (\begin{DoxyParamCaption}\item[{bool}]{enable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_a7af3286633d36f4c1e84b64dbcdd24f4}\label{class_wait_dialog_a7af3286633d36f4c1e84b64dbcdd24f4}} 
+\index{WaitDialog@{WaitDialog}!self\_set\_progression@{self\_set\_progression}}
+\index{self\_set\_progression@{self\_set\_progression}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{self\_set\_progression}{self\_set\_progression}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::self\+\_\+set\+\_\+progression (\begin{DoxyParamCaption}\item[{int}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_wait_dialog_a01963c2c1fb1347312dd49dcf5a7485b}\label{class_wait_dialog_a01963c2c1fb1347312dd49dcf5a7485b}} 
+\index{WaitDialog@{WaitDialog}!setEta@{setEta}}
+\index{setEta@{setEta}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setEta}{setEta}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Eta (\begin{DoxyParamCaption}\item[{Q\+String}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_aba0d21b4a9c919dbd3d1da7715b190a2}\label{class_wait_dialog_aba0d21b4a9c919dbd3d1da7715b190a2}} 
+\index{WaitDialog@{WaitDialog}!setFormat@{setFormat}}
+\index{setFormat@{setFormat}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setFormat}{setFormat}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Format (\begin{DoxyParamCaption}\item[{Q\+String}]{format }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_a3734bb8b41bd6758b8b4c185e7f42d62}\label{class_wait_dialog_a3734bb8b41bd6758b8b4c185e7f42d62}} 
+\index{WaitDialog@{WaitDialog}!setOnAbortListener@{setOnAbortListener}}
+\index{setOnAbortListener@{setOnAbortListener}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setOnAbortListener()}{setOnAbortListener()}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+On\+Abort\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_abort_listener}{Abort\+Listener}} $\ast$}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_wait_dialog_a87ad218e617189494f147d92795e0631}\label{class_wait_dialog_a87ad218e617189494f147d92795e0631}} 
+\index{WaitDialog@{WaitDialog}!setProgress@{setProgress}}
+\index{setProgress@{setProgress}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setProgress}{setProgress}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Progress (\begin{DoxyParamCaption}\item[{bool}]{shown,  }\item[{int}]{max }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_afaf2e714ddeff8f6bea99471f576f489}\label{class_wait_dialog_afaf2e714ddeff8f6bea99471f576f489}} 
+\index{WaitDialog@{WaitDialog}!setProgress@{setProgress}}
+\index{setProgress@{setProgress}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setProgress}{setProgress}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Progress (\begin{DoxyParamCaption}\item[{int}]{pos,  }\item[{int}]{max }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_aa159c59b6bc1b6388e7fefc2c77f5a9c}\label{class_wait_dialog_aa159c59b6bc1b6388e7fefc2c77f5a9c}} 
+\index{WaitDialog@{WaitDialog}!setProgression@{setProgression}}
+\index{setProgression@{setProgression}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setProgression}{setProgression}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Progression (\begin{DoxyParamCaption}\item[{int}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_ad85c079019be4a00fb92c4c5bf9c809d}\label{class_wait_dialog_ad85c079019be4a00fb92c4c5bf9c809d}} 
+\index{WaitDialog@{WaitDialog}!setText@{setText}}
+\index{setText@{setText}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setText}{setText}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Text (\begin{DoxyParamCaption}\item[{Q\+String}]{text }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_wait_dialog_a40523d825231c1b8838389618026ab87}\label{class_wait_dialog_a40523d825231c1b8838389618026ab87}} 
+\index{WaitDialog@{WaitDialog}!setTotal@{setTotal}}
+\index{setTotal@{setTotal}!WaitDialog@{WaitDialog}}
+\subsubsection{\texorpdfstring{setTotal}{setTotal}}
+{\footnotesize\ttfamily void Wait\+Dialog\+::set\+Total (\begin{DoxyParamCaption}\item[{int}]{max }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{waitdialog_8h}{waitdialog.\+h}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__waitdialog_8cpp}{moc\+\_\+waitdialog.\+cpp}}\item 
+qtgui/\mbox{\hyperlink{waitdialog_8cpp}{waitdialog.\+cpp}}\end{DoxyCompactItemize}

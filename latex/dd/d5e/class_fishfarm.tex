@@ -1,0 +1,653 @@
+\hypertarget{class_fishfarm}{}\section{Fishfarm Class Reference}
+\label{class_fishfarm}\index{Fishfarm@{Fishfarm}}
+
+
+{\ttfamily \#include $<$Fishfarm.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_fishfarm_aa5fcac76457a2def37af1e16101c5110}{Fishfarm}} (\mbox{\hyperlink{class_node}{Node}} $\ast$node, int id, string name, int farmtype)
+\item 
+\mbox{\hyperlink{class_fishfarm_ad100e70f8cb1ede17288e2b929215b90}{Fishfarm}} (int \+\_\+name, string \+\_\+stringname, \mbox{\hyperlink{class_node}{Node}} $\ast$\+\_\+node, int farmtype, int \+\_\+is\+\_\+active, double \+\_\+size, double \+\_\+farm\+\_\+original\+\_\+long, double \+\_\+farm\+\_\+original\+\_\+lat, double \+\_\+mean\+\_\+\+S\+ST, double \+\_\+mean\+\_\+salinity, double \+\_\+mean\+\_\+windspeed, double \+\_\+mean\+\_\+currentspeed, double \+\_\+max\+\_\+depth, double \+\_\+diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+l, double \+\_\+\+Linf\+\_\+mm, double \+\_\+\+K\+\_\+y, double \+\_\+t0\+\_\+y, double \+\_\+fulton\+\_\+condition\+\_\+factor, string \+\_\+meanw\+\_\+growth\+\_\+model\+\_\+type, int \+\_\+start\+\_\+day\+\_\+growing, int \+\_\+end\+\_\+day\+\_\+harvest, int \+\_\+nbyears\+\_\+for\+\_\+growth, int \+\_\+nb\+\_\+days\+\_\+fallowing\+\_\+period, int \+\_\+nb\+\_\+fish\+\_\+at\+\_\+start, double \+\_\+meanw\+\_\+at\+\_\+start, double \+\_\+price\+\_\+per\+\_\+kg\+\_\+at\+\_\+start, double \+\_\+target\+\_\+meanw\+\_\+at\+\_\+harvest, int \+\_\+nb\+\_\+fish\+\_\+at\+\_\+harvest, double \+\_\+meanw\+\_\+at\+\_\+harvest, double \+\_\+prop\+\_\+harvest\+\_\+kg\+\_\+sold, double \+\_\+kg\+\_\+eggs\+\_\+per\+\_\+kg, double \+\_\+price\+\_\+eggs\+\_\+per\+\_\+kg, double \+\_\+\+N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3per, double \+\_\+\+P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5per, string \+\_\+feed\+\_\+types, double \+\_\+feed\+\_\+price\+\_\+per\+\_\+kg, double \+\_\+total\+\_\+feed\+\_\+kg, double \+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed, double \+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed, double \+\_\+total\+\_\+feed\+\_\+\+N\+\_\+kg, double \+\_\+total\+\_\+feed\+\_\+\+P\+\_\+kg, string \+\_\+feed\+\_\+type\+\_\+vet, double \+\_\+feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kg, double \+\_\+total\+\_\+feed\+\_\+vet\+\_\+kg, double \+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets, double \+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vet, double \+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kg, double \+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kg, double \+\_\+annual\+\_\+discharge\+\_\+\+N\+\_\+kg, double \+\_\+annual\+\_\+discharge\+\_\+\+P\+\_\+kg, double \+\_\+annual\+\_\+discharge\+\_\+\+C\+\_\+kg, double \+\_\+annual\+\_\+discharge\+\_\+heavymetals\+\_\+kg, double \+\_\+annual\+\_\+discharge\+\_\+medecine\+\_\+kg, double \+\_\+net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+y, double \+\_\+market\+\_\+price\+\_\+sold\+\_\+fish, double \+\_\+operating\+\_\+cost\+\_\+per\+\_\+day, double \+\_\+annual\+\_\+profit)
+\item 
+\mbox{\hyperlink{class_fishfarm_a1c61719babbe711e95e179137797fc22}{Fishfarm}} ()
+\item 
+virtual \mbox{\hyperlink{class_fishfarm_ac6c9f75dd2c65158dcf6c2ad65758f28}{$\sim$\+Fishfarm}} ()
+\item 
+int \mbox{\hyperlink{class_fishfarm_a348dcb42668ee858295726b3296246d7}{get\+\_\+name}} () const
+\item 
+string \mbox{\hyperlink{class_fishfarm_a7292eee3273126c23009d5dec596cc68}{get\+\_\+stringname}} () const
+\item 
+\mbox{\hyperlink{class_node}{Node}} $\ast$ \mbox{\hyperlink{class_fishfarm_ad2e9367523994f7521a47c1333a9f61d}{get\+\_\+loc\+\_\+ff}} () const
+\item 
+int \mbox{\hyperlink{class_fishfarm_aedf2000fbd046927331dce5d3a95c83b}{get\+\_\+farmtype}} () const
+\item 
+int \mbox{\hyperlink{class_fishfarm_ad51a326fc6c04c2015a34de9f53d90be}{get\+\_\+is\+\_\+active}} () const
+\item 
+int \mbox{\hyperlink{class_fishfarm_abfbd7625dd947af136ced45817318a7b}{get\+\_\+is\+\_\+running}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a088aaa3fec52698b60ee9f418ffc3b38}{get\+\_\+size}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a5dd60ab3b14ebea4b052b6f568982cb1}{get\+\_\+farm\+\_\+original\+\_\+long}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a6256f5e9ed2e74c7d78a608c8f00fe53}{get\+\_\+farm\+\_\+original\+\_\+lat}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ac0223e0e7bc6a99e982db617fad1ee6c}{get\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ab79f2b7498216698ef9e017118ab01b7}{get\+\_\+y}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ac38c90c5b54df288a239a6644b96b5d3}{get\+\_\+\+Linf\+\_\+mm}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a5eb4a94c070b4d4a44ced1b6ae7cbd2f}{get\+\_\+\+K\+\_\+y}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_adf2964e294891fbdef94cc1fd2b1346f}{get\+\_\+t0\+\_\+y}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_af1927ba5416b01ee61c764fa74398be4}{get\+\_\+fulton\+\_\+condition\+\_\+factor}} () const
+\item 
+string \mbox{\hyperlink{class_fishfarm_a3421db7c915fbde76655ce7b6df0ba2e}{get\+\_\+meanw\+\_\+growth\+\_\+model\+\_\+type}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ac897666f45d54e4e9afb8a8d9219e642}{get\+\_\+meanw\+\_\+at\+\_\+start}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a8234993c5d79aaa2001bc5e1aa655d50}{get\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_abca6cc794011a8f73bd14aac38d4d917}{get\+\_\+sim\+\_\+previous\+\_\+individual\+\_\+mean\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a214d56e185267a336864f02c1c9629da}{get\+\_\+sim\+\_\+kg\+\_\+harvested}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a0bd9d174a35d21c9624a20bd273e318f}{get\+\_\+sim\+\_\+kg\+\_\+eggs\+\_\+harvested}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ae8036540dc9bcf0a9868e903f79c6874}{get\+\_\+sim\+\_\+annual\+\_\+profit}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_af721004d8aa13379b286b814bb4822f5}{get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+N}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a89d7d8fa18972ba13b7d2d4d42661c35}{get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+P}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a29bf78bd1864f4d6c476d6bcd26466b7}{get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+C}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a1e5424c4e5cc685874e138c3cfa85ab9}{get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+medecine}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a2263bd93823f16fedf93f16391b2f9ea}{get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+N}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a1d59bc456ec95b3758a9b95f4956305a}{get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+P}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a7045af628074dfaeb8866500b4c1a5f4}{get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+C}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_aedfaba1cc436af5bdc7fcfd6efea3461}{get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+medecine}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a1d00b6c519f683c07d12334f9e733b49}{get\+\_\+start\+\_\+day\+\_\+growing}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a6d3690c15c3a5ab3aa76307be41177d1}{get\+\_\+end\+\_\+day\+\_\+harvest}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a3c599c36b4ff6e303f28b9dccf87fe01}{get\+\_\+prop\+\_\+harvest\+\_\+kg\+\_\+sold}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_aaebff35b526722b8fa8f4476f6121dd8}{get\+\_\+nb\+\_\+fish\+\_\+at\+\_\+harvest}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a4a78d278c4acc527c4212833e89bbbda}{get\+\_\+market\+\_\+price\+\_\+sold\+\_\+fish}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a4cbdb503058458f6c78610026d40fff5}{get\+\_\+nb\+\_\+fish\+\_\+at\+\_\+start}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_aff573924f0ebf5f2b21f715d317aa594}{get\+\_\+price\+\_\+per\+\_\+kg\+\_\+at\+\_\+start}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a25c20e3fc0a6fe54e46280288cb70682}{get\+\_\+operating\+\_\+cost\+\_\+per\+\_\+day}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_aeb602bf440eafa1459146cc06b277255}{get\+\_\+kg\+\_\+eggs\+\_\+per\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ae1e420d25aca0fb65f199d4f16b40b1b}{get\+\_\+price\+\_\+eggs\+\_\+per\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ab4c74d76a064d293c8f51481446ff5a9}{get\+\_\+feed\+\_\+price\+\_\+per\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ac1e7001a0c92606f05999db104a631fc}{get\+\_\+total\+\_\+feed\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a8cd365afbb7bb3c4c9befb1014f7e1ce}{get\+\_\+feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ae76f61ab5132ffbd8a76318d261320eb}{get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+kg}} () const
+\item 
+int \mbox{\hyperlink{class_fishfarm_ab458d0fb8b938d36dab778d045d99138}{get\+\_\+nbyears\+\_\+for\+\_\+growth}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_af0bf5568a2ae439add36edb11c4e1164}{get\+\_\+total\+\_\+feed\+\_\+\+N\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_af2a9f5a448e14cf9155acb1927323adf}{get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_af75da4df1fecb171d1f0721d04526ce8}{get\+\_\+total\+\_\+feed\+\_\+\+P\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a74ad4556f4f93a0fac8d90969f35a023}{get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kg}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a4e29ff83cc1fa7db74ea75d4e04f3ee5}{get\+\_\+\+N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3per}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a414e980219c631fc1e00160143fa148e}{get\+\_\+\+P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5per}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a6737538056c4615cdfe7be7d1881e01b}{get\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ac40656b26ce0fa91890a41290dee5dbe}{get\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_a5a9f7bd7cdcfb56233671cd5f9c121b0}{get\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vet}} () const
+\item 
+double \mbox{\hyperlink{class_fishfarm_ad883c56f014dd2ae439d4eee3bec7203}{get\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vet}} () const
+\item 
+void \mbox{\hyperlink{class_fishfarm_a4e8dfe97692937fd4fb70df9ca108548}{set\+\_\+x}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_acf2984bccb511f51e2f17e1ccd70355c}{set\+\_\+y}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_ac7b440c993ed7d0bcf4e6853129f722d}{set\+\_\+is\+\_\+active}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_aaebc35e12a8370ef3bc03e4bcff9cbfc}{set\+\_\+is\+\_\+running}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a9322668eada3ad531c0c9897f640ad3f}{set\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_aeb661d3c3b94e7488db8aab974d2504d}{set\+\_\+sim\+\_\+kg\+\_\+harvested}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_abe3b06d04edcb2e144fd324b4ddeaf68}{set\+\_\+sim\+\_\+kg\+\_\+eggs\+\_\+harvested}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a181badf8c288fa84e94324707c93bc06}{set\+\_\+sim\+\_\+annual\+\_\+profit}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a4e062b531c458e2fd6b310490b49129a}{set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+N}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_ab557d77ad4d966825cfe5ceca55d32d0}{set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+P}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a6747b53fdc3d3429fee9a2be37d1ed99}{set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+C}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_add42b9fecaf35b92802b0b47f531cfd8}{set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+medecine}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a45fc053e6bf14e051bcc11a1cc170827}{set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+N}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a417fee0d26d67ad764c7befa0214e2b3}{set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+P}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_aa38a1c92bec4b2b01b48b115a1bca011}{set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+C}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a23ecd40fe5f2a6f5ff193e1b363932c6}{set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+medecine}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a84dae66641cd6530bfbc08ba75d3b7e9}{compute\+\_\+current\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg\+\_\+in\+\_\+farm}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, double a\+\_\+year)
+\item 
+void \mbox{\hyperlink{class_fishfarm_a0ae5fcb1362cbfdeb5cdf27f1788c0f9}{compute\+\_\+profit\+\_\+in\+\_\+farm}} ()
+\item 
+void \mbox{\hyperlink{class_fishfarm_ab5f99c184bfdca6613c2d61711e27f69}{compute\+\_\+discharge\+\_\+on\+\_\+farm}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{class_fishfarm_a70ca59f8c2557e3e59e697a6b6f2b295}{export\+\_\+fishfarms\+\_\+indicators}} (ofstream \&fishfarmlogs, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_fishfarm_aa5fcac76457a2def37af1e16101c5110}\label{class_fishfarm_aa5fcac76457a2def37af1e16101c5110}} 
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{Fishfarm()}{Fishfarm()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Fishfarm\+::\+Fishfarm (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node,  }\item[{int}]{id,  }\item[{string}]{name,  }\item[{int}]{farmtype }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_ad100e70f8cb1ede17288e2b929215b90}\label{class_fishfarm_ad100e70f8cb1ede17288e2b929215b90}} 
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{Fishfarm()}{Fishfarm()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Fishfarm\+::\+Fishfarm (\begin{DoxyParamCaption}\item[{int}]{\+\_\+name,  }\item[{string}]{\+\_\+stringname,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{\+\_\+node,  }\item[{int}]{farmtype,  }\item[{int}]{\+\_\+is\+\_\+active,  }\item[{double}]{\+\_\+size,  }\item[{double}]{\+\_\+farm\+\_\+original\+\_\+long,  }\item[{double}]{\+\_\+farm\+\_\+original\+\_\+lat,  }\item[{double}]{\+\_\+mean\+\_\+\+S\+ST,  }\item[{double}]{\+\_\+mean\+\_\+salinity,  }\item[{double}]{\+\_\+mean\+\_\+windspeed,  }\item[{double}]{\+\_\+mean\+\_\+currentspeed,  }\item[{double}]{\+\_\+max\+\_\+depth,  }\item[{double}]{\+\_\+diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+l,  }\item[{double}]{\+\_\+\+Linf\+\_\+mm,  }\item[{double}]{\+\_\+\+K\+\_\+y,  }\item[{double}]{\+\_\+t0\+\_\+y,  }\item[{double}]{\+\_\+fulton\+\_\+condition\+\_\+factor,  }\item[{string}]{\+\_\+meanw\+\_\+growth\+\_\+model\+\_\+type,  }\item[{int}]{\+\_\+start\+\_\+day\+\_\+growing,  }\item[{int}]{\+\_\+end\+\_\+day\+\_\+harvest,  }\item[{int}]{\+\_\+nbyears\+\_\+for\+\_\+growth,  }\item[{int}]{\+\_\+nb\+\_\+days\+\_\+fallowing\+\_\+period,  }\item[{int}]{\+\_\+nb\+\_\+fish\+\_\+at\+\_\+start,  }\item[{double}]{\+\_\+meanw\+\_\+at\+\_\+start,  }\item[{double}]{\+\_\+price\+\_\+per\+\_\+kg\+\_\+at\+\_\+start,  }\item[{double}]{\+\_\+target\+\_\+meanw\+\_\+at\+\_\+harvest,  }\item[{int}]{\+\_\+nb\+\_\+fish\+\_\+at\+\_\+harvest,  }\item[{double}]{\+\_\+meanw\+\_\+at\+\_\+harvest,  }\item[{double}]{\+\_\+prop\+\_\+harvest\+\_\+kg\+\_\+sold,  }\item[{double}]{\+\_\+kg\+\_\+eggs\+\_\+per\+\_\+kg,  }\item[{double}]{\+\_\+price\+\_\+eggs\+\_\+per\+\_\+kg,  }\item[{double}]{\+\_\+\+N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3per,  }\item[{double}]{\+\_\+\+P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5per,  }\item[{string}]{\+\_\+feed\+\_\+types,  }\item[{double}]{\+\_\+feed\+\_\+price\+\_\+per\+\_\+kg,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+kg,  }\item[{double}]{\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed,  }\item[{double}]{\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+\+N\+\_\+kg,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+\+P\+\_\+kg,  }\item[{string}]{\+\_\+feed\+\_\+type\+\_\+vet,  }\item[{double}]{\+\_\+feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kg,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+vet\+\_\+kg,  }\item[{double}]{\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets,  }\item[{double}]{\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vet,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kg,  }\item[{double}]{\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kg,  }\item[{double}]{\+\_\+annual\+\_\+discharge\+\_\+\+N\+\_\+kg,  }\item[{double}]{\+\_\+annual\+\_\+discharge\+\_\+\+P\+\_\+kg,  }\item[{double}]{\+\_\+annual\+\_\+discharge\+\_\+\+C\+\_\+kg,  }\item[{double}]{\+\_\+annual\+\_\+discharge\+\_\+heavymetals\+\_\+kg,  }\item[{double}]{\+\_\+annual\+\_\+discharge\+\_\+medecine\+\_\+kg,  }\item[{double}]{\+\_\+net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+y,  }\item[{double}]{\+\_\+market\+\_\+price\+\_\+sold\+\_\+fish,  }\item[{double}]{\+\_\+operating\+\_\+cost\+\_\+per\+\_\+day,  }\item[{double}]{\+\_\+annual\+\_\+profit }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a1c61719babbe711e95e179137797fc22}\label{class_fishfarm_a1c61719babbe711e95e179137797fc22}} 
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\index{Fishfarm@{Fishfarm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{Fishfarm()}{Fishfarm()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Fishfarm\+::\+Fishfarm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_ac6c9f75dd2c65158dcf6c2ad65758f28}\label{class_fishfarm_ac6c9f75dd2c65158dcf6c2ad65758f28}} 
+\index{Fishfarm@{Fishfarm}!````~Fishfarm@{$\sim$Fishfarm}}
+\index{````~Fishfarm@{$\sim$Fishfarm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{$\sim$Fishfarm()}{~Fishfarm()}}
+{\footnotesize\ttfamily Fishfarm\+::$\sim$\+Fishfarm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_fishfarm_a84dae66641cd6530bfbc08ba75d3b7e9}\label{class_fishfarm_a84dae66641cd6530bfbc08ba75d3b7e9}} 
+\index{Fishfarm@{Fishfarm}!compute\_current\_sim\_individual\_mean\_kg\_in\_farm@{compute\_current\_sim\_individual\_mean\_kg\_in\_farm}}
+\index{compute\_current\_sim\_individual\_mean\_kg\_in\_farm@{compute\_current\_sim\_individual\_mean\_kg\_in\_farm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{compute\_current\_sim\_individual\_mean\_kg\_in\_farm()}{compute\_current\_sim\_individual\_mean\_kg\_in\_farm()}}
+{\footnotesize\ttfamily void Fishfarm\+::compute\+\_\+current\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg\+\_\+in\+\_\+farm (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{double}]{a\+\_\+year }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_ab5f99c184bfdca6613c2d61711e27f69}\label{class_fishfarm_ab5f99c184bfdca6613c2d61711e27f69}} 
+\index{Fishfarm@{Fishfarm}!compute\_discharge\_on\_farm@{compute\_discharge\_on\_farm}}
+\index{compute\_discharge\_on\_farm@{compute\_discharge\_on\_farm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{compute\_discharge\_on\_farm()}{compute\_discharge\_on\_farm()}}
+{\footnotesize\ttfamily void Fishfarm\+::compute\+\_\+discharge\+\_\+on\+\_\+farm (\begin{DoxyParamCaption}\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a0ae5fcb1362cbfdeb5cdf27f1788c0f9}\label{class_fishfarm_a0ae5fcb1362cbfdeb5cdf27f1788c0f9}} 
+\index{Fishfarm@{Fishfarm}!compute\_profit\_in\_farm@{compute\_profit\_in\_farm}}
+\index{compute\_profit\_in\_farm@{compute\_profit\_in\_farm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{compute\_profit\_in\_farm()}{compute\_profit\_in\_farm()}}
+{\footnotesize\ttfamily void Fishfarm\+::compute\+\_\+profit\+\_\+in\+\_\+farm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a70ca59f8c2557e3e59e697a6b6f2b295}\label{class_fishfarm_a70ca59f8c2557e3e59e697a6b6f2b295}} 
+\index{Fishfarm@{Fishfarm}!export\_fishfarms\_indicators@{export\_fishfarms\_indicators}}
+\index{export\_fishfarms\_indicators@{export\_fishfarms\_indicators}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{export\_fishfarms\_indicators()}{export\_fishfarms\_indicators()}}
+{\footnotesize\ttfamily void Fishfarm\+::export\+\_\+fishfarms\+\_\+indicators (\begin{DoxyParamCaption}\item[{ofstream \&}]{fishfarmlogs,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a6d3690c15c3a5ab3aa76307be41177d1}\label{class_fishfarm_a6d3690c15c3a5ab3aa76307be41177d1}} 
+\index{Fishfarm@{Fishfarm}!get\_end\_day\_harvest@{get\_end\_day\_harvest}}
+\index{get\_end\_day\_harvest@{get\_end\_day\_harvest}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_end\_day\_harvest()}{get\_end\_day\_harvest()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+end\+\_\+day\+\_\+harvest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a6256f5e9ed2e74c7d78a608c8f00fe53}\label{class_fishfarm_a6256f5e9ed2e74c7d78a608c8f00fe53}} 
+\index{Fishfarm@{Fishfarm}!get\_farm\_original\_lat@{get\_farm\_original\_lat}}
+\index{get\_farm\_original\_lat@{get\_farm\_original\_lat}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_farm\_original\_lat()}{get\_farm\_original\_lat()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+farm\+\_\+original\+\_\+lat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a5dd60ab3b14ebea4b052b6f568982cb1}\label{class_fishfarm_a5dd60ab3b14ebea4b052b6f568982cb1}} 
+\index{Fishfarm@{Fishfarm}!get\_farm\_original\_long@{get\_farm\_original\_long}}
+\index{get\_farm\_original\_long@{get\_farm\_original\_long}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_farm\_original\_long()}{get\_farm\_original\_long()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+farm\+\_\+original\+\_\+long (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_aedf2000fbd046927331dce5d3a95c83b}\label{class_fishfarm_aedf2000fbd046927331dce5d3a95c83b}} 
+\index{Fishfarm@{Fishfarm}!get\_farmtype@{get\_farmtype}}
+\index{get\_farmtype@{get\_farmtype}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_farmtype()}{get\_farmtype()}}
+{\footnotesize\ttfamily int Fishfarm\+::get\+\_\+farmtype (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ab4c74d76a064d293c8f51481446ff5a9}\label{class_fishfarm_ab4c74d76a064d293c8f51481446ff5a9}} 
+\index{Fishfarm@{Fishfarm}!get\_feed\_price\_per\_kg@{get\_feed\_price\_per\_kg}}
+\index{get\_feed\_price\_per\_kg@{get\_feed\_price\_per\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_feed\_price\_per\_kg()}{get\_feed\_price\_per\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+feed\+\_\+price\+\_\+per\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a8cd365afbb7bb3c4c9befb1014f7e1ce}\label{class_fishfarm_a8cd365afbb7bb3c4c9befb1014f7e1ce}} 
+\index{Fishfarm@{Fishfarm}!get\_feed\_vet\_price\_per\_kg@{get\_feed\_vet\_price\_per\_kg}}
+\index{get\_feed\_vet\_price\_per\_kg@{get\_feed\_vet\_price\_per\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_feed\_vet\_price\_per\_kg()}{get\_feed\_vet\_price\_per\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_af1927ba5416b01ee61c764fa74398be4}\label{class_fishfarm_af1927ba5416b01ee61c764fa74398be4}} 
+\index{Fishfarm@{Fishfarm}!get\_fulton\_condition\_factor@{get\_fulton\_condition\_factor}}
+\index{get\_fulton\_condition\_factor@{get\_fulton\_condition\_factor}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_fulton\_condition\_factor()}{get\_fulton\_condition\_factor()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+fulton\+\_\+condition\+\_\+factor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ad51a326fc6c04c2015a34de9f53d90be}\label{class_fishfarm_ad51a326fc6c04c2015a34de9f53d90be}} 
+\index{Fishfarm@{Fishfarm}!get\_is\_active@{get\_is\_active}}
+\index{get\_is\_active@{get\_is\_active}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_is\_active()}{get\_is\_active()}}
+{\footnotesize\ttfamily int Fishfarm\+::get\+\_\+is\+\_\+active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_abfbd7625dd947af136ced45817318a7b}\label{class_fishfarm_abfbd7625dd947af136ced45817318a7b}} 
+\index{Fishfarm@{Fishfarm}!get\_is\_running@{get\_is\_running}}
+\index{get\_is\_running@{get\_is\_running}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_is\_running()}{get\_is\_running()}}
+{\footnotesize\ttfamily int Fishfarm\+::get\+\_\+is\+\_\+running (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a5eb4a94c070b4d4a44ced1b6ae7cbd2f}\label{class_fishfarm_a5eb4a94c070b4d4a44ced1b6ae7cbd2f}} 
+\index{Fishfarm@{Fishfarm}!get\_K\_y@{get\_K\_y}}
+\index{get\_K\_y@{get\_K\_y}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_K\_y()}{get\_K\_y()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+\+K\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_aeb602bf440eafa1459146cc06b277255}\label{class_fishfarm_aeb602bf440eafa1459146cc06b277255}} 
+\index{Fishfarm@{Fishfarm}!get\_kg\_eggs\_per\_kg@{get\_kg\_eggs\_per\_kg}}
+\index{get\_kg\_eggs\_per\_kg@{get\_kg\_eggs\_per\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_kg\_eggs\_per\_kg()}{get\_kg\_eggs\_per\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+kg\+\_\+eggs\+\_\+per\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac38c90c5b54df288a239a6644b96b5d3}\label{class_fishfarm_ac38c90c5b54df288a239a6644b96b5d3}} 
+\index{Fishfarm@{Fishfarm}!get\_Linf\_mm@{get\_Linf\_mm}}
+\index{get\_Linf\_mm@{get\_Linf\_mm}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_Linf\_mm()}{get\_Linf\_mm()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+\+Linf\+\_\+mm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ad2e9367523994f7521a47c1333a9f61d}\label{class_fishfarm_ad2e9367523994f7521a47c1333a9f61d}} 
+\index{Fishfarm@{Fishfarm}!get\_loc\_ff@{get\_loc\_ff}}
+\index{get\_loc\_ff@{get\_loc\_ff}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_loc\_ff()}{get\_loc\_ff()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_node}{Node}} $\ast$ Fishfarm\+::get\+\_\+loc\+\_\+ff (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a4a78d278c4acc527c4212833e89bbbda}\label{class_fishfarm_a4a78d278c4acc527c4212833e89bbbda}} 
+\index{Fishfarm@{Fishfarm}!get\_market\_price\_sold\_fish@{get\_market\_price\_sold\_fish}}
+\index{get\_market\_price\_sold\_fish@{get\_market\_price\_sold\_fish}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_market\_price\_sold\_fish()}{get\_market\_price\_sold\_fish()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+market\+\_\+price\+\_\+sold\+\_\+fish (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac897666f45d54e4e9afb8a8d9219e642}\label{class_fishfarm_ac897666f45d54e4e9afb8a8d9219e642}} 
+\index{Fishfarm@{Fishfarm}!get\_meanw\_at\_start@{get\_meanw\_at\_start}}
+\index{get\_meanw\_at\_start@{get\_meanw\_at\_start}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_meanw\_at\_start()}{get\_meanw\_at\_start()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+meanw\+\_\+at\+\_\+start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a3421db7c915fbde76655ce7b6df0ba2e}\label{class_fishfarm_a3421db7c915fbde76655ce7b6df0ba2e}} 
+\index{Fishfarm@{Fishfarm}!get\_meanw\_growth\_model\_type@{get\_meanw\_growth\_model\_type}}
+\index{get\_meanw\_growth\_model\_type@{get\_meanw\_growth\_model\_type}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_meanw\_growth\_model\_type()}{get\_meanw\_growth\_model\_type()}}
+{\footnotesize\ttfamily string Fishfarm\+::get\+\_\+meanw\+\_\+growth\+\_\+model\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a4e29ff83cc1fa7db74ea75d4e04f3ee5}\label{class_fishfarm_a4e29ff83cc1fa7db74ea75d4e04f3ee5}} 
+\index{Fishfarm@{Fishfarm}!get\_N\_in\_fish\_kg\_3per@{get\_N\_in\_fish\_kg\_3per}}
+\index{get\_N\_in\_fish\_kg\_3per@{get\_N\_in\_fish\_kg\_3per}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_N\_in\_fish\_kg\_3per()}{get\_N\_in\_fish\_kg\_3per()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+\+N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3per (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a348dcb42668ee858295726b3296246d7}\label{class_fishfarm_a348dcb42668ee858295726b3296246d7}} 
+\index{Fishfarm@{Fishfarm}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily int Fishfarm\+::get\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_aaebff35b526722b8fa8f4476f6121dd8}\label{class_fishfarm_aaebff35b526722b8fa8f4476f6121dd8}} 
+\index{Fishfarm@{Fishfarm}!get\_nb\_fish\_at\_harvest@{get\_nb\_fish\_at\_harvest}}
+\index{get\_nb\_fish\_at\_harvest@{get\_nb\_fish\_at\_harvest}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_nb\_fish\_at\_harvest()}{get\_nb\_fish\_at\_harvest()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+nb\+\_\+fish\+\_\+at\+\_\+harvest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a4cbdb503058458f6c78610026d40fff5}\label{class_fishfarm_a4cbdb503058458f6c78610026d40fff5}} 
+\index{Fishfarm@{Fishfarm}!get\_nb\_fish\_at\_start@{get\_nb\_fish\_at\_start}}
+\index{get\_nb\_fish\_at\_start@{get\_nb\_fish\_at\_start}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_nb\_fish\_at\_start()}{get\_nb\_fish\_at\_start()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+nb\+\_\+fish\+\_\+at\+\_\+start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ab458d0fb8b938d36dab778d045d99138}\label{class_fishfarm_ab458d0fb8b938d36dab778d045d99138}} 
+\index{Fishfarm@{Fishfarm}!get\_nbyears\_for\_growth@{get\_nbyears\_for\_growth}}
+\index{get\_nbyears\_for\_growth@{get\_nbyears\_for\_growth}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_nbyears\_for\_growth()}{get\_nbyears\_for\_growth()}}
+{\footnotesize\ttfamily int Fishfarm\+::get\+\_\+nbyears\+\_\+for\+\_\+growth (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a25c20e3fc0a6fe54e46280288cb70682}\label{class_fishfarm_a25c20e3fc0a6fe54e46280288cb70682}} 
+\index{Fishfarm@{Fishfarm}!get\_operating\_cost\_per\_day@{get\_operating\_cost\_per\_day}}
+\index{get\_operating\_cost\_per\_day@{get\_operating\_cost\_per\_day}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_operating\_cost\_per\_day()}{get\_operating\_cost\_per\_day()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+operating\+\_\+cost\+\_\+per\+\_\+day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a414e980219c631fc1e00160143fa148e}\label{class_fishfarm_a414e980219c631fc1e00160143fa148e}} 
+\index{Fishfarm@{Fishfarm}!get\_P\_in\_fish\_kg\_0\_5per@{get\_P\_in\_fish\_kg\_0\_5per}}
+\index{get\_P\_in\_fish\_kg\_0\_5per@{get\_P\_in\_fish\_kg\_0\_5per}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_P\_in\_fish\_kg\_0\_5per()}{get\_P\_in\_fish\_kg\_0\_5per()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+\+P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5per (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ae1e420d25aca0fb65f199d4f16b40b1b}\label{class_fishfarm_ae1e420d25aca0fb65f199d4f16b40b1b}} 
+\index{Fishfarm@{Fishfarm}!get\_price\_eggs\_per\_kg@{get\_price\_eggs\_per\_kg}}
+\index{get\_price\_eggs\_per\_kg@{get\_price\_eggs\_per\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_price\_eggs\_per\_kg()}{get\_price\_eggs\_per\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+price\+\_\+eggs\+\_\+per\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_aff573924f0ebf5f2b21f715d317aa594}\label{class_fishfarm_aff573924f0ebf5f2b21f715d317aa594}} 
+\index{Fishfarm@{Fishfarm}!get\_price\_per\_kg\_at\_start@{get\_price\_per\_kg\_at\_start}}
+\index{get\_price\_per\_kg\_at\_start@{get\_price\_per\_kg\_at\_start}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_price\_per\_kg\_at\_start()}{get\_price\_per\_kg\_at\_start()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+price\+\_\+per\+\_\+kg\+\_\+at\+\_\+start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a3c599c36b4ff6e303f28b9dccf87fe01}\label{class_fishfarm_a3c599c36b4ff6e303f28b9dccf87fe01}} 
+\index{Fishfarm@{Fishfarm}!get\_prop\_harvest\_kg\_sold@{get\_prop\_harvest\_kg\_sold}}
+\index{get\_prop\_harvest\_kg\_sold@{get\_prop\_harvest\_kg\_sold}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_prop\_harvest\_kg\_sold()}{get\_prop\_harvest\_kg\_sold()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+prop\+\_\+harvest\+\_\+kg\+\_\+sold (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a6737538056c4615cdfe7be7d1881e01b}\label{class_fishfarm_a6737538056c4615cdfe7be7d1881e01b}} 
+\index{Fishfarm@{Fishfarm}!get\_prop\_N\_in\_feed@{get\_prop\_N\_in\_feed}}
+\index{get\_prop\_N\_in\_feed@{get\_prop\_N\_in\_feed}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_prop\_N\_in\_feed()}{get\_prop\_N\_in\_feed()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a5a9f7bd7cdcfb56233671cd5f9c121b0}\label{class_fishfarm_a5a9f7bd7cdcfb56233671cd5f9c121b0}} 
+\index{Fishfarm@{Fishfarm}!get\_prop\_N\_in\_feed\_vet@{get\_prop\_N\_in\_feed\_vet}}
+\index{get\_prop\_N\_in\_feed\_vet@{get\_prop\_N\_in\_feed\_vet}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_prop\_N\_in\_feed\_vet()}{get\_prop\_N\_in\_feed\_vet()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vet (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac40656b26ce0fa91890a41290dee5dbe}\label{class_fishfarm_ac40656b26ce0fa91890a41290dee5dbe}} 
+\index{Fishfarm@{Fishfarm}!get\_prop\_P\_in\_feed@{get\_prop\_P\_in\_feed}}
+\index{get\_prop\_P\_in\_feed@{get\_prop\_P\_in\_feed}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_prop\_P\_in\_feed()}{get\_prop\_P\_in\_feed()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ad883c56f014dd2ae439d4eee3bec7203}\label{class_fishfarm_ad883c56f014dd2ae439d4eee3bec7203}} 
+\index{Fishfarm@{Fishfarm}!get\_prop\_P\_in\_feed\_vet@{get\_prop\_P\_in\_feed\_vet}}
+\index{get\_prop\_P\_in\_feed\_vet@{get\_prop\_P\_in\_feed\_vet}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_prop\_P\_in\_feed\_vet()}{get\_prop\_P\_in\_feed\_vet()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vet (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ae8036540dc9bcf0a9868e903f79c6874}\label{class_fishfarm_ae8036540dc9bcf0a9868e903f79c6874}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_annual\_profit@{get\_sim\_annual\_profit}}
+\index{get\_sim\_annual\_profit@{get\_sim\_annual\_profit}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_annual\_profit()}{get\_sim\_annual\_profit()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+annual\+\_\+profit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a7045af628074dfaeb8866500b4c1a5f4}\label{class_fishfarm_a7045af628074dfaeb8866500b4c1a5f4}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_cumul\_net\_discharge\_C@{get\_sim\_cumul\_net\_discharge\_C}}
+\index{get\_sim\_cumul\_net\_discharge\_C@{get\_sim\_cumul\_net\_discharge\_C}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_cumul\_net\_discharge\_C()}{get\_sim\_cumul\_net\_discharge\_C()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+C (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_aedfaba1cc436af5bdc7fcfd6efea3461}\label{class_fishfarm_aedfaba1cc436af5bdc7fcfd6efea3461}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_cumul\_net\_discharge\_medecine@{get\_sim\_cumul\_net\_discharge\_medecine}}
+\index{get\_sim\_cumul\_net\_discharge\_medecine@{get\_sim\_cumul\_net\_discharge\_medecine}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_cumul\_net\_discharge\_medecine()}{get\_sim\_cumul\_net\_discharge\_medecine()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+medecine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a2263bd93823f16fedf93f16391b2f9ea}\label{class_fishfarm_a2263bd93823f16fedf93f16391b2f9ea}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_cumul\_net\_discharge\_N@{get\_sim\_cumul\_net\_discharge\_N}}
+\index{get\_sim\_cumul\_net\_discharge\_N@{get\_sim\_cumul\_net\_discharge\_N}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_cumul\_net\_discharge\_N()}{get\_sim\_cumul\_net\_discharge\_N()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+N (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a1d59bc456ec95b3758a9b95f4956305a}\label{class_fishfarm_a1d59bc456ec95b3758a9b95f4956305a}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_cumul\_net\_discharge\_P@{get\_sim\_cumul\_net\_discharge\_P}}
+\index{get\_sim\_cumul\_net\_discharge\_P@{get\_sim\_cumul\_net\_discharge\_P}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_cumul\_net\_discharge\_P()}{get\_sim\_cumul\_net\_discharge\_P()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+P (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a8234993c5d79aaa2001bc5e1aa655d50}\label{class_fishfarm_a8234993c5d79aaa2001bc5e1aa655d50}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_individual\_mean\_kg@{get\_sim\_individual\_mean\_kg}}
+\index{get\_sim\_individual\_mean\_kg@{get\_sim\_individual\_mean\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_individual\_mean\_kg()}{get\_sim\_individual\_mean\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a0bd9d174a35d21c9624a20bd273e318f}\label{class_fishfarm_a0bd9d174a35d21c9624a20bd273e318f}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_kg\_eggs\_harvested@{get\_sim\_kg\_eggs\_harvested}}
+\index{get\_sim\_kg\_eggs\_harvested@{get\_sim\_kg\_eggs\_harvested}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_kg\_eggs\_harvested()}{get\_sim\_kg\_eggs\_harvested()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+kg\+\_\+eggs\+\_\+harvested (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a214d56e185267a336864f02c1c9629da}\label{class_fishfarm_a214d56e185267a336864f02c1c9629da}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_kg\_harvested@{get\_sim\_kg\_harvested}}
+\index{get\_sim\_kg\_harvested@{get\_sim\_kg\_harvested}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_kg\_harvested()}{get\_sim\_kg\_harvested()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+kg\+\_\+harvested (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a29bf78bd1864f4d6c476d6bcd26466b7}\label{class_fishfarm_a29bf78bd1864f4d6c476d6bcd26466b7}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_net\_discharge\_C@{get\_sim\_net\_discharge\_C}}
+\index{get\_sim\_net\_discharge\_C@{get\_sim\_net\_discharge\_C}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_net\_discharge\_C()}{get\_sim\_net\_discharge\_C()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+C (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a1e5424c4e5cc685874e138c3cfa85ab9}\label{class_fishfarm_a1e5424c4e5cc685874e138c3cfa85ab9}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_net\_discharge\_medecine@{get\_sim\_net\_discharge\_medecine}}
+\index{get\_sim\_net\_discharge\_medecine@{get\_sim\_net\_discharge\_medecine}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_net\_discharge\_medecine()}{get\_sim\_net\_discharge\_medecine()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+medecine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_af721004d8aa13379b286b814bb4822f5}\label{class_fishfarm_af721004d8aa13379b286b814bb4822f5}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_net\_discharge\_N@{get\_sim\_net\_discharge\_N}}
+\index{get\_sim\_net\_discharge\_N@{get\_sim\_net\_discharge\_N}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_net\_discharge\_N()}{get\_sim\_net\_discharge\_N()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+N (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a89d7d8fa18972ba13b7d2d4d42661c35}\label{class_fishfarm_a89d7d8fa18972ba13b7d2d4d42661c35}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_net\_discharge\_P@{get\_sim\_net\_discharge\_P}}
+\index{get\_sim\_net\_discharge\_P@{get\_sim\_net\_discharge\_P}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_net\_discharge\_P()}{get\_sim\_net\_discharge\_P()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+P (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_abca6cc794011a8f73bd14aac38d4d917}\label{class_fishfarm_abca6cc794011a8f73bd14aac38d4d917}} 
+\index{Fishfarm@{Fishfarm}!get\_sim\_previous\_individual\_mean\_kg@{get\_sim\_previous\_individual\_mean\_kg}}
+\index{get\_sim\_previous\_individual\_mean\_kg@{get\_sim\_previous\_individual\_mean\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_sim\_previous\_individual\_mean\_kg()}{get\_sim\_previous\_individual\_mean\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+sim\+\_\+previous\+\_\+individual\+\_\+mean\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a088aaa3fec52698b60ee9f418ffc3b38}\label{class_fishfarm_a088aaa3fec52698b60ee9f418ffc3b38}} 
+\index{Fishfarm@{Fishfarm}!get\_size@{get\_size}}
+\index{get\_size@{get\_size}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_size()}{get\_size()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a1d00b6c519f683c07d12334f9e733b49}\label{class_fishfarm_a1d00b6c519f683c07d12334f9e733b49}} 
+\index{Fishfarm@{Fishfarm}!get\_start\_day\_growing@{get\_start\_day\_growing}}
+\index{get\_start\_day\_growing@{get\_start\_day\_growing}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_start\_day\_growing()}{get\_start\_day\_growing()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+start\+\_\+day\+\_\+growing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a7292eee3273126c23009d5dec596cc68}\label{class_fishfarm_a7292eee3273126c23009d5dec596cc68}} 
+\index{Fishfarm@{Fishfarm}!get\_stringname@{get\_stringname}}
+\index{get\_stringname@{get\_stringname}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_stringname()}{get\_stringname()}}
+{\footnotesize\ttfamily string Fishfarm\+::get\+\_\+stringname (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_adf2964e294891fbdef94cc1fd2b1346f}\label{class_fishfarm_adf2964e294891fbdef94cc1fd2b1346f}} 
+\index{Fishfarm@{Fishfarm}!get\_t0\_y@{get\_t0\_y}}
+\index{get\_t0\_y@{get\_t0\_y}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_t0\_y()}{get\_t0\_y()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+t0\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac1e7001a0c92606f05999db104a631fc}\label{class_fishfarm_ac1e7001a0c92606f05999db104a631fc}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_kg@{get\_total\_feed\_kg}}
+\index{get\_total\_feed\_kg@{get\_total\_feed\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_kg()}{get\_total\_feed\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_af0bf5568a2ae439add36edb11c4e1164}\label{class_fishfarm_af0bf5568a2ae439add36edb11c4e1164}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_N\_kg@{get\_total\_feed\_N\_kg}}
+\index{get\_total\_feed\_N\_kg@{get\_total\_feed\_N\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_N\_kg()}{get\_total\_feed\_N\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+\+N\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_af75da4df1fecb171d1f0721d04526ce8}\label{class_fishfarm_af75da4df1fecb171d1f0721d04526ce8}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_P\_kg@{get\_total\_feed\_P\_kg}}
+\index{get\_total\_feed\_P\_kg@{get\_total\_feed\_P\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_P\_kg()}{get\_total\_feed\_P\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+\+P\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ae76f61ab5132ffbd8a76318d261320eb}\label{class_fishfarm_ae76f61ab5132ffbd8a76318d261320eb}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_vet\_kg@{get\_total\_feed\_vet\_kg}}
+\index{get\_total\_feed\_vet\_kg@{get\_total\_feed\_vet\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_vet\_kg()}{get\_total\_feed\_vet\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_af2a9f5a448e14cf9155acb1927323adf}\label{class_fishfarm_af2a9f5a448e14cf9155acb1927323adf}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_vet\_N\_kg@{get\_total\_feed\_vet\_N\_kg}}
+\index{get\_total\_feed\_vet\_N\_kg@{get\_total\_feed\_vet\_N\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_vet\_N\_kg()}{get\_total\_feed\_vet\_N\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_a74ad4556f4f93a0fac8d90969f35a023}\label{class_fishfarm_a74ad4556f4f93a0fac8d90969f35a023}} 
+\index{Fishfarm@{Fishfarm}!get\_total\_feed\_vet\_P\_kg@{get\_total\_feed\_vet\_P\_kg}}
+\index{get\_total\_feed\_vet\_P\_kg@{get\_total\_feed\_vet\_P\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_total\_feed\_vet\_P\_kg()}{get\_total\_feed\_vet\_P\_kg()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac0223e0e7bc6a99e982db617fad1ee6c}\label{class_fishfarm_ac0223e0e7bc6a99e982db617fad1ee6c}} 
+\index{Fishfarm@{Fishfarm}!get\_x@{get\_x}}
+\index{get\_x@{get\_x}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_x()}{get\_x()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ab79f2b7498216698ef9e017118ab01b7}\label{class_fishfarm_ab79f2b7498216698ef9e017118ab01b7}} 
+\index{Fishfarm@{Fishfarm}!get\_y@{get\_y}}
+\index{get\_y@{get\_y}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{get\_y()}{get\_y()}}
+{\footnotesize\ttfamily double Fishfarm\+::get\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarm_ac7b440c993ed7d0bcf4e6853129f722d}\label{class_fishfarm_ac7b440c993ed7d0bcf4e6853129f722d}} 
+\index{Fishfarm@{Fishfarm}!set\_is\_active@{set\_is\_active}}
+\index{set\_is\_active@{set\_is\_active}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_is\_active()}{set\_is\_active()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+is\+\_\+active (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_aaebc35e12a8370ef3bc03e4bcff9cbfc}\label{class_fishfarm_aaebc35e12a8370ef3bc03e4bcff9cbfc}} 
+\index{Fishfarm@{Fishfarm}!set\_is\_running@{set\_is\_running}}
+\index{set\_is\_running@{set\_is\_running}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_is\_running()}{set\_is\_running()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+is\+\_\+running (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a181badf8c288fa84e94324707c93bc06}\label{class_fishfarm_a181badf8c288fa84e94324707c93bc06}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_annual\_profit@{set\_sim\_annual\_profit}}
+\index{set\_sim\_annual\_profit@{set\_sim\_annual\_profit}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_annual\_profit()}{set\_sim\_annual\_profit()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+annual\+\_\+profit (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_aa38a1c92bec4b2b01b48b115a1bca011}\label{class_fishfarm_aa38a1c92bec4b2b01b48b115a1bca011}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_cumul\_net\_discharge\_C@{set\_sim\_cumul\_net\_discharge\_C}}
+\index{set\_sim\_cumul\_net\_discharge\_C@{set\_sim\_cumul\_net\_discharge\_C}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_cumul\_net\_discharge\_C()}{set\_sim\_cumul\_net\_discharge\_C()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+C (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a23ecd40fe5f2a6f5ff193e1b363932c6}\label{class_fishfarm_a23ecd40fe5f2a6f5ff193e1b363932c6}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_cumul\_net\_discharge\_medecine@{set\_sim\_cumul\_net\_discharge\_medecine}}
+\index{set\_sim\_cumul\_net\_discharge\_medecine@{set\_sim\_cumul\_net\_discharge\_medecine}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_cumul\_net\_discharge\_medecine()}{set\_sim\_cumul\_net\_discharge\_medecine()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+medecine (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a45fc053e6bf14e051bcc11a1cc170827}\label{class_fishfarm_a45fc053e6bf14e051bcc11a1cc170827}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_cumul\_net\_discharge\_N@{set\_sim\_cumul\_net\_discharge\_N}}
+\index{set\_sim\_cumul\_net\_discharge\_N@{set\_sim\_cumul\_net\_discharge\_N}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_cumul\_net\_discharge\_N()}{set\_sim\_cumul\_net\_discharge\_N()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+N (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a417fee0d26d67ad764c7befa0214e2b3}\label{class_fishfarm_a417fee0d26d67ad764c7befa0214e2b3}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_cumul\_net\_discharge\_P@{set\_sim\_cumul\_net\_discharge\_P}}
+\index{set\_sim\_cumul\_net\_discharge\_P@{set\_sim\_cumul\_net\_discharge\_P}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_cumul\_net\_discharge\_P()}{set\_sim\_cumul\_net\_discharge\_P()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+cumul\+\_\+net\+\_\+discharge\+\_\+P (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a9322668eada3ad531c0c9897f640ad3f}\label{class_fishfarm_a9322668eada3ad531c0c9897f640ad3f}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_individual\_mean\_kg@{set\_sim\_individual\_mean\_kg}}
+\index{set\_sim\_individual\_mean\_kg@{set\_sim\_individual\_mean\_kg}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_individual\_mean\_kg()}{set\_sim\_individual\_mean\_kg()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+individual\+\_\+mean\+\_\+kg (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_abe3b06d04edcb2e144fd324b4ddeaf68}\label{class_fishfarm_abe3b06d04edcb2e144fd324b4ddeaf68}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_kg\_eggs\_harvested@{set\_sim\_kg\_eggs\_harvested}}
+\index{set\_sim\_kg\_eggs\_harvested@{set\_sim\_kg\_eggs\_harvested}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_kg\_eggs\_harvested()}{set\_sim\_kg\_eggs\_harvested()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+kg\+\_\+eggs\+\_\+harvested (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_aeb661d3c3b94e7488db8aab974d2504d}\label{class_fishfarm_aeb661d3c3b94e7488db8aab974d2504d}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_kg\_harvested@{set\_sim\_kg\_harvested}}
+\index{set\_sim\_kg\_harvested@{set\_sim\_kg\_harvested}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_kg\_harvested()}{set\_sim\_kg\_harvested()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+kg\+\_\+harvested (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a6747b53fdc3d3429fee9a2be37d1ed99}\label{class_fishfarm_a6747b53fdc3d3429fee9a2be37d1ed99}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_net\_discharge\_C@{set\_sim\_net\_discharge\_C}}
+\index{set\_sim\_net\_discharge\_C@{set\_sim\_net\_discharge\_C}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_net\_discharge\_C()}{set\_sim\_net\_discharge\_C()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+C (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_add42b9fecaf35b92802b0b47f531cfd8}\label{class_fishfarm_add42b9fecaf35b92802b0b47f531cfd8}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_net\_discharge\_medecine@{set\_sim\_net\_discharge\_medecine}}
+\index{set\_sim\_net\_discharge\_medecine@{set\_sim\_net\_discharge\_medecine}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_net\_discharge\_medecine()}{set\_sim\_net\_discharge\_medecine()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+medecine (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a4e062b531c458e2fd6b310490b49129a}\label{class_fishfarm_a4e062b531c458e2fd6b310490b49129a}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_net\_discharge\_N@{set\_sim\_net\_discharge\_N}}
+\index{set\_sim\_net\_discharge\_N@{set\_sim\_net\_discharge\_N}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_net\_discharge\_N()}{set\_sim\_net\_discharge\_N()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+N (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_ab557d77ad4d966825cfe5ceca55d32d0}\label{class_fishfarm_ab557d77ad4d966825cfe5ceca55d32d0}} 
+\index{Fishfarm@{Fishfarm}!set\_sim\_net\_discharge\_P@{set\_sim\_net\_discharge\_P}}
+\index{set\_sim\_net\_discharge\_P@{set\_sim\_net\_discharge\_P}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_sim\_net\_discharge\_P()}{set\_sim\_net\_discharge\_P()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+sim\+\_\+net\+\_\+discharge\+\_\+P (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_a4e8dfe97692937fd4fb70df9ca108548}\label{class_fishfarm_a4e8dfe97692937fd4fb70df9ca108548}} 
+\index{Fishfarm@{Fishfarm}!set\_x@{set\_x}}
+\index{set\_x@{set\_x}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_x()}{set\_x()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+x (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarm_acf2984bccb511f51e2f17e1ccd70355c}\label{class_fishfarm_acf2984bccb511f51e2f17e1ccd70355c}} 
+\index{Fishfarm@{Fishfarm}!set\_y@{set\_y}}
+\index{set\_y@{set\_y}!Fishfarm@{Fishfarm}}
+\subsubsection{\texorpdfstring{set\_y()}{set\_y()}}
+{\footnotesize\ttfamily void Fishfarm\+::set\+\_\+y (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_fishfarm_8h}{Fishfarm.\+h}}\item 
+commons/\mbox{\hyperlink{_fishfarm_8cpp}{Fishfarm.\+cpp}}\end{DoxyCompactItemize}

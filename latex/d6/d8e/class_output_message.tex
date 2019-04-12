@@ -1,0 +1,142 @@
+\hypertarget{class_output_message}{}\section{Output\+Message Class Reference}
+\label{class_output_message}\index{OutputMessage@{OutputMessage}}
+
+
+an abstract class to serialize outputs through the \mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}}  
+
+
+
+
+{\ttfamily \#include $<$noipc.\+h$>$}
+
+Inheritance diagram for Output\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=9.000000cm]{d6/d8e/class_output_message}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{class_output_message_ae7e1f9d8461918318b3666466a8ee913}{$\sim$\+Output\+Message}} ()
+\item 
+\mbox{\hyperlink{class_output_message_afd40d58fe0b00e66e9e9ccb14027c5ab}{Output\+Message}} ()
+\item 
+virtual \mbox{\hyperlink{class_output_message_ae7e1f9d8461918318b3666466a8ee913}{$\sim$\+Output\+Message}} ()
+\item 
+virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} \mbox{\hyperlink{class_output_message_adfc965910862cd236e437e3050aee176}{get\+Type}} () const =0
+\item 
+virtual bool \mbox{\hyperlink{class_output_message_a949d8350d98202608e4248fe6dafa10f}{process}} ()=0
+\begin{DoxyCompactList}\small\item\em perform an operation non related to the gui feedback channel \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_output_message_a6f817de4d3430dc98521431385b95328}{send}} (std\+::ostream \&)=0
+\begin{DoxyCompactList}\small\item\em the operation to perform. \end{DoxyCompactList}\item 
+virtual size\+\_\+t \mbox{\hyperlink{class_output_message_a42e0a2560b1bf9e58b6626056f87b8c2}{send\+Binary}} (void $\ast$buffer, size\+\_\+t maxlen)=0
+\begin{DoxyCompactList}\small\item\em formats a binary block of data to be sent across the I\+PC stream \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\size\+\_\+t \mbox{\hyperlink{class_output_message_a3cdeed110f7abc0f23c2c50d28b1db6d}{put}} (void $\ast$buffer, size\+\_\+t index, T v)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+an abstract class to serialize outputs through the \mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}} 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_output_message_ae7e1f9d8461918318b3666466a8ee913}\label{class_output_message_ae7e1f9d8461918318b3666466a8ee913}} 
+\index{OutputMessage@{OutputMessage}!````~OutputMessage@{$\sim$OutputMessage}}
+\index{````~OutputMessage@{$\sim$OutputMessage}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{$\sim$OutputMessage()}{~OutputMessage()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily virtual Output\+Message\+::$\sim$\+Output\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_output_message_afd40d58fe0b00e66e9e9ccb14027c5ab}\label{class_output_message_afd40d58fe0b00e66e9e9ccb14027c5ab}} 
+\index{OutputMessage@{OutputMessage}!OutputMessage@{OutputMessage}}
+\index{OutputMessage@{OutputMessage}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{OutputMessage()}{OutputMessage()}}
+{\footnotesize\ttfamily Output\+Message\+::\+Output\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_output_message_ae7e1f9d8461918318b3666466a8ee913}\label{class_output_message_ae7e1f9d8461918318b3666466a8ee913}} 
+\index{OutputMessage@{OutputMessage}!````~OutputMessage@{$\sim$OutputMessage}}
+\index{````~OutputMessage@{$\sim$OutputMessage}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{$\sim$OutputMessage()}{~OutputMessage()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily virtual Output\+Message\+::$\sim$\+Output\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_output_message_adfc965910862cd236e437e3050aee176}\label{class_output_message_adfc965910862cd236e437e3050aee176}} 
+\index{OutputMessage@{OutputMessage}!getType@{getType}}
+\index{getType@{getType}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} Output\+Message\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_vessel_logbook_output_message_a2fadf88d13091f268a7a443bc3638c6c}{Vessel\+Logbook\+Output\+Message}}, \mbox{\hyperlink{class_move_ship_output_message_ae90a05ef8c71c5d5d0c2be4b5b540b9b}{Move\+Ship\+Output\+Message}}, \mbox{\hyperlink{class_move_vessel_output_message_a8f31dbcf29eb889a5217abc82f501b4d}{Move\+Vessel\+Output\+Message}}, \mbox{\hyperlink{class_quit_message_aacd6dd8d6b63c685151bfd54c1edc990}{Quit\+Message}}, and \mbox{\hyperlink{class_generic_console_string_output_message_a80cb535bea64b33a076b6207356a7c3c}{Generic\+Console\+String\+Output\+Message}}.
+
+\mbox{\Hypertarget{class_output_message_a949d8350d98202608e4248fe6dafa10f}\label{class_output_message_a949d8350d98202608e4248fe6dafa10f}} 
+\index{OutputMessage@{OutputMessage}!process@{process}}
+\index{process@{process}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily virtual bool Output\+Message\+::process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+perform an operation non related to the gui feedback channel 
+
+\begin{DoxyReturn}{Returns}
+false if the calling function should exit. True otherwise. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_vessel_logbook_output_message_a1892b1fa2d328eee48f88a52d6bd96b3}{Vessel\+Logbook\+Output\+Message}}, \mbox{\hyperlink{class_move_ship_output_message_aca14c61d3c88d156378bb999efac22dc}{Move\+Ship\+Output\+Message}}, \mbox{\hyperlink{class_move_vessel_output_message_ab503e94c98c0a66470a283cbf5b29c78}{Move\+Vessel\+Output\+Message}}, \mbox{\hyperlink{class_quit_message_a780765be639ff408f1d1acf2f5eef851}{Quit\+Message}}, and \mbox{\hyperlink{class_generic_console_string_output_message_a89a8f1a84f56aac8d98984d552095155}{Generic\+Console\+String\+Output\+Message}}.
+
+\mbox{\Hypertarget{class_output_message_a3cdeed110f7abc0f23c2c50d28b1db6d}\label{class_output_message_a3cdeed110f7abc0f23c2c50d28b1db6d}} 
+\index{OutputMessage@{OutputMessage}!put@{put}}
+\index{put@{put}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{put()}{put()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+size\+\_\+t Output\+Message\+::put (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{index,  }\item[{T}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_output_message_a6f817de4d3430dc98521431385b95328}\label{class_output_message_a6f817de4d3430dc98521431385b95328}} 
+\index{OutputMessage@{OutputMessage}!send@{send}}
+\index{send@{send}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily virtual bool Output\+Message\+::send (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+the operation to perform. 
+
+\begin{DoxyReturn}{Returns}
+false if error. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_vessel_logbook_output_message_a39a68c1cc103eef690f75c4881ceaee4}{Vessel\+Logbook\+Output\+Message}}, \mbox{\hyperlink{class_quit_message_ae1039b9a8fc00712a8161a3701f1fa2f}{Quit\+Message}}, \mbox{\hyperlink{class_move_ship_output_message_ad78fe623ef5cbb37133dc9f936005007}{Move\+Ship\+Output\+Message}}, \mbox{\hyperlink{class_move_vessel_output_message_a3b538a1080de230361cb875d7617c947}{Move\+Vessel\+Output\+Message}}, and \mbox{\hyperlink{class_generic_console_string_output_message_afd9c18543844626cb07d800e9f8b43a6}{Generic\+Console\+String\+Output\+Message}}.
+
+\mbox{\Hypertarget{class_output_message_a42e0a2560b1bf9e58b6626056f87b8c2}\label{class_output_message_a42e0a2560b1bf9e58b6626056f87b8c2}} 
+\index{OutputMessage@{OutputMessage}!sendBinary@{sendBinary}}
+\index{sendBinary@{sendBinary}!OutputMessage@{OutputMessage}}
+\subsubsection{\texorpdfstring{sendBinary()}{sendBinary()}}
+{\footnotesize\ttfamily virtual size\+\_\+t Output\+Message\+::send\+Binary (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{maxlen }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+formats a binary block of data to be sent across the I\+PC stream 
+
+\begin{DoxyItemize}
+\item buffer address of the data buffer \item maxlen the maximum size of the block \begin{DoxyReturn}{Returns}
+lenght of the block, or -\/1 if the process should exit (due to error, or other) 
+\end{DoxyReturn}
+\end{DoxyItemize}
+
+
+Implemented in \mbox{\hyperlink{class_quit_message_ae36862391f3a9f21a67a76074e082fe6}{Quit\+Message}}, \mbox{\hyperlink{class_vessel_logbook_output_message_af1453fd8c283bbf6eb7f2ef00bc33a5f}{Vessel\+Logbook\+Output\+Message}}, \mbox{\hyperlink{class_move_ship_output_message_ad3240c1a180d35dbd950f5085d31a6ba}{Move\+Ship\+Output\+Message}}, \mbox{\hyperlink{class_move_vessel_output_message_adad3c956721e3470a6b8e5a35e8aac86}{Move\+Vessel\+Output\+Message}}, and \mbox{\hyperlink{class_generic_console_string_output_message_abc038d7b5db3a2b2835ea23ad35d77e9}{Generic\+Console\+String\+Output\+Message}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+simulator/messages/\mbox{\hyperlink{noipc_8h}{noipc.\+h}}\item 
+simulator/\mbox{\hyperlink{outputmessage_8h}{outputmessage.\+h}}\item 
+simulator/\mbox{\hyperlink{outputmessage_8cpp}{outputmessage.\+cpp}}\end{DoxyCompactItemize}

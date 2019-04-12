@@ -1,0 +1,144 @@
+\hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder}{}\section{displace\+::graphbuilders\+::Geographic\+Grid\+Builder Class Reference}
+\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder}\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+
+
+An abstract class to build a grid of points on a map, based on certain parameters.  
+
+
+
+
+{\ttfamily \#include $<$geographicgridbuilder.\+h$>$}
+
+Inheritance diagram for displace\+::graphbuilders\+::Geographic\+Grid\+Builder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.618497cm]{d9/d7a/classdisplace_1_1graphbuilders_1_1_geographic_grid_builder}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a9cdee6c4c58c6a748326da5536df34a9}{$\sim$\+Geographic\+Grid\+Builder}} ()
+\begin{DoxyCompactList}\small\item\em Standard Destructor. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac929320efe7bd7c38064250651263999}{begin\+Create\+Grid}} ()=0
+\begin{DoxyCompactList}\small\item\em Initialize the object to iterate over the loop. \end{DoxyCompactList}\item 
+virtual Q\+PointF \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a4b896b8f9e562644829df273302674b0}{get\+Next}} ()=0
+\begin{DoxyCompactList}\small\item\em Calculate the next point and iterate the object state over the loop. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_abf20b262ee44a64508458483d26f42c1}{at\+End}} ()=0
+\begin{DoxyCompactList}\small\item\em Check if the loop is completed. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac04ab8be97b357bb12f9745a012f6a5f}{is\+At\+Line\+Start}} ()=0
+\begin{DoxyCompactList}\small\item\em Check if the loop is at the beginning of a \char`\"{}line\char`\"{} This is used to allow constrain creation for delaunay triangulation. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac5f018a1c87a2e1274ff620ee7b374a6}{end\+Create\+Grid}} ()=0
+\begin{DoxyCompactList}\small\item\em Finalize the object when the loop is completed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An abstract class to build a grid of points on a map, based on certain parameters. 
+
+Usage This class is designed to be used in a loop. This to allow the client to reject the node creation. This is how it would be used\+:
+
+\begin{DoxyVerb}MyBuilder builder(mysettings);
+builder.beginCreateGrid();
+while (!builder.atEnd()) {
+ QPointF pt = builder.getNext();
+ if (isAcceptable(pt)) {
+   doSomethingUsefulWith(pt);
+ }
+}
+builder.endCreateGrid();
+\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a9cdee6c4c58c6a748326da5536df34a9}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a9cdee6c4c58c6a748326da5536df34a9}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!````~GeographicGridBuilder@{$\sim$GeographicGridBuilder}}
+\index{````~GeographicGridBuilder@{$\sim$GeographicGridBuilder}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{$\sim$GeographicGridBuilder()}{~GeographicGridBuilder()}}
+{\footnotesize\ttfamily Geographic\+Grid\+Builder\+::$\sim$\+Geographic\+Grid\+Builder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Standard Destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_abf20b262ee44a64508458483d26f42c1}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_abf20b262ee44a64508458483d26f42c1}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!atEnd@{atEnd}}
+\index{atEnd@{atEnd}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{atEnd()}{atEnd()}}
+{\footnotesize\ttfamily virtual bool displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder\+::at\+End (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Check if the loop is completed. 
+
+\begin{DoxyReturn}{Returns}
+true if the loop is complete and the client\textquotesingle{}s loop should exit. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ae78f3efefaef598263c297686ecd7465}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder}}, and \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder_abaaebf466b639c6a98777596f3fdc31f}{displace\+::graphbuilders\+::\+Simple\+Planar\+Graph\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac929320efe7bd7c38064250651263999}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac929320efe7bd7c38064250651263999}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!beginCreateGrid@{beginCreateGrid}}
+\index{beginCreateGrid@{beginCreateGrid}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{beginCreateGrid()}{beginCreateGrid()}}
+{\footnotesize\ttfamily virtual bool displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder\+::begin\+Create\+Grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Initialize the object to iterate over the loop. 
+
+
+
+Implemented in \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a87d7dbaefebb501f491fc4bb2afeb8eb}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder}}, and \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder_acc34e4093c7e96d705b7269bebf20233}{displace\+::graphbuilders\+::\+Simple\+Planar\+Graph\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac5f018a1c87a2e1274ff620ee7b374a6}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac5f018a1c87a2e1274ff620ee7b374a6}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!endCreateGrid@{endCreateGrid}}
+\index{endCreateGrid@{endCreateGrid}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{endCreateGrid()}{endCreateGrid()}}
+{\footnotesize\ttfamily virtual bool displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder\+::end\+Create\+Grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Finalize the object when the loop is completed. 
+
+after \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac5f018a1c87a2e1274ff620ee7b374a6}{end\+Create\+Grid()}} it should be possible to call \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac929320efe7bd7c38064250651263999}{begin\+Create\+Grid()}} to start a new iteration loop. 
+
+Implemented in \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a61e96188c1a6eb7366bc252e9a5f7d53}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder}}, and \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder_a829ff92a1bd9dba3170a49ed42b193cc}{displace\+::graphbuilders\+::\+Simple\+Planar\+Graph\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a4b896b8f9e562644829df273302674b0}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a4b896b8f9e562644829df273302674b0}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!getNext@{getNext}}
+\index{getNext@{getNext}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{getNext()}{getNext()}}
+{\footnotesize\ttfamily virtual Q\+PointF displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder\+::get\+Next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Calculate the next point and iterate the object state over the loop. 
+
+
+
+Implemented in \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a219f40fcae3c1463aa7f818687ed5f39}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder}}, and \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder_a58f7a91f6889c37b462abaaf0844c49b}{displace\+::graphbuilders\+::\+Simple\+Planar\+Graph\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac04ab8be97b357bb12f9745a012f6a5f}\label{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac04ab8be97b357bb12f9745a012f6a5f}} 
+\index{displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}!isAtLineStart@{isAtLineStart}}
+\index{isAtLineStart@{isAtLineStart}!displace::graphbuilders::GeographicGridBuilder@{displace::graphbuilders::GeographicGridBuilder}}
+\subsubsection{\texorpdfstring{isAtLineStart()}{isAtLineStart()}}
+{\footnotesize\ttfamily virtual bool displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder\+::is\+At\+Line\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Check if the loop is at the beginning of a \char`\"{}line\char`\"{} This is used to allow constrain creation for delaunay triangulation. 
+
+
+
+Implemented in \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ab13312aee2a6410568267d4c697f34c7}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder}}, and \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder_ad5a6e8911d9599a5331facc31c5caa11}{displace\+::graphbuilders\+::\+Simple\+Planar\+Graph\+Builder}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/algo/\mbox{\hyperlink{geographicgridbuilder_8h}{geographicgridbuilder.\+h}}\item 
+qtgui/algo/\mbox{\hyperlink{geographicgridbuilder_8cpp}{geographicgridbuilder.\+cpp}}\end{DoxyCompactItemize}

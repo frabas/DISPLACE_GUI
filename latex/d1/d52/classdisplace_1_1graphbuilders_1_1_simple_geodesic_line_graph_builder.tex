@@ -1,0 +1,154 @@
+\hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder}{}\section{displace\+::graphbuilders\+::Simple\+Geodesic\+Line\+Graph\+Builder Class Reference}
+\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder}\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+
+
+Implements a Simple Geodesic Grid.  
+
+
+
+
+{\ttfamily \#include $<$simplegeodesiclinegraphbuilder.\+h$>$}
+
+Inheritance diagram for displace\+::graphbuilders\+::Simple\+Geodesic\+Line\+Graph\+Builder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d52/classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}{Type}} \{ \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7ac49d9928d1dbbe163cda55885c8b25ab}{Hex}}, 
+\mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7a89af8505c759d2aeecc5b85de5f35be9}{Quad}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a7124fbe267c2824105bceeadb08f8e4f}{Simple\+Geodesic\+Line\+Graph\+Builder}} (\mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}{Type}} type, double lat\+Min\+\_\+deg, double lon\+Min\+\_\+deg, double lat\+Max\+\_\+deg, double lon\+Max\+\_\+deg, double step)
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a87d7dbaefebb501f491fc4bb2afeb8eb}{begin\+Create\+Grid}} ()
+\begin{DoxyCompactList}\small\item\em Initialize the object to iterate over the loop. \end{DoxyCompactList}\item 
+Q\+PointF \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a219f40fcae3c1463aa7f818687ed5f39}{get\+Next}} ()
+\begin{DoxyCompactList}\small\item\em Calculate the next point and iterate the object state over the loop. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ae78f3efefaef598263c297686ecd7465}{at\+End}} ()
+\begin{DoxyCompactList}\small\item\em Check if the loop is completed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a61e96188c1a6eb7366bc252e9a5f7d53}{end\+Create\+Grid}} ()
+\begin{DoxyCompactList}\small\item\em Finalize the object when the loop is completed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ab13312aee2a6410568267d4c697f34c7}{is\+At\+Line\+Start}} ()
+\begin{DoxyCompactList}\small\item\em Check if the loop is at the beginning of a \char`\"{}line\char`\"{} This is used to allow constrain creation for delaunay triangulation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implements a Simple Geodesic Grid. 
+
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!Type@{Type}}
+\index{Type@{Type}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{Type}{Type}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}{displace\+::graphbuilders\+::\+Simple\+Geodesic\+Line\+Graph\+Builder\+::\+Type}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Hex@{Hex}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!Hex@{Hex}}}\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7ac49d9928d1dbbe163cda55885c8b25ab}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7ac49d9928d1dbbe163cda55885c8b25ab}} 
+Hex&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Quad@{Quad}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!Quad@{Quad}}}\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7a89af8505c759d2aeecc5b85de5f35be9}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7a89af8505c759d2aeecc5b85de5f35be9}} 
+Quad&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a7124fbe267c2824105bceeadb08f8e4f}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a7124fbe267c2824105bceeadb08f8e4f}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!SimpleGeodesicLineGraphBuilder@{SimpleGeodesicLineGraphBuilder}}
+\index{SimpleGeodesicLineGraphBuilder@{SimpleGeodesicLineGraphBuilder}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{SimpleGeodesicLineGraphBuilder()}{SimpleGeodesicLineGraphBuilder()}}
+{\footnotesize\ttfamily Simple\+Geodesic\+Line\+Graph\+Builder\+::\+Simple\+Geodesic\+Line\+Graph\+Builder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a992a295d1a98448230c6402d901933c7}{Type}}}]{type,  }\item[{double}]{lat\+Min\+\_\+deg,  }\item[{double}]{lon\+Min\+\_\+deg,  }\item[{double}]{lat\+Max\+\_\+deg,  }\item[{double}]{lon\+Max\+\_\+deg,  }\item[{double}]{step }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ae78f3efefaef598263c297686ecd7465}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ae78f3efefaef598263c297686ecd7465}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!atEnd@{atEnd}}
+\index{atEnd@{atEnd}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{atEnd()}{atEnd()}}
+{\footnotesize\ttfamily bool Simple\+Geodesic\+Line\+Graph\+Builder\+::at\+End (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Check if the loop is completed. 
+
+\begin{DoxyReturn}{Returns}
+true if the loop is complete and the client\textquotesingle{}s loop should exit. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_abf20b262ee44a64508458483d26f42c1}{displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a87d7dbaefebb501f491fc4bb2afeb8eb}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a87d7dbaefebb501f491fc4bb2afeb8eb}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!beginCreateGrid@{beginCreateGrid}}
+\index{beginCreateGrid@{beginCreateGrid}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{beginCreateGrid()}{beginCreateGrid()}}
+{\footnotesize\ttfamily bool Simple\+Geodesic\+Line\+Graph\+Builder\+::begin\+Create\+Grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initialize the object to iterate over the loop. 
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac929320efe7bd7c38064250651263999}{displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a61e96188c1a6eb7366bc252e9a5f7d53}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a61e96188c1a6eb7366bc252e9a5f7d53}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!endCreateGrid@{endCreateGrid}}
+\index{endCreateGrid@{endCreateGrid}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{endCreateGrid()}{endCreateGrid()}}
+{\footnotesize\ttfamily bool Simple\+Geodesic\+Line\+Graph\+Builder\+::end\+Create\+Grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Finalize the object when the loop is completed. 
+
+after \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a61e96188c1a6eb7366bc252e9a5f7d53}{end\+Create\+Grid()}} it should be possible to call \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a87d7dbaefebb501f491fc4bb2afeb8eb}{begin\+Create\+Grid()}} to start a new iteration loop. 
+
+Implements \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac5f018a1c87a2e1274ff620ee7b374a6}{displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a219f40fcae3c1463aa7f818687ed5f39}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_a219f40fcae3c1463aa7f818687ed5f39}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!getNext@{getNext}}
+\index{getNext@{getNext}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{getNext()}{getNext()}}
+{\footnotesize\ttfamily Q\+PointF Simple\+Geodesic\+Line\+Graph\+Builder\+::get\+Next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Calculate the next point and iterate the object state over the loop. 
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_a4b896b8f9e562644829df273302674b0}{displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder}}.
+
+\mbox{\Hypertarget{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ab13312aee2a6410568267d4c697f34c7}\label{classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder_ab13312aee2a6410568267d4c697f34c7}} 
+\index{displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}!isAtLineStart@{isAtLineStart}}
+\index{isAtLineStart@{isAtLineStart}!displace::graphbuilders::SimpleGeodesicLineGraphBuilder@{displace::graphbuilders::SimpleGeodesicLineGraphBuilder}}
+\subsubsection{\texorpdfstring{isAtLineStart()}{isAtLineStart()}}
+{\footnotesize\ttfamily bool Simple\+Geodesic\+Line\+Graph\+Builder\+::is\+At\+Line\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Check if the loop is at the beginning of a \char`\"{}line\char`\"{} This is used to allow constrain creation for delaunay triangulation. 
+
+
+
+Implements \mbox{\hyperlink{classdisplace_1_1graphbuilders_1_1_geographic_grid_builder_ac04ab8be97b357bb12f9745a012f6a5f}{displace\+::graphbuilders\+::\+Geographic\+Grid\+Builder}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/algo/\mbox{\hyperlink{simplegeodesiclinegraphbuilder_8h}{simplegeodesiclinegraphbuilder.\+h}}\item 
+qtgui/algo/\mbox{\hyperlink{simplegeodesiclinegraphbuilder_8cpp}{simplegeodesiclinegraphbuilder.\+cpp}}\end{DoxyCompactItemize}

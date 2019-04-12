@@ -1,0 +1,139 @@
+\hypertarget{class_q_c_p_graph_data}{}\section{Q\+C\+P\+Graph\+Data Class Reference}
+\label{class_q_c_p_graph_data}\index{QCPGraphData@{QCPGraphData}}
+
+
+Holds the data of one single data point for \mbox{\hyperlink{class_q_c_p_graph}{Q\+C\+P\+Graph}}.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_graph_data_ac43f7499383d2fa2ffb7a4ad43f76c7c}{Q\+C\+P\+Graph\+Data}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_graph_data_a2c32177f12f902f4e05f712837082bd6}{Q\+C\+P\+Graph\+Data}} (double \mbox{\hyperlink{class_q_c_p_graph_data_a2fcebdf84af975761c0661237d7e28ec}{key}}, double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+double \mbox{\hyperlink{class_q_c_p_graph_data_a5e0f37ea101eeec245d8c32a2206b204}{sort\+Key}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_graph_data_a72fdaf738f679ef93bea3d552ba42d1b}{main\+Key}} () const
+\item 
+double \mbox{\hyperlink{class_q_c_p_graph_data_a1b1e440a430a4a83d9a3f6f247510f27}{main\+Value}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} \mbox{\hyperlink{class_q_c_p_graph_data_a2f8dd30360356f66cc418a170a9f3792}{value\+Range}} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_q_c_p_graph_data}{Q\+C\+P\+Graph\+Data}} \mbox{\hyperlink{class_q_c_p_graph_data_a4646eac7f7a48970ea0fc5153aab0e77}{from\+Sort\+Key}} (double \mbox{\hyperlink{class_q_c_p_graph_data_a5e0f37ea101eeec245d8c32a2206b204}{sort\+Key}})
+\item 
+static bool \mbox{\hyperlink{class_q_c_p_graph_data_a1c98dfd21b82321a173db4ff860dfd21}{sort\+Key\+Is\+Main\+Key}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{class_q_c_p_graph_data_a2fcebdf84af975761c0661237d7e28ec}{key}}
+\item 
+double \mbox{\hyperlink{class_q_c_p_graph_data_ac97e3ddbdcbe0b58d0b4d6f95250d59c}{value}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Holds the data of one single data point for \mbox{\hyperlink{class_q_c_p_graph}{Q\+C\+P\+Graph}}. 
+
+The stored data is\+: \begin{DoxyItemize}
+\item {\itshape key\+:} coordinate on the key axis of this data point (this is the {\itshape main\+Key} and the {\itshape sort\+Key}) \item {\itshape value\+:} coordinate on the value axis of this data point (this is the {\itshape main\+Value})\end{DoxyItemize}
+The container for storing multiple data points is \mbox{\hyperlink{qcustomplot_8h_a2e5583d1ae212f0deb10537cf975a15a}{Q\+C\+P\+Graph\+Data\+Container}}. It is a typedef for \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}} with \mbox{\hyperlink{class_q_c_p_graph_data}{Q\+C\+P\+Graph\+Data}} as the Data\+Type template parameter. See the documentation there for an explanation regarding the data type\textquotesingle{}s generic methods.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{qcustomplot_8h_a2e5583d1ae212f0deb10537cf975a15a}{Q\+C\+P\+Graph\+Data\+Container}} 
+\end{DoxySeeAlso}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_graph_data_ac43f7499383d2fa2ffb7a4ad43f76c7c}\label{class_q_c_p_graph_data_ac43f7499383d2fa2ffb7a4ad43f76c7c}} 
+\index{QCPGraphData@{QCPGraphData}!QCPGraphData@{QCPGraphData}}
+\index{QCPGraphData@{QCPGraphData}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{QCPGraphData()}{QCPGraphData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Graph\+Data\+::\+Q\+C\+P\+Graph\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructs a data point with key and value set to zero. \mbox{\Hypertarget{class_q_c_p_graph_data_a2c32177f12f902f4e05f712837082bd6}\label{class_q_c_p_graph_data_a2c32177f12f902f4e05f712837082bd6}} 
+\index{QCPGraphData@{QCPGraphData}!QCPGraphData@{QCPGraphData}}
+\index{QCPGraphData@{QCPGraphData}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{QCPGraphData()}{QCPGraphData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Graph\+Data\+::\+Q\+C\+P\+Graph\+Data (\begin{DoxyParamCaption}\item[{double}]{key,  }\item[{double}]{value }\end{DoxyParamCaption})}
+
+Constructs a data point with the specified {\itshape key} and {\itshape value}. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_graph_data_a4646eac7f7a48970ea0fc5153aab0e77}\label{class_q_c_p_graph_data_a4646eac7f7a48970ea0fc5153aab0e77}} 
+\index{QCPGraphData@{QCPGraphData}!fromSortKey@{fromSortKey}}
+\index{fromSortKey@{fromSortKey}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{fromSortKey()}{fromSortKey()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_q_c_p_graph_data}{Q\+C\+P\+Graph\+Data}} Q\+C\+P\+Graph\+Data\+::from\+Sort\+Key (\begin{DoxyParamCaption}\item[{double}]{sort\+Key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Returns a data point with the specified {\itshape sort\+Key}. All other members are set to zero.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_graph_data_a72fdaf738f679ef93bea3d552ba42d1b}\label{class_q_c_p_graph_data_a72fdaf738f679ef93bea3d552ba42d1b}} 
+\index{QCPGraphData@{QCPGraphData}!mainKey@{mainKey}}
+\index{mainKey@{mainKey}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{mainKey()}{mainKey()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Graph\+Data\+::main\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape key} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_graph_data_a1b1e440a430a4a83d9a3f6f247510f27}\label{class_q_c_p_graph_data_a1b1e440a430a4a83d9a3f6f247510f27}} 
+\index{QCPGraphData@{QCPGraphData}!mainValue@{mainValue}}
+\index{mainValue@{mainValue}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{mainValue()}{mainValue()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Graph\+Data\+::main\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape value} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_graph_data_a5e0f37ea101eeec245d8c32a2206b204}\label{class_q_c_p_graph_data_a5e0f37ea101eeec245d8c32a2206b204}} 
+\index{QCPGraphData@{QCPGraphData}!sortKey@{sortKey}}
+\index{sortKey@{sortKey}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{sortKey()}{sortKey()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Graph\+Data\+::sort\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the {\itshape key} member of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_graph_data_a1c98dfd21b82321a173db4ff860dfd21}\label{class_q_c_p_graph_data_a1c98dfd21b82321a173db4ff860dfd21}} 
+\index{QCPGraphData@{QCPGraphData}!sortKeyIsMainKey@{sortKeyIsMainKey}}
+\index{sortKeyIsMainKey@{sortKeyIsMainKey}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{sortKeyIsMainKey()}{sortKeyIsMainKey()}}
+{\footnotesize\ttfamily static static bool Q\+C\+P\+Graph\+Data\+::sort\+Key\+Is\+Main\+Key (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Since the member {\itshape key} is both the data point key coordinate and the data ordering parameter, this method returns true.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. \mbox{\Hypertarget{class_q_c_p_graph_data_a2f8dd30360356f66cc418a170a9f3792}\label{class_q_c_p_graph_data_a2f8dd30360356f66cc418a170a9f3792}} 
+\index{QCPGraphData@{QCPGraphData}!valueRange@{valueRange}}
+\index{valueRange@{valueRange}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{valueRange()}{valueRange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} Q\+C\+P\+Graph\+Data\+::value\+Range (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns a \mbox{\hyperlink{class_q_c_p_range}{Q\+C\+P\+Range}} with both lower and upper boundary set to {\itshape value} of this data point.
+
+For a general explanation of what this method is good for in the context of the data container, see the documentation of \mbox{\hyperlink{class_q_c_p_data_container}{Q\+C\+P\+Data\+Container}}. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_c_p_graph_data_a2fcebdf84af975761c0661237d7e28ec}\label{class_q_c_p_graph_data_a2fcebdf84af975761c0661237d7e28ec}} 
+\index{QCPGraphData@{QCPGraphData}!key@{key}}
+\index{key@{key}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{key}{key}}
+{\footnotesize\ttfamily double Q\+C\+P\+Graph\+Data\+::key}
+
+\mbox{\Hypertarget{class_q_c_p_graph_data_ac97e3ddbdcbe0b58d0b4d6f95250d59c}\label{class_q_c_p_graph_data_ac97e3ddbdcbe0b58d0b4d6f95250d59c}} 
+\index{QCPGraphData@{QCPGraphData}!value@{value}}
+\index{value@{value}!QCPGraphData@{QCPGraphData}}
+\subsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily double Q\+C\+P\+Graph\+Data\+::value}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

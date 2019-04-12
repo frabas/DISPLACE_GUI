@@ -1,0 +1,123 @@
+\hypertarget{class_csv_table_model}{}\section{Csv\+Table\+Model Class Reference}
+\label{class_csv_table_model}\index{CsvTableModel@{CsvTableModel}}
+
+
+{\ttfamily \#include $<$csvtablemodel.\+h$>$}
+
+Inheritance diagram for Csv\+Table\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/d32/class_csv_table_model}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_csv_table_model_abb394c4ca904ec2b7c658edc57357df4}{Csv\+Table\+Model}} (std\+::shared\+\_\+ptr$<$ Q\+List$<$ Q\+String\+List $>$ $>$ \mbox{\hyperlink{class_csv_table_model_a110efb7633d6ada7e1aa69cd798a0784}{data}}, Q\+Object $\ast$parent=0)
+\item 
+int \mbox{\hyperlink{class_csv_table_model_a038885f5cef7e7772f3bd1123dbad5b1}{row\+Count}} (const Q\+Model\+Index \&) const
+\item 
+int \mbox{\hyperlink{class_csv_table_model_a6de6f733dcd74740ffe1f8ddd8090f2b}{column\+Count}} (const Q\+Model\+Index \&) const
+\item 
+Q\+Variant \mbox{\hyperlink{class_csv_table_model_a110efb7633d6ada7e1aa69cd798a0784}{data}} (const Q\+Model\+Index \&index, int role) const
+\item 
+bool \mbox{\hyperlink{class_csv_table_model_a4bd4b943a3fba8a0e88fe4ff674758b3}{set\+Data}} (const Q\+Model\+Index \&index, const Q\+Variant \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}, int role)
+\item 
+Q\+Variant \mbox{\hyperlink{class_csv_table_model_abee635d2b7b7695b319d050903e49c1f}{header\+Data}} (int section, Qt\+::\+Orientation orientation, int role) const
+\item 
+Qt\+::\+Item\+Flags \mbox{\hyperlink{class_csv_table_model_ab7dfc0ee22b0bc5abfe3959f187b848c}{flags}} (const Q\+Model\+Index \&index) const
+\item 
+bool \mbox{\hyperlink{class_csv_table_model_aca6f3268be19355cfc9ee07bdbe39f61}{insert\+Rows}} (int row, int count, const Q\+Model\+Index \&parent)
+\item 
+bool \mbox{\hyperlink{class_csv_table_model_a357bdd2240c3a5b1d28ef4fe15d1c753}{remove\+Rows}} (int row, int count, const Q\+Model\+Index \&parent)
+\item 
+void \mbox{\hyperlink{class_csv_table_model_a9f1e6b63797bb7ec6bbad6e237b4e4b2}{set\+Source}} (std\+::shared\+\_\+ptr$<$ Q\+List$<$ Q\+String\+List $>$ $>$ \mbox{\hyperlink{class_csv_table_model_a110efb7633d6ada7e1aa69cd798a0784}{data}})
+\item 
+void \mbox{\hyperlink{class_csv_table_model_ae5b4288f87c9cc6e0d1c27ca6f0d3af3}{set\+First\+Line\+Headers}} (bool x)
+\item 
+const Q\+List$<$ Q\+String\+List $>$ \& \mbox{\hyperlink{class_csv_table_model_acd0b0537f844bccc9092a840adc8543b}{raw\+Data}} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_csv_table_model_abb394c4ca904ec2b7c658edc57357df4}\label{class_csv_table_model_abb394c4ca904ec2b7c658edc57357df4}} 
+\index{CsvTableModel@{CsvTableModel}!CsvTableModel@{CsvTableModel}}
+\index{CsvTableModel@{CsvTableModel}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{CsvTableModel()}{CsvTableModel()}}
+{\footnotesize\ttfamily Csv\+Table\+Model\+::\+Csv\+Table\+Model (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ Q\+List$<$ Q\+String\+List $>$ $>$}]{data,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_csv_table_model_a6de6f733dcd74740ffe1f8ddd8090f2b}\label{class_csv_table_model_a6de6f733dcd74740ffe1f8ddd8090f2b}} 
+\index{CsvTableModel@{CsvTableModel}!columnCount@{columnCount}}
+\index{columnCount@{columnCount}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{columnCount()}{columnCount()}}
+{\footnotesize\ttfamily int Csv\+Table\+Model\+::column\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_csv_table_model_a110efb7633d6ada7e1aa69cd798a0784}\label{class_csv_table_model_a110efb7633d6ada7e1aa69cd798a0784}} 
+\index{CsvTableModel@{CsvTableModel}!data@{data}}
+\index{data@{data}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily Q\+Variant Csv\+Table\+Model\+::data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{int}]{role }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_csv_table_model_ab7dfc0ee22b0bc5abfe3959f187b848c}\label{class_csv_table_model_ab7dfc0ee22b0bc5abfe3959f187b848c}} 
+\index{CsvTableModel@{CsvTableModel}!flags@{flags}}
+\index{flags@{flags}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{flags()}{flags()}}
+{\footnotesize\ttfamily Qt\+::\+Item\+Flags Csv\+Table\+Model\+::flags (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_csv_table_model_abee635d2b7b7695b319d050903e49c1f}\label{class_csv_table_model_abee635d2b7b7695b319d050903e49c1f}} 
+\index{CsvTableModel@{CsvTableModel}!headerData@{headerData}}
+\index{headerData@{headerData}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{headerData()}{headerData()}}
+{\footnotesize\ttfamily Q\+Variant Csv\+Table\+Model\+::header\+Data (\begin{DoxyParamCaption}\item[{int}]{section,  }\item[{Qt\+::\+Orientation}]{orientation,  }\item[{int}]{role }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_csv_table_model_aca6f3268be19355cfc9ee07bdbe39f61}\label{class_csv_table_model_aca6f3268be19355cfc9ee07bdbe39f61}} 
+\index{CsvTableModel@{CsvTableModel}!insertRows@{insertRows}}
+\index{insertRows@{insertRows}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{insertRows()}{insertRows()}}
+{\footnotesize\ttfamily bool Csv\+Table\+Model\+::insert\+Rows (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{count,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_csv_table_model_acd0b0537f844bccc9092a840adc8543b}\label{class_csv_table_model_acd0b0537f844bccc9092a840adc8543b}} 
+\index{CsvTableModel@{CsvTableModel}!rawData@{rawData}}
+\index{rawData@{rawData}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{rawData()}{rawData()}}
+{\footnotesize\ttfamily const Q\+List$<$Q\+String\+List$>$\& Csv\+Table\+Model\+::raw\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_csv_table_model_a357bdd2240c3a5b1d28ef4fe15d1c753}\label{class_csv_table_model_a357bdd2240c3a5b1d28ef4fe15d1c753}} 
+\index{CsvTableModel@{CsvTableModel}!removeRows@{removeRows}}
+\index{removeRows@{removeRows}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{removeRows()}{removeRows()}}
+{\footnotesize\ttfamily bool Csv\+Table\+Model\+::remove\+Rows (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{count,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_csv_table_model_a038885f5cef7e7772f3bd1123dbad5b1}\label{class_csv_table_model_a038885f5cef7e7772f3bd1123dbad5b1}} 
+\index{CsvTableModel@{CsvTableModel}!rowCount@{rowCount}}
+\index{rowCount@{rowCount}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{rowCount()}{rowCount()}}
+{\footnotesize\ttfamily int Csv\+Table\+Model\+::row\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_csv_table_model_a4bd4b943a3fba8a0e88fe4ff674758b3}\label{class_csv_table_model_a4bd4b943a3fba8a0e88fe4ff674758b3}} 
+\index{CsvTableModel@{CsvTableModel}!setData@{setData}}
+\index{setData@{setData}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{setData()}{setData()}}
+{\footnotesize\ttfamily bool Csv\+Table\+Model\+::set\+Data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{const Q\+Variant \&}]{value,  }\item[{int}]{role }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_csv_table_model_ae5b4288f87c9cc6e0d1c27ca6f0d3af3}\label{class_csv_table_model_ae5b4288f87c9cc6e0d1c27ca6f0d3af3}} 
+\index{CsvTableModel@{CsvTableModel}!setFirstLineHeaders@{setFirstLineHeaders}}
+\index{setFirstLineHeaders@{setFirstLineHeaders}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{setFirstLineHeaders()}{setFirstLineHeaders()}}
+{\footnotesize\ttfamily void Csv\+Table\+Model\+::set\+First\+Line\+Headers (\begin{DoxyParamCaption}\item[{bool}]{x }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_csv_table_model_a9f1e6b63797bb7ec6bbad6e237b4e4b2}\label{class_csv_table_model_a9f1e6b63797bb7ec6bbad6e237b4e4b2}} 
+\index{CsvTableModel@{CsvTableModel}!setSource@{setSource}}
+\index{setSource@{setSource}!CsvTableModel@{CsvTableModel}}
+\subsubsection{\texorpdfstring{setSource()}{setSource()}}
+{\footnotesize\ttfamily void Csv\+Table\+Model\+::set\+Source (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ Q\+List$<$ Q\+String\+List $>$ $>$}]{data }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/csv/\mbox{\hyperlink{csvtablemodel_8h}{csvtablemodel.\+h}}\item 
+qtcommons/csv/\mbox{\hyperlink{csvtablemodel_8cpp}{csvtablemodel.\+cpp}}\end{DoxyCompactItemize}

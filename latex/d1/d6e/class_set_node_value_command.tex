@@ -1,0 +1,100 @@
+\hypertarget{class_set_node_value_command}{}\section{Set\+Node\+Value\+Command Class Reference}
+\label{class_set_node_value_command}\index{SetNodeValueCommand@{SetNodeValueCommand}}
+
+
+{\ttfamily \#include $<$setnodevaluecommand.\+h$>$}
+
+Inheritance diagram for Set\+Node\+Value\+Command\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d6e/class_set_node_value_command}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_set_node_value_command_ae9b709903f25062fe1d9f11aa77f8af3}{Set\+Node\+Value\+Command}} (Q\+List$<$ Q\+Graphics\+Item $\ast$ $>$ items, double new\+\_\+value)
+\item 
+virtual \mbox{\hyperlink{class_set_node_value_command_afd440c5c1059d410c90fe0dfb9b6349a}{$\sim$\+Set\+Node\+Value\+Command}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_set_node_value_command_a0330dab0773c047deefe2eb551d6fc5e}{execute}} ()
+\begin{DoxyCompactList}\small\item\em Execute the command. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_set_node_value_command_a794bfa7e64469fa6528179d2ca807cc3}{undo}} ()
+\begin{DoxyCompactList}\small\item\em Undo the command. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_set_node_value_command_a839cb93ffcaab91e245995aa367e07c7}{redo}} ()
+\begin{DoxyCompactList}\small\item\em Redo the command. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_set_node_value_command_ae9b709903f25062fe1d9f11aa77f8af3}\label{class_set_node_value_command_ae9b709903f25062fe1d9f11aa77f8af3}} 
+\index{SetNodeValueCommand@{SetNodeValueCommand}!SetNodeValueCommand@{SetNodeValueCommand}}
+\index{SetNodeValueCommand@{SetNodeValueCommand}!SetNodeValueCommand@{SetNodeValueCommand}}
+\subsubsection{\texorpdfstring{SetNodeValueCommand()}{SetNodeValueCommand()}}
+{\footnotesize\ttfamily Set\+Node\+Value\+Command\+::\+Set\+Node\+Value\+Command (\begin{DoxyParamCaption}\item[{Q\+List$<$ Q\+Graphics\+Item $\ast$ $>$}]{items,  }\item[{double}]{new\+\_\+value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_set_node_value_command_afd440c5c1059d410c90fe0dfb9b6349a}\label{class_set_node_value_command_afd440c5c1059d410c90fe0dfb9b6349a}} 
+\index{SetNodeValueCommand@{SetNodeValueCommand}!````~SetNodeValueCommand@{$\sim$SetNodeValueCommand}}
+\index{````~SetNodeValueCommand@{$\sim$SetNodeValueCommand}!SetNodeValueCommand@{SetNodeValueCommand}}
+\subsubsection{\texorpdfstring{$\sim$SetNodeValueCommand()}{~SetNodeValueCommand()}}
+{\footnotesize\ttfamily Set\+Node\+Value\+Command\+::$\sim$\+Set\+Node\+Value\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_set_node_value_command_a0330dab0773c047deefe2eb551d6fc5e}\label{class_set_node_value_command_a0330dab0773c047deefe2eb551d6fc5e}} 
+\index{SetNodeValueCommand@{SetNodeValueCommand}!execute@{execute}}
+\index{execute@{execute}!SetNodeValueCommand@{SetNodeValueCommand}}
+\subsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily bool Set\+Node\+Value\+Command\+::execute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Execute the command. 
+
+If the command executed correctly, the client will put the command in the Undo list. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_command_a5d83cdea649a79d7b7253196a6deddeb}{Command}}.
+
+\mbox{\Hypertarget{class_set_node_value_command_a839cb93ffcaab91e245995aa367e07c7}\label{class_set_node_value_command_a839cb93ffcaab91e245995aa367e07c7}} 
+\index{SetNodeValueCommand@{SetNodeValueCommand}!redo@{redo}}
+\index{redo@{redo}!SetNodeValueCommand@{SetNodeValueCommand}}
+\subsubsection{\texorpdfstring{redo()}{redo()}}
+{\footnotesize\ttfamily bool Set\+Node\+Value\+Command\+::redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Redo the command. 
+
+If the command redid correctly, the client will move it from the redo list to the undo list. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_command_ab222d875ec449c40467173edb28e5460}{Command}}.
+
+\mbox{\Hypertarget{class_set_node_value_command_a794bfa7e64469fa6528179d2ca807cc3}\label{class_set_node_value_command_a794bfa7e64469fa6528179d2ca807cc3}} 
+\index{SetNodeValueCommand@{SetNodeValueCommand}!undo@{undo}}
+\index{undo@{undo}!SetNodeValueCommand@{SetNodeValueCommand}}
+\subsubsection{\texorpdfstring{undo()}{undo()}}
+{\footnotesize\ttfamily bool Set\+Node\+Value\+Command\+::undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Undo the command. 
+
+If the command undid correctly, the client will move the command in the Redo list. Otherwise the entire Undo list must be cleaned. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_command_aa89348c98fd2194f1617d70f57a3ae6c}{Command}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dteditor/commands/\mbox{\hyperlink{setnodevaluecommand_8h}{setnodevaluecommand.\+h}}\item 
+dteditor/commands/\mbox{\hyperlink{setnodevaluecommand_8cpp}{setnodevaluecommand.\+cpp}}\end{DoxyCompactItemize}

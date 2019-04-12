@@ -1,0 +1,174 @@
+\hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl}{}\section{Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::Impl Struct Reference}
+\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl}\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a23267685b6c588715bba2dfdafd1aee2}{Impl}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ mydb, std\+::string myname)
+\item 
+\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl}{Impl}} \& \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_acdcd167cd07f861bf374a4ffa4ab4d11}{create}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a180feca1d1f690252e313c270202ca42}{db}}
+\item 
+std\+::string \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a28452263bbd6835bd6f033681a39ddc9}{name}}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}{fld\+Id}} \{\char`\"{}Vessel\+Id\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}} \{ \char`\"{}T\+Step\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}} \{\char`\"{}Month\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}{fld\+T\+Step\+Dep}} \{ \char`\"{}T\+Step\+Dep\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}{fld\+Node\+Id}} \{ \char`\"{}Node\+Id\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}{fld\+Pop\+Id}} \{ \char`\"{}Pop\+Id\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}{fld\+Sz\+Group\+Id}} \{ \char`\"{}Sz\+Grp\+Id\char`\"{}, Not\+Null \}
+\item 
+Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}{fld\+Catches}} \{ \char`\"{}Catches\char`\"{}, Not\+Null \}
+\item 
+std\+::mutex \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a3d2fbc81b5a6c47014675dbf58480245}{mutex}}
+\item 
+bool \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afd77869f5c80f69fd8b0b8f36c685e07}{init}} = false
+\item 
+Insert\+Statement$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}{fld\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}{fld\+T\+Step\+Dep}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}{fld\+Node\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}{fld\+Pop\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}{fld\+Sz\+Group\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}{fld\+Catches}}) $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab8a9981d663dcbc770d966771181c019}{insert\+Statement}}
+\item 
+Select\+Statement$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}{fld\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}{fld\+T\+Step\+Dep}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}{fld\+Node\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}{fld\+Pop\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}{fld\+Sz\+Group\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}{fld\+Catches}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}) $>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa95b92a06e7ee5e4729313d02a21f0ef}{select\+Statement}}
+\item 
+Where$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}})$>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a36eca8cee27f25c20ba378ec82d34706}{where}}
+\item 
+Delete\+Statement \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a903916369d1c7c31fb331f8f9d494908}{delete\+Statement}}
+\item 
+Where$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}})$>$ \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afe2a29f9e7929e8dd378396dbd44f1be}{delete\+Statement\+Where}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a23267685b6c588715bba2dfdafd1aee2}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a23267685b6c588715bba2dfdafd1aee2}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!Impl@{Impl}}
+\index{Impl@{Impl}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{Impl()}{Impl()}}
+{\footnotesize\ttfamily Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::\+Impl (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{mydb,  }\item[{std\+::string}]{myname }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_acdcd167cd07f861bf374a4ffa4ab4d11}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_acdcd167cd07f861bf374a4ffa4ab4d11}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!create@{create}}
+\index{create@{create}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl}{Impl}}\& Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a180feca1d1f690252e313c270202ca42}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a180feca1d1f690252e313c270202ca42}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!db@{db}}
+\index{db@{db}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{db}{db}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$sqlite\+::\+S\+Q\+Lite\+Storage$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::db}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a903916369d1c7c31fb331f8f9d494908}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a903916369d1c7c31fb331f8f9d494908}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!deleteStatement@{deleteStatement}}
+\index{deleteStatement@{deleteStatement}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{deleteStatement}{deleteStatement}}
+{\footnotesize\ttfamily Delete\+Statement Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::delete\+Statement}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afe2a29f9e7929e8dd378396dbd44f1be}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afe2a29f9e7929e8dd378396dbd44f1be}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!deleteStatementWhere@{deleteStatementWhere}}
+\index{deleteStatementWhere@{deleteStatementWhere}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{deleteStatementWhere}{deleteStatementWhere}}
+{\footnotesize\ttfamily Where$<$decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}})$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::delete\+Statement\+Where}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldCatches@{fldCatches}}
+\index{fldCatches@{fldCatches}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldCatches}{fldCatches}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Real$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Catches \{ \char`\"{}Catches\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldId@{fldId}}
+\index{fldId@{fldId}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldId}{fldId}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Id \{\char`\"{}Vessel\+Id\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldMonth@{fldMonth}}
+\index{fldMonth@{fldMonth}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldMonth}{fldMonth}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Month \{\char`\"{}Month\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldNodeId@{fldNodeId}}
+\index{fldNodeId@{fldNodeId}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldNodeId}{fldNodeId}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Node\+Id \{ \char`\"{}Node\+Id\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldPopId@{fldPopId}}
+\index{fldPopId@{fldPopId}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldPopId}{fldPopId}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Pop\+Id \{ \char`\"{}Pop\+Id\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldSzGroupId@{fldSzGroupId}}
+\index{fldSzGroupId@{fldSzGroupId}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldSzGroupId}{fldSzGroupId}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+Sz\+Group\+Id \{ \char`\"{}Sz\+Grp\+Id\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldTStep@{fldTStep}}
+\index{fldTStep@{fldTStep}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldTStep}{fldTStep}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+T\+Step \{ \char`\"{}T\+Step\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!fldTStepDep@{fldTStepDep}}
+\index{fldTStepDep@{fldTStepDep}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{fldTStepDep}{fldTStepDep}}
+{\footnotesize\ttfamily Field\+Def$<$Field\+Type\+::\+Integer$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::fld\+T\+Step\+Dep \{ \char`\"{}T\+Step\+Dep\char`\"{}, Not\+Null \}}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afd77869f5c80f69fd8b0b8f36c685e07}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_afd77869f5c80f69fd8b0b8f36c685e07}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!init@{init}}
+\index{init@{init}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{init}{init}}
+{\footnotesize\ttfamily bool Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::init = false}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab8a9981d663dcbc770d966771181c019}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab8a9981d663dcbc770d966771181c019}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!insertStatement@{insertStatement}}
+\index{insertStatement@{insertStatement}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{insertStatement}{insertStatement}}
+{\footnotesize\ttfamily Insert\+Statement$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}{fld\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}{fld\+T\+Step\+Dep}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}{fld\+Node\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}{fld\+Pop\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}{fld\+Sz\+Group\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}{fld\+Catches}}) $>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::insert\+Statement}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a3d2fbc81b5a6c47014675dbf58480245}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a3d2fbc81b5a6c47014675dbf58480245}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!mutex@{mutex}}
+\index{mutex@{mutex}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{mutex}{mutex}}
+{\footnotesize\ttfamily std\+::mutex Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::mutex}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a28452263bbd6835bd6f033681a39ddc9}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a28452263bbd6835bd6f033681a39ddc9}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!name@{name}}
+\index{name@{name}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily std\+::string Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::name}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa95b92a06e7ee5e4729313d02a21f0ef}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa95b92a06e7ee5e4729313d02a21f0ef}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!selectStatement@{selectStatement}}
+\index{selectStatement@{selectStatement}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{selectStatement}{selectStatement}}
+{\footnotesize\ttfamily Select\+Statement$<$ decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af73eb376b1cef5f2c3533e15bd02d10f}{fld\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a69548cc286384a7fa217ad5d28eb8db3}{fld\+Month}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_af8e8160c7c7c7990ca22da85a8389eea}{fld\+T\+Step\+Dep}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ad5ecf8bd2c86e503d68c816ce4e462ba}{fld\+Node\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_aa316c94f58fdc6dac6d0910580dde58c}{fld\+Pop\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a1cd399544e9f2db4025c18c2c06c20d0}{fld\+Sz\+Group\+Id}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a52c311e3ec42ee4ee51b959b401cf661}{fld\+Catches}}), decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}}) $>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::select\+Statement}
+
+\mbox{\Hypertarget{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a36eca8cee27f25c20ba378ec82d34706}\label{struct_vessel_vms_like_f_pings_only_table_1_1_impl_a36eca8cee27f25c20ba378ec82d34706}} 
+\index{VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}!where@{where}}
+\index{where@{where}!VesselVmsLikeFPingsOnlyTable::Impl@{VesselVmsLikeFPingsOnlyTable::Impl}}
+\subsubsection{\texorpdfstring{where}{where}}
+{\footnotesize\ttfamily Where$<$decltype(\mbox{\hyperlink{struct_vessel_vms_like_f_pings_only_table_1_1_impl_ab44c7a92d60077b3a8ed4cb58ba99962}{fld\+T\+Step}})$>$ Vessel\+Vms\+Like\+F\+Pings\+Only\+Table\+::\+Impl\+::where}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{vesselvmslikefpingsonlytable_8cpp}{vesselvmslikefpingsonlytable.\+cpp}}\end{DoxyCompactItemize}

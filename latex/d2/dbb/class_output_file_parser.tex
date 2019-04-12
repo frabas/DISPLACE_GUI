@@ -1,0 +1,232 @@
+\hypertarget{class_output_file_parser}{}\section{Output\+File\+Parser Class Reference}
+\label{class_output_file_parser}\index{OutputFileParser@{OutputFileParser}}
+
+
+{\ttfamily \#include $<$outputfileparser.\+h$>$}
+
+Inheritance diagram for Output\+File\+Parser\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d2/dbb/class_output_file_parser}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_output_file_parser_add4bf39a2cd885b36495c9a3a1b109ba}{parse}} (Q\+String path, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, int period=-\/1)
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a947aea98f88da9fefba1fdeb71a1b57b}{error}} (Q\+String)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_afad47e50fb7d679046877805e5516a04}{parse\+Completed}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_output_file_parser_a9ed11e913211e4cc4d715127b79a7458}{Output\+File\+Parser}} (\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, Q\+Object $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_vessel_stats}{Vessel\+Stats}} \mbox{\hyperlink{class_output_file_parser_a90b3909781062af06d5602038cffcffe}{parse\+Vessel\+Stat\+Line}} (const Q\+String\+List \&fields)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a56c77b7e8aa40fb9c5173f4bb7c9253a}{parse\+Pop\+Start}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_ad0612705c50457cd5c6c90718302a251}{parse\+Pop\+Cumftime}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a9e29e1e8e2850347b7db4c68c16c8166}{parse\+Pop\+Cumsweptarea}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a6ef610f6c4343c47ffbb7525b0496ef4}{parse\+Pop\+Cumcatches}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a15d015c798557f5a567ade7149770f27}{parse\+Pop\+Cumcatches\+With\+Threshold}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a929c77d31aa281506e27e7a3fe8416b1}{parse\+Pop\+Cumdiscards}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_ad5742f433c499362a35600794a9e4e23}{parse\+Pop\+Cumdiscardsratio}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a749b7d83ea62ef019421334a4a75c4cd}{parse\+Pop\+Nbchoked}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a53430b2faed0d1421652de52b07ead9c}{parse\+Pop\+Tariffs}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a88776b1c3cc91e079131e1dbb5fd76e4}{parse\+Pop\+Impact}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a76118b94b1cf3428eb8babfc448a8416}{parse\+Pop\+Cumcatches\+Per\+Pop}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_afb121d3802efa9a93e22f92cb4083a9e}{parse\+Nodes\+Envt}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_aea1d5e3b57e0ac131e9c761242ea572f}{parse\+Pop\+Benthos\+Stats}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a08ca9be64963f89acfa897aff9e9eaf3}{parse\+Fishfarmslogs\+Stats}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_acf5d73a5c6368aa20d131ecc4e347191}{parse\+Pop\+Stats}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a0668618d96d296eaae78772940a1dad0}{parse\+Vessels}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\item 
+void \mbox{\hyperlink{class_output_file_parser_a42c598b45a065fa4059d104f32e1833b}{parse\+Ships\+Stats}} (Q\+File $\ast$file, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$model, int period=-\/1)
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{class_output_file_parser_ab6ef94de181f17f5dec84cac176680cc}{to\+Int}} (const Q\+String x)
+\item 
+static double \mbox{\hyperlink{class_output_file_parser_a87f5cbf9b33862b42819535f3d21d04c}{to\+Double}} (const Q\+String x)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_output_file_parser_a9ed11e913211e4cc4d715127b79a7458}\label{class_output_file_parser_a9ed11e913211e4cc4d715127b79a7458}} 
+\index{OutputFileParser@{OutputFileParser}!OutputFileParser@{OutputFileParser}}
+\index{OutputFileParser@{OutputFileParser}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{OutputFileParser()}{OutputFileParser()}}
+{\footnotesize\ttfamily Output\+File\+Parser\+::\+Output\+File\+Parser (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_output_file_parser_a947aea98f88da9fefba1fdeb71a1b57b}\label{class_output_file_parser_a947aea98f88da9fefba1fdeb71a1b57b}} 
+\index{OutputFileParser@{OutputFileParser}!error@{error}}
+\index{error@{error}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{error}{error}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::error (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_output_file_parser_add4bf39a2cd885b36495c9a3a1b109ba}\label{class_output_file_parser_add4bf39a2cd885b36495c9a3a1b109ba}} 
+\index{OutputFileParser@{OutputFileParser}!parse@{parse}}
+\index{parse@{parse}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parse}{parse}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse (\begin{DoxyParamCaption}\item[{Q\+String}]{path,  }\item[{int}]{tstep,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_output_file_parser_afad47e50fb7d679046877805e5516a04}\label{class_output_file_parser_afad47e50fb7d679046877805e5516a04}} 
+\index{OutputFileParser@{OutputFileParser}!parseCompleted@{parseCompleted}}
+\index{parseCompleted@{parseCompleted}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseCompleted}{parseCompleted}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Completed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a08ca9be64963f89acfa897aff9e9eaf3}\label{class_output_file_parser_a08ca9be64963f89acfa897aff9e9eaf3}} 
+\index{OutputFileParser@{OutputFileParser}!parseFishfarmslogsStats@{parseFishfarmslogsStats}}
+\index{parseFishfarmslogsStats@{parseFishfarmslogsStats}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseFishfarmslogsStats()}{parseFishfarmslogsStats()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Fishfarmslogs\+Stats (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_afb121d3802efa9a93e22f92cb4083a9e}\label{class_output_file_parser_afb121d3802efa9a93e22f92cb4083a9e}} 
+\index{OutputFileParser@{OutputFileParser}!parseNodesEnvt@{parseNodesEnvt}}
+\index{parseNodesEnvt@{parseNodesEnvt}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseNodesEnvt()}{parseNodesEnvt()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Nodes\+Envt (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_aea1d5e3b57e0ac131e9c761242ea572f}\label{class_output_file_parser_aea1d5e3b57e0ac131e9c761242ea572f}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopBenthosStats@{parsePopBenthosStats}}
+\index{parsePopBenthosStats@{parsePopBenthosStats}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopBenthosStats()}{parsePopBenthosStats()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Benthos\+Stats (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a6ef610f6c4343c47ffbb7525b0496ef4}\label{class_output_file_parser_a6ef610f6c4343c47ffbb7525b0496ef4}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumcatches@{parsePopCumcatches}}
+\index{parsePopCumcatches@{parsePopCumcatches}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumcatches()}{parsePopCumcatches()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumcatches (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a76118b94b1cf3428eb8babfc448a8416}\label{class_output_file_parser_a76118b94b1cf3428eb8babfc448a8416}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumcatchesPerPop@{parsePopCumcatchesPerPop}}
+\index{parsePopCumcatchesPerPop@{parsePopCumcatchesPerPop}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumcatchesPerPop()}{parsePopCumcatchesPerPop()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumcatches\+Per\+Pop (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a15d015c798557f5a567ade7149770f27}\label{class_output_file_parser_a15d015c798557f5a567ade7149770f27}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumcatchesWithThreshold@{parsePopCumcatchesWithThreshold}}
+\index{parsePopCumcatchesWithThreshold@{parsePopCumcatchesWithThreshold}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumcatchesWithThreshold()}{parsePopCumcatchesWithThreshold()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumcatches\+With\+Threshold (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a929c77d31aa281506e27e7a3fe8416b1}\label{class_output_file_parser_a929c77d31aa281506e27e7a3fe8416b1}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumdiscards@{parsePopCumdiscards}}
+\index{parsePopCumdiscards@{parsePopCumdiscards}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumdiscards()}{parsePopCumdiscards()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumdiscards (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_ad5742f433c499362a35600794a9e4e23}\label{class_output_file_parser_ad5742f433c499362a35600794a9e4e23}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumdiscardsratio@{parsePopCumdiscardsratio}}
+\index{parsePopCumdiscardsratio@{parsePopCumdiscardsratio}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumdiscardsratio()}{parsePopCumdiscardsratio()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumdiscardsratio (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_ad0612705c50457cd5c6c90718302a251}\label{class_output_file_parser_ad0612705c50457cd5c6c90718302a251}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumftime@{parsePopCumftime}}
+\index{parsePopCumftime@{parsePopCumftime}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumftime()}{parsePopCumftime()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumftime (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a9e29e1e8e2850347b7db4c68c16c8166}\label{class_output_file_parser_a9e29e1e8e2850347b7db4c68c16c8166}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopCumsweptarea@{parsePopCumsweptarea}}
+\index{parsePopCumsweptarea@{parsePopCumsweptarea}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopCumsweptarea()}{parsePopCumsweptarea()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Cumsweptarea (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a88776b1c3cc91e079131e1dbb5fd76e4}\label{class_output_file_parser_a88776b1c3cc91e079131e1dbb5fd76e4}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopImpact@{parsePopImpact}}
+\index{parsePopImpact@{parsePopImpact}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopImpact()}{parsePopImpact()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Impact (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a749b7d83ea62ef019421334a4a75c4cd}\label{class_output_file_parser_a749b7d83ea62ef019421334a4a75c4cd}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopNbchoked@{parsePopNbchoked}}
+\index{parsePopNbchoked@{parsePopNbchoked}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopNbchoked()}{parsePopNbchoked()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Nbchoked (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a56c77b7e8aa40fb9c5173f4bb7c9253a}\label{class_output_file_parser_a56c77b7e8aa40fb9c5173f4bb7c9253a}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopStart@{parsePopStart}}
+\index{parsePopStart@{parsePopStart}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopStart()}{parsePopStart()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Start (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_acf5d73a5c6368aa20d131ecc4e347191}\label{class_output_file_parser_acf5d73a5c6368aa20d131ecc4e347191}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopStats@{parsePopStats}}
+\index{parsePopStats@{parsePopStats}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopStats()}{parsePopStats()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Stats (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a53430b2faed0d1421652de52b07ead9c}\label{class_output_file_parser_a53430b2faed0d1421652de52b07ead9c}} 
+\index{OutputFileParser@{OutputFileParser}!parsePopTariffs@{parsePopTariffs}}
+\index{parsePopTariffs@{parsePopTariffs}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parsePopTariffs()}{parsePopTariffs()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Pop\+Tariffs (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a42c598b45a065fa4059d104f32e1833b}\label{class_output_file_parser_a42c598b45a065fa4059d104f32e1833b}} 
+\index{OutputFileParser@{OutputFileParser}!parseShipsStats@{parseShipsStats}}
+\index{parseShipsStats@{parseShipsStats}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseShipsStats()}{parseShipsStats()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Ships\+Stats (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a0668618d96d296eaae78772940a1dad0}\label{class_output_file_parser_a0668618d96d296eaae78772940a1dad0}} 
+\index{OutputFileParser@{OutputFileParser}!parseVessels@{parseVessels}}
+\index{parseVessels@{parseVessels}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseVessels()}{parseVessels()}}
+{\footnotesize\ttfamily void Output\+File\+Parser\+::parse\+Vessels (\begin{DoxyParamCaption}\item[{Q\+File $\ast$}]{file,  }\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_displace_model}{Displace\+Model}} $\ast$}]{model,  }\item[{int}]{period = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_a90b3909781062af06d5602038cffcffe}\label{class_output_file_parser_a90b3909781062af06d5602038cffcffe}} 
+\index{OutputFileParser@{OutputFileParser}!parseVesselStatLine@{parseVesselStatLine}}
+\index{parseVesselStatLine@{parseVesselStatLine}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{parseVesselStatLine()}{parseVesselStatLine()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_vessel_stats}{Vessel\+Stats}} Output\+File\+Parser\+::parse\+Vessel\+Stat\+Line (\begin{DoxyParamCaption}\item[{const Q\+String\+List \&}]{fields }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_output_file_parser_a87f5cbf9b33862b42819535f3d21d04c}\label{class_output_file_parser_a87f5cbf9b33862b42819535f3d21d04c}} 
+\index{OutputFileParser@{OutputFileParser}!toDouble@{toDouble}}
+\index{toDouble@{toDouble}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{toDouble()}{toDouble()}}
+{\footnotesize\ttfamily static double Output\+File\+Parser\+::to\+Double (\begin{DoxyParamCaption}\item[{const Q\+String}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_output_file_parser_ab6ef94de181f17f5dec84cac176680cc}\label{class_output_file_parser_ab6ef94de181f17f5dec84cac176680cc}} 
+\index{OutputFileParser@{OutputFileParser}!toInt@{toInt}}
+\index{toInt@{toInt}!OutputFileParser@{OutputFileParser}}
+\subsubsection{\texorpdfstring{toInt()}{toInt()}}
+{\footnotesize\ttfamily static int Output\+File\+Parser\+::to\+Int (\begin{DoxyParamCaption}\item[{const Q\+String}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{outputfileparser_8h}{outputfileparser.\+h}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__outputfileparser_8cpp}{moc\+\_\+outputfileparser.\+cpp}}\item 
+qtgui/\mbox{\hyperlink{outputfileparser_8cpp}{outputfileparser.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,295 @@
+\hypertarget{class_simulator}{}\section{Simulator Class Reference}
+\label{class_simulator}\index{Simulator@{Simulator}}
+
+
+An ongoing simulation process.  
+
+
+
+
+{\ttfamily \#include $<$simulator.\+h$>$}
+
+Inheritance diagram for Simulator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{dd/dd1/class_simulator}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_simulator_a3ed91c5cd518e0372a519c75d52b573e}{log}} (Q\+String)
+\item 
+void \mbox{\hyperlink{class_simulator_a7d91f3582160384e49a5986e002bc81a}{simulation\+Ended}} (int status)
+\item 
+void \mbox{\hyperlink{class_simulator_a3db10c90bcd5ba05ebfeeed1edf15b38}{process\+State\+Changed}} (Q\+Process\+::\+Process\+State oldstate, Q\+Process\+::\+Process\+State newstate)
+\item 
+void \mbox{\hyperlink{class_simulator_a607d820eb7bca0092853a3c861e57e70}{simulation\+Step\+Changed}} (int)
+\item 
+void \mbox{\hyperlink{class_simulator_a77be9f7ec64264d49c239fc3d5be2ef0}{vessel\+Moved}} (int laststep, int idx, float x, float y, float course, float fuel, int state)
+\item 
+void \mbox{\hyperlink{class_simulator_a26d53673251424dda5f581b9b6095a69}{ship\+Moved}} (int laststep, int idx, float x, float y, float course)
+\item 
+void \mbox{\hyperlink{class_simulator_a902b10cc29dc29eb70e5579d468ff043}{output\+File\+Updated}} (Q\+String, int)
+\item 
+void \mbox{\hyperlink{class_simulator_a7855777d75c25419c22a4ba67963bb12}{nodes\+Stats\+Update}} (Q\+String)
+\item 
+void \mbox{\hyperlink{class_simulator_afdd8bbc35c2a0e3957f2bca7d67237bd}{debug\+Memory\+Stats}} (long rss, long peak)
+\item 
+void \mbox{\hyperlink{class_simulator_a39861df2b7110b42c10a9c67b0cf126c}{debug\+Capture}} (Q\+String)
+\item 
+void \mbox{\hyperlink{class_simulator_acd0f25e166cedfd96ec737b4375f7cc3}{sqlite\+Storage\+Opened}} (Q\+String)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_simulator_a031573bfcfe2e0f5c9539bcc1c7fc5d9}{Simulator}} ()
+\item 
+\mbox{\hyperlink{class_simulator_a0f49aa04f42060a785adf77346b9de9f}{$\sim$\+Simulator}} ()
+\item 
+void \mbox{\hyperlink{class_simulator_ae7e0ad0b8a24447f161c0b940c6783f0}{link\+Model}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $>$ model)
+\item 
+bool \mbox{\hyperlink{class_simulator_a6e5e3aa8ca2fffcc4fee463767c710c9}{start}} (Q\+String \mbox{\hyperlink{simulator_2main_8cpp_a5032743b5127232204c872f8f2bda528}{outdir}}, Q\+String name, Q\+String folder, Q\+String simul\+\_\+name)
+\item 
+bool \mbox{\hyperlink{class_simulator_a166832314a3c4c510c28771372c372b6}{is\+Running}} ()
+\item 
+bool \mbox{\hyperlink{class_simulator_aeb94927d5a555a6a64170f402f6f4618}{force\+Stop}} ()
+\item 
+Q\+Process\+::\+Process\+State \mbox{\hyperlink{class_simulator_a2f3c6e304118ae1f881610d1d3eb7f8f}{process\+State}} () const
+\item 
+void \mbox{\hyperlink{class_simulator_aec75d8a7b833cb24c535f4c49709ff45}{set\+Sim\+Steps}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_simulator_a8a15b607539c98f89c9df86a56acdc0c}{set\+Use\+Static\+Paths}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_simulator_a03e352c3e0da46be50981e32974ec948}{set\+Preexisting\+Paths\+Shop}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_simulator_a931dbff8f5dad50acb05379a0a0b2796}{set\+Verbosity\+Level}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+bool \mbox{\hyperlink{class_simulator_af76678a2bc976025f05f2f3b0be15e07}{get\+Move\+Vessel\+Option}} () const
+\item 
+void \mbox{\hyperlink{class_simulator_a2d9b64b4027c60d66a010311e007c6e4}{set\+Move\+Vessel\+Option}} (bool \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+int \mbox{\hyperlink{class_simulator_a49429cdd50f3d19d1b0456df42b97762}{get\+Vessel\+Move\+Display\+Update\+Rate}} () const
+\item 
+void \mbox{\hyperlink{class_simulator_ab73f41723e1046edfe9600462366733d}{set\+Vessel\+Move\+Display\+Update\+Rate}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_simulator_a7abdeb99b1bd7d5784e09f68e5e7912a}{set\+Out\+Dir}} (const Q\+String \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_simulator_a6e06309fae0c2341a81173eb084cf9c8}{set\+Output\+Name}} (const Q\+String \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+bool \mbox{\hyperlink{class_simulator_ac1336ca0d33dbb804fa5f4d6409a98e4}{was\+Simulation\+Started}} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static Q\+String \mbox{\hyperlink{class_simulator_a7b69a3563727bc4210ca23939d341352}{S\+E\+T\+\_\+\+N\+U\+M\+T\+H\+R\+E\+A\+DS}}
+\item 
+static Q\+String \mbox{\hyperlink{class_simulator_aea6554545aab8c31486e9c883de8346d}{S\+E\+T\+\_\+\+V\+E\+R\+B\+O\+S\+I\+TY}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An ongoing simulation process. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_simulator_a031573bfcfe2e0f5c9539bcc1c7fc5d9}\label{class_simulator_a031573bfcfe2e0f5c9539bcc1c7fc5d9}} 
+\index{Simulator@{Simulator}!Simulator@{Simulator}}
+\index{Simulator@{Simulator}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{Simulator()}{Simulator()}}
+{\footnotesize\ttfamily Simulator\+::\+Simulator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a0f49aa04f42060a785adf77346b9de9f}\label{class_simulator_a0f49aa04f42060a785adf77346b9de9f}} 
+\index{Simulator@{Simulator}!````~Simulator@{$\sim$Simulator}}
+\index{````~Simulator@{$\sim$Simulator}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{$\sim$Simulator()}{~Simulator()}}
+{\footnotesize\ttfamily Simulator\+::$\sim$\+Simulator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_simulator_a39861df2b7110b42c10a9c67b0cf126c}\label{class_simulator_a39861df2b7110b42c10a9c67b0cf126c}} 
+\index{Simulator@{Simulator}!debugCapture@{debugCapture}}
+\index{debugCapture@{debugCapture}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{debugCapture}{debugCapture}}
+{\footnotesize\ttfamily void Simulator\+::debug\+Capture (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_afdd8bbc35c2a0e3957f2bca7d67237bd}\label{class_simulator_afdd8bbc35c2a0e3957f2bca7d67237bd}} 
+\index{Simulator@{Simulator}!debugMemoryStats@{debugMemoryStats}}
+\index{debugMemoryStats@{debugMemoryStats}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{debugMemoryStats}{debugMemoryStats}}
+{\footnotesize\ttfamily void Simulator\+::debug\+Memory\+Stats (\begin{DoxyParamCaption}\item[{long}]{rss,  }\item[{long}]{peak }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_aeb94927d5a555a6a64170f402f6f4618}\label{class_simulator_aeb94927d5a555a6a64170f402f6f4618}} 
+\index{Simulator@{Simulator}!forceStop@{forceStop}}
+\index{forceStop@{forceStop}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{forceStop()}{forceStop()}}
+{\footnotesize\ttfamily bool Simulator\+::force\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_af76678a2bc976025f05f2f3b0be15e07}\label{class_simulator_af76678a2bc976025f05f2f3b0be15e07}} 
+\index{Simulator@{Simulator}!getMoveVesselOption@{getMoveVesselOption}}
+\index{getMoveVesselOption@{getMoveVesselOption}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{getMoveVesselOption()}{getMoveVesselOption()}}
+{\footnotesize\ttfamily bool Simulator\+::get\+Move\+Vessel\+Option (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_simulator_a49429cdd50f3d19d1b0456df42b97762}\label{class_simulator_a49429cdd50f3d19d1b0456df42b97762}} 
+\index{Simulator@{Simulator}!getVesselMoveDisplayUpdateRate@{getVesselMoveDisplayUpdateRate}}
+\index{getVesselMoveDisplayUpdateRate@{getVesselMoveDisplayUpdateRate}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{getVesselMoveDisplayUpdateRate()}{getVesselMoveDisplayUpdateRate()}}
+{\footnotesize\ttfamily int Simulator\+::get\+Vessel\+Move\+Display\+Update\+Rate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_simulator_a166832314a3c4c510c28771372c372b6}\label{class_simulator_a166832314a3c4c510c28771372c372b6}} 
+\index{Simulator@{Simulator}!isRunning@{isRunning}}
+\index{isRunning@{isRunning}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{isRunning()}{isRunning()}}
+{\footnotesize\ttfamily bool Simulator\+::is\+Running (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_ae7e0ad0b8a24447f161c0b940c6783f0}\label{class_simulator_ae7e0ad0b8a24447f161c0b940c6783f0}} 
+\index{Simulator@{Simulator}!linkModel@{linkModel}}
+\index{linkModel@{linkModel}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{linkModel()}{linkModel()}}
+{\footnotesize\ttfamily void Simulator\+::link\+Model (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_displace_model}{Displace\+Model}} $>$}]{model }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a3ed91c5cd518e0372a519c75d52b573e}\label{class_simulator_a3ed91c5cd518e0372a519c75d52b573e}} 
+\index{Simulator@{Simulator}!log@{log}}
+\index{log@{log}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{log}{log}}
+{\footnotesize\ttfamily void Simulator\+::log (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a7855777d75c25419c22a4ba67963bb12}\label{class_simulator_a7855777d75c25419c22a4ba67963bb12}} 
+\index{Simulator@{Simulator}!nodesStatsUpdate@{nodesStatsUpdate}}
+\index{nodesStatsUpdate@{nodesStatsUpdate}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{nodesStatsUpdate}{nodesStatsUpdate}}
+{\footnotesize\ttfamily void Simulator\+::nodes\+Stats\+Update (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a902b10cc29dc29eb70e5579d468ff043}\label{class_simulator_a902b10cc29dc29eb70e5579d468ff043}} 
+\index{Simulator@{Simulator}!outputFileUpdated@{outputFileUpdated}}
+\index{outputFileUpdated@{outputFileUpdated}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{outputFileUpdated}{outputFileUpdated}}
+{\footnotesize\ttfamily void Simulator\+::output\+File\+Updated (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1,  }\item[{int}]{\+\_\+t2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a2f3c6e304118ae1f881610d1d3eb7f8f}\label{class_simulator_a2f3c6e304118ae1f881610d1d3eb7f8f}} 
+\index{Simulator@{Simulator}!processState@{processState}}
+\index{processState@{processState}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{processState()}{processState()}}
+{\footnotesize\ttfamily Q\+Process\+::\+Process\+State Simulator\+::process\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_simulator_a3db10c90bcd5ba05ebfeeed1edf15b38}\label{class_simulator_a3db10c90bcd5ba05ebfeeed1edf15b38}} 
+\index{Simulator@{Simulator}!processStateChanged@{processStateChanged}}
+\index{processStateChanged@{processStateChanged}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{processStateChanged}{processStateChanged}}
+{\footnotesize\ttfamily void Simulator\+::process\+State\+Changed (\begin{DoxyParamCaption}\item[{Q\+Process\+::\+Process\+State}]{oldstate,  }\item[{Q\+Process\+::\+Process\+State}]{newstate }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a2d9b64b4027c60d66a010311e007c6e4}\label{class_simulator_a2d9b64b4027c60d66a010311e007c6e4}} 
+\index{Simulator@{Simulator}!setMoveVesselOption@{setMoveVesselOption}}
+\index{setMoveVesselOption@{setMoveVesselOption}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setMoveVesselOption()}{setMoveVesselOption()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Move\+Vessel\+Option (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a7abdeb99b1bd7d5784e09f68e5e7912a}\label{class_simulator_a7abdeb99b1bd7d5784e09f68e5e7912a}} 
+\index{Simulator@{Simulator}!setOutDir@{setOutDir}}
+\index{setOutDir@{setOutDir}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setOutDir()}{setOutDir()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Out\+Dir (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a6e06309fae0c2341a81173eb084cf9c8}\label{class_simulator_a6e06309fae0c2341a81173eb084cf9c8}} 
+\index{Simulator@{Simulator}!setOutputName@{setOutputName}}
+\index{setOutputName@{setOutputName}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setOutputName()}{setOutputName()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Output\+Name (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a03e352c3e0da46be50981e32974ec948}\label{class_simulator_a03e352c3e0da46be50981e32974ec948}} 
+\index{Simulator@{Simulator}!setPreexistingPathsShop@{setPreexistingPathsShop}}
+\index{setPreexistingPathsShop@{setPreexistingPathsShop}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setPreexistingPathsShop()}{setPreexistingPathsShop()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Preexisting\+Paths\+Shop (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_aec75d8a7b833cb24c535f4c49709ff45}\label{class_simulator_aec75d8a7b833cb24c535f4c49709ff45}} 
+\index{Simulator@{Simulator}!setSimSteps@{setSimSteps}}
+\index{setSimSteps@{setSimSteps}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setSimSteps()}{setSimSteps()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Sim\+Steps (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a8a15b607539c98f89c9df86a56acdc0c}\label{class_simulator_a8a15b607539c98f89c9df86a56acdc0c}} 
+\index{Simulator@{Simulator}!setUseStaticPaths@{setUseStaticPaths}}
+\index{setUseStaticPaths@{setUseStaticPaths}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setUseStaticPaths()}{setUseStaticPaths()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Use\+Static\+Paths (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a931dbff8f5dad50acb05379a0a0b2796}\label{class_simulator_a931dbff8f5dad50acb05379a0a0b2796}} 
+\index{Simulator@{Simulator}!setVerbosityLevel@{setVerbosityLevel}}
+\index{setVerbosityLevel@{setVerbosityLevel}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setVerbosityLevel()}{setVerbosityLevel()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Verbosity\+Level (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_simulator_ab73f41723e1046edfe9600462366733d}\label{class_simulator_ab73f41723e1046edfe9600462366733d}} 
+\index{Simulator@{Simulator}!setVesselMoveDisplayUpdateRate@{setVesselMoveDisplayUpdateRate}}
+\index{setVesselMoveDisplayUpdateRate@{setVesselMoveDisplayUpdateRate}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{setVesselMoveDisplayUpdateRate()}{setVesselMoveDisplayUpdateRate()}}
+{\footnotesize\ttfamily void Simulator\+::set\+Vessel\+Move\+Display\+Update\+Rate (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a26d53673251424dda5f581b9b6095a69}\label{class_simulator_a26d53673251424dda5f581b9b6095a69}} 
+\index{Simulator@{Simulator}!shipMoved@{shipMoved}}
+\index{shipMoved@{shipMoved}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{shipMoved}{shipMoved}}
+{\footnotesize\ttfamily void Simulator\+::ship\+Moved (\begin{DoxyParamCaption}\item[{int}]{laststep,  }\item[{int}]{idx,  }\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{course }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a7d91f3582160384e49a5986e002bc81a}\label{class_simulator_a7d91f3582160384e49a5986e002bc81a}} 
+\index{Simulator@{Simulator}!simulationEnded@{simulationEnded}}
+\index{simulationEnded@{simulationEnded}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{simulationEnded}{simulationEnded}}
+{\footnotesize\ttfamily void Simulator\+::simulation\+Ended (\begin{DoxyParamCaption}\item[{int}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a607d820eb7bca0092853a3c861e57e70}\label{class_simulator_a607d820eb7bca0092853a3c861e57e70}} 
+\index{Simulator@{Simulator}!simulationStepChanged@{simulationStepChanged}}
+\index{simulationStepChanged@{simulationStepChanged}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{simulationStepChanged}{simulationStepChanged}}
+{\footnotesize\ttfamily void Simulator\+::simulation\+Step\+Changed (\begin{DoxyParamCaption}\item[{int}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_acd0f25e166cedfd96ec737b4375f7cc3}\label{class_simulator_acd0f25e166cedfd96ec737b4375f7cc3}} 
+\index{Simulator@{Simulator}!sqliteStorageOpened@{sqliteStorageOpened}}
+\index{sqliteStorageOpened@{sqliteStorageOpened}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{sqliteStorageOpened}{sqliteStorageOpened}}
+{\footnotesize\ttfamily void Simulator\+::sqlite\+Storage\+Opened (\begin{DoxyParamCaption}\item[{Q\+String}]{\+\_\+t1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_a6e5e3aa8ca2fffcc4fee463767c710c9}\label{class_simulator_a6e5e3aa8ca2fffcc4fee463767c710c9}} 
+\index{Simulator@{Simulator}!start@{start}}
+\index{start@{start}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily bool Simulator\+::start (\begin{DoxyParamCaption}\item[{Q\+String}]{outdir,  }\item[{Q\+String}]{name,  }\item[{Q\+String}]{folder,  }\item[{Q\+String}]{simul\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_simulator_a77be9f7ec64264d49c239fc3d5be2ef0}\label{class_simulator_a77be9f7ec64264d49c239fc3d5be2ef0}} 
+\index{Simulator@{Simulator}!vesselMoved@{vesselMoved}}
+\index{vesselMoved@{vesselMoved}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{vesselMoved}{vesselMoved}}
+{\footnotesize\ttfamily void Simulator\+::vessel\+Moved (\begin{DoxyParamCaption}\item[{int}]{laststep,  }\item[{int}]{idx,  }\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{course,  }\item[{float}]{fuel,  }\item[{int}]{state }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_simulator_ac1336ca0d33dbb804fa5f4d6409a98e4}\label{class_simulator_ac1336ca0d33dbb804fa5f4d6409a98e4}} 
+\index{Simulator@{Simulator}!wasSimulationStarted@{wasSimulationStarted}}
+\index{wasSimulationStarted@{wasSimulationStarted}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{wasSimulationStarted()}{wasSimulationStarted()}}
+{\footnotesize\ttfamily bool Simulator\+::was\+Simulation\+Started (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_simulator_a7b69a3563727bc4210ca23939d341352}\label{class_simulator_a7b69a3563727bc4210ca23939d341352}} 
+\index{Simulator@{Simulator}!SET\_NUMTHREADS@{SET\_NUMTHREADS}}
+\index{SET\_NUMTHREADS@{SET\_NUMTHREADS}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{SET\_NUMTHREADS}{SET\_NUMTHREADS}}
+{\footnotesize\ttfamily Q\+String Simulator\+::\+S\+E\+T\+\_\+\+N\+U\+M\+T\+H\+R\+E\+A\+DS\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_simulator_aea6554545aab8c31486e9c883de8346d}\label{class_simulator_aea6554545aab8c31486e9c883de8346d}} 
+\index{Simulator@{Simulator}!SET\_VERBOSITY@{SET\_VERBOSITY}}
+\index{SET\_VERBOSITY@{SET\_VERBOSITY}!Simulator@{Simulator}}
+\subsubsection{\texorpdfstring{SET\_VERBOSITY}{SET\_VERBOSITY}}
+{\footnotesize\ttfamily Q\+String Simulator\+::\+S\+E\+T\+\_\+\+V\+E\+R\+B\+O\+S\+I\+TY\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{simulator_8h}{simulator.\+h}}\item 
+qtgui/moc/\mbox{\hyperlink{moc__simulator_8cpp}{moc\+\_\+simulator.\+cpp}}\item 
+qtgui/\mbox{\hyperlink{simulator_8cpp}{simulator.\+cpp}}\end{DoxyCompactItemize}

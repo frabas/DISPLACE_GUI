@@ -1,0 +1,107 @@
+\hypertarget{classdtree_1_1_decision_tree}{}\section{dtree\+::Decision\+Tree Class Reference}
+\label{classdtree_1_1_decision_tree}\index{dtree::DecisionTree@{dtree::DecisionTree}}
+
+
+{\ttfamily \#include $<$decisiontree.\+h$>$}
+
+Inheritance diagram for dtree\+::Decision\+Tree\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d4/d98/classdtree_1_1_decision_tree}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_a470fba8e51d63ec23701050de3f06647}{Decision\+Tree}} ()
+\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_aced396943cf79577905a2d7ae0e0e5c1}{clear}} ()
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ \mbox{\hyperlink{classdtree_1_1_decision_tree_a2cd807cc55a488faa17b4fa166168f54}{root}} () const
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ \mbox{\hyperlink{classdtree_1_1_decision_tree_a3c3f0ea82ed2d11378592577761c40ba}{create\+Node}} ()
+\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_a3696b0cc10e0019ff5bdf02e245f3463}{set\+Root}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ \mbox{\hyperlink{classdtree_1_1_decision_tree_a2cd807cc55a488faa17b4fa166168f54}{root}})
+\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_a6b7eda36962c2c659a198b01a8557531}{connect}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ node, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ parent, int child\+Id)
+\item 
+bool \mbox{\hyperlink{classdtree_1_1_decision_tree_abb0901c89130c7e4f06801aef04aed30}{is\+Empty}} () const
+\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_a3fda9fc04c3a7d5e6fc7188b3b4a23ad}{set\+Type}} (\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}} t)
+\item 
+\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}} \mbox{\hyperlink{classdtree_1_1_decision_tree_a6434b29061370693f4d1e9de2dcbdb13}{type}} () const
+\item 
+void \mbox{\hyperlink{classdtree_1_1_decision_tree_a38ca73d4ba02777a8a5d80a60e05a45e}{remove\+Nodes}} (std\+::list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a470fba8e51d63ec23701050de3f06647}\label{classdtree_1_1_decision_tree_a470fba8e51d63ec23701050de3f06647}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!DecisionTree@{DecisionTree}}
+\index{DecisionTree@{DecisionTree}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{DecisionTree()}{DecisionTree()}}
+{\footnotesize\ttfamily Decision\+Tree\+::\+Decision\+Tree (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_aced396943cf79577905a2d7ae0e0e5c1}\label{classdtree_1_1_decision_tree_aced396943cf79577905a2d7ae0e0e5c1}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!clear@{clear}}
+\index{clear@{clear}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Decision\+Tree\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a6b7eda36962c2c659a198b01a8557531}\label{classdtree_1_1_decision_tree_a6b7eda36962c2c659a198b01a8557531}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!connect@{connect}}
+\index{connect@{connect}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily void Decision\+Tree\+::connect (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$}]{node,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$}]{parent,  }\item[{int}]{child\+Id }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a3c3f0ea82ed2d11378592577761c40ba}\label{classdtree_1_1_decision_tree_a3c3f0ea82ed2d11378592577761c40ba}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!createNode@{createNode}}
+\index{createNode@{createNode}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{createNode()}{createNode()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ Decision\+Tree\+::create\+Node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_abb0901c89130c7e4f06801aef04aed30}\label{classdtree_1_1_decision_tree_abb0901c89130c7e4f06801aef04aed30}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{isEmpty()}{isEmpty()}}
+{\footnotesize\ttfamily bool dtree\+::\+Decision\+Tree\+::is\+Empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a38ca73d4ba02777a8a5d80a60e05a45e}\label{classdtree_1_1_decision_tree_a38ca73d4ba02777a8a5d80a60e05a45e}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!removeNodes@{removeNodes}}
+\index{removeNodes@{removeNodes}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{removeNodes()}{removeNodes()}}
+{\footnotesize\ttfamily void Decision\+Tree\+::remove\+Nodes (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$ $>$}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a2cd807cc55a488faa17b4fa166168f54}\label{classdtree_1_1_decision_tree_a2cd807cc55a488faa17b4fa166168f54}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!root@{root}}
+\index{root@{root}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{root()}{root()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classdtree_1_1_node}{Node}}$>$ dtree\+::\+Decision\+Tree\+::root (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a3696b0cc10e0019ff5bdf02e245f3463}\label{classdtree_1_1_decision_tree_a3696b0cc10e0019ff5bdf02e245f3463}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!setRoot@{setRoot}}
+\index{setRoot@{setRoot}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{setRoot()}{setRoot()}}
+{\footnotesize\ttfamily void Decision\+Tree\+::set\+Root (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdtree_1_1_node}{Node}} $>$}]{root }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a3fda9fc04c3a7d5e6fc7188b3b4a23ad}\label{classdtree_1_1_decision_tree_a3fda9fc04c3a7d5e6fc7188b3b4a23ad}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!setType@{setType}}
+\index{setType@{setType}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{setType()}{setType()}}
+{\footnotesize\ttfamily void dtree\+::\+Decision\+Tree\+::set\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}}}]{t }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdtree_1_1_decision_tree_a6434b29061370693f4d1e9de2dcbdb13}\label{classdtree_1_1_decision_tree_a6434b29061370693f4d1e9de2dcbdb13}} 
+\index{dtree::DecisionTree@{dtree::DecisionTree}!type@{type}}
+\index{type@{type}!dtree::DecisionTree@{dtree::DecisionTree}}
+\subsubsection{\texorpdfstring{type()}{type()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdtree_1_1_decision_tree_manager_a14180eb59d2c245ce3af1c27ddb0846d}{Decision\+Tree\+Manager\+::\+Tree\+Type}} dtree\+::\+Decision\+Tree\+::type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{decisiontree_8h}{decisiontree.\+h}}\item 
+commons/dtree/\mbox{\hyperlink{decisiontree_8cpp}{decisiontree.\+cpp}}\end{DoxyCompactItemize}

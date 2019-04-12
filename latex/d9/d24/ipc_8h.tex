@@ -1,0 +1,74 @@
+\hypertarget{ipc_8h}{}\section{simulator/ipc.h File Reference}
+\label{ipc_8h}\index{simulator/ipc.h@{simulator/ipc.h}}
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$memoryinfo.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ipc_8h_acaa6710ff61da9715db98f31d1c7302c}{init\+Ipc\+Queue}} ()
+\item 
+void \mbox{\hyperlink{ipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}{gui\+Send\+Current\+Step}} (unsigned int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{ipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}{gui\+Send\+Update\+Command}} (const std\+::string \&filename, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+void \mbox{\hyperlink{ipc_8h_a471979147bdcfc53fae734eebd41e098}{gui\+Send\+Memory\+Info}} (const \mbox{\hyperlink{class_memory_info}{Memory\+Info}} \&info)
+\item 
+void \mbox{\hyperlink{ipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}{gui\+Send\+Capture}} (bool on)
+\item 
+void \mbox{\hyperlink{ipc_8h_a55028e1d77bc035ffbc29eb651bae15b}{gui\+Send\+Terminal\+Message}} (const std\+::string \&ss)
+\item 
+void \mbox{\hyperlink{ipc_8h_a50afa17084d35f96176f056112432920}{gui\+Send\+Output\+Info}} (std\+::string sql\+Path)
+\item 
+void \mbox{\hyperlink{ipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}{finalize\+Ipc\+Queue}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{ipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}\label{ipc_8h_ad9b5db23f6364c237b84621a44f3a9b0}} 
+\index{ipc.h@{ipc.h}!finalizeIpcQueue@{finalizeIpcQueue}}
+\index{finalizeIpcQueue@{finalizeIpcQueue}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{finalizeIpcQueue()}{finalizeIpcQueue()}}
+{\footnotesize\ttfamily void finalize\+Ipc\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}\label{ipc_8h_af0843f28cdfc531d7138dd77b0c5d44e}} 
+\index{ipc.h@{ipc.h}!guiSendCapture@{guiSendCapture}}
+\index{guiSendCapture@{guiSendCapture}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendCapture()}{guiSendCapture()}}
+{\footnotesize\ttfamily void gui\+Send\+Capture (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}\label{ipc_8h_a9bcd932020770fcfc3b44c7d436c92bd}} 
+\index{ipc.h@{ipc.h}!guiSendCurrentStep@{guiSendCurrentStep}}
+\index{guiSendCurrentStep@{guiSendCurrentStep}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendCurrentStep()}{guiSendCurrentStep()}}
+{\footnotesize\ttfamily void gui\+Send\+Current\+Step (\begin{DoxyParamCaption}\item[{unsigned int}]{tstep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_a471979147bdcfc53fae734eebd41e098}\label{ipc_8h_a471979147bdcfc53fae734eebd41e098}} 
+\index{ipc.h@{ipc.h}!guiSendMemoryInfo@{guiSendMemoryInfo}}
+\index{guiSendMemoryInfo@{guiSendMemoryInfo}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendMemoryInfo()}{guiSendMemoryInfo()}}
+{\footnotesize\ttfamily void gui\+Send\+Memory\+Info (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_memory_info}{Memory\+Info}} \&}]{info }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_a50afa17084d35f96176f056112432920}\label{ipc_8h_a50afa17084d35f96176f056112432920}} 
+\index{ipc.h@{ipc.h}!guiSendOutputInfo@{guiSendOutputInfo}}
+\index{guiSendOutputInfo@{guiSendOutputInfo}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendOutputInfo()}{guiSendOutputInfo()}}
+{\footnotesize\ttfamily void gui\+Send\+Output\+Info (\begin{DoxyParamCaption}\item[{std\+::string}]{sql\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_a55028e1d77bc035ffbc29eb651bae15b}\label{ipc_8h_a55028e1d77bc035ffbc29eb651bae15b}} 
+\index{ipc.h@{ipc.h}!guiSendTerminalMessage@{guiSendTerminalMessage}}
+\index{guiSendTerminalMessage@{guiSendTerminalMessage}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendTerminalMessage()}{guiSendTerminalMessage()}}
+{\footnotesize\ttfamily void gui\+Send\+Terminal\+Message (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{ss }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}\label{ipc_8h_a40f4407e4b6f5882ef0d9873f15edacd}} 
+\index{ipc.h@{ipc.h}!guiSendUpdateCommand@{guiSendUpdateCommand}}
+\index{guiSendUpdateCommand@{guiSendUpdateCommand}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{guiSendUpdateCommand()}{guiSendUpdateCommand()}}
+{\footnotesize\ttfamily void gui\+Send\+Update\+Command (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename,  }\item[{int}]{tstep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ipc_8h_acaa6710ff61da9715db98f31d1c7302c}\label{ipc_8h_acaa6710ff61da9715db98f31d1c7302c}} 
+\index{ipc.h@{ipc.h}!initIpcQueue@{initIpcQueue}}
+\index{initIpcQueue@{initIpcQueue}!ipc.h@{ipc.h}}
+\subsubsection{\texorpdfstring{initIpcQueue()}{initIpcQueue()}}
+{\footnotesize\ttfamily void init\+Ipc\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

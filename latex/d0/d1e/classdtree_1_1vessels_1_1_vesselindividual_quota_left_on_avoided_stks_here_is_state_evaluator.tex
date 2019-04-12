@@ -1,0 +1,52 @@
+\hypertarget{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator}{}\section{dtree\+::vessels\+::Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator Class Reference}
+\label{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator}\index{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}}
+
+
+{\ttfamily \#include $<$vesselsevaluators.\+h$>$}
+
+Inheritance diagram for dtree\+::vessels\+::Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d0/d1e/classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_aeffc115847f0fbbac301c73d1acc7d14}{Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator}} ()
+\item 
+double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_a7d3f3c7db7b95a687cc4105b81c0f7f0}{evaluate}} (int fground, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$v) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_aeffc115847f0fbbac301c73d1acc7d14}\label{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_aeffc115847f0fbbac301c73d1acc7d14}} 
+\index{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}!VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}}
+\index{VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}!dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}}
+\subsubsection{\texorpdfstring{VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator()}{VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator()}}
+{\footnotesize\ttfamily dtree\+::vessels\+::\+Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator\+::\+Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_a7d3f3c7db7b95a687cc4105b81c0f7f0}\label{classdtree_1_1vessels_1_1_vesselindividual_quota_left_on_avoided_stks_here_is_state_evaluator_a7d3f3c7db7b95a687cc4105b81c0f7f0}} 
+\index{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator@{dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily double dtree\+::vessels\+::\+Vesselindividual\+Quota\+Left\+On\+Avoided\+Stks\+Here\+Is\+State\+Evaluator\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{vesselsevaluators_8h}{vesselsevaluators.\+h}}\end{DoxyCompactItemize}

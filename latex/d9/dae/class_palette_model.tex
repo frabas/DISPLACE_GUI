@@ -1,0 +1,126 @@
+\hypertarget{class_palette_model}{}\section{Palette\+Model Class Reference}
+\label{class_palette_model}\index{PaletteModel@{PaletteModel}}
+Inheritance diagram for Palette\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/dae/class_palette_model}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_palette_model_a7ddfc1d43aab3f5112fc5faa1b1b5f5b}{Palette\+Model}} (\mbox{\hyperlink{class_palette}{Palette}} $\ast$palette, Q\+Object $\ast$\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}}=0)
+\item 
+void \mbox{\hyperlink{class_palette_model_a349a1cb79eb3675e40a8ccbe3f801d01}{reread}} (\mbox{\hyperlink{class_palette}{Palette}} $\ast$palette)
+\item 
+Q\+Model\+Index \mbox{\hyperlink{class_palette_model_a193464f0511b7d81c936162dbc613282}{index}} (int row, int column, const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}}) const
+\item 
+Q\+Model\+Index \mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}} (const Q\+Model\+Index \&child) const
+\item 
+int \mbox{\hyperlink{class_palette_model_a4e78b9a576e8d7de8bb7a9e5b7c9eded}{row\+Count}} (const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}}) const
+\item 
+int \mbox{\hyperlink{class_palette_model_a799e20927106996c71844ed5ea78732f}{column\+Count}} (const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}}) const
+\item 
+Q\+Variant \mbox{\hyperlink{class_palette_model_a44d61df1c8db82dacb531cbc58072759}{data}} (const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_a193464f0511b7d81c936162dbc613282}{index}}, int role) const
+\item 
+bool \mbox{\hyperlink{class_palette_model_aff3615f74814639acb99780a1a115993}{set\+Data}} (const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_a193464f0511b7d81c936162dbc613282}{index}}, const Q\+Variant \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}, int role)
+\item 
+bool \mbox{\hyperlink{class_palette_model_af2fa88e25954f25d8bdf54925f707c7c}{insert\+Row}} (int row, const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}})
+\item 
+bool \mbox{\hyperlink{class_palette_model_a0e33d4c77d50b7eebaa437508dd502fd}{remove\+Row}} (int row, const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}{parent}})
+\item 
+Qt\+::\+Item\+Flags \mbox{\hyperlink{class_palette_model_abed3f62ed9707fa19887b724344bf705}{flags}} (const Q\+Model\+Index \&\mbox{\hyperlink{class_palette_model_a193464f0511b7d81c936162dbc613282}{index}}) const
+\item 
+void \mbox{\hyperlink{class_palette_model_aaef224b2d98b2edd66849f0822d6301a}{update}} (\mbox{\hyperlink{class_palette}{Palette}} $\ast$palette)
+\item 
+void \mbox{\hyperlink{class_palette_model_ad91a68da14777cd2c7a6ea6bc99b2856}{refresh}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_palette_model_a7ddfc1d43aab3f5112fc5faa1b1b5f5b}\label{class_palette_model_a7ddfc1d43aab3f5112fc5faa1b1b5f5b}} 
+\index{PaletteModel@{PaletteModel}!PaletteModel@{PaletteModel}}
+\index{PaletteModel@{PaletteModel}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{PaletteModel()}{PaletteModel()}}
+{\footnotesize\ttfamily Palette\+Model\+::\+Palette\+Model (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_palette}{Palette}} $\ast$}]{palette,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_palette_model_a799e20927106996c71844ed5ea78732f}\label{class_palette_model_a799e20927106996c71844ed5ea78732f}} 
+\index{PaletteModel@{PaletteModel}!columnCount@{columnCount}}
+\index{columnCount@{columnCount}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{columnCount()}{columnCount()}}
+{\footnotesize\ttfamily int Palette\+Model\+::column\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_a44d61df1c8db82dacb531cbc58072759}\label{class_palette_model_a44d61df1c8db82dacb531cbc58072759}} 
+\index{PaletteModel@{PaletteModel}!data@{data}}
+\index{data@{data}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily Q\+Variant Palette\+Model\+::data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{int}]{role }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_abed3f62ed9707fa19887b724344bf705}\label{class_palette_model_abed3f62ed9707fa19887b724344bf705}} 
+\index{PaletteModel@{PaletteModel}!flags@{flags}}
+\index{flags@{flags}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{flags()}{flags()}}
+{\footnotesize\ttfamily Qt\+::\+Item\+Flags Palette\+Model\+::flags (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_a193464f0511b7d81c936162dbc613282}\label{class_palette_model_a193464f0511b7d81c936162dbc613282}} 
+\index{PaletteModel@{PaletteModel}!index@{index}}
+\index{index@{index}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{index()}{index()}}
+{\footnotesize\ttfamily Q\+Model\+Index Palette\+Model\+::index (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_af2fa88e25954f25d8bdf54925f707c7c}\label{class_palette_model_af2fa88e25954f25d8bdf54925f707c7c}} 
+\index{PaletteModel@{PaletteModel}!insertRow@{insertRow}}
+\index{insertRow@{insertRow}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{insertRow()}{insertRow()}}
+{\footnotesize\ttfamily bool Palette\+Model\+::insert\+Row (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}\label{class_palette_model_aec318277f3470bebefbc5c54329c2bf0}} 
+\index{PaletteModel@{PaletteModel}!parent@{parent}}
+\index{parent@{parent}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{parent()}{parent()}}
+{\footnotesize\ttfamily Q\+Model\+Index Palette\+Model\+::parent (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{child }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_ad91a68da14777cd2c7a6ea6bc99b2856}\label{class_palette_model_ad91a68da14777cd2c7a6ea6bc99b2856}} 
+\index{PaletteModel@{PaletteModel}!refresh@{refresh}}
+\index{refresh@{refresh}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{refresh()}{refresh()}}
+{\footnotesize\ttfamily void Palette\+Model\+::refresh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_a0e33d4c77d50b7eebaa437508dd502fd}\label{class_palette_model_a0e33d4c77d50b7eebaa437508dd502fd}} 
+\index{PaletteModel@{PaletteModel}!removeRow@{removeRow}}
+\index{removeRow@{removeRow}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{removeRow()}{removeRow()}}
+{\footnotesize\ttfamily bool Palette\+Model\+::remove\+Row (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_a349a1cb79eb3675e40a8ccbe3f801d01}\label{class_palette_model_a349a1cb79eb3675e40a8ccbe3f801d01}} 
+\index{PaletteModel@{PaletteModel}!reread@{reread}}
+\index{reread@{reread}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{reread()}{reread()}}
+{\footnotesize\ttfamily void Palette\+Model\+::reread (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_palette}{Palette}} $\ast$}]{palette }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_a4e78b9a576e8d7de8bb7a9e5b7c9eded}\label{class_palette_model_a4e78b9a576e8d7de8bb7a9e5b7c9eded}} 
+\index{PaletteModel@{PaletteModel}!rowCount@{rowCount}}
+\index{rowCount@{rowCount}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{rowCount()}{rowCount()}}
+{\footnotesize\ttfamily int Palette\+Model\+::row\+Count (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{parent }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_aff3615f74814639acb99780a1a115993}\label{class_palette_model_aff3615f74814639acb99780a1a115993}} 
+\index{PaletteModel@{PaletteModel}!setData@{setData}}
+\index{setData@{setData}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{setData()}{setData()}}
+{\footnotesize\ttfamily bool Palette\+Model\+::set\+Data (\begin{DoxyParamCaption}\item[{const Q\+Model\+Index \&}]{index,  }\item[{const Q\+Variant \&}]{value,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_palette_model_aaef224b2d98b2edd66849f0822d6301a}\label{class_palette_model_aaef224b2d98b2edd66849f0822d6301a}} 
+\index{PaletteModel@{PaletteModel}!update@{update}}
+\index{update@{update}!PaletteModel@{PaletteModel}}
+\subsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Palette\+Model\+::update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_palette}{Palette}} $\ast$}]{palette }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{editpalettedialog_8cpp}{editpalettedialog.\+cpp}}\end{DoxyCompactItemize}

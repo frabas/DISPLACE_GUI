@@ -1,0 +1,123 @@
+\hypertarget{class_graph_interaction_controller}{}\section{Graph\+Interaction\+Controller Class Reference}
+\label{class_graph_interaction_controller}\index{GraphInteractionController@{GraphInteractionController}}
+
+
+{\ttfamily \#include $<$graphinteractioncontroller.\+h$>$}
+
+Inheritance diagram for Graph\+Interaction\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d2/d40/class_graph_interaction_controller}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}{Popup\+Menu\+Location}} \{ \mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a36be98b843e778a6e7350354b6937cfe}{Popup\+Menu\+Location\+::\+Plot}}, 
+\mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a9b27e12d584b3438e811533b32e026e8}{Popup\+Menu\+Location\+::\+Legend}}
+ \}
+\item 
+using \mbox{\hyperlink{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}{On\+Popup\+Menu\+Built}} = std\+::function$<$ void(\mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}{Popup\+Menu\+Location}} location, Q\+Menu $\ast$menu)$>$
+\end{DoxyCompactItemize}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_a74523456d82060bb6133761497dfbeb3}{selection\+Changed}} ()
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_a1f1cddbde187c45600237a46d1e14164}{mouse\+Press}} ()
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_ab1e4a0eb7f63ded4c86b6c7e4b79c80a}{mouse\+Wheel}} ()
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_a8837750ec2c9a8c3f40179ee68c602aa}{context\+Menu\+Request}} (Q\+Point pos)
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_a7e64e84b708da10d07b68cbe2ab2dfb1}{move\+Legend}} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_graph_interaction_controller_ae406f19a6cbcea61bdb1927af19f2823}{Graph\+Interaction\+Controller}} (\mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} $\ast$plot, Q\+Object $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{class_graph_interaction_controller_a4d5f8af2f6c20647d6320efe5487f5a6}{set\+On\+Popup\+Menu\+Built\+Callback}} (\mbox{\hyperlink{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}{On\+Popup\+Menu\+Built}} callback)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}\label{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}} 
+\index{GraphInteractionController@{GraphInteractionController}!OnPopupMenuBuilt@{OnPopupMenuBuilt}}
+\index{OnPopupMenuBuilt@{OnPopupMenuBuilt}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{OnPopupMenuBuilt}{OnPopupMenuBuilt}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}{Graph\+Interaction\+Controller\+::\+On\+Popup\+Menu\+Built}} =  std\+::function$<$void(\mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}{Popup\+Menu\+Location}} location, Q\+Menu $\ast$menu)$>$}
+
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}\label{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}} 
+\index{GraphInteractionController@{GraphInteractionController}!PopupMenuLocation@{PopupMenuLocation}}
+\index{PopupMenuLocation@{PopupMenuLocation}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{PopupMenuLocation}{PopupMenuLocation}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764}{Graph\+Interaction\+Controller\+::\+Popup\+Menu\+Location}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Plot@{Plot}!GraphInteractionController@{GraphInteractionController}}\index{GraphInteractionController@{GraphInteractionController}!Plot@{Plot}}}\mbox{\Hypertarget{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a36be98b843e778a6e7350354b6937cfe}\label{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a36be98b843e778a6e7350354b6937cfe}} 
+Plot&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Legend@{Legend}!GraphInteractionController@{GraphInteractionController}}\index{GraphInteractionController@{GraphInteractionController}!Legend@{Legend}}}\mbox{\Hypertarget{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a9b27e12d584b3438e811533b32e026e8}\label{class_graph_interaction_controller_a67e6eba082927bf2b984bed54fe32764a9b27e12d584b3438e811533b32e026e8}} 
+Legend&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_graph_interaction_controller_ae406f19a6cbcea61bdb1927af19f2823}\label{class_graph_interaction_controller_ae406f19a6cbcea61bdb1927af19f2823}} 
+\index{GraphInteractionController@{GraphInteractionController}!GraphInteractionController@{GraphInteractionController}}
+\index{GraphInteractionController@{GraphInteractionController}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{GraphInteractionController()}{GraphInteractionController()}}
+{\footnotesize\ttfamily Graph\+Interaction\+Controller\+::\+Graph\+Interaction\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_custom_plot}{Q\+Custom\+Plot}} $\ast$}]{plot,  }\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_graph_interaction_controller_a8837750ec2c9a8c3f40179ee68c602aa}\label{class_graph_interaction_controller_a8837750ec2c9a8c3f40179ee68c602aa}} 
+\index{GraphInteractionController@{GraphInteractionController}!contextMenuRequest@{contextMenuRequest}}
+\index{contextMenuRequest@{contextMenuRequest}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{contextMenuRequest}{contextMenuRequest}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::context\+Menu\+Request (\begin{DoxyParamCaption}\item[{Q\+Point}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_graph_interaction_controller_a1f1cddbde187c45600237a46d1e14164}\label{class_graph_interaction_controller_a1f1cddbde187c45600237a46d1e14164}} 
+\index{GraphInteractionController@{GraphInteractionController}!mousePress@{mousePress}}
+\index{mousePress@{mousePress}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{mousePress}{mousePress}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::mouse\+Press (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_graph_interaction_controller_ab1e4a0eb7f63ded4c86b6c7e4b79c80a}\label{class_graph_interaction_controller_ab1e4a0eb7f63ded4c86b6c7e4b79c80a}} 
+\index{GraphInteractionController@{GraphInteractionController}!mouseWheel@{mouseWheel}}
+\index{mouseWheel@{mouseWheel}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{mouseWheel}{mouseWheel}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::mouse\+Wheel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_graph_interaction_controller_a7e64e84b708da10d07b68cbe2ab2dfb1}\label{class_graph_interaction_controller_a7e64e84b708da10d07b68cbe2ab2dfb1}} 
+\index{GraphInteractionController@{GraphInteractionController}!moveLegend@{moveLegend}}
+\index{moveLegend@{moveLegend}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{moveLegend}{moveLegend}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::move\+Legend (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_graph_interaction_controller_a74523456d82060bb6133761497dfbeb3}\label{class_graph_interaction_controller_a74523456d82060bb6133761497dfbeb3}} 
+\index{GraphInteractionController@{GraphInteractionController}!selectionChanged@{selectionChanged}}
+\index{selectionChanged@{selectionChanged}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{selectionChanged}{selectionChanged}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::selection\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_graph_interaction_controller_a4d5f8af2f6c20647d6320efe5487f5a6}\label{class_graph_interaction_controller_a4d5f8af2f6c20647d6320efe5487f5a6}} 
+\index{GraphInteractionController@{GraphInteractionController}!setOnPopupMenuBuiltCallback@{setOnPopupMenuBuiltCallback}}
+\index{setOnPopupMenuBuiltCallback@{setOnPopupMenuBuiltCallback}!GraphInteractionController@{GraphInteractionController}}
+\subsubsection{\texorpdfstring{setOnPopupMenuBuiltCallback()}{setOnPopupMenuBuiltCallback()}}
+{\footnotesize\ttfamily void Graph\+Interaction\+Controller\+::set\+On\+Popup\+Menu\+Built\+Callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_graph_interaction_controller_a9781ca3edf7c9c5cf3ad12c3496cf24c}{Graph\+Interaction\+Controller\+::\+On\+Popup\+Menu\+Built}}}]{callback }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{graphinteractioncontroller_8h}{graphinteractioncontroller.\+h}}\item 
+qtgui/\mbox{\hyperlink{graphinteractioncontroller_8cpp}{graphinteractioncontroller.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,87 @@
+\hypertarget{class_path_shop}{}\section{Path\+Shop Class Reference}
+\label{class_path_shop}\index{PathShop@{PathShop}}
+
+
+{\ttfamily \#include $<$pathshop.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_path_shop_1_1_data}{Data}}
+\item 
+class \mbox{\hyperlink{class_path_shop_1_1_node_not_found_exception}{Node\+Not\+Found\+Exception}}
+\item 
+class \mbox{\hyperlink{class_path_shop_1_1_private}{Private}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}{Init\+Data}} = std\+::tuple$<$ \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, weight\+\_\+t $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_path_shop_a3272ce71ec3fe02ff46dc3e4c5feef09}{Path\+Shop}} ()
+\item 
+virtual \mbox{\hyperlink{class_path_shop_a36746d15228405130e85b5125e15508f}{$\sim$\+Path\+Shop}} () noexcept=default
+\item 
+\mbox{\hyperlink{class_path_shop_1_1_data}{Data}} \mbox{\hyperlink{class_path_shop_a7378ad4eed020bb21213957f2bdddc82}{get\+Node}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} id) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_path_shop}{Path\+Shop}} \mbox{\hyperlink{class_path_shop_a23fbe546bb0990d64c1f5c08d6432426}{read\+From\+Files}} (const std\+::string \&prevstream, const std\+::string \&weighstream)
+\item 
+static \mbox{\hyperlink{class_path_shop}{Path\+Shop}} \mbox{\hyperlink{class_path_shop_abdebf228fcd8d17fefe713ff934c17d9}{read\+From\+Data}} (const std\+::vector$<$ \mbox{\hyperlink{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}{Init\+Data}} $>$ \&data)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}\label{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}} 
+\index{PathShop@{PathShop}!InitData@{InitData}}
+\index{InitData@{InitData}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{InitData}{InitData}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}{Path\+Shop\+::\+Init\+Data}} =  std\+::tuple$<$\mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, weight\+\_\+t$>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_path_shop_a3272ce71ec3fe02ff46dc3e4c5feef09}\label{class_path_shop_a3272ce71ec3fe02ff46dc3e4c5feef09}} 
+\index{PathShop@{PathShop}!PathShop@{PathShop}}
+\index{PathShop@{PathShop}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{PathShop()}{PathShop()}}
+{\footnotesize\ttfamily Path\+Shop\+::\+Path\+Shop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_path_shop_a36746d15228405130e85b5125e15508f}\label{class_path_shop_a36746d15228405130e85b5125e15508f}} 
+\index{PathShop@{PathShop}!````~PathShop@{$\sim$PathShop}}
+\index{````~PathShop@{$\sim$PathShop}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{$\sim$PathShop()}{~PathShop()}}
+{\footnotesize\ttfamily virtual Path\+Shop\+::$\sim$\+Path\+Shop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_path_shop_a7378ad4eed020bb21213957f2bdddc82}\label{class_path_shop_a7378ad4eed020bb21213957f2bdddc82}} 
+\index{PathShop@{PathShop}!getNode@{getNode}}
+\index{getNode@{getNode}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{getNode()}{getNode()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_path_shop_1_1_data}{Path\+Shop\+::\+Data}} Path\+Shop\+::get\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{id }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_path_shop_abdebf228fcd8d17fefe713ff934c17d9}\label{class_path_shop_abdebf228fcd8d17fefe713ff934c17d9}} 
+\index{PathShop@{PathShop}!readFromData@{readFromData}}
+\index{readFromData@{readFromData}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{readFromData()}{readFromData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_path_shop}{Path\+Shop}} Path\+Shop\+::read\+From\+Data (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{class_path_shop_a5b4a6b28d09367509e218e48128dbf11}{Init\+Data}} $>$ \&}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_path_shop_a23fbe546bb0990d64c1f5c08d6432426}\label{class_path_shop_a23fbe546bb0990d64c1f5c08d6432426}} 
+\index{PathShop@{PathShop}!readFromFiles@{readFromFiles}}
+\index{readFromFiles@{readFromFiles}!PathShop@{PathShop}}
+\subsubsection{\texorpdfstring{readFromFiles()}{readFromFiles()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_path_shop}{Path\+Shop}} Path\+Shop\+::read\+From\+Files (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{prevstream,  }\item[{const std\+::string \&}]{weighstream }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/\mbox{\hyperlink{pathshop_8h}{pathshop.\+h}}\item 
+commons/\mbox{\hyperlink{pathshop_8cpp}{pathshop.\+cpp}}\end{DoxyCompactItemize}

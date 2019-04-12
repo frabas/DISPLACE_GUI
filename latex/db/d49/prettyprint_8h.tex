@@ -1,0 +1,124 @@
+\hypertarget{prettyprint_8h}{}\section{formats/utils/prettyprint.h File Reference}
+\label{prettyprint_8h}\index{formats/utils/prettyprint.h@{formats/utils/prettyprint.h}}
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$iterator$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$ostream$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$valarray$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structutils_1_1detail_1_1sfinae__base}{utils\+::detail\+::sfinae\+\_\+base}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1detail_1_1has__const__iterator}{utils\+::detail\+::has\+\_\+const\+\_\+iterator$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1detail_1_1has__begin__end}{utils\+::detail\+::has\+\_\+begin\+\_\+end$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters__values}{utils\+::delimiters\+\_\+values$<$ T\+Char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters}{utils\+::delimiters$<$ T, T\+Char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1print__container__helper}{utils\+::print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1print__container__helper_1_1printer}{utils\+::print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$\+::printer$<$ U $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1print__container__helper_1_1printer_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4}{utils\+::print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$\+::printer$<$ std\+::pair$<$ T1, T2 $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1print__container__helper_1_1printer_3_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4}{utils\+::print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$\+::printer$<$ std\+::tuple$<$ Args... $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1print__container__helper_1_1printer_3_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4_1_1_int}{utils\+::print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$\+::printer$<$ std\+::tuple$<$ Args... $>$ $>$\+::\+Int$<$ I $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container}{utils\+::is\+\_\+container$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container_3_01_t[_n]_4}{utils\+::is\+\_\+container$<$ T\mbox{[}\+N\mbox{]}$>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container_3_01char[_n]_4}{utils\+::is\+\_\+container$<$ char\mbox{[}\+N\mbox{]}$>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container_3_01std_1_1valarray_3_01_t_01_4_01_4}{utils\+::is\+\_\+container$<$ std\+::valarray$<$ T $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4}{utils\+::is\+\_\+container$<$ std\+::pair$<$ T1, T2 $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1is__container_3_01std_1_1tuple_3_01_args_8_8_8_01_4_01_4}{utils\+::is\+\_\+container$<$ std\+::tuple$<$ Args... $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_t_00_01char_01_4}{utils\+::delimiters$<$ T, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_t_00_01wchar__t_01_4}{utils\+::delimiters$<$ T, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1set_3_01_t_00_01_t_comp_00_01_t_allocator_01_4_00_01char_01_4}{utils\+::delimiters$<$ \+::std\+::set$<$ T, T\+Comp, T\+Allocator $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1set_3_01_t_00_01_t_comp_00_01_t_allocator_01_4_00_01wchar__t_01_4}{utils\+::delimiters$<$ \+::std\+::set$<$ T, T\+Comp, T\+Allocator $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1multiset_3_01_t_00_01_t_comp_00_01_t_allocator_01_4_00_01char_01_4}{utils\+::delimiters$<$ \+::std\+::multiset$<$ T, T\+Comp, T\+Allocator $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1multiset_3_01_t_00_01_t_comp_00_01_t_allocator_01_4_00_01wchar__t_01_4}{utils\+::delimiters$<$ \+::std\+::multiset$<$ T, T\+Comp, T\+Allocator $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1unordered__set_3_01_t_00_01_t_hash_00_01_t_equal_00_01_t_allocator_01_4_00_01char_01_4}{utils\+::delimiters$<$ \+::std\+::unordered\+\_\+set$<$ T, T\+Hash, T\+Equal, T\+Allocator $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1unordered__set_3_01_t_00_01_t_hash_00_01_t_equal_00_01_7664ae63421d022171aa24890067c483}{utils\+::delimiters$<$ \+::std\+::unordered\+\_\+set$<$ T, T\+Hash, T\+Equal, T\+Allocator $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1unordered__multiset_3_01_t_00_01_t_hash_00_01_t_equal_00bd7241f6d7fb529728590d65babd7b5}{utils\+::delimiters$<$ \+::std\+::unordered\+\_\+multiset$<$ T, T\+Hash, T\+Equal, T\+Allocator $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1unordered__multiset_3_01_t_00_01_t_hash_00_01_t_equal_0dd8c4434f263cab40f3b55ed479207a0}{utils\+::delimiters$<$ \+::std\+::unordered\+\_\+multiset$<$ T, T\+Hash, T\+Equal, T\+Allocator $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_00_01char_01_4}{utils\+::delimiters$<$ std\+::pair$<$ T1, T2 $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1pair_3_01_t1_00_01_t2_01_4_00_01wchar__t_01_4}{utils\+::delimiters$<$ \+::std\+::pair$<$ T1, T2 $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01char_01_4}{utils\+::delimiters$<$ std\+::tuple$<$ Args... $>$, char $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1delimiters_3_01_1_1std_1_1tuple_3_01_args_8_8_8_01_4_00_01wchar__t_01_4}{utils\+::delimiters$<$ \+::std\+::tuple$<$ Args... $>$, wchar\+\_\+t $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1custom__delims__base}{utils\+::custom\+\_\+delims\+\_\+base}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1custom__delims__wrapper}{utils\+::custom\+\_\+delims\+\_\+wrapper$<$ T, Delims $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1custom__delims}{utils\+::custom\+\_\+delims$<$ Delims $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1array__wrapper__n}{utils\+::array\+\_\+wrapper\+\_\+n$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structutils_1_1bucket__print__wrapper}{utils\+::bucket\+\_\+print\+\_\+wrapper$<$ T $>$}}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespaceutils}{utils}}
+\item 
+ \mbox{\hyperlink{namespaceutils_1_1detail}{utils\+::detail}}
+\item 
+ \mbox{\hyperlink{namespacestd}{std}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T , typename T\+Char , typename T\+Char\+Traits , typename T\+Delimiters $>$ }\\std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \& \mbox{\hyperlink{namespaceutils_ae2340b0fc8a712051acfd8f2fc1fc661}{utils\+::operator$<$$<$}} (std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \&stream, const print\+\_\+container\+\_\+helper$<$ T, T\+Char, T\+Char\+Traits, T\+Delimiters $>$ \&helper)
+\item 
+{\footnotesize template$<$typename T\+Char , typename T\+Char\+Traits , typename Delims $>$ }\\std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \& \mbox{\hyperlink{namespaceutils_a40fe8534b73b6f60778ed6822109fd33}{utils\+::operator$<$$<$}} (std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \&s, const custom\+\_\+delims$<$ Delims $>$ \&p)
+\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{structutils_1_1array__wrapper__n}{utils\+::array\+\_\+wrapper\+\_\+n}}$<$ T $>$ \mbox{\hyperlink{prettyprint_8h_a2d3bd9f918e5abda9f7ae3016a5f0671}{pretty\+\_\+print\+\_\+array}} (const T $\ast$const a, size\+\_\+t n)
+\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{structutils_1_1bucket__print__wrapper}{utils\+::bucket\+\_\+print\+\_\+wrapper}}$<$ T $>$ \mbox{\hyperlink{prettyprint_8h_a9bff135c8151d09a6e93fa3f1d82913b}{bucket\+\_\+print}} (const T \&m, typename T\+::size\+\_\+type n)
+\item 
+{\footnotesize template$<$typename T , typename T\+Char , typename T\+Char\+Traits $>$ }\\std\+::enable\+\_\+if$<$ \+::\mbox{\hyperlink{structutils_1_1is__container}{utils\+::is\+\_\+container}}$<$ T $>$\+::\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}, std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \& $>$\+::type \mbox{\hyperlink{namespacestd_ad453fd3d446695898da9f3fbb1fb0970}{std\+::operator$<$$<$}} (std\+::basic\+\_\+ostream$<$ T\+Char, T\+Char\+Traits $>$ \&stream, const T \&container)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{prettyprint_8h_a9bff135c8151d09a6e93fa3f1d82913b}\label{prettyprint_8h_a9bff135c8151d09a6e93fa3f1d82913b}} 
+\index{prettyprint.h@{prettyprint.h}!bucket\_print@{bucket\_print}}
+\index{bucket\_print@{bucket\_print}!prettyprint.h@{prettyprint.h}}
+\subsubsection{\texorpdfstring{bucket\_print()}{bucket\_print()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{structutils_1_1bucket__print__wrapper}{utils\+::bucket\+\_\+print\+\_\+wrapper}}$<$T$>$ bucket\+\_\+print (\begin{DoxyParamCaption}\item[{const T \&}]{m,  }\item[{typename T\+::size\+\_\+type}]{n }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prettyprint_8h_a2d3bd9f918e5abda9f7ae3016a5f0671}\label{prettyprint_8h_a2d3bd9f918e5abda9f7ae3016a5f0671}} 
+\index{prettyprint.h@{prettyprint.h}!pretty\_print\_array@{pretty\_print\_array}}
+\index{pretty\_print\_array@{pretty\_print\_array}!prettyprint.h@{prettyprint.h}}
+\subsubsection{\texorpdfstring{pretty\_print\_array()}{pretty\_print\_array()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{structutils_1_1array__wrapper__n}{utils\+::array\+\_\+wrapper\+\_\+n}}$<$T$>$ pretty\+\_\+print\+\_\+array (\begin{DoxyParamCaption}\item[{const T $\ast$const}]{a,  }\item[{size\+\_\+t}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

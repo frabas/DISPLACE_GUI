@@ -1,0 +1,115 @@
+\hypertarget{class_cached_data_storage}{}\section{Cached\+Data\+Storage$<$ Data $>$ Class Template Reference}
+\label{class_cached_data_storage}\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+
+
+{\ttfamily \#include $<$cacheddatastorage.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_cached_data_storage_1_1_record}{Record}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_cached_data_storage_a79129be295db29ebdab76a8c0b0d282b}{Cached\+Data\+Storage}} ()
+\item 
+virtual \mbox{\hyperlink{class_cached_data_storage_abf458791ffb3e5c625ac373e6dc138e0}{$\sim$\+Cached\+Data\+Storage}} () noexcept=default
+\item 
+void \mbox{\hyperlink{class_cached_data_storage_a40e294aa5a59d31fc5bd8ebfc9747689}{invalidate\+All\+Cache}} ()
+\item 
+virtual void \mbox{\hyperlink{class_cached_data_storage_aef2a92e8643673d541c5612d359ecc3d}{query\+All\+Data}} (\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}} step)=0
+\item 
+void \mbox{\hyperlink{class_cached_data_storage_a81f4ab2c55c8f5c2632db2dc27bcf5b5}{refresh\+All\+Data}} (\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}} step)
+\item 
+std\+::shared\+\_\+ptr$<$ Data $>$ \mbox{\hyperlink{class_cached_data_storage_aaea73b1bfa8a720e314e62e0bd4e268c}{get\+Data}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} node\+Id, \mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}} \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_cached_data_storage_1_1_record}{Record}} \& \mbox{\hyperlink{class_cached_data_storage_a8a09bdedf4fd7f8695149aade0dbf594}{get\+Record}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} node\+Id)
+\item 
+void \mbox{\hyperlink{class_cached_data_storage_a12f747193f32aa3b28a6058fb157b693}{update\+Data}} (\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}} step, Data n)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_cached_data_storage_1_1_record}{Record}} $>$ \mbox{\hyperlink{class_cached_data_storage_a0cf3c47cb1543564d958cc27a078b411}{cached\+Data}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_cached_data_storage_a79129be295db29ebdab76a8c0b0d282b}\label{class_cached_data_storage_a79129be295db29ebdab76a8c0b0d282b}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!CachedDataStorage@{CachedDataStorage}}
+\index{CachedDataStorage@{CachedDataStorage}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{CachedDataStorage()}{CachedDataStorage()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+\mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::\mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_abf458791ffb3e5c625ac373e6dc138e0}\label{class_cached_data_storage_abf458791ffb3e5c625ac373e6dc138e0}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!````~CachedDataStorage@{$\sim$CachedDataStorage}}
+\index{````~CachedDataStorage@{$\sim$CachedDataStorage}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{$\sim$CachedDataStorage()}{~CachedDataStorage()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+virtual \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::$\sim$\mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_cached_data_storage_aaea73b1bfa8a720e314e62e0bd4e268c}\label{class_cached_data_storage_aaea73b1bfa8a720e314e62e0bd4e268c}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!getData@{getData}}
+\index{getData@{getData}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{getData()}{getData()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+std\+::shared\+\_\+ptr$<$Data$>$ \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::get\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{node\+Id,  }\item[{\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}}}]{tstep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_a8a09bdedf4fd7f8695149aade0dbf594}\label{class_cached_data_storage_a8a09bdedf4fd7f8695149aade0dbf594}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!getRecord@{getRecord}}
+\index{getRecord@{getRecord}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{getRecord()}{getRecord()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+\mbox{\hyperlink{struct_cached_data_storage_1_1_record}{Record}}\& \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::get\+Record (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{node\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_a40e294aa5a59d31fc5bd8ebfc9747689}\label{class_cached_data_storage_a40e294aa5a59d31fc5bd8ebfc9747689}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!invalidateAllCache@{invalidateAllCache}}
+\index{invalidateAllCache@{invalidateAllCache}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{invalidateAllCache()}{invalidateAllCache()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+void \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::invalidate\+All\+Cache (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_aef2a92e8643673d541c5612d359ecc3d}\label{class_cached_data_storage_aef2a92e8643673d541c5612d359ecc3d}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!queryAllData@{queryAllData}}
+\index{queryAllData@{queryAllData}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{queryAllData()}{queryAllData()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+virtual void \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::query\+All\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}}}]{step }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_a81f4ab2c55c8f5c2632db2dc27bcf5b5}\label{class_cached_data_storage_a81f4ab2c55c8f5c2632db2dc27bcf5b5}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!refreshAllData@{refreshAllData}}
+\index{refreshAllData@{refreshAllData}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{refreshAllData()}{refreshAllData()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+void \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::refresh\+All\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}}}]{step }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_cached_data_storage_a12f747193f32aa3b28a6058fb157b693}\label{class_cached_data_storage_a12f747193f32aa3b28a6058fb157b693}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!updateData@{updateData}}
+\index{updateData@{updateData}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{updateData()}{updateData()}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+void \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::update\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacetypes_a9dc53a5ce11a196d82a6983030de8028}{types\+::tstep\+\_\+t}}}]{step,  }\item[{Data}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_cached_data_storage_a0cf3c47cb1543564d958cc27a078b411}\label{class_cached_data_storage_a0cf3c47cb1543564d958cc27a078b411}} 
+\index{CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}!cachedData@{cachedData}}
+\index{cachedData@{cachedData}!CachedDataStorage$<$ Data $>$@{CachedDataStorage$<$ Data $>$}}
+\subsubsection{\texorpdfstring{cachedData}{cachedData}}
+{\footnotesize\ttfamily template$<$typename Data $>$ \\
+std\+::vector$<$\mbox{\hyperlink{struct_cached_data_storage_1_1_record}{Record}}$>$ \mbox{\hyperlink{class_cached_data_storage}{Cached\+Data\+Storage}}$<$ Data $>$\+::cached\+Data\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/\mbox{\hyperlink{cacheddatastorage_8h}{cacheddatastorage.\+h}}\end{DoxyCompactItemize}

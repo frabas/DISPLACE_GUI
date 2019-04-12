@@ -8,6 +8,7 @@ Find your way with DISPLACE
 - [Quick start for running a DISPLACE simulation](#quick-start-for-running-a-displace-simulation)
 - [Simulation output formats](#simulation-output-formats)
 - [How to build from scratch](#how-to-build-from-scratch)
+- [DISPLACE doxygen documentation](#displace-doxygen-documentation)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
 
@@ -114,6 +115,10 @@ Any missing package should be automatically installed.
 
 [compiling on MacOSX deprecated)](docs/Building.MacOSX)
 
+
+## DISPLACE doxygen documentation
+
+Can be found [here](https://github.com/frabas/DISPLACE_GUI/blob/master/html/index.html)
 
 ## Quick start for running a basic DISPLACE simulation
 

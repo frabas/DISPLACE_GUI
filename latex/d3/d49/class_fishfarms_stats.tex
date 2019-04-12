@@ -1,0 +1,240 @@
+\hypertarget{class_fishfarms_stats}{}\section{Fishfarms\+Stats Class Reference}
+\label{class_fishfarms_stats}\index{FishfarmsStats@{FishfarmsStats}}
+
+
+{\ttfamily \#include $<$fishfarmsstats.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_fishfarms_stats_1_1_stat_data}{Stat\+Data}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_fishfarms_stats_a8df36900fc6e603b138bb62eb32583f9}{Fishfarms\+Stats}} ()
+\item 
+\mbox{\hyperlink{class_fishfarms_stats_a78b1d47662845876ddb77e9c379664e9}{$\sim$\+Fishfarms\+Stats}} () noexcept=default
+\item 
+\mbox{\hyperlink{class_fishfarms_stats_a30cb9faf5577c5299a7442e1fcab14be}{Fishfarms\+Stats}} (const \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&b)
+\item 
+\mbox{\hyperlink{class_fishfarms_stats_a4e020c532483d9eb337f378cce00c31d}{Fishfarms\+Stats}} (\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&\&b)
+\item 
+\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \& \mbox{\hyperlink{class_fishfarms_stats_a0168ce425a597529e407fea9c8840da3}{operator=}} (const \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&b)
+\item 
+\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \& \mbox{\hyperlink{class_fishfarms_stats_a37e85d7cc4811b05c046457733bc39c8}{operator=}} (\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&\&b)
+\item 
+bool \mbox{\hyperlink{class_fishfarms_stats_a81165f0ceac0a247b33c2a3beda67588}{dirty}} () const
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_aad91d298d9c2e527a77c8fb8e86cfbcc}{set\+Dirty}} (bool \mbox{\hyperlink{class_fishfarms_stats_a81165f0ceac0a247b33c2a3beda67588}{dirty}}=true)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_a2d5a843e50cf3c3908eb52806f887706}{clear}} ()
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_ac5107f039390ec5212c06f09f2e286cc}{collect\+Mean\+Weight\+Kg}} (int step, int farmid, int farmtypeid, double meanw\+\_\+kg)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_aa82750f6596838b63d9ef054cbf6c985}{collect\+Fish\+Harvested\+Kg}} (int step, int farmid, int farmtypeid, double fish\+\_\+harvested\+\_\+kg)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_af2ee722bc230c1e802719fcd6f2d1210}{collect\+Eggs\+Harvested\+Kg}} (int step, int farmid, int farmtypeid, double eggs\+\_\+harvested\+\_\+kg)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_a606f38d9ccf4579878977ff2fd32a93a}{collect\+Fishfarm\+Annual\+Profit}} (int step, int farmid, int farmtypeid, double fishfarm\+\_\+annual\+\_\+profit)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_a49186d02bb98aab156a08b617a39df36}{collect\+Net\+DischargeN}} (int step, int farmid, int farmtypeid, double net\+\_\+discharge\+\_\+N)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_afa93337cba6fa9c68f167bd3877c7e96}{collect\+Net\+DischargeP}} (int step, int farmid, int farmtypeid, double net\+\_\+discharge\+\_\+P)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_aa6863500cdc18119208fce87ca0f17a0}{collect\+Cumul\+Net\+DischargeN}} (int step, int farmid, int farmtypeid, double cumul\+\_\+net\+\_\+discharge\+\_\+N)
+\item 
+void \mbox{\hyperlink{class_fishfarms_stats_ad224fc2ef86d60de8e36d98f220a04d5}{collect\+Cumul\+Net\+DischargeP}} (int step, int farmid, int farmtypeid, double cumul\+\_\+net\+\_\+discharge\+\_\+P)
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_ad9f988090a6f7f44926f97be98bf2ff0}{meanw\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a422fda13332002d3e2f8f1b166d7ef20}{fishharvestedkg\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a625de96732eaaa646df5775567ca39f2}{eggsharvestedkg\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a6aa8dac7a8b1b39f84429c4a89d6e6de}{annualprofit\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a114ef252ea728a670051c4fa65b1082f}{netdischarge\+N\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_aafb1c4ba743a01b4c743be724c510148}{netdischarge\+P\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a52597b0a28803dafa6cfe84fe5ff0121}{cumulnetdischarge\+N\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\item 
+double \mbox{\hyperlink{class_fishfarms_stats_a35f21b6b4108a64c6bbb882a8598300e}{cumulnetdischarge\+P\+For\+Fishfarm\+And\+Farm\+Group}} (int farmid, int farmtypeid) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{struct_fishfarms_stats_1_1_stat_data}{Fishfarms\+Stats\+::\+Stat\+Data}} \mbox{\hyperlink{class_fishfarms_stats_ac60ff6ceca13b1384089c5723df34bc6}{No\+Data}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_fishfarms_stats_a8df36900fc6e603b138bb62eb32583f9}\label{class_fishfarms_stats_a8df36900fc6e603b138bb62eb32583f9}} 
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{FishfarmsStats()}{FishfarmsStats()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Fishfarms\+Stats\+::\+Fishfarms\+Stats (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a78b1d47662845876ddb77e9c379664e9}\label{class_fishfarms_stats_a78b1d47662845876ddb77e9c379664e9}} 
+\index{FishfarmsStats@{FishfarmsStats}!````~FishfarmsStats@{$\sim$FishfarmsStats}}
+\index{````~FishfarmsStats@{$\sim$FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{$\sim$FishfarmsStats()}{~FishfarmsStats()}}
+{\footnotesize\ttfamily Fishfarms\+Stats\+::$\sim$\+Fishfarms\+Stats (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a30cb9faf5577c5299a7442e1fcab14be}\label{class_fishfarms_stats_a30cb9faf5577c5299a7442e1fcab14be}} 
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{FishfarmsStats()}{FishfarmsStats()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Fishfarms\+Stats\+::\+Fishfarms\+Stats (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&}]{b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a4e020c532483d9eb337f378cce00c31d}\label{class_fishfarms_stats_a4e020c532483d9eb337f378cce00c31d}} 
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\index{FishfarmsStats@{FishfarmsStats}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{FishfarmsStats()}{FishfarmsStats()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Fishfarms\+Stats\+::\+Fishfarms\+Stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&\&}]{b }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_fishfarms_stats_a6aa8dac7a8b1b39f84429c4a89d6e6de}\label{class_fishfarms_stats_a6aa8dac7a8b1b39f84429c4a89d6e6de}} 
+\index{FishfarmsStats@{FishfarmsStats}!annualprofitForFishfarmAndFarmGroup@{annualprofitForFishfarmAndFarmGroup}}
+\index{annualprofitForFishfarmAndFarmGroup@{annualprofitForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{annualprofitForFishfarmAndFarmGroup()}{annualprofitForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::annualprofit\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a2d5a843e50cf3c3908eb52806f887706}\label{class_fishfarms_stats_a2d5a843e50cf3c3908eb52806f887706}} 
+\index{FishfarmsStats@{FishfarmsStats}!clear@{clear}}
+\index{clear@{clear}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_aa6863500cdc18119208fce87ca0f17a0}\label{class_fishfarms_stats_aa6863500cdc18119208fce87ca0f17a0}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectCumulNetDischargeN@{collectCumulNetDischargeN}}
+\index{collectCumulNetDischargeN@{collectCumulNetDischargeN}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectCumulNetDischargeN()}{collectCumulNetDischargeN()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Cumul\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{cumul\+\_\+net\+\_\+discharge\+\_\+N }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_ad224fc2ef86d60de8e36d98f220a04d5}\label{class_fishfarms_stats_ad224fc2ef86d60de8e36d98f220a04d5}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectCumulNetDischargeP@{collectCumulNetDischargeP}}
+\index{collectCumulNetDischargeP@{collectCumulNetDischargeP}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectCumulNetDischargeP()}{collectCumulNetDischargeP()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Cumul\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{cumul\+\_\+net\+\_\+discharge\+\_\+P }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_af2ee722bc230c1e802719fcd6f2d1210}\label{class_fishfarms_stats_af2ee722bc230c1e802719fcd6f2d1210}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectEggsHarvestedKg@{collectEggsHarvestedKg}}
+\index{collectEggsHarvestedKg@{collectEggsHarvestedKg}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectEggsHarvestedKg()}{collectEggsHarvestedKg()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Eggs\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{eggs\+\_\+harvested\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a606f38d9ccf4579878977ff2fd32a93a}\label{class_fishfarms_stats_a606f38d9ccf4579878977ff2fd32a93a}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectFishfarmAnnualProfit@{collectFishfarmAnnualProfit}}
+\index{collectFishfarmAnnualProfit@{collectFishfarmAnnualProfit}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectFishfarmAnnualProfit()}{collectFishfarmAnnualProfit()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Fishfarm\+Annual\+Profit (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{fishfarm\+\_\+annual\+\_\+profit }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_aa82750f6596838b63d9ef054cbf6c985}\label{class_fishfarms_stats_aa82750f6596838b63d9ef054cbf6c985}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectFishHarvestedKg@{collectFishHarvestedKg}}
+\index{collectFishHarvestedKg@{collectFishHarvestedKg}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectFishHarvestedKg()}{collectFishHarvestedKg()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Fish\+Harvested\+Kg (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{fish\+\_\+harvested\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_ac5107f039390ec5212c06f09f2e286cc}\label{class_fishfarms_stats_ac5107f039390ec5212c06f09f2e286cc}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectMeanWeightKg@{collectMeanWeightKg}}
+\index{collectMeanWeightKg@{collectMeanWeightKg}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectMeanWeightKg()}{collectMeanWeightKg()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Mean\+Weight\+Kg (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{meanw\+\_\+kg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a49186d02bb98aab156a08b617a39df36}\label{class_fishfarms_stats_a49186d02bb98aab156a08b617a39df36}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectNetDischargeN@{collectNetDischargeN}}
+\index{collectNetDischargeN@{collectNetDischargeN}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectNetDischargeN()}{collectNetDischargeN()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Net\+DischargeN (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{net\+\_\+discharge\+\_\+N }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_afa93337cba6fa9c68f167bd3877c7e96}\label{class_fishfarms_stats_afa93337cba6fa9c68f167bd3877c7e96}} 
+\index{FishfarmsStats@{FishfarmsStats}!collectNetDischargeP@{collectNetDischargeP}}
+\index{collectNetDischargeP@{collectNetDischargeP}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{collectNetDischargeP()}{collectNetDischargeP()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::collect\+Net\+DischargeP (\begin{DoxyParamCaption}\item[{int}]{step,  }\item[{int}]{farmid,  }\item[{int}]{farmtypeid,  }\item[{double}]{net\+\_\+discharge\+\_\+P }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a52597b0a28803dafa6cfe84fe5ff0121}\label{class_fishfarms_stats_a52597b0a28803dafa6cfe84fe5ff0121}} 
+\index{FishfarmsStats@{FishfarmsStats}!cumulnetdischargeNForFishfarmAndFarmGroup@{cumulnetdischargeNForFishfarmAndFarmGroup}}
+\index{cumulnetdischargeNForFishfarmAndFarmGroup@{cumulnetdischargeNForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{cumulnetdischargeNForFishfarmAndFarmGroup()}{cumulnetdischargeNForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::cumulnetdischarge\+N\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a35f21b6b4108a64c6bbb882a8598300e}\label{class_fishfarms_stats_a35f21b6b4108a64c6bbb882a8598300e}} 
+\index{FishfarmsStats@{FishfarmsStats}!cumulnetdischargePForFishfarmAndFarmGroup@{cumulnetdischargePForFishfarmAndFarmGroup}}
+\index{cumulnetdischargePForFishfarmAndFarmGroup@{cumulnetdischargePForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{cumulnetdischargePForFishfarmAndFarmGroup()}{cumulnetdischargePForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::cumulnetdischarge\+P\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a81165f0ceac0a247b33c2a3beda67588}\label{class_fishfarms_stats_a81165f0ceac0a247b33c2a3beda67588}} 
+\index{FishfarmsStats@{FishfarmsStats}!dirty@{dirty}}
+\index{dirty@{dirty}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{dirty()}{dirty()}}
+{\footnotesize\ttfamily bool Fishfarms\+Stats\+::dirty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a625de96732eaaa646df5775567ca39f2}\label{class_fishfarms_stats_a625de96732eaaa646df5775567ca39f2}} 
+\index{FishfarmsStats@{FishfarmsStats}!eggsharvestedkgForFishfarmAndFarmGroup@{eggsharvestedkgForFishfarmAndFarmGroup}}
+\index{eggsharvestedkgForFishfarmAndFarmGroup@{eggsharvestedkgForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{eggsharvestedkgForFishfarmAndFarmGroup()}{eggsharvestedkgForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::eggsharvestedkg\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a422fda13332002d3e2f8f1b166d7ef20}\label{class_fishfarms_stats_a422fda13332002d3e2f8f1b166d7ef20}} 
+\index{FishfarmsStats@{FishfarmsStats}!fishharvestedkgForFishfarmAndFarmGroup@{fishharvestedkgForFishfarmAndFarmGroup}}
+\index{fishharvestedkgForFishfarmAndFarmGroup@{fishharvestedkgForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{fishharvestedkgForFishfarmAndFarmGroup()}{fishharvestedkgForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::fishharvestedkg\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_ad9f988090a6f7f44926f97be98bf2ff0}\label{class_fishfarms_stats_ad9f988090a6f7f44926f97be98bf2ff0}} 
+\index{FishfarmsStats@{FishfarmsStats}!meanwForFishfarmAndFarmGroup@{meanwForFishfarmAndFarmGroup}}
+\index{meanwForFishfarmAndFarmGroup@{meanwForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{meanwForFishfarmAndFarmGroup()}{meanwForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::meanw\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a114ef252ea728a670051c4fa65b1082f}\label{class_fishfarms_stats_a114ef252ea728a670051c4fa65b1082f}} 
+\index{FishfarmsStats@{FishfarmsStats}!netdischargeNForFishfarmAndFarmGroup@{netdischargeNForFishfarmAndFarmGroup}}
+\index{netdischargeNForFishfarmAndFarmGroup@{netdischargeNForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{netdischargeNForFishfarmAndFarmGroup()}{netdischargeNForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::netdischarge\+N\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_aafb1c4ba743a01b4c743be724c510148}\label{class_fishfarms_stats_aafb1c4ba743a01b4c743be724c510148}} 
+\index{FishfarmsStats@{FishfarmsStats}!netdischargePForFishfarmAndFarmGroup@{netdischargePForFishfarmAndFarmGroup}}
+\index{netdischargePForFishfarmAndFarmGroup@{netdischargePForFishfarmAndFarmGroup}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{netdischargePForFishfarmAndFarmGroup()}{netdischargePForFishfarmAndFarmGroup()}}
+{\footnotesize\ttfamily double Fishfarms\+Stats\+::netdischarge\+P\+For\+Fishfarm\+And\+Farm\+Group (\begin{DoxyParamCaption}\item[{int}]{farmid,  }\item[{int}]{farmtypeid }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a0168ce425a597529e407fea9c8840da3}\label{class_fishfarms_stats_a0168ce425a597529e407fea9c8840da3}} 
+\index{FishfarmsStats@{FishfarmsStats}!operator=@{operator=}}
+\index{operator=@{operator=}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \& Fishfarms\+Stats\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&}]{b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_a37e85d7cc4811b05c046457733bc39c8}\label{class_fishfarms_stats_a37e85d7cc4811b05c046457733bc39c8}} 
+\index{FishfarmsStats@{FishfarmsStats}!operator=@{operator=}}
+\index{operator=@{operator=}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \& Fishfarms\+Stats\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_fishfarms_stats}{Fishfarms\+Stats}} \&\&}]{b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fishfarms_stats_aad91d298d9c2e527a77c8fb8e86cfbcc}\label{class_fishfarms_stats_aad91d298d9c2e527a77c8fb8e86cfbcc}} 
+\index{FishfarmsStats@{FishfarmsStats}!setDirty@{setDirty}}
+\index{setDirty@{setDirty}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{setDirty()}{setDirty()}}
+{\footnotesize\ttfamily void Fishfarms\+Stats\+::set\+Dirty (\begin{DoxyParamCaption}\item[{bool}]{dirty = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_fishfarms_stats_ac60ff6ceca13b1384089c5723df34bc6}\label{class_fishfarms_stats_ac60ff6ceca13b1384089c5723df34bc6}} 
+\index{FishfarmsStats@{FishfarmsStats}!NoData@{NoData}}
+\index{NoData@{NoData}!FishfarmsStats@{FishfarmsStats}}
+\subsubsection{\texorpdfstring{NoData}{NoData}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{struct_fishfarms_stats_1_1_stat_data}{Fishfarms\+Stats\+::\+Stat\+Data}} Fishfarms\+Stats\+::\+No\+Data\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/stats/\mbox{\hyperlink{fishfarmsstats_8h}{fishfarmsstats.\+h}}\item 
+qtgui/stats/\mbox{\hyperlink{fishfarmsstats_8cpp}{fishfarmsstats.\+cpp}}\end{DoxyCompactItemize}

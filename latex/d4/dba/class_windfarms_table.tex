@@ -1,0 +1,184 @@
+\hypertarget{class_windfarms_table}{}\section{Windfarms\+Table Class Reference}
+\label{class_windfarms_table}\index{WindfarmsTable@{WindfarmsTable}}
+
+
+{\ttfamily \#include $<$windfarmstable.\+h$>$}
+
+Inheritance diagram for Windfarms\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d4/dba/class_windfarms_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_windfarms_table_1_1_impl}{Impl}}
+\item 
+struct \mbox{\hyperlink{struct_windfarms_table_1_1_stat_data}{Stat\+Data}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Stat\+Type}} \{ \mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515ac88e6e874a8d09c7f8f4a41e3f526e5a}{Stat\+Type\+::\+Kwh}}, 
+\mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515a0c4a66b711533aa6c30ce60baa173978}{Stat\+Type\+::\+Kwh\+Production}}
+ \}
+\item 
+enum \mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Aggreg}} \{ \mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696aa0ec87054b5e5b7847d0d8780a01a3d5}{Aggreg\+::\+Sum}}, 
+\mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a78d811e98514cd165dda532286610fd2}{Aggreg\+::\+Min}}, 
+\mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a6a061313d22e51e0f25b7cd4dc065233}{Aggreg\+::\+Max}}, 
+\mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a5c0c148daa2c67922abe6018b87a759f}{Aggreg\+::\+Avg}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_windfarms_table_a5d8d669ea442364440e5e2e92f5048b1}{Windfarms\+Table}} (std\+::shared\+\_\+ptr$<$ S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_windfarms_table_a39f4f1e8f169fee846df510dad569f2d}{$\sim$\+Windfarms\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_windfarms_table_aab2a278f7454d62d77d37b048da1a5c1}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_windfarms_table_a91aa9c6965213361b5e1fc151976d9ca}{export\+Windmill\+Data}} (\mbox{\hyperlink{class_windmill}{Windmill}} $\ast$windmill, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\item 
+\mbox{\hyperlink{struct_windfarms_table_1_1_stat_data}{Stat\+Data}} \mbox{\hyperlink{class_windfarms_table_adb850840c3750a4842783990bcd423a0}{get\+Stat\+Data}} (\mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Stat\+Type}}, \mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Aggreg}}, int wf\+Type)
+\item 
+\mbox{\hyperlink{struct_windfarms_table_1_1_stat_data}{Stat\+Data}} \mbox{\hyperlink{class_windfarms_table_a4e1a8255155a82e2c9e76b3a90431da1}{get\+Stat\+Data}} (\mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Stat\+Type}}, \mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Aggreg}})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_windfarms_table_a237f9960b4a08d37769a10c43717d574}{fld\+T\+Step}} = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_windfarms_table_a3bf4f700e6b6a28688e0c9401036a624}{fld\+Windfarm\+Id}} = make\+Field\+Def(\char`\"{}Windarm\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Integer $>$ \mbox{\hyperlink{class_windfarms_table_ae386df578cdf8c90a1a9c05b021902eb}{fld\+Windfarm\+Type}} = make\+Field\+Def(\char`\"{}Windfarm\+Type\char`\"{},Field\+Type\+::\+Integer()).not\+Null()
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_windfarms_table_abb0742252486f902c65c898415fb6415}{fld\+Kwh}} = make\+Field\+Def(\char`\"{}Kwh\char`\"{}, Field\+Type\+::\+Real())
+\item 
+const Field\+Def$<$ Field\+Type\+::\+Real $>$ \mbox{\hyperlink{class_windfarms_table_a224d5ca48972136c2b469b86ddd7a4c1}{fld\+Kwh\+Production}} = make\+Field\+Def(\char`\"{}Kwh\+Production\char`\"{}, Field\+Type\+::\+Real())
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}\label{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}} 
+\index{WindfarmsTable@{WindfarmsTable}!Aggreg@{Aggreg}}
+\index{Aggreg@{Aggreg}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{Aggreg}{Aggreg}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Windfarms\+Table\+::\+Aggreg}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sum@{Sum}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!Sum@{Sum}}}\mbox{\Hypertarget{class_windfarms_table_a59a8562d196d503dd3420e06a4613696aa0ec87054b5e5b7847d0d8780a01a3d5}\label{class_windfarms_table_a59a8562d196d503dd3420e06a4613696aa0ec87054b5e5b7847d0d8780a01a3d5}} 
+Sum&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Min@{Min}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!Min@{Min}}}\mbox{\Hypertarget{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a78d811e98514cd165dda532286610fd2}\label{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a78d811e98514cd165dda532286610fd2}} 
+Min&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Max@{Max}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!Max@{Max}}}\mbox{\Hypertarget{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a6a061313d22e51e0f25b7cd4dc065233}\label{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a6a061313d22e51e0f25b7cd4dc065233}} 
+Max&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Avg@{Avg}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!Avg@{Avg}}}\mbox{\Hypertarget{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a5c0c148daa2c67922abe6018b87a759f}\label{class_windfarms_table_a59a8562d196d503dd3420e06a4613696a5c0c148daa2c67922abe6018b87a759f}} 
+Avg&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{class_windfarms_table_a882699395a936d2997b9482c08fe8515}\label{class_windfarms_table_a882699395a936d2997b9482c08fe8515}} 
+\index{WindfarmsTable@{WindfarmsTable}!StatType@{StatType}}
+\index{StatType@{StatType}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{StatType}{StatType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Windfarms\+Table\+::\+Stat\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Kwh@{Kwh}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!Kwh@{Kwh}}}\mbox{\Hypertarget{class_windfarms_table_a882699395a936d2997b9482c08fe8515ac88e6e874a8d09c7f8f4a41e3f526e5a}\label{class_windfarms_table_a882699395a936d2997b9482c08fe8515ac88e6e874a8d09c7f8f4a41e3f526e5a}} 
+Kwh&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KwhProduction@{KwhProduction}!WindfarmsTable@{WindfarmsTable}}\index{WindfarmsTable@{WindfarmsTable}!KwhProduction@{KwhProduction}}}\mbox{\Hypertarget{class_windfarms_table_a882699395a936d2997b9482c08fe8515a0c4a66b711533aa6c30ce60baa173978}\label{class_windfarms_table_a882699395a936d2997b9482c08fe8515a0c4a66b711533aa6c30ce60baa173978}} 
+Kwh\+Production&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_windfarms_table_a5d8d669ea442364440e5e2e92f5048b1}\label{class_windfarms_table_a5d8d669ea442364440e5e2e92f5048b1}} 
+\index{WindfarmsTable@{WindfarmsTable}!WindfarmsTable@{WindfarmsTable}}
+\index{WindfarmsTable@{WindfarmsTable}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{WindfarmsTable()}{WindfarmsTable()}}
+{\footnotesize\ttfamily Windfarms\+Table\+::\+Windfarms\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windfarms_table_a39f4f1e8f169fee846df510dad569f2d}\label{class_windfarms_table_a39f4f1e8f169fee846df510dad569f2d}} 
+\index{WindfarmsTable@{WindfarmsTable}!````~WindfarmsTable@{$\sim$WindfarmsTable}}
+\index{````~WindfarmsTable@{$\sim$WindfarmsTable}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{$\sim$WindfarmsTable()}{~WindfarmsTable()}}
+{\footnotesize\ttfamily Windfarms\+Table\+::$\sim$\+Windfarms\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_windfarms_table_aab2a278f7454d62d77d37b048da1a5c1}\label{class_windfarms_table_aab2a278f7454d62d77d37b048da1a5c1}} 
+\index{WindfarmsTable@{WindfarmsTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Windfarms\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windfarms_table_a91aa9c6965213361b5e1fc151976d9ca}\label{class_windfarms_table_a91aa9c6965213361b5e1fc151976d9ca}} 
+\index{WindfarmsTable@{WindfarmsTable}!exportWindmillData@{exportWindmillData}}
+\index{exportWindmillData@{exportWindmillData}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{exportWindmillData()}{exportWindmillData()}}
+{\footnotesize\ttfamily void Windfarms\+Table\+::export\+Windmill\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_windmill}{Windmill}} $\ast$}]{windmill,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windfarms_table_adb850840c3750a4842783990bcd423a0}\label{class_windfarms_table_adb850840c3750a4842783990bcd423a0}} 
+\index{WindfarmsTable@{WindfarmsTable}!getStatData@{getStatData}}
+\index{getStatData@{getStatData}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{getStatData()}{getStatData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_windfarms_table_1_1_stat_data}{Windfarms\+Table\+::\+Stat\+Data}} Windfarms\+Table\+::get\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Windfarms\+Table\+::\+Stat\+Type}}}]{stattype,  }\item[{\mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Windfarms\+Table\+::\+Aggreg}}}]{aggreg,  }\item[{int}]{wf\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windfarms_table_a4e1a8255155a82e2c9e76b3a90431da1}\label{class_windfarms_table_a4e1a8255155a82e2c9e76b3a90431da1}} 
+\index{WindfarmsTable@{WindfarmsTable}!getStatData@{getStatData}}
+\index{getStatData@{getStatData}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{getStatData()}{getStatData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_windfarms_table_1_1_stat_data}{Windfarms\+Table\+::\+Stat\+Data}} Windfarms\+Table\+::get\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_windfarms_table_a882699395a936d2997b9482c08fe8515}{Windfarms\+Table\+::\+Stat\+Type}}}]{stattype,  }\item[{\mbox{\hyperlink{class_windfarms_table_a59a8562d196d503dd3420e06a4613696}{Windfarms\+Table\+::\+Aggreg}}}]{aggreg }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_windfarms_table_abb0742252486f902c65c898415fb6415}\label{class_windfarms_table_abb0742252486f902c65c898415fb6415}} 
+\index{WindfarmsTable@{WindfarmsTable}!fldKwh@{fldKwh}}
+\index{fldKwh@{fldKwh}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{fldKwh}{fldKwh}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Windfarms\+Table\+::fld\+Kwh = make\+Field\+Def(\char`\"{}Kwh\char`\"{}, Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_windfarms_table_a224d5ca48972136c2b469b86ddd7a4c1}\label{class_windfarms_table_a224d5ca48972136c2b469b86ddd7a4c1}} 
+\index{WindfarmsTable@{WindfarmsTable}!fldKwhProduction@{fldKwhProduction}}
+\index{fldKwhProduction@{fldKwhProduction}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{fldKwhProduction}{fldKwhProduction}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Real$>$ Windfarms\+Table\+::fld\+Kwh\+Production = make\+Field\+Def(\char`\"{}Kwh\+Production\char`\"{}, Field\+Type\+::\+Real())}
+
+\mbox{\Hypertarget{class_windfarms_table_a237f9960b4a08d37769a10c43717d574}\label{class_windfarms_table_a237f9960b4a08d37769a10c43717d574}} 
+\index{WindfarmsTable@{WindfarmsTable}!fldTStep@{fldTStep}}
+\index{fldTStep@{fldTStep}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{fldTStep}{fldTStep}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Windfarms\+Table\+::fld\+T\+Step = make\+Field\+Def(\char`\"{}T\+Step\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_windfarms_table_a3bf4f700e6b6a28688e0c9401036a624}\label{class_windfarms_table_a3bf4f700e6b6a28688e0c9401036a624}} 
+\index{WindfarmsTable@{WindfarmsTable}!fldWindfarmId@{fldWindfarmId}}
+\index{fldWindfarmId@{fldWindfarmId}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{fldWindfarmId}{fldWindfarmId}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Windfarms\+Table\+::fld\+Windfarm\+Id = make\+Field\+Def(\char`\"{}Windarm\+Id\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+\mbox{\Hypertarget{class_windfarms_table_ae386df578cdf8c90a1a9c05b021902eb}\label{class_windfarms_table_ae386df578cdf8c90a1a9c05b021902eb}} 
+\index{WindfarmsTable@{WindfarmsTable}!fldWindfarmType@{fldWindfarmType}}
+\index{fldWindfarmType@{fldWindfarmType}!WindfarmsTable@{WindfarmsTable}}
+\subsubsection{\texorpdfstring{fldWindfarmType}{fldWindfarmType}}
+{\footnotesize\ttfamily const Field\+Def$<$Field\+Type\+::\+Integer$>$ Windfarms\+Table\+::fld\+Windfarm\+Type = make\+Field\+Def(\char`\"{}Windfarm\+Type\char`\"{},Field\+Type\+::\+Integer()).not\+Null()}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{windfarmstable_8h}{windfarmstable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{windfarmstable_8cpp}{windfarmstable.\+cpp}}\end{DoxyCompactItemize}

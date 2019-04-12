@@ -1,0 +1,90 @@
+\hypertarget{class_vessel_map_object}{}\section{Vessel\+Map\+Object Class Reference}
+\label{class_vessel_map_object}\index{VesselMapObject@{VesselMapObject}}
+
+
+{\ttfamily \#include $<$vesselmapobject.\+h$>$}
+
+Inheritance diagram for Vessel\+Map\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d74/class_vessel_map_object}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_vessel_map_object_a072c9cbe34ac79c037995511d18fcc3d}{Vessel\+Map\+Object}} (\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$controller, \mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $\ast$vessel)
+\item 
+std\+::shared\+\_\+ptr$<$ qmapcontrol\+::\+Geometry $>$ \mbox{\hyperlink{class_vessel_map_object_a7f982641edc34a85fd3fbfc81c7c9a68}{get\+Geometry\+Entity}} () const
+\item 
+virtual bool \mbox{\hyperlink{class_vessel_map_object_adb4af9fdb30c1e7501bba6f74dfd42c0}{show\+Properties}} ()
+\item 
+virtual void \mbox{\hyperlink{class_vessel_map_object_aba8d2fa5bdf2bbf13ade0fe2e7ba6b32}{update\+Properties}} ()
+\item 
+void \mbox{\hyperlink{class_vessel_map_object_a9c8d4f792897b7e7f8bbbd2b7091e958}{vessel\+Updated}} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static Q\+String \mbox{\hyperlink{class_vessel_map_object_ae838a6254c7ab941c6a0f373a801ad49}{vessel\+State\+To\+String}} (int state)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_vessel_map_object_a072c9cbe34ac79c037995511d18fcc3d}\label{class_vessel_map_object_a072c9cbe34ac79c037995511d18fcc3d}} 
+\index{VesselMapObject@{VesselMapObject}!VesselMapObject@{VesselMapObject}}
+\index{VesselMapObject@{VesselMapObject}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{VesselMapObject()}{VesselMapObject()}}
+{\footnotesize\ttfamily Vessel\+Map\+Object\+::\+Vessel\+Map\+Object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_map_objects_controller}{Map\+Objects\+Controller}} $\ast$}]{controller,  }\item[{\mbox{\hyperlink{class_vessel_data}{Vessel\+Data}} $\ast$}]{vessel }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_vessel_map_object_a7f982641edc34a85fd3fbfc81c7c9a68}\label{class_vessel_map_object_a7f982641edc34a85fd3fbfc81c7c9a68}} 
+\index{VesselMapObject@{VesselMapObject}!getGeometryEntity@{getGeometryEntity}}
+\index{getGeometryEntity@{getGeometryEntity}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{getGeometryEntity()}{getGeometryEntity()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$qmapcontrol\+::\+Geometry$>$ Vessel\+Map\+Object\+::get\+Geometry\+Entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_map_object_a82e055e41c862ec8d80d5bfb137b3253}{Map\+Object}}.
+
+\mbox{\Hypertarget{class_vessel_map_object_adb4af9fdb30c1e7501bba6f74dfd42c0}\label{class_vessel_map_object_adb4af9fdb30c1e7501bba6f74dfd42c0}} 
+\index{VesselMapObject@{VesselMapObject}!showProperties@{showProperties}}
+\index{showProperties@{showProperties}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{showProperties()}{showProperties()}}
+{\footnotesize\ttfamily bool Vessel\+Map\+Object\+::show\+Properties (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_map_object_ac58ccb02d5d96d934939b217020c822c}{Map\+Object}}.
+
+\mbox{\Hypertarget{class_vessel_map_object_aba8d2fa5bdf2bbf13ade0fe2e7ba6b32}\label{class_vessel_map_object_aba8d2fa5bdf2bbf13ade0fe2e7ba6b32}} 
+\index{VesselMapObject@{VesselMapObject}!updateProperties@{updateProperties}}
+\index{updateProperties@{updateProperties}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{updateProperties()}{updateProperties()}}
+{\footnotesize\ttfamily void Vessel\+Map\+Object\+::update\+Properties (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_map_object_afa7cd6a4368f4dd077614ac1d983a6c8}{Map\+Object}}.
+
+\mbox{\Hypertarget{class_vessel_map_object_ae838a6254c7ab941c6a0f373a801ad49}\label{class_vessel_map_object_ae838a6254c7ab941c6a0f373a801ad49}} 
+\index{VesselMapObject@{VesselMapObject}!vesselStateToString@{vesselStateToString}}
+\index{vesselStateToString@{vesselStateToString}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{vesselStateToString()}{vesselStateToString()}}
+{\footnotesize\ttfamily Q\+String Vessel\+Map\+Object\+::vessel\+State\+To\+String (\begin{DoxyParamCaption}\item[{int}]{state }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_vessel_map_object_a9c8d4f792897b7e7f8bbbd2b7091e958}\label{class_vessel_map_object_a9c8d4f792897b7e7f8bbbd2b7091e958}} 
+\index{VesselMapObject@{VesselMapObject}!vesselUpdated@{vesselUpdated}}
+\index{vesselUpdated@{vesselUpdated}!VesselMapObject@{VesselMapObject}}
+\subsubsection{\texorpdfstring{vesselUpdated()}{vesselUpdated()}}
+{\footnotesize\ttfamily void Vessel\+Map\+Object\+::vessel\+Updated (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/mapobjects/\mbox{\hyperlink{vesselmapobject_8h}{vesselmapobject.\+h}}\item 
+qtgui/mapobjects/\mbox{\hyperlink{vesselmapobject_8cpp}{vesselmapobject.\+cpp}}\end{DoxyCompactItemize}

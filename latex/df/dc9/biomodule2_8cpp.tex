@@ -1,0 +1,79 @@
+\hypertarget{biomodule2_8cpp}{}\section{simulator/biomodule2.cpp File Reference}
+\label{biomodule2_8cpp}\index{simulator/biomodule2.cpp@{simulator/biomodule2.cpp}}
+{\ttfamily \#include $<$Population.\+h$>$}\newline
+{\ttfamily \#include $<$Node.\+h$>$}\newline
+{\ttfamily \#include $<$Vessel.\+h$>$}\newline
+{\ttfamily \#include $<$Benthos.\+h$>$}\newline
+{\ttfamily \#include $<$options.\+h$>$}\newline
+{\ttfamily \#include $<$readdata.\+h$>$}\newline
+{\ttfamily \#include $<$helpers.\+h$>$}\newline
+{\ttfamily \#include $<$fisheriesmanagmt.\+h$>$}\newline
+{\ttfamily \#include $<$storage/sqliteoutputstorage.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}storage/tables/poptable.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}storage/tables/funcgroupstable.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$ipc.\+h$>$}\newline
+{\ttfamily \#include $<$profiler.\+h$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{biomodule2_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}{Get\+Current\+Dir}}~getcwd
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{biomodule2_8cpp_a7c03d95b89dbb30facde2406983dbe3d}{apply\+Biological\+Module2}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, int a\+\_\+month\+\_\+i, const string \&\mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}}, const string \&\mbox{\hyperlink{simulator_2main_8cpp_adce42e3d353180d56a4d9a29ea24e7bd}{namefolderinput}}, const string \&\mbox{\hyperlink{simulator_2main_8cpp_aa51908cc753b1446943da02194ae9f75}{namefolderoutput}}, const string \&pathoutput, ofstream \&popstats, ofstream \&popdyn\+\_\+N, ofstream \&popdyn\+\_\+F, ofstream \&popdyn\+\_\+\+S\+SB, ofstream \&popdyn\+\_\+annual\+\_\+indic, ofstream \&popnodes\+\_\+inc, ofstream \&popnodes\+\_\+impact, ofstream \&popnodes\+\_\+cumulcatches\+\_\+per\+\_\+pop, ofstream \&nodes\+\_\+envt, ofstream \&popnodes\+\_\+cumftime, ofstream \&popnodes\+\_\+cumsweptarea, ofstream \&popnodes\+\_\+cumcatches, ofstream \&popnodes\+\_\+cumcatches\+\_\+with\+\_\+threshold, ofstream \&popnodes\+\_\+cumdiscards, ofstream \&popnodes\+\_\+cumdiscardsratio, ofstream \&popnodes\+\_\+nbchoked, ofstream \&popnodes\+\_\+tariffs, ofstream \&\mbox{\hyperlink{thread__vessels_8cpp_a0ce9054b3d0c5f983ad61d3ed27346f7}{export\+\_\+individual\+\_\+tacs}}, ofstream \&popnodes\+\_\+end, ofstream \&benthosbiomassnodes, ofstream \&benthosnumbernodes, int \mbox{\hyperlink{simulator_2main_8cpp_a18da12a1dce03dc746278b124588e10e}{nbbenthospops}}, bool \mbox{\hyperlink{thread__vessels_8cpp_a8769b8663f8fb1a238da9f79b56411dc}{use\+\_\+gui}}, const string \&popstats\+\_\+filename, const string \&popdyn\+\_\+\+N\+\_\+filename, const string \&popdyn\+\_\+\+F\+\_\+filename, const string \&popdyn\+\_\+\+S\+S\+B\+\_\+filename, const string \&popnodes\+\_\+inc\+\_\+filename, const string \&popnodes\+\_\+end\+\_\+filename, const string \&popnodes\+\_\+impact\+\_\+filename, const string \&popnodes\+\_\+cumulcatches\+\_\+per\+\_\+pop\+\_\+filename, const string \&nodes\+\_\+envt\+\_\+filename, const string \&popnodes\+\_\+cumftime\+\_\+filename, const string \&popnodes\+\_\+cumsweptarea\+\_\+filename, const string \&popnodes\+\_\+cumcatches\+\_\+filename, const string \&popnodes\+\_\+cumcatches\+\_\+with\+\_\+threshold\+\_\+filename, const string \&popnodes\+\_\+cumdiscards\+\_\+filename, const string \&popnodes\+\_\+cumdiscardsratio\+\_\+filename, const string \&popnodes\+\_\+nbchoked\+\_\+filename, const string \&popnodes\+\_\+tariffs\+\_\+filename, const string \&popnodes\+\_\+benthos\+\_\+biomass\+\_\+filename, const string \&popnodes\+\_\+benthos\+\_\+number\+\_\+filename, const vector$<$ int $>$ \&tsteps\+\_\+quarters, const vector$<$ int $>$ \&tsteps\+\_\+semesters, const vector$<$ int $>$ \&tsteps\+\_\+years, const vector$<$ int $>$ \&tsteps\+\_\+months, const vector$<$ int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a249b6522d595e6a057580471ab5a4517}{implicit\+\_\+pops}}, const vector$<$ double $>$ \&\mbox{\hyperlink{simulator_2main_8cpp_a9965d6726a200fda85a27a2ba1cc34d0}{calib\+\_\+oth\+\_\+landings}}, vector$<$ vector$<$ double $>$ $>$ \&selectivity\+\_\+per\+\_\+stock\+\_\+ogives\+\_\+for\+\_\+oth\+\_\+land, bool \mbox{\hyperlink{thread__vessels_8cpp_a17091dbfd3e7ab134a48655f32fcce7f}{is\+\_\+tacs}}, int \mbox{\hyperlink{thread__vessels_8cpp_a817d1d286c5c2727eef056fd4c11cf76}{export\+\_\+vmslike}}, int \mbox{\hyperlink{thread__vessels_8cpp_ab77d0b405d96300fdd1070a8d50f8bb0}{freq\+\_\+do\+\_\+growth}}, const multimap$<$ int, double $>$ \&init\+\_\+weight\+\_\+per\+\_\+szgroup, const vector$<$ vector$<$ double $>$ $>$ \&species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix, vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, vector$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}{vessels}}, vector$<$ \mbox{\hyperlink{class_benthos}{Benthos}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a9ce5905f15af58742653570dbcfeec2b}{benthoss}}, const \mbox{\hyperlink{class_pop_sce_options}{Pop\+Sce\+Options}} \&\mbox{\hyperlink{thread__vessels_8cpp_a87d0bf7613b407456078fa8dd79c2330}{dyn\+\_\+pop\+\_\+sce}}, const \mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} \&\mbox{\hyperlink{thread__vessels_8cpp_a8389f6b9261a2039cabeecc230207043}{dyn\+\_\+alloc\+\_\+sce}}, vector$<$ vector$<$ double $>$ $>$ \&Ws\+\_\+at\+\_\+szgroup, vector$<$ vector$<$ vector$<$ vector$<$ double $>$ $>$ $>$ $>$ \&pred\+Kernel, vector$<$ vector$<$ double $>$ $>$ \&search\+Vol\+Mat, vector$<$ vector$<$ double $>$ $>$ \&juveniles\+\_\+diet\+\_\+preference, vector$<$ vector$<$ double $>$ $>$ \&adults\+\_\+diet\+\_\+preference, vector$<$ int $>$ \&mat\+\_\+cats)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::mutex \mbox{\hyperlink{biomodule2_8cpp_a34717756bdf48565d8ac931fdc22f1bb}{glob\+\_\+mutex}}
+\item 
+bool \mbox{\hyperlink{biomodule2_8cpp_ae765e4298e4ced5fe11aa2de95e1bf3d}{enable\+\_\+sqlite\+\_\+out}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_q_lite_output_storage}{S\+Q\+Lite\+Output\+Storage}} $>$ \mbox{\hyperlink{biomodule2_8cpp_adbfdece1251a70f12ce020ef8e61b0ae}{out\+Sqlite}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{biomodule2_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}\label{biomodule2_8cpp_af0c0d1034a71f8aa3a08cda83c9d4e7a}} 
+\index{biomodule2.cpp@{biomodule2.cpp}!GetCurrentDir@{GetCurrentDir}}
+\index{GetCurrentDir@{GetCurrentDir}!biomodule2.cpp@{biomodule2.cpp}}
+\subsubsection{\texorpdfstring{GetCurrentDir}{GetCurrentDir}}
+{\footnotesize\ttfamily \#define Get\+Current\+Dir~getcwd}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{biomodule2_8cpp_a7c03d95b89dbb30facde2406983dbe3d}\label{biomodule2_8cpp_a7c03d95b89dbb30facde2406983dbe3d}} 
+\index{biomodule2.cpp@{biomodule2.cpp}!applyBiologicalModule2@{applyBiologicalModule2}}
+\index{applyBiologicalModule2@{applyBiologicalModule2}!biomodule2.cpp@{biomodule2.cpp}}
+\subsubsection{\texorpdfstring{applyBiologicalModule2()}{applyBiologicalModule2()}}
+{\footnotesize\ttfamily bool apply\+Biological\+Module2 (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{int}]{a\+\_\+month\+\_\+i,  }\item[{const string \&}]{namesimu,  }\item[{const string \&}]{namefolderinput,  }\item[{const string \&}]{namefolderoutput,  }\item[{const string \&}]{pathoutput,  }\item[{ofstream \&}]{popstats,  }\item[{ofstream \&}]{popdyn\+\_\+N,  }\item[{ofstream \&}]{popdyn\+\_\+F,  }\item[{ofstream \&}]{popdyn\+\_\+\+S\+SB,  }\item[{ofstream \&}]{popdyn\+\_\+annual\+\_\+indic,  }\item[{ofstream \&}]{popnodes\+\_\+inc,  }\item[{ofstream \&}]{popnodes\+\_\+impact,  }\item[{ofstream \&}]{popnodes\+\_\+cumulcatches\+\_\+per\+\_\+pop,  }\item[{ofstream \&}]{nodes\+\_\+envt,  }\item[{ofstream \&}]{popnodes\+\_\+cumftime,  }\item[{ofstream \&}]{popnodes\+\_\+cumsweptarea,  }\item[{ofstream \&}]{popnodes\+\_\+cumcatches,  }\item[{ofstream \&}]{popnodes\+\_\+cumcatches\+\_\+with\+\_\+threshold,  }\item[{ofstream \&}]{popnodes\+\_\+cumdiscards,  }\item[{ofstream \&}]{popnodes\+\_\+cumdiscardsratio,  }\item[{ofstream \&}]{popnodes\+\_\+nbchoked,  }\item[{ofstream \&}]{popnodes\+\_\+tariffs,  }\item[{ofstream \&}]{export\+\_\+individual\+\_\+tacs,  }\item[{ofstream \&}]{popnodes\+\_\+end,  }\item[{ofstream \&}]{benthosbiomassnodes,  }\item[{ofstream \&}]{benthosnumbernodes,  }\item[{int}]{nbbenthospops,  }\item[{bool}]{use\+\_\+gui,  }\item[{const string \&}]{popstats\+\_\+filename,  }\item[{const string \&}]{popdyn\+\_\+\+N\+\_\+filename,  }\item[{const string \&}]{popdyn\+\_\+\+F\+\_\+filename,  }\item[{const string \&}]{popdyn\+\_\+\+S\+S\+B\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+inc\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+end\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+impact\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumulcatches\+\_\+per\+\_\+pop\+\_\+filename,  }\item[{const string \&}]{nodes\+\_\+envt\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumftime\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumsweptarea\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumcatches\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumcatches\+\_\+with\+\_\+threshold\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumdiscards\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+cumdiscardsratio\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+nbchoked\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+tariffs\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+benthos\+\_\+biomass\+\_\+filename,  }\item[{const string \&}]{popnodes\+\_\+benthos\+\_\+number\+\_\+filename,  }\item[{const vector$<$ int $>$ \&}]{tsteps\+\_\+quarters,  }\item[{const vector$<$ int $>$ \&}]{tsteps\+\_\+semesters,  }\item[{const vector$<$ int $>$ \&}]{tsteps\+\_\+years,  }\item[{const vector$<$ int $>$ \&}]{tsteps\+\_\+months,  }\item[{const vector$<$ int $>$ \&}]{implicit\+\_\+pops,  }\item[{const vector$<$ double $>$ \&}]{calib\+\_\+oth\+\_\+landings,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{selectivity\+\_\+per\+\_\+stock\+\_\+ogives\+\_\+for\+\_\+oth\+\_\+land,  }\item[{bool}]{is\+\_\+tacs,  }\item[{int}]{export\+\_\+vmslike,  }\item[{int}]{freq\+\_\+do\+\_\+growth,  }\item[{const multimap$<$ int, double $>$ \&}]{init\+\_\+weight\+\_\+per\+\_\+szgroup,  }\item[{const vector$<$ vector$<$ double $>$ $>$ \&}]{species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix,  }\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{vector$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$ $>$ \&}]{vessels,  }\item[{vector$<$ \mbox{\hyperlink{class_benthos}{Benthos}} $\ast$ $>$ \&}]{benthoss,  }\item[{const \mbox{\hyperlink{class_pop_sce_options}{Pop\+Sce\+Options}} \&}]{dyn\+\_\+pop\+\_\+sce,  }\item[{const \mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} \&}]{dyn\+\_\+alloc\+\_\+sce,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{Ws\+\_\+at\+\_\+szgroup,  }\item[{vector$<$ vector$<$ vector$<$ vector$<$ double $>$ $>$ $>$ $>$ \&}]{pred\+Kernel,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{search\+Vol\+Mat,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{juveniles\+\_\+diet\+\_\+preference,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{adults\+\_\+diet\+\_\+preference,  }\item[{vector$<$ int $>$ \&}]{mat\+\_\+cats }\end{DoxyParamCaption})}
+
+!!!!!!!!!!!!// !!!!!!!!!!!!// !!\+T\+S\+T\+EP 0!!!// !!!!!!!!!!!!// !!!!!!!!!!!!//
+
+!!!!!!!!!!!!!!!!!!!!!!!!// !!!!!!!!!!!!!!!!!!!!!!!!// !!\+T\+S\+T\+E\+PS S\+T\+A\+RT M\+O\+N\+T\+H\+S!!!// !!!!!!!!!!!!!!!!!!!!!!!!// !!!!!!!!!!!!!!!!!!!!!!!!// 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{biomodule2_8cpp_ae765e4298e4ced5fe11aa2de95e1bf3d}\label{biomodule2_8cpp_ae765e4298e4ced5fe11aa2de95e1bf3d}} 
+\index{biomodule2.cpp@{biomodule2.cpp}!enable\_sqlite\_out@{enable\_sqlite\_out}}
+\index{enable\_sqlite\_out@{enable\_sqlite\_out}!biomodule2.cpp@{biomodule2.cpp}}
+\subsubsection{\texorpdfstring{enable\_sqlite\_out}{enable\_sqlite\_out}}
+{\footnotesize\ttfamily bool enable\+\_\+sqlite\+\_\+out}
+
+\mbox{\Hypertarget{biomodule2_8cpp_a34717756bdf48565d8ac931fdc22f1bb}\label{biomodule2_8cpp_a34717756bdf48565d8ac931fdc22f1bb}} 
+\index{biomodule2.cpp@{biomodule2.cpp}!glob\_mutex@{glob\_mutex}}
+\index{glob\_mutex@{glob\_mutex}!biomodule2.cpp@{biomodule2.cpp}}
+\subsubsection{\texorpdfstring{glob\_mutex}{glob\_mutex}}
+{\footnotesize\ttfamily std\+::mutex glob\+\_\+mutex}
+
+\mbox{\Hypertarget{biomodule2_8cpp_adbfdece1251a70f12ce020ef8e61b0ae}\label{biomodule2_8cpp_adbfdece1251a70f12ce020ef8e61b0ae}} 
+\index{biomodule2.cpp@{biomodule2.cpp}!outSqlite@{outSqlite}}
+\index{outSqlite@{outSqlite}!biomodule2.cpp@{biomodule2.cpp}}
+\subsubsection{\texorpdfstring{outSqlite}{outSqlite}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_s_q_lite_output_storage}{S\+Q\+Lite\+Output\+Storage}}$>$ out\+Sqlite}
+

@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['ravfmortality',['RavFMortality',['../d5/d8a/namespacedisplace_1_1plot.html#a523612c6239ff69acc3e5b7c5b40b618aecb4cfa26e113ef1a6a0eb616f0aa969',1,'displace::plot']]],
+  ['reduced_5fspeed_5f10percent',['reduced_speed_10percent',['../d4/dfd/namespace_options.html#af8a10ffff5f6f3b9d36a1f543d5d0cbeaf0bf47ef32af6711656099c8f237dbf7',1,'Options']]],
+  ['reduced_5fspeed_5f20percent',['reduced_speed_20percent',['../d4/dfd/namespace_options.html#af8a10ffff5f6f3b9d36a1f543d5d0cbea937fe4afeaac740b9a9697d82c86dd7b',1,'Options']]],
+  ['reduced_5fspeed_5f30percent',['reduced_speed_30percent',['../d4/dfd/namespace_options.html#af8a10ffff5f6f3b9d36a1f543d5d0cbea3fa7ee26ce4a5a3aa72df6621f02e446',1,'Options']]],
+  ['revenuepersweptarea',['RevenuePerSweptArea',['../d5/d8a/namespacedisplace_1_1plot.html#ab7b96ae3ae291a71823f371d77f27d98a6480ccd64d3de7b190d0fd7747910ef8',1,'displace::plot::RevenuePerSweptArea()'],['../d5/d8a/namespacedisplace_1_1plot.html#aa453098d286017edd5b0ff3f15ba1013a6480ccd64d3de7b190d0fd7747910ef8',1,'displace::plot::RevenuePerSweptArea()']]],
+  ['riskofbycatchallstksthisgroundis',['riskOfBycatchAllStksThisGroundIs',['../d5/d90/namespacedtree.html#a79fe30831a14df904319f9e783b3189ba2b7f6ae15d2963a384b71c6e3764dee0',1,'dtree']]],
+  ['riskofbycatchavoidedstkshereis',['riskOfBycatchAvoidedStksHereIs',['../d5/d90/namespacedtree.html#a79fe30831a14df904319f9e783b3189bab236f184e104a21fe8c600f260678108',1,'dtree']]],
+  ['riskofbycatchavoidedstksnowis',['riskOfBycatchAvoidedStksNowIs',['../d5/d90/namespacedtree.html#a79fe30831a14df904319f9e783b3189bad3f36a3ce4281403ad462edf3413d5f6',1,'dtree']]],
+  ['riskofbycatchavoidedstksthisgroundis',['riskOfBycatchAvoidedStksThisGroundIs',['../d5/d90/namespacedtree.html#a79fe30831a14df904319f9e783b3189bab850d55da582c7f908a4150eb883c75b',1,'dtree']]],
+  ['rofta',['RoFTA',['../d5/d8a/namespacedisplace_1_1plot.html#ab7b96ae3ae291a71823f371d77f27d98ad58f9055d7b653bcca1cf17d7f12c2c6',1,'displace::plot::RoFTA()'],['../d5/d8a/namespacedisplace_1_1plot.html#aa453098d286017edd5b0ff3f15ba1013ad58f9055d7b653bcca1cf17d7f12c2c6',1,'displace::plot::RoFTA()']]],
+  ['rpimmediaterefresh',['rpImmediateRefresh',['../dd/d9b/class_q_custom_plot.html#a45d61392d13042e712a956d27762aa39aa6eda645ccf1a60635df3e8b71ea6ae2',1,'QCustomPlot']]],
+  ['rpqueuedrefresh',['rpQueuedRefresh',['../dd/d9b/class_q_custom_plot.html#a45d61392d13042e712a956d27762aa39acd6f1e590ea775d1ddee666428077f3e',1,'QCustomPlot']]],
+  ['rpqueuedreplot',['rpQueuedReplot',['../dd/d9b/class_q_custom_plot.html#a45d61392d13042e712a956d27762aa39a019650c6ddf308f97e811fbfff207a8f',1,'QCustomPlot']]],
+  ['rprefreshhint',['rpRefreshHint',['../dd/d9b/class_q_custom_plot.html#a45d61392d13042e712a956d27762aa39a49666a5854a68dbcca8b277b03331260',1,'QCustomPlot']]],
+  ['rudotspercentimeter',['ruDotsPerCentimeter',['../d9/d5c/namespace_q_c_p.html#a715d46153da230990aa887d0f0602452a4224e01f49b331489ad8cb12b619b229',1,'QCP']]],
+  ['rudotsperinch',['ruDotsPerInch',['../d9/d5c/namespace_q_c_p.html#a715d46153da230990aa887d0f0602452affb887d8efe79c39a1aca2acd7002afc',1,'QCP']]],
+  ['rudotspermeter',['ruDotsPerMeter',['../d9/d5c/namespace_q_c_p.html#a715d46153da230990aa887d0f0602452a707d005dea5c4ab694e4270d9c6094e8',1,'QCP']]]
+];

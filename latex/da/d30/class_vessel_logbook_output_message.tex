@@ -1,0 +1,115 @@
+\hypertarget{class_vessel_logbook_output_message}{}\section{Vessel\+Logbook\+Output\+Message Class Reference}
+\label{class_vessel_logbook_output_message}\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+
+
+{\ttfamily \#include $<$noipc.\+h$>$}
+
+Inheritance diagram for Vessel\+Logbook\+Output\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{da/d30/class_vessel_logbook_output_message}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_vessel_logbook_output_message_a8e148fec26b9f18b7a1e48e068efc0ff}{Vessel\+Logbook\+Output\+Message}} (unsigned int, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$, const std\+::vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&, std\+::vector$<$ int $>$ \&)
+\item 
+\mbox{\hyperlink{class_vessel_logbook_output_message_a2ddba61c5e80afc0745f275562328bf4}{Vessel\+Logbook\+Output\+Message}} (unsigned int \+\_\+tstep, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$v, const std\+::vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, std\+::vector$<$ int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a249b6522d595e6a057580471ab5a4517}{implicit\+\_\+pops}})
+\item 
+virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} \mbox{\hyperlink{class_vessel_logbook_output_message_a2fadf88d13091f268a7a443bc3638c6c}{get\+Type}} () const
+\item 
+bool \mbox{\hyperlink{class_vessel_logbook_output_message_a1892b1fa2d328eee48f88a52d6bd96b3}{process}} ()
+\begin{DoxyCompactList}\small\item\em perform an operation non related to the gui feedback channel \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_vessel_logbook_output_message_a39a68c1cc103eef690f75c4881ceaee4}{send}} (std\+::ostream \&)
+\begin{DoxyCompactList}\small\item\em the operation to perform. \end{DoxyCompactList}\item 
+virtual size\+\_\+t \mbox{\hyperlink{class_vessel_logbook_output_message_af1453fd8c283bbf6eb7f2ef00bc33a5f}{send\+Binary}} (void $\ast$buffer, size\+\_\+t maxlen)
+\begin{DoxyCompactList}\small\item\em formats a binary block of data to be sent across the I\+PC stream \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_vessel_logbook_output_message_a8e148fec26b9f18b7a1e48e068efc0ff}\label{class_vessel_logbook_output_message_a8e148fec26b9f18b7a1e48e068efc0ff}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{VesselLogbookOutputMessage()}{VesselLogbookOutputMessage()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Vessel\+Logbook\+Output\+Message\+::\+Vessel\+Logbook\+Output\+Message (\begin{DoxyParamCaption}\item[{unsigned int}]{,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{,  }\item[{std\+::vector$<$ int $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_vessel_logbook_output_message_a2ddba61c5e80afc0745f275562328bf4}\label{class_vessel_logbook_output_message_a2ddba61c5e80afc0745f275562328bf4}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{VesselLogbookOutputMessage()}{VesselLogbookOutputMessage()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Vessel\+Logbook\+Output\+Message\+::\+Vessel\+Logbook\+Output\+Message (\begin{DoxyParamCaption}\item[{unsigned int}]{\+\_\+tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{v,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{std\+::vector$<$ int $>$ \&}]{implicit\+\_\+pops }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_vessel_logbook_output_message_a2fadf88d13091f268a7a443bc3638c6c}\label{class_vessel_logbook_output_message_a2fadf88d13091f268a7a443bc3638c6c}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!getType@{getType}}
+\index{getType@{getType}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} Vessel\+Logbook\+Output\+Message\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_output_message_adfc965910862cd236e437e3050aee176}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_vessel_logbook_output_message_a1892b1fa2d328eee48f88a52d6bd96b3}\label{class_vessel_logbook_output_message_a1892b1fa2d328eee48f88a52d6bd96b3}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!process@{process}}
+\index{process@{process}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily bool Vessel\+Logbook\+Output\+Message\+::process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+perform an operation non related to the gui feedback channel 
+
+\begin{DoxyReturn}{Returns}
+false if the calling function should exit. True otherwise. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_output_message_a949d8350d98202608e4248fe6dafa10f}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_vessel_logbook_output_message_a39a68c1cc103eef690f75c4881ceaee4}\label{class_vessel_logbook_output_message_a39a68c1cc103eef690f75c4881ceaee4}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!send@{send}}
+\index{send@{send}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily bool Vessel\+Logbook\+Output\+Message\+::send (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+the operation to perform. 
+
+\begin{DoxyReturn}{Returns}
+false if error. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_output_message_a6f817de4d3430dc98521431385b95328}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_vessel_logbook_output_message_af1453fd8c283bbf6eb7f2ef00bc33a5f}\label{class_vessel_logbook_output_message_af1453fd8c283bbf6eb7f2ef00bc33a5f}} 
+\index{VesselLogbookOutputMessage@{VesselLogbookOutputMessage}!sendBinary@{sendBinary}}
+\index{sendBinary@{sendBinary}!VesselLogbookOutputMessage@{VesselLogbookOutputMessage}}
+\subsubsection{\texorpdfstring{sendBinary()}{sendBinary()}}
+{\footnotesize\ttfamily size\+\_\+t Vessel\+Logbook\+Output\+Message\+::send\+Binary (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{maxlen }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+formats a binary block of data to be sent across the I\+PC stream 
+
+\begin{DoxyItemize}
+\item buffer address of the data buffer \item maxlen the maximum size of the block \begin{DoxyReturn}{Returns}
+lenght of the block, or -\/1 if the process should exit (due to error, or other) 
+\end{DoxyReturn}
+\end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{class_output_message_a42e0a2560b1bf9e58b6626056f87b8c2}{Output\+Message}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+simulator/messages/\mbox{\hyperlink{noipc_8h}{noipc.\+h}}\item 
+simulator/messages/\mbox{\hyperlink{vessellogbookoutputmessage_8h}{vessellogbookoutputmessage.\+h}}\item 
+simulator/messages/\mbox{\hyperlink{vessellogbookoutputmessage_8cpp}{vessellogbookoutputmessage.\+cpp}}\end{DoxyCompactItemize}

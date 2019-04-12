@@ -1,0 +1,80 @@
+\hypertarget{class_fish_farms_def_table}{}\section{Fish\+Farms\+Def\+Table Class Reference}
+\label{class_fish_farms_def_table}\index{FishFarmsDefTable@{FishFarmsDefTable}}
+
+
+{\ttfamily \#include $<$fishfarmsdeftable.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_fish_farms_def_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}{Fishfarm\+Select\+Func}} = std\+::function$<$ bool(int nodeid, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_fishfarm}{Fishfarm}} $>$)$>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_fish_farms_def_table_a9f2b076ad975bd67f5d4c2ba5823afbd}{Fish\+Farms\+Def\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_fish_farms_def_table_a5e5b452ede20a89727a7b8f498928c1d}{$\sim$\+Fish\+Farms\+Def\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_fish_farms_def_table_a9315e3a212b9ec4ccd0a2cc2ee02830e}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_fish_farms_def_table_afc739c5179b900178a1c374e99ece7ca}{insert\+Def}} (const \mbox{\hyperlink{class_fishfarm}{Fishfarm}} \&fishfarm)
+\item 
+void \mbox{\hyperlink{class_fish_farms_def_table_ac6fc8c8cfb19b252cf28c0e0cc142573}{get\+All\+Fishfarms}} (\mbox{\hyperlink{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}{Fishfarm\+Select\+Func}} func)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}\label{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!FishfarmSelectFunc@{FishfarmSelectFunc}}
+\index{FishfarmSelectFunc@{FishfarmSelectFunc}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{FishfarmSelectFunc}{FishfarmSelectFunc}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}{Fish\+Farms\+Def\+Table\+::\+Fishfarm\+Select\+Func}} =  std\+::function$<$bool(int nodeid, std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_fishfarm}{Fishfarm}}$>$)$>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_fish_farms_def_table_a9f2b076ad975bd67f5d4c2ba5823afbd}\label{class_fish_farms_def_table_a9f2b076ad975bd67f5d4c2ba5823afbd}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!FishFarmsDefTable@{FishFarmsDefTable}}
+\index{FishFarmsDefTable@{FishFarmsDefTable}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{FishFarmsDefTable()}{FishFarmsDefTable()}}
+{\footnotesize\ttfamily Fish\+Farms\+Def\+Table\+::\+Fish\+Farms\+Def\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fish_farms_def_table_a5e5b452ede20a89727a7b8f498928c1d}\label{class_fish_farms_def_table_a5e5b452ede20a89727a7b8f498928c1d}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!````~FishFarmsDefTable@{$\sim$FishFarmsDefTable}}
+\index{````~FishFarmsDefTable@{$\sim$FishFarmsDefTable}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{$\sim$FishFarmsDefTable()}{~FishFarmsDefTable()}}
+{\footnotesize\ttfamily Fish\+Farms\+Def\+Table\+::$\sim$\+Fish\+Farms\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_fish_farms_def_table_a9315e3a212b9ec4ccd0a2cc2ee02830e}\label{class_fish_farms_def_table_a9315e3a212b9ec4ccd0a2cc2ee02830e}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Fish\+Farms\+Def\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fish_farms_def_table_ac6fc8c8cfb19b252cf28c0e0cc142573}\label{class_fish_farms_def_table_ac6fc8c8cfb19b252cf28c0e0cc142573}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!getAllFishfarms@{getAllFishfarms}}
+\index{getAllFishfarms@{getAllFishfarms}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{getAllFishfarms()}{getAllFishfarms()}}
+{\footnotesize\ttfamily void Fish\+Farms\+Def\+Table\+::get\+All\+Fishfarms (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_fish_farms_def_table_aeab850ebda904be43b0b690c789a56b9}{Fish\+Farms\+Def\+Table\+::\+Fishfarm\+Select\+Func}}}]{func }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_fish_farms_def_table_afc739c5179b900178a1c374e99ece7ca}\label{class_fish_farms_def_table_afc739c5179b900178a1c374e99ece7ca}} 
+\index{FishFarmsDefTable@{FishFarmsDefTable}!insertDef@{insertDef}}
+\index{insertDef@{insertDef}!FishFarmsDefTable@{FishFarmsDefTable}}
+\subsubsection{\texorpdfstring{insertDef()}{insertDef()}}
+{\footnotesize\ttfamily void Fish\+Farms\+Def\+Table\+::insert\+Def (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_fishfarm}{Fishfarm}} \&}]{fishfarm }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{fishfarmsdeftable_8h}{fishfarmsdeftable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{fishfarmsdeftable_8cpp}{fishfarmsdeftable.\+cpp}}\end{DoxyCompactItemize}

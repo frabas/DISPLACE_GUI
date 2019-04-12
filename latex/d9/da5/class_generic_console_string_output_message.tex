@@ -1,0 +1,106 @@
+\hypertarget{class_generic_console_string_output_message}{}\section{Generic\+Console\+String\+Output\+Message Class Reference}
+\label{class_generic_console_string_output_message}\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+
+
+{\ttfamily \#include $<$genericconsolestringoutputmessage.\+h$>$}
+
+Inheritance diagram for Generic\+Console\+String\+Output\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/da5/class_generic_console_string_output_message}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_generic_console_string_output_message_ad8b27be4c6fe9d5ee3dedf51f274a171}{Generic\+Console\+String\+Output\+Message}} (const std\+::string \&txt)
+\item 
+virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} \mbox{\hyperlink{class_generic_console_string_output_message_a80cb535bea64b33a076b6207356a7c3c}{get\+Type}} () const
+\item 
+bool \mbox{\hyperlink{class_generic_console_string_output_message_a89a8f1a84f56aac8d98984d552095155}{process}} ()
+\begin{DoxyCompactList}\small\item\em perform an operation non related to the gui feedback channel \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_generic_console_string_output_message_afd9c18543844626cb07d800e9f8b43a6}{send}} (std\+::ostream \&strm)
+\begin{DoxyCompactList}\small\item\em the operation to perform. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{class_generic_console_string_output_message_abc038d7b5db3a2b2835ea23ad35d77e9}{send\+Binary}} (void $\ast$buffer, size\+\_\+t maxlen)
+\begin{DoxyCompactList}\small\item\em formats a binary block of data to be sent across the I\+PC stream \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_generic_console_string_output_message_ad8b27be4c6fe9d5ee3dedf51f274a171}\label{class_generic_console_string_output_message_ad8b27be4c6fe9d5ee3dedf51f274a171}} 
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\subsubsection{\texorpdfstring{GenericConsoleStringOutputMessage()}{GenericConsoleStringOutputMessage()}}
+{\footnotesize\ttfamily Generic\+Console\+String\+Output\+Message\+::\+Generic\+Console\+String\+Output\+Message (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_generic_console_string_output_message_a80cb535bea64b33a076b6207356a7c3c}\label{class_generic_console_string_output_message_a80cb535bea64b33a076b6207356a7c3c}} 
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!getType@{getType}}
+\index{getType@{getType}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\subsubsection{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{ipcmsgtypes_8h_a59f75a61492e64aebfae0cc49cc26683}{Ipc\+Message\+Types}} Generic\+Console\+String\+Output\+Message\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_output_message_adfc965910862cd236e437e3050aee176}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_generic_console_string_output_message_a89a8f1a84f56aac8d98984d552095155}\label{class_generic_console_string_output_message_a89a8f1a84f56aac8d98984d552095155}} 
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!process@{process}}
+\index{process@{process}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily bool Generic\+Console\+String\+Output\+Message\+::process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+perform an operation non related to the gui feedback channel 
+
+\begin{DoxyReturn}{Returns}
+false if the calling function should exit. True otherwise. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_output_message_a949d8350d98202608e4248fe6dafa10f}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_generic_console_string_output_message_afd9c18543844626cb07d800e9f8b43a6}\label{class_generic_console_string_output_message_afd9c18543844626cb07d800e9f8b43a6}} 
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!send@{send}}
+\index{send@{send}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily bool Generic\+Console\+String\+Output\+Message\+::send (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+the operation to perform. 
+
+\begin{DoxyReturn}{Returns}
+false if error. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_output_message_a6f817de4d3430dc98521431385b95328}{Output\+Message}}.
+
+\mbox{\Hypertarget{class_generic_console_string_output_message_abc038d7b5db3a2b2835ea23ad35d77e9}\label{class_generic_console_string_output_message_abc038d7b5db3a2b2835ea23ad35d77e9}} 
+\index{GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}!sendBinary@{sendBinary}}
+\index{sendBinary@{sendBinary}!GenericConsoleStringOutputMessage@{GenericConsoleStringOutputMessage}}
+\subsubsection{\texorpdfstring{sendBinary()}{sendBinary()}}
+{\footnotesize\ttfamily size\+\_\+t Generic\+Console\+String\+Output\+Message\+::send\+Binary (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{maxlen }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+formats a binary block of data to be sent across the I\+PC stream 
+
+\begin{DoxyItemize}
+\item buffer address of the data buffer \item maxlen the maximum size of the block \begin{DoxyReturn}{Returns}
+lenght of the block, or -\/1 if the process should exit (due to error, or other) 
+\end{DoxyReturn}
+\end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{class_output_message_a42e0a2560b1bf9e58b6626056f87b8c2}{Output\+Message}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+simulator/messages/\mbox{\hyperlink{genericconsolestringoutputmessage_8h}{genericconsolestringoutputmessage.\+h}}\item 
+simulator/messages/\mbox{\hyperlink{genericconsolestringoutputmessage_8cpp}{genericconsolestringoutputmessage.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,52 @@
+\hypertarget{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator}{}\section{dtree\+::vessels\+::Vessel\+Month\+Is\+State\+Evaluator Class Reference}
+\label{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator}\index{dtree::vessels::VesselMonthIsStateEvaluator@{dtree::vessels::VesselMonthIsStateEvaluator}}
+
+
+{\ttfamily \#include $<$vesselsevaluators.\+h$>$}
+
+Inheritance diagram for dtree\+::vessels\+::Vessel\+Month\+Is\+State\+Evaluator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d0/dd2/classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_a779c71e69e53b59a7841783c2835cd21}{Vessel\+Month\+Is\+State\+Evaluator}} ()
+\item 
+double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_aec699917282c6c3cc1811b5c4e8238e9}{evaluate}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$vessel) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_a779c71e69e53b59a7841783c2835cd21}\label{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_a779c71e69e53b59a7841783c2835cd21}} 
+\index{dtree::vessels::VesselMonthIsStateEvaluator@{dtree::vessels::VesselMonthIsStateEvaluator}!VesselMonthIsStateEvaluator@{VesselMonthIsStateEvaluator}}
+\index{VesselMonthIsStateEvaluator@{VesselMonthIsStateEvaluator}!dtree::vessels::VesselMonthIsStateEvaluator@{dtree::vessels::VesselMonthIsStateEvaluator}}
+\subsubsection{\texorpdfstring{VesselMonthIsStateEvaluator()}{VesselMonthIsStateEvaluator()}}
+{\footnotesize\ttfamily dtree\+::vessels\+::\+Vessel\+Month\+Is\+State\+Evaluator\+::\+Vessel\+Month\+Is\+State\+Evaluator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_aec699917282c6c3cc1811b5c4e8238e9}\label{classdtree_1_1vessels_1_1_vessel_month_is_state_evaluator_aec699917282c6c3cc1811b5c4e8238e9}} 
+\index{dtree::vessels::VesselMonthIsStateEvaluator@{dtree::vessels::VesselMonthIsStateEvaluator}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!dtree::vessels::VesselMonthIsStateEvaluator@{dtree::vessels::VesselMonthIsStateEvaluator}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily double dtree\+::vessels\+::\+Vessel\+Month\+Is\+State\+Evaluator\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{vesselsevaluators_8h}{vesselsevaluators.\+h}}\end{DoxyCompactItemize}

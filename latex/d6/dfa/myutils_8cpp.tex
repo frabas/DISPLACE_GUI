@@ -1,0 +1,730 @@
+\hypertarget{myutils_8cpp}{}\section{commons/myutils.cpp File Reference}
+\label{myutils_8cpp}\index{commons/myutils.cpp@{commons/myutils.cpp}}
+{\ttfamily \#include \char`\"{}myutils.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$helpers.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$utils/\+Multifield\+Reader.\+h$>$}\newline
+{\ttfamily \#include $<$boost/lexical\+\_\+cast.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/algorithm/string.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structpair__first__less}{pair\+\_\+first\+\_\+less$<$ T1, T2 $>$}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{myutils_8cpp_abfe0cffcfaa65a00c5af3728843ba4ea}{myintegrand}} (double x, double S1, double S2)
+\item 
+double \mbox{\hyperlink{myutils_8cpp_a56e6001390d297e55e1f379f2d4f825b}{trapezoidal}} (double a, double b, vector$<$ double $>$ sel)
+\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\T $\ast$ \mbox{\hyperlink{myutils_8cpp_a64d77caddefed4b96fa62e3f5f73c9a2}{end}} (T(\&p\+Array)\mbox{[}N\mbox{]})
+\item 
+void \mbox{\hyperlink{myutils_8cpp_a4e0b7701cb73138fb0ac0f7e05741596}{Dijkstra\+Compute\+Paths}} (\mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} source, \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}}, spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{myutils_8h_a4497881a7e75868dd6b1cafbffd81e1f}{weight\+\_\+t}} $>$ \&min\+\_\+distance, spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&previous, std\+::vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}{relevant\+\_\+nodes}})
+\item 
+std\+::list$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \mbox{\hyperlink{myutils_8cpp_a5329e8f01eaa79cc4c000e82976a1c3b}{Dijkstra\+Get\+Shortest\+Path\+To}} (\mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} target, spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&previous)
+\item 
+std\+::list$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{myutils_8cpp_a9701a0016553471b2dc23ee4db3a81f2}{Dijkstra\+Get\+Shortest\+Path\+To}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} target, const \mbox{\hyperlink{class_path_shop}{Path\+Shop}} \&pathshop)
+\item 
+void \mbox{\hyperlink{myutils_8cpp_a47752ab385092d6fd661bed734f2ad04}{Simplify\+The\+Previous\+Map}} (int source, spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&previous, std\+::vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}{relevant\+\_\+nodes}}, spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{myutils_8h_a4497881a7e75868dd6b1cafbffd81e1f}{weight\+\_\+t}} $>$ \&min\+\_\+distance, string \mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}}, string a\+\_\+graph\+\_\+name, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+void \mbox{\hyperlink{myutils_8cpp_a8f0f4bbb25cac840fc0a4dba5ed2f217}{close\+Some\+Nodes}} (std\+::vector$<$ int $>$ \&nodes\+\_\+to\+\_\+be\+\_\+closed, \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}})
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a100ac3790f39d530a0b5f945e362db09}{fill\+\_\+from\+\_\+coord}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+coord\+\_\+x, vector$<$ double $>$ \&graph\+\_\+coord\+\_\+y, vector$<$ int $>$ \&graph\+\_\+coord\+\_\+harbour, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ab1a815816c4786bb1020804660415efc}{fill\+\_\+from\+\_\+graph}} (istream \&in, vector$<$ int $>$ \&graph\+\_\+idx\+\_\+dep, vector$<$ int $>$ \&graph\+\_\+idx\+\_\+arr, vector$<$ int $>$ \&graph\+\_\+dist\+\_\+km, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a32aa00351eeadec36a86194d99b0f002}{fill\+\_\+from\+\_\+code\+\_\+area}} (istream \&in, vector$<$ int $>$ \&graph\+\_\+point\+\_\+code\+\_\+area, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ae20f9e84ed84cadd3af699c0af864392}{fill\+\_\+from\+\_\+code\+\_\+marine\+\_\+landscape}} (istream \&in, vector$<$ int $>$ \&graph\+\_\+point\+\_\+code\+\_\+landscape, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a737ffc7d03661aa761905be249c6d41d}{fill\+\_\+from\+\_\+wind}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+wind, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a971c35efda4643bf8bf1fccbc1d57e61}{fill\+\_\+from\+\_\+sst}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+sst, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a810bdca95be243a1ea5c9641fb2cecdf}{fill\+\_\+from\+\_\+salinity}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+salinity, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_aaa14000bf1e6f25f13dab9820660f091}{fill\+\_\+from\+\_\+\+Nitrogen}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+\+Nitrogen, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a42b88b14518215ba34eb823a7b4ba12b}{fill\+\_\+from\+\_\+\+Phosphorus}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+\+Phosphorus, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_abb62612585e5ff2c7bff8d447e51b57c}{fill\+\_\+from\+\_\+\+Oxygen}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+\+Oxygen, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a3467dec8d1d1e9286d8a47630eae8be4}{fill\+\_\+from\+\_\+\+Dissolved\+Carbon}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+\+Dissolved\+Carbon, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a5453dba18390b56a0d39cbcba5bcbbab}{fill\+\_\+from\+\_\+bathymetry}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+bathymetry, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad115fe6a48c776dbdf2fc95ad4961dd9}{fill\+\_\+from\+\_\+shippingdensity}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+shippingdensity, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad176e6a0e1380dc22f7680a2cd85ca6f}{fill\+\_\+from\+\_\+siltfraction}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+siltfraction, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_acbf840ecf526e8ba11557249b105f62c}{fill\+\_\+from\+\_\+benthos\+\_\+biomass}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+benthos\+\_\+biomass, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a777b5493e477ca2528605d518c1c4669}{fill\+\_\+from\+\_\+benthos\+\_\+number}} (istream \&in, vector$<$ double $>$ \&graph\+\_\+point\+\_\+benthos\+\_\+number, int nrow)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a8739a32518d57f76eb53c9aaed4d2bcc}{fill\+\_\+in\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a307c0d657dac8cfddc70f55ec1c40a85}{fill\+\_\+in\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a142c900470e5de3507becf165384e1f3}{fill\+\_\+in\+\_\+growth\+\_\+transition}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&growth\+\_\+transition)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ae7262bb9abc21d0970de6aaeae0d9bd9}{fill\+\_\+in\+\_\+preferences\+\_\+for\+\_\+species\+\_\+matrix}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&preferences\+\_\+for\+\_\+species\+\_\+matrix)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad23f9d2a29352134e4c69abac4843536}{fill\+\_\+in\+\_\+species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a7727ebc9b8e90f159dfbe24b40c4d992}{fill\+\_\+in\+\_\+selectivity\+\_\+per\+\_\+stock}} (istream \&in, vector$<$ vector$<$ double $>$ $>$ \&selectivity\+\_\+per\+\_\+stock)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a4e3b0fbf9e5371da46933ea4797888df}{fill\+\_\+in\+\_\+param\+\_\+sr}} (istream \&in, vector$<$ double $>$ \&param\+\_\+sr)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ae7c99a3d2bdba1d714cd8093f0cf1913}{fill\+\_\+in\+\_\+initial\+\_\+tac}} (istream \&in, vector$<$ double $>$ \&initial\+\_\+tac)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a85cca31eadaf07ed42bd78a307728de5}{fill\+\_\+in\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max}} (istream \&in, vector$<$ double $>$ \&fbar\+\_\+ages\+\_\+min\+\_\+max)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a7d3cf2e6f7d287df5f1ea2cfa9a4de6f}{fill\+\_\+from\+\_\+metier\+\_\+specifications}} (istream \&in, multimap$<$ string, double $>$ \&infos)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a7d88eb4ea80fb0f8a606a4b446087938}{fill\+\_\+from\+\_\+vessels\+\_\+specifications}} (istream \&in, vector$<$ string $>$ \&names, vector$<$ int $>$ \&vid\+\_\+is\+\_\+actives, vector$<$ int $>$ \&vid\+\_\+is\+\_\+part\+\_\+of\+\_\+ref\+\_\+fleets, vector$<$ double $>$ \&speeds, vector$<$ double $>$ \&fuelcons, vector$<$ double $>$ \&lengths, vector$<$ double $>$ \&v\+K\+Ws, vector$<$ double $>$ \&carrycapacities, vector$<$ double $>$ \&tankcapacities, vector$<$ double $>$ \&nbfpingspertrips, vector$<$ double $>$ \&resttime\+\_\+par1s, vector$<$ double $>$ \&resttime\+\_\+par2s, vector$<$ double $>$ \&av\+\_\+trip\+\_\+duration, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+steaming, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+fishing, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+returning, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+inactive, vector$<$ int $>$ \&firm\+\_\+ids, vector$<$ \mbox{\hyperlink{struct_vessel_calendar}{Vessel\+Calendar}} $>$ \&calendars)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a2f555bd3243956d666fee69a5014bbef}{fill\+\_\+from\+\_\+vessels\+\_\+economic\+\_\+specifications}} (istream \&in, vector$<$ double $>$ \&this\+\_\+vessel\+\_\+nb\+\_\+crews, vector$<$ double $>$ \&annual\+\_\+other\+\_\+incomes, vector$<$ double $>$ \&landing\+\_\+costs\+\_\+percents, vector$<$ double $>$ \&crewshare\+\_\+and\+\_\+unpaid\+\_\+labour\+\_\+costs\+\_\+percents, vector$<$ double $>$ \&other\+\_\+variable\+\_\+costs\+\_\+per\+\_\+unit\+\_\+efforts, vector$<$ double $>$ \&annual\+\_\+insurance\+\_\+costs\+\_\+per\+\_\+crews, vector$<$ double $>$ \&standard\+\_\+labour\+\_\+hour\+\_\+opportunity\+\_\+costss, vector$<$ double $>$ \&standard\+\_\+annual\+\_\+full\+\_\+time\+\_\+employement\+\_\+hourss, vector$<$ double $>$ \&other\+\_\+annual\+\_\+fixed\+\_\+costss, vector$<$ double $>$ \&vessel\+\_\+values, vector$<$ double $>$ \&annual\+\_\+depreciation\+\_\+rates, vector$<$ double $>$ \&opportunity\+\_\+interest\+\_\+rates, vector$<$ double $>$ \&annual\+\_\+discount\+\_\+rates)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a13c1e57b05d4ccfef1285e4a7691c66a}{fill\+\_\+from\+\_\+ships\+\_\+specifications}} (istream \&in, vector$<$ string $>$ \&names, vector$<$ double $>$ \&imos, vector$<$ double $>$ \&yearbuilds, vector$<$ string $>$ \&flags, vector$<$ string $>$ \&types, vector$<$ double $>$ \&typecodes, vector$<$ double $>$ \&loas, vector$<$ double $>$ \&K\+Ws, vector$<$ double $>$ \&breadths, vector$<$ double $>$ \&grosstonnages, vector$<$ double $>$ \&nbunits, vector$<$ double $>$ \&fueluses, vector$<$ double $>$ \&N\+Ox\+Emission\+\_\+gper\+K\+Whs, vector$<$ double $>$ \&S\+Ox\+Emission\+\_\+percentpertotalfuelmasss, vector$<$ double $>$ \&G\+H\+G\+Emissions, vector$<$ double $>$ \&P\+M\+Emissions, vector$<$ double $>$ \&vmaxs, vector$<$ double $>$ \&vcruises, vector$<$ double $>$ \&lane\+\_\+ids)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a7ce2f90a81427842ddddeb7996c9ba97}{fill\+\_\+from\+\_\+firms\+\_\+specifications}} (istream \&in, vector$<$ int $>$ \&firm\+\_\+ids, vector$<$ string $>$ \&firm\+\_\+names, vector$<$ int $>$ \&nb\+\_\+vessels, vector$<$ double $>$ \&longs, vector$<$ double $>$ \&lats)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad2e3ef00a36329eb8ef4b5cb86f910c0}{fill\+\_\+from\+\_\+fishfarms\+\_\+specifications}} (istream \&in, vector$<$ int $>$ \&fishfarms\+\_\+ids, vector$<$ string $>$ \&fishfarms\+\_\+names, vector$<$ int $>$ \&idx\+\_\+nodes, vector$<$ int $>$ \&is\+\_\+actives, vector$<$ double $>$ \&sizes, vector$<$ double $>$ \&longs, vector$<$ double $>$ \&lats, vector$<$ double $>$ \&mean\+\_\+\+S\+S\+Ts, vector$<$ double $>$ \&mean\+\_\+salinities, vector$<$ double $>$ \&mean\+\_\+windspeeds, vector$<$ double $>$ \&mean\+\_\+currentspeeds, vector$<$ double $>$ \&max\+\_\+depths, vector$<$ double $>$ \&diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+ls, vector$<$ double $>$ \&Linf\+\_\+mms, vector$<$ double $>$ \&K\+\_\+ys, vector$<$ double $>$ \&t0\+\_\+ys, vector$<$ double $>$ \&fulton\+\_\+condition\+\_\+factors, vector$<$ string $>$ \&meanw\+\_\+growth\+\_\+model\+\_\+types, vector$<$ int $>$ \&start\+\_\+day\+\_\+growings, vector$<$ int $>$ \&end\+\_\+day\+\_\+harvests, vector$<$ int $>$ \&nbyears\+\_\+for\+\_\+growths, vector$<$ int $>$ \&nb\+\_\+days\+\_\+fallowing\+\_\+periods, vector$<$ int $>$ \&nb\+\_\+fish\+\_\+at\+\_\+starts, vector$<$ double $>$ \&meanw\+\_\+at\+\_\+starts, vector$<$ double $>$ \&price\+\_\+per\+\_\+kg\+\_\+at\+\_\+starts, vector$<$ double $>$ \&target\+\_\+meanw\+\_\+at\+\_\+harvests, vector$<$ int $>$ \&nb\+\_\+fish\+\_\+at\+\_\+harvests, vector$<$ double $>$ \&meanw\+\_\+at\+\_\+harvests, vector$<$ double $>$ \&prop\+\_\+harvest\+\_\+kg\+\_\+solds, vector$<$ double $>$ \&kg\+\_\+eggs\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&price\+\_\+eggs\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3pers, vector$<$ double $>$ \&P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5pers, vector$<$ string $>$ \&feed\+\_\+types, vector$<$ double $>$ \&feed\+\_\+price\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+kgs, vector$<$ double $>$ \&prop\+\_\+\+N\+\_\+in\+\_\+feeds, vector$<$ double $>$ \&prop\+\_\+\+P\+\_\+in\+\_\+feeds, vector$<$ double $>$ \&total\+\_\+feed\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+\+P\+\_\+kgs, vector$<$ string $>$ \&feed\+\_\+type\+\_\+vets, vector$<$ double $>$ \&feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+kgs, vector$<$ double $>$ \&prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets, vector$<$ double $>$ \&prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vets, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+P\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+C\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+heavymetals\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+medecine\+\_\+kgs, vector$<$ double $>$ \&net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+ys, vector$<$ double $>$ \&market\+\_\+price\+\_\+sold\+\_\+fishs, vector$<$ double $>$ \&operating\+\_\+cost\+\_\+per\+\_\+days, vector$<$ double $>$ \&annual\+\_\+profits)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ae052868da8e0282f790e126cc2967dcd}{fill\+\_\+from\+\_\+avai\+\_\+nodes\+\_\+with\+\_\+pop}} (istream \&in, map$<$ int, double $>$ \&avai)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a5cf9916f7ca64e61f845d9ac25d7ee05}{fill\+\_\+from\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop}} (istream \&in, multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&avai)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad214ab0cf2fdf73bc1eefe10d8b80b8e}{fill\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop}} (istream \&in, multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&coeffs)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a2220f91a631d7124176c43fbc98d2150}{fill\+\_\+from\+\_\+oth\+\_\+land}} (istream \&in, map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&oth\+\_\+land)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad310b3439c06f33add0f37151e48d1c7}{fill\+\_\+from\+\_\+overall\+\_\+migration\+\_\+fluxes}} (istream \&in, multimap$<$ int, double $>$ \&overall\+\_\+migration\+\_\+fluxes)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad07c58bc43f69ebb76b7402291288b63}{fill\+\_\+from\+\_\+relative\+\_\+stability}} (istream \&in, map$<$ string, double $>$ \&relative\+\_\+stability)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a16c17f8529ee628ec0ea83d123379f49}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i}} (istream \&in, map$<$ int, int $>$ \&a\+\_\+map)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ac9c56b5a79e7e17bb58cd8ba878a9012}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s}} (istream \&in, map$<$ int, string $>$ \&a\+\_\+map)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a2acaa8208fa84db335f83553553d23be}{fill\+\_\+from\+\_\+nodes\+\_\+in\+\_\+polygons}} (istream \&in, multimap$<$ int, int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ae1aa0d83e8fc56ca827ccf47a01cd126}{nodes\+\_\+in\+\_\+polygons}})
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_adda45815d653cde3a2cca0502a621549}{fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+s\+\_\+i}} (istream \&in, multimap$<$ string, int $>$ \&infos)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a7183cfd015d227443061b22f56c24dd2}{fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+d}} (istream \&in, multimap$<$ int, double $>$ \&infos)
+\begin{DoxyCompactList}\small\item\em fill in the vessel attributes into a multimap $<$integer, double$>$. First line is an heading. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{myutils_8cpp_ad260bea419dc2a91d41453f6024b712b}{fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+s\+\_\+d}} (istream \&in, multimap$<$ string, double $>$ \&infos)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a35d902e70250fc5f176f68d22c00ff06}{fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s}} (istream \&in, multimap$<$ int, string $>$ \&infos)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a822b5cb3ee9cb0dbf997e85408224a94}{fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i}} (istream \&in, multimap$<$ int, int $>$ \&infos)
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a990efd099bbfb898b0448b99fbe8e43a}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i}} (istream \&in, map$<$ int, int $>$ \&infos, string \mbox{\hyperlink{simulator_2main_8cpp_adce42e3d353180d56a4d9a29ea24e7bd}{namefolderinput}})
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a3ff677c7b2a4e02b13e381bc098772b7}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+d}} (istream \&in, map$<$ int, double $>$ \&infos, string \mbox{\hyperlink{simulator_2main_8cpp_adce42e3d353180d56a4d9a29ea24e7bd}{namefolderinput}})
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_a94d92a9cdb7ab0317db8551258f0d765}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s}} (istream \&in, map$<$ int, string $>$ \&infos, string \mbox{\hyperlink{simulator_2main_8cpp_adce42e3d353180d56a4d9a29ea24e7bd}{namefolderinput}})
+\item 
+bool \mbox{\hyperlink{myutils_8cpp_ab59d1a8abb149cc621bf88e36484fc82}{fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+s\+\_\+d}} (istream \&in, map$<$ string, double $>$ \&infos)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{myutils_8cpp_acead5c453ba1bee3a7ee18691fa69aeb}{find\+\_\+entries\+\_\+s\+\_\+d}} (multimap$<$ string, double $>$ \&infos, string str)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{myutils_8cpp_a22901bc415ad4c2346116997e6b8987d}{find\+\_\+entries\+\_\+s\+\_\+i}} (multimap$<$ string, int $>$ \&infos, string str)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{myutils_8cpp_a76090544848eca4f529d5ad6c20a7c0c}{find\+\_\+entries\+\_\+i\+\_\+d}} (const multimap$<$ int, double $>$ \&infos, int intg)
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{myutils_8cpp_ab00d89878d20408071d0f403619e6235}{find\+\_\+entries\+\_\+i\+\_\+i}} (const multimap$<$ int, int $>$ \&infos, int intg)
+\item 
+vector$<$ string $>$ \mbox{\hyperlink{myutils_8cpp_a2685b0dc6550da4bcf75d5795070c2ee}{find\+\_\+entries\+\_\+i\+\_\+s}} (multimap$<$ int, string $>$ \&infos, int intg)
+\item 
+void \mbox{\hyperlink{myutils_8cpp_a4e292fb86a6e46cb2d6b3374fb7a9c4f}{set\+\_\+entries\+\_\+d}} (multimap$<$ int, double $>$ \&infos, int itr, vector$<$ double $>$ newval)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{myutils_8cpp_a85cbbff3782f8873c54e42cf30caf796}{compute\+\_\+distance\+\_\+fgrounds}} (const vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}{relevant\+\_\+nodes}}, const std\+::vector$<$ \mbox{\hyperlink{class_path_shop}{Path\+Shop}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a1d6e93fdf06dc624480583be2cdd0748}{pathshops}}, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} from, vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ grounds)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{myutils_8cpp_a12ac87f49d3490db6549345d987b13f7}{scale\+\_\+a\+\_\+vector\+\_\+to\+\_\+1}} (vector$<$ double $>$ a\+\_\+vector)
+\item 
+double \mbox{\hyperlink{myutils_8cpp_aef2938721d73d3c5b5d0e6234c032d2a}{decode\+\_\+the\+\_\+tree}} (string \&tree, vector$<$ string $>$ \&direction, map$<$ string, int $>$ \&external\+\_\+states, map$<$ string, int $>$ \&internal\+\_\+states)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{myutils_8cpp_a8f0f4bbb25cac840fc0a4dba5ed2f217}\label{myutils_8cpp_a8f0f4bbb25cac840fc0a4dba5ed2f217}} 
+\index{myutils.cpp@{myutils.cpp}!closeSomeNodes@{closeSomeNodes}}
+\index{closeSomeNodes@{closeSomeNodes}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{closeSomeNodes()}{closeSomeNodes()}}
+{\footnotesize\ttfamily void close\+Some\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{nodes\+\_\+to\+\_\+be\+\_\+closed,  }\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a85cbbff3782f8873c54e42cf30caf796}\label{myutils_8cpp_a85cbbff3782f8873c54e42cf30caf796}} 
+\index{myutils.cpp@{myutils.cpp}!compute\_distance\_fgrounds@{compute\_distance\_fgrounds}}
+\index{compute\_distance\_fgrounds@{compute\_distance\_fgrounds}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{compute\_distance\_fgrounds()}{compute\_distance\_fgrounds()}}
+{\footnotesize\ttfamily vector$<$double$>$ compute\+\_\+distance\+\_\+fgrounds (\begin{DoxyParamCaption}\item[{const vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&}]{relevant\+\_\+nodes,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{class_path_shop}{Path\+Shop}} $>$ \&}]{pathshops,  }\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{from,  }\item[{vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$}]{grounds }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_aef2938721d73d3c5b5d0e6234c032d2a}\label{myutils_8cpp_aef2938721d73d3c5b5d0e6234c032d2a}} 
+\index{myutils.cpp@{myutils.cpp}!decode\_the\_tree@{decode\_the\_tree}}
+\index{decode\_the\_tree@{decode\_the\_tree}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{decode\_the\_tree()}{decode\_the\_tree()}}
+{\footnotesize\ttfamily double decode\+\_\+the\+\_\+tree (\begin{DoxyParamCaption}\item[{string \&}]{tree,  }\item[{vector$<$ string $>$ \&}]{direction,  }\item[{map$<$ string, int $>$ \&}]{external\+\_\+states,  }\item[{map$<$ string, int $>$ \&}]{internal\+\_\+states }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a4e0b7701cb73138fb0ac0f7e05741596}\label{myutils_8cpp_a4e0b7701cb73138fb0ac0f7e05741596}} 
+\index{myutils.cpp@{myutils.cpp}!DijkstraComputePaths@{DijkstraComputePaths}}
+\index{DijkstraComputePaths@{DijkstraComputePaths}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{DijkstraComputePaths()}{DijkstraComputePaths()}}
+{\footnotesize\ttfamily void Dijkstra\+Compute\+Paths (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}}]{source,  }\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map,  }\item[{spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{myutils_8h_a4497881a7e75868dd6b1cafbffd81e1f}{weight\+\_\+t}} $>$ \&}]{min\+\_\+distance,  }\item[{spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&}]{previous,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$}]{relevant\+\_\+nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a5329e8f01eaa79cc4c000e82976a1c3b}\label{myutils_8cpp_a5329e8f01eaa79cc4c000e82976a1c3b}} 
+\index{myutils.cpp@{myutils.cpp}!DijkstraGetShortestPathTo@{DijkstraGetShortestPathTo}}
+\index{DijkstraGetShortestPathTo@{DijkstraGetShortestPathTo}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{DijkstraGetShortestPathTo()}{DijkstraGetShortestPathTo()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::list$<$\mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}$>$ Dijkstra\+Get\+Shortest\+Path\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}}]{target,  }\item[{spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&}]{previous }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a9701a0016553471b2dc23ee4db3a81f2}\label{myutils_8cpp_a9701a0016553471b2dc23ee4db3a81f2}} 
+\index{myutils.cpp@{myutils.cpp}!DijkstraGetShortestPathTo@{DijkstraGetShortestPathTo}}
+\index{DijkstraGetShortestPathTo@{DijkstraGetShortestPathTo}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{DijkstraGetShortestPathTo()}{DijkstraGetShortestPathTo()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::list$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ Dijkstra\+Get\+Shortest\+Path\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{target,  }\item[{const \mbox{\hyperlink{class_path_shop}{Path\+Shop}} \&}]{pathshop }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a64d77caddefed4b96fa62e3f5f73c9a2}\label{myutils_8cpp_a64d77caddefed4b96fa62e3f5f73c9a2}} 
+\index{myutils.cpp@{myutils.cpp}!end@{end}}
+\index{end@{end}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+T$\ast$ end (\begin{DoxyParamCaption}\item[{T(\&)}]{p\+Array\mbox{[}\+N\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_ad214ab0cf2fdf73bc1eefe10d8b80b8e}\label{myutils_8cpp_ad214ab0cf2fdf73bc1eefe10d8b80b8e}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_field\_of\_coeff\_diffusion\_this\_pop@{fill\_field\_of\_coeff\_diffusion\_this\_pop}}
+\index{fill\_field\_of\_coeff\_diffusion\_this\_pop@{fill\_field\_of\_coeff\_diffusion\_this\_pop}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_field\_of\_coeff\_diffusion\_this\_pop()}{fill\_field\_of\_coeff\_diffusion\_this\_pop()}}
+{\footnotesize\ttfamily bool fill\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{coeffs }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & avai specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ae052868da8e0282f790e126cc2967dcd}\label{myutils_8cpp_ae052868da8e0282f790e126cc2967dcd}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_avai\_nodes\_with\_pop@{fill\_from\_avai\_nodes\_with\_pop}}
+\index{fill\_from\_avai\_nodes\_with\_pop@{fill\_from\_avai\_nodes\_with\_pop}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_avai\_nodes\_with\_pop()}{fill\_from\_avai\_nodes\_with\_pop()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+avai\+\_\+nodes\+\_\+with\+\_\+pop (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, double $>$ \&}]{avai }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a map 
+\begin{DoxyParams}{Parameters}
+{\em the} & vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a5cf9916f7ca64e61f845d9ac25d7ee05}\label{myutils_8cpp_a5cf9916f7ca64e61f845d9ac25d7ee05}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_avai\_szgroup\_nodes\_with\_pop@{fill\_from\_avai\_szgroup\_nodes\_with\_pop}}
+\index{fill\_from\_avai\_szgroup\_nodes\_with\_pop@{fill\_from\_avai\_szgroup\_nodes\_with\_pop}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_avai\_szgroup\_nodes\_with\_pop()}{fill\_from\_avai\_szgroup\_nodes\_with\_pop()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{avai }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & avai specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a5453dba18390b56a0d39cbcba5bcbbab}\label{myutils_8cpp_a5453dba18390b56a0d39cbcba5bcbbab}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_bathymetry@{fill\_from\_bathymetry}}
+\index{fill\_from\_bathymetry@{fill\_from\_bathymetry}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_bathymetry()}{fill\_from\_bathymetry()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+bathymetry (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+bathymetry,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_acbf840ecf526e8ba11557249b105f62c}\label{myutils_8cpp_acbf840ecf526e8ba11557249b105f62c}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_benthos\_biomass@{fill\_from\_benthos\_biomass}}
+\index{fill\_from\_benthos\_biomass@{fill\_from\_benthos\_biomass}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_benthos\_biomass()}{fill\_from\_benthos\_biomass()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+benthos\+\_\+biomass (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+benthos\+\_\+biomass,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a777b5493e477ca2528605d518c1c4669}\label{myutils_8cpp_a777b5493e477ca2528605d518c1c4669}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_benthos\_number@{fill\_from\_benthos\_number}}
+\index{fill\_from\_benthos\_number@{fill\_from\_benthos\_number}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_benthos\_number()}{fill\_from\_benthos\_number()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+benthos\+\_\+number (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+benthos\+\_\+number,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a32aa00351eeadec36a86194d99b0f002}\label{myutils_8cpp_a32aa00351eeadec36a86194d99b0f002}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_code\_area@{fill\_from\_code\_area}}
+\index{fill\_from\_code\_area@{fill\_from\_code\_area}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_code\_area()}{fill\_from\_code\_area()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+code\+\_\+area (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+point\+\_\+code\+\_\+area,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_ae20f9e84ed84cadd3af699c0af864392}\label{myutils_8cpp_ae20f9e84ed84cadd3af699c0af864392}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_code\_marine\_landscape@{fill\_from\_code\_marine\_landscape}}
+\index{fill\_from\_code\_marine\_landscape@{fill\_from\_code\_marine\_landscape}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_code\_marine\_landscape()}{fill\_from\_code\_marine\_landscape()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+code\+\_\+marine\+\_\+landscape (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+point\+\_\+code\+\_\+landscape,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a100ac3790f39d530a0b5f945e362db09}\label{myutils_8cpp_a100ac3790f39d530a0b5f945e362db09}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_coord@{fill\_from\_coord}}
+\index{fill\_from\_coord@{fill\_from\_coord}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_coord()}{fill\_from\_coord()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+coord (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+coord\+\_\+x,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+coord\+\_\+y,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+coord\+\_\+harbour,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+fill in the separated vectors related to the coord object 
+\begin{DoxyParams}{Parameters}
+{\em the} & coord file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a3467dec8d1d1e9286d8a47630eae8be4}\label{myutils_8cpp_a3467dec8d1d1e9286d8a47630eae8be4}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_DissolvedCarbon@{fill\_from\_DissolvedCarbon}}
+\index{fill\_from\_DissolvedCarbon@{fill\_from\_DissolvedCarbon}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_DissolvedCarbon()}{fill\_from\_DissolvedCarbon()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+\+Dissolved\+Carbon (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+\+Dissolved\+Carbon,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a7ce2f90a81427842ddddeb7996c9ba97}\label{myutils_8cpp_a7ce2f90a81427842ddddeb7996c9ba97}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_firms\_specifications@{fill\_from\_firms\_specifications}}
+\index{fill\_from\_firms\_specifications@{fill\_from\_firms\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_firms\_specifications()}{fill\_from\_firms\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+firms\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ int $>$ \&}]{firm\+\_\+ids,  }\item[{vector$<$ string $>$ \&}]{firm\+\_\+names,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+vessels,  }\item[{vector$<$ double $>$ \&}]{longs,  }\item[{vector$<$ double $>$ \&}]{lats }\end{DoxyParamCaption})}
+
+fill in the firms attributes 
+\begin{DoxyParams}{Parameters}
+{\em the} & firm specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ad2e3ef00a36329eb8ef4b5cb86f910c0}\label{myutils_8cpp_ad2e3ef00a36329eb8ef4b5cb86f910c0}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_fishfarms\_specifications@{fill\_from\_fishfarms\_specifications}}
+\index{fill\_from\_fishfarms\_specifications@{fill\_from\_fishfarms\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_fishfarms\_specifications()}{fill\_from\_fishfarms\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+fishfarms\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ int $>$ \&}]{fishfarms\+\_\+ids,  }\item[{vector$<$ string $>$ \&}]{fishfarms\+\_\+names,  }\item[{vector$<$ int $>$ \&}]{idx\+\_\+nodes,  }\item[{vector$<$ int $>$ \&}]{is\+\_\+actives,  }\item[{vector$<$ double $>$ \&}]{sizes,  }\item[{vector$<$ double $>$ \&}]{longs,  }\item[{vector$<$ double $>$ \&}]{lats,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+\+S\+S\+Ts,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+salinities,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+windspeeds,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+currentspeeds,  }\item[{vector$<$ double $>$ \&}]{max\+\_\+depths,  }\item[{vector$<$ double $>$ \&}]{diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+ls,  }\item[{vector$<$ double $>$ \&}]{Linf\+\_\+mms,  }\item[{vector$<$ double $>$ \&}]{K\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{t0\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{fulton\+\_\+condition\+\_\+factors,  }\item[{vector$<$ string $>$ \&}]{meanw\+\_\+growth\+\_\+model\+\_\+types,  }\item[{vector$<$ int $>$ \&}]{start\+\_\+day\+\_\+growings,  }\item[{vector$<$ int $>$ \&}]{end\+\_\+day\+\_\+harvests,  }\item[{vector$<$ int $>$ \&}]{nbyears\+\_\+for\+\_\+growths,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+days\+\_\+fallowing\+\_\+periods,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+fish\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{meanw\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{price\+\_\+per\+\_\+kg\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{target\+\_\+meanw\+\_\+at\+\_\+harvests,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+fish\+\_\+at\+\_\+harvests,  }\item[{vector$<$ double $>$ \&}]{meanw\+\_\+at\+\_\+harvests,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+harvest\+\_\+kg\+\_\+solds,  }\item[{vector$<$ double $>$ \&}]{kg\+\_\+eggs\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{price\+\_\+eggs\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3pers,  }\item[{vector$<$ double $>$ \&}]{P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5pers,  }\item[{vector$<$ string $>$ \&}]{feed\+\_\+types,  }\item[{vector$<$ double $>$ \&}]{feed\+\_\+price\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+N\+\_\+in\+\_\+feeds,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+P\+\_\+in\+\_\+feeds,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ string $>$ \&}]{feed\+\_\+type\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+C\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+heavymetals\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+medecine\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{market\+\_\+price\+\_\+sold\+\_\+fishs,  }\item[{vector$<$ double $>$ \&}]{operating\+\_\+cost\+\_\+per\+\_\+days,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+profits }\end{DoxyParamCaption})}
+
+fill in the fishfarms attributes 
+\begin{DoxyParams}{Parameters}
+{\em the} & fishfarm specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ab1a815816c4786bb1020804660415efc}\label{myutils_8cpp_ab1a815816c4786bb1020804660415efc}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_graph@{fill\_from\_graph}}
+\index{fill\_from\_graph@{fill\_from\_graph}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_graph()}{fill\_from\_graph()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+graph (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+idx\+\_\+dep,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+idx\+\_\+arr,  }\item[{vector$<$ int $>$ \&}]{graph\+\_\+dist\+\_\+km,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+fill in the separated vectors related to the coord object 
+\begin{DoxyParams}{Parameters}
+{\em the} & coord file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a7d3cf2e6f7d287df5f1ea2cfa9a4de6f}\label{myutils_8cpp_a7d3cf2e6f7d287df5f1ea2cfa9a4de6f}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_metier\_specifications@{fill\_from\_metier\_specifications}}
+\index{fill\_from\_metier\_specifications@{fill\_from\_metier\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_metier\_specifications()}{fill\_from\_metier\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+metier\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ string, double $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a multimap D\+O\+U\+B\+LE 
+\begin{DoxyParams}{Parameters}
+{\em the} & vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_aaa14000bf1e6f25f13dab9820660f091}\label{myutils_8cpp_aaa14000bf1e6f25f13dab9820660f091}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_Nitrogen@{fill\_from\_Nitrogen}}
+\index{fill\_from\_Nitrogen@{fill\_from\_Nitrogen}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_Nitrogen()}{fill\_from\_Nitrogen()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+\+Nitrogen (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+\+Nitrogen,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a2acaa8208fa84db335f83553553d23be}\label{myutils_8cpp_a2acaa8208fa84db335f83553553d23be}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_nodes\_in\_polygons@{fill\_from\_nodes\_in\_polygons}}
+\index{fill\_from\_nodes\_in\_polygons@{fill\_from\_nodes\_in\_polygons}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_nodes\_in\_polygons()}{fill\_from\_nodes\_in\_polygons()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+nodes\+\_\+in\+\_\+polygons (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ int, int $>$ \&}]{nodes\+\_\+in\+\_\+polygons }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & avai specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a2220f91a631d7124176c43fbc98d2150}\label{myutils_8cpp_a2220f91a631d7124176c43fbc98d2150}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_oth\_land@{fill\_from\_oth\_land}}
+\index{fill\_from\_oth\_land@{fill\_from\_oth\_land}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_oth\_land()}{fill\_from\_oth\_land()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+oth\+\_\+land (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \&}]{oth\+\_\+land }\end{DoxyParamCaption})}
+
+fill in the oth\+\_\+land attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & oth\+\_\+land specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ad310b3439c06f33add0f37151e48d1c7}\label{myutils_8cpp_ad310b3439c06f33add0f37151e48d1c7}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_overall\_migration\_fluxes@{fill\_from\_overall\_migration\_fluxes}}
+\index{fill\_from\_overall\_migration\_fluxes@{fill\_from\_overall\_migration\_fluxes}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_overall\_migration\_fluxes()}{fill\_from\_overall\_migration\_fluxes()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+overall\+\_\+migration\+\_\+fluxes (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ int, double $>$ \&}]{overall\+\_\+migration\+\_\+fluxes }\end{DoxyParamCaption})}
+
+fill in the overall\+\_\+migration\+\_\+fluxes attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & overall\+\_\+migration\+\_\+fluxes specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_abb62612585e5ff2c7bff8d447e51b57c}\label{myutils_8cpp_abb62612585e5ff2c7bff8d447e51b57c}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_Oxygen@{fill\_from\_Oxygen}}
+\index{fill\_from\_Oxygen@{fill\_from\_Oxygen}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_Oxygen()}{fill\_from\_Oxygen()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+\+Oxygen (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+\+Oxygen,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a42b88b14518215ba34eb823a7b4ba12b}\label{myutils_8cpp_a42b88b14518215ba34eb823a7b4ba12b}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_Phosphorus@{fill\_from\_Phosphorus}}
+\index{fill\_from\_Phosphorus@{fill\_from\_Phosphorus}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_Phosphorus()}{fill\_from\_Phosphorus()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+\+Phosphorus (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+\+Phosphorus,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_ad07c58bc43f69ebb76b7402291288b63}\label{myutils_8cpp_ad07c58bc43f69ebb76b7402291288b63}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_relative\_stability@{fill\_from\_relative\_stability}}
+\index{fill\_from\_relative\_stability@{fill\_from\_relative\_stability}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_relative\_stability()}{fill\_from\_relative\_stability()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+relative\+\_\+stability (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ string, double $>$ \&}]{relative\+\_\+stability }\end{DoxyParamCaption})}
+
+fill in the attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a810bdca95be243a1ea5c9641fb2cecdf}\label{myutils_8cpp_a810bdca95be243a1ea5c9641fb2cecdf}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_salinity@{fill\_from\_salinity}}
+\index{fill\_from\_salinity@{fill\_from\_salinity}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_salinity()}{fill\_from\_salinity()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+salinity (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+salinity,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_ad115fe6a48c776dbdf2fc95ad4961dd9}\label{myutils_8cpp_ad115fe6a48c776dbdf2fc95ad4961dd9}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_shippingdensity@{fill\_from\_shippingdensity}}
+\index{fill\_from\_shippingdensity@{fill\_from\_shippingdensity}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_shippingdensity()}{fill\_from\_shippingdensity()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+shippingdensity (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+shippingdensity,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a13c1e57b05d4ccfef1285e4a7691c66a}\label{myutils_8cpp_a13c1e57b05d4ccfef1285e4a7691c66a}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_ships\_specifications@{fill\_from\_ships\_specifications}}
+\index{fill\_from\_ships\_specifications@{fill\_from\_ships\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_ships\_specifications()}{fill\_from\_ships\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+ships\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ string $>$ \&}]{names,  }\item[{vector$<$ double $>$ \&}]{imos,  }\item[{vector$<$ double $>$ \&}]{yearbuilds,  }\item[{vector$<$ string $>$ \&}]{flags,  }\item[{vector$<$ string $>$ \&}]{types,  }\item[{vector$<$ double $>$ \&}]{typecodes,  }\item[{vector$<$ double $>$ \&}]{loas,  }\item[{vector$<$ double $>$ \&}]{K\+Ws,  }\item[{vector$<$ double $>$ \&}]{breadths,  }\item[{vector$<$ double $>$ \&}]{grosstonnages,  }\item[{vector$<$ double $>$ \&}]{nbunits,  }\item[{vector$<$ double $>$ \&}]{fueluses,  }\item[{vector$<$ double $>$ \&}]{N\+Ox\+Emission\+\_\+gper\+K\+Whs,  }\item[{vector$<$ double $>$ \&}]{S\+Ox\+Emission\+\_\+percentpertotalfuelmasss,  }\item[{vector$<$ double $>$ \&}]{G\+H\+G\+Emissions,  }\item[{vector$<$ double $>$ \&}]{P\+M\+Emissions,  }\item[{vector$<$ double $>$ \&}]{vmaxs,  }\item[{vector$<$ double $>$ \&}]{vcruises,  }\item[{vector$<$ double $>$ \&}]{lane\+\_\+ids }\end{DoxyParamCaption})}
+
+fill in the vessel attributes 
+\begin{DoxyParams}{Parameters}
+{\em the} & vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ad176e6a0e1380dc22f7680a2cd85ca6f}\label{myutils_8cpp_ad176e6a0e1380dc22f7680a2cd85ca6f}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_siltfraction@{fill\_from\_siltfraction}}
+\index{fill\_from\_siltfraction@{fill\_from\_siltfraction}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_siltfraction()}{fill\_from\_siltfraction()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+siltfraction (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+siltfraction,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a971c35efda4643bf8bf1fccbc1d57e61}\label{myutils_8cpp_a971c35efda4643bf8bf1fccbc1d57e61}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_sst@{fill\_from\_sst}}
+\index{fill\_from\_sst@{fill\_from\_sst}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_sst()}{fill\_from\_sst()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+sst (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+sst,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a2f555bd3243956d666fee69a5014bbef}\label{myutils_8cpp_a2f555bd3243956d666fee69a5014bbef}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_vessels\_economic\_specifications@{fill\_from\_vessels\_economic\_specifications}}
+\index{fill\_from\_vessels\_economic\_specifications@{fill\_from\_vessels\_economic\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_vessels\_economic\_specifications()}{fill\_from\_vessels\_economic\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+vessels\+\_\+economic\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{this\+\_\+vessel\+\_\+nb\+\_\+crews,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+other\+\_\+incomes,  }\item[{vector$<$ double $>$ \&}]{landing\+\_\+costs\+\_\+percents,  }\item[{vector$<$ double $>$ \&}]{crewshare\+\_\+and\+\_\+unpaid\+\_\+labour\+\_\+costs\+\_\+percents,  }\item[{vector$<$ double $>$ \&}]{other\+\_\+variable\+\_\+costs\+\_\+per\+\_\+unit\+\_\+efforts,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+insurance\+\_\+costs\+\_\+per\+\_\+crews,  }\item[{vector$<$ double $>$ \&}]{standard\+\_\+labour\+\_\+hour\+\_\+opportunity\+\_\+costss,  }\item[{vector$<$ double $>$ \&}]{standard\+\_\+annual\+\_\+full\+\_\+time\+\_\+employement\+\_\+hourss,  }\item[{vector$<$ double $>$ \&}]{other\+\_\+annual\+\_\+fixed\+\_\+costss,  }\item[{vector$<$ double $>$ \&}]{vessel\+\_\+values,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+depreciation\+\_\+rates,  }\item[{vector$<$ double $>$ \&}]{opportunity\+\_\+interest\+\_\+rates,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discount\+\_\+rates }\end{DoxyParamCaption})}
+
+fill in the vessel attributes 
+\begin{DoxyParams}{Parameters}
+{\em the} & vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a7d88eb4ea80fb0f8a606a4b446087938}\label{myutils_8cpp_a7d88eb4ea80fb0f8a606a4b446087938}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_vessels\_specifications@{fill\_from\_vessels\_specifications}}
+\index{fill\_from\_vessels\_specifications@{fill\_from\_vessels\_specifications}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_vessels\_specifications()}{fill\_from\_vessels\_specifications()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+vessels\+\_\+specifications (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ string $>$ \&}]{names,  }\item[{vector$<$ int $>$ \&}]{vid\+\_\+is\+\_\+actives,  }\item[{vector$<$ int $>$ \&}]{vid\+\_\+is\+\_\+part\+\_\+of\+\_\+ref\+\_\+fleets,  }\item[{vector$<$ double $>$ \&}]{speeds,  }\item[{vector$<$ double $>$ \&}]{fuelcons,  }\item[{vector$<$ double $>$ \&}]{lengths,  }\item[{vector$<$ double $>$ \&}]{v\+K\+Ws,  }\item[{vector$<$ double $>$ \&}]{carrycapacities,  }\item[{vector$<$ double $>$ \&}]{tankcapacities,  }\item[{vector$<$ double $>$ \&}]{nbfpingspertrips,  }\item[{vector$<$ double $>$ \&}]{resttime\+\_\+par1s,  }\item[{vector$<$ double $>$ \&}]{resttime\+\_\+par2s,  }\item[{vector$<$ double $>$ \&}]{av\+\_\+trip\+\_\+duration,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+steaming,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+fishing,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+returning,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+inactive,  }\item[{vector$<$ int $>$ \&}]{firm\+\_\+ids,  }\item[{vector$<$ \mbox{\hyperlink{struct_vessel_calendar}{Vessel\+Calendar}} $>$ \&}]{calendars }\end{DoxyParamCaption})}
+
+fill in the vessel attributes 
+\begin{DoxyParams}{Parameters}
+{\em the} & vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a737ffc7d03661aa761905be249c6d41d}\label{myutils_8cpp_a737ffc7d03661aa761905be249c6d41d}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_from\_wind@{fill\_from\_wind}}
+\index{fill\_from\_wind@{fill\_from\_wind}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_from\_wind()}{fill\_from\_wind()}}
+{\footnotesize\ttfamily bool fill\+\_\+from\+\_\+wind (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{graph\+\_\+point\+\_\+wind,  }\item[{int}]{nrow }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a85cca31eadaf07ed42bd78a307728de5}\label{myutils_8cpp_a85cca31eadaf07ed42bd78a307728de5}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_fbar\_ages\_min\_max@{fill\_in\_fbar\_ages\_min\_max}}
+\index{fill\_in\_fbar\_ages\_min\_max@{fill\_in\_fbar\_ages\_min\_max}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_fbar\_ages\_min\_max()}{fill\_in\_fbar\_ages\_min\_max()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{fbar\+\_\+ages\+\_\+min\+\_\+max }\end{DoxyParamCaption})}
+
+fill in 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a142c900470e5de3507becf165384e1f3}\label{myutils_8cpp_a142c900470e5de3507becf165384e1f3}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_growth\_transition@{fill\_in\_growth\_transition}}
+\index{fill\_in\_growth\_transition@{fill\_in\_growth\_transition}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_growth\_transition()}{fill\_in\_growth\_transition()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+growth\+\_\+transition (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{growth\+\_\+transition }\end{DoxyParamCaption})}
+
+fill in the growth transition matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ae7c99a3d2bdba1d714cd8093f0cf1913}\label{myutils_8cpp_ae7c99a3d2bdba1d714cd8093f0cf1913}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_initial\_tac@{fill\_in\_initial\_tac}}
+\index{fill\_in\_initial\_tac@{fill\_in\_initial\_tac}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_initial\_tac()}{fill\_in\_initial\_tac()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+initial\+\_\+tac (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{initial\+\_\+tac }\end{DoxyParamCaption})}
+
+fill in 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a4e3b0fbf9e5371da46933ea4797888df}\label{myutils_8cpp_a4e3b0fbf9e5371da46933ea4797888df}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_param\_sr@{fill\_in\_param\_sr}}
+\index{fill\_in\_param\_sr@{fill\_in\_param\_sr}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_param\_sr()}{fill\_in\_param\_sr()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+param\+\_\+sr (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ double $>$ \&}]{param\+\_\+sr }\end{DoxyParamCaption})}
+
+fill in 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a307c0d657dac8cfddc70f55ec1c40a85}\label{myutils_8cpp_a307c0d657dac8cfddc70f55ec1c40a85}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_percent\_age\_per\_szgroup\_matrix@{fill\_in\_percent\_age\_per\_szgroup\_matrix}}
+\index{fill\_in\_percent\_age\_per\_szgroup\_matrix@{fill\_in\_percent\_age\_per\_szgroup\_matrix}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_percent\_age\_per\_szgroup\_matrix()}{fill\_in\_percent\_age\_per\_szgroup\_matrix()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix }\end{DoxyParamCaption})}
+
+fill in the growth transition matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a8739a32518d57f76eb53c9aaed4d2bcc}\label{myutils_8cpp_a8739a32518d57f76eb53c9aaed4d2bcc}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_percent\_szgroup\_per\_age\_matrix@{fill\_in\_percent\_szgroup\_per\_age\_matrix}}
+\index{fill\_in\_percent\_szgroup\_per\_age\_matrix@{fill\_in\_percent\_szgroup\_per\_age\_matrix}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_percent\_szgroup\_per\_age\_matrix()}{fill\_in\_percent\_szgroup\_per\_age\_matrix()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix }\end{DoxyParamCaption})}
+
+fill in the growth transition matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ae7262bb9abc21d0970de6aaeae0d9bd9}\label{myutils_8cpp_ae7262bb9abc21d0970de6aaeae0d9bd9}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_preferences\_for\_species\_matrix@{fill\_in\_preferences\_for\_species\_matrix}}
+\index{fill\_in\_preferences\_for\_species\_matrix@{fill\_in\_preferences\_for\_species\_matrix}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_preferences\_for\_species\_matrix()}{fill\_in\_preferences\_for\_species\_matrix()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+preferences\+\_\+for\+\_\+species\+\_\+matrix (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{preferences\+\_\+for\+\_\+species\+\_\+matrix }\end{DoxyParamCaption})}
+
+fill in the preferences\+\_\+for\+\_\+species\+\_\+matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a7727ebc9b8e90f159dfbe24b40c4d992}\label{myutils_8cpp_a7727ebc9b8e90f159dfbe24b40c4d992}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_selectivity\_per\_stock@{fill\_in\_selectivity\_per\_stock}}
+\index{fill\_in\_selectivity\_per\_stock@{fill\_in\_selectivity\_per\_stock}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_selectivity\_per\_stock()}{fill\_in\_selectivity\_per\_stock()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+selectivity\+\_\+per\+\_\+stock (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{selectivity\+\_\+per\+\_\+stock }\end{DoxyParamCaption})}
+
+fill in the growth transition matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ad23f9d2a29352134e4c69abac4843536}\label{myutils_8cpp_ad23f9d2a29352134e4c69abac4843536}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_in\_species\_interactions\_mortality\_proportion\_matrix@{fill\_in\_species\_interactions\_mortality\_proportion\_matrix}}
+\index{fill\_in\_species\_interactions\_mortality\_proportion\_matrix@{fill\_in\_species\_interactions\_mortality\_proportion\_matrix}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_in\_species\_interactions\_mortality\_proportion\_matrix()}{fill\_in\_species\_interactions\_mortality\_proportion\_matrix()}}
+{\footnotesize\ttfamily bool fill\+\_\+in\+\_\+species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{vector$<$ vector$<$ double $>$ $>$ \&}]{species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix }\end{DoxyParamCaption})}
+
+fill in the species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix 
+\begin{DoxyParams}{Parameters}
+{\em the} & vector file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a3ff677c7b2a4e02b13e381bc098772b7}\label{myutils_8cpp_a3ff677c7b2a4e02b13e381bc098772b7}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_i\_d@{fill\_map\_from\_specifications\_i\_d}}
+\index{fill\_map\_from\_specifications\_i\_d@{fill\_map\_from\_specifications\_i\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_i\_d()}{fill\_map\_from\_specifications\_i\_d()}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+d (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, double $>$ \&}]{infos,  }\item[{string}]{namefolderinput }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a map $<$int, int$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a16c17f8529ee628ec0ea83d123379f49}\label{myutils_8cpp_a16c17f8529ee628ec0ea83d123379f49}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_i\_i@{fill\_map\_from\_specifications\_i\_i}}
+\index{fill\_map\_from\_specifications\_i\_i@{fill\_map\_from\_specifications\_i\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_i\_i()}{fill\_map\_from\_specifications\_i\_i()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, int $>$ \&}]{a\+\_\+map }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & avai specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a990efd099bbfb898b0448b99fbe8e43a}\label{myutils_8cpp_a990efd099bbfb898b0448b99fbe8e43a}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_i\_i@{fill\_map\_from\_specifications\_i\_i}}
+\index{fill\_map\_from\_specifications\_i\_i@{fill\_map\_from\_specifications\_i\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_i\_i()}{fill\_map\_from\_specifications\_i\_i()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, int $>$ \&}]{infos,  }\item[{string}]{namefolderinput }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a map $<$int, int$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ac9c56b5a79e7e17bb58cd8ba878a9012}\label{myutils_8cpp_ac9c56b5a79e7e17bb58cd8ba878a9012}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_i\_s@{fill\_map\_from\_specifications\_i\_s}}
+\index{fill\_map\_from\_specifications\_i\_s@{fill\_map\_from\_specifications\_i\_s}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_i\_s()}{fill\_map\_from\_specifications\_i\_s()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, string $>$ \&}]{a\+\_\+map }\end{DoxyParamCaption})}
+
+fill in the avai attributes into a multimap 
+\begin{DoxyParams}{Parameters}
+{\em the} & avai specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a94d92a9cdb7ab0317db8551258f0d765}\label{myutils_8cpp_a94d92a9cdb7ab0317db8551258f0d765}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_i\_s@{fill\_map\_from\_specifications\_i\_s}}
+\index{fill\_map\_from\_specifications\_i\_s@{fill\_map\_from\_specifications\_i\_s}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_i\_s()}{fill\_map\_from\_specifications\_i\_s()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ int, string $>$ \&}]{infos,  }\item[{string}]{namefolderinput }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a map $<$int, int$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ab59d1a8abb149cc621bf88e36484fc82}\label{myutils_8cpp_ab59d1a8abb149cc621bf88e36484fc82}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_map\_from\_specifications\_s\_d@{fill\_map\_from\_specifications\_s\_d}}
+\index{fill\_map\_from\_specifications\_s\_d@{fill\_map\_from\_specifications\_s\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_map\_from\_specifications\_s\_d()}{fill\_map\_from\_specifications\_s\_d()}}
+{\footnotesize\ttfamily bool fill\+\_\+map\+\_\+from\+\_\+specifications\+\_\+s\+\_\+d (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{map$<$ string, double $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a map $<$int, int$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a7183cfd015d227443061b22f56c24dd2}\label{myutils_8cpp_a7183cfd015d227443061b22f56c24dd2}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_multimap\_from\_specifications\_i\_d@{fill\_multimap\_from\_specifications\_i\_d}}
+\index{fill\_multimap\_from\_specifications\_i\_d@{fill\_multimap\_from\_specifications\_i\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_multimap\_from\_specifications\_i\_d()}{fill\_multimap\_from\_specifications\_i\_d()}}
+{\footnotesize\ttfamily bool fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+d (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ int, double $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+
+
+fill in the vessel attributes into a multimap $<$integer, double$>$. First line is an heading. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a822b5cb3ee9cb0dbf997e85408224a94}\label{myutils_8cpp_a822b5cb3ee9cb0dbf997e85408224a94}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_multimap\_from\_specifications\_i\_i@{fill\_multimap\_from\_specifications\_i\_i}}
+\index{fill\_multimap\_from\_specifications\_i\_i@{fill\_multimap\_from\_specifications\_i\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_multimap\_from\_specifications\_i\_i()}{fill\_multimap\_from\_specifications\_i\_i()}}
+{\footnotesize\ttfamily bool fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+i (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ int, int $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a multimap $<$int, int$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a35d902e70250fc5f176f68d22c00ff06}\label{myutils_8cpp_a35d902e70250fc5f176f68d22c00ff06}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_multimap\_from\_specifications\_i\_s@{fill\_multimap\_from\_specifications\_i\_s}}
+\index{fill\_multimap\_from\_specifications\_i\_s@{fill\_multimap\_from\_specifications\_i\_s}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_multimap\_from\_specifications\_i\_s()}{fill\_multimap\_from\_specifications\_i\_s()}}
+{\footnotesize\ttfamily bool fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+i\+\_\+s (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ int, string $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a multimap $<$int, string$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_ad260bea419dc2a91d41453f6024b712b}\label{myutils_8cpp_ad260bea419dc2a91d41453f6024b712b}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_multimap\_from\_specifications\_s\_d@{fill\_multimap\_from\_specifications\_s\_d}}
+\index{fill\_multimap\_from\_specifications\_s\_d@{fill\_multimap\_from\_specifications\_s\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_multimap\_from\_specifications\_s\_d()}{fill\_multimap\_from\_specifications\_s\_d()}}
+{\footnotesize\ttfamily bool fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+s\+\_\+d (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ string, double $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a multimap $<$string, double$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_adda45815d653cde3a2cca0502a621549}\label{myutils_8cpp_adda45815d653cde3a2cca0502a621549}} 
+\index{myutils.cpp@{myutils.cpp}!fill\_multimap\_from\_specifications\_s\_i@{fill\_multimap\_from\_specifications\_s\_i}}
+\index{fill\_multimap\_from\_specifications\_s\_i@{fill\_multimap\_from\_specifications\_s\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{fill\_multimap\_from\_specifications\_s\_i()}{fill\_multimap\_from\_specifications\_s\_i()}}
+{\footnotesize\ttfamily bool fill\+\_\+multimap\+\_\+from\+\_\+specifications\+\_\+s\+\_\+i (\begin{DoxyParamCaption}\item[{istream \&}]{in,  }\item[{multimap$<$ string, int $>$ \&}]{infos }\end{DoxyParamCaption})}
+
+fill in the vessel attributes into a multimap $<$string, integer$>$ 
+\begin{DoxyParams}{Parameters}
+{\em e.\+g.} & the vessel specification file, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{myutils_8cpp_a76090544848eca4f529d5ad6c20a7c0c}\label{myutils_8cpp_a76090544848eca4f529d5ad6c20a7c0c}} 
+\index{myutils.cpp@{myutils.cpp}!find\_entries\_i\_d@{find\_entries\_i\_d}}
+\index{find\_entries\_i\_d@{find\_entries\_i\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{find\_entries\_i\_d()}{find\_entries\_i\_d()}}
+{\footnotesize\ttfamily vector$<$double$>$ find\+\_\+entries\+\_\+i\+\_\+d (\begin{DoxyParamCaption}\item[{const multimap$<$ int, double $>$ \&}]{infos,  }\item[{int}]{intg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_ab00d89878d20408071d0f403619e6235}\label{myutils_8cpp_ab00d89878d20408071d0f403619e6235}} 
+\index{myutils.cpp@{myutils.cpp}!find\_entries\_i\_i@{find\_entries\_i\_i}}
+\index{find\_entries\_i\_i@{find\_entries\_i\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{find\_entries\_i\_i()}{find\_entries\_i\_i()}}
+{\footnotesize\ttfamily vector$<$int$>$ find\+\_\+entries\+\_\+i\+\_\+i (\begin{DoxyParamCaption}\item[{const multimap$<$ int, int $>$ \&}]{infos,  }\item[{int}]{intg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a2685b0dc6550da4bcf75d5795070c2ee}\label{myutils_8cpp_a2685b0dc6550da4bcf75d5795070c2ee}} 
+\index{myutils.cpp@{myutils.cpp}!find\_entries\_i\_s@{find\_entries\_i\_s}}
+\index{find\_entries\_i\_s@{find\_entries\_i\_s}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{find\_entries\_i\_s()}{find\_entries\_i\_s()}}
+{\footnotesize\ttfamily vector$<$string$>$ find\+\_\+entries\+\_\+i\+\_\+s (\begin{DoxyParamCaption}\item[{multimap$<$ int, string $>$ \&}]{infos,  }\item[{int}]{intg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_acead5c453ba1bee3a7ee18691fa69aeb}\label{myutils_8cpp_acead5c453ba1bee3a7ee18691fa69aeb}} 
+\index{myutils.cpp@{myutils.cpp}!find\_entries\_s\_d@{find\_entries\_s\_d}}
+\index{find\_entries\_s\_d@{find\_entries\_s\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{find\_entries\_s\_d()}{find\_entries\_s\_d()}}
+{\footnotesize\ttfamily vector$<$double$>$ find\+\_\+entries\+\_\+s\+\_\+d (\begin{DoxyParamCaption}\item[{multimap$<$ string, double $>$ \&}]{infos,  }\item[{string}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a22901bc415ad4c2346116997e6b8987d}\label{myutils_8cpp_a22901bc415ad4c2346116997e6b8987d}} 
+\index{myutils.cpp@{myutils.cpp}!find\_entries\_s\_i@{find\_entries\_s\_i}}
+\index{find\_entries\_s\_i@{find\_entries\_s\_i}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{find\_entries\_s\_i()}{find\_entries\_s\_i()}}
+{\footnotesize\ttfamily vector$<$int$>$ find\+\_\+entries\+\_\+s\+\_\+i (\begin{DoxyParamCaption}\item[{multimap$<$ string, int $>$ \&}]{infos,  }\item[{string}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_abfe0cffcfaa65a00c5af3728843ba4ea}\label{myutils_8cpp_abfe0cffcfaa65a00c5af3728843ba4ea}} 
+\index{myutils.cpp@{myutils.cpp}!myintegrand@{myintegrand}}
+\index{myintegrand@{myintegrand}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{myintegrand()}{myintegrand()}}
+{\footnotesize\ttfamily double myintegrand (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{S1,  }\item[{double}]{S2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a12ac87f49d3490db6549345d987b13f7}\label{myutils_8cpp_a12ac87f49d3490db6549345d987b13f7}} 
+\index{myutils.cpp@{myutils.cpp}!scale\_a\_vector\_to\_1@{scale\_a\_vector\_to\_1}}
+\index{scale\_a\_vector\_to\_1@{scale\_a\_vector\_to\_1}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{scale\_a\_vector\_to\_1()}{scale\_a\_vector\_to\_1()}}
+{\footnotesize\ttfamily vector$<$double$>$ scale\+\_\+a\+\_\+vector\+\_\+to\+\_\+1 (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{a\+\_\+vector }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a4e292fb86a6e46cb2d6b3374fb7a9c4f}\label{myutils_8cpp_a4e292fb86a6e46cb2d6b3374fb7a9c4f}} 
+\index{myutils.cpp@{myutils.cpp}!set\_entries\_d@{set\_entries\_d}}
+\index{set\_entries\_d@{set\_entries\_d}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{set\_entries\_d()}{set\_entries\_d()}}
+{\footnotesize\ttfamily void set\+\_\+entries\+\_\+d (\begin{DoxyParamCaption}\item[{multimap$<$ int, double $>$ \&}]{infos,  }\item[{int}]{itr,  }\item[{vector$<$ double $>$}]{newval }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a47752ab385092d6fd661bed734f2ad04}\label{myutils_8cpp_a47752ab385092d6fd661bed734f2ad04}} 
+\index{myutils.cpp@{myutils.cpp}!SimplifyThePreviousMap@{SimplifyThePreviousMap}}
+\index{SimplifyThePreviousMap@{SimplifyThePreviousMap}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{SimplifyThePreviousMap()}{SimplifyThePreviousMap()}}
+{\footnotesize\ttfamily void Simplify\+The\+Previous\+Map (\begin{DoxyParamCaption}\item[{int}]{source,  }\item[{spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}} $>$ \&}]{previous,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&}]{relevant\+\_\+nodes,  }\item[{spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{_a_star_shortest_path_finder_8h_a12260dc5cde4dd7254dc16896f69e810}{vertex\+\_\+t}}, \mbox{\hyperlink{myutils_8h_a4497881a7e75868dd6b1cafbffd81e1f}{weight\+\_\+t}} $>$ \&}]{min\+\_\+distance,  }\item[{string}]{namesimu,  }\item[{string}]{a\+\_\+graph\+\_\+name,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myutils_8cpp_a56e6001390d297e55e1f379f2d4f825b}\label{myutils_8cpp_a56e6001390d297e55e1f379f2d4f825b}} 
+\index{myutils.cpp@{myutils.cpp}!trapezoidal@{trapezoidal}}
+\index{trapezoidal@{trapezoidal}!myutils.cpp@{myutils.cpp}}
+\subsubsection{\texorpdfstring{trapezoidal()}{trapezoidal()}}
+{\footnotesize\ttfamily double trapezoidal (\begin{DoxyParamCaption}\item[{double}]{a,  }\item[{double}]{b,  }\item[{vector$<$ double $>$}]{sel }\end{DoxyParamCaption})}
+

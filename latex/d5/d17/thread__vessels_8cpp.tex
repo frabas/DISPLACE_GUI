@@ -1,0 +1,724 @@
+\hypertarget{thread__vessels_8cpp}{}\section{simulator/thread\+\_\+vessels.cpp File Reference}
+\label{thread__vessels_8cpp}\index{simulator/thread\_vessels.cpp@{simulator/thread\_vessels.cpp}}
+{\ttfamily \#include $<$helpers.\+h$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$queue$>$}\newline
+{\ttfamily \#include $<$ostream$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$values.\+h$>$}\newline
+{\ttfamily \#include $<$Vessel.\+h$>$}\newline
+{\ttfamily \#include $<$Ship.\+h$>$}\newline
+{\ttfamily \#include $<$Node.\+h$>$}\newline
+{\ttfamily \#include $<$Benthos.\+h$>$}\newline
+{\ttfamily \#include $<$Metier.\+h$>$}\newline
+{\ttfamily \#include $<$outputqueuemanager.\+h$>$}\newline
+{\ttfamily \#include $<$messages/movevesseloutputmessage.\+h$>$}\newline
+{\ttfamily \#include $<$messages/moveshipoutputmessage.\+h$>$}\newline
+{\ttfamily \#include $<$messages/vessellogbookoutputmessage.\+h$>$}\newline
+{\ttfamily \#include $<$outputexporter.\+h$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_a0a80171965af1130baf23464f865f787}{gui\+Send\+Vessel\+Logbook}} (const std\+::string \&line)
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_a3ffbccae79616f469748bda06cdffe9b}{thread\+\_\+vessel\+\_\+init}} (int n)
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_ab6dac2a26843bdb2e522147fc5ab607c}{thread\+\_\+vessel\+\_\+prepare}} ()
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_a8149d7d094e6c970d4155c6aece2f787}{thread\+\_\+vessel\+\_\+insert\+\_\+job}} (int idx)
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_aa5a766fb388b386ec7e5ae160cdc4ace}{thread\+\_\+vessel\+\_\+signal\+\_\+exit}} ()
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_a86f8f1c665076bec2b3b3d3ef1cd9c71}{thread\+\_\+vessel\+\_\+wait\+\_\+completed}} ()
+\item 
+void \mbox{\hyperlink{thread__vessels_8cpp_abd49bcf13c100d0a96bf7198ca532afa}{thread\+\_\+vessel\+\_\+deinit}} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}} \mbox{\hyperlink{thread__vessels_8cpp_ac0ddf2ed80a94dd59eedc26aa244e6a0}{m\+Out\+Queue}}
+\item 
+std\+::mutex \mbox{\hyperlink{thread__vessels_8cpp_a34717756bdf48565d8ac931fdc22f1bb}{glob\+\_\+mutex}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a8769b8663f8fb1a238da9f79b56411dc}{use\+\_\+gui}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a99cd41d9fde1bffe9ec7e528fd30d87f}{use\+\_\+dtrees}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a95b6a261c6839fc3aae7855d00f6bf54}{use\+\_\+gnuplot}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a289e49bfa29055f36455edcc9e4e1e37}{gui\+\_\+move\+\_\+vessels}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_af095f5492b7169bfb86a3b115c06c0df}{nb\+\_\+displayed\+\_\+moves\+\_\+out\+\_\+of\+\_\+twenty}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_acd7ec25c289e2df237946a852ce1e97d}{ve}}
+\item 
+vector$<$ \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}{vessels}}
+\item 
+vector$<$ \mbox{\hyperlink{class_ship}{Ship}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_aba72fd79828227c8cc2cd50a58eb39ef}{ships}}
+\item 
+vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}
+\item 
+vector$<$ \mbox{\hyperlink{class_benthos}{Benthos}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_a9ce5905f15af58742653570dbcfeec2b}{benthoss}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a0ffa0d6501611c26422d28503d7c5c34}{nbsteps}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}{nbpops}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a817d1d286c5c2727eef056fd4c11cf76}{export\+\_\+vmslike}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a13e4aad1f6a2d5c918ce04d50832b64b}{export\+\_\+hugefiles}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a9675088ccad28b0b0b25632f3d07bef8}{graph\+\_\+res}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_ae2836a05a7b3b65a0cc12d46c45106cc}{is\+\_\+individual\+\_\+vessel\+\_\+quotas}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a7cafd21963997900577877c8c45a9e46}{check\+\_\+all\+\_\+stocks\+\_\+before\+\_\+going\+\_\+fishing}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a3ea8b26245d347c4fae495814e706a5e}{tariff\+\_\+pop}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a009d0bf53fcea79270f94d77a2972359}{freq\+\_\+update\+\_\+tariff\+\_\+code}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a7bece4aaec9c92dc6b83c2e6fd4803f8}{update\+\_\+tariffs\+\_\+based\+\_\+on\+\_\+lpue\+\_\+or\+\_\+dpue\+\_\+code}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_ab77d0b405d96300fdd1070a8d50f8bb0}{freq\+\_\+do\+\_\+growth}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a6a9ab08037ae73714d11b74ff486e7dd}{freq\+\_\+redispatch\+\_\+pop}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a7ec82bfc212d977cb56d30709fc455fc}{arbitary\+\_\+breaks\+\_\+for\+\_\+tariff}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_ac33696f390a4efc943e02e6c706face1}{total\+\_\+amount\+\_\+credited}}
+\item 
+double \mbox{\hyperlink{thread__vessels_8cpp_aa02904f63050362e9ed78d52374f2f2f}{tariff\+\_\+annual\+\_\+hcr\+\_\+percent\+\_\+change}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a17091dbfd3e7ab134a48655f32fcce7f}{is\+\_\+tacs}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a59693db331770b9d480a8866dba7b87a}{is\+\_\+fishing\+\_\+credits}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_ae7b7d9ea6f3df00f1c7356739c1f9122}{is\+\_\+direct\+\_\+killing\+\_\+on\+\_\+benthos}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a89ae00327423ae85204d1bc398ff778f}{is\+\_\+resuspension\+\_\+effect\+\_\+on\+\_\+benthos}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a43d33e636da7abaf274535b7fb7bff02}{is\+\_\+discard\+\_\+ban}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_ae43c7f8149be4df710cc5b08a658b90f}{is\+\_\+grouped\+\_\+tacs}}
+\item 
+double \mbox{\hyperlink{thread__vessels_8cpp_acc56616fd5c18d056dd121677d7ae225}{tech\+\_\+creeping\+\_\+multiplier}}
+\item 
+bool \mbox{\hyperlink{thread__vessels_8cpp_a18eba4224a5ba1903a19868de715cf93}{is\+\_\+benthos\+\_\+in\+\_\+numbers}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a249b6522d595e6a057580471ab5a4517}{implicit\+\_\+pops}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a97daf2d4365464f7857a6aaa9d7c30d6}{grouped\+\_\+tacs}}
+\item 
+\mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \mbox{\hyperlink{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}{scenario}}
+\item 
+\mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} \mbox{\hyperlink{thread__vessels_8cpp_a8389f6b9261a2039cabeecc230207043}{dyn\+\_\+alloc\+\_\+sce}}
+\item 
+\mbox{\hyperlink{class_pop_sce_options}{Pop\+Sce\+Options}} \mbox{\hyperlink{thread__vessels_8cpp_a87d0bf7613b407456078fa8dd79c2330}{dyn\+\_\+pop\+\_\+sce}}
+\item 
+string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}}
+\item 
+string \mbox{\hyperlink{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}{fleetsce}}
+\item 
+int \mbox{\hyperlink{thread__vessels_8cpp_a47c8128a8da7af20c2aab95990bcb2dc}{use\+\_\+static\+\_\+paths}}
+\item 
+\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}}
+\item 
+vector$<$ string $>$ \mbox{\hyperlink{thread__vessels_8cpp_a739d8b5c7d95ad2f87458daba4fd8f47}{vertex\+\_\+names}}
+\item 
+vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}{relevant\+\_\+nodes}}
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{thread__vessels_8cpp_ae1aa0d83e8fc56ca827ccf47a01cd126}{nodes\+\_\+in\+\_\+polygons}}
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{thread__vessels_8cpp_ace8fe298fa5b261860011b940c780864}{possible\+\_\+metiers}}
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a13745fb14a977ff63e4edd32bc4f3898}{freq\+\_\+possible\+\_\+metiers}}
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a9b0413ff59a0d7a6b2a47e658908fa0b}{gshape\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}}
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a4f143794ca360528c9ddf77043110c85}{gscale\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_afe8ec2c280badcae88015ec5af2d8c08}{spe\+\_\+fgrounds}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_ac0b2734da0a37234b0bfcd0abd588982}{spe\+\_\+fgrounds\+\_\+init}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a056292e6d8965a4b7c8aa299c455045f}{spe\+\_\+harbours}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_af247411fff0c57804425231766e35cfe}{spe\+\_\+freq\+\_\+fgrounds}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_aeca57bc76ee69523561457a441165a9b}{spe\+\_\+freq\+\_\+fgrounds\+\_\+init}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a3cc91388b6ed17fb05cf27c186b3162e}{spe\+\_\+freq\+\_\+harbours}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_a1075059bb8c86b5a4ac70eb5b4ee572e}{spe\+\_\+vessel\+\_\+betas\+\_\+per\+\_\+pop}}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{thread__vessels_8cpp_ab54239f312772049ee65155fdb6c9f41}{spe\+\_\+percent\+\_\+tac\+\_\+per\+\_\+pop}}
+\item 
+vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}
+\item 
+multimap$<$ int, string $>$ \mbox{\hyperlink{thread__vessels_8cpp_a672e6bd31db08f339f981e9d8d53780c}{harbour\+\_\+names}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a710acee6706a87aa509a367cefae5a76}{name\+\_\+metiers}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_ad541b5d62baa9ad6aec2c8cbefaa3b9a}{freq\+\_\+cpue}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a841537ca4f6c15835622ff803314443c}{freq\+\_\+profit}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a0eea96bfd17303c2c899a08bb2c9d35e}{freq\+\_\+distance}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a30b875dbd5a5e8d1ddd07d004d916821}{vmslike2}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a8d9e083e0b59c235d49664ad1fb0c3f9}{vmslike3}}
+\item 
+vector$<$ \mbox{\hyperlink{class_metier}{Metier}} $\ast$ $>$ \mbox{\hyperlink{thread__vessels_8cpp_add976a96f7a0f5c20f5314d72234c427}{metiers}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a0ce9054b3d0c5f983ad61d3ed27346f7}{export\+\_\+individual\+\_\+tacs}}
+\item 
+vector$<$ \mbox{\hyperlink{class_path_shop}{Path\+Shop}} $>$ \mbox{\hyperlink{thread__vessels_8cpp_a1d6e93fdf06dc624480583be2cdd0748}{pathshops}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_ac07ab7577a9371a300830ae568fc8222}{fishfarmslogs}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_acbce7189e1b2fab20faaa2215ca0b180}{windfarmslogs}}
+\item 
+ofstream \mbox{\hyperlink{thread__vessels_8cpp_a9c4bdf44e648a82e0b0ea8111c8d0250}{shipslogs}}
+\item 
+std\+::mutex \mbox{\hyperlink{thread__vessels_8cpp_a0087e82e0ad78a341b5a6dc108b82e00}{list\+Vessel\+Mutex}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a095a3ce5e8d3a68b14d9dfc19ecae233}{list\+Vessel\+Id\+For\+Vms\+Like\+F\+Pings\+Only\+To\+Export}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_ae00ff2d2d91dcb142a1aba9583413878}{list\+Vessel\+Id\+For\+Vms\+Like\+To\+Export}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a6ff64d8fc123bd5f2b683e19d5df0bfd}{list\+Vessel\+Id\+For\+Log\+Like\+To\+Export}}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{thread__vessels_8cpp_a935cf35954eac42a030a1b91c8df168b}{list\+Vessel\+Id\+For\+Trip\+Catch\+Pop\+Per\+Szgroup\+Export}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{thread__vessels_8cpp_a0a80171965af1130baf23464f865f787}\label{thread__vessels_8cpp_a0a80171965af1130baf23464f865f787}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!guiSendVesselLogbook@{guiSendVesselLogbook}}
+\index{guiSendVesselLogbook@{guiSendVesselLogbook}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{guiSendVesselLogbook()}{guiSendVesselLogbook()}}
+{\footnotesize\ttfamily void gui\+Send\+Vessel\+Logbook (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{line }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_abd49bcf13c100d0a96bf7198ca532afa}\label{thread__vessels_8cpp_abd49bcf13c100d0a96bf7198ca532afa}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_deinit@{thread\_vessel\_deinit}}
+\index{thread\_vessel\_deinit@{thread\_vessel\_deinit}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_deinit()}{thread\_vessel\_deinit()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+deinit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a3ffbccae79616f469748bda06cdffe9b}\label{thread__vessels_8cpp_a3ffbccae79616f469748bda06cdffe9b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_init@{thread\_vessel\_init}}
+\index{thread\_vessel\_init@{thread\_vessel\_init}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_init()}{thread\_vessel\_init()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+init (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a8149d7d094e6c970d4155c6aece2f787}\label{thread__vessels_8cpp_a8149d7d094e6c970d4155c6aece2f787}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_insert\_job@{thread\_vessel\_insert\_job}}
+\index{thread\_vessel\_insert\_job@{thread\_vessel\_insert\_job}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_insert\_job()}{thread\_vessel\_insert\_job()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+insert\+\_\+job (\begin{DoxyParamCaption}\item[{int}]{idx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ab6dac2a26843bdb2e522147fc5ab607c}\label{thread__vessels_8cpp_ab6dac2a26843bdb2e522147fc5ab607c}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_prepare@{thread\_vessel\_prepare}}
+\index{thread\_vessel\_prepare@{thread\_vessel\_prepare}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_prepare()}{thread\_vessel\_prepare()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+prepare (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_aa5a766fb388b386ec7e5ae160cdc4ace}\label{thread__vessels_8cpp_aa5a766fb388b386ec7e5ae160cdc4ace}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_signal\_exit@{thread\_vessel\_signal\_exit}}
+\index{thread\_vessel\_signal\_exit@{thread\_vessel\_signal\_exit}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_signal\_exit()}{thread\_vessel\_signal\_exit()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+signal\+\_\+exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a86f8f1c665076bec2b3b3d3ef1cd9c71}\label{thread__vessels_8cpp_a86f8f1c665076bec2b3b3d3ef1cd9c71}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!thread\_vessel\_wait\_completed@{thread\_vessel\_wait\_completed}}
+\index{thread\_vessel\_wait\_completed@{thread\_vessel\_wait\_completed}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{thread\_vessel\_wait\_completed()}{thread\_vessel\_wait\_completed()}}
+{\footnotesize\ttfamily void thread\+\_\+vessel\+\_\+wait\+\_\+completed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}\label{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!adjacency\_map@{adjacency\_map}}
+\index{adjacency\_map@{adjacency\_map}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{adjacency\_map}{adjacency\_map}}
+{\footnotesize\ttfamily \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} adjacency\+\_\+map}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a7ec82bfc212d977cb56d30709fc455fc}\label{thread__vessels_8cpp_a7ec82bfc212d977cb56d30709fc455fc}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!arbitary\_breaks\_for\_tariff@{arbitary\_breaks\_for\_tariff}}
+\index{arbitary\_breaks\_for\_tariff@{arbitary\_breaks\_for\_tariff}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{arbitary\_breaks\_for\_tariff}{arbitary\_breaks\_for\_tariff}}
+{\footnotesize\ttfamily vector$<$double$>$ arbitary\+\_\+breaks\+\_\+for\+\_\+tariff}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a9ce5905f15af58742653570dbcfeec2b}\label{thread__vessels_8cpp_a9ce5905f15af58742653570dbcfeec2b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!benthoss@{benthoss}}
+\index{benthoss@{benthoss}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{benthoss}{benthoss}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_benthos}{Benthos}}$\ast$ $>$ benthoss}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}\label{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!biolsce@{biolsce}}
+\index{biolsce@{biolsce}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{biolsce}{biolsce}}
+{\footnotesize\ttfamily string biolsce}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a7cafd21963997900577877c8c45a9e46}\label{thread__vessels_8cpp_a7cafd21963997900577877c8c45a9e46}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!check\_all\_stocks\_before\_going\_fishing@{check\_all\_stocks\_before\_going\_fishing}}
+\index{check\_all\_stocks\_before\_going\_fishing@{check\_all\_stocks\_before\_going\_fishing}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{check\_all\_stocks\_before\_going\_fishing}{check\_all\_stocks\_before\_going\_fishing}}
+{\footnotesize\ttfamily bool check\+\_\+all\+\_\+stocks\+\_\+before\+\_\+going\+\_\+fishing}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a8389f6b9261a2039cabeecc230207043}\label{thread__vessels_8cpp_a8389f6b9261a2039cabeecc230207043}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!dyn\_alloc\_sce@{dyn\_alloc\_sce}}
+\index{dyn\_alloc\_sce@{dyn\_alloc\_sce}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{dyn\_alloc\_sce}{dyn\_alloc\_sce}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_dyn_alloc_options}{Dyn\+Alloc\+Options}} dyn\+\_\+alloc\+\_\+sce}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a87d0bf7613b407456078fa8dd79c2330}\label{thread__vessels_8cpp_a87d0bf7613b407456078fa8dd79c2330}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!dyn\_pop\_sce@{dyn\_pop\_sce}}
+\index{dyn\_pop\_sce@{dyn\_pop\_sce}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{dyn\_pop\_sce}{dyn\_pop\_sce}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_pop_sce_options}{Pop\+Sce\+Options}} dyn\+\_\+pop\+\_\+sce}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a13e4aad1f6a2d5c918ce04d50832b64b}\label{thread__vessels_8cpp_a13e4aad1f6a2d5c918ce04d50832b64b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!export\_hugefiles@{export\_hugefiles}}
+\index{export\_hugefiles@{export\_hugefiles}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{export\_hugefiles}{export\_hugefiles}}
+{\footnotesize\ttfamily int export\+\_\+hugefiles}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a0ce9054b3d0c5f983ad61d3ed27346f7}\label{thread__vessels_8cpp_a0ce9054b3d0c5f983ad61d3ed27346f7}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!export\_individual\_tacs@{export\_individual\_tacs}}
+\index{export\_individual\_tacs@{export\_individual\_tacs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{export\_individual\_tacs}{export\_individual\_tacs}}
+{\footnotesize\ttfamily ofstream export\+\_\+individual\+\_\+tacs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a817d1d286c5c2727eef056fd4c11cf76}\label{thread__vessels_8cpp_a817d1d286c5c2727eef056fd4c11cf76}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!export\_vmslike@{export\_vmslike}}
+\index{export\_vmslike@{export\_vmslike}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{export\_vmslike}{export\_vmslike}}
+{\footnotesize\ttfamily int export\+\_\+vmslike}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ac07ab7577a9371a300830ae568fc8222}\label{thread__vessels_8cpp_ac07ab7577a9371a300830ae568fc8222}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!fishfarmslogs@{fishfarmslogs}}
+\index{fishfarmslogs@{fishfarmslogs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{fishfarmslogs}{fishfarmslogs}}
+{\footnotesize\ttfamily ofstream fishfarmslogs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}\label{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!fleetsce@{fleetsce}}
+\index{fleetsce@{fleetsce}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{fleetsce}{fleetsce}}
+{\footnotesize\ttfamily string fleetsce}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ad541b5d62baa9ad6aec2c8cbefaa3b9a}\label{thread__vessels_8cpp_ad541b5d62baa9ad6aec2c8cbefaa3b9a}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_cpue@{freq\_cpue}}
+\index{freq\_cpue@{freq\_cpue}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_cpue}{freq\_cpue}}
+{\footnotesize\ttfamily ofstream freq\+\_\+cpue}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a0eea96bfd17303c2c899a08bb2c9d35e}\label{thread__vessels_8cpp_a0eea96bfd17303c2c899a08bb2c9d35e}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_distance@{freq\_distance}}
+\index{freq\_distance@{freq\_distance}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_distance}{freq\_distance}}
+{\footnotesize\ttfamily ofstream freq\+\_\+distance}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ab77d0b405d96300fdd1070a8d50f8bb0}\label{thread__vessels_8cpp_ab77d0b405d96300fdd1070a8d50f8bb0}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_do\_growth@{freq\_do\_growth}}
+\index{freq\_do\_growth@{freq\_do\_growth}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_do\_growth}{freq\_do\_growth}}
+{\footnotesize\ttfamily int freq\+\_\+do\+\_\+growth}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a13745fb14a977ff63e4edd32bc4f3898}\label{thread__vessels_8cpp_a13745fb14a977ff63e4edd32bc4f3898}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_possible\_metiers@{freq\_possible\_metiers}}
+\index{freq\_possible\_metiers@{freq\_possible\_metiers}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_possible\_metiers}{freq\_possible\_metiers}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ freq\+\_\+possible\+\_\+metiers}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a841537ca4f6c15835622ff803314443c}\label{thread__vessels_8cpp_a841537ca4f6c15835622ff803314443c}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_profit@{freq\_profit}}
+\index{freq\_profit@{freq\_profit}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_profit}{freq\_profit}}
+{\footnotesize\ttfamily ofstream freq\+\_\+profit}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a6a9ab08037ae73714d11b74ff486e7dd}\label{thread__vessels_8cpp_a6a9ab08037ae73714d11b74ff486e7dd}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_redispatch\_pop@{freq\_redispatch\_pop}}
+\index{freq\_redispatch\_pop@{freq\_redispatch\_pop}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_redispatch\_pop}{freq\_redispatch\_pop}}
+{\footnotesize\ttfamily int freq\+\_\+redispatch\+\_\+pop}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a009d0bf53fcea79270f94d77a2972359}\label{thread__vessels_8cpp_a009d0bf53fcea79270f94d77a2972359}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!freq\_update\_tariff\_code@{freq\_update\_tariff\_code}}
+\index{freq\_update\_tariff\_code@{freq\_update\_tariff\_code}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{freq\_update\_tariff\_code}{freq\_update\_tariff\_code}}
+{\footnotesize\ttfamily int freq\+\_\+update\+\_\+tariff\+\_\+code}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a34717756bdf48565d8ac931fdc22f1bb}\label{thread__vessels_8cpp_a34717756bdf48565d8ac931fdc22f1bb}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!glob\_mutex@{glob\_mutex}}
+\index{glob\_mutex@{glob\_mutex}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{glob\_mutex}{glob\_mutex}}
+{\footnotesize\ttfamily std\+::mutex glob\+\_\+mutex}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a9675088ccad28b0b0b25632f3d07bef8}\label{thread__vessels_8cpp_a9675088ccad28b0b0b25632f3d07bef8}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!graph\_res@{graph\_res}}
+\index{graph\_res@{graph\_res}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{graph\_res}{graph\_res}}
+{\footnotesize\ttfamily vector$<$double$>$ graph\+\_\+res}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a97daf2d4365464f7857a6aaa9d7c30d6}\label{thread__vessels_8cpp_a97daf2d4365464f7857a6aaa9d7c30d6}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!grouped\_tacs@{grouped\_tacs}}
+\index{grouped\_tacs@{grouped\_tacs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{grouped\_tacs}{grouped\_tacs}}
+{\footnotesize\ttfamily vector$<$int$>$ grouped\+\_\+tacs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a4f143794ca360528c9ddf77043110c85}\label{thread__vessels_8cpp_a4f143794ca360528c9ddf77043110c85}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!gscale\_cpue\_per\_stk\_on\_nodes@{gscale\_cpue\_per\_stk\_on\_nodes}}
+\index{gscale\_cpue\_per\_stk\_on\_nodes@{gscale\_cpue\_per\_stk\_on\_nodes}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{gscale\_cpue\_per\_stk\_on\_nodes}{gscale\_cpue\_per\_stk\_on\_nodes}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ gscale\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a9b0413ff59a0d7a6b2a47e658908fa0b}\label{thread__vessels_8cpp_a9b0413ff59a0d7a6b2a47e658908fa0b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!gshape\_cpue\_per\_stk\_on\_nodes@{gshape\_cpue\_per\_stk\_on\_nodes}}
+\index{gshape\_cpue\_per\_stk\_on\_nodes@{gshape\_cpue\_per\_stk\_on\_nodes}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{gshape\_cpue\_per\_stk\_on\_nodes}{gshape\_cpue\_per\_stk\_on\_nodes}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ gshape\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a289e49bfa29055f36455edcc9e4e1e37}\label{thread__vessels_8cpp_a289e49bfa29055f36455edcc9e4e1e37}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!gui\_move\_vessels@{gui\_move\_vessels}}
+\index{gui\_move\_vessels@{gui\_move\_vessels}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{gui\_move\_vessels}{gui\_move\_vessels}}
+{\footnotesize\ttfamily bool gui\+\_\+move\+\_\+vessels}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a672e6bd31db08f339f981e9d8d53780c}\label{thread__vessels_8cpp_a672e6bd31db08f339f981e9d8d53780c}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!harbour\_names@{harbour\_names}}
+\index{harbour\_names@{harbour\_names}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{harbour\_names}{harbour\_names}}
+{\footnotesize\ttfamily multimap$<$int, string$>$ harbour\+\_\+names}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a249b6522d595e6a057580471ab5a4517}\label{thread__vessels_8cpp_a249b6522d595e6a057580471ab5a4517}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!implicit\_pops@{implicit\_pops}}
+\index{implicit\_pops@{implicit\_pops}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{implicit\_pops}{implicit\_pops}}
+{\footnotesize\ttfamily vector$<$int$>$ implicit\+\_\+pops}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a18eba4224a5ba1903a19868de715cf93}\label{thread__vessels_8cpp_a18eba4224a5ba1903a19868de715cf93}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_benthos\_in\_numbers@{is\_benthos\_in\_numbers}}
+\index{is\_benthos\_in\_numbers@{is\_benthos\_in\_numbers}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_benthos\_in\_numbers}{is\_benthos\_in\_numbers}}
+{\footnotesize\ttfamily bool is\+\_\+benthos\+\_\+in\+\_\+numbers}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ae7b7d9ea6f3df00f1c7356739c1f9122}\label{thread__vessels_8cpp_ae7b7d9ea6f3df00f1c7356739c1f9122}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_direct\_killing\_on\_benthos@{is\_direct\_killing\_on\_benthos}}
+\index{is\_direct\_killing\_on\_benthos@{is\_direct\_killing\_on\_benthos}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_direct\_killing\_on\_benthos}{is\_direct\_killing\_on\_benthos}}
+{\footnotesize\ttfamily bool is\+\_\+direct\+\_\+killing\+\_\+on\+\_\+benthos}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a43d33e636da7abaf274535b7fb7bff02}\label{thread__vessels_8cpp_a43d33e636da7abaf274535b7fb7bff02}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_discard\_ban@{is\_discard\_ban}}
+\index{is\_discard\_ban@{is\_discard\_ban}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_discard\_ban}{is\_discard\_ban}}
+{\footnotesize\ttfamily bool is\+\_\+discard\+\_\+ban}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a59693db331770b9d480a8866dba7b87a}\label{thread__vessels_8cpp_a59693db331770b9d480a8866dba7b87a}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_fishing\_credits@{is\_fishing\_credits}}
+\index{is\_fishing\_credits@{is\_fishing\_credits}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_fishing\_credits}{is\_fishing\_credits}}
+{\footnotesize\ttfamily bool is\+\_\+fishing\+\_\+credits}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ae43c7f8149be4df710cc5b08a658b90f}\label{thread__vessels_8cpp_ae43c7f8149be4df710cc5b08a658b90f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_grouped\_tacs@{is\_grouped\_tacs}}
+\index{is\_grouped\_tacs@{is\_grouped\_tacs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_grouped\_tacs}{is\_grouped\_tacs}}
+{\footnotesize\ttfamily bool is\+\_\+grouped\+\_\+tacs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ae2836a05a7b3b65a0cc12d46c45106cc}\label{thread__vessels_8cpp_ae2836a05a7b3b65a0cc12d46c45106cc}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_individual\_vessel\_quotas@{is\_individual\_vessel\_quotas}}
+\index{is\_individual\_vessel\_quotas@{is\_individual\_vessel\_quotas}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_individual\_vessel\_quotas}{is\_individual\_vessel\_quotas}}
+{\footnotesize\ttfamily bool is\+\_\+individual\+\_\+vessel\+\_\+quotas}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a89ae00327423ae85204d1bc398ff778f}\label{thread__vessels_8cpp_a89ae00327423ae85204d1bc398ff778f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_resuspension\_effect\_on\_benthos@{is\_resuspension\_effect\_on\_benthos}}
+\index{is\_resuspension\_effect\_on\_benthos@{is\_resuspension\_effect\_on\_benthos}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_resuspension\_effect\_on\_benthos}{is\_resuspension\_effect\_on\_benthos}}
+{\footnotesize\ttfamily bool is\+\_\+resuspension\+\_\+effect\+\_\+on\+\_\+benthos}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a17091dbfd3e7ab134a48655f32fcce7f}\label{thread__vessels_8cpp_a17091dbfd3e7ab134a48655f32fcce7f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!is\_tacs@{is\_tacs}}
+\index{is\_tacs@{is\_tacs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{is\_tacs}{is\_tacs}}
+{\footnotesize\ttfamily bool is\+\_\+tacs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a6ff64d8fc123bd5f2b683e19d5df0bfd}\label{thread__vessels_8cpp_a6ff64d8fc123bd5f2b683e19d5df0bfd}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!listVesselIdForLogLikeToExport@{listVesselIdForLogLikeToExport}}
+\index{listVesselIdForLogLikeToExport@{listVesselIdForLogLikeToExport}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{listVesselIdForLogLikeToExport}{listVesselIdForLogLikeToExport}}
+{\footnotesize\ttfamily vector$<$int$>$ list\+Vessel\+Id\+For\+Log\+Like\+To\+Export}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a935cf35954eac42a030a1b91c8df168b}\label{thread__vessels_8cpp_a935cf35954eac42a030a1b91c8df168b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!listVesselIdForTripCatchPopPerSzgroupExport@{listVesselIdForTripCatchPopPerSzgroupExport}}
+\index{listVesselIdForTripCatchPopPerSzgroupExport@{listVesselIdForTripCatchPopPerSzgroupExport}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{listVesselIdForTripCatchPopPerSzgroupExport}{listVesselIdForTripCatchPopPerSzgroupExport}}
+{\footnotesize\ttfamily vector$<$int$>$ list\+Vessel\+Id\+For\+Trip\+Catch\+Pop\+Per\+Szgroup\+Export}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a095a3ce5e8d3a68b14d9dfc19ecae233}\label{thread__vessels_8cpp_a095a3ce5e8d3a68b14d9dfc19ecae233}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!listVesselIdForVmsLikeFPingsOnlyToExport@{listVesselIdForVmsLikeFPingsOnlyToExport}}
+\index{listVesselIdForVmsLikeFPingsOnlyToExport@{listVesselIdForVmsLikeFPingsOnlyToExport}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{listVesselIdForVmsLikeFPingsOnlyToExport}{listVesselIdForVmsLikeFPingsOnlyToExport}}
+{\footnotesize\ttfamily vector$<$int$>$ list\+Vessel\+Id\+For\+Vms\+Like\+F\+Pings\+Only\+To\+Export}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ae00ff2d2d91dcb142a1aba9583413878}\label{thread__vessels_8cpp_ae00ff2d2d91dcb142a1aba9583413878}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!listVesselIdForVmsLikeToExport@{listVesselIdForVmsLikeToExport}}
+\index{listVesselIdForVmsLikeToExport@{listVesselIdForVmsLikeToExport}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{listVesselIdForVmsLikeToExport}{listVesselIdForVmsLikeToExport}}
+{\footnotesize\ttfamily vector$<$int$>$ list\+Vessel\+Id\+For\+Vms\+Like\+To\+Export}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a0087e82e0ad78a341b5a6dc108b82e00}\label{thread__vessels_8cpp_a0087e82e0ad78a341b5a6dc108b82e00}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!listVesselMutex@{listVesselMutex}}
+\index{listVesselMutex@{listVesselMutex}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{listVesselMutex}{listVesselMutex}}
+{\footnotesize\ttfamily std\+::mutex list\+Vessel\+Mutex}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_add976a96f7a0f5c20f5314d72234c427}\label{thread__vessels_8cpp_add976a96f7a0f5c20f5314d72234c427}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!metiers@{metiers}}
+\index{metiers@{metiers}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{metiers}{metiers}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_metier}{Metier}}$\ast$$>$ metiers}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ac0ddf2ed80a94dd59eedc26aa244e6a0}\label{thread__vessels_8cpp_ac0ddf2ed80a94dd59eedc26aa244e6a0}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!mOutQueue@{mOutQueue}}
+\index{mOutQueue@{mOutQueue}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{mOutQueue}{mOutQueue}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_output_queue_manager}{Output\+Queue\+Manager}} m\+Out\+Queue}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a710acee6706a87aa509a367cefae5a76}\label{thread__vessels_8cpp_a710acee6706a87aa509a367cefae5a76}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!name\_metiers@{name\_metiers}}
+\index{name\_metiers@{name\_metiers}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{name\_metiers}{name\_metiers}}
+{\footnotesize\ttfamily vector$<$int$>$ name\+\_\+metiers}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_af095f5492b7169bfb86a3b115c06c0df}\label{thread__vessels_8cpp_af095f5492b7169bfb86a3b115c06c0df}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!nb\_displayed\_moves\_out\_of\_twenty@{nb\_displayed\_moves\_out\_of\_twenty}}
+\index{nb\_displayed\_moves\_out\_of\_twenty@{nb\_displayed\_moves\_out\_of\_twenty}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{nb\_displayed\_moves\_out\_of\_twenty}{nb\_displayed\_moves\_out\_of\_twenty}}
+{\footnotesize\ttfamily int nb\+\_\+displayed\+\_\+moves\+\_\+out\+\_\+of\+\_\+twenty}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}\label{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!nbpops@{nbpops}}
+\index{nbpops@{nbpops}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{nbpops}{nbpops}}
+{\footnotesize\ttfamily int nbpops}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a0ffa0d6501611c26422d28503d7c5c34}\label{thread__vessels_8cpp_a0ffa0d6501611c26422d28503d7c5c34}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!nbsteps@{nbsteps}}
+\index{nbsteps@{nbsteps}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{nbsteps}{nbsteps}}
+{\footnotesize\ttfamily int nbsteps}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}\label{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!nodes@{nodes}}
+\index{nodes@{nodes}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{nodes}{nodes}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_node}{Node}}$\ast$ $>$ nodes}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ae1aa0d83e8fc56ca827ccf47a01cd126}\label{thread__vessels_8cpp_ae1aa0d83e8fc56ca827ccf47a01cd126}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!nodes\_in\_polygons@{nodes\_in\_polygons}}
+\index{nodes\_in\_polygons@{nodes\_in\_polygons}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{nodes\_in\_polygons}{nodes\_in\_polygons}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ nodes\+\_\+in\+\_\+polygons}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a1d6e93fdf06dc624480583be2cdd0748}\label{thread__vessels_8cpp_a1d6e93fdf06dc624480583be2cdd0748}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!pathshops@{pathshops}}
+\index{pathshops@{pathshops}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{pathshops}{pathshops}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_path_shop}{Path\+Shop}}$>$ pathshops}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}\label{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!populations@{populations}}
+\index{populations@{populations}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{populations}{populations}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_population}{Population}}$\ast$ $>$ populations}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ace8fe298fa5b261860011b940c780864}\label{thread__vessels_8cpp_ace8fe298fa5b261860011b940c780864}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!possible\_metiers@{possible\_metiers}}
+\index{possible\_metiers@{possible\_metiers}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{possible\_metiers}{possible\_metiers}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ possible\+\_\+metiers}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}\label{thread__vessels_8cpp_a805aea562dce0ee8a65d4cdb26f3f1ae}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!relevant\_nodes@{relevant\_nodes}}
+\index{relevant\_nodes@{relevant\_nodes}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{relevant\_nodes}{relevant\_nodes}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ relevant\+\_\+nodes}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}\label{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!scenario@{scenario}}
+\index{scenario@{scenario}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{scenario}{scenario}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} scenario}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_aba72fd79828227c8cc2cd50a58eb39ef}\label{thread__vessels_8cpp_aba72fd79828227c8cc2cd50a58eb39ef}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!ships@{ships}}
+\index{ships@{ships}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{ships}{ships}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_ship}{Ship}}$\ast$$>$ ships}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a9c4bdf44e648a82e0b0ea8111c8d0250}\label{thread__vessels_8cpp_a9c4bdf44e648a82e0b0ea8111c8d0250}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!shipslogs@{shipslogs}}
+\index{shipslogs@{shipslogs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{shipslogs}{shipslogs}}
+{\footnotesize\ttfamily ofstream shipslogs}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_afe8ec2c280badcae88015ec5af2d8c08}\label{thread__vessels_8cpp_afe8ec2c280badcae88015ec5af2d8c08}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_fgrounds@{spe\_fgrounds}}
+\index{spe\_fgrounds@{spe\_fgrounds}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_fgrounds}{spe\_fgrounds}}
+{\footnotesize\ttfamily vector$<$int$>$ spe\+\_\+fgrounds}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ac0b2734da0a37234b0bfcd0abd588982}\label{thread__vessels_8cpp_ac0b2734da0a37234b0bfcd0abd588982}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_fgrounds\_init@{spe\_fgrounds\_init}}
+\index{spe\_fgrounds\_init@{spe\_fgrounds\_init}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_fgrounds\_init}{spe\_fgrounds\_init}}
+{\footnotesize\ttfamily vector$<$int$>$ spe\+\_\+fgrounds\+\_\+init}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_af247411fff0c57804425231766e35cfe}\label{thread__vessels_8cpp_af247411fff0c57804425231766e35cfe}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_freq\_fgrounds@{spe\_freq\_fgrounds}}
+\index{spe\_freq\_fgrounds@{spe\_freq\_fgrounds}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_freq\_fgrounds}{spe\_freq\_fgrounds}}
+{\footnotesize\ttfamily vector$<$double$>$ spe\+\_\+freq\+\_\+fgrounds}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_aeca57bc76ee69523561457a441165a9b}\label{thread__vessels_8cpp_aeca57bc76ee69523561457a441165a9b}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_freq\_fgrounds\_init@{spe\_freq\_fgrounds\_init}}
+\index{spe\_freq\_fgrounds\_init@{spe\_freq\_fgrounds\_init}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_freq\_fgrounds\_init}{spe\_freq\_fgrounds\_init}}
+{\footnotesize\ttfamily vector$<$double$>$ spe\+\_\+freq\+\_\+fgrounds\+\_\+init}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a3cc91388b6ed17fb05cf27c186b3162e}\label{thread__vessels_8cpp_a3cc91388b6ed17fb05cf27c186b3162e}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_freq\_harbours@{spe\_freq\_harbours}}
+\index{spe\_freq\_harbours@{spe\_freq\_harbours}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_freq\_harbours}{spe\_freq\_harbours}}
+{\footnotesize\ttfamily vector$<$double$>$ spe\+\_\+freq\+\_\+harbours}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a056292e6d8965a4b7c8aa299c455045f}\label{thread__vessels_8cpp_a056292e6d8965a4b7c8aa299c455045f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_harbours@{spe\_harbours}}
+\index{spe\_harbours@{spe\_harbours}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_harbours}{spe\_harbours}}
+{\footnotesize\ttfamily vector$<$int$>$ spe\+\_\+harbours}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ab54239f312772049ee65155fdb6c9f41}\label{thread__vessels_8cpp_ab54239f312772049ee65155fdb6c9f41}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_percent\_tac\_per\_pop@{spe\_percent\_tac\_per\_pop}}
+\index{spe\_percent\_tac\_per\_pop@{spe\_percent\_tac\_per\_pop}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_percent\_tac\_per\_pop}{spe\_percent\_tac\_per\_pop}}
+{\footnotesize\ttfamily vector$<$double$>$ spe\+\_\+percent\+\_\+tac\+\_\+per\+\_\+pop}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a1075059bb8c86b5a4ac70eb5b4ee572e}\label{thread__vessels_8cpp_a1075059bb8c86b5a4ac70eb5b4ee572e}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!spe\_vessel\_betas\_per\_pop@{spe\_vessel\_betas\_per\_pop}}
+\index{spe\_vessel\_betas\_per\_pop@{spe\_vessel\_betas\_per\_pop}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{spe\_vessel\_betas\_per\_pop}{spe\_vessel\_betas\_per\_pop}}
+{\footnotesize\ttfamily vector$<$double$>$ spe\+\_\+vessel\+\_\+betas\+\_\+per\+\_\+pop}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_aa02904f63050362e9ed78d52374f2f2f}\label{thread__vessels_8cpp_aa02904f63050362e9ed78d52374f2f2f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!tariff\_annual\_hcr\_percent\_change@{tariff\_annual\_hcr\_percent\_change}}
+\index{tariff\_annual\_hcr\_percent\_change@{tariff\_annual\_hcr\_percent\_change}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{tariff\_annual\_hcr\_percent\_change}{tariff\_annual\_hcr\_percent\_change}}
+{\footnotesize\ttfamily double tariff\+\_\+annual\+\_\+hcr\+\_\+percent\+\_\+change}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a3ea8b26245d347c4fae495814e706a5e}\label{thread__vessels_8cpp_a3ea8b26245d347c4fae495814e706a5e}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!tariff\_pop@{tariff\_pop}}
+\index{tariff\_pop@{tariff\_pop}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{tariff\_pop}{tariff\_pop}}
+{\footnotesize\ttfamily vector$<$int$>$ tariff\+\_\+pop}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_acc56616fd5c18d056dd121677d7ae225}\label{thread__vessels_8cpp_acc56616fd5c18d056dd121677d7ae225}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!tech\_creeping\_multiplier@{tech\_creeping\_multiplier}}
+\index{tech\_creeping\_multiplier@{tech\_creeping\_multiplier}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{tech\_creeping\_multiplier}{tech\_creeping\_multiplier}}
+{\footnotesize\ttfamily double tech\+\_\+creeping\+\_\+multiplier}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_ac33696f390a4efc943e02e6c706face1}\label{thread__vessels_8cpp_ac33696f390a4efc943e02e6c706face1}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!total\_amount\_credited@{total\_amount\_credited}}
+\index{total\_amount\_credited@{total\_amount\_credited}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{total\_amount\_credited}{total\_amount\_credited}}
+{\footnotesize\ttfamily int total\+\_\+amount\+\_\+credited}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}\label{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!tstep@{tstep}}
+\index{tstep@{tstep}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{tstep}{tstep}}
+{\footnotesize\ttfamily int tstep}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a7bece4aaec9c92dc6b83c2e6fd4803f8}\label{thread__vessels_8cpp_a7bece4aaec9c92dc6b83c2e6fd4803f8}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!update\_tariffs\_based\_on\_lpue\_or\_dpue\_code@{update\_tariffs\_based\_on\_lpue\_or\_dpue\_code}}
+\index{update\_tariffs\_based\_on\_lpue\_or\_dpue\_code@{update\_tariffs\_based\_on\_lpue\_or\_dpue\_code}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{update\_tariffs\_based\_on\_lpue\_or\_dpue\_code}{update\_tariffs\_based\_on\_lpue\_or\_dpue\_code}}
+{\footnotesize\ttfamily int update\+\_\+tariffs\+\_\+based\+\_\+on\+\_\+lpue\+\_\+or\+\_\+dpue\+\_\+code}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a99cd41d9fde1bffe9ec7e528fd30d87f}\label{thread__vessels_8cpp_a99cd41d9fde1bffe9ec7e528fd30d87f}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!use\_dtrees@{use\_dtrees}}
+\index{use\_dtrees@{use\_dtrees}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{use\_dtrees}{use\_dtrees}}
+{\footnotesize\ttfamily bool use\+\_\+dtrees}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a95b6a261c6839fc3aae7855d00f6bf54}\label{thread__vessels_8cpp_a95b6a261c6839fc3aae7855d00f6bf54}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!use\_gnuplot@{use\_gnuplot}}
+\index{use\_gnuplot@{use\_gnuplot}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{use\_gnuplot}{use\_gnuplot}}
+{\footnotesize\ttfamily bool use\+\_\+gnuplot}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a8769b8663f8fb1a238da9f79b56411dc}\label{thread__vessels_8cpp_a8769b8663f8fb1a238da9f79b56411dc}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!use\_gui@{use\_gui}}
+\index{use\_gui@{use\_gui}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{use\_gui}{use\_gui}}
+{\footnotesize\ttfamily bool use\+\_\+gui}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a47c8128a8da7af20c2aab95990bcb2dc}\label{thread__vessels_8cpp_a47c8128a8da7af20c2aab95990bcb2dc}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!use\_static\_paths@{use\_static\_paths}}
+\index{use\_static\_paths@{use\_static\_paths}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{use\_static\_paths}{use\_static\_paths}}
+{\footnotesize\ttfamily int use\+\_\+static\+\_\+paths}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_acd7ec25c289e2df237946a852ce1e97d}\label{thread__vessels_8cpp_acd7ec25c289e2df237946a852ce1e97d}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!ve@{ve}}
+\index{ve@{ve}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{ve}{ve}}
+{\footnotesize\ttfamily vector$<$int$>$ ve}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a739d8b5c7d95ad2f87458daba4fd8f47}\label{thread__vessels_8cpp_a739d8b5c7d95ad2f87458daba4fd8f47}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!vertex\_names@{vertex\_names}}
+\index{vertex\_names@{vertex\_names}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{vertex\_names}{vertex\_names}}
+{\footnotesize\ttfamily vector$<$string$>$ vertex\+\_\+names}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}\label{thread__vessels_8cpp_a5c62ccf0a525f019531241e5659bd511}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!vessels@{vessels}}
+\index{vessels@{vessels}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{vessels}{vessels}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{class_vessel}{Vessel}}$\ast$$>$ vessels}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a30b875dbd5a5e8d1ddd07d004d916821}\label{thread__vessels_8cpp_a30b875dbd5a5e8d1ddd07d004d916821}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!vmslike2@{vmslike2}}
+\index{vmslike2@{vmslike2}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{vmslike2}{vmslike2}}
+{\footnotesize\ttfamily ofstream vmslike2}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_a8d9e083e0b59c235d49664ad1fb0c3f9}\label{thread__vessels_8cpp_a8d9e083e0b59c235d49664ad1fb0c3f9}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!vmslike3@{vmslike3}}
+\index{vmslike3@{vmslike3}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{vmslike3}{vmslike3}}
+{\footnotesize\ttfamily ofstream vmslike3}
+
+\mbox{\Hypertarget{thread__vessels_8cpp_acbce7189e1b2fab20faaa2215ca0b180}\label{thread__vessels_8cpp_acbce7189e1b2fab20faaa2215ca0b180}} 
+\index{thread\_vessels.cpp@{thread\_vessels.cpp}!windfarmslogs@{windfarmslogs}}
+\index{windfarmslogs@{windfarmslogs}!thread\_vessels.cpp@{thread\_vessels.cpp}}
+\subsubsection{\texorpdfstring{windfarmslogs}{windfarmslogs}}
+{\footnotesize\ttfamily ofstream windfarmslogs}
+

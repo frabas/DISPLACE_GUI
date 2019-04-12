@@ -1,0 +1,54 @@
+\hypertarget{classdisplace_1_1dtree_1_1_time_series_evaluator}{}\section{displace\+::dtree\+::Time\+Series\+Evaluator$<$ Var $>$ Class Template Reference}
+\label{classdisplace_1_1dtree_1_1_time_series_evaluator}\index{displace::dtree::TimeSeriesEvaluator$<$ Var $>$@{displace::dtree::TimeSeriesEvaluator$<$ Var $>$}}
+
+
+{\ttfamily \#include $<$timeseriesevaluator.\+h$>$}
+
+Inheritance diagram for displace\+::dtree\+::Time\+Series\+Evaluator$<$ Var $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d8/d34/classdisplace_1_1dtree_1_1_time_series_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdisplace_1_1dtree_1_1_time_series_evaluator_a148e9dd081b0cafa5d576c20dca37a53}{Time\+Series\+Evaluator}} ()
+\item 
+double \mbox{\hyperlink{classdisplace_1_1dtree_1_1_time_series_evaluator_aca42c6a8684a9bc24d335817d6742f84}{evaluate}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$v) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1dtree_1_1_time_series_evaluator_a148e9dd081b0cafa5d576c20dca37a53}\label{classdisplace_1_1dtree_1_1_time_series_evaluator_a148e9dd081b0cafa5d576c20dca37a53}} 
+\index{displace::dtree::TimeSeriesEvaluator$<$ Var $>$@{displace::dtree::TimeSeriesEvaluator$<$ Var $>$}!TimeSeriesEvaluator@{TimeSeriesEvaluator}}
+\index{TimeSeriesEvaluator@{TimeSeriesEvaluator}!displace::dtree::TimeSeriesEvaluator$<$ Var $>$@{displace::dtree::TimeSeriesEvaluator$<$ Var $>$}}
+\subsubsection{\texorpdfstring{TimeSeriesEvaluator()}{TimeSeriesEvaluator()}}
+{\footnotesize\ttfamily template$<$displace\+::simulation\+::\+Time\+Series\+Manager\+::\+Variables Var$>$ \\
+\mbox{\hyperlink{classdisplace_1_1dtree_1_1_time_series_evaluator}{displace\+::dtree\+::\+Time\+Series\+Evaluator}}$<$ Var $>$\+::\mbox{\hyperlink{classdisplace_1_1dtree_1_1_time_series_evaluator}{Time\+Series\+Evaluator}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1dtree_1_1_time_series_evaluator_aca42c6a8684a9bc24d335817d6742f84}\label{classdisplace_1_1dtree_1_1_time_series_evaluator_aca42c6a8684a9bc24d335817d6742f84}} 
+\index{displace::dtree::TimeSeriesEvaluator$<$ Var $>$@{displace::dtree::TimeSeriesEvaluator$<$ Var $>$}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!displace::dtree::TimeSeriesEvaluator$<$ Var $>$@{displace::dtree::TimeSeriesEvaluator$<$ Var $>$}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily template$<$displace\+::simulation\+::\+Time\+Series\+Manager\+::\+Variables Var$>$ \\
+double \mbox{\hyperlink{classdisplace_1_1dtree_1_1_time_series_evaluator}{displace\+::dtree\+::\+Time\+Series\+Evaluator}}$<$ Var $>$\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/evaluators/\mbox{\hyperlink{timeseriesevaluator_8h}{timeseriesevaluator.\+h}}\end{DoxyCompactItemize}

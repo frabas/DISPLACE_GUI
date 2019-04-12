@@ -1,0 +1,93 @@
+\hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader}{}\section{displace\+::formats\+::helpers\+::Key\+Value\+Reader Class Reference}
+\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader}\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+
+
+{\ttfamily \#include $<$Key\+Value\+Reader.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a6a88deed0ee75804fb467c07afde6b01}{Key\+Value\+Reader}} ()
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a50bac6d703850be2a6a3037ccef894f9}{import\+From\+File}} (const std\+::string \&file)
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a94d113097dc2c4078c958ab360a8f817}{import\+From\+Stream}} (std\+::istream \&stream)
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a384f0414019b2e321b88b8486035b6bf}{export\+To\+File}} (const std\+::string \&file) const
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_abd96e1d77d72213690a7bd2e0300746c}{export\+To\+Stream}} (std\+::ostream \&os) const
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a962e698ee19e27561b976091adb246d6}{set}} (const std\+::string \&key, const std\+::string \&\mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+std\+::string \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_afebbcc62fdbc8baf1d98e3aeb3bfbc63}{get}} (const std\+::string \&key, std\+::string \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}=std\+::string()) const
+\item 
+bool \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a4e6e237b4e8a72221ac86f2b502af706}{is\+Set}} (const std\+::string \&key) const
+\item 
+unsigned long \mbox{\hyperlink{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a95be414e3f72631a7648392d697d4704}{num\+Key\+Values}} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a6a88deed0ee75804fb467c07afde6b01}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a6a88deed0ee75804fb467c07afde6b01}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!KeyValueReader@{KeyValueReader}}
+\index{KeyValueReader@{KeyValueReader}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{KeyValueReader()}{KeyValueReader()}}
+{\footnotesize\ttfamily Key\+Value\+Reader\+::\+Key\+Value\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a384f0414019b2e321b88b8486035b6bf}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a384f0414019b2e321b88b8486035b6bf}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!exportToFile@{exportToFile}}
+\index{exportToFile@{exportToFile}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{exportToFile()}{exportToFile()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::export\+To\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_abd96e1d77d72213690a7bd2e0300746c}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_abd96e1d77d72213690a7bd2e0300746c}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!exportToStream@{exportToStream}}
+\index{exportToStream@{exportToStream}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{exportToStream()}{exportToStream()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::export\+To\+Stream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_afebbcc62fdbc8baf1d98e3aeb3bfbc63}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_afebbcc62fdbc8baf1d98e3aeb3bfbc63}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!get@{get}}
+\index{get@{get}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily std\+::string Key\+Value\+Reader\+::get (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{std\+::string}]{value = {\ttfamily std\+:\+:string()} }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a50bac6d703850be2a6a3037ccef894f9}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a50bac6d703850be2a6a3037ccef894f9}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!importFromFile@{importFromFile}}
+\index{importFromFile@{importFromFile}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{importFromFile()}{importFromFile()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::import\+From\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a94d113097dc2c4078c958ab360a8f817}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a94d113097dc2c4078c958ab360a8f817}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!importFromStream@{importFromStream}}
+\index{importFromStream@{importFromStream}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{importFromStream()}{importFromStream()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::import\+From\+Stream (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a4e6e237b4e8a72221ac86f2b502af706}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a4e6e237b4e8a72221ac86f2b502af706}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!isSet@{isSet}}
+\index{isSet@{isSet}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{isSet()}{isSet()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::is\+Set (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a95be414e3f72631a7648392d697d4704}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a95be414e3f72631a7648392d697d4704}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!numKeyValues@{numKeyValues}}
+\index{numKeyValues@{numKeyValues}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{numKeyValues()}{numKeyValues()}}
+{\footnotesize\ttfamily unsigned long displace\+::formats\+::helpers\+::\+Key\+Value\+Reader\+::num\+Key\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a962e698ee19e27561b976091adb246d6}\label{classdisplace_1_1formats_1_1helpers_1_1_key_value_reader_a962e698ee19e27561b976091adb246d6}} 
+\index{displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}!set@{set}}
+\index{set@{set}!displace::formats::helpers::KeyValueReader@{displace::formats::helpers::KeyValueReader}}
+\subsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily bool Key\+Value\+Reader\+::set (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{value }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+formats/utils/\mbox{\hyperlink{_key_value_reader_8h}{Key\+Value\+Reader.\+h}}\item 
+formats/utils/\mbox{\hyperlink{_key_value_reader_8cpp}{Key\+Value\+Reader.\+cpp}}\end{DoxyCompactItemize}

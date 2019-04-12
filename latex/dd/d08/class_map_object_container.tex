@@ -1,0 +1,156 @@
+\hypertarget{class_map_object_container}{}\section{Map\+Object\+Container$<$ Obj, Idx $>$ Class Template Reference}
+\label{class_map_object_container}\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+
+
+A generic Container class form Map Objects.  
+
+
+
+
+{\ttfamily \#include $<$mapobjectcontainer.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef Q\+Map$<$ Idx, ObjC $\ast$ $>$\+::const\+\_\+iterator \mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_map_object_container_ab97ff5f8896b851d2b27e1e991c4d384}{Map\+Object\+Container}} ()
+\item 
+\mbox{\hyperlink{class_map_object_container_ae7fd84ad97ed9207128e8441795fd4a7}{$\sim$\+Map\+Object\+Container}} ()
+\item 
+Idx \mbox{\hyperlink{class_map_object_container_ab7e0c9271847d1daaf1d4339075ea183}{add}} (Idx id, Obj $\ast$object, int role)
+\begin{DoxyCompactList}\small\item\em add an object with the specified id and role \end{DoxyCompactList}\item 
+Obj $\ast$ \mbox{\hyperlink{class_map_object_container_a15a898aa8fe3452a85ad0a82ca5558db}{get}} (Idx id, int role)
+\item 
+void \mbox{\hyperlink{class_map_object_container_ae620f6d22864720c1a8b8815de46de7f}{clear}} ()
+\item 
+\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}} \mbox{\hyperlink{class_map_object_container_a578d70a39de94f7b8e0edd625eb97ef2}{begin}} ()
+\item 
+bool \mbox{\hyperlink{class_map_object_container_af908d67a323fdb8540e395dda61e1172}{at\+End}} (\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}} it)
+\item 
+Obj $\ast$ \mbox{\hyperlink{class_map_object_container_a53de9537128d7697e3ee0835f9b52201}{get}} (\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}} it, int role)
+\item 
+Obj $\ast$ \mbox{\hyperlink{class_map_object_container_a679fb7116afc538894fefb7bf3fc87fb}{remove}} (Idx id, int role)
+\begin{DoxyCompactList}\small\item\em remove the object specified by the id and role. The collection identified by id is not removed. Use remove(int) to remove also the list of roles it is responsibility of the caller to de-\/allocate the pointer returned \end{DoxyCompactList}\item 
+Q\+List$<$ Obj $\ast$ $>$ \mbox{\hyperlink{class_map_object_container_a6b62353d4b08a46f1624b5407c425375}{remove}} (Idx id)
+\begin{DoxyCompactList}\small\item\em Remove all the objects identified by the id, with all roles. The collection identified by id is removed. It is responsibility of the caller to de-\/allocate the objects returned with the pointer list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Obj, typename Idx = int$>$\newline
+class Map\+Object\+Container$<$ Obj, Idx $>$}
+
+A generic Container class form Map Objects. 
+
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}\label{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{Iterator}{Iterator}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+typedef Q\+Map$<$Idx,ObjC $\ast$$>$\+::const\+\_\+iterator \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}}}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_map_object_container_ab97ff5f8896b851d2b27e1e991c4d384}\label{class_map_object_container_ab97ff5f8896b851d2b27e1e991c4d384}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!MapObjectContainer@{MapObjectContainer}}
+\index{MapObjectContainer@{MapObjectContainer}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{MapObjectContainer()}{MapObjectContainer()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+\mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::\mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_ae7fd84ad97ed9207128e8441795fd4a7}\label{class_map_object_container_ae7fd84ad97ed9207128e8441795fd4a7}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!````~MapObjectContainer@{$\sim$MapObjectContainer}}
+\index{````~MapObjectContainer@{$\sim$MapObjectContainer}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{$\sim$MapObjectContainer()}{~MapObjectContainer()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+\mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::$\sim$\mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_map_object_container_ab7e0c9271847d1daaf1d4339075ea183}\label{class_map_object_container_ab7e0c9271847d1daaf1d4339075ea183}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!add@{add}}
+\index{add@{add}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+Idx \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::add (\begin{DoxyParamCaption}\item[{Idx}]{id,  }\item[{Obj $\ast$}]{object,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+add an object with the specified id and role 
+
+\mbox{\Hypertarget{class_map_object_container_af908d67a323fdb8540e395dda61e1172}\label{class_map_object_container_af908d67a323fdb8540e395dda61e1172}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!atEnd@{atEnd}}
+\index{atEnd@{atEnd}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{atEnd()}{atEnd()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+bool \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::at\+End (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}}}]{it }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_a578d70a39de94f7b8e0edd625eb97ef2}\label{class_map_object_container_a578d70a39de94f7b8e0edd625eb97ef2}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!begin@{begin}}
+\index{begin@{begin}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}} \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_ae620f6d22864720c1a8b8815de46de7f}\label{class_map_object_container_ae620f6d22864720c1a8b8815de46de7f}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!clear@{clear}}
+\index{clear@{clear}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+void \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_a15a898aa8fe3452a85ad0a82ca5558db}\label{class_map_object_container_a15a898aa8fe3452a85ad0a82ca5558db}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!get@{get}}
+\index{get@{get}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{get()}{get()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+Obj$\ast$ \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::get (\begin{DoxyParamCaption}\item[{Idx}]{id,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_a53de9537128d7697e3ee0835f9b52201}\label{class_map_object_container_a53de9537128d7697e3ee0835f9b52201}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!get@{get}}
+\index{get@{get}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{get()}{get()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+Obj$\ast$ \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_map_object_container_a744f6940937741a8ffd125e146dc86ab}{Iterator}}}]{it,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_map_object_container_a679fb7116afc538894fefb7bf3fc87fb}\label{class_map_object_container_a679fb7116afc538894fefb7bf3fc87fb}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!remove@{remove}}
+\index{remove@{remove}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{remove()}{remove()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+Obj$\ast$ \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::remove (\begin{DoxyParamCaption}\item[{Idx}]{id,  }\item[{int}]{role }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+remove the object specified by the id and role. The collection identified by id is not removed. Use remove(int) to remove also the list of roles it is responsibility of the caller to de-\/allocate the pointer returned 
+
+\begin{DoxyReturn}{Returns}
+The Pointer to the object removed. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_map_object_container_a6b62353d4b08a46f1624b5407c425375}\label{class_map_object_container_a6b62353d4b08a46f1624b5407c425375}} 
+\index{MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}!remove@{remove}}
+\index{remove@{remove}!MapObjectContainer$<$ Obj, Idx $>$@{MapObjectContainer$<$ Obj, Idx $>$}}
+\subsubsection{\texorpdfstring{remove()}{remove()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Obj, typename Idx = int$>$ \\
+Q\+List$<$Obj $\ast$$>$ \mbox{\hyperlink{class_map_object_container}{Map\+Object\+Container}}$<$ Obj, Idx $>$\+::remove (\begin{DoxyParamCaption}\item[{Idx}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Remove all the objects identified by the id, with all roles. The collection identified by id is removed. It is responsibility of the caller to de-\/allocate the objects returned with the pointer list. 
+
+\begin{DoxyReturn}{Returns}
+A List od pointers to the objects removed. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/mapobjects/\mbox{\hyperlink{mapobjectcontainer_8h}{mapobjectcontainer.\+h}}\end{DoxyCompactItemize}

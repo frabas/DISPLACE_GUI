@@ -1,0 +1,74 @@
+\hypertarget{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator}{}\section{dtree\+::vessels\+::Vessel\+Today\+Is\+State\+Evaluator Class Reference}
+\label{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator}\index{dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}}
+
+
+{\ttfamily \#include $<$vesselsevaluators.\+h$>$}
+
+Inheritance diagram for dtree\+::vessels\+::Vessel\+Today\+Is\+State\+Evaluator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{db/d9a/classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a3e9950557cd0615ecbbe02411ca4d238}{Vessel\+Today\+Is\+State\+Evaluator}} ()
+\item 
+double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ae3eb964dad250654605cc0756adbf54f}{evaluate}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$vessel) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ac1c87e23226c4231957bdd4f509a4fac}{Work\+Day}} = 0.\+0
+\item 
+static constexpr double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a4003d9e6bb39dfbeadb2d6adf866a399}{Week\+End\+Day}} = 1.\+0
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a3e9950557cd0615ecbbe02411ca4d238}\label{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a3e9950557cd0615ecbbe02411ca4d238}} 
+\index{dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}!VesselTodayIsStateEvaluator@{VesselTodayIsStateEvaluator}}
+\index{VesselTodayIsStateEvaluator@{VesselTodayIsStateEvaluator}!dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}}
+\subsubsection{\texorpdfstring{VesselTodayIsStateEvaluator()}{VesselTodayIsStateEvaluator()}}
+{\footnotesize\ttfamily dtree\+::vessels\+::\+Vessel\+Today\+Is\+State\+Evaluator\+::\+Vessel\+Today\+Is\+State\+Evaluator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ae3eb964dad250654605cc0756adbf54f}\label{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ae3eb964dad250654605cc0756adbf54f}} 
+\index{dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily double dtree\+::vessels\+::\+Vessel\+Today\+Is\+State\+Evaluator\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a4003d9e6bb39dfbeadb2d6adf866a399}\label{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_a4003d9e6bb39dfbeadb2d6adf866a399}} 
+\index{dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}!WeekEndDay@{WeekEndDay}}
+\index{WeekEndDay@{WeekEndDay}!dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}}
+\subsubsection{\texorpdfstring{WeekEndDay}{WeekEndDay}}
+{\footnotesize\ttfamily constexpr double dtree\+::vessels\+::\+Vessel\+Today\+Is\+State\+Evaluator\+::\+Week\+End\+Day = 1.\+0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ac1c87e23226c4231957bdd4f509a4fac}\label{classdtree_1_1vessels_1_1_vessel_today_is_state_evaluator_ac1c87e23226c4231957bdd4f509a4fac}} 
+\index{dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}!WorkDay@{WorkDay}}
+\index{WorkDay@{WorkDay}!dtree::vessels::VesselTodayIsStateEvaluator@{dtree::vessels::VesselTodayIsStateEvaluator}}
+\subsubsection{\texorpdfstring{WorkDay}{WorkDay}}
+{\footnotesize\ttfamily constexpr double dtree\+::vessels\+::\+Vessel\+Today\+Is\+State\+Evaluator\+::\+Work\+Day = 0.\+0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{vesselsevaluators_8h}{vesselsevaluators.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,72 @@
+\hypertarget{class_nodes_def_table}{}\section{Nodes\+Def\+Table Class Reference}
+\label{class_nodes_def_table}\index{NodesDefTable@{NodesDefTable}}
+
+
+{\ttfamily \#include $<$nodesdeftable.\+h$>$}
+
+Inheritance diagram for Nodes\+Def\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{dc/d18/class_nodes_def_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_nodes_def_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nodes_def_table_a039282d7516ffa4a5f9f2843c8eca2bf}{Nodes\+Def\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_nodes_def_table_a7245156e06fc5a05da08ad6e73011ad1}{$\sim$\+Nodes\+Def\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_nodes_def_table_a48e50902bff4f9c52ff01e0048d2ae6b}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_nodes_def_table_a1089d94496f6d3bbeaee38de2fc34ff6}{insert}} (\mbox{\hyperlink{class_node}{Node}} $\ast$node)
+\item 
+void \mbox{\hyperlink{class_nodes_def_table_a41ee8c32c215441940c754622b7df030}{query\+All\+Nodes}} (std\+::function$<$ void(std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour}{Harbour}} $>$)$>$ operation)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_nodes_def_table_a039282d7516ffa4a5f9f2843c8eca2bf}\label{class_nodes_def_table_a039282d7516ffa4a5f9f2843c8eca2bf}} 
+\index{NodesDefTable@{NodesDefTable}!NodesDefTable@{NodesDefTable}}
+\index{NodesDefTable@{NodesDefTable}!NodesDefTable@{NodesDefTable}}
+\subsubsection{\texorpdfstring{NodesDefTable()}{NodesDefTable()}}
+{\footnotesize\ttfamily Nodes\+Def\+Table\+::\+Nodes\+Def\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_def_table_a7245156e06fc5a05da08ad6e73011ad1}\label{class_nodes_def_table_a7245156e06fc5a05da08ad6e73011ad1}} 
+\index{NodesDefTable@{NodesDefTable}!````~NodesDefTable@{$\sim$NodesDefTable}}
+\index{````~NodesDefTable@{$\sim$NodesDefTable}!NodesDefTable@{NodesDefTable}}
+\subsubsection{\texorpdfstring{$\sim$NodesDefTable()}{~NodesDefTable()}}
+{\footnotesize\ttfamily Nodes\+Def\+Table\+::$\sim$\+Nodes\+Def\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_nodes_def_table_a48e50902bff4f9c52ff01e0048d2ae6b}\label{class_nodes_def_table_a48e50902bff4f9c52ff01e0048d2ae6b}} 
+\index{NodesDefTable@{NodesDefTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!NodesDefTable@{NodesDefTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Nodes\+Def\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_def_table_a1089d94496f6d3bbeaee38de2fc34ff6}\label{class_nodes_def_table_a1089d94496f6d3bbeaee38de2fc34ff6}} 
+\index{NodesDefTable@{NodesDefTable}!insert@{insert}}
+\index{insert@{insert}!NodesDefTable@{NodesDefTable}}
+\subsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Nodes\+Def\+Table\+::insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_nodes_def_table_a41ee8c32c215441940c754622b7df030}\label{class_nodes_def_table_a41ee8c32c215441940c754622b7df030}} 
+\index{NodesDefTable@{NodesDefTable}!queryAllNodes@{queryAllNodes}}
+\index{queryAllNodes@{queryAllNodes}!NodesDefTable@{NodesDefTable}}
+\subsubsection{\texorpdfstring{queryAllNodes()}{queryAllNodes()}}
+{\footnotesize\ttfamily void Nodes\+Def\+Table\+::query\+All\+Nodes (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_harbour}{Harbour}} $>$)$>$}]{operation }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{nodesdeftable_8h}{nodesdeftable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{nodesdeftable_8cpp}{nodesdeftable.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,882 @@
+\hypertarget{readdata_8h}{}\section{include/readdata.h File Reference}
+\label{readdata_8h}\index{include/readdata.h@{include/readdata.h}}
+{\ttfamily \#include $<$commons\+\_\+global.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}myutils.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Population.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}pathshop.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$options.\+h$>$}\newline
+{\ttfamily \#include $<$comstructs.\+h$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_node_banning_info}{Node\+Banning\+Info}}
+\item 
+struct \mbox{\hyperlink{struct_environment_data_record}{Environment\+Data\+Record}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a07a9604685bc7ed66d75d1b101ba2e68}{get\+Last\+Error\+Message}} ()
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ae0032db886081761b27ea6b80b93d9ac}{open\+\_\+file\+\_\+error}} (string filename)
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a47965181cb5d2cb792748f91aa67e998}{read\+\_\+config\+\_\+file}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, int \&a\+\_\+int\+\_\+line2, int \&a\+\_\+int\+\_\+line4, vector$<$ int $>$ \&a\+\_\+vector\+\_\+line6, vector$<$ int $>$ \&\mbox{\hyperlink{simulator_2main_8cpp_a22565f66884fb57eda73c18ea543a452}{implicit\+\_\+pops\+\_\+level2}}, vector$<$ int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a97daf2d4365464f7857a6aaa9d7c30d6}{grouped\+\_\+tacs}}, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line8, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line10, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line12, vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&interesting\+\_\+harbours)
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8a6ce4209e40e166509ed566c295f3ad}{read\+\_\+config\+\_\+file}} (std\+::istream \&stream, int \&a\+\_\+int\+\_\+line2, int \&a\+\_\+int\+\_\+line4, vector$<$ int $>$ \&a\+\_\+vector\+\_\+line6, vector$<$ int $>$ \&\mbox{\hyperlink{simulator_2main_8cpp_a22565f66884fb57eda73c18ea543a452}{implicit\+\_\+pops\+\_\+level2}}, vector$<$ int $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a97daf2d4365464f7857a6aaa9d7c30d6}{grouped\+\_\+tacs}}, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line8, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line10, vector$<$ double $>$ \&a\+\_\+vector\+\_\+line12, vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&interesting\+\_\+harbours)
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6019b7740aab58439ba01042b1700bdb}{read\+\_\+scenario\+\_\+config\+\_\+file}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{simulator_2main_8cpp_aa51908cc753b1446943da02194ae9f75}{namefolderoutput}}, \mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \&\mbox{\hyperlink{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}{scenario}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a09032877434fddd824196ff0844a4e01}{read\+\_\+scenario\+\_\+config\+\_\+file}} (std\+::istream \&stream, \mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \&\mbox{\hyperlink{thread__vessels_8cpp_a6c0e7b1e86be7dca81901efbbdd888d7}{scenario}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a55e9496c07744d413aa859abed126540}{read\+\_\+vessels\+\_\+features}} (string a\+\_\+quarter, vector$<$ string $>$ \&vesselids, vector$<$ int $>$ \&vid\+\_\+is\+\_\+actives, vector$<$ int $>$ \&vid\+\_\+is\+\_\+part\+\_\+of\+\_\+ref\+\_\+fleets, vector$<$ double $>$ \&speeds, vector$<$ double $>$ \&fuelcons, vector$<$ double $>$ \&lengths, vector$<$ double $>$ \&v\+K\+Ws, vector$<$ double $>$ \&carrycapacities, vector$<$ double $>$ \&tankcapacities, vector$<$ double $>$ \&nbfpingspertrips, vector$<$ double $>$ \&resttime\+\_\+par1s, vector$<$ double $>$ \&resttime\+\_\+par2s, vector$<$ double $>$ \&av\+\_\+trip\+\_\+duration, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+steaming, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+fishing, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+returning, vector$<$ double $>$ \&mult\+\_\+fuelcons\+\_\+when\+\_\+inactive, vector$<$ int $>$ \&firm\+\_\+ids, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, int \mbox{\hyperlink{simulator_2main_8cpp_a50670e80c6a2781997a7071ac6679e02}{selected\+\_\+vessels\+\_\+only}}, vector$<$ \mbox{\hyperlink{struct_vessel_calendar}{Vessel\+Calendar}} $>$ \&calendars)
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a60faf7ee7c9e4cb397807b9e64fc29ad}{read\+\_\+vessels\+\_\+economics\+\_\+features}} (vector$<$ string $>$ \&vesselids, vector$<$ double $>$ \&this\+\_\+vessel\+\_\+nb\+\_\+crews, vector$<$ double $>$ \&annual\+\_\+other\+\_\+incomes, vector$<$ double $>$ \&landing\+\_\+costs\+\_\+percents, vector$<$ double $>$ \&crewshare\+\_\+and\+\_\+unpaid\+\_\+labour\+\_\+costs\+\_\+percents, vector$<$ double $>$ \&other\+\_\+variable\+\_\+costs\+\_\+per\+\_\+unit\+\_\+efforts, vector$<$ double $>$ \&annual\+\_\+insurance\+\_\+costs\+\_\+per\+\_\+crews, vector$<$ double $>$ \&standard\+\_\+labour\+\_\+hour\+\_\+opportunity\+\_\+costss, vector$<$ double $>$ \&standard\+\_\+annual\+\_\+full\+\_\+time\+\_\+employement\+\_\+hourss, vector$<$ double $>$ \&other\+\_\+annual\+\_\+fixed\+\_\+costss, vector$<$ double $>$ \&vessel\+\_\+values, vector$<$ double $>$ \&annual\+\_\+depreciation\+\_\+rates, vector$<$ double $>$ \&opportunity\+\_\+interest\+\_\+rates, vector$<$ double $>$ \&annual\+\_\+discount\+\_\+rates, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a964fa2dde1d666b6f2bd91f4e01b1e46}{read\+\_\+ships\+\_\+features}} (vector$<$ string $>$ \&shipids, vector$<$ double $>$ \&imos, vector$<$ double $>$ \&yearbuilds, vector$<$ string $>$ \&flags, vector$<$ string $>$ \&types, vector$<$ double $>$ \&typecodes, vector$<$ double $>$ \&loas, vector$<$ double $>$ \&K\+Ws, vector$<$ double $>$ \&breadths, vector$<$ double $>$ \&grosstonnages, vector$<$ double $>$ \&nbunits, vector$<$ double $>$ \&fueluses, vector$<$ double $>$ \&N\+Ox\+Emission\+\_\+gper\+K\+Whs, vector$<$ double $>$ \&S\+Ox\+Emission\+\_\+percentpertotalfuelmasss, vector$<$ double $>$ \&G\+H\+G\+Emissions, vector$<$ double $>$ \&P\+M\+Emissions, vector$<$ double $>$ \&vmaxs, vector$<$ double $>$ \&vcruises, vector$<$ double $>$ \&lane\+\_\+ids, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a48667115015ce6f6cdefe313d11e632b}{read\+\_\+fishfarms\+\_\+features}} (vector$<$ int $>$ \&fishfarms\+\_\+ids, vector$<$ string $>$ \&fishfarms\+\_\+names, vector$<$ int $>$ \&idx\+\_\+nodes, vector$<$ int $>$ \&is\+\_\+actives, vector$<$ double $>$ \&sizes, vector$<$ double $>$ \&longs, vector$<$ double $>$ \&lats, vector$<$ double $>$ \&mean\+\_\+\+S\+S\+Ts, vector$<$ double $>$ \&mean\+\_\+salinities, vector$<$ double $>$ \&mean\+\_\+windspeeds, vector$<$ double $>$ \&mean\+\_\+currentspeeds, vector$<$ double $>$ \&max\+\_\+depths, vector$<$ double $>$ \&diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+ls, vector$<$ double $>$ \&Linf\+\_\+mms, vector$<$ double $>$ \&K\+\_\+ys, vector$<$ double $>$ \&t0\+\_\+ys, vector$<$ double $>$ \&fulton\+\_\+condition\+\_\+factors, vector$<$ string $>$ \&meanw\+\_\+growth\+\_\+model\+\_\+types, vector$<$ int $>$ \&start\+\_\+day\+\_\+growings, vector$<$ int $>$ \&end\+\_\+day\+\_\+harvests, vector$<$ int $>$ \&nbyears\+\_\+for\+\_\+growths, vector$<$ int $>$ \&nb\+\_\+days\+\_\+fallowing\+\_\+periods, vector$<$ int $>$ \&nb\+\_\+fish\+\_\+at\+\_\+starts, vector$<$ double $>$ \&meanw\+\_\+at\+\_\+starts, vector$<$ double $>$ \&price\+\_\+per\+\_\+kg\+\_\+at\+\_\+starts, vector$<$ double $>$ \&target\+\_\+meanw\+\_\+at\+\_\+harvests, vector$<$ int $>$ \&nb\+\_\+fish\+\_\+at\+\_\+harvests, vector$<$ double $>$ \&meanw\+\_\+at\+\_\+harvests, vector$<$ double $>$ \&prop\+\_\+harvest\+\_\+kg\+\_\+solds, vector$<$ double $>$ \&kg\+\_\+eggs\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&price\+\_\+eggs\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3pers, vector$<$ double $>$ \&P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5pers, vector$<$ string $>$ \&feed\+\_\+types, vector$<$ double $>$ \&feed\+\_\+price\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+kg, vector$<$ double $>$ \&prop\+\_\+\+N\+\_\+in\+\_\+feeds, vector$<$ double $>$ \&prop\+\_\+\+P\+\_\+in\+\_\+feeds, vector$<$ double $>$ \&total\+\_\+feed\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+\+P\+\_\+kgs, vector$<$ string $>$ \&feed\+\_\+type\+\_\+vets, vector$<$ double $>$ \&feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+kgs, vector$<$ double $>$ \&prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets, vector$<$ double $>$ \&prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vets, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+N\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+P\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+\+C\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+heavymetals\+\_\+kgs, vector$<$ double $>$ \&annual\+\_\+discharge\+\_\+medecine\+\_\+kgs, vector$<$ double $>$ \&net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+ys, vector$<$ double $>$ \&market\+\_\+price\+\_\+sold\+\_\+fishs, vector$<$ double $>$ \&operating\+\_\+cost\+\_\+per\+\_\+days, vector$<$ double $>$ \&annual\+\_\+profits, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_adbb8988b6d4622417a4d376949041609}{read\+\_\+firms\+\_\+features}} (vector$<$ int $>$ \&firm\+\_\+ids, vector$<$ string $>$ \&firm\+\_\+names, vector$<$ int $>$ \&nb\+\_\+vessels, vector$<$ double $>$ \&longs, vector$<$ double $>$ \&lats, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a246f69eea363dbc9cfb3605809c832d3}{read\+\_\+fgrounds}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_acec93530a8d91db0e00c8488f3f6440c}{read\+\_\+fgrounds\+\_\+init}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6e6bdab0186847f48217269cf495ce69}{read\+\_\+harbours}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8743b5e321b45c53d1d5effd6a56c1c1}{read\+\_\+freq\+\_\+fgrounds}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a1f57a5e7e029b64f2e13430fc6dbfee5}{read\+\_\+freq\+\_\+fgrounds\+\_\+init}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_abe2331b1b3a031cbdaef58915cb06f62}{read\+\_\+freq\+\_\+harbours}} (string a\+\_\+quarter, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aa9db8ab4340e42fd8636a47e370dc447}{read\+\_\+vessels\+\_\+betas}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a3305fcb9bfb422fb51c6323419d69224}{read\+\_\+vessels\+\_\+tacs}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a90d8a75c0e1dcc36fd3ab6dbc61b2a22}{read\+\_\+initial\+\_\+fishing\+\_\+credits}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a4add990678e421e6e3e9904c55f7d64d}{read\+\_\+possible\+\_\+metiers}} (string a\+\_\+quarter, string a\+\_\+vessel, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_acd27c8c96ab07f9e99fbc5f021706111}{read\+\_\+freq\+\_\+possible\+\_\+metiers}} (string a\+\_\+quarter, string a\+\_\+vessel, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a9bb9da441e11cbc608d5c3c106f8ae35}{read\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}} (string a\+\_\+quarter, string a\+\_\+vessel, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a40ae6e932f57a9ffa88a2906b0a16485}{read\+\_\+gshape\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}} (string a\+\_\+quarter, string a\+\_\+vessel, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aeed43f3550eed7638ab80b63b393c169}{read\+\_\+gscale\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes}} (string a\+\_\+quarter, string a\+\_\+vessel, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ac617bef7ad79f2540abfc275df4b3195}{read\+\_\+initial\+\_\+tariffs\+\_\+on\+\_\+nodes}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string a\+\_\+graph\+\_\+name)
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, string $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ad26190d82a456ba5a776b034accb3258}{read\+\_\+harbour\+\_\+names}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+int \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a579c79c6f36fc444af7005b42b58da8b}{read\+\_\+prices\+\_\+per\+\_\+harbour}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} i, string a\+\_\+quarter, multimap$<$ string, double $>$ \&prices\+\_\+per\+\_\+harbour, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+int \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ac849262f3d8abaa2fc64753dcef0b6ac}{read\+\_\+prices\+\_\+per\+\_\+harbour\+\_\+each\+\_\+pop\+\_\+per\+\_\+cat}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} i, string a\+\_\+quarter, multimap$<$ int, double $>$ \&prices\+\_\+per\+\_\+harbour\+\_\+each\+\_\+species\+\_\+per\+\_\+cat, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8542eda6d0cf1e8821979973170c97bb}{read\+\_\+fuel\+\_\+prices\+\_\+per\+\_\+vsize}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} i, string a\+\_\+quarter, map$<$ int, double $>$ \&fuel\+\_\+prices\+\_\+per\+\_\+vsize, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_afb99951518c4aced88de205ad19a3e6c}{read\+\_\+metiers\+\_\+types}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a89e7d67d6c7792fffad7da054125ac59}{read\+\_\+sel\+\_\+ogives}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8bc9a5cc27817817a8070541b2c5c0ba}{read\+\_\+dis\+\_\+ogives}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ab624111b055b64e0d1b2bb18aec761f1}{read\+\_\+metiers\+\_\+betas}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a9377d8467262fed0a9fb4dc8c7e1d9ae}{read\+\_\+discardratio\+\_\+limits}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6f4aeb25e6af7f62b324f91047fa9ef3}{read\+\_\+is\+\_\+avoided\+\_\+stocks}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ad80b2e5a7f07e6439aec57d887db76b8}{read\+\_\+metiers\+\_\+mls\+\_\+cat}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aa18d2c6916b8a737c0b0e4d72ba76294}{read\+\_\+percent\+\_\+revenue\+\_\+completenesses}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a57b39a06cb36159e551bd6e96f5b98ae}{read\+\_\+metiers\+\_\+fspeed}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ac5630eb36f6186acb82b408a04f70201}{read\+\_\+gear\+\_\+widths\+\_\+param\+\_\+a}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a67951bbaa2057157fa2380bb3f993b0a}{read\+\_\+gear\+\_\+widths\+\_\+param\+\_\+b}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, string $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a46af3be18021cf0f677ac57bbf4d43f3}{read\+\_\+gear\+\_\+widths\+\_\+model\+\_\+type}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a4dc29cc1a6be6a9786df670f54201e9e}{read\+\_\+loss\+\_\+after\+\_\+1\+\_\+passage\+\_\+per\+\_\+landscape\+\_\+per\+\_\+func\+\_\+group}} (int a\+\_\+met, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ada1a33af5e3e9a4f4ae2c2e2dd6406ed}{read\+\_\+logistic\+\_\+recovery\+\_\+rates\+\_\+per\+\_\+month\+\_\+per\+\_\+funcgr}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ad5791f5758b316d37c93912c709a4f3d}{read\+\_\+habitat\+\_\+deltas\+\_\+per\+\_\+pop}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a23c00ced4a082ab58cf018bcb018e0ef}{read\+\_\+benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af81102df2bd3fe11aab139d3d99658f8}{read\+\_\+benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a4d1ea103f0a9ca3a3b93ec6e561ed1b9}{read\+\_\+metier\+\_\+target\+\_\+stocks}} (int a\+\_\+met, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_afa211bfc75c92168298e504dfdb3d4c9}{read\+\_\+metier\+\_\+suitable\+\_\+seabottomtypes}} (int a\+\_\+met, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a46037d80398299cb6c0937affeaf4743}{read\+\_\+selectivity\+\_\+per\+\_\+stock\+\_\+ogives}} (int a\+\_\+met, int \mbox{\hyperlink{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}{nbpops}}, int nbszgroups, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}{fleetsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aa5612420c1f46316646b86bce6aeda32}{read\+\_\+selectivity\+\_\+per\+\_\+stock\+\_\+ogives\+\_\+for\+\_\+oth\+\_\+land}} (int \mbox{\hyperlink{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}{nbpops}}, int nbszgroups, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}{fleetsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a96fb008cef3a32110982472c4818edf3}{read\+\_\+prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node\+\_\+per\+\_\+landscape}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a3b558ef3b743aa28a35eba7289510a80}{read\+\_\+prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node\+\_\+per\+\_\+landscape}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ab3676764b6a2ea37427238e41147bb7d}{read\+\_\+meanw\+\_\+funcgr\+\_\+per\+\_\+landscape}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a040af1b7d95f0342e8b3adcaf137b012}{read\+\_\+size\+\_\+per\+\_\+farm}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a4e364918ef4094c09d26a20b1a83dbed}{read\+\_\+size\+\_\+per\+\_\+windmill}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a101303e4bfa8d8e2bdb9f6f19e0990ac}{read\+\_\+shiplanes\+\_\+lon}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af74601fef75973d9520742262934744e}{read\+\_\+shiplanes\+\_\+lat}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_add6356e308ac6ccd858413c8aa86204d}{read\+\_\+pop\+\_\+names\+\_\+in\+\_\+string}} (map$<$ int, string $>$ \&pop\+\_\+names, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6a7d73dc9edeac702e8569a238260278}{read\+\_\+avai\+\_\+betas}} (string a\+\_\+semester, string szgroup, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ad35623dbe7f031346902070f6c96bcea}{read\+\_\+init\+\_\+pops\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a563d8198b01a460faf14ba871066535b}{read\+\_\+init\+\_\+prop\+\_\+migrants\+\_\+pops\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af697486bd9478c659cd6476960cbaded}{read\+\_\+init\+\_\+maturity\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af90de03f5b06d34d1056f32ecadb5325}{read\+\_\+init\+\_\+fecundity\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af3d9bb3698ba16dbeabff8f72c3ce1af}{read\+\_\+init\+\_\+weight\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8223edb6df78185334bc0f637ab6fcdf}{read\+\_\+init\+\_\+comcat\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a67721ed0eebfa432f6c6f1c16c5b9c9c}{read\+\_\+init\+\_\+\+M\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a4d8a8fb1fc5098e8dfabb4ef17419b9d}{read\+\_\+init\+\_\+proprecru\+\_\+per\+\_\+szgroup}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a1bf54c500a49ec9dee3350ad361abc3c}{read\+\_\+lst\+\_\+idx\+\_\+nodes\+\_\+per\+\_\+pop}} (string a\+\_\+semester, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string str\+\_\+rand\+\_\+avai\+\_\+file)
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a5af16787ebedc80bcd4bf5a1d2674cbd}{read\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop}} (string a\+\_\+semester, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string str\+\_\+rand\+\_\+avai\+\_\+file, string \mbox{\hyperlink{simulator_2main_8cpp_a87c5884aaffb0c67f0164f9fb3befdee}{type\+\_\+of\+\_\+avai\+\_\+field\+\_\+to\+\_\+read}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aa7dd669cd9358fc43135f90a2ff9d5d1}{read\+\_\+full\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop}} (string a\+\_\+semester, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string str\+\_\+rand\+\_\+avai\+\_\+file, string \mbox{\hyperlink{simulator_2main_8cpp_a87c5884aaffb0c67f0164f9fb3befdee}{type\+\_\+of\+\_\+avai\+\_\+field\+\_\+to\+\_\+read}})
+\item 
+multimap$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a66f99880c85bc79fb092925505dacc00}{read\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop}} (string a\+\_\+semester, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a72f3f90ab3a35abb0900b2221087f379}{read\+\_\+growth\+\_\+transition\+\_\+matrix}} (int a\+\_\+pop, int nbszgroup, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a56925dbe8bc2658f58aed0f26c5c7a82}{read\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix}} (int a\+\_\+pop, int nbszgroup, int nbage, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_abdba0f9700c00b9882623ccf2ae8b84d}{read\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix}} (int a\+\_\+pop, int nbszgroup, int nbage, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ac87ed9259b9e0b1415996295dc3d1df1}{read\+\_\+param\+\_\+sr}} (int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a5dbbff79f30d432d9591ead6e5053e04}{read\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max\+\_\+and\+\_\+ftarget}} (int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aec09203b0d291f43805bbd975a519dae}{read\+\_\+initial\+\_\+tac}} (int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6eb2af98fb402e502aa1e01308fa96cd}{read\+\_\+tac\+\_\+percent\+\_\+simulated}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a99ebef1accbda0ff5cbd019f4040c4ec}{read\+\_\+hyperstability\+\_\+param}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+map$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aba949dabb4f6e811d207d8ef30269288}{read\+\_\+oth\+\_\+land\+\_\+nodes\+\_\+with\+\_\+pop}} (string a\+\_\+semester, string a\+\_\+month, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_ac0d4da211dc8525932bc710d17e69b80}{fleetsce}})
+\item 
+map$<$ string, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aad9ca989bdf46dffcdaf006d88440739}{read\+\_\+relative\+\_\+stability\+\_\+keys}} (string a\+\_\+semester, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a0960b4d83f8d2c36d856c0c84344f43c}{read\+\_\+selected\+\_\+szgroups\+\_\+per\+\_\+pop}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_abc33cdd141d1207be6546cbc3f802c4b}{read\+\_\+overall\+\_\+migration\+\_\+fluxes}} (string a\+\_\+semester, int a\+\_\+pop, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a151be5012302914c24e95420bad6b307}{read\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock\+\_\+allstks}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+multimap$<$ int, double $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8586f24787a9a18ffa868b21ba3aae65}{read\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock\+\_\+allstks}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a56b8254dac8f11701a1131618f60bf88}{read\+\_\+species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix}} (int \mbox{\hyperlink{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}{nbpops}}, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ vector$<$ double $>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a6eaa02229efc822c0d693dba9c33ea6f}{read\+\_\+preferences\+\_\+for\+\_\+species\+\_\+matrix}} (int a\+\_\+pop, int \mbox{\hyperlink{thread__vessels_8cpp_a664e1cfcbba8af93cd65eaeb74e3b3a5}{nbpops}}, int nbszgroup, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string \mbox{\hyperlink{thread__vessels_8cpp_a1eac30376f2ca43221ac45bcac9635a8}{biolsce}})
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a8b111b8182d243588ede91ca8c527a98}{read\+\_\+tsteps\+\_\+quarters}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_abd90476d8c9cf1f70ed2e54de259fc51}{read\+\_\+tsteps\+\_\+semesters}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aa874406bea69ed9d5d7979ad253151a5}{read\+\_\+tsteps\+\_\+months}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aebccfac85f166784cc025b27877f15ba}{read\+\_\+tsteps\+\_\+years}} (string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}} $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ab52294e450f9e7f683d0b44a3745a623}{read\+\_\+maps\+\_\+previous}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} source, string \mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}}, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string a\+\_\+graph\+\_\+name)
+\item 
+spp\+::sparse\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ae03b63de8c91a90e92884a4540ea51c0}{read\+\_\+min\+\_\+distance}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} source, string \mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}}, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string a\+\_\+graph\+\_\+name)
+\item 
+\mbox{\hyperlink{class_path_shop}{Path\+Shop}} \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a2797b9f87799bd7d277b5f8a1fb6e40f}{read\+\_\+graph\+\_\+details}} (\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} source, string \mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}}, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}}, string a\+\_\+graph\+\_\+name)
+\item 
+multimap$<$ int, int $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af3b3554ba0bbd5d9cdb4d4d0b6f1b532}{read\+\_\+nodes\+\_\+in\+\_\+polygons}} (string a\+\_\+quarter, string \mbox{\hyperlink{simulator_2main_8cpp_a4b65f47992a71e554210fa8a81eeaac0}{a\+\_\+graph}}, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a306f87178261a08039d92540d0264adc}{read\+\_\+metier\+\_\+quarterly\+\_\+closures}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, string a\+\_\+quarter, string \mbox{\hyperlink{simulator_2main_8cpp_a4b65f47992a71e554210fa8a81eeaac0}{a\+\_\+graph}}, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a5a23e00476176bb7645a15ebd5c343e8}{read\+\_\+metier\+\_\+monthly\+\_\+closures}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, string a\+\_\+month, string \mbox{\hyperlink{simulator_2main_8cpp_a4b65f47992a71e554210fa8a81eeaac0}{a\+\_\+graph}}, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_af76cfbc93d2d0b8eb5ecbe6e784c40af}{read\+\_\+vsize\+\_\+monthly\+\_\+closures}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, string a\+\_\+month, string \mbox{\hyperlink{simulator_2main_8cpp_a4b65f47992a71e554210fa8a81eeaac0}{a\+\_\+graph}}, string folder\+\_\+name\+\_\+parameterization, string \mbox{\hyperlink{simulator_2main_8cpp_ac86ec3f78ebd07880c0aea89b076590f}{inputfolder}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_afab1119b029cebb2e5a107e9e199d73b}{read\+\_\+metier\+\_\+closures}} (std\+::istream \&stream, const string \&separator, vector$<$ \mbox{\hyperlink{struct_node_banning_info}{Node\+Banning\+Info}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_afaeaa9d55484d74745cadaaa03c17fd4}{read\+\_\+vsize\+\_\+closures}} (std\+::istream \&stream, const string \&separator, vector$<$ \mbox{\hyperlink{struct_node_banning_info}{Node\+Banning\+Info}} $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}})
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aab15474c2854e36354e0e5a5b40cf125}{read\+\_\+biological\+\_\+traits\+\_\+params}} (istream \&stream, const std\+::string \&separator, std\+::vector$<$ std\+::tuple$<$ string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string $>$ $>$ \&biological\+\_\+traits\+\_\+params)
+\item 
+bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aad417bbac94fd6574653f8065d81537a}{read\+\_\+environment\+\_\+on\+\_\+coord}} (istream \&stream, const std\+::string \&separator, std\+::vector$<$ \mbox{\hyperlink{struct_environment_data_record}{Environment\+Data\+Record}} $>$ \&environment\+\_\+on\+\_\+coord)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_aef790f7ca0419b84b0cd33b16605f55c}{write\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+N\+\_\+in\+\_\+file}} (ofstream \&S\+M\+S\+\_\+\+N\+\_\+in, vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, vector$<$ int $>$ stock\+\_\+numbers, vector$<$ int $>$ a\+\_\+unit, vector$<$ int $>$ a\+\_\+number\+\_\+of\+\_\+ages)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_a9bdccae0bcea5b2b2d3ab5e610d69fae}{write\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+F\+\_\+in\+\_\+file}} (ofstream \&S\+M\+S\+\_\+\+F\+\_\+in, vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, vector$<$ int $>$ stock\+\_\+numbers)
+\item 
+void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} \mbox{\hyperlink{readdata_8h_ad5460ce7c28e4c159442b3b56a822996}{read\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+N\+\_\+out\+\_\+file}} (vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_a52b340841e812112c424c384bb9e7ebc}{populations}}, vector$<$ int $>$ stock\+\_\+numbers, vector$<$ int $>$ a\+\_\+unit, vector$<$ int $>$ a\+\_\+number\+\_\+of\+\_\+ages, string sms\+\_\+folder, string \mbox{\hyperlink{simulator_2main_8cpp_a44a282d0a5b623c9d3e1d35def57a3fe}{namesimu}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{readdata_8h_a07a9604685bc7ed66d75d1b101ba2e68}\label{readdata_8h_a07a9604685bc7ed66d75d1b101ba2e68}} 
+\index{readdata.h@{readdata.h}!getLastErrorMessage@{getLastErrorMessage}}
+\index{getLastErrorMessage@{getLastErrorMessage}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{getLastErrorMessage()}{getLastErrorMessage()}}
+{\footnotesize\ttfamily std\+::string \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} get\+Last\+Error\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ae0032db886081761b27ea6b80b93d9ac}\label{readdata_8h_ae0032db886081761b27ea6b80b93d9ac}} 
+\index{readdata.h@{readdata.h}!open\_file\_error@{open\_file\_error}}
+\index{open\_file\_error@{open\_file\_error}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{open\_file\_error()}{open\_file\_error()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} open\+\_\+file\+\_\+error (\begin{DoxyParamCaption}\item[{string}]{filename }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a151be5012302914c24e95420bad6b307}\label{readdata_8h_a151be5012302914c24e95420bad6b307}} 
+\index{readdata.h@{readdata.h}!read\_adults\_diet\_preference\_per\_stock\_allstks@{read\_adults\_diet\_preference\_per\_stock\_allstks}}
+\index{read\_adults\_diet\_preference\_per\_stock\_allstks@{read\_adults\_diet\_preference\_per\_stock\_allstks}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_adults\_diet\_preference\_per\_stock\_allstks()}{read\_adults\_diet\_preference\_per\_stock\_allstks()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+adults\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock\+\_\+allstks (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6a7d73dc9edeac702e8569a238260278}\label{readdata_8h_a6a7d73dc9edeac702e8569a238260278}} 
+\index{readdata.h@{readdata.h}!read\_avai\_betas@{read\_avai\_betas}}
+\index{read\_avai\_betas@{read\_avai\_betas}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_avai\_betas()}{read\_avai\_betas()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+avai\+\_\+betas (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{szgroup,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a5af16787ebedc80bcd4bf5a1d2674cbd}\label{readdata_8h_a5af16787ebedc80bcd4bf5a1d2674cbd}} 
+\index{readdata.h@{readdata.h}!read\_avai\_szgroup\_nodes\_with\_pop@{read\_avai\_szgroup\_nodes\_with\_pop}}
+\index{read\_avai\_szgroup\_nodes\_with\_pop@{read\_avai\_szgroup\_nodes\_with\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_avai\_szgroup\_nodes\_with\_pop()}{read\_avai\_szgroup\_nodes\_with\_pop()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{str\+\_\+rand\+\_\+avai\+\_\+file,  }\item[{string}]{type\+\_\+of\+\_\+avai\+\_\+field\+\_\+to\+\_\+read }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a23c00ced4a082ab58cf018bcb018e0ef}\label{readdata_8h_a23c00ced4a082ab58cf018bcb018e0ef}} 
+\index{readdata.h@{readdata.h}!read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}}
+\index{read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}{read\_benthos\_biomass\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+benthos\+\_\+biomass\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af81102df2bd3fe11aab139d3d99658f8}\label{readdata_8h_af81102df2bd3fe11aab139d3d99658f8}} 
+\index{readdata.h@{readdata.h}!read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}}
+\index{read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr@{read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}{read\_benthos\_number\_carrying\_capacity\_K\_per\_landscape\_per\_funcgr()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+benthos\+\_\+number\+\_\+carrying\+\_\+capacity\+\_\+\+K\+\_\+per\+\_\+landscape\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aab15474c2854e36354e0e5a5b40cf125}\label{readdata_8h_aab15474c2854e36354e0e5a5b40cf125}} 
+\index{readdata.h@{readdata.h}!read\_biological\_traits\_params@{read\_biological\_traits\_params}}
+\index{read\_biological\_traits\_params@{read\_biological\_traits\_params}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_biological\_traits\_params()}{read\_biological\_traits\_params()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+biological\+\_\+traits\+\_\+params (\begin{DoxyParamCaption}\item[{istream \&}]{stream,  }\item[{const std\+::string \&}]{separator,  }\item[{std\+::vector$<$ std\+::tuple$<$ string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string $>$ $>$ \&}]{biological\+\_\+traits\+\_\+params }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a47965181cb5d2cb792748f91aa67e998}\label{readdata_8h_a47965181cb5d2cb792748f91aa67e998}} 
+\index{readdata.h@{readdata.h}!read\_config\_file@{read\_config\_file}}
+\index{read\_config\_file@{read\_config\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_config\_file()}{read\_config\_file()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+config\+\_\+file (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{int \&}]{nbpops,  }\item[{int \&}]{nbbenthospops,  }\item[{vector$<$ int $>$ \&}]{implicit\+\_\+pops,  }\item[{vector$<$ int $>$ \&}]{implicit\+\_\+pops\+\_\+level2,  }\item[{vector$<$ int $>$ \&}]{grouped\+\_\+tacs,  }\item[{vector$<$ double $>$ \&}]{calib\+\_\+oth\+\_\+landings,  }\item[{vector$<$ double $>$ \&}]{calib\+\_\+w,  }\item[{vector$<$ double $>$ \&}]{calib\+\_\+cpue,  }\item[{vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&}]{interesting\+\_\+harbours }\end{DoxyParamCaption})}
+
+read the settings for the siums given the case study 
+\begin{DoxyParams}{Parameters}
+{\em the} & vectors to be filled in, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{readdata_8h_a8a6ce4209e40e166509ed566c295f3ad}\label{readdata_8h_a8a6ce4209e40e166509ed566c295f3ad}} 
+\index{readdata.h@{readdata.h}!read\_config\_file@{read\_config\_file}}
+\index{read\_config\_file@{read\_config\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_config\_file()}{read\_config\_file()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+config\+\_\+file (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream,  }\item[{int \&}]{a\+\_\+int\+\_\+line2,  }\item[{int \&}]{a\+\_\+int\+\_\+line4,  }\item[{vector$<$ int $>$ \&}]{a\+\_\+vector\+\_\+line6,  }\item[{vector$<$ int $>$ \&}]{implicit\+\_\+pops\+\_\+level2,  }\item[{vector$<$ int $>$ \&}]{grouped\+\_\+tacs,  }\item[{vector$<$ double $>$ \&}]{a\+\_\+vector\+\_\+line8,  }\item[{vector$<$ double $>$ \&}]{a\+\_\+vector\+\_\+line10,  }\item[{vector$<$ double $>$ \&}]{a\+\_\+vector\+\_\+line12,  }\item[{vector$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \&}]{interesting\+\_\+harbours }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a9bb9da441e11cbc608d5c3c106f8ae35}\label{readdata_8h_a9bb9da441e11cbc608d5c3c106f8ae35}} 
+\index{readdata.h@{readdata.h}!read\_cpue\_per\_stk\_on\_nodes@{read\_cpue\_per\_stk\_on\_nodes}}
+\index{read\_cpue\_per\_stk\_on\_nodes@{read\_cpue\_per\_stk\_on\_nodes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_cpue\_per\_stk\_on\_nodes()}{read\_cpue\_per\_stk\_on\_nodes()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+vessel,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8bc9a5cc27817817a8070541b2c5c0ba}\label{readdata_8h_a8bc9a5cc27817817a8070541b2c5c0ba}} 
+\index{readdata.h@{readdata.h}!read\_dis\_ogives@{read\_dis\_ogives}}
+\index{read\_dis\_ogives@{read\_dis\_ogives}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_dis\_ogives()}{read\_dis\_ogives()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+dis\+\_\+ogives (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a9377d8467262fed0a9fb4dc8c7e1d9ae}\label{readdata_8h_a9377d8467262fed0a9fb4dc8c7e1d9ae}} 
+\index{readdata.h@{readdata.h}!read\_discardratio\_limits@{read\_discardratio\_limits}}
+\index{read\_discardratio\_limits@{read\_discardratio\_limits}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_discardratio\_limits()}{read\_discardratio\_limits()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+discardratio\+\_\+limits (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aad417bbac94fd6574653f8065d81537a}\label{readdata_8h_aad417bbac94fd6574653f8065d81537a}} 
+\index{readdata.h@{readdata.h}!read\_environment\_on\_coord@{read\_environment\_on\_coord}}
+\index{read\_environment\_on\_coord@{read\_environment\_on\_coord}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_environment\_on\_coord()}{read\_environment\_on\_coord()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+environment\+\_\+on\+\_\+coord (\begin{DoxyParamCaption}\item[{istream \&}]{stream,  }\item[{const std\+::string \&}]{separator,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_environment_data_record}{Environment\+Data\+Record}} $>$ \&}]{environment\+\_\+on\+\_\+coord }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a5dbbff79f30d432d9591ead6e5053e04}\label{readdata_8h_a5dbbff79f30d432d9591ead6e5053e04}} 
+\index{readdata.h@{readdata.h}!read\_fbar\_ages\_min\_max\_and\_ftarget@{read\_fbar\_ages\_min\_max\_and\_ftarget}}
+\index{read\_fbar\_ages\_min\_max\_and\_ftarget@{read\_fbar\_ages\_min\_max\_and\_ftarget}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_fbar\_ages\_min\_max\_and\_ftarget()}{read\_fbar\_ages\_min\_max\_and\_ftarget()}}
+{\footnotesize\ttfamily vector$<$double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+fbar\+\_\+ages\+\_\+min\+\_\+max\+\_\+and\+\_\+ftarget (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a246f69eea363dbc9cfb3605809c832d3}\label{readdata_8h_a246f69eea363dbc9cfb3605809c832d3}} 
+\index{readdata.h@{readdata.h}!read\_fgrounds@{read\_fgrounds}}
+\index{read\_fgrounds@{read\_fgrounds}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_fgrounds()}{read\_fgrounds()}}
+{\footnotesize\ttfamily multimap$<$string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+fgrounds (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_acec93530a8d91db0e00c8488f3f6440c}\label{readdata_8h_acec93530a8d91db0e00c8488f3f6440c}} 
+\index{readdata.h@{readdata.h}!read\_fgrounds\_init@{read\_fgrounds\_init}}
+\index{read\_fgrounds\_init@{read\_fgrounds\_init}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_fgrounds\_init()}{read\_fgrounds\_init()}}
+{\footnotesize\ttfamily multimap$<$string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+fgrounds\+\_\+init (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a66f99880c85bc79fb092925505dacc00}\label{readdata_8h_a66f99880c85bc79fb092925505dacc00}} 
+\index{readdata.h@{readdata.h}!read\_field\_of\_coeff\_diffusion\_this\_pop@{read\_field\_of\_coeff\_diffusion\_this\_pop}}
+\index{read\_field\_of\_coeff\_diffusion\_this\_pop@{read\_field\_of\_coeff\_diffusion\_this\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_field\_of\_coeff\_diffusion\_this\_pop()}{read\_field\_of\_coeff\_diffusion\_this\_pop()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+field\+\_\+of\+\_\+coeff\+\_\+diffusion\+\_\+this\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_adbb8988b6d4622417a4d376949041609}\label{readdata_8h_adbb8988b6d4622417a4d376949041609}} 
+\index{readdata.h@{readdata.h}!read\_firms\_features@{read\_firms\_features}}
+\index{read\_firms\_features@{read\_firms\_features}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_firms\_features()}{read\_firms\_features()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+firms\+\_\+features (\begin{DoxyParamCaption}\item[{vector$<$ int $>$ \&}]{firm\+\_\+ids,  }\item[{vector$<$ string $>$ \&}]{firm\+\_\+names,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+vessels,  }\item[{vector$<$ double $>$ \&}]{longs,  }\item[{vector$<$ double $>$ \&}]{lats,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a48667115015ce6f6cdefe313d11e632b}\label{readdata_8h_a48667115015ce6f6cdefe313d11e632b}} 
+\index{readdata.h@{readdata.h}!read\_fishfarms\_features@{read\_fishfarms\_features}}
+\index{read\_fishfarms\_features@{read\_fishfarms\_features}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_fishfarms\_features()}{read\_fishfarms\_features()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+fishfarms\+\_\+features (\begin{DoxyParamCaption}\item[{vector$<$ int $>$ \&}]{fishfarms\+\_\+ids,  }\item[{vector$<$ string $>$ \&}]{fishfarms\+\_\+names,  }\item[{vector$<$ int $>$ \&}]{idx\+\_\+nodes,  }\item[{vector$<$ int $>$ \&}]{is\+\_\+actives,  }\item[{vector$<$ double $>$ \&}]{sizes,  }\item[{vector$<$ double $>$ \&}]{longs,  }\item[{vector$<$ double $>$ \&}]{lats,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+\+S\+S\+Ts,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+salinities,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+windspeeds,  }\item[{vector$<$ double $>$ \&}]{mean\+\_\+currentspeeds,  }\item[{vector$<$ double $>$ \&}]{max\+\_\+depths,  }\item[{vector$<$ double $>$ \&}]{diss\+\_\+\+O2\+\_\+mg\+\_\+per\+\_\+ls,  }\item[{vector$<$ double $>$ \&}]{Linf\+\_\+mms,  }\item[{vector$<$ double $>$ \&}]{K\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{t0\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{fulton\+\_\+condition\+\_\+factors,  }\item[{vector$<$ string $>$ \&}]{meanw\+\_\+growth\+\_\+model\+\_\+types,  }\item[{vector$<$ int $>$ \&}]{start\+\_\+day\+\_\+growings,  }\item[{vector$<$ int $>$ \&}]{end\+\_\+day\+\_\+harvests,  }\item[{vector$<$ int $>$ \&}]{nbyears\+\_\+for\+\_\+growths,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+days\+\_\+fallowing\+\_\+periods,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+fish\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{meanw\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{price\+\_\+per\+\_\+kg\+\_\+at\+\_\+starts,  }\item[{vector$<$ double $>$ \&}]{target\+\_\+meanw\+\_\+at\+\_\+harvests,  }\item[{vector$<$ int $>$ \&}]{nb\+\_\+fish\+\_\+at\+\_\+harvests,  }\item[{vector$<$ double $>$ \&}]{meanw\+\_\+at\+\_\+harvests,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+harvest\+\_\+kg\+\_\+solds,  }\item[{vector$<$ double $>$ \&}]{kg\+\_\+eggs\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{price\+\_\+eggs\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{N\+\_\+in\+\_\+fish\+\_\+kg\+\_\+3pers,  }\item[{vector$<$ double $>$ \&}]{P\+\_\+in\+\_\+fish\+\_\+kg\+\_\+0\+\_\+5pers,  }\item[{vector$<$ string $>$ \&}]{feed\+\_\+types,  }\item[{vector$<$ double $>$ \&}]{feed\+\_\+price\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+kg,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+N\+\_\+in\+\_\+feeds,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+P\+\_\+in\+\_\+feeds,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ string $>$ \&}]{feed\+\_\+type\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{feed\+\_\+vet\+\_\+price\+\_\+per\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+N\+\_\+in\+\_\+feed\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{prop\+\_\+\+P\+\_\+in\+\_\+feed\+\_\+vets,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{total\+\_\+feed\+\_\+vet\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+N\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+P\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+\+C\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+heavymetals\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discharge\+\_\+medecine\+\_\+kgs,  }\item[{vector$<$ double $>$ \&}]{net\+\_\+harvest\+\_\+kg\+\_\+per\+\_\+sqkm\+\_\+ys,  }\item[{vector$<$ double $>$ \&}]{market\+\_\+price\+\_\+sold\+\_\+fishs,  }\item[{vector$<$ double $>$ \&}]{operating\+\_\+cost\+\_\+per\+\_\+days,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+profits,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8743b5e321b45c53d1d5effd6a56c1c1}\label{readdata_8h_a8743b5e321b45c53d1d5effd6a56c1c1}} 
+\index{readdata.h@{readdata.h}!read\_freq\_fgrounds@{read\_freq\_fgrounds}}
+\index{read\_freq\_fgrounds@{read\_freq\_fgrounds}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_freq\_fgrounds()}{read\_freq\_fgrounds()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+freq\+\_\+fgrounds (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a1f57a5e7e029b64f2e13430fc6dbfee5}\label{readdata_8h_a1f57a5e7e029b64f2e13430fc6dbfee5}} 
+\index{readdata.h@{readdata.h}!read\_freq\_fgrounds\_init@{read\_freq\_fgrounds\_init}}
+\index{read\_freq\_fgrounds\_init@{read\_freq\_fgrounds\_init}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_freq\_fgrounds\_init()}{read\_freq\_fgrounds\_init()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+freq\+\_\+fgrounds\+\_\+init (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_abe2331b1b3a031cbdaef58915cb06f62}\label{readdata_8h_abe2331b1b3a031cbdaef58915cb06f62}} 
+\index{readdata.h@{readdata.h}!read\_freq\_harbours@{read\_freq\_harbours}}
+\index{read\_freq\_harbours@{read\_freq\_harbours}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_freq\_harbours()}{read\_freq\_harbours()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+freq\+\_\+harbours (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_acd27c8c96ab07f9e99fbc5f021706111}\label{readdata_8h_acd27c8c96ab07f9e99fbc5f021706111}} 
+\index{readdata.h@{readdata.h}!read\_freq\_possible\_metiers@{read\_freq\_possible\_metiers}}
+\index{read\_freq\_possible\_metiers@{read\_freq\_possible\_metiers}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_freq\_possible\_metiers()}{read\_freq\_possible\_metiers()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+freq\+\_\+possible\+\_\+metiers (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+vessel,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8542eda6d0cf1e8821979973170c97bb}\label{readdata_8h_a8542eda6d0cf1e8821979973170c97bb}} 
+\index{readdata.h@{readdata.h}!read\_fuel\_prices\_per\_vsize@{read\_fuel\_prices\_per\_vsize}}
+\index{read\_fuel\_prices\_per\_vsize@{read\_fuel\_prices\_per\_vsize}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_fuel\_prices\_per\_vsize()}{read\_fuel\_prices\_per\_vsize()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+fuel\+\_\+prices\+\_\+per\+\_\+vsize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{i,  }\item[{string}]{a\+\_\+quarter,  }\item[{map$<$ int, double $>$ \&}]{fuel\+\_\+prices\+\_\+per\+\_\+vsize,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aa7dd669cd9358fc43135f90a2ff9d5d1}\label{readdata_8h_aa7dd669cd9358fc43135f90a2ff9d5d1}} 
+\index{readdata.h@{readdata.h}!read\_full\_avai\_szgroup\_nodes\_with\_pop@{read\_full\_avai\_szgroup\_nodes\_with\_pop}}
+\index{read\_full\_avai\_szgroup\_nodes\_with\_pop@{read\_full\_avai\_szgroup\_nodes\_with\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_full\_avai\_szgroup\_nodes\_with\_pop()}{read\_full\_avai\_szgroup\_nodes\_with\_pop()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+full\+\_\+avai\+\_\+szgroup\+\_\+nodes\+\_\+with\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{str\+\_\+rand\+\_\+avai\+\_\+file,  }\item[{string}]{type\+\_\+of\+\_\+avai\+\_\+field\+\_\+to\+\_\+read }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a46af3be18021cf0f677ac57bbf4d43f3}\label{readdata_8h_a46af3be18021cf0f677ac57bbf4d43f3}} 
+\index{readdata.h@{readdata.h}!read\_gear\_widths\_model\_type@{read\_gear\_widths\_model\_type}}
+\index{read\_gear\_widths\_model\_type@{read\_gear\_widths\_model\_type}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_gear\_widths\_model\_type()}{read\_gear\_widths\_model\_type()}}
+{\footnotesize\ttfamily map$<$int, string$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+gear\+\_\+widths\+\_\+model\+\_\+type (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ac5630eb36f6186acb82b408a04f70201}\label{readdata_8h_ac5630eb36f6186acb82b408a04f70201}} 
+\index{readdata.h@{readdata.h}!read\_gear\_widths\_param\_a@{read\_gear\_widths\_param\_a}}
+\index{read\_gear\_widths\_param\_a@{read\_gear\_widths\_param\_a}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_gear\_widths\_param\_a()}{read\_gear\_widths\_param\_a()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+gear\+\_\+widths\+\_\+param\+\_\+a (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a67951bbaa2057157fa2380bb3f993b0a}\label{readdata_8h_a67951bbaa2057157fa2380bb3f993b0a}} 
+\index{readdata.h@{readdata.h}!read\_gear\_widths\_param\_b@{read\_gear\_widths\_param\_b}}
+\index{read\_gear\_widths\_param\_b@{read\_gear\_widths\_param\_b}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_gear\_widths\_param\_b()}{read\_gear\_widths\_param\_b()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+gear\+\_\+widths\+\_\+param\+\_\+b (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a2797b9f87799bd7d277b5f8a1fb6e40f}\label{readdata_8h_a2797b9f87799bd7d277b5f8a1fb6e40f}} 
+\index{readdata.h@{readdata.h}!read\_graph\_details@{read\_graph\_details}}
+\index{read\_graph\_details@{read\_graph\_details}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_graph\_details()}{read\_graph\_details()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_path_shop}{Path\+Shop}} \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+graph\+\_\+details (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{source,  }\item[{string}]{namesimu,  }\item[{string}]{inputfolder,  }\item[{string}]{a\+\_\+graph\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a72f3f90ab3a35abb0900b2221087f379}\label{readdata_8h_a72f3f90ab3a35abb0900b2221087f379}} 
+\index{readdata.h@{readdata.h}!read\_growth\_transition\_matrix@{read\_growth\_transition\_matrix}}
+\index{read\_growth\_transition\_matrix@{read\_growth\_transition\_matrix}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_growth\_transition\_matrix()}{read\_growth\_transition\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+growth\+\_\+transition\+\_\+matrix (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{int}]{nbszgroup,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aeed43f3550eed7638ab80b63b393c169}\label{readdata_8h_aeed43f3550eed7638ab80b63b393c169}} 
+\index{readdata.h@{readdata.h}!read\_gscale\_cpue\_per\_stk\_on\_nodes@{read\_gscale\_cpue\_per\_stk\_on\_nodes}}
+\index{read\_gscale\_cpue\_per\_stk\_on\_nodes@{read\_gscale\_cpue\_per\_stk\_on\_nodes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_gscale\_cpue\_per\_stk\_on\_nodes()}{read\_gscale\_cpue\_per\_stk\_on\_nodes()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+gscale\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+vessel,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a40ae6e932f57a9ffa88a2906b0a16485}\label{readdata_8h_a40ae6e932f57a9ffa88a2906b0a16485}} 
+\index{readdata.h@{readdata.h}!read\_gshape\_cpue\_per\_stk\_on\_nodes@{read\_gshape\_cpue\_per\_stk\_on\_nodes}}
+\index{read\_gshape\_cpue\_per\_stk\_on\_nodes@{read\_gshape\_cpue\_per\_stk\_on\_nodes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_gshape\_cpue\_per\_stk\_on\_nodes()}{read\_gshape\_cpue\_per\_stk\_on\_nodes()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+gshape\+\_\+cpue\+\_\+per\+\_\+stk\+\_\+on\+\_\+nodes (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+vessel,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ad5791f5758b316d37c93912c709a4f3d}\label{readdata_8h_ad5791f5758b316d37c93912c709a4f3d}} 
+\index{readdata.h@{readdata.h}!read\_habitat\_deltas\_per\_pop@{read\_habitat\_deltas\_per\_pop}}
+\index{read\_habitat\_deltas\_per\_pop@{read\_habitat\_deltas\_per\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_habitat\_deltas\_per\_pop()}{read\_habitat\_deltas\_per\_pop()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+habitat\+\_\+deltas\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ad26190d82a456ba5a776b034accb3258}\label{readdata_8h_ad26190d82a456ba5a776b034accb3258}} 
+\index{readdata.h@{readdata.h}!read\_harbour\_names@{read\_harbour\_names}}
+\index{read\_harbour\_names@{read\_harbour\_names}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_harbour\_names()}{read\_harbour\_names()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, string$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+harbour\+\_\+names (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6e6bdab0186847f48217269cf495ce69}\label{readdata_8h_a6e6bdab0186847f48217269cf495ce69}} 
+\index{readdata.h@{readdata.h}!read\_harbours@{read\_harbours}}
+\index{read\_harbours@{read\_harbours}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_harbours()}{read\_harbours()}}
+{\footnotesize\ttfamily multimap$<$string, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+harbours (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a99ebef1accbda0ff5cbd019f4040c4ec}\label{readdata_8h_a99ebef1accbda0ff5cbd019f4040c4ec}} 
+\index{readdata.h@{readdata.h}!read\_hyperstability\_param@{read\_hyperstability\_param}}
+\index{read\_hyperstability\_param@{read\_hyperstability\_param}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_hyperstability\_param()}{read\_hyperstability\_param()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+hyperstability\+\_\+param (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8223edb6df78185334bc0f637ab6fcdf}\label{readdata_8h_a8223edb6df78185334bc0f637ab6fcdf}} 
+\index{readdata.h@{readdata.h}!read\_init\_comcat\_per\_szgroup@{read\_init\_comcat\_per\_szgroup}}
+\index{read\_init\_comcat\_per\_szgroup@{read\_init\_comcat\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_comcat\_per\_szgroup()}{read\_init\_comcat\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+comcat\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af90de03f5b06d34d1056f32ecadb5325}\label{readdata_8h_af90de03f5b06d34d1056f32ecadb5325}} 
+\index{readdata.h@{readdata.h}!read\_init\_fecundity\_per\_szgroup@{read\_init\_fecundity\_per\_szgroup}}
+\index{read\_init\_fecundity\_per\_szgroup@{read\_init\_fecundity\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_fecundity\_per\_szgroup()}{read\_init\_fecundity\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+fecundity\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a67721ed0eebfa432f6c6f1c16c5b9c9c}\label{readdata_8h_a67721ed0eebfa432f6c6f1c16c5b9c9c}} 
+\index{readdata.h@{readdata.h}!read\_init\_M\_per\_szgroup@{read\_init\_M\_per\_szgroup}}
+\index{read\_init\_M\_per\_szgroup@{read\_init\_M\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_M\_per\_szgroup()}{read\_init\_M\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+\+M\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af697486bd9478c659cd6476960cbaded}\label{readdata_8h_af697486bd9478c659cd6476960cbaded}} 
+\index{readdata.h@{readdata.h}!read\_init\_maturity\_per\_szgroup@{read\_init\_maturity\_per\_szgroup}}
+\index{read\_init\_maturity\_per\_szgroup@{read\_init\_maturity\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_maturity\_per\_szgroup()}{read\_init\_maturity\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+maturity\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ad35623dbe7f031346902070f6c96bcea}\label{readdata_8h_ad35623dbe7f031346902070f6c96bcea}} 
+\index{readdata.h@{readdata.h}!read\_init\_pops\_per\_szgroup@{read\_init\_pops\_per\_szgroup}}
+\index{read\_init\_pops\_per\_szgroup@{read\_init\_pops\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_pops\_per\_szgroup()}{read\_init\_pops\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+pops\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a563d8198b01a460faf14ba871066535b}\label{readdata_8h_a563d8198b01a460faf14ba871066535b}} 
+\index{readdata.h@{readdata.h}!read\_init\_prop\_migrants\_pops\_per\_szgroup@{read\_init\_prop\_migrants\_pops\_per\_szgroup}}
+\index{read\_init\_prop\_migrants\_pops\_per\_szgroup@{read\_init\_prop\_migrants\_pops\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_prop\_migrants\_pops\_per\_szgroup()}{read\_init\_prop\_migrants\_pops\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+prop\+\_\+migrants\+\_\+pops\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a4d8a8fb1fc5098e8dfabb4ef17419b9d}\label{readdata_8h_a4d8a8fb1fc5098e8dfabb4ef17419b9d}} 
+\index{readdata.h@{readdata.h}!read\_init\_proprecru\_per\_szgroup@{read\_init\_proprecru\_per\_szgroup}}
+\index{read\_init\_proprecru\_per\_szgroup@{read\_init\_proprecru\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_proprecru\_per\_szgroup()}{read\_init\_proprecru\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+proprecru\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af3d9bb3698ba16dbeabff8f72c3ce1af}\label{readdata_8h_af3d9bb3698ba16dbeabff8f72c3ce1af}} 
+\index{readdata.h@{readdata.h}!read\_init\_weight\_per\_szgroup@{read\_init\_weight\_per\_szgroup}}
+\index{read\_init\_weight\_per\_szgroup@{read\_init\_weight\_per\_szgroup}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_init\_weight\_per\_szgroup()}{read\_init\_weight\_per\_szgroup()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+init\+\_\+weight\+\_\+per\+\_\+szgroup (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a90d8a75c0e1dcc36fd3ab6dbc61b2a22}\label{readdata_8h_a90d8a75c0e1dcc36fd3ab6dbc61b2a22}} 
+\index{readdata.h@{readdata.h}!read\_initial\_fishing\_credits@{read\_initial\_fishing\_credits}}
+\index{read\_initial\_fishing\_credits@{read\_initial\_fishing\_credits}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_initial\_fishing\_credits()}{read\_initial\_fishing\_credits()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+initial\+\_\+fishing\+\_\+credits (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aec09203b0d291f43805bbd975a519dae}\label{readdata_8h_aec09203b0d291f43805bbd975a519dae}} 
+\index{readdata.h@{readdata.h}!read\_initial\_tac@{read\_initial\_tac}}
+\index{read\_initial\_tac@{read\_initial\_tac}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_initial\_tac()}{read\_initial\_tac()}}
+{\footnotesize\ttfamily vector$<$double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+initial\+\_\+tac (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ac617bef7ad79f2540abfc275df4b3195}\label{readdata_8h_ac617bef7ad79f2540abfc275df4b3195}} 
+\index{readdata.h@{readdata.h}!read\_initial\_tariffs\_on\_nodes@{read\_initial\_tariffs\_on\_nodes}}
+\index{read\_initial\_tariffs\_on\_nodes@{read\_initial\_tariffs\_on\_nodes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_initial\_tariffs\_on\_nodes()}{read\_initial\_tariffs\_on\_nodes()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+initial\+\_\+tariffs\+\_\+on\+\_\+nodes (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{a\+\_\+graph\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6f4aeb25e6af7f62b324f91047fa9ef3}\label{readdata_8h_a6f4aeb25e6af7f62b324f91047fa9ef3}} 
+\index{readdata.h@{readdata.h}!read\_is\_avoided\_stocks@{read\_is\_avoided\_stocks}}
+\index{read\_is\_avoided\_stocks@{read\_is\_avoided\_stocks}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_is\_avoided\_stocks()}{read\_is\_avoided\_stocks()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+is\+\_\+avoided\+\_\+stocks (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8586f24787a9a18ffa868b21ba3aae65}\label{readdata_8h_a8586f24787a9a18ffa868b21ba3aae65}} 
+\index{readdata.h@{readdata.h}!read\_juveniles\_diet\_preference\_per\_stock\_allstks@{read\_juveniles\_diet\_preference\_per\_stock\_allstks}}
+\index{read\_juveniles\_diet\_preference\_per\_stock\_allstks@{read\_juveniles\_diet\_preference\_per\_stock\_allstks}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_juveniles\_diet\_preference\_per\_stock\_allstks()}{read\_juveniles\_diet\_preference\_per\_stock\_allstks()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+juveniles\+\_\+diet\+\_\+preference\+\_\+per\+\_\+stock\+\_\+allstks (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ada1a33af5e3e9a4f4ae2c2e2dd6406ed}\label{readdata_8h_ada1a33af5e3e9a4f4ae2c2e2dd6406ed}} 
+\index{readdata.h@{readdata.h}!read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr@{read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr}}
+\index{read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr@{read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr()}{read\_logistic\_recovery\_rates\_per\_month\_per\_funcgr()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+logistic\+\_\+recovery\+\_\+rates\+\_\+per\+\_\+month\+\_\+per\+\_\+funcgr (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a4dc29cc1a6be6a9786df670f54201e9e}\label{readdata_8h_a4dc29cc1a6be6a9786df670f54201e9e}} 
+\index{readdata.h@{readdata.h}!read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group@{read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group}}
+\index{read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group@{read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group()}{read\_loss\_after\_1\_passage\_per\_landscape\_per\_func\_group()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+loss\+\_\+after\+\_\+1\+\_\+passage\+\_\+per\+\_\+landscape\+\_\+per\+\_\+func\+\_\+group (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+met,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a1bf54c500a49ec9dee3350ad361abc3c}\label{readdata_8h_a1bf54c500a49ec9dee3350ad361abc3c}} 
+\index{readdata.h@{readdata.h}!read\_lst\_idx\_nodes\_per\_pop@{read\_lst\_idx\_nodes\_per\_pop}}
+\index{read\_lst\_idx\_nodes\_per\_pop@{read\_lst\_idx\_nodes\_per\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_lst\_idx\_nodes\_per\_pop()}{read\_lst\_idx\_nodes\_per\_pop()}}
+{\footnotesize\ttfamily multimap$<$int, \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+lst\+\_\+idx\+\_\+nodes\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{str\+\_\+rand\+\_\+avai\+\_\+file }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ab52294e450f9e7f683d0b44a3745a623}\label{readdata_8h_ab52294e450f9e7f683d0b44a3745a623}} 
+\index{readdata.h@{readdata.h}!read\_maps\_previous@{read\_maps\_previous}}
+\index{read\_maps\_previous@{read\_maps\_previous}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_maps\_previous()}{read\_maps\_previous()}}
+{\footnotesize\ttfamily spp\+::sparse\+\_\+hash\+\_\+map$<$\mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, \mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+maps\+\_\+previous (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{source,  }\item[{string}]{namesimu,  }\item[{string}]{inputfolder,  }\item[{string}]{a\+\_\+graph\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ab3676764b6a2ea37427238e41147bb7d}\label{readdata_8h_ab3676764b6a2ea37427238e41147bb7d}} 
+\index{readdata.h@{readdata.h}!read\_meanw\_funcgr\_per\_landscape@{read\_meanw\_funcgr\_per\_landscape}}
+\index{read\_meanw\_funcgr\_per\_landscape@{read\_meanw\_funcgr\_per\_landscape}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_meanw\_funcgr\_per\_landscape()}{read\_meanw\_funcgr\_per\_landscape()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+meanw\+\_\+funcgr\+\_\+per\+\_\+landscape (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_afab1119b029cebb2e5a107e9e199d73b}\label{readdata_8h_afab1119b029cebb2e5a107e9e199d73b}} 
+\index{readdata.h@{readdata.h}!read\_metier\_closures@{read\_metier\_closures}}
+\index{read\_metier\_closures@{read\_metier\_closures}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metier\_closures()}{read\_metier\_closures()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metier\+\_\+closures (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream,  }\item[{const string \&}]{separator,  }\item[{vector$<$ \mbox{\hyperlink{struct_node_banning_info}{Node\+Banning\+Info}} $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a5a23e00476176bb7645a15ebd5c343e8}\label{readdata_8h_a5a23e00476176bb7645a15ebd5c343e8}} 
+\index{readdata.h@{readdata.h}!read\_metier\_monthly\_closures@{read\_metier\_monthly\_closures}}
+\index{read\_metier\_monthly\_closures@{read\_metier\_monthly\_closures}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metier\_monthly\_closures()}{read\_metier\_monthly\_closures()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metier\+\_\+monthly\+\_\+closures (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{string}]{a\+\_\+month,  }\item[{string}]{a\+\_\+graph,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a306f87178261a08039d92540d0264adc}\label{readdata_8h_a306f87178261a08039d92540d0264adc}} 
+\index{readdata.h@{readdata.h}!read\_metier\_quarterly\_closures@{read\_metier\_quarterly\_closures}}
+\index{read\_metier\_quarterly\_closures@{read\_metier\_quarterly\_closures}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metier\_quarterly\_closures()}{read\_metier\_quarterly\_closures()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metier\+\_\+quarterly\+\_\+closures (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+graph,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_afa211bfc75c92168298e504dfdb3d4c9}\label{readdata_8h_afa211bfc75c92168298e504dfdb3d4c9}} 
+\index{readdata.h@{readdata.h}!read\_metier\_suitable\_seabottomtypes@{read\_metier\_suitable\_seabottomtypes}}
+\index{read\_metier\_suitable\_seabottomtypes@{read\_metier\_suitable\_seabottomtypes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metier\_suitable\_seabottomtypes()}{read\_metier\_suitable\_seabottomtypes()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metier\+\_\+suitable\+\_\+seabottomtypes (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+met,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a4d1ea103f0a9ca3a3b93ec6e561ed1b9}\label{readdata_8h_a4d1ea103f0a9ca3a3b93ec6e561ed1b9}} 
+\index{readdata.h@{readdata.h}!read\_metier\_target\_stocks@{read\_metier\_target\_stocks}}
+\index{read\_metier\_target\_stocks@{read\_metier\_target\_stocks}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metier\_target\_stocks()}{read\_metier\_target\_stocks()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metier\+\_\+target\+\_\+stocks (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+met,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ab624111b055b64e0d1b2bb18aec761f1}\label{readdata_8h_ab624111b055b64e0d1b2bb18aec761f1}} 
+\index{readdata.h@{readdata.h}!read\_metiers\_betas@{read\_metiers\_betas}}
+\index{read\_metiers\_betas@{read\_metiers\_betas}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metiers\_betas()}{read\_metiers\_betas()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metiers\+\_\+betas (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a57b39a06cb36159e551bd6e96f5b98ae}\label{readdata_8h_a57b39a06cb36159e551bd6e96f5b98ae}} 
+\index{readdata.h@{readdata.h}!read\_metiers\_fspeed@{read\_metiers\_fspeed}}
+\index{read\_metiers\_fspeed@{read\_metiers\_fspeed}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metiers\_fspeed()}{read\_metiers\_fspeed()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metiers\+\_\+fspeed (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ad80b2e5a7f07e6439aec57d887db76b8}\label{readdata_8h_ad80b2e5a7f07e6439aec57d887db76b8}} 
+\index{readdata.h@{readdata.h}!read\_metiers\_mls\_cat@{read\_metiers\_mls\_cat}}
+\index{read\_metiers\_mls\_cat@{read\_metiers\_mls\_cat}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metiers\_mls\_cat()}{read\_metiers\_mls\_cat()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metiers\+\_\+mls\+\_\+cat (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_afb99951518c4aced88de205ad19a3e6c}\label{readdata_8h_afb99951518c4aced88de205ad19a3e6c}} 
+\index{readdata.h@{readdata.h}!read\_metiers\_types@{read\_metiers\_types}}
+\index{read\_metiers\_types@{read\_metiers\_types}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_metiers\_types()}{read\_metiers\_types()}}
+{\footnotesize\ttfamily map$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+metiers\+\_\+types (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ae03b63de8c91a90e92884a4540ea51c0}\label{readdata_8h_ae03b63de8c91a90e92884a4540ea51c0}} 
+\index{readdata.h@{readdata.h}!read\_min\_distance@{read\_min\_distance}}
+\index{read\_min\_distance@{read\_min\_distance}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_min\_distance()}{read\_min\_distance()}}
+{\footnotesize\ttfamily spp\+::sparse\+\_\+hash\+\_\+map$<$\mbox{\hyperlink{classtypes_1_1_id_a3460149759853c50fa31ad199e73419a}{types\+::\+Node\+Id\+::type}}, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+min\+\_\+distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{source,  }\item[{string}]{namesimu,  }\item[{string}]{inputfolder,  }\item[{string}]{a\+\_\+graph\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af3b3554ba0bbd5d9cdb4d4d0b6f1b532}\label{readdata_8h_af3b3554ba0bbd5d9cdb4d4d0b6f1b532}} 
+\index{readdata.h@{readdata.h}!read\_nodes\_in\_polygons@{read\_nodes\_in\_polygons}}
+\index{read\_nodes\_in\_polygons@{read\_nodes\_in\_polygons}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_nodes\_in\_polygons()}{read\_nodes\_in\_polygons()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+nodes\+\_\+in\+\_\+polygons (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+graph,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aba949dabb4f6e811d207d8ef30269288}\label{readdata_8h_aba949dabb4f6e811d207d8ef30269288}} 
+\index{readdata.h@{readdata.h}!read\_oth\_land\_nodes\_with\_pop@{read\_oth\_land\_nodes\_with\_pop}}
+\index{read\_oth\_land\_nodes\_with\_pop@{read\_oth\_land\_nodes\_with\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_oth\_land\_nodes\_with\_pop()}{read\_oth\_land\_nodes\_with\_pop()}}
+{\footnotesize\ttfamily map$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+oth\+\_\+land\+\_\+nodes\+\_\+with\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{a\+\_\+month,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{fleetsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_abc33cdd141d1207be6546cbc3f802c4b}\label{readdata_8h_abc33cdd141d1207be6546cbc3f802c4b}} 
+\index{readdata.h@{readdata.h}!read\_overall\_migration\_fluxes@{read\_overall\_migration\_fluxes}}
+\index{read\_overall\_migration\_fluxes@{read\_overall\_migration\_fluxes}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_overall\_migration\_fluxes()}{read\_overall\_migration\_fluxes()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+overall\+\_\+migration\+\_\+fluxes (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ac87ed9259b9e0b1415996295dc3d1df1}\label{readdata_8h_ac87ed9259b9e0b1415996295dc3d1df1}} 
+\index{readdata.h@{readdata.h}!read\_param\_sr@{read\_param\_sr}}
+\index{read\_param\_sr@{read\_param\_sr}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_param\_sr()}{read\_param\_sr()}}
+{\footnotesize\ttfamily vector$<$double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+param\+\_\+sr (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a56925dbe8bc2658f58aed0f26c5c7a82}\label{readdata_8h_a56925dbe8bc2658f58aed0f26c5c7a82}} 
+\index{readdata.h@{readdata.h}!read\_percent\_age\_per\_szgroup\_matrix@{read\_percent\_age\_per\_szgroup\_matrix}}
+\index{read\_percent\_age\_per\_szgroup\_matrix@{read\_percent\_age\_per\_szgroup\_matrix}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_percent\_age\_per\_szgroup\_matrix()}{read\_percent\_age\_per\_szgroup\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+percent\+\_\+age\+\_\+per\+\_\+szgroup\+\_\+matrix (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{int}]{nbszgroup,  }\item[{int}]{nbage,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aa18d2c6916b8a737c0b0e4d72ba76294}\label{readdata_8h_aa18d2c6916b8a737c0b0e4d72ba76294}} 
+\index{readdata.h@{readdata.h}!read\_percent\_revenue\_completenesses@{read\_percent\_revenue\_completenesses}}
+\index{read\_percent\_revenue\_completenesses@{read\_percent\_revenue\_completenesses}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_percent\_revenue\_completenesses()}{read\_percent\_revenue\_completenesses()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+percent\+\_\+revenue\+\_\+completenesses (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_abdba0f9700c00b9882623ccf2ae8b84d}\label{readdata_8h_abdba0f9700c00b9882623ccf2ae8b84d}} 
+\index{readdata.h@{readdata.h}!read\_percent\_szgroup\_per\_age\_matrix@{read\_percent\_szgroup\_per\_age\_matrix}}
+\index{read\_percent\_szgroup\_per\_age\_matrix@{read\_percent\_szgroup\_per\_age\_matrix}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_percent\_szgroup\_per\_age\_matrix()}{read\_percent\_szgroup\_per\_age\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+percent\+\_\+szgroup\+\_\+per\+\_\+age\+\_\+matrix (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{int}]{nbszgroup,  }\item[{int}]{nbage,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_add6356e308ac6ccd858413c8aa86204d}\label{readdata_8h_add6356e308ac6ccd858413c8aa86204d}} 
+\index{readdata.h@{readdata.h}!read\_pop\_names\_in\_string@{read\_pop\_names\_in\_string}}
+\index{read\_pop\_names\_in\_string@{read\_pop\_names\_in\_string}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_pop\_names\_in\_string()}{read\_pop\_names\_in\_string()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+pop\+\_\+names\+\_\+in\+\_\+string (\begin{DoxyParamCaption}\item[{map$<$ int, string $>$ \&}]{pop\+\_\+names,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a4add990678e421e6e3e9904c55f7d64d}\label{readdata_8h_a4add990678e421e6e3e9904c55f7d64d}} 
+\index{readdata.h@{readdata.h}!read\_possible\_metiers@{read\_possible\_metiers}}
+\index{read\_possible\_metiers@{read\_possible\_metiers}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_possible\_metiers()}{read\_possible\_metiers()}}
+{\footnotesize\ttfamily multimap$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+possible\+\_\+metiers (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{string}]{a\+\_\+vessel,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6eaa02229efc822c0d693dba9c33ea6f}\label{readdata_8h_a6eaa02229efc822c0d693dba9c33ea6f}} 
+\index{readdata.h@{readdata.h}!read\_preferences\_for\_species\_matrix@{read\_preferences\_for\_species\_matrix}}
+\index{read\_preferences\_for\_species\_matrix@{read\_preferences\_for\_species\_matrix}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_preferences\_for\_species\_matrix()}{read\_preferences\_for\_species\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+preferences\+\_\+for\+\_\+species\+\_\+matrix (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+pop,  }\item[{int}]{nbpops,  }\item[{int}]{nbszgroup,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a579c79c6f36fc444af7005b42b58da8b}\label{readdata_8h_a579c79c6f36fc444af7005b42b58da8b}} 
+\index{readdata.h@{readdata.h}!read\_prices\_per\_harbour@{read\_prices\_per\_harbour}}
+\index{read\_prices\_per\_harbour@{read\_prices\_per\_harbour}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_prices\_per\_harbour()}{read\_prices\_per\_harbour()}}
+{\footnotesize\ttfamily int \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+prices\+\_\+per\+\_\+harbour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{i,  }\item[{string}]{a\+\_\+quarter,  }\item[{multimap$<$ string, double $>$ \&}]{prices\+\_\+per\+\_\+harbour,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ac849262f3d8abaa2fc64753dcef0b6ac}\label{readdata_8h_ac849262f3d8abaa2fc64753dcef0b6ac}} 
+\index{readdata.h@{readdata.h}!read\_prices\_per\_harbour\_each\_pop\_per\_cat@{read\_prices\_per\_harbour\_each\_pop\_per\_cat}}
+\index{read\_prices\_per\_harbour\_each\_pop\_per\_cat@{read\_prices\_per\_harbour\_each\_pop\_per\_cat}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_prices\_per\_harbour\_each\_pop\_per\_cat()}{read\_prices\_per\_harbour\_each\_pop\_per\_cat()}}
+{\footnotesize\ttfamily int \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+prices\+\_\+per\+\_\+harbour\+\_\+each\+\_\+pop\+\_\+per\+\_\+cat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}}]{i,  }\item[{string}]{a\+\_\+quarter,  }\item[{multimap$<$ int, double $>$ \&}]{prices\+\_\+per\+\_\+harbour\+\_\+each\+\_\+species\+\_\+per\+\_\+cat,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a96fb008cef3a32110982472c4818edf3}\label{readdata_8h_a96fb008cef3a32110982472c4818edf3}} 
+\index{readdata.h@{readdata.h}!read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape@{read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape}}
+\index{read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape@{read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape()}{read\_prop\_funcgr\_biomass\_per\_node\_per\_landscape()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+prop\+\_\+funcgr\+\_\+biomass\+\_\+per\+\_\+node\+\_\+per\+\_\+landscape (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a3b558ef3b743aa28a35eba7289510a80}\label{readdata_8h_a3b558ef3b743aa28a35eba7289510a80}} 
+\index{readdata.h@{readdata.h}!read\_prop\_funcgr\_number\_per\_node\_per\_landscape@{read\_prop\_funcgr\_number\_per\_node\_per\_landscape}}
+\index{read\_prop\_funcgr\_number\_per\_node\_per\_landscape@{read\_prop\_funcgr\_number\_per\_node\_per\_landscape}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_prop\_funcgr\_number\_per\_node\_per\_landscape()}{read\_prop\_funcgr\_number\_per\_node\_per\_landscape()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+prop\+\_\+funcgr\+\_\+number\+\_\+per\+\_\+node\+\_\+per\+\_\+landscape (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aad9ca989bdf46dffcdaf006d88440739}\label{readdata_8h_aad9ca989bdf46dffcdaf006d88440739}} 
+\index{readdata.h@{readdata.h}!read\_relative\_stability\_keys@{read\_relative\_stability\_keys}}
+\index{read\_relative\_stability\_keys@{read\_relative\_stability\_keys}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_relative\_stability\_keys()}{read\_relative\_stability\_keys()}}
+{\footnotesize\ttfamily map$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+relative\+\_\+stability\+\_\+keys (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{int}]{a\+\_\+pop,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6019b7740aab58439ba01042b1700bdb}\label{readdata_8h_a6019b7740aab58439ba01042b1700bdb}} 
+\index{readdata.h@{readdata.h}!read\_scenario\_config\_file@{read\_scenario\_config\_file}}
+\index{read\_scenario\_config\_file@{read\_scenario\_config\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_scenario\_config\_file()}{read\_scenario\_config\_file()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+scenario\+\_\+config\+\_\+file (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{namefolderoutput,  }\item[{\mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \&}]{scenario }\end{DoxyParamCaption})}
+
+read the scenario specific settings for the siums given the case study 
+\begin{DoxyParams}{Parameters}
+{\em the} & vectors to be filled in, ... \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{readdata_8h_a09032877434fddd824196ff0844a4e01}\label{readdata_8h_a09032877434fddd824196ff0844a4e01}} 
+\index{readdata.h@{readdata.h}!read\_scenario\_config\_file@{read\_scenario\_config\_file}}
+\index{read\_scenario\_config\_file@{read\_scenario\_config\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_scenario\_config\_file()}{read\_scenario\_config\_file()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+scenario\+\_\+config\+\_\+file (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream,  }\item[{\mbox{\hyperlink{structdisplace_1_1commons_1_1_scenario}{displace\+::commons\+::\+Scenario}} \&}]{scenario }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a89e7d67d6c7792fffad7da054125ac59}\label{readdata_8h_a89e7d67d6c7792fffad7da054125ac59}} 
+\index{readdata.h@{readdata.h}!read\_sel\_ogives@{read\_sel\_ogives}}
+\index{read\_sel\_ogives@{read\_sel\_ogives}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_sel\_ogives()}{read\_sel\_ogives()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+sel\+\_\+ogives (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a0960b4d83f8d2c36d856c0c84344f43c}\label{readdata_8h_a0960b4d83f8d2c36d856c0c84344f43c}} 
+\index{readdata.h@{readdata.h}!read\_selected\_szgroups\_per\_pop@{read\_selected\_szgroups\_per\_pop}}
+\index{read\_selected\_szgroups\_per\_pop@{read\_selected\_szgroups\_per\_pop}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_selected\_szgroups\_per\_pop()}{read\_selected\_szgroups\_per\_pop()}}
+{\footnotesize\ttfamily multimap$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+selected\+\_\+szgroups\+\_\+per\+\_\+pop (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a46037d80398299cb6c0937affeaf4743}\label{readdata_8h_a46037d80398299cb6c0937affeaf4743}} 
+\index{readdata.h@{readdata.h}!read\_selectivity\_per\_stock\_ogives@{read\_selectivity\_per\_stock\_ogives}}
+\index{read\_selectivity\_per\_stock\_ogives@{read\_selectivity\_per\_stock\_ogives}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_selectivity\_per\_stock\_ogives()}{read\_selectivity\_per\_stock\_ogives()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+selectivity\+\_\+per\+\_\+stock\+\_\+ogives (\begin{DoxyParamCaption}\item[{int}]{a\+\_\+met,  }\item[{int}]{nbpops,  }\item[{int}]{nbszgroups,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{fleetsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aa5612420c1f46316646b86bce6aeda32}\label{readdata_8h_aa5612420c1f46316646b86bce6aeda32}} 
+\index{readdata.h@{readdata.h}!read\_selectivity\_per\_stock\_ogives\_for\_oth\_land@{read\_selectivity\_per\_stock\_ogives\_for\_oth\_land}}
+\index{read\_selectivity\_per\_stock\_ogives\_for\_oth\_land@{read\_selectivity\_per\_stock\_ogives\_for\_oth\_land}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_selectivity\_per\_stock\_ogives\_for\_oth\_land()}{read\_selectivity\_per\_stock\_ogives\_for\_oth\_land()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+selectivity\+\_\+per\+\_\+stock\+\_\+ogives\+\_\+for\+\_\+oth\+\_\+land (\begin{DoxyParamCaption}\item[{int}]{nbpops,  }\item[{int}]{nbszgroups,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{fleetsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af74601fef75973d9520742262934744e}\label{readdata_8h_af74601fef75973d9520742262934744e}} 
+\index{readdata.h@{readdata.h}!read\_shiplanes\_lat@{read\_shiplanes\_lat}}
+\index{read\_shiplanes\_lat@{read\_shiplanes\_lat}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_shiplanes\_lat()}{read\_shiplanes\_lat()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+shiplanes\+\_\+lat (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a101303e4bfa8d8e2bdb9f6f19e0990ac}\label{readdata_8h_a101303e4bfa8d8e2bdb9f6f19e0990ac}} 
+\index{readdata.h@{readdata.h}!read\_shiplanes\_lon@{read\_shiplanes\_lon}}
+\index{read\_shiplanes\_lon@{read\_shiplanes\_lon}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_shiplanes\_lon()}{read\_shiplanes\_lon()}}
+{\footnotesize\ttfamily multimap$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+shiplanes\+\_\+lon (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a964fa2dde1d666b6f2bd91f4e01b1e46}\label{readdata_8h_a964fa2dde1d666b6f2bd91f4e01b1e46}} 
+\index{readdata.h@{readdata.h}!read\_ships\_features@{read\_ships\_features}}
+\index{read\_ships\_features@{read\_ships\_features}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_ships\_features()}{read\_ships\_features()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+ships\+\_\+features (\begin{DoxyParamCaption}\item[{vector$<$ string $>$ \&}]{shipids,  }\item[{vector$<$ double $>$ \&}]{imos,  }\item[{vector$<$ double $>$ \&}]{yearbuilds,  }\item[{vector$<$ string $>$ \&}]{flags,  }\item[{vector$<$ string $>$ \&}]{types,  }\item[{vector$<$ double $>$ \&}]{typecodes,  }\item[{vector$<$ double $>$ \&}]{loas,  }\item[{vector$<$ double $>$ \&}]{K\+Ws,  }\item[{vector$<$ double $>$ \&}]{breadths,  }\item[{vector$<$ double $>$ \&}]{grosstonnages,  }\item[{vector$<$ double $>$ \&}]{nbunits,  }\item[{vector$<$ double $>$ \&}]{fueluses,  }\item[{vector$<$ double $>$ \&}]{N\+Ox\+Emission\+\_\+gper\+K\+Whs,  }\item[{vector$<$ double $>$ \&}]{S\+Ox\+Emission\+\_\+percentpertotalfuelmasss,  }\item[{vector$<$ double $>$ \&}]{G\+H\+G\+Emissions,  }\item[{vector$<$ double $>$ \&}]{P\+M\+Emissions,  }\item[{vector$<$ double $>$ \&}]{vmaxs,  }\item[{vector$<$ double $>$ \&}]{vcruises,  }\item[{vector$<$ double $>$ \&}]{lane\+\_\+ids,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a040af1b7d95f0342e8b3adcaf137b012}\label{readdata_8h_a040af1b7d95f0342e8b3adcaf137b012}} 
+\index{readdata.h@{readdata.h}!read\_size\_per\_farm@{read\_size\_per\_farm}}
+\index{read\_size\_per\_farm@{read\_size\_per\_farm}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_size\_per\_farm()}{read\_size\_per\_farm()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+size\+\_\+per\+\_\+farm (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a4e364918ef4094c09d26a20b1a83dbed}\label{readdata_8h_a4e364918ef4094c09d26a20b1a83dbed}} 
+\index{readdata.h@{readdata.h}!read\_size\_per\_windmill@{read\_size\_per\_windmill}}
+\index{read\_size\_per\_windmill@{read\_size\_per\_windmill}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_size\_per\_windmill()}{read\_size\_per\_windmill()}}
+{\footnotesize\ttfamily map$<$int, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+size\+\_\+per\+\_\+windmill (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_ad5460ce7c28e4c159442b3b56a822996}\label{readdata_8h_ad5460ce7c28e4c159442b3b56a822996}} 
+\index{readdata.h@{readdata.h}!read\_SMS\_OP\_N\_out\_file@{read\_SMS\_OP\_N\_out\_file}}
+\index{read\_SMS\_OP\_N\_out\_file@{read\_SMS\_OP\_N\_out\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_SMS\_OP\_N\_out\_file()}{read\_SMS\_OP\_N\_out\_file()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+N\+\_\+out\+\_\+file (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{vector$<$ int $>$}]{stock\+\_\+numbers,  }\item[{vector$<$ int $>$}]{a\+\_\+unit,  }\item[{vector$<$ int $>$}]{a\+\_\+number\+\_\+of\+\_\+ages,  }\item[{string}]{sms\+\_\+folder,  }\item[{string}]{namesimu }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a56b8254dac8f11701a1131618f60bf88}\label{readdata_8h_a56b8254dac8f11701a1131618f60bf88}} 
+\index{readdata.h@{readdata.h}!read\_species\_interactions\_mortality\_proportion\_matrix@{read\_species\_interactions\_mortality\_proportion\_matrix}}
+\index{read\_species\_interactions\_mortality\_proportion\_matrix@{read\_species\_interactions\_mortality\_proportion\_matrix}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_species\_interactions\_mortality\_proportion\_matrix()}{read\_species\_interactions\_mortality\_proportion\_matrix()}}
+{\footnotesize\ttfamily vector$<$ vector$<$double$>$ $>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+species\+\_\+interactions\+\_\+mortality\+\_\+proportion\+\_\+matrix (\begin{DoxyParamCaption}\item[{int}]{nbpops,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{string}]{biolsce }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a6eb2af98fb402e502aa1e01308fa96cd}\label{readdata_8h_a6eb2af98fb402e502aa1e01308fa96cd}} 
+\index{readdata.h@{readdata.h}!read\_tac\_percent\_simulated@{read\_tac\_percent\_simulated}}
+\index{read\_tac\_percent\_simulated@{read\_tac\_percent\_simulated}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_tac\_percent\_simulated()}{read\_tac\_percent\_simulated()}}
+{\footnotesize\ttfamily map$<$int, int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+tac\+\_\+percent\+\_\+simulated (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aa874406bea69ed9d5d7979ad253151a5}\label{readdata_8h_aa874406bea69ed9d5d7979ad253151a5}} 
+\index{readdata.h@{readdata.h}!read\_tsteps\_months@{read\_tsteps\_months}}
+\index{read\_tsteps\_months@{read\_tsteps\_months}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_tsteps\_months()}{read\_tsteps\_months()}}
+{\footnotesize\ttfamily vector$<$int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+tsteps\+\_\+months (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a8b111b8182d243588ede91ca8c527a98}\label{readdata_8h_a8b111b8182d243588ede91ca8c527a98}} 
+\index{readdata.h@{readdata.h}!read\_tsteps\_quarters@{read\_tsteps\_quarters}}
+\index{read\_tsteps\_quarters@{read\_tsteps\_quarters}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_tsteps\_quarters()}{read\_tsteps\_quarters()}}
+{\footnotesize\ttfamily vector$<$int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+tsteps\+\_\+quarters (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_abd90476d8c9cf1f70ed2e54de259fc51}\label{readdata_8h_abd90476d8c9cf1f70ed2e54de259fc51}} 
+\index{readdata.h@{readdata.h}!read\_tsteps\_semesters@{read\_tsteps\_semesters}}
+\index{read\_tsteps\_semesters@{read\_tsteps\_semesters}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_tsteps\_semesters()}{read\_tsteps\_semesters()}}
+{\footnotesize\ttfamily vector$<$int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+tsteps\+\_\+semesters (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aebccfac85f166784cc025b27877f15ba}\label{readdata_8h_aebccfac85f166784cc025b27877f15ba}} 
+\index{readdata.h@{readdata.h}!read\_tsteps\_years@{read\_tsteps\_years}}
+\index{read\_tsteps\_years@{read\_tsteps\_years}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_tsteps\_years()}{read\_tsteps\_years()}}
+{\footnotesize\ttfamily vector$<$int$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+tsteps\+\_\+years (\begin{DoxyParamCaption}\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aa9db8ab4340e42fd8636a47e370dc447}\label{readdata_8h_aa9db8ab4340e42fd8636a47e370dc447}} 
+\index{readdata.h@{readdata.h}!read\_vessels\_betas@{read\_vessels\_betas}}
+\index{read\_vessels\_betas@{read\_vessels\_betas}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vessels\_betas()}{read\_vessels\_betas()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vessels\+\_\+betas (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a60faf7ee7c9e4cb397807b9e64fc29ad}\label{readdata_8h_a60faf7ee7c9e4cb397807b9e64fc29ad}} 
+\index{readdata.h@{readdata.h}!read\_vessels\_economics\_features@{read\_vessels\_economics\_features}}
+\index{read\_vessels\_economics\_features@{read\_vessels\_economics\_features}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vessels\_economics\_features()}{read\_vessels\_economics\_features()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vessels\+\_\+economics\+\_\+features (\begin{DoxyParamCaption}\item[{vector$<$ string $>$ \&}]{vesselids,  }\item[{vector$<$ double $>$ \&}]{this\+\_\+vessel\+\_\+nb\+\_\+crews,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+other\+\_\+incomes,  }\item[{vector$<$ double $>$ \&}]{landing\+\_\+costs\+\_\+percents,  }\item[{vector$<$ double $>$ \&}]{crewshare\+\_\+and\+\_\+unpaid\+\_\+labour\+\_\+costs\+\_\+percents,  }\item[{vector$<$ double $>$ \&}]{other\+\_\+variable\+\_\+costs\+\_\+per\+\_\+unit\+\_\+efforts,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+insurance\+\_\+costs\+\_\+per\+\_\+crews,  }\item[{vector$<$ double $>$ \&}]{standard\+\_\+labour\+\_\+hour\+\_\+opportunity\+\_\+costss,  }\item[{vector$<$ double $>$ \&}]{standard\+\_\+annual\+\_\+full\+\_\+time\+\_\+employement\+\_\+hourss,  }\item[{vector$<$ double $>$ \&}]{other\+\_\+annual\+\_\+fixed\+\_\+costss,  }\item[{vector$<$ double $>$ \&}]{vessel\+\_\+values,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+depreciation\+\_\+rates,  }\item[{vector$<$ double $>$ \&}]{opportunity\+\_\+interest\+\_\+rates,  }\item[{vector$<$ double $>$ \&}]{annual\+\_\+discount\+\_\+rates,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a55e9496c07744d413aa859abed126540}\label{readdata_8h_a55e9496c07744d413aa859abed126540}} 
+\index{readdata.h@{readdata.h}!read\_vessels\_features@{read\_vessels\_features}}
+\index{read\_vessels\_features@{read\_vessels\_features}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vessels\_features()}{read\_vessels\_features()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vessels\+\_\+features (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+quarter,  }\item[{vector$<$ string $>$ \&}]{vesselids,  }\item[{vector$<$ int $>$ \&}]{vid\+\_\+is\+\_\+actives,  }\item[{vector$<$ int $>$ \&}]{vid\+\_\+is\+\_\+part\+\_\+of\+\_\+ref\+\_\+fleets,  }\item[{vector$<$ double $>$ \&}]{speeds,  }\item[{vector$<$ double $>$ \&}]{fuelcons,  }\item[{vector$<$ double $>$ \&}]{lengths,  }\item[{vector$<$ double $>$ \&}]{v\+K\+Ws,  }\item[{vector$<$ double $>$ \&}]{carrycapacities,  }\item[{vector$<$ double $>$ \&}]{tankcapacities,  }\item[{vector$<$ double $>$ \&}]{nbfpingspertrips,  }\item[{vector$<$ double $>$ \&}]{resttime\+\_\+par1s,  }\item[{vector$<$ double $>$ \&}]{resttime\+\_\+par2s,  }\item[{vector$<$ double $>$ \&}]{av\+\_\+trip\+\_\+duration,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+steaming,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+fishing,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+returning,  }\item[{vector$<$ double $>$ \&}]{mult\+\_\+fuelcons\+\_\+when\+\_\+inactive,  }\item[{vector$<$ int $>$ \&}]{firm\+\_\+ids,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder,  }\item[{int}]{selected\+\_\+vessels\+\_\+only,  }\item[{vector$<$ \mbox{\hyperlink{struct_vessel_calendar}{Vessel\+Calendar}} $>$ \&}]{calendars }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a3305fcb9bfb422fb51c6323419d69224}\label{readdata_8h_a3305fcb9bfb422fb51c6323419d69224}} 
+\index{readdata.h@{readdata.h}!read\_vessels\_tacs@{read\_vessels\_tacs}}
+\index{read\_vessels\_tacs@{read\_vessels\_tacs}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vessels\_tacs()}{read\_vessels\_tacs()}}
+{\footnotesize\ttfamily multimap$<$string, double$>$ \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vessels\+\_\+tacs (\begin{DoxyParamCaption}\item[{string}]{a\+\_\+semester,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_afaeaa9d55484d74745cadaaa03c17fd4}\label{readdata_8h_afaeaa9d55484d74745cadaaa03c17fd4}} 
+\index{readdata.h@{readdata.h}!read\_vsize\_closures@{read\_vsize\_closures}}
+\index{read\_vsize\_closures@{read\_vsize\_closures}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vsize\_closures()}{read\_vsize\_closures()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vsize\+\_\+closures (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream,  }\item[{const string \&}]{separator,  }\item[{vector$<$ \mbox{\hyperlink{struct_node_banning_info}{Node\+Banning\+Info}} $>$ \&}]{nodes }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_af76cfbc93d2d0b8eb5ecbe6e784c40af}\label{readdata_8h_af76cfbc93d2d0b8eb5ecbe6e784c40af}} 
+\index{readdata.h@{readdata.h}!read\_vsize\_monthly\_closures@{read\_vsize\_monthly\_closures}}
+\index{read\_vsize\_monthly\_closures@{read\_vsize\_monthly\_closures}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{read\_vsize\_monthly\_closures()}{read\_vsize\_monthly\_closures()}}
+{\footnotesize\ttfamily bool \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} read\+\_\+vsize\+\_\+monthly\+\_\+closures (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{string}]{a\+\_\+month,  }\item[{string}]{a\+\_\+graph,  }\item[{string}]{folder\+\_\+name\+\_\+parameterization,  }\item[{string}]{inputfolder }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_a9bdccae0bcea5b2b2d3ab5e610d69fae}\label{readdata_8h_a9bdccae0bcea5b2b2d3ab5e610d69fae}} 
+\index{readdata.h@{readdata.h}!write\_SMS\_OP\_F\_in\_file@{write\_SMS\_OP\_F\_in\_file}}
+\index{write\_SMS\_OP\_F\_in\_file@{write\_SMS\_OP\_F\_in\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{write\_SMS\_OP\_F\_in\_file()}{write\_SMS\_OP\_F\_in\_file()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} write\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+F\+\_\+in\+\_\+file (\begin{DoxyParamCaption}\item[{ofstream \&}]{S\+M\+S\+\_\+\+F\+\_\+in,  }\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{vector$<$ int $>$}]{stock\+\_\+numbers }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readdata_8h_aef790f7ca0419b84b0cd33b16605f55c}\label{readdata_8h_aef790f7ca0419b84b0cd33b16605f55c}} 
+\index{readdata.h@{readdata.h}!write\_SMS\_OP\_N\_in\_file@{write\_SMS\_OP\_N\_in\_file}}
+\index{write\_SMS\_OP\_N\_in\_file@{write\_SMS\_OP\_N\_in\_file}!readdata.h@{readdata.h}}
+\subsubsection{\texorpdfstring{write\_SMS\_OP\_N\_in\_file()}{write\_SMS\_OP\_N\_in\_file()}}
+{\footnotesize\ttfamily void \mbox{\hyperlink{commons__global_8h_a7954b0a9cc74bf18f205f69e04612915}{C\+O\+M\+M\+O\+N\+S\+S\+H\+A\+R\+E\+D\+\_\+\+E\+X\+P\+O\+RT}} write\+\_\+\+S\+M\+S\+\_\+\+O\+P\+\_\+\+N\+\_\+in\+\_\+file (\begin{DoxyParamCaption}\item[{ofstream \&}]{S\+M\+S\+\_\+\+N\+\_\+in,  }\item[{vector$<$ \mbox{\hyperlink{class_population}{Population}} $\ast$ $>$ \&}]{populations,  }\item[{vector$<$ int $>$}]{stock\+\_\+numbers,  }\item[{vector$<$ int $>$}]{a\+\_\+unit,  }\item[{vector$<$ int $>$}]{a\+\_\+number\+\_\+of\+\_\+ages }\end{DoxyParamCaption})}
+

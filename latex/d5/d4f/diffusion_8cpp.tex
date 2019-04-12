@@ -1,0 +1,71 @@
+\hypertarget{diffusion_8cpp}{}\section{commons/diffusion.cpp File Reference}
+\label{diffusion_8cpp}\index{commons/diffusion.cpp@{commons/diffusion.cpp}}
+{\ttfamily \#include $<$diffusion.\+h$>$}\newline
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef bg\+::model\+::point$<$ double, 2, bg\+::cs\+::cartesian $>$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}
+\item 
+typedef bg\+::model\+::box$<$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}} $>$ \mbox{\hyperlink{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}{box}}
+\item 
+typedef std\+::pair$<$ \mbox{\hyperlink{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}{box}}, unsigned $>$ \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{diffusion_8cpp_a9e4e0725d04ad87f198b0e3b577f4520}{create\+R\+Tree\+From\+Nodes}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&\mbox{\hyperlink{thread__vessels_8cpp_ace5675146c8515428d094fd142d8a2d2}{nodes}}, bgi\+::rtree$<$ std\+::pair$<$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}, int $>$, bgi\+::quadratic$<$ 16 $>$ $>$ \&rtree)
+\item 
+bool \mbox{\hyperlink{diffusion_8cpp_a0b38fcd80bf1dcb195196ea0652137be}{diffuse\+\_\+\+Nitrogen\+\_\+with\+\_\+gradients}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&list\+\_\+of\+\_\+nodes, \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}}, bgi\+::rtree$<$ std\+::pair$<$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}, int $>$, bgi\+::quadratic$<$ 16 $>$ $>$ \&rtree, double coeff)
+\item 
+bool \mbox{\hyperlink{diffusion_8cpp_afb3caefd853427fa9358da4f50dea1fb}{diffuse\+\_\+\+Nitrogen\+\_\+in\+\_\+every\+\_\+directions}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&list\+\_\+of\+\_\+nodes, \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}}, double coeff)
+\item 
+bool \mbox{\hyperlink{diffusion_8cpp_a336fe836d12fab28f8db3b4878b7e6de}{diffuse\+\_\+\+Benthos\+\_\+in\+\_\+every\+\_\+directions}} (vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&list\+\_\+of\+\_\+nodes, \mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&\mbox{\hyperlink{thread__vessels_8cpp_ada1040d49789f59db85b5c6096b3313d}{adjacency\+\_\+map}}, double coeff)
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}\label{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}} 
+\index{diffusion.cpp@{diffusion.cpp}!box@{box}}
+\index{box@{box}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{box}{box}}
+{\footnotesize\ttfamily typedef bg\+::model\+::box$<$\mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}$>$ \mbox{\hyperlink{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}{box}}}
+
+\mbox{\Hypertarget{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}\label{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}} 
+\index{diffusion.cpp@{diffusion.cpp}!point@{point}}
+\index{point@{point}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{point}{point}}
+{\footnotesize\ttfamily typedef bg\+::model\+::point$<$double, 2, bg\+::cs\+::cartesian$>$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}}
+
+\mbox{\Hypertarget{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}\label{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}} 
+\index{diffusion.cpp@{diffusion.cpp}!value@{value}}
+\index{value@{value}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily typedef std\+::pair$<$\mbox{\hyperlink{diffusion_8cpp_afb37f686eee8fe2e664532e9967a5ef7}{box}}, unsigned$>$ \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}}}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{diffusion_8cpp_a9e4e0725d04ad87f198b0e3b577f4520}\label{diffusion_8cpp_a9e4e0725d04ad87f198b0e3b577f4520}} 
+\index{diffusion.cpp@{diffusion.cpp}!createRTreeFromNodes@{createRTreeFromNodes}}
+\index{createRTreeFromNodes@{createRTreeFromNodes}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{createRTreeFromNodes()}{createRTreeFromNodes()}}
+{\footnotesize\ttfamily void create\+R\+Tree\+From\+Nodes (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{nodes,  }\item[{bgi\+::rtree$<$ std\+::pair$<$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}, int $>$, bgi\+::quadratic$<$ 16 $>$ $>$ \&}]{rtree }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{diffusion_8cpp_a336fe836d12fab28f8db3b4878b7e6de}\label{diffusion_8cpp_a336fe836d12fab28f8db3b4878b7e6de}} 
+\index{diffusion.cpp@{diffusion.cpp}!diffuse\_Benthos\_in\_every\_directions@{diffuse\_Benthos\_in\_every\_directions}}
+\index{diffuse\_Benthos\_in\_every\_directions@{diffuse\_Benthos\_in\_every\_directions}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{diffuse\_Benthos\_in\_every\_directions()}{diffuse\_Benthos\_in\_every\_directions()}}
+{\footnotesize\ttfamily bool diffuse\+\_\+\+Benthos\+\_\+in\+\_\+every\+\_\+directions (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{list\+\_\+of\+\_\+nodes,  }\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map,  }\item[{double}]{coeff }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{diffusion_8cpp_afb3caefd853427fa9358da4f50dea1fb}\label{diffusion_8cpp_afb3caefd853427fa9358da4f50dea1fb}} 
+\index{diffusion.cpp@{diffusion.cpp}!diffuse\_Nitrogen\_in\_every\_directions@{diffuse\_Nitrogen\_in\_every\_directions}}
+\index{diffuse\_Nitrogen\_in\_every\_directions@{diffuse\_Nitrogen\_in\_every\_directions}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{diffuse\_Nitrogen\_in\_every\_directions()}{diffuse\_Nitrogen\_in\_every\_directions()}}
+{\footnotesize\ttfamily bool diffuse\+\_\+\+Nitrogen\+\_\+in\+\_\+every\+\_\+directions (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{list\+\_\+of\+\_\+nodes,  }\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map,  }\item[{double}]{coeff }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{diffusion_8cpp_a0b38fcd80bf1dcb195196ea0652137be}\label{diffusion_8cpp_a0b38fcd80bf1dcb195196ea0652137be}} 
+\index{diffusion.cpp@{diffusion.cpp}!diffuse\_Nitrogen\_with\_gradients@{diffuse\_Nitrogen\_with\_gradients}}
+\index{diffuse\_Nitrogen\_with\_gradients@{diffuse\_Nitrogen\_with\_gradients}!diffusion.cpp@{diffusion.cpp}}
+\subsubsection{\texorpdfstring{diffuse\_Nitrogen\_with\_gradients()}{diffuse\_Nitrogen\_with\_gradients()}}
+{\footnotesize\ttfamily bool diffuse\+\_\+\+Nitrogen\+\_\+with\+\_\+gradients (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \&}]{list\+\_\+of\+\_\+nodes,  }\item[{\mbox{\hyperlink{myutils_8h_ae689dbcb43e66abf9a513718b83bd87d}{adjacency\+\_\+map\+\_\+t}} \&}]{adjacency\+\_\+map,  }\item[{bgi\+::rtree$<$ std\+::pair$<$ \mbox{\hyperlink{diffusion_8cpp_a380468221cb8294f9329d11c99c4da30}{point}}, int $>$, bgi\+::quadratic$<$ 16 $>$ $>$ \&}]{rtree,  }\item[{double}]{coeff }\end{DoxyParamCaption})}
+

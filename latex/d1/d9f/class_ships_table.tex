@@ -1,0 +1,72 @@
+\hypertarget{class_ships_table}{}\section{Ships\+Table Class Reference}
+\label{class_ships_table}\index{ShipsTable@{ShipsTable}}
+
+
+{\ttfamily \#include $<$shipstable.\+h$>$}
+
+Inheritance diagram for Ships\+Table\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d9f/class_ships_table}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_ships_table_1_1_impl}{Impl}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_ships_table_a3517ea91749252e3f28e1125d9e8a63a}{Ships\+Table}} (std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$ db, std\+::string name)
+\item 
+\mbox{\hyperlink{class_ships_table_a6e09c3aa5ce197a0f094a1908987b108}{$\sim$\+Ships\+Table}} () noexcept
+\item 
+void \mbox{\hyperlink{class_ships_table_a55bcab80359ce688ac530fb419965de3}{drop\+And\+Create}} ()
+\item 
+void \mbox{\hyperlink{class_ships_table_acb6781e8fa1d587c6a79f08b63d2194f}{export\+Ships\+Indivators}} (int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}}, \mbox{\hyperlink{class_ship}{Ship}} $\ast$ship)
+\item 
+\mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} \mbox{\hyperlink{class_ships_table_a0d1779e92f564cd50581e1222a04c1a2}{get\+Ships\+Stat\+Data}} (\mbox{\hyperlink{namespacedisplace_1_1plot_a8c50b4d54cafba744b1b5b51b53407e0}{displace\+::plot\+::\+Ships\+Stat}} stattype, \mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}} aggtype, int shipid, std\+::vector$<$ int $>$ shiptypeid)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_ships_table_a3517ea91749252e3f28e1125d9e8a63a}\label{class_ships_table_a3517ea91749252e3f28e1125d9e8a63a}} 
+\index{ShipsTable@{ShipsTable}!ShipsTable@{ShipsTable}}
+\index{ShipsTable@{ShipsTable}!ShipsTable@{ShipsTable}}
+\subsubsection{\texorpdfstring{ShipsTable()}{ShipsTable()}}
+{\footnotesize\ttfamily Ships\+Table\+::\+Ships\+Table (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sqlite\+::\+S\+Q\+Lite\+Storage $>$}]{db,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ships_table_a6e09c3aa5ce197a0f094a1908987b108}\label{class_ships_table_a6e09c3aa5ce197a0f094a1908987b108}} 
+\index{ShipsTable@{ShipsTable}!````~ShipsTable@{$\sim$ShipsTable}}
+\index{````~ShipsTable@{$\sim$ShipsTable}!ShipsTable@{ShipsTable}}
+\subsubsection{\texorpdfstring{$\sim$ShipsTable()}{~ShipsTable()}}
+{\footnotesize\ttfamily Ships\+Table\+::$\sim$\+Ships\+Table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_ships_table_a55bcab80359ce688ac530fb419965de3}\label{class_ships_table_a55bcab80359ce688ac530fb419965de3}} 
+\index{ShipsTable@{ShipsTable}!dropAndCreate@{dropAndCreate}}
+\index{dropAndCreate@{dropAndCreate}!ShipsTable@{ShipsTable}}
+\subsubsection{\texorpdfstring{dropAndCreate()}{dropAndCreate()}}
+{\footnotesize\ttfamily void Ships\+Table\+::drop\+And\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ships_table_acb6781e8fa1d587c6a79f08b63d2194f}\label{class_ships_table_acb6781e8fa1d587c6a79f08b63d2194f}} 
+\index{ShipsTable@{ShipsTable}!exportShipsIndivators@{exportShipsIndivators}}
+\index{exportShipsIndivators@{exportShipsIndivators}!ShipsTable@{ShipsTable}}
+\subsubsection{\texorpdfstring{exportShipsIndivators()}{exportShipsIndivators()}}
+{\footnotesize\ttfamily void Ships\+Table\+::export\+Ships\+Indivators (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_ship}{Ship}} $\ast$}]{ship }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_ships_table_a0d1779e92f564cd50581e1222a04c1a2}\label{class_ships_table_a0d1779e92f564cd50581e1222a04c1a2}} 
+\index{ShipsTable@{ShipsTable}!getShipsStatData@{getShipsStatData}}
+\index{getShipsStatData@{getShipsStatData}!ShipsTable@{ShipsTable}}
+\subsubsection{\texorpdfstring{getShipsStatData()}{getShipsStatData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_timeline_data}{Timeline\+Data}} Ships\+Table\+::get\+Ships\+Stat\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a8c50b4d54cafba744b1b5b51b53407e0}{displace\+::plot\+::\+Ships\+Stat}}}]{stattype,  }\item[{\mbox{\hyperlink{namespacedisplace_1_1plot_a522cdc3da3faefae0803944b866e0c3d}{displace\+::plot\+::\+Aggregation\+Type}}}]{aggtype,  }\item[{int}]{shipid,  }\item[{std\+::vector$<$ int $>$}]{shiptypeid }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/tables/\mbox{\hyperlink{shipstable_8h}{shipstable.\+h}}\item 
+commons/storage/tables/\mbox{\hyperlink{shipstable_8cpp}{shipstable.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,346 @@
+\hypertarget{class_q_c_p_data_selection}{}\section{Q\+C\+P\+Data\+Selection Class Reference}
+\label{class_q_c_p_data_selection}\index{QCPDataSelection@{QCPDataSelection}}
+
+
+Describes a data set by holding multiple \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} instances.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection_a0e0b7faaec7df1a7c77dd6f4883cdf0d}{Q\+C\+P\+Data\+Selection}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection_a738dfb4f5718c5df5ed35ea33ac37818}{Q\+C\+P\+Data\+Selection}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&range)
+\item 
+bool \mbox{\hyperlink{class_q_c_p_data_selection_a664fa566569b17148abafd6b1dbbf347}{operator==}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other) const
+\item 
+bool \mbox{\hyperlink{class_q_c_p_data_selection_a8324733cc88660ee4792ee60d6a4520c}{operator!=}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other) const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& \mbox{\hyperlink{class_q_c_p_data_selection_a4584d4b0ea5c4f095bd7b70f88eb5d9d}{operator+=}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other)
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& \mbox{\hyperlink{class_q_c_p_data_selection_a17058640d4e6f49984a0e7e42043df1b}{operator+=}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&other)
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& \mbox{\hyperlink{class_q_c_p_data_selection_a66f9fab70b026baa64bf8e52fe5de07e}{operator-\/=}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other)
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& \mbox{\hyperlink{class_q_c_p_data_selection_a8d18b20d20dde737eefc10967e31cf73}{operator-\/=}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&other)
+\item 
+int \mbox{\hyperlink{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}{data\+Range\+Count}} () const
+\item 
+int \mbox{\hyperlink{class_q_c_p_data_selection_ac9e74dd294778aa799216c3435c9c4f0}{data\+Point\+Count}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}} (int index=0) const
+\item 
+Q\+List$<$ \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} $>$ \mbox{\hyperlink{class_q_c_p_data_selection_ac3b1c5e7713d380cd9e447f4556b94da}{data\+Ranges}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \mbox{\hyperlink{class_q_c_p_data_selection_a890f9291e0b7f065747040de5d68ff7d}{span}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}{add\+Data\+Range}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&\mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}}, bool \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}=true)
+\item 
+void \mbox{\hyperlink{class_q_c_p_data_selection_a385dd665e6690d39afb8bbd727b1e00b}{clear}} ()
+\item 
+bool \mbox{\hyperlink{class_q_c_p_data_selection_a7f7526b475998dc0c3d6c376b24736c9}{is\+Empty}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} ()
+\item 
+void \mbox{\hyperlink{class_q_c_p_data_selection_a17b84d852911531d229f4a76aa239a75}{enforce\+Type}} (\mbox{\hyperlink{namespace_q_c_p_ac6cb9db26a564b27feda362a438db038}{Q\+C\+P\+::\+Selection\+Type}} type)
+\item 
+bool \mbox{\hyperlink{class_q_c_p_data_selection_ab1ad3d5bbb55749c3f7ab1e45429c932}{contains}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other) const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_af5267ced53687561367105ee77b874ab}{intersection}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&other) const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_af296ec5a948656c1d1ecb7b2970d2a24}{intersection}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&other) const
+\item 
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_ae8097f4e4ffee7b1b5df27c93eb365db}{inverse}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&outer\+Range) const
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a49c0217af248959d59abfdd29401b678}{operator+}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&a, const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a5feed9419bd3df5cb4d4a761580545cc}{operator+}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&a, const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_aa574f51a74d6998e9be95e252e6be287}{operator+}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&a, const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a0822e3133b80b5dedfc8050a19c1e0c5}{operator+}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&a, const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a41147ef7d6303c746e398278b7b624d1}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&a, const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a726652cb9ed840e3025435cc2c266468}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&a, const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_a32c5784ac70946f09a09b2dd19816b78}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&a, const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&b)
+\item 
+const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \mbox{\hyperlink{class_q_c_p_data_selection_ad62dd67b505c1fa9c02d1aafabcb9acf}{operator-\/}} (const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&a, const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&b)
+\end{DoxyCompactItemize}
+\subsection*{Related Functions}
+(Note that these are not member functions.) \begin{DoxyCompactItemize}
+\item 
+Q\+Debug \mbox{\hyperlink{class_q_c_p_data_selection_aed65b8988afe6b03adeadf5edf663670}{operator$<$$<$}} (Q\+Debug d, const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&selection)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Describes a data set by holding multiple \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} instances. 
+
+\mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} manages multiple instances of \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} in order to represent any (possibly disjoint) set of data selection.
+
+The data selection can be modified with addition and subtraction operators which take \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} and \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} instances, as well as methods such as \mbox{\hyperlink{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}{add\+Data\+Range}} and \mbox{\hyperlink{class_q_c_p_data_selection_a385dd665e6690d39afb8bbd727b1e00b}{clear}}. Read access is provided by \mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}}, \mbox{\hyperlink{class_q_c_p_data_selection_ac3b1c5e7713d380cd9e447f4556b94da}{data\+Ranges}}, \mbox{\hyperlink{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}{data\+Range\+Count}}, etc.
+
+The method \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} is used to join directly adjacent or even overlapping \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} instances. \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} automatically simplifies when using the addition/subtraction operators. The only case when \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} is left to the user, is when calling \mbox{\hyperlink{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}{add\+Data\+Range}}, with the parameter {\itshape simplify} explicitly set to false. This is useful if many data ranges will be added to the selection successively and the overhead for simplifying after each iteration shall be avoided. In this case, you should make sure to call \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} after completing the operation.
+
+Use \mbox{\hyperlink{class_q_c_p_data_selection_a17b84d852911531d229f4a76aa239a75}{enforce\+Type}} to bring the data selection into a state complying with the constraints for selections defined in \mbox{\hyperlink{namespace_q_c_p_ac6cb9db26a564b27feda362a438db038}{Q\+C\+P\+::\+Selection\+Type}}.
+
+Q\+Custom\+Plot\textquotesingle{}s data selection mechanism is based on \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} and \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}}.\hypertarget{class_q_c_p_data_selection_qcpdataselection-iterating}{}\subsection{Iterating over a data selection}\label{class_q_c_p_data_selection_qcpdataselection-iterating}
+As an example, the following code snippet calculates the average value of a graph\textquotesingle{}s data \mbox{\hyperlink{class_q_c_p_abstract_plottable_a040bf09f41d456284cfd39cc37aa068f}{selection}}\+:
+
+
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_data_selection_a0e0b7faaec7df1a7c77dd6f4883cdf0d}\label{class_q_c_p_data_selection_a0e0b7faaec7df1a7c77dd6f4883cdf0d}} 
+\index{QCPDataSelection@{QCPDataSelection}!QCPDataSelection@{QCPDataSelection}}
+\index{QCPDataSelection@{QCPDataSelection}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{QCPDataSelection()}{QCPDataSelection()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Data\+Selection\+::\+Q\+C\+P\+Data\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Creates an empty \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}}. \mbox{\Hypertarget{class_q_c_p_data_selection_a738dfb4f5718c5df5ed35ea33ac37818}\label{class_q_c_p_data_selection_a738dfb4f5718c5df5ed35ea33ac37818}} 
+\index{QCPDataSelection@{QCPDataSelection}!QCPDataSelection@{QCPDataSelection}}
+\index{QCPDataSelection@{QCPDataSelection}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{QCPDataSelection()}{QCPDataSelection()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Q\+C\+P\+Data\+Selection\+::\+Q\+C\+P\+Data\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Creates a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} containing the provided {\itshape range}. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}\label{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}} 
+\index{QCPDataSelection@{QCPDataSelection}!addDataRange@{addDataRange}}
+\index{addDataRange@{addDataRange}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{addDataRange()}{addDataRange()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Data\+Selection\+::add\+Data\+Range (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{data\+Range,  }\item[{bool}]{simplify = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Adds the given {\itshape data\+Range} to this data selection. This is equivalent to the += operator but allows disabling immediate simplification by setting {\itshape simplify} to false. This can improve performance if adding a very large amount of data ranges successively. In this case, make sure to call \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} manually, after the operation. \mbox{\Hypertarget{class_q_c_p_data_selection_a385dd665e6690d39afb8bbd727b1e00b}\label{class_q_c_p_data_selection_a385dd665e6690d39afb8bbd727b1e00b}} 
+\index{QCPDataSelection@{QCPDataSelection}!clear@{clear}}
+\index{clear@{clear}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Data\+Selection\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Removes all data ranges. The data selection then contains no data points.
+
+\mbox{\hyperlink{class_q_c_p_data_selection_a7f7526b475998dc0c3d6c376b24736c9}{is\+Empty}} \mbox{\Hypertarget{class_q_c_p_data_selection_ab1ad3d5bbb55749c3f7ab1e45429c932}\label{class_q_c_p_data_selection_ab1ad3d5bbb55749c3f7ab1e45429c932}} 
+\index{QCPDataSelection@{QCPDataSelection}!contains@{contains}}
+\index{contains@{contains}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Data\+Selection\+::contains (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption}) const}
+
+Returns true if the data selection {\itshape other} is contained entirely in this data selection, i.\+e. all data point indices that are in {\itshape other} are also in this data selection.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_data_range_a13ca398776374a3160aa85433718b812}{Q\+C\+P\+Data\+Range\+::contains}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_ac9e74dd294778aa799216c3435c9c4f0}\label{class_q_c_p_data_selection_ac9e74dd294778aa799216c3435c9c4f0}} 
+\index{QCPDataSelection@{QCPDataSelection}!dataPointCount@{dataPointCount}}
+\index{dataPointCount@{dataPointCount}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{dataPointCount()}{dataPointCount()}}
+{\footnotesize\ttfamily int Q\+C\+P\+Data\+Selection\+::data\+Point\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Returns the total number of data points contained in all data ranges that make up this data selection. \mbox{\Hypertarget{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}\label{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}} 
+\index{QCPDataSelection@{QCPDataSelection}!dataRange@{dataRange}}
+\index{dataRange@{dataRange}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{dataRange()}{dataRange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} Q\+C\+P\+Data\+Selection\+::data\+Range (\begin{DoxyParamCaption}\item[{int}]{index = {\ttfamily 0} }\end{DoxyParamCaption}) const}
+
+Returns the data range with the specified {\itshape index}.
+
+If the data selection is simplified (the usual state of the selection, see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}), the ranges are sorted by ascending data point index.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}{data\+Range\+Count}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}\label{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}} 
+\index{QCPDataSelection@{QCPDataSelection}!dataRangeCount@{dataRangeCount}}
+\index{dataRangeCount@{dataRangeCount}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{dataRangeCount()}{dataRangeCount()}}
+{\footnotesize\ttfamily int Q\+C\+P\+Data\+Selection\+::data\+Range\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the number of ranges that make up the data selection. The ranges can be accessed by \mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}} via their index.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}}, \mbox{\hyperlink{class_q_c_p_data_selection_ac9e74dd294778aa799216c3435c9c4f0}{data\+Point\+Count}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_ac3b1c5e7713d380cd9e447f4556b94da}\label{class_q_c_p_data_selection_ac3b1c5e7713d380cd9e447f4556b94da}} 
+\index{QCPDataSelection@{QCPDataSelection}!dataRanges@{dataRanges}}
+\index{dataRanges@{dataRanges}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{dataRanges()}{dataRanges()}}
+{\footnotesize\ttfamily Q\+List$<$ \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} $>$ Q\+C\+P\+Data\+Selection\+::data\+Ranges (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns all data ranges that make up the data selection. If the data selection is simplified (the usual state of the selection, see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}), the ranges are sorted by ascending data point index.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_data_selection_a6956acf6a9a49a353b4f9b58608978ad}{data\+Range}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_a17b84d852911531d229f4a76aa239a75}\label{class_q_c_p_data_selection_a17b84d852911531d229f4a76aa239a75}} 
+\index{QCPDataSelection@{QCPDataSelection}!enforceType@{enforceType}}
+\index{enforceType@{enforceType}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{enforceType()}{enforceType()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Data\+Selection\+::enforce\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_q_c_p_ac6cb9db26a564b27feda362a438db038}{Q\+C\+P\+::\+Selection\+Type}}}]{type }\end{DoxyParamCaption})}
+
+Makes sure this data selection conforms to the specified {\itshape type} selection type. Before the type is enforced, \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} is called.
+
+Depending on {\itshape type}, enforcing means adding new data points that were previously not part of the selection, or removing data points from the selection. If the current selection already conforms to {\itshape type}, the data selection is not changed.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{namespace_q_c_p_ac6cb9db26a564b27feda362a438db038}{Q\+C\+P\+::\+Selection\+Type}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_af5267ced53687561367105ee77b874ab}\label{class_q_c_p_data_selection_af5267ced53687561367105ee77b874ab}} 
+\index{QCPDataSelection@{QCPDataSelection}!intersection@{intersection}}
+\index{intersection@{intersection}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{intersection()}{intersection()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} Q\+C\+P\+Data\+Selection\+::intersection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{other }\end{DoxyParamCaption}) const}
+
+Returns a data selection containing the points which are both in this data selection and in the data range {\itshape other}.
+
+A common use case is to limit an unknown data selection to the valid range of a data container, using \mbox{\hyperlink{class_q_c_p_data_container_aece90eeb2ba8d3c46d3d94023630fbc7}{Q\+C\+P\+Data\+Container\+::data\+Range}} as {\itshape other}. One can then safely iterate over the returned data selection without exceeding the data container\textquotesingle{}s bounds. \mbox{\Hypertarget{class_q_c_p_data_selection_af296ec5a948656c1d1ecb7b2970d2a24}\label{class_q_c_p_data_selection_af296ec5a948656c1d1ecb7b2970d2a24}} 
+\index{QCPDataSelection@{QCPDataSelection}!intersection@{intersection}}
+\index{intersection@{intersection}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{intersection()}{intersection()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} Q\+C\+P\+Data\+Selection\+::intersection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption}) const}
+
+Returns a data selection containing the points which are both in this data selection and in the data selection {\itshape other}. \mbox{\Hypertarget{class_q_c_p_data_selection_ae8097f4e4ffee7b1b5df27c93eb365db}\label{class_q_c_p_data_selection_ae8097f4e4ffee7b1b5df27c93eb365db}} 
+\index{QCPDataSelection@{QCPDataSelection}!inverse@{inverse}}
+\index{inverse@{inverse}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{inverse()}{inverse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} Q\+C\+P\+Data\+Selection\+::inverse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{outer\+Range }\end{DoxyParamCaption}) const}
+
+Returns a data selection which is the exact inverse of this data selection, with {\itshape outer\+Range} defining the base range on which to invert. If {\itshape outer\+Range} is smaller than the \mbox{\hyperlink{class_q_c_p_data_selection_a890f9291e0b7f065747040de5d68ff7d}{span}} of this data selection, it is expanded accordingly.
+
+For example, this method can be used to retrieve all unselected segments by setting {\itshape outer\+Range} to the full data range of the plottable, and calling this method on a data selection holding the selected segments. \mbox{\Hypertarget{class_q_c_p_data_selection_a7f7526b475998dc0c3d6c376b24736c9}\label{class_q_c_p_data_selection_a7f7526b475998dc0c3d6c376b24736c9}} 
+\index{QCPDataSelection@{QCPDataSelection}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{isEmpty()}{isEmpty()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Data\+Selection\+::is\+Empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns true if there are no data ranges, and thus no data points, in this \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} instance.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_data_selection_abd8869ccb231ab991e8576de931f647d}{data\+Range\+Count}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_data_selection_a8324733cc88660ee4792ee60d6a4520c}\label{class_q_c_p_data_selection_a8324733cc88660ee4792ee60d6a4520c}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Data\+Selection\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_data_selection_a4584d4b0ea5c4f095bd7b70f88eb5d9d}\label{class_q_c_p_data_selection_a4584d4b0ea5c4f095bd7b70f88eb5d9d}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& Q\+C\+P\+Data\+Selection\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption})}
+
+Adds the data selection of {\itshape other} to this data selection, and then simplifies this data selection (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_a17058640d4e6f49984a0e7e42043df1b}\label{class_q_c_p_data_selection_a17058640d4e6f49984a0e7e42043df1b}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& Q\+C\+P\+Data\+Selection\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{other }\end{DoxyParamCaption})}
+
+Adds the data range {\itshape other} to this data selection, and then simplifies this data selection (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_a66f9fab70b026baa64bf8e52fe5de07e}\label{class_q_c_p_data_selection_a66f9fab70b026baa64bf8e52fe5de07e}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/=()}{operator-=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& Q\+C\+P\+Data\+Selection\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption})}
+
+Removes all data point indices that are described by {\itshape other} from this data selection. \mbox{\Hypertarget{class_q_c_p_data_selection_a8d18b20d20dde737eefc10967e31cf73}\label{class_q_c_p_data_selection_a8d18b20d20dde737eefc10967e31cf73}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/=()}{operator-=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \& Q\+C\+P\+Data\+Selection\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{other }\end{DoxyParamCaption})}
+
+Removes all data point indices that are described by {\itshape other} from this data selection. \mbox{\Hypertarget{class_q_c_p_data_selection_a664fa566569b17148abafd6b1dbbf347}\label{class_q_c_p_data_selection_a664fa566569b17148abafd6b1dbbf347}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator==@{operator==}}
+\index{operator==@{operator==}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Data\+Selection\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{other }\end{DoxyParamCaption}) const}
+
+Returns true if this selection is identical (contains the same data ranges with the same begin and end indices) to {\itshape other}.
+
+Note that both data selections must be in simplified state (the usual state of the selection, see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}}) for this operator to return correct results. \mbox{\Hypertarget{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}\label{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}} 
+\index{QCPDataSelection@{QCPDataSelection}!simplify@{simplify}}
+\index{simplify@{simplify}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{simplify()}{simplify()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Data\+Selection\+::simplify (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Sorts all data ranges by range begin index in ascending order, and then joins directly adjacent or overlapping ranges. This can reduce the number of individual data ranges in the selection, and prevents possible double-\/counting when iterating over the data points held by the data ranges.
+
+This method is automatically called when using the addition/subtraction operators. The only case when \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{simplify}} is left to the user, is when calling \mbox{\hyperlink{class_q_c_p_data_selection_a46740c5aa7b80ae9b2abf6985d61b74f}{add\+Data\+Range}}, with the parameter {\itshape simplify} explicitly set to false. \mbox{\Hypertarget{class_q_c_p_data_selection_a890f9291e0b7f065747040de5d68ff7d}\label{class_q_c_p_data_selection_a890f9291e0b7f065747040de5d68ff7d}} 
+\index{QCPDataSelection@{QCPDataSelection}!span@{span}}
+\index{span@{span}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{span()}{span()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} Q\+C\+P\+Data\+Selection\+::span (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Returns a \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} which spans the entire data selection, including possible intermediate segments which are not part of the original data selection. 
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_data_selection_a49c0217af248959d59abfdd29401b678}\label{class_q_c_p_data_selection_a49c0217af248959d59abfdd29401b678}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+@{operator+}}
+\index{operator+@{operator+}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points in {\itshape a} joined with the data points in {\itshape b}. The resulting data selection is already simplified (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{Q\+C\+P\+Data\+Selection\+::simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_a5feed9419bd3df5cb4d4a761580545cc}\label{class_q_c_p_data_selection_a5feed9419bd3df5cb4d4a761580545cc}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+@{operator+}}
+\index{operator+@{operator+}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points in {\itshape a} joined with the data points in {\itshape b}. The resulting data selection is already simplified (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{Q\+C\+P\+Data\+Selection\+::simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_aa574f51a74d6998e9be95e252e6be287}\label{class_q_c_p_data_selection_aa574f51a74d6998e9be95e252e6be287}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+@{operator+}}
+\index{operator+@{operator+}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points in {\itshape a} joined with the data points in {\itshape b}. The resulting data selection is already simplified (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{Q\+C\+P\+Data\+Selection\+::simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_a0822e3133b80b5dedfc8050a19c1e0c5}\label{class_q_c_p_data_selection_a0822e3133b80b5dedfc8050a19c1e0c5}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator+@{operator+}}
+\index{operator+@{operator+}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points in {\itshape a} joined with the data points in {\itshape b}. The resulting data selection is already simplified (see \mbox{\hyperlink{class_q_c_p_data_selection_a4a2fbad1a6e4d1dd26fdfdf88956f2a4}{Q\+C\+P\+Data\+Selection\+::simplify}}). \mbox{\Hypertarget{class_q_c_p_data_selection_a41147ef7d6303c746e398278b7b624d1}\label{class_q_c_p_data_selection_a41147ef7d6303c746e398278b7b624d1}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points which are in {\itshape a} but not in {\itshape b}. \mbox{\Hypertarget{class_q_c_p_data_selection_a726652cb9ed840e3025435cc2c266468}\label{class_q_c_p_data_selection_a726652cb9ed840e3025435cc2c266468}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points which are in {\itshape a} but not in {\itshape b}. \mbox{\Hypertarget{class_q_c_p_data_selection_a32c5784ac70946f09a09b2dd19816b78}\label{class_q_c_p_data_selection_a32c5784ac70946f09a09b2dd19816b78}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points which are in {\itshape a} but not in {\itshape b}. \mbox{\Hypertarget{class_q_c_p_data_selection_ad62dd67b505c1fa9c02d1aafabcb9acf}\label{class_q_c_p_data_selection_ad62dd67b505c1fa9c02d1aafabcb9acf}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{a,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_range}{Q\+C\+P\+Data\+Range}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Return a \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} with the data points which are in {\itshape a} but not in {\itshape b}. \mbox{\Hypertarget{class_q_c_p_data_selection_aed65b8988afe6b03adeadf5edf663670}\label{class_q_c_p_data_selection_aed65b8988afe6b03adeadf5edf663670}} 
+\index{QCPDataSelection@{QCPDataSelection}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!QCPDataSelection@{QCPDataSelection}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily Q\+Debug operator$<$$<$ (\begin{DoxyParamCaption}\item[{Q\+Debug}]{d,  }\item[{const \mbox{\hyperlink{class_q_c_p_data_selection}{Q\+C\+P\+Data\+Selection}} \&}]{selection }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [related]}}
+
+Prints {\itshape selection} in a human readable format to the q\+Debug output. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

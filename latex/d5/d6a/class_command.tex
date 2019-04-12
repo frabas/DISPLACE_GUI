@@ -1,0 +1,110 @@
+\hypertarget{class_command}{}\section{Command Class Reference}
+\label{class_command}\index{Command@{Command}}
+
+
+An abstract class that implements an interface for commands that can be undone and redone.  
+
+
+
+
+{\ttfamily \#include $<$command.\+h$>$}
+
+Inheritance diagram for Command\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d5/d6a/class_command}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_command_a18df2d81039392daeb0b78c346a70537}{Command}} ()
+\item 
+virtual \mbox{\hyperlink{class_command_ab552bb3a07fdd1acbfd8ea76e69b2278}{$\sim$\+Command}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_command_a5d83cdea649a79d7b7253196a6deddeb}{execute}} ()=0
+\begin{DoxyCompactList}\small\item\em Execute the command. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_command_aa89348c98fd2194f1617d70f57a3ae6c}{undo}} ()=0
+\begin{DoxyCompactList}\small\item\em Undo the command. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_command_ab222d875ec449c40467173edb28e5460}{redo}} ()=0
+\begin{DoxyCompactList}\small\item\em Redo the command. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An abstract class that implements an interface for commands that can be undone and redone. 
+
+This class imeplements a \mbox{\hyperlink{class_command}{Command}} design pattern. Each command that can be undone and re-\/done must derive from this class. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_command_a18df2d81039392daeb0b78c346a70537}\label{class_command_a18df2d81039392daeb0b78c346a70537}} 
+\index{Command@{Command}!Command@{Command}}
+\index{Command@{Command}!Command@{Command}}
+\subsubsection{\texorpdfstring{Command()}{Command()}}
+{\footnotesize\ttfamily Command\+::\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_command_ab552bb3a07fdd1acbfd8ea76e69b2278}\label{class_command_ab552bb3a07fdd1acbfd8ea76e69b2278}} 
+\index{Command@{Command}!````~Command@{$\sim$Command}}
+\index{````~Command@{$\sim$Command}!Command@{Command}}
+\subsubsection{\texorpdfstring{$\sim$Command()}{~Command()}}
+{\footnotesize\ttfamily Command\+::$\sim$\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_command_a5d83cdea649a79d7b7253196a6deddeb}\label{class_command_a5d83cdea649a79d7b7253196a6deddeb}} 
+\index{Command@{Command}!execute@{execute}}
+\index{execute@{execute}!Command@{Command}}
+\subsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily virtual bool Command\+::execute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Execute the command. 
+
+If the command executed correctly, the client will put the command in the Undo list. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_set_tree_type_command_af11ff06bfd5b1068828ba3d1702d291e}{Set\+Tree\+Type\+Command}}, and \mbox{\hyperlink{class_set_node_value_command_a0330dab0773c047deefe2eb551d6fc5e}{Set\+Node\+Value\+Command}}.
+
+\mbox{\Hypertarget{class_command_ab222d875ec449c40467173edb28e5460}\label{class_command_ab222d875ec449c40467173edb28e5460}} 
+\index{Command@{Command}!redo@{redo}}
+\index{redo@{redo}!Command@{Command}}
+\subsubsection{\texorpdfstring{redo()}{redo()}}
+{\footnotesize\ttfamily virtual bool Command\+::redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Redo the command. 
+
+If the command redid correctly, the client will move it from the redo list to the undo list. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_set_tree_type_command_a16b5d34a58f58a5daad23f8c32fc14b4}{Set\+Tree\+Type\+Command}}, and \mbox{\hyperlink{class_set_node_value_command_a839cb93ffcaab91e245995aa367e07c7}{Set\+Node\+Value\+Command}}.
+
+\mbox{\Hypertarget{class_command_aa89348c98fd2194f1617d70f57a3ae6c}\label{class_command_aa89348c98fd2194f1617d70f57a3ae6c}} 
+\index{Command@{Command}!undo@{undo}}
+\index{undo@{undo}!Command@{Command}}
+\subsubsection{\texorpdfstring{undo()}{undo()}}
+{\footnotesize\ttfamily virtual bool Command\+::undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Undo the command. 
+
+If the command undid correctly, the client will move the command in the Redo list. Otherwise the entire Undo list must be cleaned. \begin{DoxyReturn}{Returns}
+true if the command executed correctly, false if an error occurred. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_set_tree_type_command_ac6538d32b00404cfca61d6f28bf7b854}{Set\+Tree\+Type\+Command}}, and \mbox{\hyperlink{class_set_node_value_command_a794bfa7e64469fa6528179d2ca807cc3}{Set\+Node\+Value\+Command}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dteditor/commands/\mbox{\hyperlink{command_8h}{command.\+h}}\item 
+dteditor/commands/\mbox{\hyperlink{command_8cpp}{command.\+cpp}}\end{DoxyCompactItemize}

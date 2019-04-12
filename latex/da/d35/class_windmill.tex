@@ -1,0 +1,157 @@
+\hypertarget{class_windmill}{}\section{Windmill Class Reference}
+\label{class_windmill}\index{Windmill@{Windmill}}
+
+
+{\ttfamily \#include $<$Windmill.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}{Windmill}} ()
+\item 
+\mbox{\hyperlink{class_windmill_a4b1638f4202bc635071f6f0034cdc2f0}{Windmill}} (int \+\_\+idx, string \+\_\+name, \mbox{\hyperlink{class_node}{Node}} $\ast$\+\_\+node, double \+\_\+size, int \+\_\+type, int \+\_\+k\+Wh, int \+\_\+is\+\_\+active)
+\item 
+\mbox{\hyperlink{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}{Windmill}} ()
+\item 
+virtual \mbox{\hyperlink{class_windmill_a2a34ccc52cd7bca9db02494eb0c14876}{$\sim$\+Windmill}} ()
+\item 
+string \mbox{\hyperlink{class_windmill_af92ebf7972106f12cdbc856ef98a829c}{get\+\_\+name}} () const
+\item 
+int \mbox{\hyperlink{class_windmill_a609521495ddc227888b3cab504ea9fba}{get\+\_\+idx}} () const
+\item 
+int \mbox{\hyperlink{class_windmill_a50457283d873a95457c1cc1b0fd1a33b}{get\+\_\+type}} () const
+\item 
+int \mbox{\hyperlink{class_windmill_a31c7e5766ef3621c9fbfa949104278b9}{get\+\_\+is\+\_\+active}} () const
+\item 
+double \mbox{\hyperlink{class_windmill_aa26470b5a5f65c3fd83dfbc1455b8f22}{get\+\_\+x}} () const
+\item 
+double \mbox{\hyperlink{class_windmill_a530a5389da11b72da1a5f519ff62d4e5}{get\+\_\+y}} () const
+\item 
+void \mbox{\hyperlink{class_windmill_aa30d16b7d9666e00dad2a13b6d8bda58}{set\+\_\+x}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+void \mbox{\hyperlink{class_windmill_ab669b5a24920634578d95c6d4b967cf9}{set\+\_\+y}} (double \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+double \mbox{\hyperlink{class_windmill_aebd4e86003db02f68273aa9a303f0f59}{get\+\_\+k\+Wh}} () const
+\item 
+double \mbox{\hyperlink{class_windmill_aa86a674862be49762f19203f646b6760}{get\+\_\+k\+W\+\_\+production}} () const
+\item 
+void \mbox{\hyperlink{class_windmill_a5c4a7f5a3a66db3bd1f27448d215bc7b}{set\+\_\+k\+W\+\_\+production}} (double \+\_\+cumul)
+\item 
+void \mbox{\hyperlink{class_windmill_a5a84117a760afc88ab76aa84f15bb4eb}{compute\+\_\+k\+Wproduction\+\_\+in\+\_\+farm}} ()
+\item 
+void \mbox{\hyperlink{class_windmill_a5f1a3de08f118e3ddffca90f324539b0}{export\+\_\+windmills\+\_\+indicators}} (ofstream \&\mbox{\hyperlink{simulator_2main_8cpp_a419cdf809e883878510d2fd0f98a5375}{windmillslogs}}, int \mbox{\hyperlink{thread__vessels_8cpp_a84bc73d278de929ec9974e1a95d9b23a}{tstep}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}\label{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}} 
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{Windmill()}{Windmill()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Windmill\+::\+Windmill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_a4b1638f4202bc635071f6f0034cdc2f0}\label{class_windmill_a4b1638f4202bc635071f6f0034cdc2f0}} 
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{Windmill()}{Windmill()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Windmill\+::\+Windmill (\begin{DoxyParamCaption}\item[{int}]{\+\_\+idx,  }\item[{string}]{\+\_\+name,  }\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{\+\_\+node,  }\item[{double}]{\+\_\+size,  }\item[{int}]{\+\_\+type,  }\item[{int}]{\+\_\+k\+Wh,  }\item[{int}]{\+\_\+is\+\_\+active }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}\label{class_windmill_a1c1c3d64318b42e398b44a184b20aacd}} 
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\index{Windmill@{Windmill}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{Windmill()}{Windmill()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Windmill\+::\+Windmill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_a2a34ccc52cd7bca9db02494eb0c14876}\label{class_windmill_a2a34ccc52cd7bca9db02494eb0c14876}} 
+\index{Windmill@{Windmill}!````~Windmill@{$\sim$Windmill}}
+\index{````~Windmill@{$\sim$Windmill}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{$\sim$Windmill()}{~Windmill()}}
+{\footnotesize\ttfamily Windmill\+::$\sim$\+Windmill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_windmill_a5a84117a760afc88ab76aa84f15bb4eb}\label{class_windmill_a5a84117a760afc88ab76aa84f15bb4eb}} 
+\index{Windmill@{Windmill}!compute\_kWproduction\_in\_farm@{compute\_kWproduction\_in\_farm}}
+\index{compute\_kWproduction\_in\_farm@{compute\_kWproduction\_in\_farm}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{compute\_kWproduction\_in\_farm()}{compute\_kWproduction\_in\_farm()}}
+{\footnotesize\ttfamily void Windmill\+::compute\+\_\+k\+Wproduction\+\_\+in\+\_\+farm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_a5f1a3de08f118e3ddffca90f324539b0}\label{class_windmill_a5f1a3de08f118e3ddffca90f324539b0}} 
+\index{Windmill@{Windmill}!export\_windmills\_indicators@{export\_windmills\_indicators}}
+\index{export\_windmills\_indicators@{export\_windmills\_indicators}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{export\_windmills\_indicators()}{export\_windmills\_indicators()}}
+{\footnotesize\ttfamily void Windmill\+::export\+\_\+windmills\+\_\+indicators (\begin{DoxyParamCaption}\item[{ofstream \&}]{windmillslogs,  }\item[{int}]{tstep }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_a609521495ddc227888b3cab504ea9fba}\label{class_windmill_a609521495ddc227888b3cab504ea9fba}} 
+\index{Windmill@{Windmill}!get\_idx@{get\_idx}}
+\index{get\_idx@{get\_idx}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_idx()}{get\_idx()}}
+{\footnotesize\ttfamily int Windmill\+::get\+\_\+idx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_a31c7e5766ef3621c9fbfa949104278b9}\label{class_windmill_a31c7e5766ef3621c9fbfa949104278b9}} 
+\index{Windmill@{Windmill}!get\_is\_active@{get\_is\_active}}
+\index{get\_is\_active@{get\_is\_active}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_is\_active()}{get\_is\_active()}}
+{\footnotesize\ttfamily int Windmill\+::get\+\_\+is\+\_\+active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_aa86a674862be49762f19203f646b6760}\label{class_windmill_aa86a674862be49762f19203f646b6760}} 
+\index{Windmill@{Windmill}!get\_kW\_production@{get\_kW\_production}}
+\index{get\_kW\_production@{get\_kW\_production}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_kW\_production()}{get\_kW\_production()}}
+{\footnotesize\ttfamily double Windmill\+::get\+\_\+k\+W\+\_\+production (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_aebd4e86003db02f68273aa9a303f0f59}\label{class_windmill_aebd4e86003db02f68273aa9a303f0f59}} 
+\index{Windmill@{Windmill}!get\_kWh@{get\_kWh}}
+\index{get\_kWh@{get\_kWh}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_kWh()}{get\_kWh()}}
+{\footnotesize\ttfamily double Windmill\+::get\+\_\+k\+Wh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_af92ebf7972106f12cdbc856ef98a829c}\label{class_windmill_af92ebf7972106f12cdbc856ef98a829c}} 
+\index{Windmill@{Windmill}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily string Windmill\+::get\+\_\+name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_a50457283d873a95457c1cc1b0fd1a33b}\label{class_windmill_a50457283d873a95457c1cc1b0fd1a33b}} 
+\index{Windmill@{Windmill}!get\_type@{get\_type}}
+\index{get\_type@{get\_type}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_type()}{get\_type()}}
+{\footnotesize\ttfamily int Windmill\+::get\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_aa26470b5a5f65c3fd83dfbc1455b8f22}\label{class_windmill_aa26470b5a5f65c3fd83dfbc1455b8f22}} 
+\index{Windmill@{Windmill}!get\_x@{get\_x}}
+\index{get\_x@{get\_x}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_x()}{get\_x()}}
+{\footnotesize\ttfamily double Windmill\+::get\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_a530a5389da11b72da1a5f519ff62d4e5}\label{class_windmill_a530a5389da11b72da1a5f519ff62d4e5}} 
+\index{Windmill@{Windmill}!get\_y@{get\_y}}
+\index{get\_y@{get\_y}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{get\_y()}{get\_y()}}
+{\footnotesize\ttfamily double Windmill\+::get\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_windmill_a5c4a7f5a3a66db3bd1f27448d215bc7b}\label{class_windmill_a5c4a7f5a3a66db3bd1f27448d215bc7b}} 
+\index{Windmill@{Windmill}!set\_kW\_production@{set\_kW\_production}}
+\index{set\_kW\_production@{set\_kW\_production}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{set\_kW\_production()}{set\_kW\_production()}}
+{\footnotesize\ttfamily void Windmill\+::set\+\_\+k\+W\+\_\+production (\begin{DoxyParamCaption}\item[{double}]{\+\_\+cumul }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_aa30d16b7d9666e00dad2a13b6d8bda58}\label{class_windmill_aa30d16b7d9666e00dad2a13b6d8bda58}} 
+\index{Windmill@{Windmill}!set\_x@{set\_x}}
+\index{set\_x@{set\_x}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{set\_x()}{set\_x()}}
+{\footnotesize\ttfamily void Windmill\+::set\+\_\+x (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_windmill_ab669b5a24920634578d95c6d4b967cf9}\label{class_windmill_ab669b5a24920634578d95c6d4b967cf9}} 
+\index{Windmill@{Windmill}!set\_y@{set\_y}}
+\index{set\_y@{set\_y}!Windmill@{Windmill}}
+\subsubsection{\texorpdfstring{set\_y()}{set\_y()}}
+{\footnotesize\ttfamily void Windmill\+::set\+\_\+y (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/utils/\mbox{\hyperlink{utils_2_windmill_8h}{Windmill.\+h}}\item 
+commons/\mbox{\hyperlink{commons_2_windmill_8cpp}{Windmill.\+cpp}}\end{DoxyCompactItemize}

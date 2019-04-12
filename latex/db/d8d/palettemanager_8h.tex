@@ -1,0 +1,124 @@
+\hypertarget{palettemanager_8h}{}\section{qtgui/palettemanager.h File Reference}
+\label{palettemanager_8h}\index{qtgui/palettemanager.h@{qtgui/palettemanager.h}}
+{\ttfamily \#include $<$Q\+String$>$}\newline
+{\ttfamily \#include $<$Q\+Vector$>$}\newline
+{\ttfamily \#include $<$Q\+Color$>$}\newline
+{\ttfamily \#include $<$Q\+Map$>$}\newline
+{\ttfamily \#include $<$Q\+List$>$}\newline
+{\ttfamily \#include $<$Q\+I\+O\+Device$>$}\newline
+{\ttfamily \#include $<$Q\+Variant$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_palette}{Palette}}
+\item 
+class \mbox{\hyperlink{class_palette_manager}{Palette\+Manager}}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269}{Palette\+Role}} \{ \newline
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a1ccd266d6794eb323d2863bb89d74853}{Value\+Role}} = 0, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a24dcf7e5b0df4c8b663efcf50057ce44}{Value0to1\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c29c4b5a00d28acb66f3de971a93992}{Population\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c91765144c3ddb8984a604582f77d80}{Tariffs\+Role}}, 
+\newline
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a82aa8ad1b5bd7bbb05602dbd576a3cfa}{Benthos\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8e4ec39dadf1c11cc5412243cad7162f}{Fishfarm\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269aa44afd3b588dfb072181b13d57792f61}{Bathy\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269afe3e2064be45cd824f3e1edbb34e5e57}{Salinity\+Role}}, 
+\newline
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269acf2f2a30b6347b707455eaa4f0c220ef}{S\+S\+T\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af19e781b21fc45df8e0e320aea174385}{Wind\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8a60b1c577e95e1e37a731e0c81d97b0}{Nitrogen\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ad11473bda628766911e2758d91cf901d}{Phosphorus\+Role}}, 
+\newline
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a786b35b657b01129ce0811e2e8cef1fe}{Oxygen\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abe671d134c18a7c47d3c9c28763002a7}{Dissolved\+Carbon\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af555b5e515d59166184a38a2f91dc25a}{Shippingdensity\+Role}}, 
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abd9b3593377a4ff37e871ff37332d189}{Siltfraction\+Role}}, 
+\newline
+\mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ac50235242e0d64f2622a0e5761d81062}{Last\+Role}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269}} 
+\index{palettemanager.h@{palettemanager.h}!PaletteRole@{PaletteRole}}
+\index{PaletteRole@{PaletteRole}!palettemanager.h@{palettemanager.h}}
+\subsubsection{\texorpdfstring{PaletteRole}{PaletteRole}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269}{Palette\+Role}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ValueRole@{ValueRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!ValueRole@{ValueRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a1ccd266d6794eb323d2863bb89d74853}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a1ccd266d6794eb323d2863bb89d74853}} 
+Value\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Value0to1Role@{Value0to1Role}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!Value0to1Role@{Value0to1Role}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a24dcf7e5b0df4c8b663efcf50057ce44}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a24dcf7e5b0df4c8b663efcf50057ce44}} 
+Value0to1\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PopulationRole@{PopulationRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!PopulationRole@{PopulationRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c29c4b5a00d28acb66f3de971a93992}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c29c4b5a00d28acb66f3de971a93992}} 
+Population\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TariffsRole@{TariffsRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!TariffsRole@{TariffsRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c91765144c3ddb8984a604582f77d80}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a4c91765144c3ddb8984a604582f77d80}} 
+Tariffs\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BenthosRole@{BenthosRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!BenthosRole@{BenthosRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a82aa8ad1b5bd7bbb05602dbd576a3cfa}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a82aa8ad1b5bd7bbb05602dbd576a3cfa}} 
+Benthos\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FishfarmRole@{FishfarmRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!FishfarmRole@{FishfarmRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8e4ec39dadf1c11cc5412243cad7162f}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8e4ec39dadf1c11cc5412243cad7162f}} 
+Fishfarm\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BathyRole@{BathyRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!BathyRole@{BathyRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269aa44afd3b588dfb072181b13d57792f61}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269aa44afd3b588dfb072181b13d57792f61}} 
+Bathy\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SalinityRole@{SalinityRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!SalinityRole@{SalinityRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269afe3e2064be45cd824f3e1edbb34e5e57}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269afe3e2064be45cd824f3e1edbb34e5e57}} 
+Salinity\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SSTRole@{SSTRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!SSTRole@{SSTRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269acf2f2a30b6347b707455eaa4f0c220ef}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269acf2f2a30b6347b707455eaa4f0c220ef}} 
+S\+S\+T\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WindRole@{WindRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!WindRole@{WindRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af19e781b21fc45df8e0e320aea174385}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af19e781b21fc45df8e0e320aea174385}} 
+Wind\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NitrogenRole@{NitrogenRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!NitrogenRole@{NitrogenRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8a60b1c577e95e1e37a731e0c81d97b0}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a8a60b1c577e95e1e37a731e0c81d97b0}} 
+Nitrogen\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PhosphorusRole@{PhosphorusRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!PhosphorusRole@{PhosphorusRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ad11473bda628766911e2758d91cf901d}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ad11473bda628766911e2758d91cf901d}} 
+Phosphorus\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OxygenRole@{OxygenRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!OxygenRole@{OxygenRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a786b35b657b01129ce0811e2e8cef1fe}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269a786b35b657b01129ce0811e2e8cef1fe}} 
+Oxygen\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DissolvedCarbonRole@{DissolvedCarbonRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!DissolvedCarbonRole@{DissolvedCarbonRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abe671d134c18a7c47d3c9c28763002a7}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abe671d134c18a7c47d3c9c28763002a7}} 
+Dissolved\+Carbon\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ShippingdensityRole@{ShippingdensityRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!ShippingdensityRole@{ShippingdensityRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af555b5e515d59166184a38a2f91dc25a}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269af555b5e515d59166184a38a2f91dc25a}} 
+Shippingdensity\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SiltfractionRole@{SiltfractionRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!SiltfractionRole@{SiltfractionRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abd9b3593377a4ff37e871ff37332d189}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269abd9b3593377a4ff37e871ff37332d189}} 
+Siltfraction\+Role&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LastRole@{LastRole}!palettemanager.h@{palettemanager.h}}\index{palettemanager.h@{palettemanager.h}!LastRole@{LastRole}}}\mbox{\Hypertarget{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ac50235242e0d64f2622a0e5761d81062}\label{palettemanager_8h_adf4610684920d9165d0d74c1ea45b269ac50235242e0d64f2622a0e5761d81062}} 
+Last\+Role&\\
+\hline
+
+\end{DoxyEnumFields}

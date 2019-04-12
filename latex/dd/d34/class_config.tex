@@ -1,0 +1,206 @@
+\hypertarget{class_config}{}\section{Config Class Reference}
+\label{class_config}\index{Config@{Config}}
+
+
+{\ttfamily \#include $<$config.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_config_abd0c571c116924871e30444b192b792a}{Config}} ()
+\item 
+bool \mbox{\hyperlink{class_config_a74d4ba7919c0cc3eddb22d836861344a}{save}} (Q\+String path, Q\+String modelname, Q\+String outputname, Q\+String $\ast$error)
+\item 
+int \mbox{\hyperlink{class_config_ab202e96cdfea3ca5a6ef3025219c502c}{get\+Nbpops}} () const
+\item 
+void \mbox{\hyperlink{class_config_af0071bb155f7a9491a2c47383d827adf}{set\+Nbpops}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+int \mbox{\hyperlink{class_config_a195f6e3a5e3a3e35a41716ec53fa0365}{get\+Nbbenthospops}} () const
+\item 
+void \mbox{\hyperlink{class_config_acd0bf6785354a69b37af0684e3d7bd8c}{set\+Nbbenthospops}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\item 
+const Q\+List$<$ int $>$ \& \mbox{\hyperlink{class_config_a8f3b135cd618bfec4f380e04bef5f787}{implicit\+\_\+pops}} () const
+\item 
+const Q\+List$<$ int $>$ \& \mbox{\hyperlink{class_config_a1de9a380a6c5a19fa2973cd1e786ba45}{implicit\+\_\+pops\+\_\+level2}} () const
+\item 
+const Q\+List$<$ int $>$ \& \mbox{\hyperlink{class_config_a6627eb314eacce2817c04811826a3a65}{grouped\+\_\+tacs}} () const
+\item 
+void \mbox{\hyperlink{class_config_aa8cb20d3adf8c13107a32f8add00e575}{set\+Implicit\+\_\+pops}} (const Q\+List$<$ int $>$ \&\mbox{\hyperlink{class_config_a8f3b135cd618bfec4f380e04bef5f787}{implicit\+\_\+pops}})
+\item 
+void \mbox{\hyperlink{class_config_add968c3863cec6bc9c09266caefd2e5d}{set\+Implicit\+\_\+pops\+\_\+level2}} (const Q\+List$<$ int $>$ \&\mbox{\hyperlink{class_config_a1de9a380a6c5a19fa2973cd1e786ba45}{implicit\+\_\+pops\+\_\+level2}})
+\item 
+void \mbox{\hyperlink{class_config_ab3c3dad78f4f4733f6db9c02b6c6444d}{set\+Grouped\+\_\+tacs}} (const Q\+List$<$ int $>$ \&\mbox{\hyperlink{class_config_a6627eb314eacce2817c04811826a3a65}{grouped\+\_\+tacs}})
+\item 
+const Q\+List$<$ double $>$ \& \mbox{\hyperlink{class_config_a7280b5ac9f8b20f5d387d1a2f4d27422}{calib\+\_\+oth\+\_\+landings}} () const
+\item 
+void \mbox{\hyperlink{class_config_a4d9c889cb646c899b2e3bf88f3fbbb9f}{set\+Calib\+\_\+oth\+\_\+landings}} (const Q\+List$<$ double $>$ \&\mbox{\hyperlink{class_config_a7280b5ac9f8b20f5d387d1a2f4d27422}{calib\+\_\+oth\+\_\+landings}})
+\item 
+const Q\+List$<$ double $>$ \& \mbox{\hyperlink{class_config_a27d6d3da20e0caa6d8aa74426293e845}{calib\+\_\+weight\+\_\+at\+\_\+szgroup}} () const
+\item 
+void \mbox{\hyperlink{class_config_a1d4cbc8598711100f6abd67f8d278855}{set\+Calib\+\_\+weight\+\_\+at\+\_\+szgroup}} (const Q\+List$<$ double $>$ \&\mbox{\hyperlink{class_config_a27d6d3da20e0caa6d8aa74426293e845}{calib\+\_\+weight\+\_\+at\+\_\+szgroup}})
+\item 
+const Q\+List$<$ double $>$ \& \mbox{\hyperlink{class_config_afcd156348309481d3b0d05b68ce1a7a7}{calib\+\_\+cpue\+\_\+multiplier}} () const
+\item 
+void \mbox{\hyperlink{class_config_a0a1b15fba3e853b4f9aba8b91277d3b4}{set\+Calib\+\_\+cpue\+\_\+multiplier}} (const Q\+List$<$ double $>$ \&\mbox{\hyperlink{class_config_afcd156348309481d3b0d05b68ce1a7a7}{calib\+\_\+cpue\+\_\+multiplier}})
+\item 
+int \mbox{\hyperlink{class_config_a9f5e6aa3773ebdfdd05d0d042731565e}{get\+Sz\+Groups}} () const
+\item 
+void \mbox{\hyperlink{class_config_a19b1b398c3978c67c0bd2502a3be438a}{set\+Sz\+Groups}} (int \mbox{\hyperlink{diffusion_8cpp_a4b41795815d9f3d03abfc739e666d5da}{value}})
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_config}{Config}} \mbox{\hyperlink{class_config_a65ac3dd592c155c8153efee9ef2eb9f0}{read\+From\+File}} (Q\+String path, Q\+String modelname, Q\+String outputname)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Q\+List$<$ \mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}} $>$ \mbox{\hyperlink{class_config_a412f802599694d3259049599c344e267}{m\+\_\+interesting\+\_\+harbours}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_config_abd0c571c116924871e30444b192b792a}\label{class_config_abd0c571c116924871e30444b192b792a}} 
+\index{Config@{Config}!Config@{Config}}
+\index{Config@{Config}!Config@{Config}}
+\subsubsection{\texorpdfstring{Config()}{Config()}}
+{\footnotesize\ttfamily Config\+::\+Config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_config_afcd156348309481d3b0d05b68ce1a7a7}\label{class_config_afcd156348309481d3b0d05b68ce1a7a7}} 
+\index{Config@{Config}!calib\_cpue\_multiplier@{calib\_cpue\_multiplier}}
+\index{calib\_cpue\_multiplier@{calib\_cpue\_multiplier}!Config@{Config}}
+\subsubsection{\texorpdfstring{calib\_cpue\_multiplier()}{calib\_cpue\_multiplier()}}
+{\footnotesize\ttfamily const Q\+List$<$ double $>$ \& Config\+::calib\+\_\+cpue\+\_\+multiplier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a7280b5ac9f8b20f5d387d1a2f4d27422}\label{class_config_a7280b5ac9f8b20f5d387d1a2f4d27422}} 
+\index{Config@{Config}!calib\_oth\_landings@{calib\_oth\_landings}}
+\index{calib\_oth\_landings@{calib\_oth\_landings}!Config@{Config}}
+\subsubsection{\texorpdfstring{calib\_oth\_landings()}{calib\_oth\_landings()}}
+{\footnotesize\ttfamily const Q\+List$<$ double $>$ \& Config\+::calib\+\_\+oth\+\_\+landings (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a27d6d3da20e0caa6d8aa74426293e845}\label{class_config_a27d6d3da20e0caa6d8aa74426293e845}} 
+\index{Config@{Config}!calib\_weight\_at\_szgroup@{calib\_weight\_at\_szgroup}}
+\index{calib\_weight\_at\_szgroup@{calib\_weight\_at\_szgroup}!Config@{Config}}
+\subsubsection{\texorpdfstring{calib\_weight\_at\_szgroup()}{calib\_weight\_at\_szgroup()}}
+{\footnotesize\ttfamily const Q\+List$<$ double $>$ \& Config\+::calib\+\_\+weight\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a195f6e3a5e3a3e35a41716ec53fa0365}\label{class_config_a195f6e3a5e3a3e35a41716ec53fa0365}} 
+\index{Config@{Config}!getNbbenthospops@{getNbbenthospops}}
+\index{getNbbenthospops@{getNbbenthospops}!Config@{Config}}
+\subsubsection{\texorpdfstring{getNbbenthospops()}{getNbbenthospops()}}
+{\footnotesize\ttfamily int Config\+::get\+Nbbenthospops (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_ab202e96cdfea3ca5a6ef3025219c502c}\label{class_config_ab202e96cdfea3ca5a6ef3025219c502c}} 
+\index{Config@{Config}!getNbpops@{getNbpops}}
+\index{getNbpops@{getNbpops}!Config@{Config}}
+\subsubsection{\texorpdfstring{getNbpops()}{getNbpops()}}
+{\footnotesize\ttfamily int Config\+::get\+Nbpops (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a9f5e6aa3773ebdfdd05d0d042731565e}\label{class_config_a9f5e6aa3773ebdfdd05d0d042731565e}} 
+\index{Config@{Config}!getSzGroups@{getSzGroups}}
+\index{getSzGroups@{getSzGroups}!Config@{Config}}
+\subsubsection{\texorpdfstring{getSzGroups()}{getSzGroups()}}
+{\footnotesize\ttfamily int Config\+::get\+Sz\+Groups (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a6627eb314eacce2817c04811826a3a65}\label{class_config_a6627eb314eacce2817c04811826a3a65}} 
+\index{Config@{Config}!grouped\_tacs@{grouped\_tacs}}
+\index{grouped\_tacs@{grouped\_tacs}!Config@{Config}}
+\subsubsection{\texorpdfstring{grouped\_tacs()}{grouped\_tacs()}}
+{\footnotesize\ttfamily const Q\+List$<$ int $>$ \& Config\+::grouped\+\_\+tacs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a8f3b135cd618bfec4f380e04bef5f787}\label{class_config_a8f3b135cd618bfec4f380e04bef5f787}} 
+\index{Config@{Config}!implicit\_pops@{implicit\_pops}}
+\index{implicit\_pops@{implicit\_pops}!Config@{Config}}
+\subsubsection{\texorpdfstring{implicit\_pops()}{implicit\_pops()}}
+{\footnotesize\ttfamily const Q\+List$<$ int $>$ \& Config\+::implicit\+\_\+pops (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a1de9a380a6c5a19fa2973cd1e786ba45}\label{class_config_a1de9a380a6c5a19fa2973cd1e786ba45}} 
+\index{Config@{Config}!implicit\_pops\_level2@{implicit\_pops\_level2}}
+\index{implicit\_pops\_level2@{implicit\_pops\_level2}!Config@{Config}}
+\subsubsection{\texorpdfstring{implicit\_pops\_level2()}{implicit\_pops\_level2()}}
+{\footnotesize\ttfamily const Q\+List$<$ int $>$ \& Config\+::implicit\+\_\+pops\+\_\+level2 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_config_a65ac3dd592c155c8153efee9ef2eb9f0}\label{class_config_a65ac3dd592c155c8153efee9ef2eb9f0}} 
+\index{Config@{Config}!readFromFile@{readFromFile}}
+\index{readFromFile@{readFromFile}!Config@{Config}}
+\subsubsection{\texorpdfstring{readFromFile()}{readFromFile()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_config}{Config}} Config\+::read\+From\+File (\begin{DoxyParamCaption}\item[{Q\+String}]{path,  }\item[{Q\+String}]{modelname,  }\item[{Q\+String}]{outputname }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_config_a74d4ba7919c0cc3eddb22d836861344a}\label{class_config_a74d4ba7919c0cc3eddb22d836861344a}} 
+\index{Config@{Config}!save@{save}}
+\index{save@{save}!Config@{Config}}
+\subsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily bool Config\+::save (\begin{DoxyParamCaption}\item[{Q\+String}]{path,  }\item[{Q\+String}]{modelname,  }\item[{Q\+String}]{outputname,  }\item[{Q\+String $\ast$}]{error }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_a0a1b15fba3e853b4f9aba8b91277d3b4}\label{class_config_a0a1b15fba3e853b4f9aba8b91277d3b4}} 
+\index{Config@{Config}!setCalib\_cpue\_multiplier@{setCalib\_cpue\_multiplier}}
+\index{setCalib\_cpue\_multiplier@{setCalib\_cpue\_multiplier}!Config@{Config}}
+\subsubsection{\texorpdfstring{setCalib\_cpue\_multiplier()}{setCalib\_cpue\_multiplier()}}
+{\footnotesize\ttfamily void Config\+::set\+Calib\+\_\+cpue\+\_\+multiplier (\begin{DoxyParamCaption}\item[{const Q\+List$<$ double $>$ \&}]{calib\+\_\+cpue\+\_\+multiplier }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_a4d9c889cb646c899b2e3bf88f3fbbb9f}\label{class_config_a4d9c889cb646c899b2e3bf88f3fbbb9f}} 
+\index{Config@{Config}!setCalib\_oth\_landings@{setCalib\_oth\_landings}}
+\index{setCalib\_oth\_landings@{setCalib\_oth\_landings}!Config@{Config}}
+\subsubsection{\texorpdfstring{setCalib\_oth\_landings()}{setCalib\_oth\_landings()}}
+{\footnotesize\ttfamily void Config\+::set\+Calib\+\_\+oth\+\_\+landings (\begin{DoxyParamCaption}\item[{const Q\+List$<$ double $>$ \&}]{calib\+\_\+oth\+\_\+landings }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_a1d4cbc8598711100f6abd67f8d278855}\label{class_config_a1d4cbc8598711100f6abd67f8d278855}} 
+\index{Config@{Config}!setCalib\_weight\_at\_szgroup@{setCalib\_weight\_at\_szgroup}}
+\index{setCalib\_weight\_at\_szgroup@{setCalib\_weight\_at\_szgroup}!Config@{Config}}
+\subsubsection{\texorpdfstring{setCalib\_weight\_at\_szgroup()}{setCalib\_weight\_at\_szgroup()}}
+{\footnotesize\ttfamily void Config\+::set\+Calib\+\_\+weight\+\_\+at\+\_\+szgroup (\begin{DoxyParamCaption}\item[{const Q\+List$<$ double $>$ \&}]{calib\+\_\+weight\+\_\+at\+\_\+szgroup }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_ab3c3dad78f4f4733f6db9c02b6c6444d}\label{class_config_ab3c3dad78f4f4733f6db9c02b6c6444d}} 
+\index{Config@{Config}!setGrouped\_tacs@{setGrouped\_tacs}}
+\index{setGrouped\_tacs@{setGrouped\_tacs}!Config@{Config}}
+\subsubsection{\texorpdfstring{setGrouped\_tacs()}{setGrouped\_tacs()}}
+{\footnotesize\ttfamily void Config\+::set\+Grouped\+\_\+tacs (\begin{DoxyParamCaption}\item[{const Q\+List$<$ int $>$ \&}]{grouped\+\_\+tacs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_aa8cb20d3adf8c13107a32f8add00e575}\label{class_config_aa8cb20d3adf8c13107a32f8add00e575}} 
+\index{Config@{Config}!setImplicit\_pops@{setImplicit\_pops}}
+\index{setImplicit\_pops@{setImplicit\_pops}!Config@{Config}}
+\subsubsection{\texorpdfstring{setImplicit\_pops()}{setImplicit\_pops()}}
+{\footnotesize\ttfamily void Config\+::set\+Implicit\+\_\+pops (\begin{DoxyParamCaption}\item[{const Q\+List$<$ int $>$ \&}]{implicit\+\_\+pops }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_add968c3863cec6bc9c09266caefd2e5d}\label{class_config_add968c3863cec6bc9c09266caefd2e5d}} 
+\index{Config@{Config}!setImplicit\_pops\_level2@{setImplicit\_pops\_level2}}
+\index{setImplicit\_pops\_level2@{setImplicit\_pops\_level2}!Config@{Config}}
+\subsubsection{\texorpdfstring{setImplicit\_pops\_level2()}{setImplicit\_pops\_level2()}}
+{\footnotesize\ttfamily void Config\+::set\+Implicit\+\_\+pops\+\_\+level2 (\begin{DoxyParamCaption}\item[{const Q\+List$<$ int $>$ \&}]{implicit\+\_\+pops\+\_\+level2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_acd0bf6785354a69b37af0684e3d7bd8c}\label{class_config_acd0bf6785354a69b37af0684e3d7bd8c}} 
+\index{Config@{Config}!setNbbenthospops@{setNbbenthospops}}
+\index{setNbbenthospops@{setNbbenthospops}!Config@{Config}}
+\subsubsection{\texorpdfstring{setNbbenthospops()}{setNbbenthospops()}}
+{\footnotesize\ttfamily void Config\+::set\+Nbbenthospops (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_af0071bb155f7a9491a2c47383d827adf}\label{class_config_af0071bb155f7a9491a2c47383d827adf}} 
+\index{Config@{Config}!setNbpops@{setNbpops}}
+\index{setNbpops@{setNbpops}!Config@{Config}}
+\subsubsection{\texorpdfstring{setNbpops()}{setNbpops()}}
+{\footnotesize\ttfamily void Config\+::set\+Nbpops (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_config_a19b1b398c3978c67c0bd2502a3be438a}\label{class_config_a19b1b398c3978c67c0bd2502a3be438a}} 
+\index{Config@{Config}!setSzGroups@{setSzGroups}}
+\index{setSzGroups@{setSzGroups}!Config@{Config}}
+\subsubsection{\texorpdfstring{setSzGroups()}{setSzGroups()}}
+{\footnotesize\ttfamily void Config\+::set\+Sz\+Groups (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_config_a412f802599694d3259049599c344e267}\label{class_config_a412f802599694d3259049599c344e267}} 
+\index{Config@{Config}!m\_interesting\_harbours@{m\_interesting\_harbours}}
+\index{m\_interesting\_harbours@{m\_interesting\_harbours}!Config@{Config}}
+\subsubsection{\texorpdfstring{m\_interesting\_harbours}{m\_interesting\_harbours}}
+{\footnotesize\ttfamily Q\+List$<$\mbox{\hyperlink{classtypes_1_1_node_id}{types\+::\+Node\+Id}}$>$ Config\+::m\+\_\+interesting\+\_\+harbours}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtgui/\mbox{\hyperlink{config_8h}{config.\+h}}\item 
+qtgui/\mbox{\hyperlink{config_8cpp}{config.\+cpp}}\end{DoxyCompactItemize}

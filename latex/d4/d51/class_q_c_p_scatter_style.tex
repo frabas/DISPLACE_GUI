@@ -1,0 +1,551 @@
+\hypertarget{class_q_c_p_scatter_style}{}\section{Q\+C\+P\+Scatter\+Style Class Reference}
+\label{class_q_c_p_scatter_style}\index{QCPScatterStyle@{QCPScatterStyle}}
+
+
+Represents the visual appearance of scatter points.  
+
+
+
+
+{\ttfamily \#include $<$qcustomplot.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46}{Scatter\+Property}} \{ \newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a5891be10bea382fad6c20f7737a2dd90}{sp\+None}} = 0x00, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46aa04d012e7c03e455db2b68fdd55c2a04}{sp\+Pen}} = 0x01, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af0499b1fc04de2dcc7e47ff0ef75c904}{sp\+Brush}} = 0x02, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a553ae95798ace9a328c7cd62045260b0}{sp\+Size}} = 0x04, 
+\newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a19c224563adb42c55fb8b7ae6904411b}{sp\+Shape}} = 0x08, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af62509c0409467f387234274762e6f69}{sp\+All}} = 0x\+FF
+ \}
+\item 
+enum \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \{ \newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349abd144c291ca274f77053ec68cab6c022}{ss\+None}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a06e15a735b79093a1d999c0374fa3aa1}{ss\+Dot}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a9eacd60f059dc3ef71bf249f515a6fe4}{ss\+Cross}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a2d7f1d3c1a148b9d9d17f2fd9cae5eb7}{ss\+Plus}}, 
+\newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7c92a110880d0ef2170dff3a5b4f7779}{ss\+Circle}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a281fe1434696dcbab3aa6b9ccfbb09e9}{ss\+Disc}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a279e48703ddc9f1cf4a61d3e2817ab3c}{ss\+Square}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a4fc5929df1b2dad0a3cb2ef2c8b6e633}{ss\+Diamond}}, 
+\newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6047a2d64e41f1d6ce54445d595d442f}{ss\+Star}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a74a8d4eff1d97b57c53a60d0003453c3}{ss\+Triangle}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6156274d21d8b4115197567d3ea2d9a8}{ss\+Triangle\+Inverted}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7081310936c200c6c78e34c172f72d07}{ss\+Cross\+Square}}, 
+\newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a5aa8e9db545e5404482fec774768ee25}{ss\+Plus\+Square}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a524613ba5d1c4eaa1541d74cf339d283}{ss\+Cross\+Circle}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6fa151d01f1694c9ff9922da686dc535}{ss\+Plus\+Circle}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349ada3b2988ece38c121922a4b5007eb08d}{ss\+Peace}}, 
+\newline
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}}, 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}{ss\+Custom}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a8836018d9ad83ccd8870de8315c1be73}{Q\+C\+P\+Scatter\+Style}} ()
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}{Q\+C\+P\+Scatter\+Style}} (\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}}, double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}}=6)
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_afa059da858c864c7e05871dc602d7eab}{Q\+C\+P\+Scatter\+Style}} (\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}}, const Q\+Color \&color, double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}})
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a6e1b64f12cac7f07af180ae4316fd38d}{Q\+C\+P\+Scatter\+Style}} (\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}}, const Q\+Color \&color, const Q\+Color \&fill, double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}})
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a85acc4941d7e5c9bca5fa51377a77f49}{Q\+C\+P\+Scatter\+Style}} (\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}}, const Q\+Pen \&\mbox{\hyperlink{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}{pen}}, const Q\+Brush \&\mbox{\hyperlink{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}{brush}}, double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}})
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a63962094587a4c2258435aa7933996cc}{Q\+C\+P\+Scatter\+Style}} (const Q\+Pixmap \&\mbox{\hyperlink{class_q_c_p_scatter_style_a9b2d1a2ec0aac0c74f7582d14050e93a}{pixmap}})
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_a879c30647683b3cfbde2afecea815e6f}{Q\+C\+P\+Scatter\+Style}} (const Q\+Painter\+Path \&\mbox{\hyperlink{class_q_c_p_scatter_style_aef1fac84c9830fd97f2a8568e605e372}{custom\+Path}}, const Q\+Pen \&\mbox{\hyperlink{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}{pen}}, const Q\+Brush \&\mbox{\hyperlink{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}{brush}}=Qt\+::\+No\+Brush, double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}}=6)
+\item 
+double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}} () const
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}} () const
+\item 
+Q\+Pen \mbox{\hyperlink{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}{pen}} () const
+\item 
+Q\+Brush \mbox{\hyperlink{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}{brush}} () const
+\item 
+Q\+Pixmap \mbox{\hyperlink{class_q_c_p_scatter_style_a9b2d1a2ec0aac0c74f7582d14050e93a}{pixmap}} () const
+\item 
+Q\+Painter\+Path \mbox{\hyperlink{class_q_c_p_scatter_style_aef1fac84c9830fd97f2a8568e605e372}{custom\+Path}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a7d59ba8864914f765817841089e436f1}{set\+From\+Other}} (const \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} \&other, Scatter\+Properties properties)
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} (double \mbox{\hyperlink{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}{size}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}{set\+Shape}} (\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}{shape}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} (const Q\+Pen \&\mbox{\hyperlink{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}{pen}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}{set\+Brush}} (const Q\+Brush \&\mbox{\hyperlink{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}{brush}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}{set\+Pixmap}} (const Q\+Pixmap \&\mbox{\hyperlink{class_q_c_p_scatter_style_a9b2d1a2ec0aac0c74f7582d14050e93a}{pixmap}})
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}{set\+Custom\+Path}} (const Q\+Painter\+Path \&\mbox{\hyperlink{class_q_c_p_scatter_style_aef1fac84c9830fd97f2a8568e605e372}{custom\+Path}})
+\item 
+bool \mbox{\hyperlink{class_q_c_p_scatter_style_a72db6bcb1e1abd6e53c1315dd3dea7e4}{is\+None}} () const
+\item 
+bool \mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}} () const
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_acabc2a8c83d650b946f50c3166b6c35e}{undefine\+Pen}} ()
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_afd8044ece445300499ca0dc164821e0f}{apply\+To}} (\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$painter, const Q\+Pen \&default\+Pen) const
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a89b5105e6027bfcbfeefed9d201b607c}{draw\+Shape}} (\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$painter, const Q\+PointF \&pos) const
+\item 
+void \mbox{\hyperlink{class_q_c_p_scatter_style_a95c297b114c77c22428ef40f54620ddf}{draw\+Shape}} (\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$painter, double x, double y) const
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{class_q_c_p_scatter_style_a757da98671eb06b221979373ac2cec91}{m\+Size}}
+\item 
+\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} \mbox{\hyperlink{class_q_c_p_scatter_style_af1b327f35f107ed108290187bbc8c7c6}{m\+Shape}}
+\item 
+Q\+Pen \mbox{\hyperlink{class_q_c_p_scatter_style_a0f6a85e6d1e3ae1ca1b6efb4d4cdfe17}{m\+Pen}}
+\item 
+Q\+Brush \mbox{\hyperlink{class_q_c_p_scatter_style_a1b9c6ab10aebcaf236f1f45d1d6d64d1}{m\+Brush}}
+\item 
+Q\+Pixmap \mbox{\hyperlink{class_q_c_p_scatter_style_a7697346c89b19d4cd1d8dd33319ec9e3}{m\+Pixmap}}
+\item 
+Q\+Painter\+Path \mbox{\hyperlink{class_q_c_p_scatter_style_a813cb074744dc5a2f59cc99d6a10c6f0}{m\+Custom\+Path}}
+\item 
+bool \mbox{\hyperlink{class_q_c_p_scatter_style_a84ef5aa591ddba07b440f597e1669e78}{m\+Pen\+Defined}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents the visual appearance of scatter points. 
+
+This class holds information about shape, color and size of scatter points. In plottables like \mbox{\hyperlink{class_q_c_p_graph}{Q\+C\+P\+Graph}} it is used to store how scatter points shall be drawn. For example, \mbox{\hyperlink{class_q_c_p_graph_a12bd17a8ba21983163ec5d8f42a9fea5}{Q\+C\+P\+Graph\+::set\+Scatter\+Style}} takes a \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance.
+
+A scatter style consists of a shape (\mbox{\hyperlink{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}{set\+Shape}}), a line color (\mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}}) and possibly a fill (\mbox{\hyperlink{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}{set\+Brush}}), if the shape provides a fillable area. Further, the size of the shape can be controlled with \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}}.\hypertarget{class_q_c_p_scatter_style_QCPScatterStyle-defining}{}\subsection{Specifying a scatter style}\label{class_q_c_p_scatter_style_QCPScatterStyle-defining}
+You can set all these configurations either by calling the respective functions on an instance\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+ Or you can use one of the various constructors that take different parameter combinations, making it easy to specify a scatter style in a single call, like so\+: 
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+ \hypertarget{class_q_c_p_scatter_style_QCPScatterStyle-undefinedpen}{}\subsection{Leaving the color/pen up to the plottable}\label{class_q_c_p_scatter_style_QCPScatterStyle-undefinedpen}
+There are two constructors which leave the pen undefined\+: \mbox{\hyperlink{class_q_c_p_scatter_style_a8836018d9ad83ccd8870de8315c1be73}{Q\+C\+P\+Scatter\+Style()}} and \mbox{\hyperlink{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}{Q\+C\+P\+Scatter\+Style(\+Scatter\+Shape shape, double size)}}. If those constructors are used, a call to \mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}} will return false. It leads to scatter points that inherit the pen from the plottable that uses the scatter style. Thus, if such a scatter style is passed to \mbox{\hyperlink{class_q_c_p_graph}{Q\+C\+P\+Graph}}, the line color of the graph (\mbox{\hyperlink{class_q_c_p_abstract_plottable_ab74b09ae4c0e7e13142fe4b5bf46cac7}{Q\+C\+P\+Graph\+::set\+Pen}}) will be used by the scatter points. This makes it very convenient to set up typical scatter settings\+:
+
+
+\begin{DoxyCodeInclude}{0}
+\end{DoxyCodeInclude}
+ Notice that it wasn\textquotesingle{}t even necessary to explicitly call a \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} constructor. This works because \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} provides a constructor that can transform a \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} directly into a \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance (that\textquotesingle{}s the \mbox{\hyperlink{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}{Q\+C\+P\+Scatter\+Style(\+Scatter\+Shape shape, double size)}} constructor with a default for {\itshape size}). In those cases, C++ allows directly supplying a \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}}, where actually a \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} is expected.\hypertarget{class_q_c_p_scatter_style_QCPScatterStyle-custompath-and-pixmap}{}\subsection{Custom shapes and pixmaps}\label{class_q_c_p_scatter_style_QCPScatterStyle-custompath-and-pixmap}
+\mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} supports drawing custom shapes and arbitrary pixmaps as scatter points.
+
+For custom shapes, you can provide a Q\+Painter\+Path with the desired shape to the \mbox{\hyperlink{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}{set\+Custom\+Path}} function or call the constructor that takes a painter path. The scatter shape will automatically be set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}{ss\+Custom}}.
+
+For pixmaps, you call \mbox{\hyperlink{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}{set\+Pixmap}} with the desired Q\+Pixmap. Alternatively you can use the constructor that takes a Q\+Pixmap. The scatter shape will automatically be set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}}. Note that \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} does not influence the appearance of the pixmap. 
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!ScatterProperty@{ScatterProperty}}
+\index{ScatterProperty@{ScatterProperty}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{ScatterProperty}{ScatterProperty}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46}{Q\+C\+P\+Scatter\+Style\+::\+Scatter\+Property}}}
+
+Represents the various properties of a scatter style instance. For example, this enum is used to specify which properties of \mbox{\hyperlink{class_q_c_p_selection_decorator_ab403a613289714ff4fd4a0c0371ab116}{Q\+C\+P\+Selection\+Decorator\+::set\+Scatter\+Style}} will be used when highlighting selected data points.
+
+Specific scatter properties can be transferred between \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instances via \mbox{\hyperlink{class_q_c_p_scatter_style_a7d59ba8864914f765817841089e436f1}{set\+From\+Other}}. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spNone@{spNone}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spNone@{spNone}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a5891be10bea382fad6c20f7737a2dd90}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a5891be10bea382fad6c20f7737a2dd90}} 
+sp\+None&{\ttfamily 0x00} None \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spPen@{spPen}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spPen@{spPen}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46aa04d012e7c03e455db2b68fdd55c2a04}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46aa04d012e7c03e455db2b68fdd55c2a04}} 
+sp\+Pen&{\ttfamily 0x01} The pen property, see \mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spBrush@{spBrush}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spBrush@{spBrush}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af0499b1fc04de2dcc7e47ff0ef75c904}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af0499b1fc04de2dcc7e47ff0ef75c904}} 
+sp\+Brush&{\ttfamily 0x02} The brush property, see \mbox{\hyperlink{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}{set\+Brush}} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spSize@{spSize}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spSize@{spSize}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a553ae95798ace9a328c7cd62045260b0}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a553ae95798ace9a328c7cd62045260b0}} 
+sp\+Size&{\ttfamily 0x04} The size property, see \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spShape@{spShape}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spShape@{spShape}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a19c224563adb42c55fb8b7ae6904411b}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46a19c224563adb42c55fb8b7ae6904411b}} 
+sp\+Shape&{\ttfamily 0x08} The shape property, see \mbox{\hyperlink{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}{set\+Shape}} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{spAll@{spAll}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!spAll@{spAll}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af62509c0409467f387234274762e6f69}\label{class_q_c_p_scatter_style_a8974f6a20f8f6eea7781f0e6af9deb46af62509c0409467f387234274762e6f69}} 
+sp\+All&{\ttfamily 0x\+FF} All properties \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!ScatterShape@{ScatterShape}}
+\index{ScatterShape@{ScatterShape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{ScatterShape}{ScatterShape}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Q\+C\+P\+Scatter\+Style\+::\+Scatter\+Shape}}}
+
+Defines the shape used for scatter points.
+
+On plottables/items that draw scatters, the sizes of these visualizations (with exception of \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a06e15a735b79093a1d999c0374fa3aa1}{ss\+Dot}} and \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}}) can be controlled with the \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} function. Scatters are drawn with the pen and brush specified with \mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} and \mbox{\hyperlink{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}{set\+Brush}}. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssNone@{ssNone}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssNone@{ssNone}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349abd144c291ca274f77053ec68cab6c022}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349abd144c291ca274f77053ec68cab6c022}} 
+ss\+None&no scatter symbols are drawn (e.\+g. in \mbox{\hyperlink{class_q_c_p_graph}{Q\+C\+P\+Graph}}, data only represented with lines) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssDot@{ssDot}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssDot@{ssDot}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a06e15a735b79093a1d999c0374fa3aa1}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a06e15a735b79093a1d999c0374fa3aa1}} 
+ss\+Dot&\textbackslash{}enumimage\{ss\+Dot.\+png\} a single pixel (use \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a281fe1434696dcbab3aa6b9ccfbb09e9}{ss\+Disc}} or \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7c92a110880d0ef2170dff3a5b4f7779}{ss\+Circle}} if you want a round shape with a certain radius) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssCross@{ssCross}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssCross@{ssCross}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a9eacd60f059dc3ef71bf249f515a6fe4}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a9eacd60f059dc3ef71bf249f515a6fe4}} 
+ss\+Cross&\textbackslash{}enumimage\{ss\+Cross.\+png\} a cross \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssPlus@{ssPlus}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssPlus@{ssPlus}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a2d7f1d3c1a148b9d9d17f2fd9cae5eb7}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a2d7f1d3c1a148b9d9d17f2fd9cae5eb7}} 
+ss\+Plus&\textbackslash{}enumimage\{ss\+Plus.\+png\} a plus \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssCircle@{ssCircle}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssCircle@{ssCircle}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7c92a110880d0ef2170dff3a5b4f7779}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7c92a110880d0ef2170dff3a5b4f7779}} 
+ss\+Circle&\textbackslash{}enumimage\{ss\+Circle.\+png\} a circle \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssDisc@{ssDisc}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssDisc@{ssDisc}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a281fe1434696dcbab3aa6b9ccfbb09e9}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a281fe1434696dcbab3aa6b9ccfbb09e9}} 
+ss\+Disc&\textbackslash{}enumimage\{ss\+Disc.\+png\} a circle which is filled with the pen\textquotesingle{}s color (not the brush as with ss\+Circle) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssSquare@{ssSquare}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssSquare@{ssSquare}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a279e48703ddc9f1cf4a61d3e2817ab3c}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a279e48703ddc9f1cf4a61d3e2817ab3c}} 
+ss\+Square&\textbackslash{}enumimage\{ss\+Square.\+png\} a square \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssDiamond@{ssDiamond}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssDiamond@{ssDiamond}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a4fc5929df1b2dad0a3cb2ef2c8b6e633}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a4fc5929df1b2dad0a3cb2ef2c8b6e633}} 
+ss\+Diamond&\textbackslash{}enumimage\{ss\+Diamond.\+png\} a diamond \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssStar@{ssStar}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssStar@{ssStar}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6047a2d64e41f1d6ce54445d595d442f}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6047a2d64e41f1d6ce54445d595d442f}} 
+ss\+Star&\textbackslash{}enumimage\{ss\+Star.\+png\} a star with eight arms, i.\+e. a combination of cross and plus \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssTriangle@{ssTriangle}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssTriangle@{ssTriangle}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a74a8d4eff1d97b57c53a60d0003453c3}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a74a8d4eff1d97b57c53a60d0003453c3}} 
+ss\+Triangle&\textbackslash{}enumimage\{ss\+Triangle.\+png\} an equilateral triangle, standing on baseline \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssTriangleInverted@{ssTriangleInverted}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssTriangleInverted@{ssTriangleInverted}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6156274d21d8b4115197567d3ea2d9a8}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6156274d21d8b4115197567d3ea2d9a8}} 
+ss\+Triangle\+Inverted&\textbackslash{}enumimage\{ss\+Triangle\+Inverted.\+png\} an equilateral triangle, standing on corner \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssCrossSquare@{ssCrossSquare}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssCrossSquare@{ssCrossSquare}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7081310936c200c6c78e34c172f72d07}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7081310936c200c6c78e34c172f72d07}} 
+ss\+Cross\+Square&\textbackslash{}enumimage\{ss\+Cross\+Square.\+png\} a square with a cross inside \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssPlusSquare@{ssPlusSquare}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssPlusSquare@{ssPlusSquare}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a5aa8e9db545e5404482fec774768ee25}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a5aa8e9db545e5404482fec774768ee25}} 
+ss\+Plus\+Square&\textbackslash{}enumimage\{ss\+Plus\+Square.\+png\} a square with a plus inside \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssCrossCircle@{ssCrossCircle}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssCrossCircle@{ssCrossCircle}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a524613ba5d1c4eaa1541d74cf339d283}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a524613ba5d1c4eaa1541d74cf339d283}} 
+ss\+Cross\+Circle&\textbackslash{}enumimage\{ss\+Cross\+Circle.\+png\} a circle with a cross inside \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssPlusCircle@{ssPlusCircle}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssPlusCircle@{ssPlusCircle}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6fa151d01f1694c9ff9922da686dc535}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a6fa151d01f1694c9ff9922da686dc535}} 
+ss\+Plus\+Circle&\textbackslash{}enumimage\{ss\+Plus\+Circle.\+png\} a circle with a plus inside \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssPeace@{ssPeace}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssPeace@{ssPeace}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349ada3b2988ece38c121922a4b5007eb08d}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349ada3b2988ece38c121922a4b5007eb08d}} 
+ss\+Peace&\textbackslash{}enumimage\{ss\+Peace.\+png\} a circle, with one vertical and two downward diagonal lines \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssPixmap@{ssPixmap}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssPixmap@{ssPixmap}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}} 
+ss\+Pixmap&a custom pixmap specified by \mbox{\hyperlink{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}{set\+Pixmap}}, centered on the data point coordinates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ssCustom@{ssCustom}!QCPScatterStyle@{QCPScatterStyle}}\index{QCPScatterStyle@{QCPScatterStyle}!ssCustom@{ssCustom}}}\mbox{\Hypertarget{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}\label{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}} 
+ss\+Custom&custom painter operations are performed per scatter (As Q\+Painter\+Path, see \mbox{\hyperlink{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}{set\+Custom\+Path}}) \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a8836018d9ad83ccd8870de8315c1be73}\label{class_q_c_p_scatter_style_a8836018d9ad83ccd8870de8315c1be73}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with size set to 6. No shape, pen or brush is defined.
+
+Since the pen is undefined (\mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}} returns false), the scatter color will be inherited from the plottable that uses this scatter style. \mbox{\Hypertarget{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}\label{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}}}]{shape,  }\item[{double}]{size = {\ttfamily 6} }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with shape set to {\itshape shape} and size to {\itshape size}. No pen or brush is defined.
+
+Since the pen is undefined (\mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}} returns false), the scatter color will be inherited from the plottable that uses this scatter style. \mbox{\Hypertarget{class_q_c_p_scatter_style_afa059da858c864c7e05871dc602d7eab}\label{class_q_c_p_scatter_style_afa059da858c864c7e05871dc602d7eab}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [3/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}}}]{shape,  }\item[{const Q\+Color \&}]{color,  }\item[{double}]{size }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with shape set to {\itshape shape}, the pen color set to {\itshape color}, and size to {\itshape size}. No brush is defined, i.\+e. the scatter point will not be filled. \mbox{\Hypertarget{class_q_c_p_scatter_style_a6e1b64f12cac7f07af180ae4316fd38d}\label{class_q_c_p_scatter_style_a6e1b64f12cac7f07af180ae4316fd38d}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [4/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}}}]{shape,  }\item[{const Q\+Color \&}]{color,  }\item[{const Q\+Color \&}]{fill,  }\item[{double}]{size }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with shape set to {\itshape shape}, the pen color set to {\itshape color}, the brush color to {\itshape fill} (with a solid pattern), and size to {\itshape size}. \mbox{\Hypertarget{class_q_c_p_scatter_style_a85acc4941d7e5c9bca5fa51377a77f49}\label{class_q_c_p_scatter_style_a85acc4941d7e5c9bca5fa51377a77f49}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [5/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}}}]{shape,  }\item[{const Q\+Pen \&}]{pen,  }\item[{const Q\+Brush \&}]{brush,  }\item[{double}]{size }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with shape set to {\itshape shape}, the pen set to {\itshape pen}, the brush to {\itshape brush}, and size to {\itshape size}.
+
+\begin{DoxyWarning}{Warning}
+In some cases it might be tempting to directly use a pen style like {\ttfamily Qt\+::\+No\+Pen} as {\itshape pen} and a color like {\ttfamily Qt\+::blue} as {\itshape brush}. Notice however, that the corresponding call~\newline
+{\ttfamily \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style(\+Q\+C\+P\+Scatter\+Shape\+::ss\+Circle, Qt\+::\+No\+Pen, Qt\+::blue, 5)}}}~\newline
+doesn\textquotesingle{}t necessarily lead C++ to use this constructor in some cases, but might mistake {\ttfamily Qt\+::\+No\+Pen} for a Q\+Color and use the \mbox{\hyperlink{class_q_c_p_scatter_style_a6e1b64f12cac7f07af180ae4316fd38d}{Q\+C\+P\+Scatter\+Style(\+Scatter\+Shape shape, const Q\+Color \&color, const Q\+Color \&fill, double size)}} constructor instead (which will lead to an unexpected look of the scatter points). To prevent this, be more explicit with the parameter types. For example, use {\ttfamily Q\+Brush(\+Qt\+::blue)} instead of just {\ttfamily Qt\+::blue}, to clearly point out to the compiler that this constructor is wanted. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a63962094587a4c2258435aa7933996cc}\label{class_q_c_p_scatter_style_a63962094587a4c2258435aa7933996cc}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [6/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{const Q\+Pixmap \&}]{pixmap }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance which will show the specified {\itshape pixmap}. The scatter shape is set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}}. \mbox{\Hypertarget{class_q_c_p_scatter_style_a879c30647683b3cfbde2afecea815e6f}\label{class_q_c_p_scatter_style_a879c30647683b3cfbde2afecea815e6f}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\index{QCPScatterStyle@{QCPScatterStyle}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{QCPScatterStyle()}{QCPScatterStyle()}\hspace{0.1cm}{\footnotesize\ttfamily [7/7]}}
+{\footnotesize\ttfamily Q\+C\+P\+Scatter\+Style\+::\+Q\+C\+P\+Scatter\+Style (\begin{DoxyParamCaption}\item[{const Q\+Painter\+Path \&}]{custom\+Path,  }\item[{const Q\+Pen \&}]{pen,  }\item[{const Q\+Brush \&}]{brush = {\ttfamily Qt\+:\+:NoBrush},  }\item[{double}]{size = {\ttfamily 6} }\end{DoxyParamCaption})}
+
+Creates a new \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} instance with a custom shape that is defined via {\itshape custom\+Path}. The scatter shape is set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}{ss\+Custom}}.
+
+The custom shape line will be drawn with {\itshape pen} and filled with {\itshape brush}. The size has a slightly different meaning than for built-\/in scatter points\+: The custom path will be drawn scaled by a factor of {\itshape size/6.\+0}. Since the default {\itshape size} is 6, the custom path will appear in its original size by default. To for example double the size of the path, set {\itshape size} to 12. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_afd8044ece445300499ca0dc164821e0f}\label{class_q_c_p_scatter_style_afd8044ece445300499ca0dc164821e0f}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!applyTo@{applyTo}}
+\index{applyTo@{applyTo}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{applyTo()}{applyTo()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::apply\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$}]{painter,  }\item[{const Q\+Pen \&}]{default\+Pen }\end{DoxyParamCaption}) const}
+
+Applies the pen and the brush of this scatter style to {\itshape painter}. If this scatter style has an undefined pen (\mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}}), sets the pen of {\itshape painter} to {\itshape default\+Pen} instead.
+
+This function is used by plottables (or any class that wants to draw scatters) just before a number of scatters with this style shall be drawn with the {\itshape painter}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a89b5105e6027bfcbfeefed9d201b607c}{draw\+Shape}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}\label{class_q_c_p_scatter_style_adc4f66aed84f1d7a3a5aabf4f48f31a6}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!brush@{brush}}
+\index{brush@{brush}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{brush()}{brush()}}
+{\footnotesize\ttfamily Q\+Brush Q\+C\+P\+Scatter\+Style\+::brush (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_aef1fac84c9830fd97f2a8568e605e372}\label{class_q_c_p_scatter_style_aef1fac84c9830fd97f2a8568e605e372}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!customPath@{customPath}}
+\index{customPath@{customPath}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{customPath()}{customPath()}}
+{\footnotesize\ttfamily Q\+Painter\+Path Q\+C\+P\+Scatter\+Style\+::custom\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a89b5105e6027bfcbfeefed9d201b607c}\label{class_q_c_p_scatter_style_a89b5105e6027bfcbfeefed9d201b607c}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!drawShape@{drawShape}}
+\index{drawShape@{drawShape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{drawShape()}{drawShape()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::draw\+Shape (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$}]{painter,  }\item[{const Q\+PointF \&}]{pos }\end{DoxyParamCaption}) const}
+
+Draws the scatter shape with {\itshape painter} at position {\itshape pos}.
+
+This function does not modify the pen or the brush on the painter, as \mbox{\hyperlink{class_q_c_p_scatter_style_afd8044ece445300499ca0dc164821e0f}{apply\+To}} is meant to be called before scatter points are drawn with \mbox{\hyperlink{class_q_c_p_scatter_style_a89b5105e6027bfcbfeefed9d201b607c}{draw\+Shape}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_afd8044ece445300499ca0dc164821e0f}{apply\+To}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a95c297b114c77c22428ef40f54620ddf}\label{class_q_c_p_scatter_style_a95c297b114c77c22428ef40f54620ddf}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!drawShape@{drawShape}}
+\index{drawShape@{drawShape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{drawShape()}{drawShape()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::draw\+Shape (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_painter}{Q\+C\+P\+Painter}} $\ast$}]{painter,  }\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption}) const}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Draws the scatter shape with {\itshape painter} at position {\itshape x} and {\itshape y}. \mbox{\Hypertarget{class_q_c_p_scatter_style_a72db6bcb1e1abd6e53c1315dd3dea7e4}\label{class_q_c_p_scatter_style_a72db6bcb1e1abd6e53c1315dd3dea7e4}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!isNone@{isNone}}
+\index{isNone@{isNone}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{isNone()}{isNone()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Scatter\+Style\+::is\+None (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether the scatter shape is \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349abd144c291ca274f77053ec68cab6c022}{ss\+None}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}{set\+Shape}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}\label{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!isPenDefined@{isPenDefined}}
+\index{isPenDefined@{isPenDefined}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{isPenDefined()}{isPenDefined()}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Scatter\+Style\+::is\+Pen\+Defined (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether a pen has been defined for this scatter style.
+
+The pen is undefined if a constructor is called that does not carry {\itshape pen} as parameter. Those are \mbox{\hyperlink{class_q_c_p_scatter_style_a8836018d9ad83ccd8870de8315c1be73}{Q\+C\+P\+Scatter\+Style()}} and \mbox{\hyperlink{class_q_c_p_scatter_style_a003d92f74f4561eda111862eadd62f28}{Q\+C\+P\+Scatter\+Style(\+Scatter\+Shape shape, double size)}}. If the pen is undefined, the pen of the respective plottable will be used for drawing scatters.
+
+If a pen was defined for this scatter style instance, and you now wish to undefine the pen, call \mbox{\hyperlink{class_q_c_p_scatter_style_acabc2a8c83d650b946f50c3166b6c35e}{undefine\+Pen}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}\label{class_q_c_p_scatter_style_acdd6313d16e69d3810e9d1f48dd9e4bb}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!pen@{pen}}
+\index{pen@{pen}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{pen()}{pen()}}
+{\footnotesize\ttfamily Q\+Pen Q\+C\+P\+Scatter\+Style\+::pen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a9b2d1a2ec0aac0c74f7582d14050e93a}\label{class_q_c_p_scatter_style_a9b2d1a2ec0aac0c74f7582d14050e93a}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!pixmap@{pixmap}}
+\index{pixmap@{pixmap}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{pixmap()}{pixmap()}}
+{\footnotesize\ttfamily Q\+Pixmap Q\+C\+P\+Scatter\+Style\+::pixmap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}\label{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setBrush@{setBrush}}
+\index{setBrush@{setBrush}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setBrush()}{setBrush()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Brush (\begin{DoxyParamCaption}\item[{const Q\+Brush \&}]{brush }\end{DoxyParamCaption})}
+
+Sets the brush that will be used to fill scatter points to {\itshape brush}. Note that not all scatter shapes have fillable areas. For example, \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a2d7f1d3c1a148b9d9d17f2fd9cae5eb7}{ss\+Plus}} does not while \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a7c92a110880d0ef2170dff3a5b4f7779}{ss\+Circle}} does.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}\label{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setCustomPath@{setCustomPath}}
+\index{setCustomPath@{setCustomPath}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setCustomPath()}{setCustomPath()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Custom\+Path (\begin{DoxyParamCaption}\item[{const Q\+Painter\+Path \&}]{custom\+Path }\end{DoxyParamCaption})}
+
+Sets the custom shape that will be drawn as scatter point to {\itshape custom\+Path}.
+
+The scatter shape is automatically set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}{ss\+Custom}}. \mbox{\Hypertarget{class_q_c_p_scatter_style_a7d59ba8864914f765817841089e436f1}\label{class_q_c_p_scatter_style_a7d59ba8864914f765817841089e436f1}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setFromOther@{setFromOther}}
+\index{setFromOther@{setFromOther}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setFromOther()}{setFromOther()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+From\+Other (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_q_c_p_scatter_style}{Q\+C\+P\+Scatter\+Style}} \&}]{other,  }\item[{Scatter\+Properties}]{properties }\end{DoxyParamCaption})}
+
+Copies the specified {\itshape properties} from the {\itshape other} scatter style to this scatter style. \mbox{\Hypertarget{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}\label{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setPen@{setPen}}
+\index{setPen@{setPen}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setPen()}{setPen()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Pen (\begin{DoxyParamCaption}\item[{const Q\+Pen \&}]{pen }\end{DoxyParamCaption})}
+
+Sets the pen that will be used to draw scatter points to {\itshape pen}.
+
+If the pen was previously undefined (see \mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}}), the pen is considered defined after a call to this function, even if {\itshape pen} is {\ttfamily Qt\+::\+No\+Pen}. If you have defined a pen previously by calling this function and now wish to undefine the pen, call \mbox{\hyperlink{class_q_c_p_scatter_style_acabc2a8c83d650b946f50c3166b6c35e}{undefine\+Pen}}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a74d692aaeb8d4b36d6f7d510e44264b1}{set\+Brush}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}\label{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setPixmap@{setPixmap}}
+\index{setPixmap@{setPixmap}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setPixmap()}{setPixmap()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Pixmap (\begin{DoxyParamCaption}\item[{const Q\+Pixmap \&}]{pixmap }\end{DoxyParamCaption})}
+
+Sets the pixmap that will be drawn as scatter point to {\itshape pixmap}.
+
+Note that \mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} does not influence the appearance of the pixmap.
+
+The scatter shape is automatically set to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}}. \mbox{\Hypertarget{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}\label{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setShape@{setShape}}
+\index{setShape@{setShape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setShape()}{setShape()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Shape (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Q\+C\+P\+Scatter\+Style\+::\+Scatter\+Shape}}}]{shape }\end{DoxyParamCaption})}
+
+Sets the shape to {\itshape shape}.
+
+Note that the calls \mbox{\hyperlink{class_q_c_p_scatter_style_a5fb611d46acfac520d7b89a1c71d9246}{set\+Pixmap}} and \mbox{\hyperlink{class_q_c_p_scatter_style_a96a3e949f90b2afe5677ca9412a12a1e}{set\+Custom\+Path}} automatically set the shape to \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a8718b849ca7c307b07b8e091efb0c31e}{ss\+Pixmap}} and \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349a15d9bcfd9de94edda949006529f9219d}{ss\+Custom}}, respectively.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}{set\+Size}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}\label{class_q_c_p_scatter_style_aaefdd031052892c4136129db68596e0f}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!setSize@{setSize}}
+\index{setSize@{setSize}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{setSize()}{setSize()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::set\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})}
+
+Sets the size (pixel diameter) of the drawn scatter points to {\itshape size}.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_q_c_p_scatter_style_a7c641c4d4c6d29cb705d3887cfce91c1}{set\+Shape}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}\label{class_q_c_p_scatter_style_af04cad55bd7f58a96da4fc6bc46a0a1e}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!shape@{shape}}
+\index{shape@{shape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{shape()}{shape()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} Q\+C\+P\+Scatter\+Style\+::shape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}\label{class_q_c_p_scatter_style_a0e94526d9165d9f50e262102bdd71a47}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!size@{size}}
+\index{size@{size}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily double Q\+C\+P\+Scatter\+Style\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_acabc2a8c83d650b946f50c3166b6c35e}\label{class_q_c_p_scatter_style_acabc2a8c83d650b946f50c3166b6c35e}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!undefinePen@{undefinePen}}
+\index{undefinePen@{undefinePen}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{undefinePen()}{undefinePen()}}
+{\footnotesize\ttfamily void Q\+C\+P\+Scatter\+Style\+::undefine\+Pen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Sets this scatter style to have an undefined pen (see \mbox{\hyperlink{class_q_c_p_scatter_style_a47077eb6450fe9a788f833e4ec1b1d5a}{is\+Pen\+Defined}} for what an undefined pen implies).
+
+A call to \mbox{\hyperlink{class_q_c_p_scatter_style_a761f1f229cc0ca4703e1e2b89f6dd1ba}{set\+Pen}} will define a pen. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a1b9c6ab10aebcaf236f1f45d1d6d64d1}\label{class_q_c_p_scatter_style_a1b9c6ab10aebcaf236f1f45d1d6d64d1}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mBrush@{mBrush}}
+\index{mBrush@{mBrush}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mBrush}{mBrush}}
+{\footnotesize\ttfamily Q\+Brush Q\+C\+P\+Scatter\+Style\+::m\+Brush\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a813cb074744dc5a2f59cc99d6a10c6f0}\label{class_q_c_p_scatter_style_a813cb074744dc5a2f59cc99d6a10c6f0}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mCustomPath@{mCustomPath}}
+\index{mCustomPath@{mCustomPath}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mCustomPath}{mCustomPath}}
+{\footnotesize\ttfamily Q\+Painter\+Path Q\+C\+P\+Scatter\+Style\+::m\+Custom\+Path\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a0f6a85e6d1e3ae1ca1b6efb4d4cdfe17}\label{class_q_c_p_scatter_style_a0f6a85e6d1e3ae1ca1b6efb4d4cdfe17}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mPen@{mPen}}
+\index{mPen@{mPen}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mPen}{mPen}}
+{\footnotesize\ttfamily Q\+Pen Q\+C\+P\+Scatter\+Style\+::m\+Pen\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a84ef5aa591ddba07b440f597e1669e78}\label{class_q_c_p_scatter_style_a84ef5aa591ddba07b440f597e1669e78}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mPenDefined@{mPenDefined}}
+\index{mPenDefined@{mPenDefined}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mPenDefined}{mPenDefined}}
+{\footnotesize\ttfamily bool Q\+C\+P\+Scatter\+Style\+::m\+Pen\+Defined\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a7697346c89b19d4cd1d8dd33319ec9e3}\label{class_q_c_p_scatter_style_a7697346c89b19d4cd1d8dd33319ec9e3}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mPixmap@{mPixmap}}
+\index{mPixmap@{mPixmap}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mPixmap}{mPixmap}}
+{\footnotesize\ttfamily Q\+Pixmap Q\+C\+P\+Scatter\+Style\+::m\+Pixmap\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_af1b327f35f107ed108290187bbc8c7c6}\label{class_q_c_p_scatter_style_af1b327f35f107ed108290187bbc8c7c6}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mShape@{mShape}}
+\index{mShape@{mShape}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mShape}{mShape}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_q_c_p_scatter_style_adb31525af6b680e6f1b7472e43859349}{Scatter\+Shape}} Q\+C\+P\+Scatter\+Style\+::m\+Shape\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_q_c_p_scatter_style_a757da98671eb06b221979373ac2cec91}\label{class_q_c_p_scatter_style_a757da98671eb06b221979373ac2cec91}} 
+\index{QCPScatterStyle@{QCPScatterStyle}!mSize@{mSize}}
+\index{mSize@{mSize}!QCPScatterStyle@{QCPScatterStyle}}
+\subsubsection{\texorpdfstring{mSize}{mSize}}
+{\footnotesize\ttfamily double Q\+C\+P\+Scatter\+Style\+::m\+Size\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8h}{qcustomplot.\+h}}\item 
+qtcommons/\mbox{\hyperlink{qcustomplot_8cpp}{qcustomplot.\+cpp}}\end{DoxyCompactItemize}

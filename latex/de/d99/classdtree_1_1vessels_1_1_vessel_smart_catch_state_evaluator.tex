@@ -1,0 +1,52 @@
+\hypertarget{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator}{}\section{dtree\+::vessels\+::Vessel\+Smart\+Catch\+State\+Evaluator Class Reference}
+\label{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator}\index{dtree::vessels::VesselSmartCatchStateEvaluator@{dtree::vessels::VesselSmartCatchStateEvaluator}}
+
+
+{\ttfamily \#include $<$vesselsevaluators.\+h$>$}
+
+Inheritance diagram for dtree\+::vessels\+::Vessel\+Smart\+Catch\+State\+Evaluator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{de/d99/classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a20d811d8aed263ad5ce4be2137ebc850}{Vessel\+Smart\+Catch\+State\+Evaluator}} ()
+\item 
+double \mbox{\hyperlink{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a299f7b316ec87eec04189a486499d19f}{evaluate}} (int fground, \mbox{\hyperlink{class_vessel}{Vessel}} $\ast$v) const
+\begin{DoxyCompactList}\small\item\em evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a20d811d8aed263ad5ce4be2137ebc850}\label{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a20d811d8aed263ad5ce4be2137ebc850}} 
+\index{dtree::vessels::VesselSmartCatchStateEvaluator@{dtree::vessels::VesselSmartCatchStateEvaluator}!VesselSmartCatchStateEvaluator@{VesselSmartCatchStateEvaluator}}
+\index{VesselSmartCatchStateEvaluator@{VesselSmartCatchStateEvaluator}!dtree::vessels::VesselSmartCatchStateEvaluator@{dtree::vessels::VesselSmartCatchStateEvaluator}}
+\subsubsection{\texorpdfstring{VesselSmartCatchStateEvaluator()}{VesselSmartCatchStateEvaluator()}}
+{\footnotesize\ttfamily dtree\+::vessels\+::\+Vessel\+Smart\+Catch\+State\+Evaluator\+::\+Vessel\+Smart\+Catch\+State\+Evaluator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a299f7b316ec87eec04189a486499d19f}\label{classdtree_1_1vessels_1_1_vessel_smart_catch_state_evaluator_a299f7b316ec87eec04189a486499d19f}} 
+\index{dtree::vessels::VesselSmartCatchStateEvaluator@{dtree::vessels::VesselSmartCatchStateEvaluator}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!dtree::vessels::VesselSmartCatchStateEvaluator@{dtree::vessels::VesselSmartCatchStateEvaluator}}
+\subsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily double dtree\+::vessels\+::\+Vessel\+Smart\+Catch\+State\+Evaluator\+::evaluate (\begin{DoxyParamCaption}\item[{int}]{tstep,  }\item[{\mbox{\hyperlink{class_vessel}{Vessel}} $\ast$}]{vessel }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+evaluate the state/variable, and returns the selected output, as double. Client can decide what to do with the value, for example, it can round it and use it as an index to select the proper output in a node. It is a client responsibility, in particular, to handle special cases, for example, if the index is outside the range of expected outputs. A decorator class can eventually remap outputs. 
+
+\begin{DoxyItemize}
+\item tstep The current Time Step of the simulation. \item vessel A pointer for the vessel being evaluated. \end{DoxyItemize}
+
+
+Implements \mbox{\hyperlink{classdtree_1_1_state_evaluator_ab57666219fbdc728f40d9d5acd5726cb}{dtree\+::\+State\+Evaluator}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/dtree/\mbox{\hyperlink{vesselsevaluators_8h}{vesselsevaluators.\+h}}\end{DoxyCompactItemize}

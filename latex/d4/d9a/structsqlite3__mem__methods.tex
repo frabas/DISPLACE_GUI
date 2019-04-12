@@ -1,0 +1,81 @@
+\hypertarget{structsqlite3__mem__methods}{}\section{sqlite3\+\_\+mem\+\_\+methods Struct Reference}
+\label{structsqlite3__mem__methods}\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+
+
+{\ttfamily \#include $<$sqlite3.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a19aee06ad5c1c7041f55725b6adb2b18}{x\+Malloc}} )(int)
+\item 
+void($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a17d4fe3177f86bd7b559ecadaa343ee8}{x\+Free}} )(void $\ast$)
+\item 
+void $\ast$($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a82ef8b50d6b9920c1dadb3257cf36a3a}{x\+Realloc}} )(void $\ast$, int)
+\item 
+int($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a703ec736e9ce21fd43b9602bcd07fa8e}{x\+Size}} )(void $\ast$)
+\item 
+int($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_aaf22c6bca12dc6a3f5851e2b6b59835d}{x\+Roundup}} )(int)
+\item 
+int($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a870eddbe27d9062ed2fb49ba13233501}{x\+Init}} )(void $\ast$)
+\item 
+void($\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_ae3b1f92553e714484515409eefec5c2f}{x\+Shutdown}} )(void $\ast$)
+\item 
+void $\ast$ \mbox{\hyperlink{structsqlite3__mem__methods_a390f66d08d5a480544e919f64d7713de}{p\+App\+Data}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structsqlite3__mem__methods_a390f66d08d5a480544e919f64d7713de}\label{structsqlite3__mem__methods_a390f66d08d5a480544e919f64d7713de}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!pAppData@{pAppData}}
+\index{pAppData@{pAppData}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{pAppData}{pAppData}}
+{\footnotesize\ttfamily void$\ast$ sqlite3\+\_\+mem\+\_\+methods\+::p\+App\+Data}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_a17d4fe3177f86bd7b559ecadaa343ee8}\label{structsqlite3__mem__methods_a17d4fe3177f86bd7b559ecadaa343ee8}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xFree@{xFree}}
+\index{xFree@{xFree}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xFree}{xFree}}
+{\footnotesize\ttfamily void($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Free) (void $\ast$)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_a870eddbe27d9062ed2fb49ba13233501}\label{structsqlite3__mem__methods_a870eddbe27d9062ed2fb49ba13233501}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xInit@{xInit}}
+\index{xInit@{xInit}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xInit}{xInit}}
+{\footnotesize\ttfamily int($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Init) (void $\ast$)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_a19aee06ad5c1c7041f55725b6adb2b18}\label{structsqlite3__mem__methods_a19aee06ad5c1c7041f55725b6adb2b18}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xMalloc@{xMalloc}}
+\index{xMalloc@{xMalloc}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xMalloc}{xMalloc}}
+{\footnotesize\ttfamily void$\ast$($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Malloc) (int)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_a82ef8b50d6b9920c1dadb3257cf36a3a}\label{structsqlite3__mem__methods_a82ef8b50d6b9920c1dadb3257cf36a3a}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xRealloc@{xRealloc}}
+\index{xRealloc@{xRealloc}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xRealloc}{xRealloc}}
+{\footnotesize\ttfamily void$\ast$($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Realloc) (void $\ast$, int)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_aaf22c6bca12dc6a3f5851e2b6b59835d}\label{structsqlite3__mem__methods_aaf22c6bca12dc6a3f5851e2b6b59835d}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xRoundup@{xRoundup}}
+\index{xRoundup@{xRoundup}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xRoundup}{xRoundup}}
+{\footnotesize\ttfamily int($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Roundup) (int)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_ae3b1f92553e714484515409eefec5c2f}\label{structsqlite3__mem__methods_ae3b1f92553e714484515409eefec5c2f}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xShutdown@{xShutdown}}
+\index{xShutdown@{xShutdown}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xShutdown}{xShutdown}}
+{\footnotesize\ttfamily void($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Shutdown) (void $\ast$)}
+
+\mbox{\Hypertarget{structsqlite3__mem__methods_a703ec736e9ce21fd43b9602bcd07fa8e}\label{structsqlite3__mem__methods_a703ec736e9ce21fd43b9602bcd07fa8e}} 
+\index{sqlite3\_mem\_methods@{sqlite3\_mem\_methods}!xSize@{xSize}}
+\index{xSize@{xSize}!sqlite3\_mem\_methods@{sqlite3\_mem\_methods}}
+\subsubsection{\texorpdfstring{xSize}{xSize}}
+{\footnotesize\ttfamily int($\ast$ sqlite3\+\_\+mem\+\_\+methods\+::x\+Size) (void $\ast$)}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+commons/storage/\mbox{\hyperlink{sqlite3_8h}{sqlite3.\+h}}\end{DoxyCompactItemize}

@@ -118,7 +118,7 @@ Any missing package should be automatically installed.
 
 ## DISPLACE doxygen documentation
 
-Can be found [here](@ref https://github.com/frabas/DISPLACE_GUI/blob/master/html/index.html)
+Can be found [here](@ref https://github.com/frabas/DISPLACE_GUI/blob/master/doxygen/doc/html/index.html)
 
 ## Quick start for running a basic DISPLACE simulation
 

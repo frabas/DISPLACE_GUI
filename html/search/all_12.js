@@ -131,6 +131,7 @@ var searchData=
   ['readfromfiles',['readFromFiles',['../d1/dc2/class_path_shop.html#a23fbe546bb0990d64c1f5c08d6432426',1,'PathShop']]],
   ['readfromscenario',['readFromScenario',['../d5/d2e/classdtree_1_1_decision_tree_manager.html#a881d41c8c321734312bb2aa7382de08a',1,'dtree::DecisionTreeManager']]],
   ['readfromtree',['readFromTree',['../d8/d6e/class_ui___config_dialog.html#a3209c750f7bbb8f66fc3b44eb23f0510',1,'Ui_ConfigDialog']]],
+  ['readme_2emd',['README.md',['../d9/dd6/_r_e_a_d_m_e_8md.html',1,'']]],
   ['readoutput',['readOutput',['../de/d5e/class_r_console.html#ad221772edf4f86270d4e0f43a300756c',1,'RConsole::readOutput()'],['../df/da2/class_ts_editor_window.html#ac74844d6fbcdba1b2529592e887e270e',1,'TsEditorWindow::readOutput()']]],
   ['readscenariofileifavailable',['readScenarioFileIfAvailable',['../d5/d2e/classdtree_1_1_decision_tree_manager.html#ae1c3dba103715e7d3c8a20cff575efd8',1,'dtree::DecisionTreeManager']]],
   ['readtree',['readTree',['../da/d18/class_dt_csv_reader.html#a4588366de4199026256c0529a064c954',1,'DtCsvReader']]],

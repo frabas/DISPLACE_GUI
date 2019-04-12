@@ -24,10 +24,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "DISPLACE", "index.html", [
-    [ "A spatial model of fisheries to help sustainable fishing and maritime spatial planning", "index.html", [
-      [ "Introduction", "index.html#intro_sec", null ],
-      [ "Installation", "index.html#Installation", null ]
-    ] ],
+    [ "Find your way with DISPLACE", "index.html", null ],
     [ "Bug List", "de/da5/bug.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [

@@ -346,6 +346,5 @@ var searchData=
   ['axisselectablechanged',['axisSelectableChanged',['../df/ddc/class_q_c_p_color_scale_axis_rect_private.html#a66d2baed86966bb03a6d7c32dc7d59f7',1,'QCPColorScaleAxisRectPrivate']]],
   ['axisselectionbox',['axisSelectionBox',['../dc/dba/class_q_c_p_axis_painter_private.html#ab29635564acb5d0012fa9e297477db05',1,'QCPAxisPainterPrivate']]],
   ['axisselectionchanged',['axisSelectionChanged',['../df/ddc/class_q_c_p_color_scale_axis_rect_private.html#a6112ad4291ac1695d37659cb049d598d',1,'QCPColorScaleAxisRectPrivate']]],
-  ['axistype',['axisType',['../d2/deb/class_q_c_p_axis.html#aa19679359783c5ecd27757b7e5619976',1,'QCPAxis::axisType() const'],['../d2/deb/class_q_c_p_axis.html#ae2bcc1728b382f10f064612b368bc18a',1,'QCPAxis::AxisType()']]],
-  ['a_20spatial_20model_20of_20fisheries_20to_20help_20sustainable_20fishing_20and_20maritime_20spatial_20planning',['A spatial model of fisheries to help sustainable fishing and maritime spatial planning',['../index.html',1,'']]]
+  ['axistype',['axisType',['../d2/deb/class_q_c_p_axis.html#aa19679359783c5ecd27757b7e5619976',1,'QCPAxis::axisType() const'],['../d2/deb/class_q_c_p_axis.html#ae2bcc1728b382f10f064612b368bc18a',1,'QCPAxis::AxisType()']]]
 ];

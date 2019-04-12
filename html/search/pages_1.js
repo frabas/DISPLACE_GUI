@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bug_20list',['Bug List',['../de/da5/bug.html',1,'']]]
+  ['find_20your_20way_20with_20displace',['Find your way with DISPLACE',['../index.html',1,'']]]
 ];

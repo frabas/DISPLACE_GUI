@@ -1,3 +1,158 @@
-\hypertarget{index_intro_sec}{}\section{Introduction}\label{index_intro_sec}
-D\+I\+S\+P\+L\+A\+CE is a dynamic, individual-\/based model for spatial fishing planning and effort displacement integrating underlying fish population models. The D\+I\+S\+P\+L\+A\+CE project develops and provides a platform primarily for research purposes to transform the fishermen detailed knowledge into models, evaluation tools, and methods that can provide the fisheries with research and advice. By conducting a ecological and socio-\/economic impact assessment the model intends to serve as an aid to decision-\/making for (fishery) managers. An impact assessment will help answering on what are the impacts of the different policy options and who will be affected. By quantifying the effects the assessment will measure how the different options compare, for example how different the options perform in achieving the objective(s) of the policy.\hypertarget{index_Installation}{}\section{Installation}\label{index_Installation}
-The D\+I\+S\+P\+L\+A\+CE software is available for download at www.\+displace-\/project.\+org. Installation procedures for windows, Linux and i\+OS platforms are briefly described on this web site. 
+\subsection*{Summary}
+
+
+\begin{DoxyItemize}
+\item \href{\#what-is-for}{\texttt{ What is for?}}
+\item \href{\#how-to-cite}{\texttt{ How to cite}}
+\item \href{\#how-to-install}{\texttt{ How to install}}
+\item \href{\#quick-start-for-running-a-displace-simulation}{\texttt{ Quick start for running a D\+I\+S\+P\+L\+A\+CE simulation}}
+\item \href{\#simulation-output-formats}{\texttt{ Simulation output formats}}
+\item \href{\#how-to-build-from-scratch}{\texttt{ How to build from scratch}}
+\item \href{\#displace-doxygen-documentation}{\texttt{ D\+I\+S\+P\+L\+A\+CE doxygen documentation}}
+\item \href{\#gdal-notes}{\texttt{ G\+D\+AL notes}}
+\item \href{\#unit-testing}{\texttt{ Unit testing}}
+\end{DoxyItemize}
+
+\subsection*{What is for?}
+
+D\+I\+S\+P\+L\+A\+CE is a dynamic, individual-\/based model for spatial fishing planning and effort displacement integrating underlying fish population models. The D\+I\+S\+P\+L\+A\+CE project develops and provides a platform primarily for research purposes to transform the fishermen detailed knowledge into models, evaluation tools, and methods that can provide the fisheries with research and advice. By conducting a ecological and socio-\/economic impact assessment the model intends to serve as an aid to decision-\/making for (fishery) managers. An impact assessment will help answering on what are the impacts of the different policy options and who will be affected. By quantifying the effects the assessment will measure how the different options compare, for example how different the options perform in achieving the objective(s) of the policy.
+
+\subsection*{How to cite}
+
+
+\begin{DoxyItemize}
+\item Bastardie F, Nielsen JR, Miethe T. 2014. D\+I\+S\+P\+L\+A\+CE\+: a dynamic, individual-\/based model for spatial fishing planning and effort displacement -\/ integrating underlying fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3)\+:366-\/386. \href{https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126\#.XJs-ubh7nmE}{\texttt{ link here}}
+\item Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. Competition for marine space\+: modelling the Baltic Sea fisheries and effort displacement under spatial restrictions. I\+C\+ES Journal of Marine Science, doi\+: 10.\+1093/icesjms/fsu215. \href{https://academic.oup.com/icesjms/article/72/3/824/701817}{\texttt{ link to a free copy}}
+\item Bastardie, F., Nielsen, J. R., Eero, M., Fuga, F. Rindorf., A. 2017. Effects of changes in stock productivity and mixing on sustainable fishing and economic viability, I\+C\+ES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551 \href{https://academic.oup.com/icesjms/article/74/2/535/2669542}{\texttt{ link to a free copy}}
+\item Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M., Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. Spatial planning for fisheries in the Northern Adriatic\+: working toward viable and sustainable fishing. Ecosphere 8( 2)\+:e01696. \href{https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696}{\texttt{ link to a free copy}}
+\end{DoxyItemize}
+
+\subsection*{How to install D\+I\+S\+P\+L\+A\+CE}
+
+Look at the \href{https://github.com/frabas/DISPLACE_GUI/releases}{\texttt{ Release section}} on this Git\+Hub repository to download an installer for Windows. Alternatively, look at the \href{https://drive.google.com/drive/folders/0ByuO_4j-1PxtfnZBblpQNmh2a2Z4SmpkRC16T1kwR0t1RWUyOVUxdHlEZzZwZWVpaVJac00}{\texttt{ google drive for D\+I\+S\+P\+L\+A\+CE}} for Unix or Mac\+O\+SX packages, also hosting additional files i.\+e. possible dependencies and the D\+I\+S\+P\+L\+A\+CE software development kit.
+
+\subsubsection*{Install on Windows}
+
+Launch the installer application, and follow the guide. There are no prerequisites on Windows, and the application should work out of the box.
+
+\subsubsection*{Install on Mac\+OS}
+
+Open the D\+MG file, then drop the program in the Application folder. There are no prerequisites on Mac\+OS, and the application should work out of the box.
+
+\subsubsection*{Install on Ubuntu Linux}
+
+Ubuntu 18.\+04\+L\+TS has a few prerequisites that must be installed before installing the displace package itself.
+
+Run the following command to install the prerequisites\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ sudo apt install libgdal20 libgdal-dev libcgal13 libcgal-dev libboost1.65-all-dev libgeographic17 libqt5gui5 libqt5widgets5 libqt5xml5}
+\end{DoxyCode}
+
+
+Then install the {\ttfamily msqlitecpp} packages provided in the download section\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ sudo dpkg -i msqlitecpp0\_0.9.4\_amd64.deb msqlitecpp-dev\_0.9.4\_amd64.deb }
+\end{DoxyCode}
+
+
+Finally, install the displace package\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ sudo dpkg -i displace\_0.9.22\_amd64.deb}
+\end{DoxyCode}
+
+
+If you have any difficulty, try fixing the package dependencies by running\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ sudo apt --fix-broken install}
+\end{DoxyCode}
+
+
+Any missing package should be automatically installed.
+
+\subsection*{How to compile from the code source}
+
+compiling with C\+Make (preferred)
+
+compiling on H\+PC (simulator only)
+
+making the displace sdk (optional)
+
+\href{docs/Building.win}{\texttt{ compiling on Windows (deprecated)}}
+
+\href{docs/Building.unix}{\texttt{ compiling on Unix deprecated)}}
+
+\href{docs/Building.MacOSX}{\texttt{ compiling on Mac\+O\+SX deprecated)}}
+
+\subsection*{D\+I\+S\+P\+L\+A\+CE doxygen documentation}
+
+Can be found \href{https://github.com/frabas/DISPLACE_GUI/blob/master/html/index.html}{\texttt{ here}}
+
+\subsection*{Quick start for running a basic D\+I\+S\+P\+L\+A\+CE simulation}
+
+\href{https://displace-project.org/blog/download/}{\texttt{ D\+I\+S\+P\+L\+A\+CE Example datasets}} are available for download. You need to unzip the downloaded file to a folder that name the dataset with the pattern D\+I\+S\+P\+L\+A\+C\+E\+\_\+input\+\_\+xx, for example D\+I\+S\+P\+L\+A\+C\+E\+\_\+input\+\_\+minitest which is the minimal dataset typically used for demonstration purpose.
+
+Run D\+I\+S\+P\+L\+A\+CE with e.\+g. displacegui
+
+By default the Model Objects is set to 4. If you want to run a scenario, first make sure your Model Objects is set to \mbox{[}0\mbox{]}.
+
+
+
+If yes then in the main menu do a \char`\"{}\+File\char`\"{}$>$"Load a \mbox{\hyperlink{class_scenario}{Scenario}} Model,
+
+
+
+and choose a scenario file (a .dat file) you´ll find in the\textbackslash{}simusspe subfolder of your D\+I\+S\+P\+L\+A\+CE dataset. Select the file, click Ok and wait to see the D\+I\+S\+P\+L\+A\+CE graph plotted on the map.
+
+
+
+You can now click Start in the D\+I\+S\+P\+L\+A\+CE command panel for a D\+I\+S\+P\+L\+A\+CE simulation to start\+:
+
+
+
+After some object creation and initialization the time step window will shortly update and the simulation run to the end time step. By default, 8762 hourly time steps will be simulated which is approx. the number of hours in one year. in Setup menu the total number of time step can be changed to up to 52586 for a maximal 6-\/years horizon. Because of the computation time, running more than one year simulation and many replicates are better done on a H\+PC cluster. Automated shell scripts to run many D\+I\+S\+P\+L\+A\+CE simulations in parallel on a H\+PC cluster can be provided on request.
+
+\subsection*{Simulation output formats}
+
+Look at the description of the list of files produced by a D\+I\+S\+P\+L\+A\+CE simulation. A \href{https://github.com/frabas/displaceplot/releases}{\texttt{ displaceplot}} R package has been developed to handle these output text files and produced some plots out of them. Simulation outcomes are also exported as a S\+Q\+Lite database which can be re-\/loaded within D\+I\+S\+P\+L\+A\+CE in a Replay mode. The internal structure and simulated data can be further retrieved from the database when using an external S\+Q\+Lite DB browser.
+
+To load a result database into D\+I\+S\+P\+L\+A\+CE\+:
+
+
+
+Select a D\+I\+S\+P\+L\+A\+CE db file\+:
+
+
+
+Once loaded, the simulation can be replayed with the Replay command\+:
+
+
+
+\subsection*{G\+D\+AL Notes}
+
+Current version of Q\+Map\+Control supports shapefiles loading O\+N\+LY for W\+G\+S84 Coordinates system. This is because Q\+Map\+Control itself uses W\+G\+S84 coordinates. So you need to convert your shapefiles if not using this C\+RS. You can use ogr2ogr or the provided script in the scripts/ directory.
+
+\$ ogr2ogr -\/t\+\_\+srs W\+G\+S84 D\+E\+S\+T.\+shp S\+R\+C.\+shp
+
+Note that D\+E\+ST file is specified before the source!
+
+\subsection*{Unit testing}
+
+Unit testing is performed using the Boost\+::\+Test framework. It can be compiled and linked in two ways\+:
+
+
+\begin{DoxyItemize}
+\item Dynamic linked, using the system installed boost\+::test library. This option is enabled by default on Unix
+\item Compiled in, using the boost/test/included/unit\+\_\+test.\+hpp (included in main.\+cpp). This is suitable for Windows, where boost\+::test is not available with our version of mingw64. A standard installation of boost\+::test is required.
+\end{DoxyItemize}
+
+The two methods can be selected by defining boost\+\_\+test\+\_\+included in the C\+O\+N\+F\+IG line of the Qt Project. It is enabled by default on Windows (see localconfig.\+pri).
+
+If boost\+::test is not available in any form, it can be disabled by removing the units-\/test option from the C\+O\+N\+F\+IG variable in the pro file. 

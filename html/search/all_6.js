@@ -345,5 +345,6 @@ var searchData=
   ['funcid',['funcId',['../dc/dea/struct_func_groups_table_1_1_stat.html#a31ff5cdd741938d30d94a7dd75607f0c',1,'FuncGroupsTable::Stat']]],
   ['fvseffort',['FvsEffort',['../d5/d8a/namespacedisplace_1_1plot.html#a523612c6239ff69acc3e5b7c5b40b618a890c56e42724bcc776d6349eb89404b1',1,'displace::plot']]],
   ['fx',['fX',['../d7/d48/struct_fish_farms_def_table_1_1_impl.html#a74ecffa210908377879c244444116dab',1,'FishFarmsDefTable::Impl']]],
-  ['fy',['fY',['../d7/d48/struct_fish_farms_def_table_1_1_impl.html#a7922671ffef246d44ed2c9fb4efd719d',1,'FishFarmsDefTable::Impl']]]
+  ['fy',['fY',['../d7/d48/struct_fish_farms_def_table_1_1_impl.html#a7922671ffef246d44ed2c9fb4efd719d',1,'FishFarmsDefTable::Impl']]],
+  ['find_20your_20way_20with_20displace',['Find your way with DISPLACE',['../index.html',1,'']]]
 ];

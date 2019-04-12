@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.22"
+#define MyAppVersion "1.0"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -40,7 +40,7 @@ Compression=lzma
 SolidCompression=true
 
 [Languages]
-Name: english; MessagesFile: compiler:Default.isl
+Name: english; MessagesFile: compiler:Default.isl; LicenseFile: LICENSE.txt
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked

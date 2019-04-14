@@ -102,7 +102,7 @@ Any missing package should be automatically installed.
 
 ## DISPLACE doxygen documentation
 
-Can be found [here](@ref https://github.com/frabas/DISPLACE_GUI/blob/master/doxygen/doc/html/index.html)
+Can be found [here](https://frabas.github.io/DISPLACE_GUI/doxygen/doc/html/index.html)
 
 Procedure for updating the doxygen documentation without keeping track of git history [here](https://github.com/robotology/how-to-document-modules/blob/master/README.md)
 

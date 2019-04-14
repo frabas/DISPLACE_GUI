@@ -3,7 +3,7 @@ Find your way with DISPLACE
 
 ## Summary
 - [What is for?](#what-is-for)
-- [How to cite](#how-to-cite)
+- [How to contribute](#how-to-contribute)
 - [How to install](#how-to-install)
 - [Quick start for running a DISPLACE simulation](#quick-start-for-running-a-displace-simulation)
 - [Simulation output formats](#simulation-output-formats)
@@ -11,6 +11,7 @@ Find your way with DISPLACE
 - [DISPLACE doxygen documentation](#displace-doxygen-documentation)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
+- [How to cite](#how-to-cite)
 
 
 
@@ -26,26 +27,9 @@ An impact assessment will help answering on what are the impacts of the differen
 By quantifying the effects the assessment will measure how the different options compare, for example 
 how different the options perform in achieving the objective(s) of the policy.
 
+## How to contribute
 
-## How to cite
-
-* Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
-spatial fishing planning and effort displacement - integrating underlying 
-fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386. [link here](https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126#.XJs-ubh7nmE) 
-
-* Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
-Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to a free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
-
-* Bastardie, F., Nielsen, J. R., Eero, M., Fuga, F. Rindorf., A. 2017. Effects of changes
-in stock productivity and mixing on sustainable fishing and economic viability,
-ICES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551
-[link to a free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
-
-* Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M.,
-Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. 
-Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
-Ecosphere 8( 2):e01696. [link to a free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
+[Please read our CONTRIBUTING statement here](docs/CONTRIBUTING.md)
 
 
 ## How to install DISPLACE
@@ -119,6 +103,8 @@ Any missing package should be automatically installed.
 ## DISPLACE doxygen documentation
 
 Can be found [here](@ref https://github.com/frabas/DISPLACE_GUI/blob/master/doxygen/doc/html/index.html)
+
+Procedure for updating the doxygen documentation without keeping track of git history [here](https://github.com/robotology/how-to-document-modules/blob/master/README.md)
 
 ## Quick start for running a basic DISPLACE simulation
 
@@ -208,4 +194,24 @@ Unit testing is performed using the Boost::Test framework. It can be compiled an
 The two methods can be selected by defining boost_test_included in the CONFIG line of the Qt Project. It is enabled by default on Windows (see localconfig.pri).
 
 If boost::test is not available in any form, it can be disabled by removing the units-test option from the CONFIG variable in the pro file.
+
+## How to cite
+
+* Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
+spatial fishing planning and effort displacement - integrating underlying 
+fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386. [link here](https://www.nrcresearchpress.com/doi/full/10.1139/cjfas-2013-0126#.XJs-ubh7nmE) 
+
+* Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
+Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
+under spatial restrictions. ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215. [link to a free copy](https://academic.oup.com/icesjms/article/72/3/824/701817) 
+
+* Bastardie, F., Nielsen, J. R., Eero, M., Fuga, F. Rindorf., A. 2017. Effects of changes
+in stock productivity and mixing on sustainable fishing and economic viability,
+ICES Journal of Marine Science, Volume 74, Issue 2, Pages 535–551
+[link to a free copy](https://academic.oup.com/icesjms/article/74/2/535/2669542)
+
+* Bastardie, F., Angelini, S., Bolognini, L., Fuga, F., Manfredi, C., Martinelli, M.,
+Nielsen, J. R., Santojanni, A., Scarcella, G., and Grati, F.. 2017. 
+Spatial planning for fisheries in the Northern Adriatic: working toward viable and sustainable fishing.
+Ecosphere 8( 2):e01696. [link to a free copy](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.1696) 
 

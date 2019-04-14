@@ -132,10 +132,10 @@ tstep / node / long / lat /shiptype / shipid / nb_units / fuel_use_h / NOx_emiss
 
 
 # lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)
-year.month / pop.0/ pop.1/ pop.2 /…/ disc.0/disc.1/disc.2/…/effort/cumsteaming/nbtrip/bwtrip/fuelcons/
+year.month / pop.0/ pop.1/ pop.2 /â€¦/ disc.0/disc.1/disc.2/â€¦/effort/cumsteaming/nbtrip/bwtrip/fuelcons/
 revenue/rev_from_av_prices/sweptr/revpersweptarea/fuelcost/gav/gradva/totland/totland_explicit/
 totland_implicit/rev_explicit_from_av_prices /av_effort/av_bwtrip/traveled_dist/
-vpuf/vapuf/ disc_rate_0 disc_rate_1/disc_rate_2/…/av_vapuf_month 
+vpuf/vapuf/ disc_rate_0 disc_rate_1/disc_rate_2/â€¦/av_vapuf_month 
 
 
 # average_cumftime_layer.txt (obtained with postprocessing R routines)

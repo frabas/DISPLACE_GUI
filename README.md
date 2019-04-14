@@ -29,7 +29,7 @@ how different the options perform in achieving the objective(s) of the policy.
 
 ## How to contribute
 
-[Please read our CONTRIBUTING statement here](docs/CONTRIBUTING.md)
+[Please read our CONTRIBUTING statement here](CONTRIBUTING.md)
 
 
 ## How to install DISPLACE

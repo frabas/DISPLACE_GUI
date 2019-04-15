@@ -11,6 +11,7 @@ Find your way with DISPLACE
 - [DISPLACE doxygen documentation](#displace-doxygen-documentation)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
+- [Build a new case studies](#build-a-new-case-studies)
 - [How to cite](#how-to-cite)
 
 
@@ -194,6 +195,11 @@ Unit testing is performed using the Boost::Test framework. It can be compiled an
 The two methods can be selected by defining boost_test_included in the CONFIG line of the Qt Project. It is enabled by default on Windows (see localconfig.pri).
 
 If boost::test is not available in any form, it can be disabled by removing the units-test option from the CONFIG variable in the pro file.
+
+## Build a new case studies
+
+A set of [R routines](https://github.com/frabas/DISPLACE_R_inputs) are available to create a new DISPLACE case study from scratch. These routines are quite data-hungry 
+and would require to be adapted to each case. Ideally a R package should be build soon to wrap them in a consistent tool.
 
 ## How to cite
 

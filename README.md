@@ -11,7 +11,7 @@ Find your way with DISPLACE
 - [DISPLACE doxygen documentation](#displace-doxygen-documentation)
 - [GDAL notes](#gdal-notes)
 - [Unit testing](#unit-testing)
-- [Build a new case studies](#build-a-new-case-studies)
+- [Build a new case study](#build-a-new-case-study)
 - [How to cite](#how-to-cite)
 
 
@@ -196,10 +196,13 @@ The two methods can be selected by defining boost_test_included in the CONFIG li
 
 If boost::test is not available in any form, it can be disabled by removing the units-test option from the CONFIG variable in the pro file.
 
-## Build a new case studies
+## Build a new case study
 
 A set of [R routines](https://github.com/frabas/DISPLACE_R_inputs) are available to create a new DISPLACE case study from scratch. These routines are quite data-hungry 
-and would require to be adapted to each case. Ideally a R package should be build soon to wrap them in a consistent tool.
+and would require to be adapted to each case. Ideally a R package should be build soon to wrap them in a consistent tool. 
+Another way is to scrutinize the DISPLACE_input_mintest github repository to see all the required input files required 
+to run a minimal case study. Because it can be currently tricky to understand the logic behind all the input text files 
+we will think one day to build a unique input database to DISPLACE instead of using so many individual text files.
 
 ## How to cite
 

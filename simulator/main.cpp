@@ -3274,6 +3274,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i]->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
         vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
         vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
+        if(spe_vessel_betas_per_pop.size()!=nbpops)
+             throw std::runtime_error("Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops");
+
         vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
         vessels[i]->set_spe_possible_metiers(possible_metiers);
         vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers);

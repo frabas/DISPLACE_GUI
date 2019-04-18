@@ -109,6 +109,13 @@ bool read_config_file(std::istream &stream,
         calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
         interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " "));
 
+        if(calib_oth_landings.size()!=nbpops)
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+        if(calib_w.size()!=nbpops)
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+        if(calib_cpue.size()!=nbpops)
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+
         if(grouped_tacs.empty()){
             grouped_tacs.resize(nbpops);
             iota (std::begin(grouped_tacs), std::end(grouped_tacs), 0); // Fill with 0, 1, ...,

@@ -4274,7 +4274,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     else
     {
 
-        cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl;
+        dout(cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl);
         this->set_metier(  metiers[ 0 ]  ); // dangerous fix
     }
 

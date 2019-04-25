@@ -67,6 +67,7 @@ static const char *dyn_pop_options[] = {
     "modelShippingOnBenthos",
     "diffusePopN",
     "sizeSpectra",
+    "nbcpCoupling",
     "diffuseNutrients",
     "noHyperstability",
 };

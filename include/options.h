@@ -121,6 +121,7 @@ enum Pop_Sce {
     pop_baseline,
     use_SMS,
     use_SMS_single,
+    nbcpCoupling,
     diffusePopN,
     avai_shuffler_on,
     avai_updater_on,

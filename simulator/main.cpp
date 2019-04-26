@@ -3278,11 +3278,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
         if(spe_vessel_betas_per_pop.size()!=nbpops)
              {
-            //std::stringstream er;
-            //er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
-            //        nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-            //         spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
-            // throw std::runtime_error(er.str());
+               std::stringstream er;
+               er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
+                    nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+                     spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
+               throw std::runtime_error(er.str());
+
+               //possibly, fix dim in R for the oldest dataset:
+               //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
+
              }
 
         vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);

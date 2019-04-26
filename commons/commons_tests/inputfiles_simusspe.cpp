@@ -236,12 +236,14 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<int> implicit_pops;
     vector<int> implicit_pops_level2;
     vector<int> grouped_tacs;
+    vector<int> nbcp_coupling_pops;
     vector<double> calib_oth_landings;
     vector<double> calib_w;
     vector<double> calib_cpue;
     vector<types::NodeId> interesting_harbours;
 
-    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
+    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs,
+                              nbcp_coupling_pops, calib_oth_landings,
                              calib_w, calib_cpue, interesting_harbours);
 
     BOOST_CHECK(r);
@@ -268,7 +270,8 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
                   "# implicit stocks\n";
     is.str(test);
     is.clear();
-    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
+    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2,
+                         grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
                                   calib_w, calib_cpue, interesting_harbours);
 
     BOOST_CHECK(!r);

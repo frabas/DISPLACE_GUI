@@ -63,6 +63,7 @@ bool read_config_file(string folder_name_parameterization,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
                       vector<int>& grouped_tacs,
+                      vector<int>& nbcp_coupling_pops,
                       vector<double>& calib_oth_landings,
                       vector<double>& calib_w,
                       vector<double>& calib_cpue,
@@ -73,7 +74,7 @@ bool read_config_file(string folder_name_parameterization,
     std::cout << "Reading config file from " << filename << std::endl;
 
     std::ifstream fstream (filename.c_str(), std::ios_base::in);
-    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
+    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
                             calib_w, calib_cpue, interesting_harbours);
 }
 
@@ -83,6 +84,7 @@ bool read_config_file(std::istream &stream,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
                       vector<int>& grouped_tacs,
+                      vector<int>& nbcp_coupling_pops,
                       vector<double>& calib_oth_landings,
                       vector<double>& calib_w,
                       vector<double>& calib_cpue,
@@ -92,7 +94,7 @@ bool read_config_file(std::istream &stream,
     static const helpers::LineNumberReader::Specifications specs {
         {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
         {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"},
-        {15,"implicit_pops_level2"}, {17,"grouped_tacs"},
+        {15,"implicit_pops_level2"}, {17,"grouped_tacs"},{19,"nbcp_coupling_pops"},
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -104,21 +106,25 @@ bool read_config_file(std::istream &stream,
         implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
         implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");
         grouped_tacs= displace::formats::utils::stringToVector<int>(reader.get("grouped_tacs"), " ");
+        nbcp_coupling_pops= displace::formats::utils::stringToVector<int>(reader.get("nbcp_coupling_pops"), " ");
         calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
         calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
         calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
         interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " "));
 
         if(calib_oth_landings.size()!=nbpops)
-             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. inconsistency with nbpops");
         if(calib_w.size()!=nbpops)
-             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. inconsistency with nbpops");
         if(calib_cpue.size()!=nbpops)
-             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. consistency with nbpops");
+             throw std::runtime_error("Error while reading: config.dat: check the dimension i.e. inconsistency with nbpops");
 
         if(grouped_tacs.empty()){
             grouped_tacs.resize(nbpops);
             iota (std::begin(grouped_tacs), std::end(grouped_tacs), 0); // Fill with 0, 1, ...,
+            }
+        if(nbcp_coupling_pops.empty()){
+            grouped_tacs.push_back(0);
             }
         } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS

@@ -117,6 +117,7 @@ extern double tech_creeping_multiplier;
 extern bool is_benthos_in_numbers;
 extern vector <int> implicit_pops;
 extern vector <int> grouped_tacs;
+extern vector <int> nbcp_coupling_pops;
 extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;

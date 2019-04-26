@@ -39,6 +39,7 @@ Config::Config()
       m_implicit_pops(),
       m_implicit_pops_level2(),
       m_grouped_tacs(),
+      m_nbcp_coupling_pops(),
       m_calib_oth_landings(),
       m_calib_weight_at_szgroup(),
       m_calib_cpue_multiplier()
@@ -73,6 +74,16 @@ const QList<int> &Config::grouped_tacs() const
 void Config::setGrouped_tacs(const QList<int> &grouped_tacs)
 {
     m_grouped_tacs = grouped_tacs;
+}
+
+const QList<int> &Config::nbcp_coupling_pops() const
+{
+    return m_nbcp_coupling_pops;
+}
+
+void Config::setNbcp_coupling_pops(const QList<int> &nbcp_coupling_pops)
+{
+    m_nbcp_coupling_pops = nbcp_coupling_pops;
 }
 
 const QList<double> &Config::calib_oth_landings() const
@@ -189,6 +200,11 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
         stream << a << " ";
     stream << endl;
 
+    stream <<"# nbcp merging index pops (will be used if active Options::nbcpCoupling)"<< endl;
+    foreach (int a, m_nbcp_coupling_pops)
+        stream << a << " ";
+    stream << endl;
+
     file.close();
     return true;
 }
@@ -204,6 +220,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     std::vector <int> implicit_pops;
     std::vector <int> implicit_pops_level2;
     std::vector <int> grouped_tacs;
+    std::vector <int> nbcp_coupling_pops;
     std::vector <types::NodeId> implicit_harbours;
     std::vector <double> calib_oth_landings;
     std::vector <double> calib_weight_at_szgroup;
@@ -217,6 +234,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         implicit_pops,
         implicit_pops_level2,
         grouped_tacs,
+        nbcp_coupling_pops,
         calib_oth_landings,
         calib_weight_at_szgroup,
         calib_cpue_multiplier,
@@ -233,6 +251,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         config.m_implicit_pops_level2.push_back(*it);
     for (std::vector<int>::iterator it = grouped_tacs.begin(); it != grouped_tacs.end(); ++it)
         config.m_grouped_tacs.push_back(*it);
+    for (std::vector<int>::iterator it = nbcp_coupling_pops.begin(); it != nbcp_coupling_pops.end(); ++it)
+        config.m_nbcp_coupling_pops.push_back(*it);
     for (std::vector<double>::iterator it = calib_oth_landings.begin(); it != calib_oth_landings.end(); ++it)
         config.m_calib_oth_landings.push_back(*it);
     for (std::vector<double>::iterator it = calib_weight_at_szgroup.begin(); it != calib_weight_at_szgroup.end(); ++it)

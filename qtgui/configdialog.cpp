@@ -56,6 +56,15 @@ bool ConfigDialog::get(Config &config) const
             return false;
     }
 
+    bool ok3;
+    QList<int> impl3;
+    QStringList l3 = ui->m_nbcp_coupling_pops->text().split(" ", QString::SkipEmptyParts);
+    foreach(QString s, l3) {
+        impl3.push_back(s.toInt(&ok3));
+        if (!ok3)
+            return false;
+    }
+
     QList<double> cal1;
     l = ui->m_calib_oth_landings->text().split(" ", QString::SkipEmptyParts);
     foreach(QString s, l) {
@@ -120,28 +129,34 @@ void ConfigDialog::set(const Config &config)
 
     ui->m_grouped_tacs->setText(il1.join(" "));
 
-
-
-    QList<double> l2 = config.calib_cpue_multiplier();
+    QList<int> l2 = config.nbcp_coupling_pops();
     QStringList il2;
-    foreach (double i, l2)
+    foreach (int i, l2)
         il2 << QString::number(i);
 
-    ui->m_calib_cpue_multiplier->setText(il2.join(" "));
+    ui->m_nbcp_coupling_pops->setText(il2.join(" "));
 
-    QList<double> l3 = config.calib_oth_landings();
+
+    QList<double> l3 = config.calib_cpue_multiplier();
     QStringList il3;
     foreach (double i, l3)
         il3 << QString::number(i);
 
-    ui->m_calib_oth_landings->setText(il3.join(" "));
+    ui->m_calib_cpue_multiplier->setText(il3.join(" "));
 
-    QList<double> l4 = config.calib_weight_at_szgroup();
+    QList<double> l4 = config.calib_oth_landings();
     QStringList il4;
     foreach (double i, l4)
         il4 << QString::number(i);
 
-    ui->m_calib_weight_at_szgroup->setText(il4.join(" "));
+    ui->m_calib_oth_landings->setText(il4.join(" "));
+
+    QList<double> l5 = config.calib_weight_at_szgroup();
+    QStringList il5;
+    foreach (double i, l5)
+        il5 << QString::number(i);
+
+    ui->m_calib_weight_at_szgroup->setText(il5.join(" "));
 
     auto hl = config.m_interesting_harbours;
     il.clear();

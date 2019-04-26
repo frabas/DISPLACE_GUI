@@ -238,6 +238,7 @@ bool use_dtrees;
 vector <int> implicit_pops;
 vector <int> implicit_pops_level2;
 vector <int> grouped_tacs;
+vector <int> nbcp_coupling_pops;
 vector <double> global_quotas_uptake;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
@@ -647,6 +648,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 implicit_pops,
                 implicit_pops_level2,
                 grouped_tacs,
+                nbcp_coupling_pops,
                 calib_oth_landings,
                 calib_weight_at_szgroup,
                 calib_cpue_multiplier,
@@ -3275,7 +3277,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
         vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
         if(spe_vessel_betas_per_pop.size()!=nbpops)
-             throw std::runtime_error("Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops");
+             {
+            //std::stringstream er;
+            //er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
+            //        nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+            //         spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
+            // throw std::runtime_error(er.str());
+             }
 
         vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
         vessels[i]->set_spe_possible_metiers(possible_metiers);
@@ -4823,29 +4831,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
               string a_command_for_R;
 
-              stringstream out;
-              int p=0; // hardcoded idx pop for now
-              out << p;
-              string a_pop = out.str();
-
-              stringstream outtstep;
-              outtstep << tstep;
-              string atstep = outtstep.str();
-              if (p==0)
+              for (unsigned int p=0; p<populations.size(); p++)
               {
-                 #if defined(_WIN32)
-                   cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                   a_command_for_R = "Rscript .\\interactiverscripts\\nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
-                   cout << "look after " << a_command_for_R << endl;
-                   system(a_command_for_R.c_str());
-                 #else
-                   cout << "nbcp_coupling...done" << endl;
-                   // caution with HPC, annoying lower cases in file names and paths required!
-                   a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
-                   system(a_command_for_R.c_str());
-                 #endif
-              }
+                  if (binary_search (nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(),  p  ) )
+                  {
+                     stringstream out;
+                     out << p;
+                     string a_pop = out.str();
 
+                     stringstream outtstep;
+                     outtstep << tstep;
+                     string atstep = outtstep.str();
+
+                     #if defined(_WIN32)
+                        cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+                        a_command_for_R = "Rscript .\\interactiverscripts\\nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                        cout << "executing " << a_command_for_R << endl;
+                        system(a_command_for_R.c_str());
+                    #else
+                       cout << "nbcp_coupling...done" << endl;
+                       // caution with HPC, annoying lower cases in file names and paths required!
+                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                       system(a_command_for_R.c_str());
+                    #endif
+                  }  // end nbcp coupling pops
+                }  // end pop
             }
 
 

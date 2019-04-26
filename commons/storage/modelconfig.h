@@ -16,6 +16,7 @@ struct COMMONSSHARED_EXPORT ModelConfig {
     std::vector <double> m_calib_cpue_multiplier;
     std::vector <int> m_implicit_pops_level2;
     std::vector <int> m_grouped_tacs;
+    std::vector <int> m_nbcp_coupling_pops;
 };
 
 

@@ -2641,11 +2641,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         if(selszi==2) avai_beta_param =populations[pop]->get_avai3_beta();
                         if(selszi==3) avai_beta_param =populations[pop]->get_avai5_beta();
                         if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TO DO: simplify this crap...
-                        avai_betas +=  avai_beta_param * avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
+                            avai_betas +=  avai_beta_param * avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
                         }
 
 
-                    // vessel effect
+
+                    // Normal harvest function:
                     tot_catch_per_pop[pop] = min(tot, exp( // vessel effect
                                                      v_betas_per_pop[pop]*1 +
                                                    // metier effect
@@ -2656,6 +2657,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                                           avai_betas  // poisson regression, see the R code
                                                 )*populations[pop]->get_cpue_multiplier()* tech_creeping_multiplier );
                                         // 'min' is there for not allowing catching more than available!
+
+
+
+                    // check edge cases:
+                    //if(populations[pop]->get_pop_name()=="ZPO.2024")
+                    //  {
+                    //    cout << "tot_catch_per_pop kg for harbour porpoise, given this vessel effect "<< v_betas_per_pop[pop] <<
+                    //          " and this pop avai  "<< avai_pops_at_selected_szgroup.at(0) << " and avai_betas "<< avai_betas <<
+                    //            " and avai_beta_param "<< populations[pop]->get_avai0_beta() <<
+                    //            " and selectivity " << selectivity_per_stock[pop][selected_szgroups.at(0)] << ", is " << tot_catch_per_pop[pop] << endl;
+                    //  }
+
+
 
                     dout(cout  << "-------------------------" << endl);
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);

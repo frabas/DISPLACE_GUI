@@ -1,3 +1,11 @@
+displace (1.0) bionic; urgency=medium
+
+  * Implement a effort harvest control rules entry point
+  * Many fixes
+  * First Open Source version
+
+ -- Federico Fuga <fuga@studiofuga.com>  Thu, 02 May 2019 12:38:37 +0200
+
 displace (0.9.22) bionic; urgency=medium
 
   * New Version: added new options in bio model

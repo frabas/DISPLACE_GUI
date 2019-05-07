@@ -3,6 +3,7 @@
 debug/
 release/
 *.user.*
+*.pro.user
 *.o
 *.so
 .vs/

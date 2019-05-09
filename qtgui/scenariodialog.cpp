@@ -62,6 +62,7 @@ static const char *dyn_pop_options[] = {
     "includeForcingLayers",
     "diffuseBenthos",
     "modelBenthosInN",
+    "modelBenthosInLongevity",
     "modeldirectKillingOnBenthos",
     "modelResuspensionEffectOnBenthos",
     "modelShippingOnBenthos",

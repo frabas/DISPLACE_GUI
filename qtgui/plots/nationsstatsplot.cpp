@@ -112,7 +112,7 @@ void NationsStatsPlot::update(QCustomPlot *plot, displace::plot::NationsStat sta
         if(nationName.toStdString()=="BGR")
              graph->setScatterStyle(QCPScatterStyle(QPixmap(":/icons/bulgaria-flag-round-icon-16.png")));
 
-     QColor col = col_it != mPalette.end() ? *col_it : QColor();
+        QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));

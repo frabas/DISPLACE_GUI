@@ -226,6 +226,7 @@ bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
+bool is_benthos_in_longevity_classes;
 bool is_direct_killing_on_benthos;
 bool is_resuspension_effect_on_benthos;
 double tech_creeping_multiplier=1;
@@ -842,6 +843,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     } else{
         is_benthos_in_numbers=0; // if not N then it impacts the benthos biomass by default
     }
+
+    if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
+    {
+        is_benthos_in_longevity_classes=1;
+    } else{
+        is_benthos_in_longevity_classes=0;
+    }
+
+
 
     if(dyn_pop_sce.option(Options::modeldirectKillingOnBenthos))
     {
@@ -1606,16 +1616,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
     multimap<int, double> prop_funcgr_biomass_per_node;
     multimap<int, double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-    if(dyn_pop_sce.option(Options::modelBenthosInN))
+    multimap<int, double> longevity_classes_condition_per_node;
+
+
+    if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
     {
-        prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
-        benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+         longevity_classes_condition_per_node =  read_longevity_classes_condition_per_node(folder_name_parameterization,  inputfolder);
+         benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
     }
     else
     {
-        prop_funcgr_biomass_per_node    = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
-        benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+        if(dyn_pop_sce.option(Options::modelBenthosInN))
+        {
+            prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
+            benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+        }
+        else
+        {
+            prop_funcgr_biomass_per_node    = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
+            benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+        }
     }
+
+
+
+
     multimap<int, double> recovery_rates_per_funcgr       = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
 
     multimap<int, double> habitat_deltas_per_pop          = read_habitat_deltas_per_pop(folder_name_parameterization, inputfolder);
@@ -1649,45 +1674,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        if(dyn_pop_sce.option(Options::modelBenthosInN))
+        if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
         {
-            multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
-            multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
-            for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
-            {
-                outc(cout << pos->second << endl);
-                // biomass per cell for this group specific to this landscape
-                init_prop_funcgr_number_per_node.push_back(pos->second);
-            }
+            multimap<int,double>::iterator lower_it_lgy = longevity_classes_condition_per_node.lower_bound(0);
+            multimap<int,double>::iterator upper_it_lgy = longevity_classes_condition_per_node.upper_bound(0);
 
-            multimap<int,double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
-            multimap<int,double>::iterator upper_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
-            for (multimap<int, double>::iterator pos=lower_landddd; pos != upper_landddd; pos++)
+            vector <double> a_vector;
+            for (multimap<int, double>::iterator pos=lower_it_lgy; pos != upper_it_lgy; pos++)
             {
-                outc(cout << pos->second << endl);
-                // logistic recovery rates for this group specific to this landscape
-                init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+                a_vector.push_back(pos->second);
             }
 
 
-        }
-        else
-        {
-
-            multimap<int,double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(a_marine_landscape);
-            multimap<int,double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(a_marine_landscape);
-
-            for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
+            if(a_vector.size()!=(size_t)nbbenthospops)
             {
-                outc(cout << "check this: " << pos->second << endl);
-                // biomass per cell for this group specific to this landscape
-                init_prop_funcgr_biomass_per_node.push_back(pos->second);
-            }
-
-            if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
-            {
-                cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
-                     ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl;
+                cout << "on node 0: " << " nb longevity class is " <<  a_vector.size() <<
+                     ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run." << endl;
                 int aa;
                 cin>>aa;
             }
@@ -1700,9 +1702,66 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // logistic recovery rates for this group specific to this landscape
                 init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
             }
-
-
         }
+        else
+        {
+            if(dyn_pop_sce.option(Options::modelBenthosInN))
+            {
+                multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
+                multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
+                for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
+                {
+                    outc(cout << pos->second << endl);
+                    // biomass per cell for this group specific to this landscape
+                    init_prop_funcgr_number_per_node.push_back(pos->second);
+                }
+
+                multimap<int,double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
+                multimap<int,double>::iterator upper_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
+                for (multimap<int, double>::iterator pos=lower_landddd; pos != upper_landddd; pos++)
+                {
+                    outc(cout << pos->second << endl);
+                    // logistic recovery rates for this group specific to this landscape
+                    init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+                }
+
+
+            }
+            else
+            {
+
+                multimap<int,double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(a_marine_landscape);
+                multimap<int,double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(a_marine_landscape);
+
+                for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
+                {
+                    outc(cout << "check this: " << pos->second << endl);
+                    // biomass per cell for this group specific to this landscape
+                    init_prop_funcgr_biomass_per_node.push_back(pos->second);
+                }
+
+
+                if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
+                {
+                    cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
+                         ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl;
+                    int aa;
+                    cin>>aa;
+                }
+
+                multimap<int,double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
+                multimap<int,double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
+                for (multimap<int, double>::iterator pos=lower_landdd; pos != upper_landdd; pos++)
+                {
+                    outc(cout << pos->second << endl);
+                    // logistic recovery rates for this group specific to this landscape
+                    init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+                }
+
+
+            }
+        }
+
 
 
         multimap<int,double>::iterator lower_land3 = meanw_funcgr_per_node.lower_bound(a_marine_landscape);
@@ -1750,7 +1809,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
                                             is_benthos_in_numbers,
-                                            init_h_betas_per_pop);
+                                            is_benthos_in_longevity_classes,
+                                            init_h_betas_per_pop,
+                                            longevity_classes_condition_per_node
+                                            );
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 

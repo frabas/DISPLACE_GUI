@@ -79,6 +79,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,includeForcingLayers);
     O(mMap,diffuseBenthos);
     O(mMap,modelBenthosInN);
+    O(mMap,modelBenthosInLongevity);
     O(mMap,modeldirectKillingOnBenthos);
     O(mMap,modelShippingOnBenthos);
     O(mMap,modelResuspensionEffectOnBenthos);

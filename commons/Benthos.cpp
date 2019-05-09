@@ -36,7 +36,9 @@ Benthos::Benthos(int _id,
                     const vector<double> &_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                     const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
                     bool is_benthos_in_numbers,
-                    const vector<double> &_h_betas_per_pop
+                    bool is_benthos_in_longevity_classes,
+                    const vector<double> &_h_betas_per_pop,
+                    multimap<int,double> &_longevity_classes_condition_per_node
                     )
 {
 
@@ -63,12 +65,50 @@ Benthos::Benthos(int _id,
             _nodes[n]->set_benthos_id(id);
 		}
 	}
+
+
+    if(is_benthos_in_longevity_classes)
+    {
+       cout << "Benthos longevity approach...for this landscape "<< marine_landscape  << endl;
+    }
+
+
     dout(cout << endl);
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
-		list_nodes.push_back(p_spe_nodes[i]);
-        if(is_benthos_in_numbers)
-          {
+       list_nodes.push_back(p_spe_nodes[i]);
+
+
+        vector<double> init_longevity_classes_condition_per_node;
+        if(is_benthos_in_longevity_classes)
+        {
+           int idx_node = p_spe_nodes[i]->get_idx_node().toIndex();
+           multimap<int,double>::iterator lower_it_lgy = _longevity_classes_condition_per_node.lower_bound(idx_node);
+           multimap<int,double>::iterator upper_it_lgy = _longevity_classes_condition_per_node.upper_bound(idx_node);
+           for (multimap<int, double>::iterator pos=lower_it_lgy; pos != upper_it_lgy; pos++)
+           {
+               //outc(cout << "check this: " << pos->second << endl);
+               // benthos condition per node
+               init_longevity_classes_condition_per_node.push_back(pos->second);
+           }
+
+           for(unsigned int funcgr=0; funcgr<init_longevity_classes_condition_per_node.size();funcgr++)
+              {
+               //outc(cout << "funcgr is: " << funcgr << endl);
+               //outc(cout << "init_longevity_classes_condition_per_node.at(funcgr) is: " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
+              // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
+              p_spe_nodes[i]->add_benthos_tot_biomass_on_node(1.0 * init_longevity_classes_condition_per_node.at(funcgr) );
+              p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(1.0);
+              // add carryingcap K
+              p_spe_nodes[i]->add_benthos_tot_number_K_on_node(1.0);
+              p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(1.0);
+              //dout (cout << "this longevity group "<< funcgr << "initial condition on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
+              //       "this marine landscape " << marine_landscape << " is " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
+              }
+
+        } else{
+          if(is_benthos_in_numbers)
+            {
 
             for(unsigned int funcgr=0; funcgr<prop_funcgr_number_per_node.size();funcgr++)
                {
@@ -81,12 +121,12 @@ Benthos::Benthos(int _id,
                // add carryingcap K
                p_spe_nodes[i]->add_benthos_tot_number_K_on_node(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr) );
                p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr) );
-            }
+               }
                dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
                       "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
-        }
-        else
-        {
+            }
+           else
+           {
             for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
                {
                 // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
@@ -100,7 +140,8 @@ Benthos::Benthos(int _id,
                if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->add_benthos_tot_number_K_on_node(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr) );
                }
 
-         }
+           }
+        }
     }
 
     cout << "creating benthos for " << _marine_landscape <<" ...OK" << endl;

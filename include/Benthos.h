@@ -41,8 +41,9 @@ class COMMONSSHARED_EXPORT Benthos
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
             const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-            bool is_benthos_in_numbers,
-            const vector<double> &h_betas_per_pop);
+            bool is_benthos_in_numbers, bool is_benthos_in_longevity_classes,
+            const vector<double> &h_betas_per_pop,
+            multimap<int, double> &_longevity_classes_condition_per_node);
         virtual ~Benthos();
         int get_id() const;
         int get_marine_landscape() const;

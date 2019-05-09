@@ -1945,6 +1945,28 @@ multimap<int, double> read_prop_funcgr_biomass_per_node_per_landscape(string fol
     return(prop_funcgr_per_node);
 }
 
+
+// FOR BENTHOS
+multimap<int, double> read_longevity_classes_condition_per_node(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/longevity_classes_condition_per_node.dat";
+
+    ifstream file_longevity_classes_condition_per_node;
+    file_longevity_classes_condition_per_node.open(filename.c_str());
+    if(file_longevity_classes_condition_per_node.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> longevity_classes_condition_per_node;
+    fill_multimap_from_specifications_i_d(file_longevity_classes_condition_per_node,  longevity_classes_condition_per_node);
+    file_longevity_classes_condition_per_node.close();
+
+    return(longevity_classes_condition_per_node);
+}
+
+
 multimap<int, double> read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder)
 {
 

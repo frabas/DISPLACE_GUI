@@ -131,6 +131,7 @@ enum Pop_Sce {
     includeForcingLayers,
     diffuseBenthos,
     modelBenthosInN,
+    modelBenthosInLongevity,
     modeldirectKillingOnBenthos,
     modelResuspensionEffectOnBenthos,
     modelShippingOnBenthos,

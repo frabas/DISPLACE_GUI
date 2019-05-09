@@ -251,7 +251,41 @@ int will_stop=0; // see Options::DEBUG_TAC
 
 
 
-    }
+
+            // EXPORT INITIAL BENTHOS STATS
+            if(dyn_pop_sce.option(Options::modelBenthosInN))
+            {
+                //...and export the benthos numbers on node
+               for (unsigned int n=0; n<nodes.size(); n++)
+                  {
+                  for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
+                     {
+                           nodes.at(n)->export_benthos_tot_number_per_funcgroup(benthosnumbernodes, tstep, funcgroup);
+                           if (outSqlite)
+                               outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup, 1);
+                     }
+                  }
+
+
+             }
+            else
+            {
+                //...and export the benthos biomasses on node
+                for (unsigned int n=0; n<nodes.size(); n++)
+                {
+                    for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
+                    {
+                               nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
+                               if (outSqlite)
+                                   outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup, 0);
+                    }
+                }
+
+
+
+            }
+
+    } // END TSTEP 0
 
 
 

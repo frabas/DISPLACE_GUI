@@ -518,7 +518,7 @@ void MainWindow::outputUpdated()
     try {
         qDebug() << "Updating map to step " << models[0]->getCurrentStep();
         mMapController->updateNodes(0);
-        mStatsController->updateStats(models[0].get());
+        if(models[0]->getCurrentStep()>8760) mStatsController->updateStats(models[0].get());
     } catch (sqlite::SQLiteException &xcp) {
         qWarning() << "Error updating output: " << xcp.what();
     }

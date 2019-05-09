@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -58,6 +58,8 @@
      <addaction name="actionPalettes0to1"/>
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
+     <addaction name="actionBenthos"/>
+     <addaction name="actionFishfarms"/>
      <addaction name="actionBathymetry"/>
      <addaction name="actionSalinity"/>
      <addaction name="actionSST"/>
@@ -68,6 +70,7 @@
      <addaction name="actionDissolvedCarbon"/>
      <addaction name="actionShippingDensity"/>
      <addaction name="actionSiltFraction"/>
+     <addaction name="actionPalettes0to1blue"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -2279,8 +2282,8 @@ L3</string>
   </action>
   <action name="actionShippingDensity">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/colors.png</normaloff>icons/colors.png</iconset>
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
    </property>
    <property name="text">
     <string>ShippingDensity...</string>
@@ -2293,6 +2296,33 @@ L3</string>
    </property>
    <property name="text">
     <string>SiltFraction...</string>
+   </property>
+  </action>
+  <action name="actionBenthos">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Benthos...</string>
+   </property>
+  </action>
+  <action name="actionFishfarms">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fishfarms...</string>
+   </property>
+  </action>
+  <action name="actionPalettes0to1blue">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Values 0 to 1 blue...</string>
    </property>
   </action>
  </widget>

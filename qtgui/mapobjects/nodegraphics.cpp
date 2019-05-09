@@ -121,7 +121,15 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     } else if (ilist.size() == 1) {
         boost::optional<double> v = getValueForPop(ilist[0]);
         if (v.is_initialized()) {
-            painter.setBrush(mController->getPalette(mModelIndex, ValueRole).color(v.value()));
+            switch (mType) {
+            case BenthosBiomass:
+            case BenthosMeanweight:
+            case BenthosNumber:
+                painter.setBrush(mController->getPalette(mModelIndex, Value0to1BlueRole).color(v.value()));
+              break;
+            default:
+                painter.setBrush(mController->getPalette(mModelIndex, ValueRole).color(v.value()));
+            }
             painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
         }
     } else {        // nothing to display.

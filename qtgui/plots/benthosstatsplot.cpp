@@ -15,7 +15,8 @@ BenthosStatsPlot::BenthosStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
       mTimeline(timeline),
       pen(QColor(0,0,255,200))
 {
-    mPalette = PaletteManager::instance()->palette(BenthosRole);
+    // mPalette = PaletteManager::instance()->palette(BenthosRole);
+    mPalette = PaletteManager::instance()->palette(Value0to1BlueRole); // longevity approach
 }
 
 void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat stat, QCustomPlot *theplot)

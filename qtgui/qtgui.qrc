@@ -94,5 +94,6 @@
         <file>icons/lithuania-flag-round-icon-16.png</file>
         <file>palettes/shippingdensity_colors.p2c</file>
         <file>palettes/siltfraction_colors.p2c</file>
+        <file>palettes/benthos_0_to_1_colors.p2c</file>
     </qresource>
 </RCC>

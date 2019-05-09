@@ -147,12 +147,15 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
     void on_actionPalettes0to1_triggered();
+    void on_actionPalettes0to1blue_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
     void on_nationsStatsSelector_currentIndexChanged(int index);
     void on_vesselsStatsSelector_currentIndexChanged(int index);
     void on_harbStatSelector_currentIndexChanged(int index);
     void on_actionPopulations_triggered();
     void on_actionTariffs_triggered();
+    void on_actionBenthos_triggered();
+    void on_actionFishfarms_triggered();
     void on_actionBathymetry_triggered();
     void on_actionShippingDensity_triggered();
     void on_actionSiltFraction_triggered();

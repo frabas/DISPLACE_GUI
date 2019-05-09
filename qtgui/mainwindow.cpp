@@ -1273,6 +1273,11 @@ void MainWindow::on_actionPalettes0to1_triggered()
     showPaletteDialog(Value0to1Role);
 }
 
+void MainWindow::on_actionPalettes0to1blue_triggered()
+{
+    showPaletteDialog(Value0to1BlueRole);
+}
+
 void MainWindow::on_actionPopulations_triggered()
 {
     showPaletteDialog(PopulationRole);
@@ -1281,6 +1286,18 @@ void MainWindow::on_actionPopulations_triggered()
 void MainWindow::on_actionTariffs_triggered()
 {
     showPaletteDialog(TariffsRole);
+}
+
+void MainWindow::on_actionBenthos_triggered()
+{
+    //showPaletteDialog(BenthosRole);
+    showPaletteDialog(Value0to1BlueRole);
+
+}
+
+void MainWindow::on_actionFishfarms_triggered()
+{
+    showPaletteDialog(FishfarmRole);
 }
 
 void MainWindow::on_actionBathymetry_triggered()

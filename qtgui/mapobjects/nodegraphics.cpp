@@ -94,7 +94,8 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         }
     }
 
-    int RADIUS = piew() / LastType * (LastType - mType);
+    //int RADIUS = piew() / LastType * (LastType - mType); // downsizing the nodegraphics size from the last layer
+    int RADIUS = piew();
 
     if (ilist.size() > 1) {
         if (tot > 1e-3) {

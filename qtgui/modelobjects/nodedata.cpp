@@ -214,7 +214,7 @@ double NodeData::getBenthosBiomass(int func) const
     if (v && func < v->mBenthosBiomass.size() && func >= 0)
         return v->mBenthosBiomass[func];
 
-    return -1;
+    return 0;
 }
 
 double NodeData::getBenthosNumber(int func) const
@@ -223,7 +223,7 @@ double NodeData::getBenthosNumber(int func) const
     if (v && func < v->mBenthosNumber.size() && func >= 0)
         return v->mBenthosNumber[func];
 
-    return -1;
+    return 0;
 }
 
 double NodeData::getBenthosMeanweight(int func) const
@@ -232,7 +232,7 @@ double NodeData::getBenthosMeanweight(int func) const
     if (v && func < v->mBenthosMeanweight.size() && func >= 0)
         return v->mBenthosMeanweight[func];
 
-    return -1;
+    return 0;
 }
 
 double NodeData::getBenthosBiomassOverK(int func) const
@@ -241,7 +241,7 @@ double NodeData::getBenthosBiomassOverK(int func) const
     if (v && func < v->mBenthosBiomassOverK.size() && func >= 0)
         return v->mBenthosBiomassOverK[func];
 
-    return -1;
+    return 0;
 }
 
 double NodeData::getBenthosNumberOverK(int func) const
@@ -250,7 +250,7 @@ double NodeData::getBenthosNumberOverK(int func) const
     if (v && func < v->mBenthosNumberOverK.size() && func >= 0)
         return v->mBenthosNumberOverK[func];
 
-    return -1;
+    return 0;
 }
 
 void NodeData::setFishfarmFishMeanWeight(int farm, double fishfarmfishmeanweight)

@@ -6091,6 +6091,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           }
         }
 
+
+
+          ///------------------------------///
+          ///------------------------------///
+          ///  HOURLY BENTHOS RECOVERY     ///
+          ///------------------------------///
+          ///------------------------------///
+          // van Denderen et al. 2019
+          if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
+          {
+
+             for (unsigned int b=0; b<benthoss.size(); b++)
+                {
+                 benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(1);
+                }
+          }
+
+
           ///------------------------------///
           ///------------------------------///
           ///  REINIT SOME VALUES ON NODES ///
@@ -6106,8 +6124,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           }
 
 
-
-        ///------------------------------///
+       ///------------------------------///
         ///------------------------------///
         ///  EXPORTING TO DB             ///
         ///------------------------------///

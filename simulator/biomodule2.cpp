@@ -1341,14 +1341,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
         }
 
-        // a recovery of the benthos biomasses on node
-        int is_longevity=0;
-        if(dyn_pop_sce.option(Options::modelBenthosInLongevity)) is_longevity=1;
-        for (unsigned int b=0; b<benthoss.size(); b++)
+        // a recovery of the benthos biomasses on node on monthly basis
+        // (ONLY IF NOT THE LONGEVITY APPROACH, BECAUSE LONGEVITY IS ON HOURLY BASIS)
+        if(!dyn_pop_sce.option(Options::modelBenthosInLongevity))
         {
-            benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(is_longevity);
+           for (unsigned int b=0; b<benthoss.size(); b++)
+           {
+            benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(0);
+           }
         }
-
     }
 
 

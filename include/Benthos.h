@@ -54,7 +54,7 @@ class COMMONSSHARED_EXPORT Benthos
         const vector<double> &get_recovery_rates_per_funcgr() const;
         const vector<double> &get_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr() const;
         const vector<double> &get_benthos_number_carrying_capacity_K_per_landscape_per_funcgr() const;
-        void recover_benthos_tot_biomass_per_funcgroup();
+        void recover_benthos_tot_biomass_per_funcgroup(int is_longevity);
         void recover_benthos_tot_number_per_funcgroup();
 
         const vector<double> &get_h_betas_per_pop() const; // link to Vessel::do_catch() harvest function

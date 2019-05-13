@@ -210,27 +210,54 @@ const vector<Node *> &Benthos::get_list_nodes() const
 
 
 
-void Benthos::recover_benthos_tot_biomass_per_funcgroup()
+void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
 {
     dout(cout  << "the benthos recovering...." << endl);
 
    vector<Node *> list_nodes_this_landsc= get_list_nodes();
    vector<double> all_benthos_tot_biomass = list_nodes_this_landsc.at(0)->get_benthos_tot_biomass();
 
-   for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
-   {
+   double new_benthos_tot_biomass;
+   double benthos_tot_biomass;
+
+
+   // van Denderen et al. 2019
+   double time =12;// if monthly time step here
+   // double time=365*24; // if hourly time step here
+   double K =1.0;
+   vector <double> Recov(4,0);
+   Recov.at(0)= 5.31/1/time;
+   Recov.at(1)=  5.31/2/time;
+   Recov.at(2)=  5.31/6.5/time;
+   Recov.at(3)=  5.31/10/time;
+
+   if(!is_longevity) for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
+    {
       // Pitcher et al. 2016
       for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
        {
-          double K                       = get_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr().at(funcgr);
-          double benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
-          double new_benthos_tot_biomass =(benthos_tot_biomass*K)/
+          K                       = get_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr().at(funcgr);
+          benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
+          new_benthos_tot_biomass =(benthos_tot_biomass*K)/
                                          (benthos_tot_biomass+
                                            (K-benthos_tot_biomass)* exp(-get_recovery_rates_per_funcgr().at(funcgr)));
+          list_nodes_this_landsc.at(n)->set_benthos_tot_biomass(funcgr,  new_benthos_tot_biomass); // update on node
+       }
+    }
+
+
+      // Van denderen et al. 2019
+   if(is_longevity) for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
+       {
+        for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
+          {
+          benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
+          new_benthos_tot_biomass= benthos_tot_biomass + Recov[funcgr]*benthos_tot_biomass*((K - benthos_tot_biomass)/ K );
+
 
           list_nodes_this_landsc.at(n)->set_benthos_tot_biomass(funcgr,  new_benthos_tot_biomass); // update on node
+         }
       }
-   }
 
 }
 

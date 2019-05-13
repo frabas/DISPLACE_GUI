@@ -222,14 +222,7 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
 
 
    // van Denderen et al. 2019
-   double time =12;// if monthly time step here
-   // double time=365*24; // if hourly time step here
    double K =1.0;
-   vector <double> Recov(4,0);
-   Recov.at(0)= 5.31/1/time;
-   Recov.at(1)=  5.31/2/time;
-   Recov.at(2)=  5.31/6.5/time;
-   Recov.at(3)=  5.31/10/time;
 
    if(!is_longevity) for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
     {
@@ -252,7 +245,7 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
         for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
           {
           benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
-          new_benthos_tot_biomass= benthos_tot_biomass + Recov[funcgr]*benthos_tot_biomass*((K - benthos_tot_biomass)/ K );
+          new_benthos_tot_biomass= benthos_tot_biomass + get_recovery_rates_per_funcgr().at(funcgr)*benthos_tot_biomass*((K - benthos_tot_biomass)/ K );
 
 
           list_nodes_this_landsc.at(n)->set_benthos_tot_biomass(funcgr,  new_benthos_tot_biomass); // update on node

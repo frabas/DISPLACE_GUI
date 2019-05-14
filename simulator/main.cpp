@@ -2633,8 +2633,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "compute PredKernel..." << endl;
         vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-        //BEFORE 050320129 vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
-        vector<double> beta (nbpops, 80);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        //vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        // replace with logistic per 14 weight class
+        // beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
+        vector<double> beta {100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150, 111.1882, 118.4140, 130.5108, 150.4701, 180.9963};
+
         for (unsigned int prey=0; prey<nbpops; ++prey)
         {  // loop over prey
            for (unsigned int j=0; j<nbpops; ++j)
@@ -2646,7 +2649,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                      if(Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey))
                      {
                          predKernel.at(j).at(kprey).at(k).at(prey)=
-                                 exp(-pow(log((beta.at(prey)*Ws_at_szgroup.at(prey).at(kprey))/ Ws_at_szgroup.at(j).at(kprey)),2) / (pow(2*sigma.at(prey),2)));                                        ;
+                                 exp(-pow(log((beta.at(kprey)*Ws_at_szgroup.at(prey).at(kprey))/ Ws_at_szgroup.at(j).at(kprey)),2) / (pow(2*sigma.at(prey),2)));                                        ;
                          //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                      }
                      else
@@ -2718,6 +2721,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   {  // loop over prey
 
 
+      double eta_m  = get<29>(biological_traits_params.at(prey));
       double kappa  = get<30>(biological_traits_params.at(prey));
       double q      = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
       double n      = get<32>(biological_traits_params.at(prey));
@@ -2732,28 +2736,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       cout << " reading f0est is " << f0est << endl;
       cout << " reading lambda is " << lambda << endl;
 
-      double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
-
-     //cout << " this prey " << prey << " alphae is " << alphae << endl;
-     //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(prey) is " << beta.at(prey) << " lambda is " << lambda << endl;
 
      for (unsigned int j=0; j<nbpops; ++j)
      {  // loop over predators
          for (unsigned int k=0; k<NBSZGROUP; ++k)
          {
+             double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(k),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
+
+            //cout << " this prey " << prey << " alphae is " << alphae << endl;
+            //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(k) is " << beta.at(k) << " lambda is " << lambda << endl;
+
              // loop over predator sizes
             double Wk = get<2>(biological_traits_params.at(j));
             double Winf = get<1>(biological_traits_params.at(j));
-            double h               = 3*Wk/(0.6*   pow(Winf,(-0.333333333))   ); // Calculate h from K
-            // TODO input eta_m (specific to stock)
-            // TODO: double h               = (3/0.36)*Wk*pow(Winf,(0.25))*pow(eta_m,(-0.333333333)); // Calculate h from K
-            //BEFORE 05032019: double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            double h               = (3/0.36)*Wk*pow(Winf,(0.25))*pow(eta_m,(-0.333333333)); // Calculate h from K
+            if(h<=15) h            = 15;
             double gamma           = (f0est*h / (alphae*kappa*0.5*(1-f0est)));
             //cout << "j: " << j << " k: " << k << endl;
             //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
             //cout << "h: " << h << " gamma: " << gamma << endl;
             //cout << "q: " << q  << " f0est:" << f0est << endl;
-            //cout << "pow(Winf,(-1/3)): " << pow(Winf,(-0.333333333))  << endl;
             searchVolMat.at(j).at(k)       = gamma *  pow(Ws_at_szgroup.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
             //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
          }

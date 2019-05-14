@@ -6134,7 +6134,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        // export
         {
             std::unique_lock<std::mutex> m(listVesselMutex);
-            for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
+            if(export_hugefiles) for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
             {
                //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
 

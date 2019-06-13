@@ -1,9 +1,9 @@
 #include "sqliteoutputstorage.h"
 
-#include "sqlitestorage.h"
-#include "sqlitefieldsop.h"
-#include "sqlitestatement.h"
-#include "sqlitestatementformatters.h"
+#include "msqlitecpp/v1/sqlitestorage.h"
+#include "msqlitecpp/v1/sqlitefieldsop.h"
+#include "msqlitecpp/v1/sqlitestatement.h"
+#include "msqlitecpp/v1/sqlitestatementformatters.h"
 #include "tables/vesseldeftable.h"
 #include "tables/vesselslogliketable.h"
 #include "tables/nodesdeftable.h"

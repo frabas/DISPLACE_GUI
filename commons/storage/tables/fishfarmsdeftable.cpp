@@ -5,9 +5,9 @@
 #include "fishfarmsdeftable.h"
 #include "Fishfarm.h"
 
-#include <insertstatement.h>
-#include <createstatement.h>
-#include <selectstatement.h>
+#include "msqlitecpp/v1/insertstatement.h"
+#include "msqlitecpp/v1/createstatement.h"
+#include "msqlitecpp/v1/selectstatement.h"
 
 using namespace sqlite;
 
@@ -99,10 +99,10 @@ struct FishFarmsDefTable::Impl {
     void getAllFishfarms(std::function<bool(int nodeId, std::shared_ptr<Fishfarm> fishfarm)> func)
     {
         selectAllFishfarms.exec([&func](int id,
-                                   int nodeId,
-                                   std::string name,
-                                   int type,
-                                   double x, double y) {
+                                        int nodeId,
+                                        std::string name,
+                                        int type,
+                                        double x, double y) {
             auto ff = std::make_shared<Fishfarm>(nullptr, id, name, type);
             ff->set_x(x);
             ff->set_y(y);

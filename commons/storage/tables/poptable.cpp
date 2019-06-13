@@ -1,9 +1,9 @@
 #include "poptable.h"
 
 #include "Node.h"
-#include "sqlitestatement.h"
-#include "sqlitestatementformatters.h"
-#include "sqlitefieldsop.h"
+#include "msqlitecpp/v1/sqlitestatement.h"
+#include "msqlitecpp/v1/sqlitestatementformatters.h"
+#include "msqlitecpp/v1/sqlitefieldsop.h"
 
 #include <iostream>
 
@@ -11,15 +11,15 @@ struct PopTable::Impl {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-         FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+    PreparedInsert <FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
 
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
 
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name), p(std::make_unique<Impl>())
+        : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
 
@@ -27,8 +27,9 @@ PopTable::~PopTable() noexcept = default;
 
 void PopTable::dropAndCreate()
 {
-    if (db()->tableExists(name()))
+    if (db()->tableExists(name())) {
         db()->dropTable(name());
+    }
 
     create(std::make_tuple(fldNodeId,
                            fldTStep,
@@ -38,7 +39,7 @@ void PopTable::dropAndCreate()
                            fldCumCatches,
                            fldCumDiscards,
                            fldImpact
-                           ));
+    ));
 }
 
 bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &weight_at_szgroup)
@@ -48,42 +49,41 @@ bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
 
     double totN_this_pop, totW_this_pop;
 
-      for(unsigned int name_pop = 0; name_pop < node->get_nbpops(); name_pop++) {
+    for (unsigned int name_pop = 0; name_pop < node->get_nbpops(); name_pop++) {
 
-        totN_this_pop=0;		 // re-init
-        totW_this_pop= 0.0;
+        totN_this_pop = 0;         // re-init
+        totW_this_pop = 0.0;
         auto lower_init_we = weight_at_szgroup.lower_bound(name_pop);
         auto upper_init_we = weight_at_szgroup.upper_bound(name_pop);
         vector<double> w;
-        for (auto pos=lower_init_we; pos != upper_init_we; pos++)
+        for (auto pos = lower_init_we; pos != upper_init_we; pos++)
             w.push_back(pos->second);
 
-        auto const &ns =node->get_Ns_pops_at_szgroup(name_pop);
-        auto const &cumulcatches_per_pop =node->get_cumcatches_per_pop().at(name_pop);
-        auto const &impact_per_pop =node->get_impact_per_pop().at(name_pop);
-        auto const &cumuldiscards_per_pop=node->get_cumdiscards_per_pop().at(name_pop);
-        for(unsigned int sz = 0; sz < ns.size(); sz++)
-        {
-            totN_this_pop+= ns[sz];
-            totW_this_pop+= ns[sz] * w.at(sz);
+        auto const &ns = node->get_Ns_pops_at_szgroup(name_pop);
+        auto const &cumulcatches_per_pop = node->get_cumcatches_per_pop().at(name_pop);
+        auto const &impact_per_pop = node->get_impact_per_pop().at(name_pop);
+        auto const &cumuldiscards_per_pop = node->get_cumdiscards_per_pop().at(name_pop);
+        for (unsigned int sz = 0; sz < ns.size(); sz++) {
+            totN_this_pop += ns[sz];
+            totW_this_pop += ns[sz] * w.at(sz);
         }
 
 
 
-     //   if(totN_this_pop!=0) SQLiteTable::insert (p->statement, std::make_tuple(
-            SQLiteTable::insert (p->statement, std::make_tuple(
-                    (int)node->get_idx_node().toIndex(),
-                    tstep,
-                    (int)name_pop,
-                    totN_this_pop,
-                    totW_this_pop,
-                    cumulcatches_per_pop,
-                    cumuldiscards_per_pop,
-                    impact_per_pop
-                    ));
+        //   if(totN_this_pop!=0) SQLiteTable::insert (p->statement, std::make_tuple(
+        SQLiteTable::insert(p->statement, std::make_tuple(
+                (int) node->get_idx_node().toIndex(),
+                tstep,
+                (int) name_pop,
+                totN_this_pop,
+                totW_this_pop,
+                cumulcatches_per_pop,
+                cumuldiscards_per_pop,
+                impact_per_pop
+        ));
     }
 
-return 0;
+    return 0;
 }
 
 void PopTable::init()
@@ -98,7 +98,7 @@ void PopTable::init()
                                                      fldCumCatches,
                                                      fldCumDiscards,
                                                      fldImpact
-                                                   ));
+        ));
 
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
@@ -107,21 +107,21 @@ void PopTable::init()
                                                       fldCumCatches, fldCumDiscards,
                                                       fldImpact,
                                                       sqlite::op::max(fldTStep)
-                                                      )
-                .where (sqlite::op::le(fldTStep))
-                .groupBy (fldNodeId, fldPopId);
+        )
+                .where(sqlite::op::le(fldTStep))
+                .groupBy(fldNodeId, fldPopId);
 
         p->allNodesQueryStatement = sqlite::SQLiteStatement(db(), sqlAllQuery);
     }
 }
 
-void PopTable::queryAllNodesAtStep(int tstep, std::function<bool (PopTable::Stat)> op)
+void PopTable::queryAllNodesAtStep(int tstep, std::function<bool(PopTable::Stat)> op)
 {
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
     p->allNodesQueryStatement.bind(1, tstep);
-    p->allNodesQueryStatement.execute([this, &op](){
+    p->allNodesQueryStatement.execute([this, &op]() {
         auto &st = p->allNodesQueryStatement;
         Stat s;
         s.tstep = st.getIntValue(7);
@@ -132,8 +132,9 @@ void PopTable::queryAllNodesAtStep(int tstep, std::function<bool (PopTable::Stat
         s.cumC = st.getDoubleValue(4);
         s.cumD = st.getDoubleValue(5);
         s.impact = st.getDoubleValue(6);
-        if (op)
+        if (op) {
             return op(s);
+        }
         return false;
     });
 }
@@ -141,10 +142,10 @@ void PopTable::queryAllNodesAtStep(int tstep, std::function<bool (PopTable::Stat
 size_t PopTable::getNbPops()
 {
     sqlite::statements::Select select(name(), sqlite::op::count(sqlite::op::distinct(fldPopId)));
-    sqlite::SQLiteStatement stmt(db(),select);
+    sqlite::SQLiteStatement stmt(db(), select);
 
     size_t v;
-    stmt.execute([&stmt, &v](){
+    stmt.execute([&stmt, &v]() {
         v = stmt.getIntValue(0);
         return true;
     });

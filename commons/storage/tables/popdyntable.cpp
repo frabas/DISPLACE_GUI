@@ -1,20 +1,20 @@
 #include "popdyntable.h"
 
-#include <Population.h>
+#include "Population.h"
 #include "utils/make_unique.h"
 
 struct PopDynTable::Impl {
     bool init = false;
     std::mutex mutex;
-    PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real> > insertStatement;
+    PreparedInsert <FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
 };
 
 PopDynTable::PopDynTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name), p(utils::make_unique<Impl>())
+        : SQLiteTable(db, name), p(utils::make_unique<Impl>())
 {
 }
 
@@ -22,8 +22,9 @@ PopDynTable::~PopDynTable() noexcept = default;
 
 void PopDynTable::dropAndCreate()
 {
-    if (db()->tableExists(name()))
+    if (db()->tableExists(name())) {
         db()->dropTable(name());
+    }
 
     create(std::make_tuple(fldTStep,
                            fldPopId,
@@ -40,7 +41,7 @@ void PopDynTable::dropAndCreate()
                            fldSSB,
                            fldFFmsy,
                            fldPropMature
-                           ));
+    ));
 }
 
 void PopDynTable::insert(int tstep, int popid, Population *pop)
@@ -49,20 +50,20 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
 
     if (!p->init) {
         p->insertStatement = prepareInsert(std::make_tuple(fldTStep,
-                                           fldPopId,
-                                           fldGroup,
-                                           fldNz,
-                                           fldC,
-                                           fldD,
-                                           fldF,
-                                           fldravF,
-                                           fldM,
-                                           fldNa,
-                                           fldW,
-                                           fldMat,
-                                           fldSSB,
-                                           fldFFmsy,
-                                           fldPropMature));
+                                                           fldPopId,
+                                                           fldGroup,
+                                                           fldNz,
+                                                           fldC,
+                                                           fldD,
+                                                           fldF,
+                                                           fldravF,
+                                                           fldM,
+                                                           fldNa,
+                                                           fldW,
+                                                           fldMat,
+                                                           fldSSB,
+                                                           fldFFmsy,
+                                                           fldPropMature));
         p->init = true;
     }
 
@@ -79,24 +80,24 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
     const auto &FFmsy = pop->get_FFmsy();
     const auto &PropMature = pop->get_proportion_mature_fish();
 
-    auto n = std::max(Nz.size(), std::max(F.size(),  SSB.size()));
+    auto n = std::max(Nz.size(), std::max(F.size(), SSB.size()));
 
     for (size_t i = 0; i < n; ++i)
         SQLiteTable::insert(p->insertStatement, std::make_tuple(tstep,
-                            popid,
-                            (int)i,
-                            (i < Nz.size() ? Nz.at(i) : -1),
-                            (i < C.size() ? C.at(i) : -1),
-                            (i < D.size() ? D.at(i) : -1),
-                            (i < F.size() ? F.at(i) : -1),
-                            (i < ravF.size() ? ravF.at(i) : -1),
-                            (i < M.size() ? M.at(i) : -1),
-                            (i < Na.size() ? Na.at(i) : -1),
-                            (i < W.size() ? W.at(i) : -1),
-                            (i < Mat.size() ? Mat.at(i) : -1),
-                            (i < SSB.size() ? SSB.at(i) : -1),
-                            (i < FFmsy.size() ? FFmsy.at(i) : -1),
-                            PropMature
+                                                                popid,
+                                                                (int) i,
+                                                                (i < Nz.size() ? Nz.at(i) : -1),
+                                                                (i < C.size() ? C.at(i) : -1),
+                                                                (i < D.size() ? D.at(i) : -1),
+                                                                (i < F.size() ? F.at(i) : -1),
+                                                                (i < ravF.size() ? ravF.at(i) : -1),
+                                                                (i < M.size() ? M.at(i) : -1),
+                                                                (i < Na.size() ? Na.at(i) : -1),
+                                                                (i < W.size() ? W.at(i) : -1),
+                                                                (i < Mat.size() ? Mat.at(i) : -1),
+                                                                (i < SSB.size() ? SSB.at(i) : -1),
+                                                                (i < FFmsy.size() ? FFmsy.at(i) : -1),
+                                                                PropMature
                             )
-                    );
+        );
 }

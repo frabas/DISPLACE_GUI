@@ -6,23 +6,24 @@
 
 #include <functional>
 
-#include "sqlitefielddef.h"
-#include "sqlitetable.h"
+#include "msqlitecpp/v1/sqlitefielddef.h"
+#include "msqlitecpp/v1/sqlitetable.h"
 
 #include <vector>
 #include <string>
 
 using namespace sqlite;
 
-class COMMONSSHARED_EXPORT VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteTable
-{
+class COMMONSSHARED_EXPORT VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;
 
     void create();
+
 public:
     VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+
     ~VesselVmsLikeFPingsOnlyTable() noexcept;
 
     void dropAndCreate();
@@ -38,9 +39,11 @@ public:
         double catches;
     };
 
-    void insertLog (const Log &log);
-    void queryAllVesselsAtStep (int tstep, std::function<bool(const Log &)>);
-    void deleteAllVesselsBeforeMonth (int month);
+    void insertLog(const Log &log);
+
+    void queryAllVesselsAtStep(int tstep, std::function<bool(const Log &)>);
+
+    void deleteAllVesselsBeforeMonth(int month);
 };
 
 #endif // VESSELVMSLIKEFPINGSONLYTABLE_H

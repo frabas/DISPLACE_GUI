@@ -4,20 +4,20 @@
 
 #include "Node.h"
 #include "Harbour.h"
-#include <sqlitestatementformatters.h>
-#include <sqlitestatement.h>
+#include "msqlitecpp/v1/sqlitestatementformatters.h"
+#include "msqlitecpp/v1/sqlitestatement.h"
 
 struct NodesDefTable::Impl {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Text>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,  FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
+    PreparedInsert <FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Text>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
 };
 
 NodesDefTable::NodesDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name), p(std::make_unique<Impl>())
+        : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
 
@@ -25,8 +25,9 @@ NodesDefTable::~NodesDefTable() noexcept = default;
 
 void NodesDefTable::dropAndCreate()
 {
-    if (db()->tableExists(name()))
+    if (db()->tableExists(name())) {
         db()->dropTable(name());
+    }
 
     create(std::make_tuple(fldNodeId,
                            fldHarbourId,
@@ -36,7 +37,7 @@ void NodesDefTable::dropAndCreate()
                            bathymetry,
                            shippingdensity,
                            siltfraction
-                           ));
+    ));
 }
 
 void NodesDefTable::insert(Node *node)
@@ -50,7 +51,7 @@ void NodesDefTable::insert(Node *node)
                                                      bathymetry, shippingdensity, siltfraction));
     }
 
-    SQLiteTable::insert(p->statement, std::make_tuple((int)node->get_idx_node().toIndex(),
+    SQLiteTable::insert(p->statement, std::make_tuple((int) node->get_idx_node().toIndex(),
                                                       node->get_harbour(),
                                                       node->get_name(),
                                                       node->get_x(),
@@ -59,16 +60,17 @@ void NodesDefTable::insert(Node *node)
                                                       node->get_bathymetry(),
                                                       node->get_shippingdensity(),
                                                       node->get_siltfraction()
-                                                      )
-                        );
+                        )
+    );
 }
 
 void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std::shared_ptr<Harbour>)> operation)
 {
-    sqlite::statements::Select s(name(), fldNodeId, fldHarbourId, fldNodeName, fldLong, fldLat, marineLandscape, bathymetry, shippingdensity, siltfraction);
-    sqlite::SQLiteStatement stmt (db(), s);
+    sqlite::statements::Select s(name(), fldNodeId, fldHarbourId, fldNodeName, fldLong, fldLat, marineLandscape,
+                                 bathymetry, shippingdensity, siltfraction);
+    sqlite::SQLiteStatement stmt(db(), s);
 
-    stmt.execute([&operation,&stmt]() {
+    stmt.execute([&operation, &stmt]() {
         std::shared_ptr<Node> n;
         std::shared_ptr<Harbour> h;
         auto hid = stmt.getIntValue(1);
@@ -88,7 +90,7 @@ void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std:
         n->setShippingdensity(stmt.getDoubleValue(7));
         n->setSiltfraction(stmt.getDoubleValue(8));
 
-        operation(n,h);
+        operation(n, h);
         return true;
     });
 }

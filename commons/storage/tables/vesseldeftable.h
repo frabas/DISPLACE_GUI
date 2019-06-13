@@ -7,8 +7,8 @@
 
 #include <functional>
 
-#include "sqlitefielddef.h"
-#include "sqlitetable.h"
+#include "msqlitecpp/v1/sqlitefielddef.h"
+#include "msqlitecpp/v1/sqlitetable.h"
 using namespace sqlite;
 
 #include <vector>

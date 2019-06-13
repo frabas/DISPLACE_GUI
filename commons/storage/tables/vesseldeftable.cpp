@@ -1,10 +1,10 @@
 #include "vesseldeftable.h"
 
-#include <Vessel.h>
-#include <Node.h>
+#include "Vessel.h"
+#include "Node.h"
 
-#include <sqlitestatement.h>
-#include <sqlitestatementformatters.h>
+#include "msqlitecpp/v1/sqlitestatement.h"
+#include "msqlitecpp/v1/sqlitestatementformatters.h"
 
 #include <iterator>
 
@@ -16,15 +16,15 @@ struct VesselDefTable::Impl {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Text>,
-        FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Text>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+    PreparedInsert <FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Text>,
+    FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Text>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
 };
 
 VesselDefTable::VesselDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db, name), p(std::make_unique<Impl>())
+        : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
 
@@ -32,8 +32,9 @@ VesselDefTable::~VesselDefTable() noexcept = default;
 
 void VesselDefTable::dropAndCreate()
 {
-    if (db()->tableExists(name()))
+    if (db()->tableExists(name())) {
         db()->dropTable(name());
+    }
 
     create(std::make_tuple(fldId,
                            fldNode,
@@ -67,29 +68,29 @@ void VesselDefTable::feedVesselsDefTable(Vessel *vessel)
                                                      fldNationality,
                                                      fldSpeeds,
                                                      fldLengths
-                                                     ));
+        ));
     }
 
 
     std::string nat = vessel->get_name().substr(0, 3);
-    insert (p->statement, std::make_tuple(
-                vessel->get_idx(),
-                vessel->get_name(),
-                int(vessel->get_loc()->get_idx_node().toIndex()),
-                nat,
-                vessel->get_speed(),
-                vessel->get_length()
-                ));
+    insert(p->statement, std::make_tuple(
+            vessel->get_idx(),
+            vessel->get_name(),
+            int(vessel->get_loc()->get_idx_node().toIndex()),
+            nat,
+            vessel->get_speed(),
+            vessel->get_length()
+    ));
 }
 
 std::vector<std::string> VesselDefTable::getNationsList()
 {
     auto select = sqlite::statements::Select(name(), fldNationality).distinct();
 
-    sqlite::SQLiteStatement stmt(db(),select);
+    sqlite::SQLiteStatement stmt(db(), select);
 
     std::vector<std::string> data;
-    stmt.execute([&stmt, &data](){
+    stmt.execute([&stmt, &data]() {
         data.push_back(stmt.getStringValue(0));
         return true;
     });
@@ -99,7 +100,7 @@ std::vector<std::string> VesselDefTable::getNationsList()
 
 void VesselDefTable::queryAllVessels(
         std::function<Node *(int id)> getnode,
-        std::function<bool (std::shared_ptr<Vessel>)> op)
+        std::function<bool(std::shared_ptr<Vessel>)> op)
 {
     auto select = sqlite::statements::Select(name(),
                                              fldId, fldNode,
@@ -109,8 +110,9 @@ void VesselDefTable::queryAllVessels(
         auto id = stmt.getIntValue(1);
         auto node = getnode(id);
         auto d = std::make_shared<Vessel>(node, stmt.getIntValue(0), stmt.getStringValue(2));
-        if (op)
+        if (op) {
             return op(d);
+        }
         return false;
     });
 }

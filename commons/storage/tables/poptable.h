@@ -6,8 +6,9 @@
 
 #include <functional>
 
-#include "sqlitefielddef.h"
-#include "sqlitetable.h"
+#include "msqlitecpp/v1/sqlitefielddef.h"
+#include "msqlitecpp/v1/sqlitetable.h"
+
 using namespace sqlite;
 
 #include <vector>
@@ -16,25 +17,27 @@ using namespace sqlite;
 
 class Node;
 
-class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
-{
+class COMMONSSHARED_EXPORT PopTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId", FieldType::Integer()).notNull();
 
-    FieldDef<FieldType::Real> fldTotNId = makeFieldDef("TotalN",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> fldTotWId = makeFieldDef("TotalW",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> fldCumCatches = makeFieldDef("CumCatches",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> fldCumDiscards = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> fldImpact = makeFieldDef("Impact",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldTotNId = makeFieldDef("TotalN", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldTotWId = makeFieldDef("TotalW", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldCumCatches = makeFieldDef("CumCatches", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldCumDiscards = makeFieldDef("CumDiscards", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldImpact = makeFieldDef("Impact", FieldType::Real()).notNull();
 
     void init();
+
 public:
     PopTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+
     ~PopTable() noexcept;
+
     void dropAndCreate();
 
     bool insert(int tstep, Node *node, const std::multimap<int, double> &initstate);
@@ -46,7 +49,8 @@ public:
 
         double totNid, totWid, cumC, cumD, impact;
     };
-    void queryAllNodesAtStep(int tstep, std::function<bool (Stat)> op);
+
+    void queryAllNodesAtStep(int tstep, std::function<bool(Stat)> op);
 
     size_t getNbPops();
 };

@@ -8,8 +8,8 @@
 #include "commons_global.h"
 #include "idtypes.h"
 
-#include "sqlitefielddef.h"
-#include "sqlitetable.h"
+#include "msqlitecpp/v1/sqlitefielddef.h"
+#include "msqlitecpp/v1/sqlitetable.h"
 
 #include <memory>
 
@@ -20,13 +20,16 @@ class COMMONSSHARED_EXPORT FishFarmsDefTable {
     std::unique_ptr<Impl> p;
 public:
     FishFarmsDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
-    ~FishFarmsDefTable() noexcept ;
+
+    ~FishFarmsDefTable() noexcept;
 
     void dropAndCreate();
-    void insertDef (const Fishfarm &fishfarm);
+
+    void insertDef(const Fishfarm &fishfarm);
 
     using FishfarmSelectFunc = std::function<bool(int nodeid, std::shared_ptr<Fishfarm>)>;
-    void getAllFishfarms (FishfarmSelectFunc func);
+
+    void getAllFishfarms(FishfarmSelectFunc func);
 };
 
 

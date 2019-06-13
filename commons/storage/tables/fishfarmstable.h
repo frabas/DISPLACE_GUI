@@ -4,8 +4,9 @@
 #include "commons_global.h"
 #include "idtypes.h"
 
-#include "sqlitefielddef.h"
-#include "sqlitetable.h"
+#include "msqlitecpp/v1/sqlitefielddef.h"
+#include "msqlitecpp/v1/sqlitetable.h"
+
 using namespace sqlite;
 
 #include <vector>
@@ -14,15 +15,14 @@ using namespace sqlite;
 
 class Fishfarm;
 
-class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
-{
+class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 public:
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldFarmId = makeFieldDef("FarmId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldFarmType = makeFieldDef("FarmType",FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldFarmId = makeFieldDef("FarmId", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldFarmType = makeFieldDef("FarmType", FieldType::Integer()).notNull();
 
     FieldDef<FieldType::Real> fldMeanW = makeFieldDef("MeanW", FieldType::Real());
     FieldDef<FieldType::Real> fldFish = makeFieldDef("Fish", FieldType::Real());
@@ -37,9 +37,10 @@ public:
     FieldDef<FieldType::Real> fldNetDisMedCum = makeFieldDef("fldNetDisMedCum", FieldType::Real());
 
 
-
     FishfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
+
     ~FishfarmsTable() noexcept;
+
     void dropAndCreate();
 
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);

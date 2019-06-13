@@ -1,22 +1,22 @@
 #include "nodestariffstattable.h"
 
-#include <Node.h>
+#include "Node.h"
 
-#include <sqlitestatementformatters.h>
-#include <sqlitefieldsop.h>
-#include <sqlitestatement.h>
+#include "msqlitecpp/v1/sqlitestatementformatters.h"
+#include "msqlitecpp/v1/sqlitefieldsop.h"
+#include "msqlitecpp/v1/sqlitestatement.h"
 
 struct NodesTariffStatTable::Impl {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
+    PreparedInsert <FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
 
 NodesTariffStatTable::NodesTariffStatTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name), p(std::make_unique<Impl>())
+        : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
 
@@ -24,15 +24,16 @@ NodesTariffStatTable::~NodesTariffStatTable() noexcept = default;
 
 void NodesTariffStatTable::dropAndCreate()
 {
-    if (db()->tableExists(name()))
+    if (db()->tableExists(name())) {
         db()->dropTable(name());
+    }
 
     create(std::make_tuple(fldNodeId,
                            fldTStep,
                            tariffAll,
                            tariffPop,
                            tariffBenthos
-                           ));
+    ));
 }
 
 void NodesTariffStatTable::init()
@@ -45,15 +46,15 @@ void NodesTariffStatTable::init()
                                                            tariffAll,
                                                            tariffPop,
                                                            tariffBenthos
-                                                           ));
+        ));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       fldNodeId,
                                                       tariffAll, tariffPop, tariffBenthos,
                                                       sqlite::op::max(fldTStep)
-                                                      )
-                .where (sqlite::op::le(fldTStep))
-                .groupBy (fldNodeId);
+        )
+                .where(sqlite::op::le(fldTStep))
+                .groupBy(fldNodeId);
 
         p->allNodesQueryStatement = sqlite::SQLiteStatement(db(), sqlAllQuery);
     }
@@ -62,36 +63,37 @@ void NodesTariffStatTable::init()
 bool NodesTariffStatTable::insert(int tstep, Node *node)
 {
 
-    if(node->get_tariffs().at(0)==0) return 1; // avoid exporting full of 0s lines
+    if (node->get_tariffs().at(0) == 0) { return 1; } // avoid exporting full of 0s lines
 
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
     SQLiteTable::insert(p->insertStatement,
                         std::make_tuple(tstep,
-                            (int)node->get_idx_node().toIndex(),
-                            node->get_tariffs().at(0),
-                            node->get_tariffs().at(1),
-                            node->get_tariffs().at(2)
-                            )
-                        );
-return 0;
+                                        (int) node->get_idx_node().toIndex(),
+                                        node->get_tariffs().at(0),
+                                        node->get_tariffs().at(1),
+                                        node->get_tariffs().at(2)
+                        )
+    );
+    return 0;
 }
 
-void NodesTariffStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesTariffStatTable::NodeTariffStat)> op)
+void NodesTariffStatTable::queryAllNodesAtStep(int tstep, std::function<bool(NodesTariffStatTable::NodeTariffStat)> op)
 {
     init();
 
     p->allNodesQueryStatement.bind(1, tstep);
-    p->allNodesQueryStatement.execute([this, &op](){
+    p->allNodesQueryStatement.execute([this, &op]() {
         auto &st = p->allNodesQueryStatement;
         NodeTariffStat s;
         s.nodeId = types::NodeId(st.getIntValue(0));
         s.tariffall = st.getDoubleValue(1);
         s.tariffpop = st.getDoubleValue(2);
         s.tariffbenthos = st.getDoubleValue(3);
-        if (op)
+        if (op) {
             return op(s);
+        }
         return false;
     });
 }

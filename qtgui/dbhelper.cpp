@@ -42,7 +42,7 @@
 #include <storage/tables/poptable.h>
 #include <storage/tables/funcgroupstable.h>
 #include <storage/tables/fishfarmsdeftable.h>
-#include <sqlitestorage.h>
+#include "msqlitecpp/v1/sqlitestorage.h"
 #include <storage/modelmetadataaccessor.h>
 
 #include <utils/make_unique.h>

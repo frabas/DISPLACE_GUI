@@ -38,7 +38,7 @@
 #include <QtDebug>
 
 #include "storage/sqliteoutputstorage.h"
-#include "sqlitestorage.h"
+#include "msqlitecpp/v1/sqlitestorage.h"
 
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";

@@ -5,7 +5,7 @@
 #include <displacemodel.h>
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/vesselslogliketable.h>
-#include <sqlitestatement.h>
+#include <msqlitecpp/v1/sqlitestatement.h>
 
 #include <qcustomplot.h>
 

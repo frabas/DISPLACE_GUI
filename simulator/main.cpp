@@ -42,7 +42,7 @@
 
 #include <idtypes.h>
 
-#include "sqlitestorage.h"
+#include "msqlitecpp/v1/sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
 #include "storage/tables/vesselvmslikefpingsonlytable.h"

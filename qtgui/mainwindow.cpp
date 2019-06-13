@@ -94,7 +94,7 @@
 
 #include <legacy/binarygraphfilewriter.h>
 
-#include <sqlitestorage.h>
+#include "msqlitecpp/v1/sqlitestorage.h"
 
 #include <QBoxLayout>
 #include <QTextEdit>

@@ -24,11 +24,9 @@
 #include "tables/nodesenvttable.h"
 #include "modelmetadataaccessor.h"
 
-#include <cassert>
-
-#include <Vessel.h>
-#include <Metier.h>
-#include <Population.h>
+#include "Vessel.h"
+#include "Metier.h"
+#include "Population.h"
 
 
 

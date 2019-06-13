@@ -64,7 +64,8 @@ SOURCES= main.cpp \
     thread_vessels.cpp \
     outputexporter.cpp \
     getRSS.cpp \
-    biomodule2.cpp
+    biomodule2.cpp \
+    fisheriesmanagmt.cpp
 
 HEADERS= \
     ../include/readdata.h \

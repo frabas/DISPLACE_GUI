@@ -9,7 +9,11 @@ include_directories(
 file(GLOB HEADERS QMapControl/src/QMapControl/*.h)
 file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 
-#set(GDAL_LIBRARY gdal)
+if (NOT APPLE)
+    set(GDAL_LIBRARY gdal)
+else()
+    set(GDAL_LIBRARY GDAL::GDAL)
+endif()
 
 #if (WIN32)
 #    link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
@@ -17,7 +21,7 @@ file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 #endif (WIN32)
 
 set(LIBRARIES
-        GDAL::GDAL
+        ${GDAL_LIBRARY}
         )
 
 add_library(QMapControl SHARED

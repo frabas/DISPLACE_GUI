@@ -53,6 +53,8 @@ target_link_libraries(displace
         commons
         formats
         ${LIBRARIES}
+        msqlitecpp::msqlitecpp
+
         Boost::program_options
         )
 

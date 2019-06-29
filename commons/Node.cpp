@@ -2018,7 +2018,13 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);
 
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K.at(funcgr)
-    if(benthos_tot_biomass.at(funcgr)>1e-5)
+    if(benthos_tot_biomass.at(funcgr)>1e-5 && (tstep==0 ||
+                                               tstep==8761 ||
+                                               tstep==17521 ||
+                                               tstep==26281 ||
+                                               tstep==35065 ||
+                                               tstep==43825 ||
+                                               tstep==52585))
          benthosbiomassnodes << setprecision(0) << fixed << funcgr << " " << tstep << " " <<
           setprecision(3) << fixed <<  this->get_idx_node().toIndex() << " " << this->get_x() << " " << this->get_y() << " " <<
           setprecision(0) << fixed << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " " <<

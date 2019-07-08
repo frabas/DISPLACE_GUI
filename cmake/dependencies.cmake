@@ -20,11 +20,8 @@ link_directories(${GeographicLib_LIBRARY_DIRS})
 
 find_package(GDAL REQUIRED 1.11)
 message("GDAL library: ${GDAL_LIBRARY}")
-
-if (NOT APPLE)
-    include_directories(${GDAL_INCLUDE_DIR})
-    link_directories(${GDAL_LIBRARY_DIRS})
-endif()
+message("GDAL include: ${GDAL_INCLUDE_DIR}")
+#include_directories(${GDAL_INCLUDE_DIR})
 
 if (NOT WITHOUT_GUI)
     find_package(CGAL REQUIRED)

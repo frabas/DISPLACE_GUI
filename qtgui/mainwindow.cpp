@@ -113,37 +113,40 @@
 
 const int MainWindow::maxModels = MAX_MODELS;
 const QString MainWindow::dbSuffix = ".db";
-const QString MainWindow::dbFilter = QT_TR_NOOP("Displace Database files (*.db);;All files (*.*)") ;
+const QString MainWindow::dbFilter = QT_TR_NOOP("Displace Database files (*.db);;All files (*.*)");
 const QString MainWindow::dbLastDirKey = "db_lastdir";
 const int MainWindow::playTimerDefault = 20;
 
 const int MainWindow::playTimerRates[] = {
-    50, 40, 25, 20, 15, 10, 5, 2, 1
+        50, 40, 25, 20, 15, 10, 5, 2, 1
 };
 
-namespace types { namespace helpers {
-template <typename IDX, typename C>
-QList<IDX> toIdQList(const QList<C> &c) {
+namespace types {
+namespace helpers {
+template<typename IDX, typename C>
+QList<IDX> toIdQList(const QList<C> &c)
+{
     QList<IDX> l;
     for (auto v : c)
         l.push_back(IDX(v));
     return l;
 }
-} } // Ns
+}
+} // Ns
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    models(),
-    currentModel(0),
-    currentModelIdx(-1),
-    mSimulation(0),
-    mMapController(0),
-    map(0),
-    treemodel(0),
-    mPlayTimerInterval(playTimerDefault),
-    mMouseMode(0),
-    mWaitDialog(0)
+        QMainWindow(parent),
+        ui(new Ui::MainWindow),
+        models(),
+        currentModel(0),
+        currentModelIdx(-1),
+        mSimulation(0),
+        mMapController(0),
+        map(0),
+        treemodel(0),
+        mPlayTimerInterval(playTimerDefault),
+        mMouseMode(0),
+        mWaitDialog(0)
 {
     ui->setupUi(this);
 
@@ -177,29 +180,30 @@ MainWindow::MainWindow(QWidget *parent) :
         models[i] = 0;
     }
 
-    connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
-    connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
-    connect (&mMemoryWatchTimer, SIGNAL(timeout()), this, SLOT(memoryTimerTimeout()));
+    connect(this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
+    connect(&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
+    connect(&mMemoryWatchTimer, SIGNAL(timeout()), this, SLOT(memoryTimerTimeout()));
 
     mMemoryWatchTimer.start(2500);
 
     qDebug() << "Connect gui to simulator";
     mSimulation = new Simulator();
     mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
-    connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
-    connect (mSimulation, SIGNAL(simulationEnded(int)), this, SLOT(simulationEnded(int)));
-    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState,QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState,QProcess::ProcessState)));
-    connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
+    connect(mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
+    connect(mSimulation, SIGNAL(simulationEnded(int)), this, SLOT(simulationEnded(int)));
+    connect(mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState, QProcess::ProcessState)), this,
+            SLOT(simulatorProcessStateChanged(QProcess::ProcessState, QProcess::ProcessState)));
+    connect(mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
-    connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
-             this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
-    connect (mSimulation, SIGNAL(shipMoved(int,int,float,float,float)),
-             this, SLOT(shipMoved(int,int,float,float,float)));
-    connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
-    connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
-    connect (mSimulation, SIGNAL(sqliteStorageOpened(QString)), this, SLOT(simulatorSqlStorageChanged(QString)));
-    connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
-    connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
+    connect(mSimulation, SIGNAL(vesselMoved(int, int, float, float, float, float, int)),
+            this, SLOT(vesselMoved(int, int, float, float, float, float, int)));
+    connect(mSimulation, SIGNAL(shipMoved(int, int, float, float, float)),
+            this, SLOT(shipMoved(int, int, float, float, float)));
+    connect(mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
+    connect(mSimulation, SIGNAL(outputFileUpdated(QString, int)), this, SLOT(updateOutputFile(QString, int)));
+    connect(mSimulation, SIGNAL(sqliteStorageOpened(QString)), this, SLOT(simulatorSqlStorageChanged(QString)));
+    connect(mSimulation, SIGNAL(debugMemoryStats(long, long)), this, SLOT(simulatorDebugMemoryStats(long, long)));
+    connect(mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
     qDebug() << "Connect gui to simulator...OK";
 
@@ -225,18 +229,21 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Connect map widget ";
     map = ui->mapWidget;
     mMapController = new MapObjectsController(map);
-    connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
-    connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
+    connect(mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
+    connect(mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
-    connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
-    connect (map, SIGNAL(mouseEventPressCoordinate(QMouseEvent*,PointWorldCoord)), this, SLOT(mapMousePress(QMouseEvent*,PointWorldCoord)));
-    connect (map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
-    connect (map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
+    connect(map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
+    connect(map, SIGNAL(mouseEventPressCoordinate(QMouseEvent * , PointWorldCoord)), this,
+            SLOT(mapMousePress(QMouseEvent * , PointWorldCoord)));
+    connect(map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent * , PointWorldCoord, PointWorldCoord)), this,
+            SLOT(mapMouseRelease(QMouseEvent * , PointWorldCoord, PointWorldCoord)));
+    connect(map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent * , PointWorldCoord, PointWorldCoord)), this,
+            SLOT(mapMouseMove(QMouseEvent * , PointWorldCoord, PointWorldCoord)));
 
     map->setBackgroundColour(Qt::white);
 
     QPixmap pixmap;
-    pixmap.fill( Qt::white );
+    pixmap.fill(Qt::white);
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
 
     /* Stats windows setup */
@@ -257,7 +264,7 @@ MainWindow::MainWindow(QWidget *parent) :
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
+    connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -290,11 +297,13 @@ class Loader : public BackgroundWorker {
     int mModelIdx;
 public:
     Loader(MainWindow *main, QString dir, int model_idx = 0)
-        : BackgroundWorker(main), mDir(dir),
-          mModelIdx (model_idx) {
+            : BackgroundWorker(main), mDir(dir),
+              mModelIdx(model_idx)
+    {
     }
 
-    virtual void execute() override {
+    virtual void execute() override
+    {
         qDebug() << "Loader started";
         QString error;
         if (!mMain->loadLiveModel(mDir, &error, mModelIdx)) {
@@ -320,16 +329,17 @@ void MainWindow::on_action_Load_triggered()
 
     lastpath = sets.value("lastpath", QDir::homePath()).toString();
 
-    QString dir  = QFileDialog::getOpenFileName(this,
-                                                tr("Select a scenario file - look at simusspe_* directory"),
-                                                lastpath, QString("*.dat"));
-    if (dir.isEmpty())
+    QString dir = QFileDialog::getOpenFileName(this,
+                                               tr("Select a scenario file - look at simusspe_* directory"),
+                                               lastpath, QString("*.dat"));
+    if (dir.isEmpty()) {
         return;
+    }
 
-    QDir d (dir);
+    QDir d(dir);
     sets.setValue("lastpath", d.absolutePath());
 
-    Loader *loader = new Loader(this,dir, currentModelIdx);
+    Loader *loader = new Loader(this, dir, currentModelIdx);
 
     startBackgroundOperation(loader, 0);
 }
@@ -341,10 +351,11 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     }
 
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
-    if (currentModelIdx >= 0)
+    if (currentModelIdx >= 0) {
         currentModel = models[currentModelIdx];
-    else
+    } else {
         currentModel = 0;
+    }
 
     int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     treemodel->setCurrentModel(currentModelIdx, currentModel.get());
@@ -352,7 +363,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
     mStatsController->updateStats(currentModel.get());
 
-    DisplaceModel::ModelType type = currentModel == 0 ? DisplaceModel::EmptyModelType : currentModel->modelType() ;
+    DisplaceModel::ModelType type = currentModel == 0 ? DisplaceModel::EmptyModelType : currentModel->modelType();
 
     bool e = (type == DisplaceModel::OfflineModelType || type == DisplaceModel::EditorModelType);
     ui->play_bk->setEnabled(e);
@@ -430,7 +441,9 @@ void MainWindow::simulatorLogging(QString msg)
 void MainWindow::simulationEnded(int exitcode)
 {
     if (exitcode != 0) {
-        QMessageBox::warning(this, tr("Simulation ended"), tr("The simulator exited with an error code (%1). See the console for details.").arg(exitcode));
+        QMessageBox::warning(this, tr("Simulation ended"),
+                             tr("The simulator exited with an error code (%1). See the console for details.").arg(
+                                     exitcode));
     }
 }
 
@@ -441,8 +454,9 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
         ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
 
-        if (newstate != QProcess::Running)
+        if (newstate != QProcess::Running) {
             simulatorProcessStepChanged(-1);
+        }
 
         if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
         }
@@ -465,11 +479,10 @@ void MainWindow::simulatorProcessStepChanged(int step)
     }
 
 
-    if (step != -1 && models[0] != nullptr)
-    {
-        int mtminus1 = models[0]->calendar()->getMonth(step-1);
+    if (step != -1 && models[0] != nullptr) {
+        int mtminus1 = models[0]->calendar()->getMonth(step - 1);
         int mt = models[0]->calendar()->getMonth(step);
-        if(mt!=mtminus1) models[0]->setCurrentStep(step); // update only if month starts
+        if (mt != mtminus1) { models[0]->setCurrentStep(step); } // update only if month starts
     }
 
     updateCalendarDisplay(step);
@@ -482,7 +495,7 @@ void MainWindow::simulatorNodeStatsUpdate(QString data)
 
 void MainWindow::simulatorDebugMemoryStats(long rss, long peak)
 {
-    mStatusInfoLabel->setText(QString("Simulator Memory RSS: %1Mb peak %2Mb").arg(rss/1024).arg(peak/1024));
+    mStatusInfoLabel->setText(QString("Simulator Memory RSS: %1Mb peak %2Mb").arg(rss / 1024).arg(peak / 1024));
 }
 
 void MainWindow::simulatorCaptureLine(QString line)
@@ -492,19 +505,19 @@ void MainWindow::simulatorCaptureLine(QString line)
 
 void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)
 {
-    models[0]->updateVessel (step, idx, x, y, course, fuel, state);
+    models[0]->updateVessel(step, idx, x, y, course, fuel, state);
     mMapController->updateVesselPosition(0, idx);
 }
 
 void MainWindow::shipMoved(int step, int idx, float x, float y, float course)
 {
-    models[0]->updateShip (step, idx, x, y, course);
+    models[0]->updateShip(step, idx, x, y, course);
     mMapController->updateShipPosition(0, idx);
 }
 
 void MainWindow::updateModelState()
 {
-    simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
+    simulatorProcessStateChanged(mSimulation->processState(), mSimulation->processState());
     updateModelList();
 }
 
@@ -518,7 +531,7 @@ void MainWindow::outputUpdated()
     try {
         qDebug() << "Updating map to step " << models[0]->getCurrentStep();
         mMapController->updateNodes(0);
-        if(models[0]->getCurrentStep()>8760) mStatsController->updateStats(models[0].get());
+        if (models[0]->getCurrentStep() > 8760) { mStatsController->updateStats(models[0].get()); }
     } catch (sqlite::SQLiteException &xcp) {
         qWarning() << "Error updating output: " << xcp.what();
     }
@@ -526,35 +539,41 @@ void MainWindow::outputUpdated()
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
-    mCoordinatesInfoLabel->setText(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+    mCoordinatesInfoLabel->setText(QString("Pos: %1 %2").arg(pos.latitude(), 5).arg(pos.longitude(), 5));
 }
 
 void MainWindow::mapMousePress(QMouseEvent *event, PointWorldCoord point)
 {
     Q_UNUSED(event);
-    if (!mMouseMode)    // no mouse mode active
+    if (!mMouseMode) {    // no mouse mode active
         return;
+    }
 
-    if (!mMouseMode->pressEvent(point.rawPoint()))
+    if (!mMouseMode->pressEvent(point.rawPoint())) {
         abortMouseMode();
+    }
 }
 
 void MainWindow::mapMouseRelease(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
 {
-    if (!mMouseMode)    // no mouse mode active
+    if (!mMouseMode) {    // no mouse mode active
         return;
+    }
 
-    if (!mMouseMode->releaseEvent(point.rawPoint()))
+    if (!mMouseMode->releaseEvent(point.rawPoint())) {
         abortMouseMode();
+    }
 }
 
 void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
 {
-    if (!mMouseMode)    // no mouse mode active
+    if (!mMouseMode) {    // no mouse mode active
         return;
+    }
 
-    if (!mMouseMode->moveEvent(point.rawPoint()))
+    if (!mMouseMode->moveEvent(point.rawPoint())) {
         abortMouseMode();
+    }
 }
 
 void MainWindow::showMessage(const QString &message)
@@ -574,8 +593,9 @@ void MainWindow::treeViewContextMenuRequested(QPoint point)
     if (index.isValid()) {
         objecttree::ObjectTreeEntity *entity = treemodel->entity(index);
         QMenu *menu = entity->contextMenu();
-        if (menu)
+        if (menu) {
             menu->exec(ui->treeView->mapToGlobal(point));
+        }
     }
 }
 
@@ -587,16 +607,18 @@ void MainWindow::errorImportingStatsFile(QString msg)
 
 void MainWindow::playTimerTimeout()
 {
-    if (currentModel->getCurrentStep() < currentModel->getLastStep())
+    if (currentModel->getCurrentStep() < currentModel->getLastStep()) {
         on_play_fwd_clicked();
-    else
+    } else {
         on_play_auto_clicked();
+    }
 }
 
 void MainWindow::memoryTimerTimeout()
 {
     mMemInfo.update();
-    mMemInfoLabel->setText(QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss()/1024).arg(mMemInfo.peakRss()/1024));
+    mMemInfoLabel->setText(
+            QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss() / 1024).arg(mMemInfo.peakRss() / 1024));
 }
 
 void MainWindow::waitStart()
@@ -610,7 +632,7 @@ void MainWindow::waitStart()
 
 void MainWindow::waitEnd()
 {
-    qDebug()  << "Wait End";
+    qDebug() << "Wait End";
 
     if (mWaitDialog) {
         mWaitDialog->close();
@@ -651,7 +673,7 @@ void MainWindow::editorAddEdge(int from, int to)
     double d;
 
 #if GEOGRAPHICLIB_VERSION_MINOR > 25
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+    const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
 #else
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
@@ -681,15 +703,16 @@ void MainWindow::updateModelList()
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(
-                        QString(tr("[%1] %2 %3 %4")).arg(i).arg(models[i]->inputName())
-                        .arg(models[i]->outputName()).arg(models[i]->simulationName()),
-                        i);
-            if (i == n)
+                    QString(tr("[%1] %2 %3 %4")).arg(i).arg(models[i]->inputName())
+                            .arg(models[i]->outputName()).arg(models[i]->simulationName()),
+                    i);
+            if (i == n) {
                 sel = i;
+            }
         } else {
             ui->modelSelector->addItem(
-                        QString(tr("[%1]")).arg(i),
-                        i);
+                    QString(tr("[%1]")).arg(i),
+                    i);
         }
     }
 
@@ -709,12 +732,12 @@ void MainWindow::updateCalendarDisplay(int tstep)
     } else {
         int mt = 0, yr = 0;
         if (currentModel->calendar()) {
-            mt =currentModel->calendar()->getMonth(tstep);
+            mt = currentModel->calendar()->getMonth(tstep);
             yr = currentModel->calendar()->getYear(tstep);
         }
         QString txt = QString("D %1 [%6] Wk %2\nMt %3 Yr %4\n%5:00 h")
                 .arg(tstep / 24)
-                .arg(tstep / (24*7))
+                .arg(tstep / (24 * 7))
                 .arg(mt)
                 .arg(yr)
                 .arg(tstep % 24)
@@ -727,8 +750,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (mSimulation->isRunning()) {
         int res = QMessageBox::question(this, tr("Simulation running"),
-                              tr("A simulation process is running. Closing the app will force close it. Do you want to proceed?"),
-                              QMessageBox::No, QMessageBox::Yes);
+                                        tr("A simulation process is running. Closing the app will force close it. Do you want to proceed?"),
+                                        QMessageBox::No, QMessageBox::Yes);
 
         if (res == QMessageBox::Yes) {
             mSimulation->forceStop();
@@ -758,13 +781,13 @@ void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
 
 void MainWindow::centerMapOnHarbourId(int id)
 {
-    std::shared_ptr<HarbourData> h (currentModel->getHarboursList()[id]);
+    std::shared_ptr<HarbourData> h(currentModel->getHarboursList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mHarbour->get_x(), h->mHarbour->get_y()));
 }
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
+    std::shared_ptr<NodeData> h(currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
 
@@ -803,12 +826,14 @@ void MainWindow::centerMapOnWindmillId(int id)
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
-        if ((mLastRunDatabase == models[0]->linkedDatabase() || mLastRunSimulationName == models[0]->simulationName()) && mSimulation->wasSimulationStarted()) {
+        if ((mLastRunDatabase == models[0]->linkedDatabase() ||
+             mLastRunSimulationName == models[0]->simulationName()) && mSimulation->wasSimulationStarted()) {
             int res = QMessageBox::information(this, tr("Restart simulation"),
                                                tr("Restarting simulation will eventually overwrite the results data, either in a linked db or in the output files. Are you sure to continue?"),
                                                QMessageBox::Yes, QMessageBox::No);
-            if (res == QMessageBox::No)
+            if (res == QMessageBox::No) {
                 return;
+            }
         }
 
         ui->profilingOutput->clear();
@@ -819,7 +844,8 @@ void MainWindow::on_cmdStart_clicked()
         mSimulation->setOutDir(models[0]->getOutDir());
         mSimulation->setUseStaticPaths(models[0]->getUseStaticPaths());
         mSimulation->setOutputName(models[0]->outputName());
-        mSimulation->start(models[0]->outDir(), models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
+        mSimulation->start(models[0]->outDir(), models[0]->inputName(), models[0]->basepath(),
+                           models[0]->simulationName());
     }
 }
 
@@ -832,8 +858,9 @@ void MainWindow::on_cmdStop_clicked()
 
 void MainWindow::on_actionScenario_triggered()
 {
-    if (!currentModel || currentModel->modelType() == DisplaceModel::OfflineModelType)
+    if (!currentModel || currentModel->modelType() == DisplaceModel::OfflineModelType) {
         return;
+    }
 
     bool askForReload = (currentModel->modelType() == DisplaceModel::LiveModelType);
     openScenarioDialog(currentModel->fullpath(), askForReload, false);
@@ -843,14 +870,15 @@ void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bo
 {
     if (currentModel) {
         Scenario d = currentModel->scenario();
-        ScenarioDialog dlg (d, this);
+        ScenarioDialog dlg(d, this);
         dlg.setScenarioPath(suggestedPath);
-        if (forceRename)
+        if (forceRename) {
             dlg.setForceRename();
+        }
         if (dlg.exec() == QDialog::Accepted) {
             int r = QMessageBox::question(this, tr("Saving scenario"),
                                           QString(tr("The scenario file must be saved%1. Proceed?"))
-                                            .arg(askForReload ? " and the model reloaded" : ""),
+                                                  .arg(askForReload ? " and the model reloaded" : ""),
                                           QMessageBox::No, QMessageBox::Yes);
             if (r == QMessageBox::Yes) {
                 currentModel->setScenario(dlg.getScenario());
@@ -863,18 +891,19 @@ void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bo
 
                 if (ok) {
                     QMessageBox::information(this, tr("Model saved"),
-                                             QString(tr("The model %1 has been saved successfully.")).arg(currentModel->inputName()));
+                                             QString(tr("The model %1 has been saved successfully.")).arg(
+                                                     currentModel->inputName()));
                 } else {
                     QMessageBox::warning(this, tr("Save failed"),
                                          QString(tr("There was an error saving the model %1: %2"))
-                                         .arg(dlg.getScenarioPath())
-                                         .arg(currentModel->getLastError()));
+                                                 .arg(dlg.getScenarioPath())
+                                                 .arg(currentModel->getLastError()));
                     return;
                 }
 
                 if (askForReload) {
-                    Loader *loader = new Loader(this,currentModel->fullpath());
-                    startBackgroundOperation(loader,0);
+                    Loader *loader = new Loader(this, currentModel->fullpath());
+                    startBackgroundOperation(loader, 0);
                 }
             }
         }
@@ -883,12 +912,14 @@ void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bo
 
 void MainWindow::on_actionConfiguration_triggered()
 {
-    if (!currentModel || (currentModel->modelType() != DisplaceModel::LiveModelType && currentModel->modelType() != DisplaceModel::EditorModelType))
+    if (!currentModel || (currentModel->modelType() != DisplaceModel::LiveModelType &&
+                          currentModel->modelType() != DisplaceModel::EditorModelType)) {
         return;
+    }
 
     if (currentModel) {
         Config c = currentModel->config();
-        ConfigDialog dlg (currentModel.get(), this);
+        ConfigDialog dlg(currentModel.get(), this);
         dlg.set(c);
         if (dlg.exec() == QDialog::Accepted) {
             if (!dlg.get(c)) {
@@ -903,7 +934,7 @@ void MainWindow::on_actionConfiguration_triggered()
                                      QString(tr("There was an error saving the Config file for model %1: %2"))
                                              .arg(currentModel->fullpath())
                                              .arg(currentModel->getLastError())
-                                     );
+                );
                 return;
             }
         }
@@ -927,42 +958,45 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 {
-    if (!treemodel->isObject(index))
+    if (!treemodel->isObject(index)) {
         return;
+    }
 
     ObjectTreeModel::Category cat = treemodel->getCategory(index);
     switch (cat) {
 
-    case ObjectTreeModel::Harbours:
-        centerMapOnHarbourId((dynamic_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
-        break;
+        case ObjectTreeModel::Harbours:
+            centerMapOnHarbourId((dynamic_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
+            break;
 
-    case ObjectTreeModel::Nodes:
-        centerMapOnNodeId((dynamic_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
-        break;
+        case ObjectTreeModel::Nodes:
+            centerMapOnNodeId((dynamic_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
+            break;
 
-    case ObjectTreeModel::Vessels:
-        centerMapOnVesselId((dynamic_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
-        break;
+        case ObjectTreeModel::Vessels:
+            centerMapOnVesselId((dynamic_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
+            break;
 
-    case ObjectTreeModel::Firms:
-        centerMapOnFirmId((dynamic_cast<objecttree::FirmEntity *>(treemodel->entity(index)))->getFirmId());
-        break;
+        case ObjectTreeModel::Firms:
+            centerMapOnFirmId((dynamic_cast<objecttree::FirmEntity *>(treemodel->entity(index)))->getFirmId());
+            break;
 
-    case ObjectTreeModel::Ships:
-        centerMapOnShipId((dynamic_cast<objecttree::ShipEntity *>(treemodel->entity(index)))->getShipId());
-        break;
+        case ObjectTreeModel::Ships:
+            centerMapOnShipId((dynamic_cast<objecttree::ShipEntity *>(treemodel->entity(index)))->getShipId());
+            break;
 
-    case ObjectTreeModel::Fishfarms:
-        centerMapOnFishfarmId((dynamic_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
-        break;
+        case ObjectTreeModel::Fishfarms:
+            centerMapOnFishfarmId(
+                    (dynamic_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
+            break;
 
-    case ObjectTreeModel::Windmills:
-        centerMapOnWindmillId((dynamic_cast<objecttree::WindmillEntity *>(treemodel->entity(index)))->getWindmillId());
-        break;
+        case ObjectTreeModel::Windmills:
+            centerMapOnWindmillId(
+                    (dynamic_cast<objecttree::WindmillEntity *>(treemodel->entity(index)))->getWindmillId());
+            break;
 
-    default:    // nothing to do
-        return;
+        default:    // nothing to do
+            return;
     }
 }
 
@@ -973,7 +1007,7 @@ void MainWindow::on_saveConsoleButton_clicked()
                                                 QString(), QString(tr("Text files (*.txt);;All files (*.*)")));
 
     if (!path.isEmpty()) {
-        QFile file (path);
+        QFile file(path);
         if (!file.open(QFile::WriteOnly)) {
             QMessageBox::warning(this, tr("Save failed"),
                                  QString(tr("Cannot save file: %1")).arg(file.errorString()));
@@ -1001,7 +1035,7 @@ void MainWindow::on_cmdSetup_clicked()
     dlg.setVesselMoveDisplayUpdateRate(mSimulation->getVesselMoveDisplayUpdateRate());
     dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
     dlg.setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
-   
+
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setOutDir(dlg.getOutDir());
@@ -1015,8 +1049,8 @@ void MainWindow::on_cmdSetup_clicked()
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
         set.setValue(Simulator::SET_VERBOSITY, dlg.getVerbosityLevel());
 
-     
-        if (mSimulation){
+
+        if (mSimulation) {
             mSimulation->setVerbosityLevel(dlg.getVerbosityLevel());
         }
         updateModelList();
@@ -1026,14 +1060,15 @@ void MainWindow::on_cmdSetup_clicked()
 void MainWindow::on_actionLoad_results_triggered()
 {
     QSettings sets;
-    QString dbname =  QFileDialog::getOpenFileName(this, tr("Load Results file"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter);
+    QString dbname = QFileDialog::getOpenFileName(this, tr("Load Results file"),
+                                                  sets.value(dbLastDirKey).toString(), dbFilter);
 
     if (!dbname.isEmpty()) {
         int i;
         for (i = 1; i < MAX_MODELS; ++i) {
-            if (models[i] == 0)
+            if (models[i] == 0) {
                 break;
+            }
         }
 
         if (i == MAX_MODELS) {
@@ -1041,7 +1076,7 @@ void MainWindow::on_actionLoad_results_triggered()
                                  tr("We cannot load more database."));
             return;
         }
-        QFileInfo info (dbname);
+        QFileInfo info(dbname);
         if (info.suffix().isEmpty()) {
             dbname += dbSuffix;
             info = QFileInfo(dbname);
@@ -1061,7 +1096,7 @@ void MainWindow::on_actionLoad_results_triggered()
         models[i] = newmodel;
 
         mMapController->setModel(i, newmodel);
-        mMapController->createMapObjectsFromModel(i,models[i].get());
+        mMapController->createMapObjectsFromModel(i, models[i].get());
         ui->modelSelector->setCurrentIndex(i);
 
         emit modelStateChanged();
@@ -1071,14 +1106,14 @@ void MainWindow::on_actionLoad_results_triggered()
 
 int MainWindow::newEditorModel(QString name)
 {
-    int i = MAX_MODELS-1;
+    int i = MAX_MODELS - 1;
     std::shared_ptr<DisplaceModel> edmodel = std::shared_ptr<DisplaceModel>(new DisplaceModel());
     edmodel->edit(name);
     edmodel->setIndex(i);
     models[i] = edmodel;
 
     mMapController->setModel(i, edmodel);
-    mMapController->createMapObjectsFromModel(i,models[i].get());
+    mMapController->createMapObjectsFromModel(i, models[i].get());
     ui->modelSelector->setCurrentIndex(i);
 
     emit modelStateChanged();
@@ -1102,13 +1137,13 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     }
 
     work->moveToThread(thread);
-    connect (thread, SIGNAL(started()), work, SLOT(process()));
-    connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
-    connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
-    connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
-    connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
+    connect(thread, SIGNAL(started()), work, SLOT(process()));
+    connect(work, SIGNAL(workStarted()), this, SLOT(waitStart()));
+    connect(work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
+    connect(work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
+    connect(work, SIGNAL(warning(QString, QString)), this, SLOT(showWarningMessageBox(QString, QString)));
 
-    connect (work, &BackgroundWorker::completed, [thread]() {
+    connect(work, &BackgroundWorker::completed, [thread]() {
         thread->quit();
     });
 
@@ -1132,14 +1167,15 @@ QProcess *MainWindow::prepareAppExecutableStart(QString exename)
     ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->setProgram(app);
 
-    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError /*err*/) {
-       QMessageBox::warning(this, tr("Failed to start"),
-                            QString(tr("The process %1 failed to start")).arg(app));
-    });
+    connect(ed, static_cast<void (QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+            [this, ed, app](QProcess::ProcessError /*err*/) {
+                QMessageBox::warning(this, tr("Failed to start"),
+                                     QString(tr("The process %1 failed to start")).arg(app));
+            });
     return ed;
 }
 
-void MainWindow::startMouseMode(MouseMode * newmode)
+void MainWindow::startMouseMode(MouseMode *newmode)
 {
     abortMouseMode();
     mMouseMode = newmode;
@@ -1159,8 +1195,9 @@ void MainWindow::endMouseMode(bool success)
 {
     mMouseModeInfoLabel->hide();
     mStatusInfoLabel->setText("");
-    if (!mMouseMode)
+    if (!mMouseMode) {
         return;
+    }
 
     if (success) {
         mMouseMode->endMode(success);
@@ -1190,8 +1227,9 @@ void MainWindow::completeMouseMode()
 
 void MainWindow::simulatorSqlStorageChanged(QString path)
 {
-    if (currentModel)
+    if (currentModel) {
         currentModel->setSimulationSqlStorage(path);
+    }
 }
 
 void MainWindow::showWarningMessageBox(QString title, QString message)
@@ -1222,22 +1260,22 @@ void MainWindow::on_play_bk_clicked()
 
 void MainWindow::on_play_fbk_clicked()
 {
-     ui->play_step->setValue(currentModel->getCurrentStep() - 50);
+    ui->play_step->setValue(currentModel->getCurrentStep() - 50);
 }
 
 void MainWindow::on_play_ffwd_clicked()
 {
-     ui->play_step->setValue(currentModel->getCurrentStep() + 50);
+    ui->play_step->setValue(currentModel->getCurrentStep() + 50);
 }
 
 void MainWindow::on_play_first_clicked()
 {
-     ui->play_step->setValue(0);
+    ui->play_step->setValue(0);
 }
 
 void MainWindow::on_play_last_clicked()
 {
-     ui->play_step->setValue(currentModel->getLastStep());
+    ui->play_step->setValue(currentModel->getLastStep());
 }
 
 void MainWindow::on_play_auto_clicked()
@@ -1351,7 +1389,7 @@ void MainWindow::on_actionDissolvedCarbon_triggered()
     showPaletteDialog(DissolvedCarbonRole);
 }
 
-void MainWindow::showPaletteDialog (PaletteRole role)
+void MainWindow::showPaletteDialog(PaletteRole role)
 {
     EditPaletteDialog dlg(this);
     Palette pal = mMapController->getPalette(currentModelIdx, role);
@@ -1366,22 +1404,22 @@ void MainWindow::showPaletteDialog (PaletteRole role)
 
 void MainWindow::on_popStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setPopulationStat((displace::plot::PopulationStat)index);
+    mStatsController->setPopulationStat((displace::plot::PopulationStat) index);
 }
 
 void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
 {
-    mStatsController->setNationsStat((displace::plot::NationsStat)index);
+    mStatsController->setNationsStat((displace::plot::NationsStat) index);
 }
 
 void MainWindow::on_vesselsStatsSelector_currentIndexChanged(int index)
 {
-    mStatsController->setVesselsStat((displace::plot::VesselsStat)index);
+    mStatsController->setVesselsStat((displace::plot::VesselsStat) index);
 }
 
 void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setHarbourStat((displace::plot::HarboursStat)index);
+    mStatsController->setHarbourStat((displace::plot::HarboursStat) index);
 }
 
 void MainWindow::on_metierStatSelector_currentIndexChanged(int index)
@@ -1399,7 +1437,8 @@ void MainWindow::on_play_params_clicked()
     int current = rates.size();
     rates << QString::number(1000 / mPlayTimerInterval);
 
-    QString value = QInputDialog::getItem(this, tr("Autoplay frame rate"), tr("Frame rate, in fps"), rates, current, true, &ok);
+    QString value = QInputDialog::getItem(this, tr("Autoplay frame rate"), tr("Frame rate, in fps"), rates, current,
+                                          true, &ok);
     if (ok) {
         int n = value.toInt(&ok);
         if (ok) {
@@ -1420,28 +1459,30 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionImport_Shapefile_triggered()
 {
     if (currentModel == 0) {
-        QMessageBox::information(this, tr("Importing shape file"), tr("Please load a simulation or database before importing a shapefile"));
+        QMessageBox::information(this, tr("Importing shape file"),
+                                 tr("Please load a simulation or database before importing a shapefile"));
         return;
     }
 
 
     QSettings sets;
-    QString name =  QFileDialog::getOpenFileName(this, tr("Import shapefile"),
-                                         sets.value("import_shape").toString(), tr("*.shp;;*.*"));
+    QString name = QFileDialog::getOpenFileName(this, tr("Import shapefile"),
+                                                sets.value("import_shape").toString(), tr("*.shp;;*.*"));
 
     if (!name.isEmpty()) {
-        QFileInfo info (name);
+        QFileInfo info(name);
 
-        GDALDataset *ds = (GDALDataset*)OGROpen(name.toStdString().c_str(), 0, nullptr);
+        GDALDataset *ds = (GDALDataset *) OGROpen(name.toStdString().c_str(), 0, nullptr);
 
         QString layer;
 
         if (ds->GetLayerCount() > 1) {
             QStringList items;
-            for(int i = 0; i < ds->GetLayerCount(); ++i)
+            for (int i = 0; i < ds->GetLayerCount(); ++i)
                 items << ds->GetLayer(i)->GetName();
 
-            layer = QInputDialog::getItem(this, tr("Shapefile open"), tr("Please select the a layer, or cancel for all layers"), items,0, false);
+            layer = QInputDialog::getItem(this, tr("Shapefile open"),
+                                          tr("Please select the a layer, or cancel for all layers"), items, 0, false);
         }
 
         mMapController->importShapefile(currentModelIdx, name, layer);
@@ -1475,7 +1516,8 @@ void MainWindow::on_actionEdge_Edit_toggled(bool en)
     if (en) {
         map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectLine, false);
         mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
-        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerEdges, true);
+        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerEdges,
+                                           true);
     }
 }
 
@@ -1484,7 +1526,8 @@ void MainWindow::on_actionNode_Editor_toggled(bool en)
     if (en) {
         map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectBox, false);
         mMapController->setEditorMode(MapObjectsController::NodeEditorMode);
-        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerGraph, true);
+        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerGraph,
+                                           true);
     }
 }
 
@@ -1495,10 +1538,12 @@ void MainWindow::on_actionDelete_triggered()
 
 void MainWindow::on_actionClear_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
-    if (QMessageBox::warning(this, tr("Clear graph"), tr("This operation will permanently remove the all the nodes from graph. Proceed?"),
+    if (QMessageBox::warning(this, tr("Clear graph"),
+                             tr("This operation will permanently remove the all the nodes from graph. Proceed?"),
                              QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         currentModel->clearAllNodes();
         mMapController->clearAllNodes(currentModelIdx);
@@ -1508,8 +1553,9 @@ void MainWindow::on_actionClear_Graph_triggered()
 
 void MainWindow::on_actionCreate_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     CreateGraphDialog dlg(this);
     QStringList list;
@@ -1528,12 +1574,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
             gb->setDistance1(dlg.step1() * 1000);
             gb->setDistance2(dlg.step2() * 1000);
             gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
-        } else if (dlg.isLoadEnabled()){
+        } else if (dlg.isLoadEnabled()) {
             gb->actionLoad(dlg.loadGraphPath());
         } else {
             // that shouldn't be possible.
             QMessageBox::critical(this, tr("Logic Error"),
-                    "Something strange happened. No Action is selected for CreateGraphDialog.");
+                                  "Something strange happened. No Action is selected for CreateGraphDialog.");
             return;
         }
 
@@ -1542,22 +1588,26 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setMaxLinks(dlg.isMaxLinksEnabled() ? dlg.getMaxLinks() : -1);
         gb->setMinLinks(dlg.isMinLinksEnabled() ? dlg.getMinLinks() : -1);
 
-        if (dlg.isRemoveLongEdgesEnabled())
+        if (dlg.isRemoveLongEdgesEnabled()) {
             gb->setLinkLimits(dlg.removeLongEdgesLimit());
-        else
+        } else {
             gb->setLinkLimits(-1.0);
+        }
 
         QString s = dlg.getIncludingSelectedShapefile1();
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             gb->setIncludingShapefile1(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+        }
 
         s = dlg.getIncludingSelectedShapefile2();
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             gb->setIncludingShapefile2(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+        }
 
         s = dlg.getExcludingSelectedShapefile();
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             gb->setExcludingShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+        }
 
         WaitDialog *wdlg = new WaitDialog(this);
         wdlg->setText(tr("Wait while graph is created..."));
@@ -1571,7 +1621,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
 void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
 {
-    currentModel->addGraph (nodes, mMapController);
+    currentModel->addGraph(nodes, mMapController);
 }
 
 void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
@@ -1591,7 +1641,8 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         qDebug() << "Banned Metiers: " << QString::fromStdString(ss.str());
 
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.nbOfDaysClosedPerMonth(),
-                                                   dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
+                                                   dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(),
+                                                   dlg.isPenaltyQ4(), checkedMonths,
                                                    checkedVesSizes,
                                                    bannedMetiers);
         mMapController->redraw();
@@ -1608,20 +1659,22 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 
     try {
         if (!m->load(path, tp)) {
-            if (error)
+            if (error) {
                 *error = m->getLastError();
+            }
             return false;
         }
     } catch (std::exception &x) {
-        if (error)
+        if (error) {
             *error = x.what();
+        }
         return false;
     }
 
     /* Connect model */
     qDebug() << "connecting outputParsed()";
-    connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
-    connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
+    connect(m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
+    connect(m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
 
     mMapController->removeModel(model_idx);
 
@@ -1640,8 +1693,9 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 
 void MainWindow::on_actionExport_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     QSettings sets;
     QString lastpath;
@@ -1654,15 +1708,18 @@ void MainWindow::on_actionExport_Graph_triggered()
             QFileInfo info(fn);
             sets.setValue("last_export", info.absolutePath());
         } else {
-            QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
+            QMessageBox::warning(this, tr("Export failed"),
+                                 QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
         }
     }
 }
 
 void MainWindow::on_actionLoad_Harbours_triggered()
 {
-    if (!currentModel || (currentModel->modelType() != DisplaceModel::EditorModelType && currentModel->modelType() != DisplaceModel::OfflineModelType ))
+    if (!currentModel || (currentModel->modelType() != DisplaceModel::EditorModelType &&
+                          currentModel->modelType() != DisplaceModel::OfflineModelType)) {
         return;
+    }
 
     QSettings sets;
     QString lastpath;
@@ -1676,8 +1733,7 @@ void MainWindow::on_actionLoad_Harbours_triggered()
         InputFileParser parser;
         if (parser.parseHarbourFile(fn, list, &error)) {
             currentModel->importHarbours(list);
-            foreach (std::shared_ptr<HarbourData> h, list)
-                mMapController->addHarbour(currentModelIdx, h, true);
+                    foreach (std::shared_ptr<HarbourData> h, list)mMapController->addHarbour(currentModelIdx, h, true);
 
             mMapController->redraw();
             QFileInfo info(fn);
@@ -1691,8 +1747,9 @@ void MainWindow::on_actionLoad_Harbours_triggered()
 
 void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     QSettings sets;
     QString lastpath;
@@ -1709,15 +1766,17 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
 void MainWindow::on_actionCreate_Shortest_Path_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     CreateShortestPathDialog dlg(this);
     dlg.setShortestPathFolder(currentModel->linkedShortestPathFolder());
     dlg.setOutputFolder(currentModel->linkedGraphFolder());
     dlg.setGraphName(QString::number(currentModel->scenario().getGraph()));
-    if (dlg.exec() != QDialog::Accepted)
+    if (dlg.exec() != QDialog::Accepted) {
         return;
+    }
 
     currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
     currentModel->linkGraphFolder(dlg.getOutputFolder());
@@ -1726,12 +1785,15 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     currentModel->setScenario(sce);
 
     WaitDialog *dialog = new WaitDialog(this);
-    displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
+    displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this,
+                                                                                                             dialog,
+                                                                                                             currentModel.get());
 
-    if (dlg.isBinaryFormat())
+    if (dlg.isBinaryFormat()) {
         builder->setBinaryFormat();
-    else
+    } else {
         builder->setTextFormat();
+    }
 
     SaveGraphDialog savedlg(this);
     savedlg.setName(QString::number(sce.getGraph()));
@@ -1794,7 +1856,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         bool ok;
         QSet<int> nodes;
         do {
-            QString in= p1.arg(i++);
+            QString in = p1.arg(i++);
             qDebug() << "Parsing file: " << in;
             ok = parser.parseRelevantNodes(in, nodes);
         } while (ok);
@@ -1808,26 +1870,26 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         qDebug() << "nodes :" << nodes.size();
 
         bool ok2;
-        QString in2= dlg.getRelevantInterNodesFolder();
+        QString in2 = dlg.getRelevantInterNodesFolder();
         QVector<int> nodeids;
         ok2 = parser2.parseRelevantInterNodes(in2, nodeids);
 
-        QList<std::shared_ptr<NodeData> >l;
-        foreach (int i, nodes) {
-            l.push_back(currentModel->getNodesList()[i]);
-        }
+        QList<std::shared_ptr<NodeData> > l;
+                foreach (int i, nodes) {
+                l.push_back(currentModel->getNodesList()[i]);
+            }
         builder->setRelevantNodes(l);
         builder->setRelevantInterNodes(nodeids);
     }
 
-    if (dlg.isAStarSelected())
+    if (dlg.isAStarSelected()) {
         builder->setAlgorithmType(ShortestPathBuilderWorker::AlgorithmType::Astar);
-    else
+    } else {
         builder->setAlgorithmType(ShortestPathBuilderWorker::AlgorithmType::Dijkstra);
+    }
 
 
-
-        builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
+    builder->run(this, SLOT(end_ShortestPathCreated(bool)));
 }
 
 void MainWindow::end_ShortestPathCreated(bool completed)
@@ -1847,32 +1909,35 @@ void MainWindow::end_ShortestPathCreated(bool completed)
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
 {
     if (!currentModel ||
-            (currentModel->modelType() != DisplaceModel::EditorModelType &&
-             currentModel->modelType() != DisplaceModel::LiveModelType))
+        (currentModel->modelType() != DisplaceModel::EditorModelType &&
+         currentModel->modelType() != DisplaceModel::LiveModelType)) {
         return;
+    }
     startMouseMode(new DrawPenaltyPolygon(this, mMapController));
 }
 
 void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 {
     if (!currentModel ||
-            (currentModel->modelType() != DisplaceModel::EditorModelType &&
-             currentModel->modelType() != DisplaceModel::LiveModelType))
+        (currentModel->modelType() != DisplaceModel::EditorModelType &&
+         currentModel->modelType() != DisplaceModel::LiveModelType)) {
         return;
+    }
 
     PathPenaltyDialog dlg(this);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
-    if (currentModel->getMetiersCount() == 0)
+    if (currentModel->getMetiersCount() == 0) {
         dlg.setMetierNumber(40);
-    else
+    } else {
         dlg.setMetierNumber(currentModel->getMetiersCount());
+    }
 
     dlg.showShapefileOptions(true);
 
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
-        double nbOfDaysClosedPerMonth=dlg.nbOfDaysClosedPerMonth();
+        double nbOfDaysClosedPerMonth = dlg.nbOfDaysClosedPerMonth();
         QStringList shp = dlg.selectedShapefile();
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
@@ -1884,15 +1949,17 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 //            dss.push_back(ds);
 
             int n = ds->GetLayerCount();
-            for (int i = 0; i < n ;  ++i) {
+            for (int i = 0; i < n; ++i) {
                 OGRLayer *lr = ds->GetLayer(i);
                 lr->SetSpatialFilter(0);
                 lr->ResetReading();
 
                 OGRFeature *feature;
                 while ((feature = lr->GetNextFeature())) {
-                    currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, nbOfDaysClosedPerMonth,
-                                                               dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
+                    currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight,
+                                                               nbOfDaysClosedPerMonth,
+                                                               dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(),
+                                                               dlg.isPenaltyQ4(), checkedMonths,
                                                                checkedVesSizes,
                                                                bannedMetiers);
                 }
@@ -1901,18 +1968,20 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
         mMapController->redraw();
 
-        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights has changed, if using static paths you'll need to recreate the shortest path."));
+        QMessageBox::warning(this, tr("Penalties applied"),
+                             tr("Graph weights has changed, if using static paths you'll need to recreate the shortest path."));
     }
 }
 
 // TODO: Refactor all the following functions, they are copy-and-paste of the same code.
-void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignCodesFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                             std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         // TODO WATCHOUT! raw pointer shouldn't be embedded in smart pointers!
         //ds = std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(shp.toStdString().c_str(), 0, nullptr));
@@ -1927,7 +1996,7 @@ void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const 
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -1952,25 +2021,24 @@ void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const 
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-
-
-void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignSSTFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                           std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), GA_ReadOnly));
     }
@@ -1984,7 +2052,7 @@ void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const ch
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2009,23 +2077,24 @@ void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const ch
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignSalinityFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), FALSE));
     }
@@ -2039,7 +2108,7 @@ void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, con
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2064,23 +2133,24 @@ void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, con
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignNitrogenFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<GDALDataSet>(GDALOpen(shp.toStdString().c_str(), FALSE));
     }
@@ -2094,7 +2164,7 @@ void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, con
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2119,22 +2189,23 @@ void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, con
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
-void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignPhosphorusFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                  std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2148,7 +2219,7 @@ void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, c
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2173,23 +2244,24 @@ void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, c
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignOxygenFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                              std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2203,7 +2275,7 @@ void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2228,22 +2300,23 @@ void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
-void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignDissolvedCarbonFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                       std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2257,7 +2330,7 @@ void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString s
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2282,23 +2355,24 @@ void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString s
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignWindFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                            std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2312,7 +2386,7 @@ void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const c
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2337,25 +2411,24 @@ void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const c
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-
-
-void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignBenthosBiomassFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                      std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2369,7 +2442,7 @@ void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString sh
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2394,23 +2467,24 @@ void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString sh
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
 
 
-void MainWindow::assignBenthosNumberFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignBenthosNumberFromShapefileGen(QString title, QString shp, const char *const fieldname,
+                                                     std::function<void(OGRGeometry *, int)> func)
 {
     auto ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        throw std::logic_error ("Not implemented. ");
+        throw std::logic_error("Not implemented. ");
         // FIXME: it is not recommendable to use it this way. Make ds a normal pointer instead.
         //ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
     }
@@ -2424,7 +2498,7 @@ void MainWindow::assignBenthosNumberFromShapefileGen (QString title, QString shp
     int nftr = 0;
     int n_nofield = 0;
     int n = ds->GetLayerCount();
-    for (int i = 0; i < n ;  ++i) {
+    for (int i = 0; i < n; ++i) {
         OGRLayer *lr = ds->GetLayer(i);
         lr->SetSpatialFilter(0);
         lr->ResetReading();
@@ -2449,34 +2523,35 @@ void MainWindow::assignBenthosNumberFromShapefileGen (QString title, QString shp
     if (n_nofield > 0) {
         QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
-                             .arg(n_nofield).arg(fieldname));
+                                     .arg(n_nofield).arg(fieldname));
     } else {
         QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
-                                 .arg(nftr));
+                                         .arg(nftr));
     }
 
 }
-
 
 
 void MainWindow::on_actionAssign_Landscape_codes_triggered()
 {
     QString title = tr("Set Landscape codes ('hab_code' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "hab_code";
+        const char *fieldname = "hab_code";
         QString shp = dlg.selectedShapefile();
 
         assignCodesFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setLandscapeCodesFromFeature(geom, code); } );
+            currentModel->setLandscapeCodesFromFeature(geom, code);
+        });
     }
 }
 
@@ -2484,19 +2559,21 @@ void MainWindow::on_actionAssign_Wind_triggered()
 {
     QString title = tr("Set Wind (speed) ('wind' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "wind";
+        const char *fieldname = "wind";
         QString shp = dlg.selectedShapefile();
 
         assignWindFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setWindFromFeature(geom, code); } );
+            currentModel->setWindFromFeature(geom, code);
+        });
     }
 }
 
@@ -2504,19 +2581,21 @@ void MainWindow::on_actionAssign_SST_triggered()
 {
     QString title = tr("Set Sea Surface Temperature ('sst' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "sst";
+        const char *fieldname = "sst";
         QString shp = dlg.selectedShapefile();
 
         assignSSTFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setSSTFromFeature(geom, code); } );
+            currentModel->setSSTFromFeature(geom, code);
+        });
     }
 }
 
@@ -2525,19 +2604,21 @@ void MainWindow::on_actionAssign_Salinity_triggered()
 {
     QString title = tr("Set Salinity ('psu' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "psu";
+        const char *fieldname = "psu";
         QString shp = dlg.selectedShapefile();
 
         assignSalinityFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setSalinityFromFeature(geom, code); } );
+            currentModel->setSalinityFromFeature(geom, code);
+        });
     }
 }
 
@@ -2545,19 +2626,21 @@ void MainWindow::on_actionAssign_Nitrogen_triggered()
 {
     QString title = tr("Set Nitrogen ('Nitrogen' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "Nitrogen";
+        const char *fieldname = "Nitrogen";
         QString shp = dlg.selectedShapefile();
 
         assignNitrogenFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setNitrogenFromFeature(geom, code); } );
+            currentModel->setNitrogenFromFeature(geom, code);
+        });
     }
 }
 
@@ -2565,19 +2648,21 @@ void MainWindow::on_actionAssign_Phosphorus_triggered()
 {
     QString title = tr("Set Phosphorus ('Phosphorus' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "Phosphorus";
+        const char *fieldname = "Phosphorus";
         QString shp = dlg.selectedShapefile();
 
         assignPhosphorusFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setPhosphorusFromFeature(geom, code); } );
+            currentModel->setPhosphorusFromFeature(geom, code);
+        });
     }
 }
 
@@ -2586,19 +2671,21 @@ void MainWindow::on_actionAssign_Oxygen_triggered()
 {
     QString title = tr("Set Oxygen ('Oxygen' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "Oxygen";
+        const char *fieldname = "Oxygen";
         QString shp = dlg.selectedShapefile();
 
         assignOxygenFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setOxygenFromFeature(geom, code); } );
+            currentModel->setOxygenFromFeature(geom, code);
+        });
     }
 }
 
@@ -2606,19 +2693,21 @@ void MainWindow::on_actionAssign_DissolvedCarbon_triggered()
 {
     QString title = tr("Set DissolvedCarbon ('DissCarbon' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "DissCarbon";
+        const char *fieldname = "DissCarbon";
         QString shp = dlg.selectedShapefile();
 
         assignDissolvedCarbonFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setDissolvedCarbonFromFeature(geom, code); } );
+            currentModel->setDissolvedCarbonFromFeature(geom, code);
+        });
     }
 }
 
@@ -2627,19 +2716,21 @@ void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
 {
     QString title = tr("Set Total Benthos Biomass ('grsqmeter' field required - gram per squared meter)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "grsqmeter";
+        const char *fieldname = "grsqmeter";
         QString shp = dlg.selectedShapefile();
 
         assignBenthosBiomassFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int bio) {
-            currentModel->setBenthosBiomassFromFeature(geom, bio); } );
+            currentModel->setBenthosBiomassFromFeature(geom, bio);
+        });
     }
 }
 
@@ -2647,19 +2738,21 @@ void MainWindow::on_actionAssign_Total_benthos_number_triggered()
 {
     QString title = tr("Set Total Benthos Number ('nbsqmeter' field required - nb per squared meter)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "nbsqmeter";
+        const char *fieldname = "nbsqmeter";
         QString shp = dlg.selectedShapefile();
 
         assignBenthosNumberFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int nb) {
-            currentModel->setBenthosNumberFromFeature(geom, nb); } );
+            currentModel->setBenthosNumberFromFeature(geom, nb);
+        });
     }
 }
 
@@ -2668,26 +2761,29 @@ void MainWindow::on_actionAssign_Area_codes_triggered()
 {
     QString title = tr("Set Area codes ('area_code' field required)");
 
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     ShapefileOperationDialog dlg(this);
     dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "area_code";
+        const char *fieldname = "area_code";
         QString shp = dlg.selectedShapefile();
 
-        assignCodesFromShapefileGen(title,shp, fieldname, [&](OGRGeometry *geom, int code) {
-            currentModel->setAreaCodesFromFeature(geom, code); } );
+        assignCodesFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setAreaCodesFromFeature(geom, code);
+        });
     }
 }
 
 void MainWindow::on_actionLoad_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     QSettings sets;
     QString lastpath = sets.value("last_graphpath", QDir::homePath()).toString();
@@ -2704,8 +2800,9 @@ void MainWindow::on_actionLoad_Graph_triggered()
             coordspath = info.absolutePath() + "/coord" + fnn.mid(5);
 
             int res = QMessageBox::question(this, tr("Coordinates file"),
-                                      QString(tr("Do you want also to load %1 as a coordinates file?")).arg(coordspath),
-                                      QMessageBox::Yes, QMessageBox::No);
+                                            QString(tr("Do you want also to load %1 as a coordinates file?")).arg(
+                                                    coordspath),
+                                            QMessageBox::Yes, QMessageBox::No);
             if (res == QMessageBox::Open) {
                 coordspath = QFileDialog::getOpenFileName(this, tr("Import Coords file"), coordspath);
             } else if (res == QMessageBox::No) {
@@ -2716,15 +2813,16 @@ void MainWindow::on_actionLoad_Graph_triggered()
             graphpath = info.absolutePath() + "/graph" + fnn.mid(5);
 
             int res = QMessageBox::question(this, tr("Graph file"),
-                                      QString(tr("Do you want also to load %1 as a graph file?")).arg(graphpath),
-                                      QMessageBox::Yes, QMessageBox::No);
+                                            QString(tr("Do you want also to load %1 as a graph file?")).arg(graphpath),
+                                            QMessageBox::Yes, QMessageBox::No);
             if (res == QMessageBox::Open) {
                 graphpath = QFileDialog::getOpenFileName(this, tr("Import Graph file"), coordspath);
             } else if (res == QMessageBox::No) {
                 graphpath = QString();
             }
         } else {
-            QMessageBox::warning(this, tr("Cannot load file"), tr("Selected file must start either with graph or with coords."));
+            QMessageBox::warning(this, tr("Cannot load file"),
+                                 tr("Selected file must start either with graph or with coords."));
             return;
         }
 
@@ -2732,12 +2830,14 @@ void MainWindow::on_actionLoad_Graph_triggered()
         QList<GraphBuilder::Node> nodes;
         QString error;
         if (parser.parseGraph(graphpath, coordspath, nodes, &error)) {
-            qDebug()  << nodes.size() << "Nodes loaded.";
+            qDebug() << nodes.size() << "Nodes loaded.";
 
             currentModel->addGraph(nodes, mMapController);
 //            currentModel->importGraph (graphpath, coordspath);
         } else {
-            QMessageBox::warning(this, tr("Error loading greph/coords file. Please check that graph parameters (especially nrow) are correct in the scenario file."), error);
+            QMessageBox::warning(this,
+                                 tr("Error loading greph/coords file. Please check that graph parameters (especially nrow) are correct in the scenario file."),
+                                 error);
             return;
         }
 
@@ -2749,8 +2849,9 @@ void MainWindow::on_actionLoad_Graph_triggered()
 
 void MainWindow::on_actionSave_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     SaveGraphDialog dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
@@ -2780,7 +2881,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
                                  bathymetrypath, shippingdensitypath, siltfractionpath,
-                                 benthospath, benthosnbpath, acpath, polypath,polypathMomths,
+                                 benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
@@ -2795,20 +2896,23 @@ struct sorter {
     double weight;
     std::shared_ptr<NodeData> node;
 
-    sorter(std::shared_ptr<NodeData> _node, double _weight) {
+    sorter(std::shared_ptr<NodeData> _node, double _weight)
+    {
         weight = _weight;
         node = _node;
     }
 
-    friend bool operator < (const sorter &s1, const sorter &s2) {
+    friend bool operator<(const sorter &s1, const sorter &s2)
+    {
         return s1.weight < s2.weight;
     }
 };
 
 void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     if (currentModel->getHarboursCount() == currentModel->getNodesCount()) {
         QMessageBox::warning(this, tr("Cannot link harbours and ndoes"),
@@ -2819,84 +2923,92 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
     LinkHarboursDialog dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.isRemoveLinksSet()) {
-            foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-                currentModel->getNodesList()[harbour->mHarbour->get_idx_node().toIndex()]->removeAllAdiacencies();
-            }
+                    foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+                    currentModel->getNodesList()[harbour->mHarbour->get_idx_node().toIndex()]->removeAllAdiacencies();
+                }
         }
 
 #if GEOGRAPHICLIB_VERSION_MINOR > 25
-        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+        const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
 #else
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-        foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-            auto harbid = harbour->mHarbour->get_idx_node();
-            QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
+                foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+                auto harbid = harbour->mHarbour->get_idx_node();
+                QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
 
-            double distance = dlg.getMaxDinstance();
+                double distance = dlg.getMaxDinstance();
 
-            QList<std::shared_ptr<NodeData> > nodes;
-            QList<sorter> snodes;
-            do {
-                nodes = currentModel->getAllNodesWithin(pos, distance);
-                distance *= 2.0;
+                QList<std::shared_ptr<NodeData> > nodes;
+                QList<sorter> snodes;
+                do {
+                    nodes = currentModel->getAllNodesWithin(pos, distance);
+                    distance *= 2.0;
 
-                if (nodes.size() > 1) {
-                    double dist;
-                    foreach (std::shared_ptr<NodeData> node, nodes) {
-                        if (node->get_idx_node() != harbid) {
-                            if (dlg.isAvoidHHLinks() && node->mNode->get_is_harbour())
-                                continue;
-                            geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
-                            snodes.push_back(sorter(node, dist));
+                    if (nodes.size() > 1) {
+                        double dist;
+                                foreach (std::shared_ptr<NodeData> node, nodes) {
+                                if (node->get_idx_node() != harbid) {
+                                    if (dlg.isAvoidHHLinks() && node->mNode->get_is_harbour()) {
+                                        continue;
+                                    }
+                                    geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(),
+                                                 node->get_x(), dist);
+                                    snodes.push_back(sorter(node, dist));
+                                }
+                            }
+
+                        qSort(snodes);
+
+                        int n = dlg.getMaxLinks();
+                        if (n == -1) {
+                            n = snodes.count();
+                        } else {
+                            n = min(snodes.count(), dlg.getMaxLinks());
+                        }
+                        for (int i = 0; i < n; ++i) {
+                            auto nodeid = snodes[i].node->get_idx_node();
+                            int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
+                            int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
+                            mMapController->addEdge(currentModelIdx,
+                                                    currentModel->getNodesList()[harbid.toIndex()]->getAdiacencyByIdx(
+                                                            he_id), true);
+                            mMapController->addEdge(currentModelIdx,
+                                                    currentModel->getNodesList()[nodeid.toIndex()]->getAdiacencyByIdx(
+                                                            te_id), true);
                         }
                     }
-
-                    qSort(snodes);
-
-                    int n = dlg.getMaxLinks();
-                    if (n == -1)
-                        n = snodes.count();
-                    else
-                        n = min(snodes.count(), dlg.getMaxLinks());
-                    for (int i = 0; i < n; ++i) {
-                        auto nodeid = snodes[i].node->get_idx_node();
-                        int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
-                        int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid.toIndex()]->getAdiacencyByIdx(he_id), true);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid.toIndex()]->getAdiacencyByIdx(te_id), true);
-                    }
-                }
-            } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
-        }
+                } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
+            }
     }
 }
 
 void MainWindow::on_actionAdd_triggered()
 {
-    if (!isEditorModel())
+    if (!isEditorModel()) {
         return;
+    }
 
     switch (mMapController->getEditorMode()) {
-    case MapObjectsController::NoEditorMode:
-        break;
-    case MapObjectsController::NodeEditorMode:
-        if (true) {
-            ui->actionAdd->setChecked(true);
-            SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
-            connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
-            startMouseMode(new MoveFilteringMouseModeDecorator(mode));
-        }
-        break;
-    case MapObjectsController::EdgeEditorMode:
-        if (true) {
-            ui->actionAdd->setChecked(true);
-            EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
-            connect (mode, SIGNAL(edgeAdded(int,int)), this, SLOT(editorAddEdge(int,int)));
-            startMouseMode(new MoveFilteringMouseModeDecorator(mode));
-        }
-        break;
+        case MapObjectsController::NoEditorMode:
+            break;
+        case MapObjectsController::NodeEditorMode:
+            if (true) {
+                ui->actionAdd->setChecked(true);
+                SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
+                connect(mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
+                startMouseMode(new MoveFilteringMouseModeDecorator(mode));
+            }
+            break;
+        case MapObjectsController::EdgeEditorMode:
+            if (true) {
+                ui->actionAdd->setChecked(true);
+                EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
+                connect(mode, SIGNAL(edgeAdded(int, int)), this, SLOT(editorAddEdge(int, int)));
+                startMouseMode(new MoveFilteringMouseModeDecorator(mode));
+            }
+            break;
     }
 }
 
@@ -2920,11 +3032,13 @@ void MainWindow::on_cmdProfileSave_clicked()
 {
     QSettings set;
     QString defpos = set.value("report_path", QDir::homePath()).toString();
-    QString path = QFileDialog::getSaveFileName(this, tr("Append report to file"), defpos, tr("Text files (*.txt);;All files (*.*)"));
+    QString path = QFileDialog::getSaveFileName(this, tr("Append report to file"), defpos,
+                                                tr("Text files (*.txt);;All files (*.*)"));
     if (!path.isEmpty()) {
         QFile f(path);
         if (!f.open(QIODevice::WriteOnly | QIODevice::Append)) {
-            QMessageBox::warning(this, tr("Save failed"), QString("Cannot save to %1: %2").arg(path).arg(f.errorString()));
+            QMessageBox::warning(this, tr("Save failed"),
+                                 QString("Cannot save to %1: %2").arg(path).arg(f.errorString()));
             return;
         }
 
@@ -2953,24 +3067,26 @@ void MainWindow::on_cmdProfileSave_clicked()
 void MainWindow::on_actionCSV_Editor_triggered()
 {
     CsvEditor *editor = new CsvEditor();
-    connect (editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
+    connect(editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
 
     editor->show();
 }
 
 void MainWindow::on_actionMergeWeights_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     MergeDataDialog dlg(this);
     dlg.setWindowTitle(tr("Merge geodata file to graph nodes at sea (SI_LATI, SI_LONG input fields required)"));
     if (dlg.exec()) {
-        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Weights);
+        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(
+                displace::workers::MergerStrategy::Weights);
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
-        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+        connect(merger, SIGNAL(completed(DataMerger * )), this, SLOT(mergeCompleted(DataMerger * )));
 
-        if (mWaitDialog != 0) delete mWaitDialog;
+        if (mWaitDialog != 0) { delete mWaitDialog; }
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
@@ -2983,17 +3099,19 @@ void MainWindow::on_actionMergeWeights_triggered()
 /// \todo: This is duplicated code - see MainWindow::on_actionMergeWeights_triggered(). Must be simplified and unified.
 void MainWindow::on_actionMergePings_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     MergeDataDialog dlg(this);
     dlg.setWindowTitle(tr("Merge geodata file to harbour nodes (SI_LATI, SI_LONG input fields required)"));
     if (dlg.exec()) {
-        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Ping);
+        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(
+                displace::workers::MergerStrategy::Ping);
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
-        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+        connect(merger, SIGNAL(completed(DataMerger * )), this, SLOT(mergeCompleted(DataMerger * )));
 
-        if (mWaitDialog != 0) delete mWaitDialog;
+        if (mWaitDialog != 0) { delete mWaitDialog; }
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
@@ -3004,8 +3122,9 @@ void MainWindow::on_actionMergePings_triggered()
 
 void MainWindow::on_actionCalcPopDistribution_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType) {
         return;
+    }
 
     MergePopulationDataDialog dlg(this);
     dlg.setOutputRequiresTemplate(2);
@@ -3016,17 +3135,19 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     dlg.setOutputFile("%1spe_full_avai_szgroup_nodes_semester%2");
 
     if (dlg.exec()) {
-        displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
+        displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(
+                currentModel.get());
 
         strategy->setStocks(dlg.getSelectedStocks());
         strategy->setGroups(dlg.getSelectedGroupsIndexes());
-        if (dlg.isPopulationOutChecked())
+        if (dlg.isPopulationOutChecked()) {
             strategy->setPopulationOutputFileName(dlg.getPopulationOutFileName());
+        }
 
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
-        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+        connect(merger, SIGNAL(completed(DataMerger * )), this, SLOT(mergeCompleted(DataMerger * )));
 
-        if (mWaitDialog != 0) delete mWaitDialog;
+        if (mWaitDialog != 0) { delete mWaitDialog; }
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
@@ -3052,8 +3173,8 @@ void MainWindow::mergeCompleted(DataMerger *merger)
     } catch (displace::DisplaceException &x) {
         QMessageBox::warning(this, tr("Error merging files"),
                              QString(tr("An error occurred while merging files %1: %2"))
-                             .arg(x.file())
-                             .arg(x.message()));
+                                     .arg(x.file())
+                                     .arg(x.message()));
     }
 
     delete merger;
@@ -3067,20 +3188,22 @@ void MainWindow::exportGraphics(QString label, QWidget *widget)
     QStringList filter = displace::helpers::images::supportedFormatsOnWriteAsFilter();
     QString deffilter;
     int idx = displace::helpers::images::supportedFormatsOnWrite().indexOf(lastform);
-    if (idx != -1)
+    if (idx != -1) {
         deffilter = filter[idx];
+    }
 
     QString path = QFileDialog::getSaveFileName(this, QString(tr("Export %1 Image")).arg(label),
                                                 defpos, filter.join(";;"), &deffilter);
     if (!path.isEmpty()) {
         int idx = path.lastIndexOf(QString("."));
-        QString extension = (idx != -1 ? path.mid(idx+1) : "");
+        QString extension = (idx != -1 ? path.mid(idx + 1) : "");
         if (extension.isEmpty()) {
             idx = filter.indexOf(deffilter);
             if (idx != -1) {
                 extension = displace::helpers::images::supportedFormatsOnWrite().at(idx);
-                if (!path.endsWith('.'))
+                if (!path.endsWith('.')) {
                     path.append(".");
+                }
                 path.append(extension);
             }
         }
@@ -3088,7 +3211,7 @@ void MainWindow::exportGraphics(QString label, QWidget *widget)
         QFileInfo info(path);
         set.setValue("ImageExport", info.path());
 
-        if(widget->grab().save(path)) {
+        if (widget->grab().save(path)) {
             set.setValue("ImageExport.format", extension.toLower());
 
             QMessageBox::information(this, tr("Image saved"),
@@ -3124,17 +3247,19 @@ void MainWindow::on_actionExport_Nations_triggered()
 void MainWindow::on_actionLoadStockNames_triggered()
 {
     MruPathManager mru;
-    QString file = QFileDialog::getOpenFileName(this, tr("Load stock names"), mru.getMru(MruPathManager::StockNamesFile),
+    QString file = QFileDialog::getOpenFileName(this, tr("Load stock names"),
+                                                mru.getMru(MruPathManager::StockNamesFile),
                                                 tr("Dat,Txt files (*.dat *.txt);;All files (*.*)"));
 
     if (!file.isEmpty()) {
         InputFileParser parser;
-        QMap<QString,int> stocks;
+        QMap<QString, int> stocks;
         try {
             parser.parseStockNamesFile(file, stocks);
         } catch (displace::DisplaceException &ex) {
-            QMessageBox::warning(this, tr("Load stock names"), tr("An error occured while loading the stock names: %1 file %2 line %3")
-                                 .arg(ex.message()).arg(ex.file()).arg(ex.line()));
+            QMessageBox::warning(this, tr("Load stock names"),
+                                 tr("An error occured while loading the stock names: %1 file %2 line %3")
+                                         .arg(ex.message()).arg(ex.file()).arg(ex.line()));
             return;
         }
         currentModel->setStockNames(stocks);
@@ -3206,7 +3331,6 @@ void MainWindow::on_actionVessel_Creation_Editor_triggered()
 }
 
 
-
 void MainWindow::on_actionScheduler_Editor_triggered()
 {
     auto ed = prepareAppExecutableStart("scheduler");
@@ -3222,93 +3346,168 @@ void MainWindow::on_actionExportAllGraphics_triggered()
     if (!out.isEmpty()) {
 
         GraphExportProperties p;
-        if (p.exec() == QDialog::Rejected)
+        if (p.exec() == QDialog::Rejected) {
             return;
+        }
 
         auto r = p.getOptions();
 
-        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Aggregate), r);
-        exportPlot (out + QString("/pop_catch.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Catches), r);
-        exportPlot (out + QString("/pop_discard.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Discards), r);
-        exportPlot (out + QString("/pop_ravF.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::RavFMortality), r);
-        exportPlot (out + QString("/pop_F.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
-        exportPlot (out + QString("/pop_natmortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NatMortality), r);
-        exportPlot (out + QString("/pop_numberatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::NumberAtAge), r);
-        exportPlot (out + QString("/pop_weightatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::WeightAtAge), r);
-        exportPlot (out + QString("/pop_maturityatage.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::MaturityAtAge), r);
-        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::SSB), r);
-        exportPlot (out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
-        exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);
-        exportPlot (out + QString("/pop_choking.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Choking), r);
-        exportPlot (out + QString("/pop_ffmsy.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FFmsy), r);
-        exportPlot (out + QString("/pop_propmature.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::PropMature), r);
-        exportPlot (out + QString("/pop_fvseffort.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::FvsEffort), r);
+        exportPlot(out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Aggregate), r);
+        exportPlot(out + QString("/pop_catch.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Catches), r);
+        exportPlot(out + QString("/pop_discard.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Discards), r);
+        exportPlot(out + QString("/pop_ravF.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::RavFMortality), r);
+        exportPlot(out + QString("/pop_F.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Mortality), r);
+        exportPlot(out + QString("/pop_natmortality.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::NatMortality), r);
+        exportPlot(out + QString("/pop_numberatage.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::NumberAtAge), r);
+        exportPlot(out + QString("/pop_weightatage.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::WeightAtAge), r);
+        exportPlot(out + QString("/pop_maturityatage.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::MaturityAtAge), r);
+        exportPlot(out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::SSB), r);
+        exportPlot(out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
+        exportPlot(out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Quotas), r);
+        exportPlot(out + QString("/pop_choking.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::Choking), r);
+        exportPlot(out + QString("/pop_ffmsy.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::FFmsy), r);
+        exportPlot(out + QString("/pop_propmature.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::PropMature), r);
+        exportPlot(out + QString("/pop_fvseffort.%1").arg(r.format), StatsController::Populations,
+                   static_cast<int>(displace::plot::PopulationStat::FvsEffort), r);
 
-        exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Catches), r);
-        exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Discards), r);
-        exportPlot (out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Earnings), r);
-        exportPlot (out + QString("/nations_exearnings.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::ExEarnings), r);
-        exportPlot (out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::TimeAtSea), r);
-        exportPlot (out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Gav), r);
-        exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Vpuf), r);
-        exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::SweptArea), r);
-        exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::RevenuePerSweptArea), r);
-        exportPlot (out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::GVA), r);
-        exportPlot (out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::GVAPerRevenue), r);
-        exportPlot (out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::LabourSurplus), r);
-        exportPlot (out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::GrossProfit), r);
-        exportPlot (out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::NetProfit), r);
-        exportPlot (out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::NetProfitMargin), r);
-        exportPlot (out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::GVAPerFTE), r);
-        exportPlot (out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::RoFTA), r);
-        exportPlot (out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::BER), r);
-        exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::CRBER), r);
-        exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::NetPresentValue), r);
-        exportPlot (out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::numTrips), r);
+        exportPlot(out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::Catches), r);
+        exportPlot(out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::Discards), r);
+        exportPlot(out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::Earnings), r);
+        exportPlot(out + QString("/nations_exearnings.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::ExEarnings), r);
+        exportPlot(out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::TimeAtSea), r);
+        exportPlot(out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::Gav), r);
+        exportPlot(out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::Vpuf), r);
+        exportPlot(out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::SweptArea), r);
+        exportPlot(out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::RevenuePerSweptArea), r);
+        exportPlot(out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::GVA), r);
+        exportPlot(out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::GVAPerRevenue), r);
+        exportPlot(out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::LabourSurplus), r);
+        exportPlot(out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::GrossProfit), r);
+        exportPlot(out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::NetProfit), r);
+        exportPlot(out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::NetProfitMargin), r);
+        exportPlot(out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::GVAPerFTE), r);
+        exportPlot(out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::RoFTA), r);
+        exportPlot(out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::BER), r);
+        exportPlot(out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::CRBER), r);
+        exportPlot(out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::NetPresentValue), r);
+        exportPlot(out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations,
+                   static_cast<int>(displace::plot::NationsStat::numTrips), r);
 
-        exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_Catches), r);
-        exportPlot (out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_Discards), r);
-        exportPlot (out + QString("/harbours_earnings.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_Earnings), r);
-        exportPlot (out + QString("/harbours_gav.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_Gav), r);
-        exportPlot (out + QString("/harbours_vpuf.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_Vpuf), r);
-        exportPlot (out + QString("/harbours_sweptarea.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_SweptArea), r);
-        exportPlot (out + QString("/harbours_revenuepersweptarea.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_RevenuePerSweptArea), r);
-        exportPlot (out + QString("/harbours_GVA.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_GVA), r);
-        exportPlot (out + QString("/harbours_GVAPerRevenue.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_GVAPerRevenue), r);
-        exportPlot (out + QString("/harbours_LabourSurplus.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_LabourSurplus), r);
-        exportPlot (out + QString("/harbours_GrossProfit.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_GrossProfit), r);
-        exportPlot (out + QString("/harbours_NetProfit.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_NetProfit), r);
-        exportPlot (out + QString("/harbours_NetProfitMargin.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_NetProfitMargin), r);
-        exportPlot (out + QString("/harbours_GVAPerFTE.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_GVAPerFTE), r);
-        exportPlot (out + QString("/harbours_RoFTA.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_RoFTA), r);
-        exportPlot (out + QString("/harbours_BER.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_BER), r);
-        exportPlot (out + QString("/harbours_CRBER.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_CRBER), r);
-        exportPlot (out + QString("/harbours_NetPresentValue.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_NetPresentValue), r);
-        exportPlot (out + QString("/harbours_numTrips.%1").arg(r.format), StatsController::Harbours, static_cast<int>(displace::plot::HarboursStat::H_numTrips), r);
+        exportPlot(out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_Catches), r);
+        exportPlot(out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_Discards), r);
+        exportPlot(out + QString("/harbours_earnings.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_Earnings), r);
+        exportPlot(out + QString("/harbours_gav.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_Gav), r);
+        exportPlot(out + QString("/harbours_vpuf.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_Vpuf), r);
+        exportPlot(out + QString("/harbours_sweptarea.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_SweptArea), r);
+        exportPlot(out + QString("/harbours_revenuepersweptarea.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_RevenuePerSweptArea), r);
+        exportPlot(out + QString("/harbours_GVA.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_GVA), r);
+        exportPlot(out + QString("/harbours_GVAPerRevenue.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_GVAPerRevenue), r);
+        exportPlot(out + QString("/harbours_LabourSurplus.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_LabourSurplus), r);
+        exportPlot(out + QString("/harbours_GrossProfit.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_GrossProfit), r);
+        exportPlot(out + QString("/harbours_NetProfit.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_NetProfit), r);
+        exportPlot(out + QString("/harbours_NetProfitMargin.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_NetProfitMargin), r);
+        exportPlot(out + QString("/harbours_GVAPerFTE.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_GVAPerFTE), r);
+        exportPlot(out + QString("/harbours_RoFTA.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_RoFTA), r);
+        exportPlot(out + QString("/harbours_BER.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_BER), r);
+        exportPlot(out + QString("/harbours_CRBER.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_CRBER), r);
+        exportPlot(out + QString("/harbours_NetPresentValue.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_NetPresentValue), r);
+        exportPlot(out + QString("/harbours_numTrips.%1").arg(r.format), StatsController::Harbours,
+                   static_cast<int>(displace::plot::HarboursStat::H_numTrips), r);
 
-        exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_Catches), r);
-        exportPlot (out + QString("/metiers_discards.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_Discards), r);
-        exportPlot (out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_Revenues), r);
-        exportPlot (out + QString("/metiers_gav.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_Gav), r);
-        exportPlot (out + QString("/metiers_vpuf.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_Vpuf), r);
-        exportPlot (out + QString("/metiers_GVA.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_GVA), r);
-        exportPlot (out + QString("/metiers_GVAPerRevenue.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_GVAPerRevenue), r);
-        exportPlot (out + QString("/metiers_LabourSurplus.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_LabourSurplus), r);
-        exportPlot (out + QString("/metiers_GrossProfit.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_GrossProfit), r);
-        exportPlot (out + QString("/metiers_NetProfit.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_NetProfit), r);
-        exportPlot (out + QString("/metiers_NetProfitMargin.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_NetProfitMargin), r);
-        exportPlot (out + QString("/metiers_GVAPerFTE.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_GVAPerFTE), r);
-        exportPlot (out + QString("/metiers_RoFTA.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_RoFTA), r);
-        exportPlot (out + QString("/metiers_BER.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_BER), r);
-        exportPlot (out + QString("/metiers_CRBER.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_CRBER), r);
-        exportPlot (out + QString("/metiers_NetPresentValue.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_NetPresentValue), r);
-        exportPlot (out + QString("/metiers_numTrips.%1").arg(r.format), StatsController::Metiers, static_cast<int>(displace::plot::MetiersStat::M_numTrips), r);
+        exportPlot(out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_Catches), r);
+        exportPlot(out + QString("/metiers_discards.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_Discards), r);
+        exportPlot(out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_Revenues), r);
+        exportPlot(out + QString("/metiers_gav.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_Gav), r);
+        exportPlot(out + QString("/metiers_vpuf.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_Vpuf), r);
+        exportPlot(out + QString("/metiers_GVA.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_GVA), r);
+        exportPlot(out + QString("/metiers_GVAPerRevenue.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_GVAPerRevenue), r);
+        exportPlot(out + QString("/metiers_LabourSurplus.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_LabourSurplus), r);
+        exportPlot(out + QString("/metiers_GrossProfit.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_GrossProfit), r);
+        exportPlot(out + QString("/metiers_NetProfit.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_NetProfit), r);
+        exportPlot(out + QString("/metiers_NetProfitMargin.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_NetProfitMargin), r);
+        exportPlot(out + QString("/metiers_GVAPerFTE.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_GVAPerFTE), r);
+        exportPlot(out + QString("/metiers_RoFTA.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_RoFTA), r);
+        exportPlot(out + QString("/metiers_BER.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_BER), r);
+        exportPlot(out + QString("/metiers_CRBER.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_CRBER), r);
+        exportPlot(out + QString("/metiers_NetPresentValue.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_NetPresentValue), r);
+        exportPlot(out + QString("/metiers_numTrips.%1").arg(r.format), StatsController::Metiers,
+                   static_cast<int>(displace::plot::MetiersStat::M_numTrips), r);
 
         s.setValue("allplots_out", out);
     }
 }
 
-void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties)
+void
+MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties)
 {
     QCustomPlot plot;
 
@@ -3332,13 +3531,14 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
         dlg.setMaximum(files.size());
         dlg.setWindowModality(Qt::WindowModal);
 
-        int i= 0;
+        int i = 0;
         for (QString f : files) {
             dlg.setValue(i++);
-            if (dlg.wasCanceled())
+            if (dlg.wasCanceled()) {
                 break;
+            }
 
-            QFileInfo fi (f);
+            QFileInfo fi(f);
             QString fn = fi.fileName();
             if (!fn.startsWith("previous_") && !fn.startsWith("min_distance_")) {
                 continue;
@@ -3346,8 +3546,9 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
 
             QString of(f);
             of.replace(".dat", ".bin");
-            if (!of.endsWith(".bin"))
+            if (!of.endsWith(".bin")) {
                 of += ".bin";
+            }
 
             std::ifstream in;
 
@@ -3364,14 +3565,13 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
             }
 
             string line;
-            while(!getline(in, line).eof())
-            {
+            while (!getline(in, line).eof()) {
                 int key;
                 in >> key;
                 int val;
                 in >> val;
 
-                if (!wr.write(static_cast<uint16_t>(key),static_cast<uint16_t>(val))) {
+                if (!wr.write(static_cast<uint16_t>(key), static_cast<uint16_t>(val))) {
                     errors << QString("Cannot write to %1").arg(of);
                     break;
                 }
@@ -3383,9 +3583,10 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
         dlg.setValue(files.size());
 
         if (errors.size() == 0) {
-            QMessageBox::information(this,tr("Graph conversion"), tr("Graph converted successfully."));
+            QMessageBox::information(this, tr("Graph conversion"), tr("Graph converted successfully."));
         } else {
-            QMessageBox::warning(this, tr("Graph conversion"), tr("%1 Errors occurred converting files").arg(errors.size()) );
+            QMessageBox::warning(this, tr("Graph conversion"),
+                                 tr("%1 Errors occurred converting files").arg(errors.size()));
         }
     }
 }
@@ -3401,8 +3602,8 @@ void MainWindow::on_action_Record_Current_Map_Position_triggered()
 void MainWindow::on_actionClear_configuration_triggered()
 {
     auto r = QMessageBox::warning(this, tr("Clear configuration"),
-                         tr("This will remove all the current configuration. Proceed?"),
-                         QMessageBox::No, QMessageBox::Yes);
+                                  tr("This will remove all the current configuration. Proceed?"),
+                                  QMessageBox::No, QMessageBox::Yes);
     if (r == QMessageBox::Yes) {
         QSettings s;
         s.clear();
@@ -3413,15 +3614,15 @@ void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
 {
     bool ok;
     int sz1 = QInputDialog::getInt(this, tr("Set Node Symbol size in x"),
-                                  tr("Symbol size in x, in pixels:"),
-                                  NodeGraphics::pieh(), 1, 1000, 1, &ok);
+                                   tr("Symbol size in x, in pixels:"),
+                                   NodeGraphics::pieh(), 1, 1000, 1, &ok);
 
-    int sz2=sz1;
+    int sz2 = sz1;
     if (ok) {
-     ok=false;
-     sz2 = QInputDialog::getInt(this, tr("Set Node Symbol size in y"),
-                                  tr("Symbol size in y, in pixels:"),
-                                  NodeGraphics::pieh(), 1, 1000, 1, &ok);
+        ok = false;
+        sz2 = QInputDialog::getInt(this, tr("Set Node Symbol size in y"),
+                                   tr("Symbol size in y, in pixels:"),
+                                   NodeGraphics::pieh(), 1, 1000, 1, &ok);
     }
 
     if (ok) {

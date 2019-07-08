@@ -49,6 +49,7 @@
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
+
 using namespace sqlite;
 
 #include "msqlitecpp/v2/storage.h"
@@ -66,11 +67,13 @@ using namespace sqlite;
 
 // for Windows
 #ifdef _WIN32
-#include <windows.h>
+                                                                                                                        #include <windows.h>
 #include <direct.h>
 #define GetCurrentDir _getcwd
 #else
+
 #include <unistd.h>
+
 #define GetCurrentDir getcwd
 #endif
 
@@ -91,10 +94,12 @@ using namespace sqlite;
 #include "shortestpath/GeoGraphLoader.h"
 
 #ifndef NO_IPC
+
 #include <ipc.h>
 #include <outputqueuemanager.h>
 #include <outputmessage.h>
 #include <messages/genericconsolestringoutputmessage.h>
+
 #endif
 
 #include <biomodule2.h>
@@ -112,8 +117,8 @@ using namespace sqlite;
 #include <set>
 #include <cstdlib>
 #include <cstdio>
-#include <stdio.h>				 /* defines FILENAME_MAX */
-#include <stdlib.h>				 /* system, NULL, EXIT_FAILURE */
+#include <stdio.h>                 /* defines FILENAME_MAX */
+#include <stdlib.h>                 /* system, NULL, EXIT_FAILURE */
 #include <algorithm>
 #include <ctime>
 #include <cmath>
@@ -172,7 +177,7 @@ namespace sql = msqlitecpp::v2;
 
 // global variables
 #ifdef _WIN32
-FILE *pipe2;
+                                                                                                                        FILE *pipe2;
 FILE *pipe3;
 FILE *pipe4;
 #endif
@@ -183,7 +188,7 @@ std::string cwd;
 char buf[MAXPATH];
 
 #ifdef PROFILE
-AverageProfiler mLoopProfile;
+                                                                                                                        AverageProfiler mLoopProfile;
 AverageProfiler mVesselLoopProfile;
 AverageProfiler mPopExportProfile;
 Profiler mLoadProfile;
@@ -199,12 +204,12 @@ MemoryInfo memInfo;
 
 std::mutex glob_mutex;
 vector<int> ve;
-vector <Vessel*> vessels;
-vector <Ship*> ships;
-vector <Benthos* > benthoss;
-vector <Population* > populations;
-vector <Fishfarm* > fishfarms;
-vector <Windmill* > windmills;
+vector<Vessel *> vessels;
+vector<Ship *> ships;
+vector<Benthos *> benthoss;
+vector<Population *> populations;
+vector<Fishfarm *> fishfarms;
+vector<Windmill *> windmills;
 int tstep;
 int nbpops;
 int nbbenthospops;
@@ -212,15 +217,15 @@ int a_graph;
 types::NodeId a_port;
 int nrow_coord;
 int nrow_graph;
-vector <double> graph_res;
+vector<double> graph_res;
 bool is_individual_vessel_quotas;
 bool check_all_stocks_before_going_fishing;
-vector <int> tariff_pop;
+vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
 int freq_do_growth;
 int freq_redispatch_the_pop;
-vector <double> arbitary_breaks_for_tariff;
+vector<double> arbitary_breaks_for_tariff;
 int total_amount_credited;
 double tariff_annual_hcr_percent_change;
 
@@ -232,23 +237,23 @@ bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
 bool is_benthos_in_longevity_classes;
 bool is_direct_killing_on_benthos;
 bool is_resuspension_effect_on_benthos;
-double tech_creeping_multiplier=1;
+double tech_creeping_multiplier = 1;
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
 bool use_dtrees;
-vector <int> implicit_pops;
-vector <int> implicit_pops_level2;
-vector <int> grouped_tacs;
-vector <int> nbcp_coupling_pops;
-vector <double> global_quotas_uptake;
-vector <int> explicit_pops;
-vector <double> calib_oth_landings;
-vector <double> calib_weight_at_szgroup;
-vector <double> calib_cpue_multiplier;
-vector <types::NodeId> int_harbours;
+vector<int> implicit_pops;
+vector<int> implicit_pops_level2;
+vector<int> grouped_tacs;
+vector<int> nbcp_coupling_pops;
+vector<double> global_quotas_uptake;
+vector<int> explicit_pops;
+vector<double> calib_oth_landings;
+vector<double> calib_weight_at_szgroup;
+vector<double> calib_cpue_multiplier;
+vector<types::NodeId> int_harbours;
 displace::commons::Scenario scenario;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
@@ -272,7 +277,7 @@ vector<double> spe_freq_harbours;
 vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
 vector<double> spe_fishing_credits;
-vector <Node* > nodes;
+vector<Node *> nodes;
 multimap<types::NodeId, string> harbour_names;
 vector<int> name_metiers;
 ofstream freq_cpue;
@@ -280,9 +285,9 @@ ofstream freq_profit;
 ofstream freq_distance;
 ofstream vmslike2;
 ofstream vmslike3;
-vector <Metier*> metiers;
+vector<Metier *> metiers;
 ofstream export_individual_tacs;
-vector <PathShop> pathshops;
+vector<PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
 ofstream shipslogs;
@@ -349,13 +354,15 @@ static void unlock()
     glob_mutex.unlock();
 }
 
-bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<types::NodeId> &nodes)
+bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, string ftype, string a_quarter,
+                         set<types::NodeId> &nodes)
 {
-    string filename=  inputfolder + "/vesselsspe_"+folder_name_parameterization+"/vesselsspe_" + ftype + "_" + a_quarter + ".dat";
+    string filename =
+            inputfolder + "/vesselsspe_" + folder_name_parameterization + "/vesselsspe_" + ftype + "_" + a_quarter +
+            ".dat";
     ifstream in;
     in.open(filename.c_str());
-    if(in.fail())
-    {
+    if (in.fail()) {
         open_file_error(filename.c_str());
         return false;
     }
@@ -364,13 +371,13 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
     string vessel_name;
     int node;
     int n = 0;
-    while(!in.eof())
-    {
+    while (!in.eof()) {
         getline(in, line);
         ++n;
-        if (n == 1)
+        if (n == 1) {
             continue;
-        std::stringstream ss (line);
+        }
+        std::stringstream ss(line);
         ss >> vessel_name;
         ss >> node;
         nodes.insert(types::NodeId(node));
@@ -386,22 +393,30 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 {
     set<types::NodeId> nodes;
 
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes))
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter2", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter2", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter3", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter3", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter4", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter4", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter1", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter1", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter2", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter2", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter3", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter3", nodes)) {
         return false;
-    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter4", nodes))
+    }
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter4", nodes)) {
         return false;
+    }
 
     auto it = nodes.begin();
     while (it != nodes.end()) {
@@ -415,39 +430,38 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 }
 
 
-
 bool test_not_belong_to_firm(const Vessel *v, int id)
 {
-    return v->get_firm_id()!=id;
+    return v->get_firm_id() != id;
 }
 
 
-string type_of_avai_field_to_read=""; // by default, use the initial input
+string type_of_avai_field_to_read = ""; // by default, use the initial input
 
 // parameters
 
-bool crash_handler_enabled  = true;
+bool crash_handler_enabled = true;
 // default
 string outdir;
 
-string namefolderinput="fake";
-string namefolderoutput="baseline";
-string inputfolder=".";
-string namesimu="sim1";
+string namefolderinput = "fake";
+string namefolderoutput = "baseline";
+string inputfolder = ".";
+string namesimu = "sim1";
 string inputdb;
-int nbsteps=10;
-double dparam=10.0;
-int use_static_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
-int selected_vessels_only=0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
+int nbsteps = 10;
+double dparam = 10.0;
+int use_static_paths = 0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
+int selected_vessels_only = 0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
 bool use_gui = false;
 bool gui_move_vessels = true;
 bool use_gnuplot = false;
 int num_threads = 4;
-int nb_displayed_moves_out_of_twenty=1;
+int nb_displayed_moves_out_of_twenty = 1;
 int export_vmslike = 1;
 int export_hugefiles = 1;
 
-void parseCommandLine (int argc, char const *argv[])
+void parseCommandLine(int argc, char const *argv[])
 {
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -465,16 +479,16 @@ void parseCommandLine (int argc, char const *argv[])
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
             ("indb", po::value(&inputdb), "Read input data from sqlite db")
-            ("commit-rate", po::value(&numStepTransactions), "Modify the number of loops before committing to sqlite db")
+            ("commit-rate", po::value(&numStepTransactions),
+             "Modify the number of loops before committing to sqlite db")
             ("use-gui", "Enable IPC channel to talk to the GUI")
-            ("no-gui-move-vessels", "Disable the movement of the vessels/ships in the GUI" )
+            ("no-gui-move-vessels", "Disable the movement of the vessels/ships in the GUI")
             ("disable-sqlite", "Disable the SQLite output")
             ("num_threads", po::value(&num_threads), "Number of threads to use to move vessels")
             ("rate", po::value(&nb_displayed_moves_out_of_twenty), "Nb of displayed moves of of 20")
             ("disable-crash-handler", "Disable the crash handler")
             ("debug", "Enable debug mode")
-            ("without-gnuplot", "Maintained for compatibility, no functions")
-            ;
+            ("without-gnuplot", "Maintained for compatibility, no functions");
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -482,19 +496,24 @@ void parseCommandLine (int argc, char const *argv[])
 
     if (vm.count("help")) {
         std::cout << desc << "\n";
-        exit (0);
+        exit(0);
     }
 
-    if (vm.count("use-gui"))
+    if (vm.count("use-gui")) {
         use_gui = true;
-    if (vm.count("no-gui-move-vessels"))
+    }
+    if (vm.count("no-gui-move-vessels")) {
         gui_move_vessels = false;
-    if (vm.count("disable-sqlite"))
+    }
+    if (vm.count("disable-sqlite")) {
         enable_sqlite_out = false;
-    if (vm.count("disable-crash-handler"))
+    }
+    if (vm.count("disable-crash-handler")) {
         crash_handler_enabled = false;
-    if (vm.count("debug"))
+    }
+    if (vm.count("debug")) {
         crash_handler_enabled = false;
+    }
 }
 
 
@@ -512,18 +531,19 @@ void parseCommandLine (int argc, char const *argv[])
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
-int app_main(int argc, char const* argv[])
+int app_main(int argc, char const *argv[])
 {
 #ifdef _WIN32
     string outdir="C:";
 #else
     bool DTU_HPC_SCRATCH = false;
     string home;
-    if(DTU_HPC_SCRATCH)
-        home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
-    else
-        home=getenv("HOME");
-    outdir=home+"/ibm_vessels";
+    if (DTU_HPC_SCRATCH) {
+        home = "/SCRATCH/fbas"; // => DTU SCRATCH for HPC
+    } else {
+        home = getenv("HOME");
+    }
+    outdir = home + "/ibm_vessels";
 #endif
 
     // example for setting up options for the command line
@@ -551,8 +571,9 @@ int app_main(int argc, char const* argv[])
     parseCommandLine(argc, argv);
 
     CrashHandler handler;
-    if (crash_handler_enabled)
+    if (crash_handler_enabled) {
         handler.initialize();
+    }
 
     initIpcQueue();
     thread_vessel_init(num_threads);
@@ -561,7 +582,7 @@ int app_main(int argc, char const* argv[])
 
     lock();
     cout << " nbsteps " << nbsteps
-         << " namefolderinput " << namefolderinput <<" " << use_static_paths << endl;
+         << " namefolderinput " << namefolderinput << " " << use_static_paths << endl;
     unlock();
 
     //	if(namefolderinput=="fake") inputfolder="DISPLACE_input_test";
@@ -578,12 +599,12 @@ int app_main(int argc, char const* argv[])
 
     //for initial input data
     // init
-    string a_month   ="month1";
-    string a_semester="semester1";
-    string a_quarter ="quarter1";
-    int a_month_i    =1;
-    int a_quarter_i  =1;
-    int a_semester_i =1;
+    string a_month = "month1";
+    string a_semester = "semester1";
+    string a_quarter = "quarter1";
+    int a_month_i = 1;
+    int a_quarter_i = 1;
+    int a_semester_i = 1;
 
     // create a specific output directory for the ibm outcomes
     string an_output_folder;
@@ -591,7 +612,7 @@ int app_main(int argc, char const* argv[])
     string namefolder;
 
 #ifdef _WIN32
-    an_output_folder= outdir+"/DISPLACE_outputs";
+                                                                                                                            an_output_folder= outdir+"/DISPLACE_outputs";
     mkdir(an_output_folder.c_str());
 
 
@@ -604,122 +625,117 @@ int app_main(int argc, char const* argv[])
 
     // not Windows eg Linux on HPC DTU
     int status;
-    an_output_folder= outdir+"/DISPLACE_outputs";
+    an_output_folder = outdir + "/DISPLACE_outputs";
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if(status < 0) 	{
+    if (status < 0) {
         cerr << "could not create directory" << an_output_folder << ": " << strerror(errno) << endl;
         return -1;
     }
 
-    a_basic_output_folder= outdir+"/DISPLACE_outputs/"+namefolderinput;
+    a_basic_output_folder = outdir + "/DISPLACE_outputs/" + namefolderinput;
     status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-    if(status < 0)
-    {
+    if (status < 0) {
         cerr << "could not create directory" << a_basic_output_folder << ": " << strerror(errno) << endl;
         return -1;
     }
 
     // create a specific output directory for this simu
-    namefolder= outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
+    namefolder = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput;
     status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if(status < 0)
-    {
+    if (status < 0) {
         cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
         return -1;
     }
 #endif
 
 
-
 #ifdef _WIN32
-    // for gnuplot installed for at least MinGW_with_gcc_4.6.2
+                                                                                                                            // for gnuplot installed for at least MinGW_with_gcc_4.6.2
 const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #else
     char *path = 0;
 #endif
 
     // get the name of the input directory for this simu
-    string folder_name_parameterization= namefolderinput;
+    string folder_name_parameterization = namefolderinput;
 
     // for the file name if stochastic variation on availability keys
     string str_rand_avai_file;
 
     // nbpops, etc.: caution= config numbers here, read from config files.
     // a mistake in these files are of great consequences.
-    string a_graph_name="a_graph";
+    string a_graph_name = "a_graph";
 
 
     // config at the simusspe level
-    if (!read_config_file (
-                folder_name_parameterization,
-                inputfolder,
-                nbpops,
-                nbbenthospops,
-                implicit_pops,
-                implicit_pops_level2,
-                grouped_tacs,
-                nbcp_coupling_pops,
-                calib_oth_landings,
-                calib_weight_at_szgroup,
-                calib_cpue_multiplier,
-                int_harbours
-                )) {
+    if (!read_config_file(
+            folder_name_parameterization,
+            inputfolder,
+            nbpops,
+            nbbenthospops,
+            implicit_pops,
+            implicit_pops_level2,
+            grouped_tacs,
+            nbcp_coupling_pops,
+            calib_oth_landings,
+            calib_weight_at_szgroup,
+            calib_cpue_multiplier,
+            int_harbours
+    )) {
         cerr << "Cannot read Config File: Bad format\n";
         return 2;
     }
 
-    if (!read_scenario_config_file (
-                folder_name_parameterization,
-                inputfolder,
-                namefolderoutput,
-                scenario)) {
+    if (!read_scenario_config_file(
+            folder_name_parameterization,
+            inputfolder,
+            namefolderoutput,
+            scenario)) {
         cerr << "Cannot read scenario config file, Bad Format.\n";
         return 2;
     }
 
     dyn_alloc_sce = scenario.dyn_alloc_sce;
-    dyn_pop_sce  = scenario.dyn_pop_sce;
+    dyn_pop_sce = scenario.dyn_pop_sce;
     biolsce = scenario.biolsce;
     fleetsce = scenario.fleetsce;
-    freq_do_growth=scenario.freq_do_growth;
-    freq_redispatch_the_pop=scenario.freq_redispatch_the_pop;
+    freq_do_growth = scenario.freq_do_growth;
+    freq_redispatch_the_pop = scenario.freq_redispatch_the_pop;
     a_graph = scenario.a_graph;
     nrow_coord = scenario.nrow_coord;
     nrow_graph = scenario.nrow_graph;
     a_port = scenario.a_port;
     graph_res = scenario.graph_res;
     is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
-    check_all_stocks_before_going_fishing=scenario.check_all_stocks_before_going_fishing;
+    check_all_stocks_before_going_fishing = scenario.check_all_stocks_before_going_fishing;
     use_dtrees = scenario.use_dtrees;
-    if(dyn_alloc_sce.option(Options::fishing_credits))
-    {
-        tariff_pop=scenario.tariff_pop;
-        freq_update_tariff_code=scenario.freq_update_tariff_code;
-        update_tariffs_based_on_lpue_or_dpue_code=scenario.update_tariffs_based_on_lpue_or_dpue_code;
-        arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
-        total_amount_credited=scenario.total_amount_credited;
-        tariff_annual_hcr_percent_change=scenario.tariff_annual_hcr_percent_change;
+    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        tariff_pop = scenario.tariff_pop;
+        freq_update_tariff_code = scenario.freq_update_tariff_code;
+        update_tariffs_based_on_lpue_or_dpue_code = scenario.update_tariffs_based_on_lpue_or_dpue_code;
+        arbitary_breaks_for_tariff = scenario.arbitary_breaks_for_tariff;
+        total_amount_credited = scenario.total_amount_credited;
+        tariff_annual_hcr_percent_change = scenario.tariff_annual_hcr_percent_change;
     }
-
 
 
     stringstream graphnum;
     graphnum << a_graph;
-    a_graph_name=a_graph_name+graphnum.str();
+    a_graph_name = a_graph_name + graphnum.str();
 
     // Create simulation scenario
     displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
 
     if (use_dtrees) {
-        if (!sim_scenario->loadTimeSeries(inputfolder+"/timeseries", "")) {
-            std::cerr << "Cannot read time series. aborting." <<std::endl;
+        if (!sim_scenario->loadTimeSeries(inputfolder + "/timeseries", "")) {
+            std::cerr << "Cannot read time series. aborting." << std::endl;
             return -1;
         }
 
         // Load dtrees
-        if (dtree::DecisionTreeManager::manager()->readFromScenario(inputfolder+"/dtrees", scenario) <= 0) {
+        if (dtree::DecisionTreeManager::manager()->readFromScenario(inputfolder + "/dtrees", scenario) <= 0) {
             std::cerr << "Cannot read decision trees, aborting." << std::endl;
             return -1;
         }
@@ -727,24 +743,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // check if config reading OK
     outc(cout << nbpops << endl);
-    for (unsigned int a_pop=0; a_pop<implicit_pops.size(); a_pop++)
-    {
-        outc(cout <<" " <<  implicit_pops.at(a_pop));
+    for (unsigned int a_pop = 0; a_pop < implicit_pops.size(); a_pop++) {
+        outc(cout << " " << implicit_pops.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop=0; a_pop<nbpops; a_pop++)
-    {
-        outc(cout <<" " <<  calib_oth_landings.at(a_pop));
+    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
+        outc(cout << " " << calib_oth_landings.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop=0; a_pop<nbpops; a_pop++)
-    {
-        outc(cout <<" " <<  calib_weight_at_szgroup.at(a_pop));
+    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
+        outc(cout << " " << calib_weight_at_szgroup.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop=0; a_pop<nbpops; a_pop++)
-    {
-        outc(cout <<" " <<  calib_cpue_multiplier.at(a_pop));
+    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
+        outc(cout << " " << calib_cpue_multiplier.at(a_pop));
     }
     outc(cout << endl);
 
@@ -763,8 +775,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
     outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
 
-    if(dyn_alloc_sce.option(Options::fishing_credits))
-    {
+    if (dyn_alloc_sce.option(Options::fishing_credits)) {
         outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
         outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
         outc(cout << "update_tariffs_based_on_lpue_or_dpue_code " << update_tariffs_based_on_lpue_or_dpue_code << endl);
@@ -779,18 +790,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // using vessel and species-specific historic cpue data... (just like in paper Bastardie et al 2010)
 
     // set a fixed seed
-    int a_rand= rand() % 10000;
+    int a_rand = rand() % 10000;
     // to avoid chosing the seed in the same second!
-    for (int waste=0; waste< a_rand; waste++)
-    {
+    for (int waste = 0; waste < a_rand; waste++) {
     }
 
     // detect a integer in the name of the simu
     size_t iii = 0;
-    for (; iii < namesimu.length(); iii++ ){ if ( isdigit(namesimu[iii]) ) break; }
+    for (; iii < namesimu.length(); iii++) { if (isdigit(namesimu[iii])) { break; }}
 
     // remove the first chars, which aren't digits
-    string str = namesimu.substr(iii, namesimu.length() - iii );
+    string str = namesimu.substr(iii, namesimu.length() - iii);
 
     // convert the remaining text to an integer
     int a_seed = atoi(str.c_str());
@@ -799,88 +809,77 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     std::cout << "The random seed is set to: " << a_seed << std::endl;
 
     // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
-    srand (a_seed);
+    srand(a_seed);
 
 
     // special case for random stochastic spatial pop distribution
-    if(dyn_pop_sce.option(Options::white_noise_on_avai_deprecated))
-    {
+    if (dyn_pop_sce.option(Options::white_noise_on_avai_deprecated)) {
         // pick up a file name randomly later on
-        int rand_avai_file= (rand() % 50)+1;
-        char buffer [100];
-        sprintf (buffer, "%03d", rand_avai_file);
+        int rand_avai_file = (rand() % 50) + 1;
+        char buffer[100];
+        sprintf(buffer, "%03d", rand_avai_file);
         str_rand_avai_file = buffer;
         outc(cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << endl);
-    }
-    else
-    {
+    } else {
         // no stochastic variation
         str_rand_avai_file = "baseline";
     }
 
 
-    if(dyn_alloc_sce.option(Options::TACs))
-    {
-        is_tacs=1;
-    } else{
-        is_tacs=0;
+    if (dyn_alloc_sce.option(Options::TACs)) {
+        is_tacs = 1;
+    } else {
+        is_tacs = 0;
     }
 
-    if(dyn_alloc_sce.option(Options::fishing_credits))
-    {
-        is_fishing_credits=1;
-    } else{
-        is_fishing_credits=0;
+    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        is_fishing_credits = 1;
+    } else {
+        is_fishing_credits = 0;
     }
 
-    if(dyn_alloc_sce.option(Options::discard_ban))
-    {
-        is_discard_ban=1;
-    } else{
-        is_discard_ban=0;
+    if (dyn_alloc_sce.option(Options::discard_ban)) {
+        is_discard_ban = 1;
+    } else {
+        is_discard_ban = 0;
     }
 
-    if(dyn_alloc_sce.option(Options::groupedTACs))
-    {
-        is_grouped_tacs=1;
-    } else{
-        is_grouped_tacs=0;
+    if (dyn_alloc_sce.option(Options::groupedTACs)) {
+        is_grouped_tacs = 1;
+    } else {
+        is_grouped_tacs = 0;
     }
 
 
-    if(dyn_pop_sce.option(Options::modelBenthosInN))
-    {
-        is_benthos_in_numbers=1;
-    } else{
-        is_benthos_in_numbers=0; // if not N then it impacts the benthos biomass by default
+    if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+        is_benthos_in_numbers = 1;
+    } else {
+        is_benthos_in_numbers = 0; // if not N then it impacts the benthos biomass by default
     }
 
-    if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
-    {
-        is_benthos_in_longevity_classes=1;
-    } else{
-        is_benthos_in_longevity_classes=0;
+    if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        is_benthos_in_longevity_classes = 1;
+    } else {
+        is_benthos_in_longevity_classes = 0;
     }
 
 
-
-    if(dyn_pop_sce.option(Options::modeldirectKillingOnBenthos))
-    {
-        is_direct_killing_on_benthos=1;
-    } else{
-        is_direct_killing_on_benthos=0; // direct fishing effect on benthos
+    if (dyn_pop_sce.option(Options::modeldirectKillingOnBenthos)) {
+        is_direct_killing_on_benthos = 1;
+    } else {
+        is_direct_killing_on_benthos = 0; // direct fishing effect on benthos
     }
 
-    if(dyn_pop_sce.option(Options::modelResuspensionEffectOnBenthos))
-    {
-        is_resuspension_effect_on_benthos=1;
-    } else{
-        is_resuspension_effect_on_benthos=0; // indirect fishing effect on benthos
+    if (dyn_pop_sce.option(Options::modelResuspensionEffectOnBenthos)) {
+        is_resuspension_effect_on_benthos = 1;
+    } else {
+        is_resuspension_effect_on_benthos = 0; // indirect fishing effect on benthos
     }
 
-    if (!OutputExporter::instantiate(outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
+    if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
+                                     namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
-        exit (1);
+        exit(1);
     }
 
 
@@ -889,7 +888,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     try {
         if (enable_sqlite_out) {
-            outSqlitePath = namefolder + "/" + namefolderinput + "_" +namesimu+"_out.db";
+            outSqlitePath = namefolder + "/" + namefolderinput + "_" + namesimu + "_out.db";
 
             unlink(outSqlitePath.c_str());
 
@@ -897,7 +896,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             outSqlite->open();
             outSqlite->createAllTables();
 
-            OutputExporter::instance().setSQLiteDb(outSqlite);            
+            OutputExporter::instance().setSQLiteDb(outSqlite);
             guiSendOutputInfo(outSqlitePath);
 
             metadata = std::make_shared<ModelMetadataAccessor>(outSqlite->metadata());
@@ -913,22 +912,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         metadata->setNbSizes(NBSZGROUP);
     }
 
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/export_individual_tac_" +
+               namesimu + ".dat";
     export_individual_tacs.open(filename.c_str());
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " TEST MY R UTILS           " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " TEST MY R UTILS           " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     // Seed the random-number generator with current time so that
     // the numbers will be different every time we run.
-    int seed = (int)time(NULL);	 // random seed
+    int seed = (int) time(NULL);     // random seed
     UNUSED(seed);
 
 #if 0
-    dout(cout  << " check do_sample() " << endl);
+                                                                                                                            dout(cout  << " check do_sample() " << endl);
     int val[4]= {12,13,14,15};
     double p[4]= {0.01,0.200,0.300,0.490};
     // draw 100 numbers from these 4 values, see myRutils.cpp
@@ -940,43 +940,42 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << endl);
 #endif
 
-    dout(cout  << " check rgamma() " << endl);
-    double a_shape=1;
-    double a_scale=60;
+    dout(cout << " check rgamma() " << endl);
+    double a_shape = 1;
+    double a_scale = 60;
     vector<double> a_res;
-    for(int i =0; i<100; i++)
-    {
-        a_res.push_back( rgamma(a_shape, a_scale) );
-        dout(cout  << " " << a_res[i]);
+    for (int i = 0; i < 100; i++) {
+        a_res.push_back(rgamma(a_shape, a_scale));
+        dout(cout << " " << a_res[i]);
     }
-    dout(cout  << endl);
+    dout(cout << endl);
 
     // test the splitting of trees
     // (NOTE: this method will fail if the same variables are present in several branches...use a data.frame instead?)
-    string a_string= "0.0 last_trip_was 0.3 weather_is 0.5 fish_price_is 0.2 last_trip_was 0.8 remaining_quota_is 0.9";
+    string a_string = "0.0 last_trip_was 0.3 weather_is 0.5 fish_price_is 0.2 last_trip_was 0.8 remaining_quota_is 0.9";
     vector<string> a_split_string;
-    string a_delimiter =" fish_price_is ";
-    split( a_split_string, a_string, a_delimiter, splitX::no_empties);
+    string a_delimiter = " fish_price_is ";
+    split(a_split_string, a_string, a_delimiter, splitX::no_empties);
     //	print( a_split_string );
     // second split....
-    a_string=a_split_string[0];
-    a_delimiter =" weather_is ";
-    split( a_split_string, a_string, a_delimiter, splitX::no_empties);
+    a_string = a_split_string[0];
+    a_delimiter = " weather_is ";
+    split(a_split_string, a_string, a_delimiter, splitX::no_empties);
     //	print( a_split_string );
     //system("PAUSE");
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " TEST MY UTILS             " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " TEST MY UTILS             " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
-    double MLS=40;
-    double L75= 46.4;
-    double L50= 27.4;
-    double S1  =L50*log(3) / (L75 - L50);
-    double S2  = S1/L50;
+    double MLS = 40;
+    double L75 = 46.4;
+    double L50 = 27.4;
+    double S1 = L50 * log(3) / (L75 - L50);
+    double S2 = S1 / L50;
     double result1 = simpson<myintegrand>(20, MLS, 100, S1, S2); // discards
     double result2 = simpson<myintegrand>(MLS, 70, 100, S1, S2); // landings
     dout(cout << result1 << "  " << result2 << endl);
@@ -1034,30 +1033,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     sel.push_back(0.9150155);
     sel.push_back(0.9194053);
     sel.push_back(0.9235872);
-    double result3 = trapezoidal(20-20, MLS-20, sel); // landings
-    double result4 = trapezoidal(MLS-20, 70-20, sel); // landings
+    double result3 = trapezoidal(20 - 20, MLS - 20, sel); // landings
+    double result4 = trapezoidal(MLS - 20, 70 - 20, sel); // landings
     cout << result3 << "  " << result4 << endl;
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " NODE-RELATED STUFFS      " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " NODE-RELATED STUFFS      " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 #ifdef PROFILE
-    memInfo.update();
+                                                                                                                            memInfo.update();
     guiSendMemoryInfo(memInfo);
     mLoadProfile.start();
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
+    Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
-          << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
-    node.set_xy(2,2);
+               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
+    node.set_xy(2, 2);
     dout (cout << "is the node now at 2,2? "
-          << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
+               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 
     // input data, coord nodes of the graph
     ifstream coord_graph;
@@ -1066,25 +1066,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     stringstream out;
     out << a_graph;
     string a_graph_s = out.str();
-    string filename_graph=inputfolder+"/graphsspe/coord"+a_graph_s+".dat";
-    string filename_code_area_graph=inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
-    string filename_code_marine_landscape_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
-    string filename_wind_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_wind.dat";
-    string filename_sst_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_sst.dat";
-    string filename_salinity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_salinity.dat";
-    string filename_Nitrogen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_nitrogen.dat";
-    string filename_Phosphorus_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_phosphorus.dat";
-    string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_oxygen.dat";
-    string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_dissolvedcarbon.dat";
-    string filename_bathymetry_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_bathymetry.dat";
-    string filename_shippingdensity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_shippingdensity.dat";
-    string filename_siltfraction_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_siltfraction.dat";
-    string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
-    string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
+    string filename_graph = inputfolder + "/graphsspe/coord" + a_graph_s + ".dat";
+    string filename_code_area_graph = inputfolder + "/graphsspe/code_area_for_graph" + a_graph_s + "_points.dat";
+    string filename_code_marine_landscape_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_landscape.dat";
+    string filename_wind_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_wind.dat";
+    string filename_sst_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_sst.dat";
+    string filename_salinity_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_salinity.dat";
+    string filename_Nitrogen_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_nitrogen.dat";
+    string filename_Phosphorus_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_phosphorus.dat";
+    string filename_Oxygen_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_oxygen.dat";
+    string filename_DissolvedCarbon_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_dissolvedcarbon.dat";
+    string filename_bathymetry_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_bathymetry.dat";
+    string filename_shippingdensity_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_shippingdensity.dat";
+    string filename_siltfraction_graph = inputfolder + "/graphsspe/coord" + a_graph_s + "_with_siltfraction.dat";
+    string filename_code_benthos_biomass_graph =
+            inputfolder + "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
+    string filename_code_benthos_number_graph =
+            inputfolder + "/graphsspe/coord" + a_graph_s + "_with_benthos_total_number.dat";
 
     coord_graph.open(filename_graph.c_str());
-    if(coord_graph.fail())
-    {
+    if (coord_graph.fail()) {
         open_file_error(filename_graph.c_str());
         return 1;
     }
@@ -1100,8 +1101,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, code area for each point of the graph (e.g. 1: NS, 2: BW, 3: BE, 10: open sea)
     ifstream code_area_graph;
     code_area_graph.open(filename_code_area_graph.c_str());
-    if(code_area_graph.fail())
-    {
+    if (code_area_graph.fail()) {
         open_file_error(filename_code_area_graph.c_str());
         return 1;
     }
@@ -1114,8 +1114,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the marine landscape for each point of the graph (e.g. 111, 112, etc. e.g. see the BALANCE map coding)
     ifstream code_landscape_graph;
     code_landscape_graph.open(filename_code_marine_landscape_graph.c_str());
-    if(code_landscape_graph.fail())
-    {
+    if (code_landscape_graph.fail()) {
         open_file_error(filename_code_marine_landscape_graph.c_str());
         return 1;
     }
@@ -1128,8 +1127,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the WIND for each point of the graph
     ifstream wind_graph;
     wind_graph.open(filename_wind_graph.c_str());
-    if(wind_graph.fail())
-    {
+    if (wind_graph.fail()) {
         open_file_error(filename_wind_graph.c_str());
         return 1;
     }
@@ -1142,8 +1140,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the SST for each point of the graph
     ifstream sst_graph;
     sst_graph.open(filename_sst_graph.c_str());
-    if(sst_graph.fail())
-    {
+    if (sst_graph.fail()) {
         open_file_error(filename_sst_graph.c_str());
         return 1;
     }
@@ -1156,8 +1153,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the SST for each point of the graph
     ifstream salinity_graph;
     salinity_graph.open(filename_salinity_graph.c_str());
-    if(salinity_graph.fail())
-    {
+    if (salinity_graph.fail()) {
         open_file_error(filename_salinity_graph.c_str());
         return 1;
     }
@@ -1170,8 +1166,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream Nitrogen_graph;
     Nitrogen_graph.open(filename_Nitrogen_graph.c_str());
-    if(Nitrogen_graph.fail())
-    {
+    if (Nitrogen_graph.fail()) {
         open_file_error(filename_Nitrogen_graph.c_str());
         return 1;
     }
@@ -1183,8 +1178,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream Phosphorus_graph;
     Phosphorus_graph.open(filename_Phosphorus_graph.c_str());
-    if(Phosphorus_graph.fail())
-    {
+    if (Phosphorus_graph.fail()) {
         open_file_error(filename_Phosphorus_graph.c_str());
         return 1;
     }
@@ -1196,8 +1190,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream Oxygen_graph;
     Oxygen_graph.open(filename_Oxygen_graph.c_str());
-    if(Oxygen_graph.fail())
-    {
+    if (Oxygen_graph.fail()) {
         open_file_error(filename_Oxygen_graph.c_str());
         return 1;
     }
@@ -1209,8 +1202,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream DissolvedCarbon_graph;
     DissolvedCarbon_graph.open(filename_DissolvedCarbon_graph.c_str());
-    if(DissolvedCarbon_graph.fail())
-    {
+    if (DissolvedCarbon_graph.fail()) {
         open_file_error(filename_DissolvedCarbon_graph.c_str());
         return 1;
     }
@@ -1222,8 +1214,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream bathymetry_graph;
     bathymetry_graph.open(filename_bathymetry_graph.c_str());
-    if(bathymetry_graph.fail())
-    {
+    if (bathymetry_graph.fail()) {
         open_file_error(filename_bathymetry_graph.c_str());
         return 1;
     }
@@ -1235,8 +1226,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream shippingdensity_graph;
     shippingdensity_graph.open(filename_shippingdensity_graph.c_str());
-    if(shippingdensity_graph.fail())
-    {
+    if (shippingdensity_graph.fail()) {
         open_file_error(filename_shippingdensity_graph.c_str());
         return 1;
     }
@@ -1248,8 +1238,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     ifstream siltfraction_graph;
     siltfraction_graph.open(filename_siltfraction_graph.c_str());
-    if(siltfraction_graph.fail())
-    {
+    if (siltfraction_graph.fail()) {
         open_file_error(filename_siltfraction_graph.c_str());
         return 1;
     }
@@ -1280,8 +1269,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the benthos total BIOMASS for each point of the graph
     ifstream benthos_biomass_graph;
     benthos_biomass_graph.open(filename_code_benthos_biomass_graph.c_str());
-    if(benthos_biomass_graph.fail())
-    {
+    if (benthos_biomass_graph.fail()) {
         open_file_error(filename_code_benthos_biomass_graph.c_str());
         return 1;
     }
@@ -1294,8 +1282,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // input data, for the benthos total NUMBER for each point of the graph
     ifstream benthos_number_graph;
     benthos_number_graph.open(filename_code_benthos_number_graph.c_str());
-    if(benthos_number_graph.fail())
-    {
+    if (benthos_number_graph.fail()) {
         open_file_error(filename_code_benthos_number_graph.c_str());
         return 1;
     }
@@ -1309,97 +1296,95 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // overwriting for GRAPH ENVT FORCING VARIABLES
-    if(dyn_pop_sce.option(Options::includeForcingLayers))
-    {
-       cout << "import environmental variables in one shoot..." << endl;
+    if (dyn_pop_sce.option(Options::includeForcingLayers)) {
+        cout << "import environmental variables in one shoot..." << endl;
 
 
-       const string separator=",";
+        const string separator = ",";
 
-       stringstream out;
-       out << a_graph;
-       string a_graph_s = out.str();
-       string filename = inputfolder+"/graphsspe/environment_on_coord"+a_graph_s+".dat";
+        stringstream out;
+        out << a_graph;
+        string a_graph_s = out.str();
+        string filename = inputfolder + "/graphsspe/environment_on_coord" + a_graph_s + ".dat";
 
-       ifstream is;
-       is.open(filename.c_str());
-       if(is.fail())
-       {
-           cout << "Fail to open the file "<< filename << endl;
-           open_file_error(filename);
-           return false;
-       }
+        ifstream is;
+        is.open(filename.c_str());
+        if (is.fail()) {
+            cout << "Fail to open the file " << filename << endl;
+            open_file_error(filename);
+            return false;
+        }
 
-       std::vector <EnvironmentDataRecord> environment_on_coord;
-       bool r = read_environment_on_coord (is, separator, environment_on_coord);
+        std::vector<EnvironmentDataRecord> environment_on_coord;
+        bool r = read_environment_on_coord(is, separator, environment_on_coord);
 
-       //"x" 0                    "y" 1                    "harb" 2
-       //"pt_graph" 3             "code_area" 4
-       //"landscapes_code" 5      "landscape_norm" 6       "landscape_alpha" 7
-       //"wind" 8                 "wind_norm" 9            "wind_alpha" 10
-       //"sst" 11                 "sst_norm" 12            "sst_alpha" 13
-       //"salinity" 14            "salinity_norm" 15       "salinity_alpha"  16
-       //"nitrogen" 17            "nitrogen_norm"   18     "nitrogen_alpha" 19
-       //"phosphorus" 20          "phosphorus_norm" 21     "phosphorus_alpha" 22
-       //"oxygen" 23              "oxygen_norm" 24         "oxygen_alpha" 25
-       //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
-       //"bathymetry" 29
-       //"shippingdensity" 30
-       //"siltfraction" 31
+        //"x" 0                    "y" 1                    "harb" 2
+        //"pt_graph" 3             "code_area" 4
+        //"landscapes_code" 5      "landscape_norm" 6       "landscape_alpha" 7
+        //"wind" 8                 "wind_norm" 9            "wind_alpha" 10
+        //"sst" 11                 "sst_norm" 12            "sst_alpha" 13
+        //"salinity" 14            "salinity_norm" 15       "salinity_alpha"  16
+        //"nitrogen" 17            "nitrogen_norm"   18     "nitrogen_alpha" 19
+        //"phosphorus" 20          "phosphorus_norm" 21     "phosphorus_alpha" 22
+        //"oxygen" 23              "oxygen_norm" 24         "oxygen_alpha" 25
+        //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
+        //"bathymetry" 29
+        //"shippingdensity" 30
+        //"siltfraction" 31
 
-       cout << "environment_on_coord.size() "<< environment_on_coord.size() << endl;
-       for (unsigned int n=0; n<environment_on_coord.size(); n++)
-       {
-          graph_coord_x.at(n)=environment_on_coord.at(n).x; // #0
-          graph_coord_y.at(n)=environment_on_coord.at(n).y; // #1
-          graph_coord_harbour.at(n)=environment_on_coord.at(n).harb; // #2
-          graph_point_code_area.at(n)=environment_on_coord.at(n).code_area; // #4
-          graph_point_code_landscape.at(n)=environment_on_coord.at(n).landscapes_code; // #5
-          graph_point_landscape_norm.at(n)=environment_on_coord.at(n).landscape_norm;
-          graph_point_landscape_alpha.at(n)=environment_on_coord.at(n).landscape_alpha;
-          graph_point_wind.at(n)=environment_on_coord.at(n).wind; // #8
-          graph_point_wind_norm.at(n)=environment_on_coord.at(n).wind_norm;
-          graph_point_wind_alpha.at(n)=environment_on_coord.at(n).wind_alpha;
-          graph_point_sst.at(n)=environment_on_coord.at(n).sst;  // #11
-          graph_point_sst_norm.at(n)=environment_on_coord.at(n).sst_norm;
-          graph_point_sst_alpha.at(n)=environment_on_coord.at(n).sst_alpha;
-          graph_point_salinity.at(n)=environment_on_coord.at(n).salinity;  // #14
-          graph_point_salinity_norm.at(n)=environment_on_coord.at(n).salinity_norm;
-          graph_point_salinity_alpha.at(n)=environment_on_coord.at(n).salinity_alpha;
-          graph_point_Nitrogen.at(n)=environment_on_coord.at(n).nitrogen;  // #17
-          graph_point_Nitrogen_norm.at(n)=environment_on_coord.at(n).nitrogen_norm;
-          graph_point_Nitrogen_alpha.at(n)=environment_on_coord.at(n).nitrogen_alpha;
-          graph_point_Phosphorus.at(n)=environment_on_coord.at(n).phosphorus;  // #20
-          graph_point_Phosphorus_norm.at(n)=environment_on_coord.at(n).phosphorus_norm;
-          graph_point_Phosphorus_alpha.at(n)=environment_on_coord.at(n).phosphorus_alpha;
-          graph_point_Oxygen.at(n)=environment_on_coord.at(n).oxygen;  // #23
-          graph_point_Oxygen_norm.at(n)=environment_on_coord.at(n).oxygen_norm;
-          graph_point_Oxygen_alpha.at(n)=environment_on_coord.at(n).oxygen_alpha;
-          graph_point_DissolvedCarbon.at(n)=environment_on_coord.at(n).dissolvedcarbon;  // #26
-          graph_point_DissolvedCarbon_norm.at(n)=environment_on_coord.at(n).dissolvedcarbon_norm;
-          graph_point_DissolvedCarbon_alpha.at(n)=environment_on_coord.at(n).dissolvedcarbon_alpha;
-          graph_point_bathymetry.at(n)=environment_on_coord.at(n).bathymetry; // 29
-          graph_point_shippingdensity.at(n)=environment_on_coord.at(n).shippingdensity; // 30
-          graph_point_siltfraction.at(n)=environment_on_coord.at(n).siltfraction; // 31
-       }
+        cout << "environment_on_coord.size() " << environment_on_coord.size() << endl;
+        for (unsigned int n = 0; n < environment_on_coord.size(); n++) {
+            graph_coord_x.at(n) = environment_on_coord.at(n).x; // #0
+            graph_coord_y.at(n) = environment_on_coord.at(n).y; // #1
+            graph_coord_harbour.at(n) = environment_on_coord.at(n).harb; // #2
+            graph_point_code_area.at(n) = environment_on_coord.at(n).code_area; // #4
+            graph_point_code_landscape.at(n) = environment_on_coord.at(n).landscapes_code; // #5
+            graph_point_landscape_norm.at(n) = environment_on_coord.at(n).landscape_norm;
+            graph_point_landscape_alpha.at(n) = environment_on_coord.at(n).landscape_alpha;
+            graph_point_wind.at(n) = environment_on_coord.at(n).wind; // #8
+            graph_point_wind_norm.at(n) = environment_on_coord.at(n).wind_norm;
+            graph_point_wind_alpha.at(n) = environment_on_coord.at(n).wind_alpha;
+            graph_point_sst.at(n) = environment_on_coord.at(n).sst;  // #11
+            graph_point_sst_norm.at(n) = environment_on_coord.at(n).sst_norm;
+            graph_point_sst_alpha.at(n) = environment_on_coord.at(n).sst_alpha;
+            graph_point_salinity.at(n) = environment_on_coord.at(n).salinity;  // #14
+            graph_point_salinity_norm.at(n) = environment_on_coord.at(n).salinity_norm;
+            graph_point_salinity_alpha.at(n) = environment_on_coord.at(n).salinity_alpha;
+            graph_point_Nitrogen.at(n) = environment_on_coord.at(n).nitrogen;  // #17
+            graph_point_Nitrogen_norm.at(n) = environment_on_coord.at(n).nitrogen_norm;
+            graph_point_Nitrogen_alpha.at(n) = environment_on_coord.at(n).nitrogen_alpha;
+            graph_point_Phosphorus.at(n) = environment_on_coord.at(n).phosphorus;  // #20
+            graph_point_Phosphorus_norm.at(n) = environment_on_coord.at(n).phosphorus_norm;
+            graph_point_Phosphorus_alpha.at(n) = environment_on_coord.at(n).phosphorus_alpha;
+            graph_point_Oxygen.at(n) = environment_on_coord.at(n).oxygen;  // #23
+            graph_point_Oxygen_norm.at(n) = environment_on_coord.at(n).oxygen_norm;
+            graph_point_Oxygen_alpha.at(n) = environment_on_coord.at(n).oxygen_alpha;
+            graph_point_DissolvedCarbon.at(n) = environment_on_coord.at(n).dissolvedcarbon;  // #26
+            graph_point_DissolvedCarbon_norm.at(n) = environment_on_coord.at(n).dissolvedcarbon_norm;
+            graph_point_DissolvedCarbon_alpha.at(n) = environment_on_coord.at(n).dissolvedcarbon_alpha;
+            graph_point_bathymetry.at(n) = environment_on_coord.at(n).bathymetry; // 29
+            graph_point_shippingdensity.at(n) = environment_on_coord.at(n).shippingdensity; // 30
+            graph_point_siltfraction.at(n) = environment_on_coord.at(n).siltfraction; // 31
+        }
 
-       //check
-       cout << "prior check of environment_on_coord:" << endl;
-       cout << environment_on_coord.at(0).x << " " << environment_on_coord.at(0).y  << " " <<
-              environment_on_coord.at(0).harb << " " << environment_on_coord.at(0).code_area << " " <<
-              environment_on_coord.at(0).landscapes_code << " " << environment_on_coord.at(0).wind << " " <<
-              environment_on_coord.at(0).sst << " " << environment_on_coord.at(0).salinity << " " <<
-              environment_on_coord.at(0).nitrogen << " " << environment_on_coord.at(0).phosphorus << " " <<
-              environment_on_coord.at(0).oxygen << " " << environment_on_coord.at(0).dissolvedcarbon << " " << endl;
+        //check
+        cout << "prior check of environment_on_coord:" << endl;
+        cout << environment_on_coord.at(0).x << " " << environment_on_coord.at(0).y << " " <<
+             environment_on_coord.at(0).harb << " " << environment_on_coord.at(0).code_area << " " <<
+             environment_on_coord.at(0).landscapes_code << " " << environment_on_coord.at(0).wind << " " <<
+             environment_on_coord.at(0).sst << " " << environment_on_coord.at(0).salinity << " " <<
+             environment_on_coord.at(0).nitrogen << " " << environment_on_coord.at(0).phosphorus << " " <<
+             environment_on_coord.at(0).oxygen << " " << environment_on_coord.at(0).dissolvedcarbon << " " << endl;
 
 
-       cout << "posterior check of environment_on_coord:" << endl;
-       cout << graph_coord_x.at(0) << " " << graph_coord_y.at(0) << " " << graph_coord_harbour.at(0) << " " <<
-                graph_point_code_area.at(0) << " " << graph_point_code_landscape.at(0)  <<" " << graph_point_wind.at(0) << " " <<
-                graph_point_sst.at(0) << " " << graph_point_salinity.at(0)  <<" " << graph_point_Nitrogen.at(0) << " " <<
-                graph_point_Phosphorus.at(0) << " " << graph_point_Oxygen.at(0)  <<" " << graph_point_DissolvedCarbon.at(0) << " "<<
-               endl;
-
+        cout << "posterior check of environment_on_coord:" << endl;
+        cout << graph_coord_x.at(0) << " " << graph_coord_y.at(0) << " " << graph_coord_harbour.at(0) << " " <<
+             graph_point_code_area.at(0) << " " << graph_point_code_landscape.at(0) << " " << graph_point_wind.at(0)
+             << " " <<
+             graph_point_sst.at(0) << " " << graph_point_salinity.at(0) << " " << graph_point_Nitrogen.at(0) << " " <<
+             graph_point_Phosphorus.at(0) << " " << graph_point_Oxygen.at(0) << " " << graph_point_DissolvedCarbon.at(0)
+             << " " <<
+             endl;
 
 
     }
@@ -1409,15 +1394,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // check inputs
-    for (unsigned int i=0; i<graph_coord_harbour.size(); i++)
-    {
-        dout(cout  << graph_coord_harbour[i] << " ");
+    for (unsigned int i = 0; i < graph_coord_harbour.size(); i++) {
+        dout(cout << graph_coord_harbour[i] << " ");
     }
-    dout(cout  << endl);
+    dout(cout << endl);
 
     // check inputs
-    for (unsigned int i=0; i<graph_point_code_area.size(); i++)
-    {
+    for (unsigned int i = 0; i < graph_point_code_area.size(); i++) {
         outc(cout << graph_point_code_area[i] << " ");
     }
     outc(cout << endl);
@@ -1428,127 +1411,69 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // and check with the coord in input.
     // use inheritance i.e. a Harbour is child of a Node
     // use polymorphism i.e. store either Harbour or Node in the vector of pointers 'nodes'
-    nodes = vector <Node* > (graph_coord_x.size());
-    for (unsigned int i=0; i<graph_coord_x.size(); i++)
-    {
+    nodes = vector<Node *>(graph_coord_x.size());
+    for (unsigned int i = 0; i < graph_coord_x.size(); i++) {
 
-        if(graph_coord_harbour[i])
-        {
+        if (graph_coord_harbour[i]) {
             types::NodeId nId(i);
 
-            string a_name="none";
+            string a_name = "none";
             types::NodeId a_point;
             // get the name of this harbour
             auto lower_g = harbour_names.lower_bound(nId);
             auto upper_g = harbour_names.upper_bound(nId);
-            for (auto pos=lower_g; pos != upper_g; pos++)
-            {
-                a_point= pos->first;
-                a_name= pos->second;
+            for (auto pos = lower_g; pos != upper_g; pos++) {
+                a_point = pos->first;
+                a_name = pos->second;
             }
 
-            map<int,double> init_fuelprices;
+            map<int, double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
-            if(a_name!="none" && a_point== nId)
-            {
+            if (a_name != "none" && a_point == nId) {
                 outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point, a_quarter, fishprices_each_species_per_cat,
+                                                                   folder_name_parameterization, inputfolder);
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 assert(er2 == 0);
                 outc(cout << "....OK" << endl);
-            }
-            else
-            {
-                outc(cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl);
-                outc(cout << "...then go for the port: " << a_port  << " instead" <<  endl);
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
+            } else {
+                outc(cout << a_point
+                          << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)"
+                          << endl);
+                outc(cout << "...then go for the port: " << a_port << " instead" << endl);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat,
+                                                                   folder_name_parameterization, inputfolder);
 
                 assert(er2 == 0);
             }
 
             // read fuel price (vessel size dependent for the time being)
-            if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
-            {
-                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
+            if (dyn_alloc_sce.option(Options::fuelprice_plus20percent)) {
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization,
+                                           inputfolder);
 
-                map<int,double>::iterator pos;
-                for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
-                {
-                    pos->second = (pos->second)*1.2;
+                map<int, double>::iterator pos;
+                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                    pos->second = (pos->second) * 1.2;
                 }
 
-                for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
-                {
+                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
                     outc(cout << pos->first << " " << pos->second);
                 }
-            }
-            else
-            {
-                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization, inputfolder);
+            } else {
+                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, folder_name_parameterization,
+                                           inputfolder);
 
             }
 
 
-            vector <types::NodeId> init_usual_fgrounds;
+            vector<types::NodeId> init_usual_fgrounds;
             init_usual_fgrounds.push_back(types::NodeId(0));
 
-            vector <double> init_freq_usual_fgrounds;
+            vector<double> init_freq_usual_fgrounds;
             init_freq_usual_fgrounds.push_back(1.0);
 
-            nodes[i] =    (new Harbour(types::NodeId(i),
-                                       graph_coord_x[i],
-                                       graph_coord_y[i],
-                                       graph_coord_harbour[i],
-                                       graph_point_code_area[i],
-                                       graph_point_code_landscape[i],
-                                       graph_point_landscape_norm[i],
-                                       graph_point_landscape_alpha[i],
-                                       graph_point_wind[i],
-                                       graph_point_wind_norm[i],
-                                       graph_point_wind_alpha[i],
-                                       graph_point_sst[i],
-                                       graph_point_sst_norm[i],
-                                       graph_point_sst_alpha[i],
-                                       graph_point_salinity[i],
-                                       graph_point_salinity_norm[i],
-                                       graph_point_salinity_alpha[i],
-                                       graph_point_Nitrogen[i],
-                                       graph_point_Nitrogen_norm[i],
-                                       graph_point_Nitrogen_alpha[i],
-                                       graph_point_Phosphorus[i],
-                                       graph_point_Phosphorus_norm[i],
-                                       graph_point_Phosphorus_alpha[i],
-                                       graph_point_Oxygen[i],
-                                       graph_point_Oxygen_norm[i],
-                                       graph_point_Oxygen_alpha[i],
-                                       graph_point_DissolvedCarbon[i],
-                                       graph_point_DissolvedCarbon_norm[i],
-                                       graph_point_DissolvedCarbon_alpha[i],
-                                       graph_point_bathymetry[i],
-                                       graph_point_shippingdensity[i],
-                                       graph_point_siltfraction[i],
-                                       graph_point_benthos_biomass[i],
-                                       graph_point_benthos_number[i],
-                                       0, // meanweight not set from a GIS layer....
-                                       0, // biomass_K not set from a GIS layer....
-                                       0, // number_K not set from a GIS layer....
-                                       nbpops,
-                                       nbbenthospops,
-                                       NBSZGROUP,
-                                       a_name,
-                                       fishprices_each_species_per_cat,
-                                       init_fuelprices,
-                                       init_usual_fgrounds,
-                                       init_freq_usual_fgrounds
-                                       ));
-
-            dout(cout << "Harbour " <<  nodes[i]->get_name() << " " <<
-                 nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
-                 nodes[i]->get_is_harbour()<< " " <<endl);
-        }
-        else
-        {
-            nodes[i] =    (new Node(types::NodeId(i),
+            nodes[i] = (new Harbour(types::NodeId(i),
                                     graph_coord_x[i],
                                     graph_coord_y[i],
                                     graph_coord_harbour[i],
@@ -1587,9 +1512,60 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     0, // number_K not set from a GIS layer....
                                     nbpops,
                                     nbbenthospops,
-                                    NBSZGROUP));
-            dout (cout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
-                  << " " << nodes[i]->get_code_area() << endl);
+                                    NBSZGROUP,
+                                    a_name,
+                                    fishprices_each_species_per_cat,
+                                    init_fuelprices,
+                                    init_usual_fgrounds,
+                                    init_freq_usual_fgrounds
+            ));
+
+            dout(cout << "Harbour " << nodes[i]->get_name() << " " <<
+                      nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
+                      nodes[i]->get_is_harbour() << " " << endl);
+        } else {
+            nodes[i] = (new Node(types::NodeId(i),
+                                 graph_coord_x[i],
+                                 graph_coord_y[i],
+                                 graph_coord_harbour[i],
+                                 graph_point_code_area[i],
+                                 graph_point_code_landscape[i],
+                                 graph_point_landscape_norm[i],
+                                 graph_point_landscape_alpha[i],
+                                 graph_point_wind[i],
+                                 graph_point_wind_norm[i],
+                                 graph_point_wind_alpha[i],
+                                 graph_point_sst[i],
+                                 graph_point_sst_norm[i],
+                                 graph_point_sst_alpha[i],
+                                 graph_point_salinity[i],
+                                 graph_point_salinity_norm[i],
+                                 graph_point_salinity_alpha[i],
+                                 graph_point_Nitrogen[i],
+                                 graph_point_Nitrogen_norm[i],
+                                 graph_point_Nitrogen_alpha[i],
+                                 graph_point_Phosphorus[i],
+                                 graph_point_Phosphorus_norm[i],
+                                 graph_point_Phosphorus_alpha[i],
+                                 graph_point_Oxygen[i],
+                                 graph_point_Oxygen_norm[i],
+                                 graph_point_Oxygen_alpha[i],
+                                 graph_point_DissolvedCarbon[i],
+                                 graph_point_DissolvedCarbon_norm[i],
+                                 graph_point_DissolvedCarbon_alpha[i],
+                                 graph_point_bathymetry[i],
+                                 graph_point_shippingdensity[i],
+                                 graph_point_siltfraction[i],
+                                 graph_point_benthos_biomass[i],
+                                 graph_point_benthos_number[i],
+                                 0, // meanweight not set from a GIS layer....
+                                 0, // biomass_K not set from a GIS layer....
+                                 0, // number_K not set from a GIS layer....
+                                 nbpops,
+                                 nbbenthospops,
+                                 NBSZGROUP));
+            dout (cout << nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
+                       << " " << nodes[i]->get_code_area() << endl);
 
         }
     }
@@ -1602,27 +1578,27 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // CREATE A RTREE INDEXING THE NODES TO EASILY PERFORM SPATIAL QUERIES
     // https://www.boost.org/doc/libs/1_66_0/libs/geometry/doc/html/geometry/spatial_indexes/rtree_quickstart.html
     // first, create the rtree using e.g. default constructor
-    bgi::rtree< std::pair<point, int>, bgi::quadratic<16> > rtree;
+    bgi::rtree<std::pair<point, int>, bgi::quadratic<16> > rtree;
     createRTreeFromNodes(nodes, rtree);
 
 
-
 #ifdef PROFILE
-    memInfo.update();
+                                                                                                                            memInfo.update();
     guiSendMemoryInfo(memInfo);
 
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
 #endif
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " BENTHOS-RELATED STUFFS    " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " BENTHOS-RELATED STUFFS    " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 
     // read estimates
-    multimap<int, double> meanw_funcgr_per_node           = read_meanw_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> meanw_funcgr_per_node = read_meanw_funcgr_per_landscape(folder_name_parameterization,
+                                                                                  inputfolder);
     multimap<int, double> prop_funcgr_number_per_node;
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
     multimap<int, double> prop_funcgr_biomass_per_node;
@@ -1630,48 +1606,47 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> longevity_classes_condition_per_node;
 
 
-    if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
-    {
-         longevity_classes_condition_per_node =  read_longevity_classes_condition_per_node(folder_name_parameterization,  inputfolder);
-         benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
-    }
-    else
-    {
-        if(dyn_pop_sce.option(Options::modelBenthosInN))
-        {
-            prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
-            benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+    if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        longevity_classes_condition_per_node = read_longevity_classes_condition_per_node(folder_name_parameterization,
+                                                                                         inputfolder);
+        benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+                folder_name_parameterization, inputfolder);
+    } else {
+        if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+            prop_funcgr_number_per_node = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,
+                                                                                         inputfolder);
+            benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(
+                    folder_name_parameterization, inputfolder);
+        } else {
+            prop_funcgr_biomass_per_node = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,
+                                                                                           inputfolder);
+            benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+                    folder_name_parameterization, inputfolder);
         }
-        else
-        {
-            prop_funcgr_biomass_per_node    = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
-            benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
-        }
     }
 
 
+    multimap<int, double> recovery_rates_per_funcgr = read_logistic_recovery_rates_per_month_per_funcgr(
+            folder_name_parameterization, inputfolder);
 
-
-    multimap<int, double> recovery_rates_per_funcgr       = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
-
-    multimap<int, double> habitat_deltas_per_pop          = read_habitat_deltas_per_pop(folder_name_parameterization, inputfolder);
+    multimap<int, double> habitat_deltas_per_pop = read_habitat_deltas_per_pop(folder_name_parameterization,
+                                                                               inputfolder);
 
 
 
     // 2. sort and unique
     sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
     std::vector<int>::iterator it;
-    it = std::unique (graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-    graph_point_code_landscape.resize( std::distance(graph_point_code_landscape.begin(),it) );
+    it = std::unique(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
+    graph_point_code_landscape.resize(std::distance(graph_point_code_landscape.begin(), it));
     int nbland = graph_point_code_landscape.size();
 
     // creation of a vector of benthos shared (one benthos shared per landscape)
-    benthoss = vector <Benthos* > (nbland);
+    benthoss = vector<Benthos *>(nbland);
 
     outc(cout << "nb of marine landscapes " << nbland << endl);
 
-    for(int landscape=0; landscape<nbland; landscape++)
-    {
+    for (int landscape = 0; landscape < nbland; landscape++) {
 
         vector<double> init_meanw_funcgr_per_node;
         vector<double> init_prop_funcgr_number_per_node;
@@ -1681,89 +1656,87 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> init_recovery_rates_per_funcgr;
         vector<double> init_h_betas_per_pop;
 
-        int a_marine_landscape  =   graph_point_code_landscape.at(landscape);
+        int a_marine_landscape = graph_point_code_landscape.at(landscape);
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
-        {
-            multimap<int,double>::iterator lower_it_lgy = longevity_classes_condition_per_node.lower_bound(0);
-            multimap<int,double>::iterator upper_it_lgy = longevity_classes_condition_per_node.upper_bound(0);
+        if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+            multimap<int, double>::iterator lower_it_lgy = longevity_classes_condition_per_node.lower_bound(0);
+            multimap<int, double>::iterator upper_it_lgy = longevity_classes_condition_per_node.upper_bound(0);
 
-            vector <double> a_vector;
-            for (multimap<int, double>::iterator pos=lower_it_lgy; pos != upper_it_lgy; pos++)
-            {
+            vector<double> a_vector;
+            for (multimap<int, double>::iterator pos = lower_it_lgy; pos != upper_it_lgy; pos++) {
                 a_vector.push_back(pos->second);
             }
 
 
-            if(a_vector.size()!=(size_t)nbbenthospops)
-            {
-                cout << "on node 0: " << " nb longevity class is " <<  a_vector.size() <<
-                     ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run." << endl;
+            if (a_vector.size() != (size_t) nbbenthospops) {
+                cout << "on node 0: " << " nb longevity class is " << a_vector.size() <<
+                     ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run."
+                     << endl;
                 int aa;
-                cin>>aa;
+                cin >> aa;
             }
 
-            multimap<int,double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
-            multimap<int,double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
-            for (multimap<int, double>::iterator pos=lower_landdd; pos != upper_landdd; pos++)
-            {
+            multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+                    a_marine_landscape);
+            multimap<int, double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+                    a_marine_landscape);
+            for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                 outc(cout << pos->second << endl);
                 // logistic recovery rates for this group specific to this landscape
                 init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
             }
-        }
-        else
-        {
-            if(dyn_pop_sce.option(Options::modelBenthosInN))
-            {
-                multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
-                multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
-                for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
-                {
+        } else {
+            if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+                multimap<int, double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(
+                        a_marine_landscape);
+                multimap<int, double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(
+                        a_marine_landscape);
+                for (multimap<int, double>::iterator pos = lower_land; pos != upper_land; pos++) {
                     outc(cout << pos->second << endl);
                     // biomass per cell for this group specific to this landscape
                     init_prop_funcgr_number_per_node.push_back(pos->second);
                 }
 
-                multimap<int,double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
-                multimap<int,double>::iterator upper_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
-                for (multimap<int, double>::iterator pos=lower_landddd; pos != upper_landddd; pos++)
-                {
+                multimap<int, double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+                        a_marine_landscape);
+                multimap<int, double>::iterator upper_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+                        a_marine_landscape);
+                for (multimap<int, double>::iterator pos = lower_landddd; pos != upper_landddd; pos++) {
                     outc(cout << pos->second << endl);
                     // logistic recovery rates for this group specific to this landscape
                     init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
                 }
 
 
-            }
-            else
-            {
+            } else {
 
-                multimap<int,double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(a_marine_landscape);
-                multimap<int,double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(a_marine_landscape);
+                multimap<int, double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(
+                        a_marine_landscape);
+                multimap<int, double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(
+                        a_marine_landscape);
 
-                for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
-                {
+                for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
                     outc(cout << "check this: " << pos->second << endl);
                     // biomass per cell for this group specific to this landscape
                     init_prop_funcgr_biomass_per_node.push_back(pos->second);
                 }
 
 
-                if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
-                {
-                    cout << a_marine_landscape << " nb funcgr is " <<  init_prop_funcgr_biomass_per_node.size() <<
-                         ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun." << endl;
+                if (init_prop_funcgr_biomass_per_node.size() != (size_t) nbbenthospops) {
+                    cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
+                         ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
+                         << endl;
                     int aa;
-                    cin>>aa;
+                    cin >> aa;
                 }
 
-                multimap<int,double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
-                multimap<int,double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
-                for (multimap<int, double>::iterator pos=lower_landdd; pos != upper_landdd; pos++)
-                {
+                multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+                        a_marine_landscape);
+                multimap<int, double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+                        a_marine_landscape);
+                for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                     outc(cout << pos->second << endl);
                     // logistic recovery rates for this group specific to this landscape
                     init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
@@ -1774,31 +1747,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-
-        multimap<int,double>::iterator lower_land3 = meanw_funcgr_per_node.lower_bound(a_marine_landscape);
-        multimap<int,double>::iterator upper_land3 = meanw_funcgr_per_node.upper_bound(a_marine_landscape);
-        for (multimap<int, double>::iterator pos=lower_land3; pos != upper_land3; pos++)
-        {
+        multimap<int, double>::iterator lower_land3 = meanw_funcgr_per_node.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_land3 = meanw_funcgr_per_node.upper_bound(a_marine_landscape);
+        for (multimap<int, double>::iterator pos = lower_land3; pos != upper_land3; pos++) {
             outc(cout << pos->second << endl);
             // biomass per cell for this group specific to this landscape
             init_meanw_funcgr_per_node.push_back(pos->second);
         }
 
 
-
-        multimap<int,double>::iterator lower_landd = recovery_rates_per_funcgr.lower_bound(a_marine_landscape);
-        multimap<int,double>::iterator upper_landd = recovery_rates_per_funcgr.upper_bound(a_marine_landscape);
-        for (multimap<int, double>::iterator pos=lower_landd; pos != upper_landd; pos++)
-        {
+        multimap<int, double>::iterator lower_landd = recovery_rates_per_funcgr.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_landd = recovery_rates_per_funcgr.upper_bound(a_marine_landscape);
+        for (multimap<int, double>::iterator pos = lower_landd; pos != upper_landd; pos++) {
             outc(cout << pos->second << endl);
             // logistic recovery rates for this group specific to this landscape
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
 
-        multimap<int,double>::iterator lower_land2 = habitat_deltas_per_pop.lower_bound(a_marine_landscape);
-        multimap<int,double>::iterator upper_land2 = habitat_deltas_per_pop.upper_bound(a_marine_landscape);
-        for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
-        {
+        multimap<int, double>::iterator lower_land2 = habitat_deltas_per_pop.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_land2 = habitat_deltas_per_pop.upper_bound(a_marine_landscape);
+        for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
             outc(cout << pos->second << endl);
             // habitat_deltas_per_pop specific to this landscape
             init_h_betas_per_pop.push_back(pos->second);
@@ -1810,34 +1778,34 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // init_biomass will be distributed evenly among nodes
         // belonging to this particular landscape
 
-        benthoss[landscape] =   new Benthos(landscape,
-                                            a_marine_landscape,
-                                            nodes,
-                                            init_prop_funcgr_biomass_per_node,
-                                            init_prop_funcgr_number_per_node,
-                                            init_meanw_funcgr_per_node,
-                                            init_recovery_rates_per_funcgr,
-                                            init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
-                                            init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                            is_benthos_in_numbers,
-                                            is_benthos_in_longevity_classes,
-                                            init_h_betas_per_pop,
-                                            longevity_classes_condition_per_node
-                                            );
+        benthoss[landscape] = new Benthos(landscape,
+                                          a_marine_landscape,
+                                          nodes,
+                                          init_prop_funcgr_biomass_per_node,
+                                          init_prop_funcgr_number_per_node,
+                                          init_meanw_funcgr_per_node,
+                                          init_recovery_rates_per_funcgr,
+                                          init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
+                                          init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
+                                          is_benthos_in_numbers,
+                                          is_benthos_in_longevity_classes,
+                                          init_h_betas_per_pop,
+                                          longevity_classes_condition_per_node
+        );
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 
     }
 
     // check
-    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-    {
+    for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
         dout(cout << "this node " << nodes.at(a_idx)->get_idx_node().toIndex() <<
-             " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
+                  " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
-        {
-            cout << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again" << endl;
+        if (nodes.at(a_idx)->get_benthos_tot_biomass().size() != (size_t) nbbenthospops) {
+            cout
+                    << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again"
+                    << endl;
             int aa;
             cin >> aa;
         }
@@ -1852,9 +1820,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // check the biomasses
     vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_biomass_per_node();
     outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
-    for(unsigned int gr=0 ; gr<a_prop_funcgr_per_node.size();  gr++)
-    {
-        outc(cout << a_prop_funcgr_per_node[gr] << " " );
+    for (unsigned int gr = 0; gr < a_prop_funcgr_per_node.size(); gr++) {
+        outc(cout << a_prop_funcgr_per_node[gr] << " ");
     }
     outc(cout << endl);
 
@@ -1872,11 +1839,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " FISHFARMS-RELATED STUFFS " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " FISHFARMS-RELATED STUFFS " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 
     // read general firm features
@@ -1898,11 +1865,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> t0_ys;
     vector<double> fulton_condition_factors;
     vector<string> meanw_growth_model_types;
-    vector<int>    start_day_growings;
-    vector<int>    end_day_harvests;
-    vector<int>    nbyears_for_growths;
-    vector<int>    nb_days_fallowing_periods;
-    vector<int>    nb_fish_at_starts;
+    vector<int> start_day_growings;
+    vector<int> end_day_harvests;
+    vector<int> nbyears_for_growths;
+    vector<int> nb_days_fallowing_periods;
+    vector<int> nb_fish_at_starts;
     vector<double> meanw_at_starts;
     vector<double> price_per_kg_at_starts;
     vector<double> target_meanw_at_harvests;
@@ -1938,7 +1905,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> annual_profits;
 
 
-    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes,
+                                 fishfarms_longs, fishfarms_lats,
                                  mean_SSTs,
                                  mean_salinities,
                                  mean_windspeeds,
@@ -1988,55 +1956,62 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  market_price_sold_fishs,
                                  operating_cost_per_days,
                                  annual_profits,
-                               folder_name_parameterization, inputfolder)) {
+                                 folder_name_parameterization, inputfolder)) {
         cerr << "Error loading fishfarms features. Bailing out.\n";
         return 2;
     }
 
 
-    vector <Fishfarm*> fishfarms(all_fishfarms_ids.size());
-    for(unsigned int i=0; i<all_fishfarms_ids.size();i++)
-    {
+    vector<Fishfarm *> fishfarms(all_fishfarms_ids.size());
+    for (unsigned int i = 0; i < all_fishfarms_ids.size(); i++) {
 
-       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), 0, is_actives[i],
-                       fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
-                                  mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i], max_depths[i], diss_O2_mg_per_ls[i],
-                                  Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i], meanw_growth_model_types[i],
-                                  start_day_growings[i], end_day_harvests[i], nbyears_for_growths[i], nb_days_fallowing_periods[i],
-                                  nb_fish_at_starts[i], meanw_at_starts[i],
-                                  price_per_kg_at_starts[i], target_meanw_at_harvests[i], nb_fish_at_harvests[i], meanw_at_harvests[i],
-                                  prop_harvest_kg_solds[i], kg_eggs_per_kgs[i], price_eggs_per_kgs[i],
-                                  N_in_fish_kg_3pers[i], P_in_fish_kg_0_5pers[i],
-                                  feed_types[i], feed_price_per_kgs[i], total_feed_kgs[i], prop_N_in_feeds[i], prop_P_in_feeds[i],
-                                  total_feed_N_kgs[i], total_feed_P_kgs[i],
-                                  feed_type_vets[i], feed_vet_price_per_kgs[i], total_feed_vet_kgs[i], prop_N_in_feed_vets[i], prop_P_in_feed_vets[i],
-                                  total_feed_vet_N_kgs[i], total_feed_vet_P_kgs[i],
-                                  annual_discharge_N_kgs[i], annual_discharge_P_kgs[i],
-                                  annual_discharge_C_kgs[i], annual_discharge_heavymetals_kgs[i],
-                                  annual_discharge_medecine_kgs[i], net_harvest_kg_per_sqkm_ys[i],
-                                  market_price_sold_fishs[i], operating_cost_per_days[i], annual_profits[i]
-                                  );
+        fishfarms[i] = new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), 0, is_actives[i],
+                                    fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
+                                    mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i],
+                                    max_depths[i], diss_O2_mg_per_ls[i],
+                                    Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i],
+                                    meanw_growth_model_types[i],
+                                    start_day_growings[i], end_day_harvests[i], nbyears_for_growths[i],
+                                    nb_days_fallowing_periods[i],
+                                    nb_fish_at_starts[i], meanw_at_starts[i],
+                                    price_per_kg_at_starts[i], target_meanw_at_harvests[i], nb_fish_at_harvests[i],
+                                    meanw_at_harvests[i],
+                                    prop_harvest_kg_solds[i], kg_eggs_per_kgs[i], price_eggs_per_kgs[i],
+                                    N_in_fish_kg_3pers[i], P_in_fish_kg_0_5pers[i],
+                                    feed_types[i], feed_price_per_kgs[i], total_feed_kgs[i], prop_N_in_feeds[i],
+                                    prop_P_in_feeds[i],
+                                    total_feed_N_kgs[i], total_feed_P_kgs[i],
+                                    feed_type_vets[i], feed_vet_price_per_kgs[i], total_feed_vet_kgs[i],
+                                    prop_N_in_feed_vets[i], prop_P_in_feed_vets[i],
+                                    total_feed_vet_N_kgs[i], total_feed_vet_P_kgs[i],
+                                    annual_discharge_N_kgs[i], annual_discharge_P_kgs[i],
+                                    annual_discharge_C_kgs[i], annual_discharge_heavymetals_kgs[i],
+                                    annual_discharge_medecine_kgs[i], net_harvest_kg_per_sqkm_ys[i],
+                                    market_price_sold_fishs[i], operating_cost_per_days[i], annual_profits[i]
+        );
 
-       nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
+        nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
 
-       cout << fishfarms[i]->get_name() << endl;
-       cout << "on node " << idx_nodes[i] << " put ffarm " << nodes.at(idx_nodes[i])->get_ff_names_on_node().at(0) << endl;
-       cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
-       cout <<"end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()    << endl;
+        cout << fishfarms[i]->get_name() << endl;
+        cout << "on node " << idx_nodes[i] << " put ffarm " << nodes.at(idx_nodes[i])->get_ff_names_on_node().at(0)
+             << endl;
+        cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << endl;
+        cout << "end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()
+             << endl;
 
-       if (outSqlite)
-           outSqlite->exportFishfarmDef(*fishfarms[i]);
+        if (outSqlite) {
+            outSqlite->exportFishfarmDef(*fishfarms[i]);
+        }
     }
 
     cout << "all fishfarms created...." << endl;
 
 
-
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " WINDMILLS-RELATED STUFFS " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " WINDMILLS-RELATED STUFFS " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     map<int, double> init_size_per_windmill = read_size_per_windmill(folder_name_parameterization, inputfolder);
     cout << "Does the size_per_windmill need a check?" << endl;
@@ -2044,16 +2019,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //TODO: extend variables in read_size_per_windmill() e.g. read kWh from files etc.
 
 
-    for(map<int, double>::iterator iter=init_size_per_windmill.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
-        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 1, 500, 1); // Caution: type is 1, kW is 500, is_active at 1
+    for (map<int, double>::iterator iter = init_size_per_windmill.begin();
+         iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound(iter->first)) {
+        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 1, 500,
+                                    1); // Caution: type is 1, kW is 500, is_active at 1
         windmills.push_back(wm);
     }
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " POPULATION-RELATED STUFFS " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " POPULATION-RELATED STUFFS " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -2077,316 +2054,344 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // read other stuffs...
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
     cout << "Do the pop files init_pops_per_szgroup need a check?" << endl;
-    multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, inputfolder,
+                                                                             biolsce);
     cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
-    multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(
+            folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_fecundity_per_szgroup need a check?" << endl;
-    multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization,
+                                                                                       inputfolder, biolsce);
     cout << "Do the pop files init_maturity_per_szgroup need a check?" << endl;
-    multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization,
+                                                                                     inputfolder, biolsce);
     cout << "Do the pop files init_weight_per_szgroupneed a check?" << endl;
-    multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization,
+                                                                                 inputfolder, biolsce);
     cout << "Do the pop files init_comcat_per_szgroup need a check?" << endl;
-    multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, inputfolder);
+    multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization,
+                                                                              inputfolder);
     cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
-    multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, inputfolder,
+                                                                       biolsce);
     cout << "Do the pop files init_proprecru_per_szgroup need a check?" << endl;
-    multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
+    multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization,
+                                                                                       inputfolder, biolsce);
     cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
-    multimap<int, types::NodeId> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
+    multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester,
+                                                                                    folder_name_parameterization,
+                                                                                    inputfolder, str_rand_avai_file);
     cout << "Do the pop files selected_szgroups need a check?" << endl;
-    multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
+    multimap<int, int> selected_szgroups = read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
 
     // init
     // detect nb of selected szgroups arbitrary from pop0
     // and init the vector of vector avai object on node
-    multimap<int,int>::iterator lselsz = selected_szgroups.lower_bound(0);
-    multimap<int,int>::iterator uselsz = selected_szgroups.upper_bound(0);
+    multimap<int, int>::iterator lselsz = selected_szgroups.lower_bound(0);
+    multimap<int, int>::iterator uselsz = selected_szgroups.upper_bound(0);
     vector<int> selected_szgroups_pop0;
-    for (multimap<int, int>::iterator pos=lselsz; pos != uselsz; pos++)
-    {
+    for (multimap<int, int>::iterator pos = lselsz; pos != uselsz; pos++) {
         selected_szgroups_pop0.push_back(pos->second);
     }
 
-    for (unsigned int i=0; i< nodes.size(); i++)
-    {
+    for (unsigned int i = 0; i < nodes.size(); i++) {
         nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
         nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops, selected_szgroups_pop0.size());
     }
 
 
-
-
     cout << "Does the pop file tac_percent_simulated need a check?" << endl;
-    map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, inputfolder);
+    map<int, int> tac_percent_simulated = read_tac_percent_simulated(folder_name_parameterization, inputfolder);
     cout << "Does the pop file hyperstability_param need a check?" << endl;
-    map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, inputfolder);
+    map<int, double> hyperstability_param = read_hyperstability_param(folder_name_parameterization, inputfolder);
 
 
     // input data, read proportion of natural mortality from other species when spatial co-occurences on node
     cout << "Do the species_interactions_mortality_proportion_matrix creation  need a check?" << endl;
-    vector< vector<double> > species_interactions_mortality_proportion_matrix= read_species_interactions_mortality_proportion_matrix(nbpops, folder_name_parameterization, inputfolder, biolsce);
+    vector<vector<double> > species_interactions_mortality_proportion_matrix = read_species_interactions_mortality_proportion_matrix(
+            nbpops, folder_name_parameterization, inputfolder, biolsce);
 
 
     // creation of a vector of populations
-    populations = vector <Population* > (nbpops);
+    populations = vector<Population *>(nbpops);
 
     // get the name of the pops
     // copy only unique elements of init_pops_per_szgroup into name_pops
     // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
     cout << "Do the name_pops creation  need a check?" << endl;
     vector<int> name_pops;
-    for(multimap<int, double>::iterator iter=init_pops_per_szgroup.begin(); iter != init_pops_per_szgroup.end();
-        iter = init_pops_per_szgroup.upper_bound( iter->first ) )
-    {
-        name_pops.push_back (iter->first);
+    for (multimap<int, double>::iterator iter = init_pops_per_szgroup.begin(); iter != init_pops_per_szgroup.end();
+         iter = init_pops_per_szgroup.upper_bound(iter->first)) {
+        name_pops.push_back(iter->first);
         cout << "pop " << iter->first << endl;
 
     }
     cout << "nb pops: " << name_pops.size() << endl;
-    cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl;
+    cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "
+         << endl;
 
     // FOR-LOOP OVER POP
-    for (unsigned int sp=0; sp<populations.size(); sp++)
-    {
-        dout(cout  << endl);
+    for (unsigned int sp = 0; sp < populations.size(); sp++) {
+        dout(cout << endl);
 
         string pop_name = pop_names[sp];
-        cout << "pop_name: " <<  sp << ": " << pop_name << endl;
+        cout << "pop_name: " << sp << ": " << pop_name << endl;
 
 
 
 
         // avai0 beta for this particular pop
-        multimap<int,double>::iterator lower_0 = avai0_betas.lower_bound(sp);
-        multimap<int,double>::iterator upper_0 = avai0_betas.upper_bound(sp);
+        multimap<int, double>::iterator lower_0 = avai0_betas.lower_bound(sp);
+        multimap<int, double>::iterator upper_0 = avai0_betas.upper_bound(sp);
         double avai0_beta;
-        for (multimap<int, double>::iterator pos=lower_0; pos != upper_0; pos++)
-            avai0_beta=pos->second;
+        for (multimap<int, double>::iterator pos = lower_0; pos != upper_0; pos++)
+            avai0_beta = pos->second;
 
         // avai2 beta for this particular pop
-        multimap<int,double>::iterator lower_2 = avai2_betas.lower_bound(sp);
-        multimap<int,double>::iterator upper_2 = avai2_betas.upper_bound(sp);
+        multimap<int, double>::iterator lower_2 = avai2_betas.lower_bound(sp);
+        multimap<int, double>::iterator upper_2 = avai2_betas.upper_bound(sp);
         double avai2_beta;
-        for (multimap<int, double>::iterator pos=lower_2; pos != upper_2; pos++)
-            avai2_beta=pos->second;
+        for (multimap<int, double>::iterator pos = lower_2; pos != upper_2; pos++)
+            avai2_beta = pos->second;
 
         // avai3 beta for this particular pop
-        multimap<int,double>::iterator lower_3 = avai3_betas.lower_bound(sp);
-        multimap<int,double>::iterator upper_3 = avai3_betas.upper_bound(sp);
+        multimap<int, double>::iterator lower_3 = avai3_betas.lower_bound(sp);
+        multimap<int, double>::iterator upper_3 = avai3_betas.upper_bound(sp);
         double avai3_beta;
-        for (multimap<int, double>::iterator pos=lower_3; pos != upper_3; pos++)
-            avai3_beta=pos->second;
+        for (multimap<int, double>::iterator pos = lower_3; pos != upper_3; pos++)
+            avai3_beta = pos->second;
 
         // avai5 beta for this particular pop
-        multimap<int,double>::iterator lower_5 = avai5_betas.lower_bound(sp);
-        multimap<int,double>::iterator upper_5 = avai5_betas.upper_bound(sp);
+        multimap<int, double>::iterator lower_5 = avai5_betas.lower_bound(sp);
+        multimap<int, double>::iterator upper_5 = avai5_betas.upper_bound(sp);
         double avai5_beta;
-        for (multimap<int, double>::iterator pos=lower_5; pos != upper_5; pos++)
-            avai5_beta=pos->second;
+        for (multimap<int, double>::iterator pos = lower_5; pos != upper_5; pos++)
+            avai5_beta = pos->second;
 
         // avai7 beta for this particular pop
-        multimap<int,double>::iterator lower_7 = avai7_betas.lower_bound(sp);
-        multimap<int,double>::iterator upper_7 = avai7_betas.upper_bound(sp);
+        multimap<int, double>::iterator lower_7 = avai7_betas.lower_bound(sp);
+        multimap<int, double>::iterator upper_7 = avai7_betas.upper_bound(sp);
         double avai7_beta;
-        for (multimap<int, double>::iterator pos=lower_7; pos != upper_7; pos++)
-            avai7_beta=pos->second;
+        for (multimap<int, double>::iterator pos = lower_7; pos != upper_7; pos++)
+            avai7_beta = pos->second;
 
         // initial selected szgroups
-        multimap<int,int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
-        multimap<int,int>::iterator upper_init_selsz = selected_szgroups.upper_bound(sp);
+        multimap<int, int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
+        multimap<int, int>::iterator upper_init_selsz = selected_szgroups.upper_bound(sp);
         vector<int> init_selected_szgroups;
-        for (multimap<int, int>::iterator pos=lower_init_selsz; pos != upper_init_selsz; pos++)
+        for (multimap<int, int>::iterator pos = lower_init_selsz; pos != upper_init_selsz; pos++)
             // convert in thousands
             init_selected_szgroups.push_back(pos->second);
 
         // initial N for this particular pop
-        multimap<int,double>::iterator lower_init = init_pops_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init = init_pops_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
         vector<double> init_tot_N_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+        for (multimap<int, double>::iterator pos = lower_init; pos != upper_init; pos++)
             // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
             init_tot_N_per_szgroup.push_back(pos->second * 1000);
-            // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
-            cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
+        // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
+        cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
 
         // initial prop_migrants for this particular pop
-        multimap<int,double>::iterator lower_init_migrants = init_prop_migrants_pops_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_migrants = init_prop_migrants_pops_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_migrants = init_prop_migrants_pops_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_migrants = init_prop_migrants_pops_per_szgroup.upper_bound(sp);
         vector<double> init_prop_migrants_in_N_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_migrants; pos != upper_init_migrants; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_migrants; pos != upper_init_migrants; pos++)
             // convert in thousands
             init_prop_migrants_in_N_per_szgroup.push_back(pos->second);
 
         // initial fecundity for this particular pop
-        multimap<int,double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
         vector<double> init_fecundity_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_fec; pos != upper_init_fec; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_fec; pos != upper_init_fec; pos++)
             init_fecundity_per_szgroup.push_back(pos->second);
 
         // initial maturity for particular this pop
-        multimap<int,double>::iterator lower_init_ma = init_maturity_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_ma = init_maturity_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_ma = init_maturity_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_ma = init_maturity_per_szgroup.upper_bound(sp);
         vector<double> init_maturity_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_ma; pos != upper_init_ma; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_ma; pos != upper_init_ma; pos++)
             init_maturity_per_szgroup.push_back(pos->second);
 
         // initial weight for this particular pop
-        multimap<int,double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(sp);
         vector<double> init_weight_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_we; pos != upper_init_we; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_we; pos != upper_init_we; pos++)
             init_weight_per_szgroup.push_back(pos->second);
 
         // initial weight for this particular pop
-        multimap<int,int>::iterator lower_init_cc = init_comcat_per_szgroup.lower_bound(sp);
-        multimap<int,int>::iterator upper_init_cc = init_comcat_per_szgroup.upper_bound(sp);
+        multimap<int, int>::iterator lower_init_cc = init_comcat_per_szgroup.lower_bound(sp);
+        multimap<int, int>::iterator upper_init_cc = init_comcat_per_szgroup.upper_bound(sp);
         vector<int> init_comcat_per_szgroup;
-        for (multimap<int, int>::iterator pos=lower_init_cc; pos != upper_init_cc; pos++)
+        for (multimap<int, int>::iterator pos = lower_init_cc; pos != upper_init_cc; pos++)
             init_comcat_per_szgroup.push_back(pos->second);
 
         // initial M for this particular pop
-        multimap<int,double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(sp);
         vector<double> init_M_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_M; pos != upper_init_M; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_M; pos != upper_init_M; pos++)
             init_M_per_szgroup.push_back(pos->second);
 
         // initial proprecru for this particular pop
-        multimap<int,double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(sp);
-        multimap<int,double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(sp);
+        multimap<int, double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(sp);
+        multimap<int, double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(sp);
         vector<double> init_proprecru_per_szgroup;
-        for (multimap<int, double>::iterator pos=lower_init_proprecru; pos != upper_init_proprecru; pos++)
+        for (multimap<int, double>::iterator pos = lower_init_proprecru; pos != upper_init_proprecru; pos++)
             init_proprecru_per_szgroup.push_back(pos->second);
 
         // input data, avai per szgroup on nodes and presence of the pop
-        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, type_of_avai_field_to_read);
-        multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, type_of_avai_field_to_read);
+        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, sp,
+                                                                                                       folder_name_parameterization,
+                                                                                                       inputfolder,
+                                                                                                       str_rand_avai_file,
+                                                                                                       type_of_avai_field_to_read);
+        multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop = read_full_avai_szgroup_nodes_with_pop(
+                a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file,
+                type_of_avai_field_to_read);
 
         // input data
         multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
-        if(dyn_pop_sce.option(Options::diffusePopN))
-        {
+        if (dyn_pop_sce.option(Options::diffusePopN)) {
             cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
-            field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
+            field_of_coeff_diffusion_this_pop = read_field_of_coeff_diffusion_this_pop(a_semester, sp,
+                                                                                       folder_name_parameterization,
+                                                                                       inputfolder, biolsce);
         }
 
         // input data, read a other landings per node for this species
-        map<types::NodeId, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, sp, folder_name_parameterization, inputfolder, fleetsce);
-        map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
+        map<types::NodeId, double> oth_land = read_oth_land_nodes_with_pop(a_semester, a_month, sp,
+                                                                           folder_name_parameterization, inputfolder,
+                                                                           fleetsce);
+        map<string, double> relative_stability_key = read_relative_stability_keys(a_semester, sp,
+                                                                                  folder_name_parameterization,
+                                                                                  inputfolder);
 
         // input data, growth transition, percent_szgroup_per_age_matrix
-        vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
-        vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
-        vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
+        vector<vector<double> > growth_transition_matrix = read_growth_transition_matrix(sp, NBSZGROUP,
+                                                                                         folder_name_parameterization,
+                                                                                         inputfolder, biolsce);
+        vector<vector<double> > percent_szgroup_per_age_matrix = read_percent_szgroup_per_age_matrix(sp, NBSZGROUP,
+                                                                                                     NBAGE,
+                                                                                                     folder_name_parameterization,
+                                                                                                     inputfolder,
+                                                                                                     biolsce);
+        vector<vector<double> > percent_age_per_szgroup_matrix = read_percent_age_per_szgroup_matrix(sp, NBSZGROUP,
+                                                                                                     NBAGE,
+                                                                                                     folder_name_parameterization,
+                                                                                                     inputfolder,
+                                                                                                     biolsce);
 
         // input data, parameter for stock-recruitment relationship
-        vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
+        vector<double> param_sr = read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, fbar ages
-        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder, biolsce);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop = read_fbar_ages_min_max_and_ftarget(sp,
+                                                                                                   folder_name_parameterization,
+                                                                                                   inputfolder,
+                                                                                                   biolsce);
 
         // input data, initial tac
-        vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
+        vector<double> tac_this_pop = read_initial_tac(sp, folder_name_parameterization, inputfolder);
         cout << "initial tac has been read correctly" << endl;
 
         global_quotas_uptake.push_back(0.0);
 
-        if(dyn_alloc_sce.option(Options::TACs) && tac_this_pop.at(0)==0)
-        {
-             cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp << "and potentially other pops..." << endl;
-             cout << "a fake, non binding value is filled in for now" << endl;
-             tac_this_pop.at(0) =100000; // tons
+        if (dyn_alloc_sce.option(Options::TACs) && tac_this_pop.at(0) == 0) {
+            cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp
+                 << "and potentially other pops..." << endl;
+            cout << "a fake, non binding value is filled in for now" << endl;
+            tac_this_pop.at(0) = 100000; // tons
         }
 
-        double tac_percent_simulated_this_pop= tac_percent_simulated.at(sp);
-        double hyperstability_param_this_pop= hyperstability_param.at(sp);
+        double tac_percent_simulated_this_pop = tac_percent_simulated.at(sp);
+        double hyperstability_param_this_pop = hyperstability_param.at(sp);
 
         // input data, read migration fluxes in proportion per size group (if any)
         dout(cout << "read overall migration..." << endl);
-        multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
+        multimap<int, double> overall_migration_fluxes = read_overall_migration_fluxes(a_semester, sp,
+                                                                                       folder_name_parameterization,
+                                                                                       inputfolder, biolsce);
         dout(cout << "overall migration has been read correctly" << endl);
 
-        double landings_so_far=1.0;
+        double landings_so_far = 1.0;
 
-        double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
-        double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);
+        double a_calib_cpue_multiplier = calib_cpue_multiplier.at(sp);
+        double a_calib_weight_at_szgroup = calib_weight_at_szgroup.at(sp);
 
 
-        vector< vector<double> > preferences_for_species_matrix;
+        vector<vector<double> > preferences_for_species_matrix;
         //if (dyn_pop_sce.option(Options::sizeSpectra))
         //{
         //    preferences_for_species_matrix= read_preferences_for_species_matrix(sp, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
         //}
 
-        cout << " create pop... "  << endl;
-        populations[sp] =   ( new Population(sp,
-                                             pop_name,
-                                             avai0_beta,
-                                             avai2_beta,
-                                             avai3_beta,
-                                             avai5_beta,
-                                             avai7_beta,
-                                             init_selected_szgroups,
-                                             init_tot_N_per_szgroup,// N comes in thousands in the input file
-                                             init_prop_migrants_in_N_per_szgroup,
-                                             init_fecundity_per_szgroup,
-                                             init_weight_per_szgroup,
-                                             init_comcat_per_szgroup,
-                                             init_maturity_per_szgroup,
-                                             init_M_per_szgroup,
-                                             init_proprecru_per_szgroup,
-                                             param_sr,
-                                             lst_idx_nodes_per_pop,
-                                             full_avai_szgroup_nodes_with_pop,
-                                             field_of_coeff_diffusion_this_pop,
-                                             oth_land,
-                                             overall_migration_fluxes,
-                                             relative_stability_key,
-                                             percent_szgroup_per_age_matrix,
-                                             percent_age_per_szgroup_matrix,
-                                             growth_transition_matrix,
-                                             nodes,
-                                             fbar_ages_min_max_and_ftarget_this_pop,
-                                             tac_this_pop,
-                                             tac_percent_simulated_this_pop,
-                                             hyperstability_param_this_pop,
-                                             landings_so_far,
-                                             a_calib_cpue_multiplier,
-                                             a_calib_weight_at_szgroup));
-        cout << " ...done "  << endl;
+        cout << " create pop... " << endl;
+        populations[sp] = (new Population(sp,
+                                          pop_name,
+                                          avai0_beta,
+                                          avai2_beta,
+                                          avai3_beta,
+                                          avai5_beta,
+                                          avai7_beta,
+                                          init_selected_szgroups,
+                                          init_tot_N_per_szgroup,// N comes in thousands in the input file
+                                          init_prop_migrants_in_N_per_szgroup,
+                                          init_fecundity_per_szgroup,
+                                          init_weight_per_szgroup,
+                                          init_comcat_per_szgroup,
+                                          init_maturity_per_szgroup,
+                                          init_M_per_szgroup,
+                                          init_proprecru_per_szgroup,
+                                          param_sr,
+                                          lst_idx_nodes_per_pop,
+                                          full_avai_szgroup_nodes_with_pop,
+                                          field_of_coeff_diffusion_this_pop,
+                                          oth_land,
+                                          overall_migration_fluxes,
+                                          relative_stability_key,
+                                          percent_szgroup_per_age_matrix,
+                                          percent_age_per_szgroup_matrix,
+                                          growth_transition_matrix,
+                                          nodes,
+                                          fbar_ages_min_max_and_ftarget_this_pop,
+                                          tac_this_pop,
+                                          tac_percent_simulated_this_pop,
+                                          hyperstability_param_this_pop,
+                                          landings_so_far,
+                                          a_calib_cpue_multiplier,
+                                          a_calib_weight_at_szgroup));
+        cout << " ...done " << endl;
 
-        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
-        {
+        if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
             outc(cout << "inform avai on nodes " << endl);
 
             // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
             outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-            vector <types::NodeId> nodes_with_presence;
+            vector<types::NodeId> nodes_with_presence;
             auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
             auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
-            for (auto a_pos=lower_pop; a_pos != upper_pop; a_pos++)
-            {
-                nodes_with_presence.push_back (a_pos->second);
+            for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
+                nodes_with_presence.push_back(a_pos->second);
             }
 
             outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
             // init avai on each node (we know the presence...) for this pop for selected szgroup
-            for (unsigned int n=0; n< nodes_with_presence.size(); n++)
-            {
-                dout(cout  << ".");
-                auto spat_avai_per_selected_szgroup = find_entries (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
-                if(!spat_avai_per_selected_szgroup.empty())
-                {
-                    nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp, spat_avai_per_selected_szgroup);
-                }
-                else
-                {
+            for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                dout(cout << ".");
+                auto spat_avai_per_selected_szgroup = find_entries(avai_szgroup_nodes_with_pop,
+                                                                   nodes_with_presence.at(n));
+                if (!spat_avai_per_selected_szgroup.empty()) {
+                    nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
+                                                                                                     spat_avai_per_selected_szgroup);
+                } else {
                     // inconsistence between lst_idx_nodes and avai files if this happen...
-                    outc(cout << nodes_with_presence.at(n) );
+                    outc(cout << nodes_with_presence.at(n));
                 }
 
             }
@@ -2413,9 +2418,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            outc(cout << endl);
             */
 
-            outc(cout << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
-        }						 // end implicit pop
-    }							 // end pop
+            outc(cout
+                         << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
+                         << endl);
+        }                         // end implicit pop
+    }                             // end pop
 
 
 
@@ -2502,11 +2509,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     */
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " FISHING CREDITS-RELATED   " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " FISHING CREDITS-RELATED   " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 
     // TO DO: compute the composite tariff also from the benthos and risk of bycatch on localities?
@@ -2517,124 +2524,119 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //tariffs.push_back(init_tariff0_on_localities);
     //tariffs.push_back(init_tariff1_on_localities);
 
-    if(dyn_alloc_sce.option(Options::fishing_credits))
-    {
-        auto initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, inputfolder, a_graph_name);
+    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
+                                                                      a_graph_name);
 
 
         // init
-        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-        {
+        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
 
-            auto idx_node=nodes.at(a_idx)->get_idx_node();
+            auto idx_node = nodes.at(a_idx)->get_idx_node();
 
             // initial tariff for this particular node
             auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
             auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
             vector<double> init_tariffs;
-            for (auto pos=lower_init_cr; pos != upper_init_cr; pos++)
+            for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
                 init_tariffs.push_back(pos->second);
 
 
             // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-            while (init_tariffs.size() <= 3) init_tariffs.push_back(0);
+            while (init_tariffs.size() <= 3) { init_tariffs.push_back(0); }
 
 
-            if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
+            if (initial_tariffs_on_nodes.count(idx_node) == 0) {
+                init_tariffs.push_back(0);
+            } // put 0 if this node is not informed
 
             nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
         }
 
 
         // check
-        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-        {
+        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
             dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
-                 " has tariffs 0 " << nodes.at(a_idx)->get_tariffs().at(0) << endl);
+                      " has tariffs 0 " << nodes.at(a_idx)->get_tariffs().at(0) << endl);
 
             dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
-                 " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
+                      " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
         }
-    }
-    else
-    {
+    } else {
         // need to inform with a vector of three zeros at least
         vector<double> init_tariffs(3, 0);
-        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-        {
+        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
             nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
         }
     }
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " SIZE-SPECTRA STUFFS       " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " SIZE-SPECTRA STUFFS       " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     cout << "initiate size-spectra-related objects..." << endl;
-    vector<vector<double> > Ws_at_szgroup(nbpops, vector<double> (NBSZGROUP));
-    vector<vector<vector<vector<double> > > > predKernel (nbpops,
-                                                                vector<vector<vector<double>>>(NBSZGROUP,
-                                                                               vector<vector<double> >(NBSZGROUP,
-                                                                                              vector<double> (nbpops, 0.0)
-                                                                                              )
-                                                                               )
-                                                                );
-    vector<vector<double> > searchVolMat(nbpops, vector<double> (NBSZGROUP));
-    vector<vector<double> > juveniles_diet_preference(nbpops, vector<double> (nbpops));
-    vector<vector<double> > adults_diet_preference(nbpops, vector<double> (nbpops));
-    int mat_cat=0; //init - split juveniles vs. adult categories
+    vector<vector<double> > Ws_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<vector<vector<double> > > > predKernel(nbpops,
+                                                         vector<vector<vector<double>>>(NBSZGROUP,
+                                                                                        vector<vector<double> >(
+                                                                                                NBSZGROUP,
+                                                                                                vector<double>(nbpops,
+                                                                                                               0.0)
+                                                                                        )
+                                                         )
+    );
+    vector<vector<double> > searchVolMat(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > juveniles_diet_preference(nbpops, vector<double>(nbpops));
+    vector<vector<double> > adults_diet_preference(nbpops, vector<double>(nbpops));
+    int mat_cat = 0; //init - split juveniles vs. adult categories
     vector<int> mat_cats(nbpops, 0);
 
-    if(dyn_pop_sce.option(Options::sizeSpectra))
-    {
-       cout << "sizeSpectra option is on..." << endl;
+    if (dyn_pop_sce.option(Options::sizeSpectra)) {
+        cout << "sizeSpectra option is on..." << endl;
 
         // compute a predKernel and a searchVol
         // predKernel.at(j).at(kprey).at(k).at(name_pop)
 
         // read-in multimap on diet of stocks per stock
-        multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
-        multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(folder_name_parameterization, inputfolder, biolsce);
+        multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(
+                folder_name_parameterization, inputfolder, biolsce);
+        multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(
+                folder_name_parameterization, inputfolder, biolsce);
 
 
-       cout << "compute Ws_at_szgroup..." << endl;
-        for (unsigned int j=0; j<nbpops; ++j)
-        {  // loop over predators
-            vector <double> W_this_pop=populations.at(j)->get_weight_at_szgroup();
-            for (unsigned int k=0; k<NBSZGROUP; ++k)
-            {  // loop over predator sizes
-              Ws_at_szgroup.at(j).at(k)= W_this_pop.at(k);
-              //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
+        cout << "compute Ws_at_szgroup..." << endl;
+        for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+            vector<double> W_this_pop = populations.at(j)->get_weight_at_szgroup();
+            for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
+                Ws_at_szgroup.at(j).at(k) = W_this_pop.at(k);
+                //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
             }
         }
 
         cout << "initialize PredKernel..." << endl;
-        for (unsigned int prey=0; prey<nbpops; ++prey)
-        {  // loop over prey
-           for (unsigned int j=0; j<nbpops; ++j)
-           {  // loop over predators
-               for (unsigned int k=0; k<NBSZGROUP; ++k)
-               {  // loop over predator sizes
-                  for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
-                  {  // loop over prey sizes
-                     predKernel.at(j).at(kprey).at(k).at(prey)= Ws_at_szgroup.at(j).at(k); // init
-                     //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
-                  }
-               }
-           }
+        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
+            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+                for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
+                    for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
+                        predKernel.at(j).at(kprey).at(k).at(prey) = Ws_at_szgroup.at(j).at(k); // init
+                        //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                    }
+                }
+            }
         }
 
         // check:
-            //  cout << "check some initial values of PredKernel..." << endl;
-            //  cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
-            //  cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
-            //  cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
-            //  cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+        //  cout << "check some initial values of PredKernel..." << endl;
+        //  cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
+        //  cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
+        //  cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
+        //  cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
-        if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
+        if (predKernel.at(0).at(1).at(0).at(0) !=
+            predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {
             int a;
             cout << "1: nan detected" << endl;
@@ -2643,44 +2645,41 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         cout << "compute PredKernel..." << endl;
-        vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
+        vector<double> sigma(nbpops,
+                             1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
         //vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
         // replace with logistic per 14 weight class
         // beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
-        vector<double> beta {100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150, 111.1882, 118.4140, 130.5108, 150.4701, 180.9963};
+        vector<double> beta{100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150,
+                            111.1882, 118.4140, 130.5108, 150.4701, 180.9963};
 
-        for (unsigned int prey=0; prey<nbpops; ++prey)
-        {  // loop over prey
-           for (unsigned int j=0; j<nbpops; ++j)
-           {  // loop over predators
-               for (unsigned int k=0; k<NBSZGROUP; ++k)
-               {  // loop over predator sizes
-                  for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
-                  {  // loop over prey sizes
-                     if(Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey))
-                     {
-                         predKernel.at(j).at(kprey).at(k).at(prey)=
-                                 exp(-pow(log((beta.at(kprey)*Ws_at_szgroup.at(prey).at(kprey))/ Ws_at_szgroup.at(j).at(kprey)),2) / (pow(2*sigma.at(prey),2)));                                        ;
-                         //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
-                     }
-                     else
-                     {
-                         predKernel.at(j).at(kprey).at(k).at(prey)= 0.0;
-                         //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
-                     }
-                  }
-               }
-           }
+        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
+            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+                for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
+                    for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
+                        if (Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey)) {
+                            predKernel.at(j).at(kprey).at(k).at(prey) =
+                                    exp(-pow(log((beta.at(kprey) * Ws_at_szgroup.at(prey).at(kprey)) /
+                                                 Ws_at_szgroup.at(j).at(kprey)), 2) / (pow(2 * sigma.at(prey), 2)));;
+                            //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                        } else {
+                            predKernel.at(j).at(kprey).at(k).at(prey) = 0.0;
+                            //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                        }
+                    }
+                }
+            }
         }
 
-       // check:
+        // check:
         // cout << "check some values of PredKernel..." << endl;
         // cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
         // cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
         // cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
         // cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
-        if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
+        if (predKernel.at(0).at(1).at(0).at(0) !=
+            predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {
             int a;
             cout << "1: nan detected" << endl;
@@ -2689,139 +2688,137 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-  const string separator=";";
+        const string separator = ";";
 
-  string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/Stock_biological_traits.csv"; // file location is an issue....
+        string filename = inputfolder + "/popsspe_" + folder_name_parameterization +
+                          "/Stock_biological_traits.csv"; // file location is an issue....
 
-  ifstream is;
-  is.open(filename.c_str());
-  if(is.fail())
-  {
-      cout << "Fail to open the file "<< filename << endl;
-      open_file_error(filename);
-      return false;
-  }
+        ifstream is;
+        is.open(filename.c_str());
+        if (is.fail()) {
+            cout << "Fail to open the file " << filename << endl;
+            open_file_error(filename);
+            return false;
+        }
 
-  cout << "import a few parameters ..." << endl;
-  std::vector <std::tuple< string, double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, double, double, double,
-                                   double, string> > biological_traits_params;
-  bool r = read_biological_traits_params (is, separator, biological_traits_params);
+        cout << "import a few parameters ..." << endl;
+        std::vector<std::tuple<string, double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, double, double, double,
+                double, string> > biological_traits_params;
+        bool r = read_biological_traits_params(is, separator, biological_traits_params);
 
-  //colnames:
-  //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
-  //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
+        //colnames:
+        //0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34
+        //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
 
-  // parameters to compute the search volume (volumetric search rate)
-  cout << "read few parameters ..." << endl;
-  //auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6); //TODO: AVOID HARDCODING FOR THESE BUNCH OF PARAMS
-  //double kappa  = std::get<0>(param);
-  //double q      = std::get<1>(param);     // Scaling of search volume
-  //double n      = std::get<2>(param);
-  //double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
-
-
-  cout << "compute the searchVolMat..." << endl;
-  for (unsigned int prey=0; prey<nbpops; ++prey)
-  {  // loop over prey
+        // parameters to compute the search volume (volumetric search rate)
+        cout << "read few parameters ..." << endl;
+        //auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6); //TODO: AVOID HARDCODING FOR THESE BUNCH OF PARAMS
+        //double kappa  = std::get<0>(param);
+        //double q      = std::get<1>(param);     // Scaling of search volume
+        //double n      = std::get<2>(param);
+        //double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
 
 
-      double eta_m  = get<29>(biological_traits_params.at(prey));
-      double kappa  = get<30>(biological_traits_params.at(prey));
-      double q      = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
-      double n      = get<32>(biological_traits_params.at(prey));
-      double f0est  = get<33>(biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
-      mat_cat       = get<28>(biological_traits_params.at(prey));
-      mat_cats.at(prey)=mat_cat;
-
-      double lambda= 2+q-n;
-      cout << " reading kappa is " << kappa << endl;
-      cout << " reading q is " << q << endl;
-      cout << " reading n is " << n << endl;
-      cout << " reading f0est is " << f0est << endl;
-      cout << " reading lambda is " << lambda << endl;
+        cout << "compute the searchVolMat..." << endl;
+        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
 
 
-     for (unsigned int j=0; j<nbpops; ++j)
-     {  // loop over predators
-         for (unsigned int k=0; k<NBSZGROUP; ++k)
-         {
-             double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(k),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
+            double eta_m = get<29>(biological_traits_params.at(prey));
+            double kappa = get<30>(biological_traits_params.at(prey));
+            double q = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
+            double n = get<32>(biological_traits_params.at(prey));
+            double f0est = get<33>(
+                    biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
+            mat_cat = get<28>(biological_traits_params.at(prey));
+            mat_cats.at(prey) = mat_cat;
 
-            //cout << " this prey " << prey << " alphae is " << alphae << endl;
-            //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(k) is " << beta.at(k) << " lambda is " << lambda << endl;
-
-             // loop over predator sizes
-            double Wk = get<2>(biological_traits_params.at(j));
-            double Winf = get<1>(biological_traits_params.at(j));
-            double h               = (3/0.36)*Wk*pow(Winf,(0.25))*pow(eta_m,(-0.333333333)); // Calculate h from K
-            if(h<=15) h            = 15;
-            double gamma           = (f0est*h / (alphae*kappa*0.5*(1-f0est)));
-            //cout << "j: " << j << " k: " << k << endl;
-            //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
-            //cout << "h: " << h << " gamma: " << gamma << endl;
-            //cout << "q: " << q  << " f0est:" << f0est << endl;
-            searchVolMat.at(j).at(k)       = gamma *  pow(Ws_at_szgroup.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
-            //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
-         }
-     }
+            double lambda = 2 + q - n;
+            cout << " reading kappa is " << kappa << endl;
+            cout << " reading q is " << q << endl;
+            cout << " reading n is " << n << endl;
+            cout << " reading f0est is " << f0est << endl;
+            cout << " reading lambda is " << lambda << endl;
 
 
-  // because it is a simplified version we do not compute phiprey, encounteredfood and feedinglevel
-  // we will instead assume feeding level at 0.6
-  // this is why this loop over prey seems useless for now
+            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+                for (unsigned int k = 0; k < NBSZGROUP; ++k) {
+                    double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta.at(k), (lambda - 2)) *
+                                    exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
 
+                    //cout << " this prey " << prey << " alphae is " << alphae << endl;
+                    //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(k) is " << beta.at(k) << " lambda is " << lambda << endl;
+
+                    // loop over predator sizes
+                    double Wk = get<2>(biological_traits_params.at(j));
+                    double Winf = get<1>(biological_traits_params.at(j));
+                    double h = (3 / 0.36) * Wk * pow(Winf, (0.25)) * pow(eta_m, (-0.333333333)); // Calculate h from K
+                    if (h <= 15) { h = 15; }
+                    double gamma = (f0est * h / (alphae * kappa * 0.5 * (1 - f0est)));
+                    //cout << "j: " << j << " k: " << k << endl;
+                    //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
+                    //cout << "h: " << h << " gamma: " << gamma << endl;
+                    //cout << "q: " << q  << " f0est:" << f0est << endl;
+                    searchVolMat.at(j).at(k) = gamma * pow(Ws_at_szgroup.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
+                    //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
+                }
+            }
+
+
+            // because it is a simplified version we do not compute phiprey, encounteredfood and feedinglevel
+            // we will instead assume feeding level at 0.6
+            // this is why this loop over prey seems useless for now
 
 
 
-  }
+
+        }
 
 
-
-  cout << "Read in the diet preference..." << endl;
-  for (unsigned int j=0; j<nbpops; ++j)
-  {  // loop over predators
-      multimap<int,double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
-      multimap<int,double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
-      multimap<int,double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(j);
-      multimap<int,double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(j);
-      vector<double> ad_diet_pref;
-      for (multimap<int, double>::iterator pos=lower_ia; pos != upper_ia; pos++)
+        cout << "Read in the diet preference..." << endl;
+        for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+            multimap<int, double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
+            multimap<int, double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
+            multimap<int, double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(j);
+            multimap<int, double>::iterator upper_ij = juveniles_diet_preference_per_stock_allstks.upper_bound(j);
+            vector<double> ad_diet_pref;
+            for (multimap<int, double>::iterator pos = lower_ia; pos != upper_ia; pos++)
                 ad_diet_pref.push_back(pos->second);
-      vector<double> juv_diet_pref;
-      for (multimap<int, double>::iterator pos=lower_ij; pos != upper_ij; pos++)
+            vector<double> juv_diet_pref;
+            for (multimap<int, double>::iterator pos = lower_ij; pos != upper_ij; pos++)
                 juv_diet_pref.push_back(pos->second);
-      if(ad_diet_pref.size()!=nbpops) cout << "error dim in input file for adults diet preference" << endl;
-      if(juv_diet_pref.size()!=nbpops) cout << "error dim in input file for juveniles diet preference" << endl;
+            if (ad_diet_pref.size() != nbpops) { cout << "error dim in input file for adults diet preference" << endl; }
+            if (juv_diet_pref.size() != nbpops) {
+                cout << "error dim in input file for juveniles diet preference" << endl;
+            }
 
-      for (unsigned int prey=0; prey<nbpops; ++prey)
-          {  // loop over prey
-          // assign diet info to this stock
-            adults_diet_preference.at(j).at(prey)= ad_diet_pref.at(prey);
-            juveniles_diet_preference.at(j).at(prey)= juv_diet_pref.at(prey);
+            for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
+                // assign diet info to this stock
+                adults_diet_preference.at(j).at(prey) = ad_diet_pref.at(prey);
+                juveniles_diet_preference.at(j).at(prey) = juv_diet_pref.at(prey);
 
-          // useless because getters not used
-          //populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
-          //populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
-          }
-   }
+                // useless because getters not used
+                //populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
+                //populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
+            }
+        }
 
 
-    cout << "Initial objects for sizeSpectra option...ok" << endl;
+        cout << "Initial objects for sizeSpectra option...ok" << endl;
 
     }
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " METIER-RELATED STUFFS     " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " METIER-RELATED STUFFS     " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     //input data, metier characteristics: selectivty ogives, beta per pop
     //multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder); // DEPRECATED
@@ -2830,100 +2827,115 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read metier betas parameters....ok? " << endl;
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
     cout << "read discardratio_limits parameters....ok? " << endl;
-    multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
+    multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization,
+                                                                          inputfolder);
     cout << "read is_avoided_stocks parameters....ok? " << endl;
-    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
+    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization,
+                                                                   inputfolder);
     cout << "read mls cat parameters....ok? " << endl;
-    multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
+    multimap<int, int> metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
     cout << "read metiers types parameters....ok? " << endl;
-    map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
+    map<int, int> metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
     cout << "read revenue completeness parameters....ok? " << endl;
-    map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, inputfolder);
+    map<int, double> percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization,
+                                                                                          inputfolder);
     cout << "read fspeed parameters....ok? " << endl;
-    map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, inputfolder);
+    map<int, double> metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, inputfolder);
     cout << "read metier gear width a parameters....ok? " << endl;
-    map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
+    map<int, double> metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
     cout << "read metier gear width b parameters....ok? " << endl;
-    map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
+    map<int, double> metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
     cout << "read metier gear width model type parameters....ok? " << endl;
-    map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
+    map<int, string> metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization,
+                                                                                  inputfolder);
 
     // oth_land are not metier-specific by nature, but the reader is placed here for coherence...
-    vector< vector<double> > selectivity_per_stock_ogives_for_oth_land= read_selectivity_per_stock_ogives_for_oth_land(nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
+    vector<vector<double> > selectivity_per_stock_ogives_for_oth_land = read_selectivity_per_stock_ogives_for_oth_land(
+            nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, fleetsce);
 
     // get the name of the metiers
     // copy only unique elements into name_metiers
     cout << "retrieve the metier names.... " << endl;
-    for(multimap<int, double>::iterator iter=metiers_gear_widths_param_a.begin(); iter != metiers_gear_widths_param_a.end();
-        iter = metiers_gear_widths_param_a.upper_bound( iter->first ) )
-    {
-        name_metiers.push_back (iter->first);
+    for (multimap<int, double>::iterator iter = metiers_gear_widths_param_a.begin();
+         iter != metiers_gear_widths_param_a.end();
+         iter = metiers_gear_widths_param_a.upper_bound(iter->first)) {
+        name_metiers.push_back(iter->first);
         outc(cout << "metier " << iter->first << endl);
     }
     cout << "nb metiers: " << name_metiers.size() << endl;
-    cout << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! " << endl;
+    cout
+            << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! "
+            << endl;
 
     // creation of a vector of metier from input data...
-    metiers = vector <Metier*> (name_metiers.size());
+    metiers = vector<Metier *>(name_metiers.size());
 
-    for (unsigned int i=0; i<metiers.size(); i++)
-    {
+    for (unsigned int i = 0; i < metiers.size(); i++) {
 
         int metier_name = i;
         cout << "creating metier " << i << endl;
 
         //vector<double> selectivity                 = find_entries_i_d(sel_ogives, metier_name); // DEPRECATED
         //vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name); // DEPRECATED
-        vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
-        vector<double> discardratio_limits         = find_entries_i_d(discards_rate_limits, metier_name);
-        vector<int> is_avoided_stocks              = find_entries_i_i(is_avoided_stockss, metier_name);
-        vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
-        int metier_type                            = metiers_types[ i ];
-        double percent_revenue_completeness        = percent_revenue_completenesses[ i ];
-        double fspeed                              = metiers_fspeed[ i ];
-        double gear_width_a                        = metiers_gear_widths_param_a[ i ];
-        double gear_width_b                        = metiers_gear_widths_param_b[ i ];
-        string gear_width_model                    = metiers_gear_widths_model_type[ i ];
-        multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, inputfolder);
-        multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, inputfolder);
-        multimap<int, int> metier_suitable_seabottomtypes    = read_metier_suitable_seabottomtypes(metier_name, folder_name_parameterization, inputfolder);
+        vector<double> metier_betas = find_entries_i_d(metiers_betas, metier_name);
+        vector<double> discardratio_limits = find_entries_i_d(discards_rate_limits, metier_name);
+        vector<int> is_avoided_stocks = find_entries_i_i(is_avoided_stockss, metier_name);
+        vector<int> metier_mls_cat = find_entries_i_i(metiers_mls_cat, metier_name);
+        int metier_type = metiers_types[i];
+        double percent_revenue_completeness = percent_revenue_completenesses[i];
+        double fspeed = metiers_fspeed[i];
+        double gear_width_a = metiers_gear_widths_param_a[i];
+        double gear_width_b = metiers_gear_widths_param_b[i];
+        string gear_width_model = metiers_gear_widths_model_type[i];
+        multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name,
+                                                                                                            folder_name_parameterization,
+                                                                                                            inputfolder);
+        multimap<int, int> metier_target_stocks = read_metier_target_stocks(metier_name, folder_name_parameterization,
+                                                                            inputfolder);
+        multimap<int, int> metier_suitable_seabottomtypes = read_metier_suitable_seabottomtypes(metier_name,
+                                                                                                folder_name_parameterization,
+                                                                                                inputfolder);
 
 
-        vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
+        vector<vector<double> > selectivity_per_stock_ogives = read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP,
+                                                                                                 folder_name_parameterization,
+                                                                                                 inputfolder, fleetsce);
 
 
         // metier_target_stocks for this particular metier
-        multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
-        multimap<int,int>::iterator upper_metier_target_stocks = metier_target_stocks.upper_bound(i);
+        multimap<int, int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
+        multimap<int, int>::iterator upper_metier_target_stocks = metier_target_stocks.upper_bound(i);
         vector<int> the_metier_target_stocks;
-        for (multimap<int, int>::iterator pos=lower_metier_target_stocks; pos != upper_metier_target_stocks; pos++)
+        for (multimap<int, int>::iterator pos = lower_metier_target_stocks; pos != upper_metier_target_stocks; pos++)
             the_metier_target_stocks.push_back(pos->second);
 
         // metier_suitable_seabottomtypes for this particular metier
-        multimap<int,int>::iterator lower_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.lower_bound(i);
-        multimap<int,int>::iterator upper_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.upper_bound(i);
+        multimap<int, int>::iterator lower_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.lower_bound(
+                i);
+        multimap<int, int>::iterator upper_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.upper_bound(
+                i);
         vector<int> the_metier_suitable_seabottomtypes;
-        for (multimap<int, int>::iterator pos=lower_metier_suitable_seabottomtypes; pos != upper_metier_suitable_seabottomtypes; pos++)
+        for (multimap<int, int>::iterator pos = lower_metier_suitable_seabottomtypes;
+             pos != upper_metier_suitable_seabottomtypes; pos++)
             the_metier_suitable_seabottomtypes.push_back(pos->second);
 
 
-
-        metiers[i] =  new Metier(metier_name,
-                                 metier_type,
-                                 percent_revenue_completeness,
-                                 selectivity_per_stock_ogives,
-                                 metier_betas,
-                                 discardratio_limits,
-                                 is_avoided_stocks,
-                                 metier_mls_cat,
-                                 fspeed,
-                                 gear_width_a,
-                                 gear_width_b,
-                                 gear_width_model,
-                                 loss_after_1_passage,
-                                 the_metier_target_stocks,
-                                 the_metier_suitable_seabottomtypes);
-        cout << "done.... "  << endl;
+        metiers[i] = new Metier(metier_name,
+                                metier_type,
+                                percent_revenue_completeness,
+                                selectivity_per_stock_ogives,
+                                metier_betas,
+                                discardratio_limits,
+                                is_avoided_stocks,
+                                metier_mls_cat,
+                                fspeed,
+                                gear_width_a,
+                                gear_width_b,
+                                gear_width_model,
+                                loss_after_1_passage,
+                                the_metier_target_stocks,
+                                the_metier_suitable_seabottomtypes);
+        cout << "done.... " << endl;
     }
 
 
@@ -2938,15 +2950,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    */
 
     // check selectivity per metier per stock
-    vector< vector<double> > selectivity_per_stock = metiers[0]->get_selectivity_per_stock_ogives();
-    for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
-    {
-        for(unsigned int j = 0; j < selectivity_per_stock[i].size(); j++)
-        {
+    vector<vector<double> > selectivity_per_stock = metiers[0]->get_selectivity_per_stock_ogives();
+    for (unsigned int i = 0; i < selectivity_per_stock.size(); i++) {
+        for (unsigned int j = 0; j < selectivity_per_stock[i].size(); j++) {
 
-            cout << "pop is "<< i  << endl;
-            cout << "szgroup is "<< j  << endl;
-            cout << "selectivity_per_stock[i,j] is "<< selectivity_per_stock[i][j]  << endl;
+            cout << "pop is " << i << endl;
+            cout << "szgroup is " << j << endl;
+            cout << "selectivity_per_stock[i,j] is " << selectivity_per_stock[i][j] << endl;
         }
     }
 
@@ -2954,25 +2964,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // check metier betas
     vector<double> met_betas = metiers[0]->get_betas_per_pop();
     cout << "met_betas of the metier 0" << endl;
-    for (int i=0; i<met_betas.size(); i++)
-    {
-        cout  << " " << met_betas[i] << " " ;
+    for (int i = 0; i < met_betas.size(); i++) {
+        cout << " " << met_betas[i] << " ";
     }
     cout << endl;
 
     // check gear_width_a
     double gear_width_a = metiers[0]->get_gear_width_a();
     cout << "gear_width_a of the metier 0" << endl;
-    cout  << " " << gear_width_a << " " ;
+    cout << " " << gear_width_a << " ";
     cout << endl;
 
 
-
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " SHIP-RELATED STUFFS       " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " SHIP-RELATED STUFFS       " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     // read general ship features (incl. their specific lanes)
     vector<string> shipids;
@@ -2986,17 +2994,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> breadths;
     vector<double> grosstonnages;
     vector<double> nbunits;
-    vector<double>  fueluses;
-    vector<double>  NOxEmission_gperKWhs;
-    vector<double>  SOxEmission_percentpertotalfuelmasss;
-    vector<double>  GHGEmissions;
-    vector<double>  PMEmissions;
+    vector<double> fueluses;
+    vector<double> NOxEmission_gperKWhs;
+    vector<double> SOxEmission_percentpertotalfuelmasss;
+    vector<double> GHGEmissions;
+    vector<double> PMEmissions;
     vector<double> vmaxs;
     vector<double> vcruises;
     vector<double> lane_ids;
     if (!read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
                              loas, KWs, breadths, grosstonnages, nbunits,
-                             fueluses,NOxEmission_gperKWhs, SOxEmission_percentpertotalfuelmasss,
+                             fueluses, NOxEmission_gperKWhs, SOxEmission_percentpertotalfuelmasss,
                              GHGEmissions, PMEmissions,
                              vmaxs, vcruises, lane_ids,
                              folder_name_parameterization, inputfolder)) {
@@ -3005,39 +3013,38 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     // read shipping lanes
-    multimap<int, double> shiplanes_lat = read_shiplanes_lat( folder_name_parameterization, inputfolder);
-    multimap<int, double> shiplanes_lon = read_shiplanes_lon( folder_name_parameterization, inputfolder);
+    multimap<int, double> shiplanes_lat = read_shiplanes_lat(folder_name_parameterization, inputfolder);
+    multimap<int, double> shiplanes_lon = read_shiplanes_lon(folder_name_parameterization, inputfolder);
 
     vector<double> lats;
     vector<double> longs;
 
-    ships= vector <Ship*> (shipids.size());
-    for (unsigned int i=0; i<shipids.size(); i++)
-    {
-        cout<<"create ship " << shipids[i] << endl;
+    ships = vector<Ship *>(shipids.size());
+    for (unsigned int i = 0; i < shipids.size(); i++) {
+        cout << "create ship " << shipids[i] << endl;
 
-        lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
-        longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
-        ships[i]= new Ship(i,shipids[i], 1, imos[i], yearbuilds[i], flags[i],
-                           types[i], typecodes[i], KWs[i], loas[i], breadths[i],
-                           grosstonnages[i], nbunits[i],
-                           fueluses[i], NOxEmission_gperKWhs[i],
-                           SOxEmission_percentpertotalfuelmasss[i],
-                           GHGEmissions[i], PMEmissions[i],
-                           vmaxs[i], vcruises[i], longs, lats);
+        lats = find_entries_i_d(shiplanes_lat, lane_ids[i]);
+        longs = find_entries_i_d(shiplanes_lon, lane_ids[i]);
+        ships[i] = new Ship(i, shipids[i], 1, imos[i], yearbuilds[i], flags[i],
+                            types[i], typecodes[i], KWs[i], loas[i], breadths[i],
+                            grosstonnages[i], nbunits[i],
+                            fueluses[i], NOxEmission_gperKWhs[i],
+                            SOxEmission_percentpertotalfuelmasss[i],
+                            GHGEmissions[i], PMEmissions[i],
+                            vmaxs[i], vcruises[i], longs, lats);
         ships[i]->set_idx_ship(i);
 
-        cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl;
+        cout << "at (" << ships[i]->get_x() << "," << ships[i]->get_y() << ") " << endl;
 
     }
-    cout<<"Number of ships created: " << ships.size()  << endl;
+    cout << "Number of ships created: " << ships.size() << endl;
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " VESSEL-RELATED STUFFS     " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " VESSEL-RELATED STUFFS     " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -3066,7 +3073,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<int> firm_ids;
     vector<VesselCalendar> calendars;
 
-    if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives, vid_is_part_of_ref_fleets,
+    if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                                speeds, fuelcons, lengths, vKWs,
                                carrycapacities, tankcapacities, nbfpingspertrips,
                                resttime_par1s, resttime_par2s, av_trip_duration,
@@ -3094,25 +3101,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     cout << "read_vessels_economic_features() in loadVessels()" << endl;
     if (!read_vessels_economics_features(
-                               vesselids,
-                               this_vessel_nb_crews,
-                               annual_other_incomes,
-                               landing_costs_percents,
-                               crewshare_and_unpaid_labour_costs_percents,
-                               other_variable_costs_per_unit_efforts,
-                               annual_insurance_costs_per_crews,
-                               standard_labour_hour_opportunity_costss,
-                               standard_annual_full_time_employement_hourss,
-                               other_annual_fixed_costss,
-                               vessel_values,
-                               annual_depreciation_rates,
-                               opportunity_interest_rates,
-                               annual_discount_rates,
-                               folder_name_parameterization, inputfolder
-                               )) {
-           std::cerr << "Cannot read vessel economic features.\n";
-           return -1;
-       }
+            vesselids,
+            this_vessel_nb_crews,
+            annual_other_incomes,
+            landing_costs_percents,
+            crewshare_and_unpaid_labour_costs_percents,
+            other_variable_costs_per_unit_efforts,
+            annual_insurance_costs_per_crews,
+            standard_labour_hour_opportunity_costss,
+            standard_annual_full_time_employement_hourss,
+            other_annual_fixed_costss,
+            vessel_values,
+            annual_depreciation_rates,
+            opportunity_interest_rates,
+            annual_discount_rates,
+            folder_name_parameterization, inputfolder
+    )) {
+        std::cerr << "Cannot read vessel economic features.\n";
+        return -1;
+    }
 
 
     // read the more complex objects (i.e. when several info for a same vessel)...
@@ -3122,10 +3129,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     auto harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization,
+                                                                          inputfolder);
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
+    multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
 
     /*
     // debug
@@ -3149,51 +3157,50 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
-    if(dyn_alloc_sce.option(Options::area_monthly_closure))
-    {
+    if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
 
         if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
-            exit (1);
+            exit(1);
         }
         if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
-            exit (1);
+            exit(1);
         }
 
     }
-    if(dyn_alloc_sce.option(Options::area_closure))
-    {
+    if (dyn_alloc_sce.option(Options::area_closure)) {
 
-        if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
-            exit (1);
+        if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization,
+                                            inputfolder)) {
+            exit(1);
         }
     }
 
 
     multimap<string, double> fishing_credits;
-    if(dyn_alloc_sce.option(Options::fishing_credits))
-    {
+    if (dyn_alloc_sce.option(Options::fishing_credits)) {
         fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
     }
 
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
     // and check the start coord
     //here
-    vessels = vector <Vessel*> (vesselids.size());
-    for (unsigned int i=0; i<vesselids.size(); i++)
+    vessels = vector<Vessel *>(vesselids.size());
+    for (unsigned int i = 0; i < vesselids.size(); i++)
         //vector <Vessel*> vessels(7); //here
         //vesselids.erase (vesselids.begin());
         //for (int i=0; i<7; i++)
     {
-        outc(cout<<"create vessel " << i << endl);
+        outc(cout << "create vessel " << i << endl);
 
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
         possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
+                                                           inputfolder);
 
 
 #if 0
-        // check
+                                                                                                                                // check
         cout << "possible metiers for " << vesselids[i] << " are " << endl;
         for ( std::multimap< int, int, std::less< int > >::const_iterator iter =possible_metiers.begin();
               iter != possible_metiers.end(); ++iter )
@@ -3209,21 +3216,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 # endif
 
         //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                         folder_name_parameterization, inputfolder);
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                         folder_name_parameterization, inputfolder);
 
 
 
         // debug
-        if(possible_metiers.size() != freq_possible_metiers.size())
-        {
+        if (possible_metiers.size() != freq_possible_metiers.size()) {
             unlock();
-            cout<< "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
-                << "for the vessel " << vesselids[i] << endl;
+            cout << "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
+                 << "for the vessel " << vesselids[i] << endl;
             unlock();
 
             int tmp;
-            cin >> tmp;			 // pause
+            cin >> tmp;             // pause
         }
 
 
@@ -3245,90 +3253,88 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
         spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
 
-        if(dyn_alloc_sce.option(Options::fishing_credits))
-        {
+        if (dyn_alloc_sce.option(Options::fishing_credits)) {
             tout(cout << "Read in fishing credits for this vessel " << vesselids[i] << endl);
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
-            for (int icr=0; icr <spe_fishing_credits.size();++icr)
-            {
-                spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
+            for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
+                spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
             }
 
             // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-            while (spe_fishing_credits.size() <= 3) spe_fishing_credits.push_back(0);
+            while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
 
 
-
-            cout << "Fishing credits 0 for this vessel " << vesselids[i]  << " is " << spe_fishing_credits.at(0) << endl;
+            cout << "Fishing credits 0 for this vessel " << vesselids[i] << " is " << spe_fishing_credits.at(0) << endl;
 
         }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
         types::NodeId start_harbour;
-        if(!spe_harbours.empty())
-        {
+        if (!spe_harbours.empty()) {
             // need to convert in array, see myRutils.cpp
             auto one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
-            start_harbour= one_harbour[0];
-        }
-        else
-        {
+            start_harbour = one_harbour[0];
+        } else {
             // if missing info for a given vessel for this quarter
             outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
             // CAUTION: LIKE A MAGIC NUMBER HERE!!!
-            start_harbour=find_entries(harbours, vesselids[0])[0];
+            start_harbour = find_entries(harbours, vesselids[0])[0];
             spe_harbours.push_back(start_harbour);
             spe_freq_harbours.push_back(1);
             outc(cout << "then take node: " << start_harbour << endl);
         }
 
-        vessels[i]= new Vessel(nodes[start_harbour.toIndex()],
-                i,
-                vesselids[i],
-                nbpops,
-                NBSZGROUP,
-                spe_harbours,
-                spe_fgrounds,
-                spe_fgrounds_init,
-                spe_freq_harbours,
-                spe_freq_fgrounds,
-                spe_freq_fgrounds_init,
-                spe_vessel_betas_per_pop,
-                spe_percent_tac_per_pop,
-                possible_metiers,
-                freq_possible_metiers,
-                vid_is_actives[i],
-                vid_is_part_of_ref_fleets[i],
-                speeds[i],
-                fuelcons[i],
-                lengths[i],
-                vKWs[i],
-                carrycapacities[i],
-                tankcapacities[i],
-                nbfpingspertrips[i],
-                resttime_par1s[i],
-                resttime_par2s[i],
-                av_trip_duration[i],
-                mult_fuelcons_when_steaming[i],
-                mult_fuelcons_when_fishing[i],
-                mult_fuelcons_when_returning[i],
-                mult_fuelcons_when_inactive[i],
-                firm_ids[i],
-                calendars[i],
-                i<this_vessel_nb_crews.size()? this_vessel_nb_crews[i]: 0,
-                i<annual_other_incomes.size()?  annual_other_incomes[i]: 0,
-                i<landing_costs_percents.size()? landing_costs_percents[i]: 0,
-                i<crewshare_and_unpaid_labour_costs_percents.size()? crewshare_and_unpaid_labour_costs_percents[i]: 0,
-                i<other_variable_costs_per_unit_efforts.size()? other_variable_costs_per_unit_efforts[i]: 0,
-                i<annual_insurance_costs_per_crews.size()? annual_insurance_costs_per_crews[i]: 0,
-                i<standard_labour_hour_opportunity_costss.size()? standard_labour_hour_opportunity_costss[i]: 0,
-                i<standard_annual_full_time_employement_hourss.size()? standard_annual_full_time_employement_hourss[i]: 0,
-                i<other_annual_fixed_costss.size()? other_annual_fixed_costss[i]: 0,
-                i<vessel_values.size()? vessel_values[i]: 0,
-                i<annual_depreciation_rates.size()? annual_depreciation_rates[i]: 0,
-                i<opportunity_interest_rates.size()? opportunity_interest_rates[i]: 0,
-                i<annual_discount_rates.size()? annual_discount_rates[i]: 0
-                );
+        vessels[i] = new Vessel(nodes[start_harbour.toIndex()],
+                                i,
+                                vesselids[i],
+                                nbpops,
+                                NBSZGROUP,
+                                spe_harbours,
+                                spe_fgrounds,
+                                spe_fgrounds_init,
+                                spe_freq_harbours,
+                                spe_freq_fgrounds,
+                                spe_freq_fgrounds_init,
+                                spe_vessel_betas_per_pop,
+                                spe_percent_tac_per_pop,
+                                possible_metiers,
+                                freq_possible_metiers,
+                                vid_is_actives[i],
+                                vid_is_part_of_ref_fleets[i],
+                                speeds[i],
+                                fuelcons[i],
+                                lengths[i],
+                                vKWs[i],
+                                carrycapacities[i],
+                                tankcapacities[i],
+                                nbfpingspertrips[i],
+                                resttime_par1s[i],
+                                resttime_par2s[i],
+                                av_trip_duration[i],
+                                mult_fuelcons_when_steaming[i],
+                                mult_fuelcons_when_fishing[i],
+                                mult_fuelcons_when_returning[i],
+                                mult_fuelcons_when_inactive[i],
+                                firm_ids[i],
+                                calendars[i],
+                                i < this_vessel_nb_crews.size() ? this_vessel_nb_crews[i] : 0,
+                                i < annual_other_incomes.size() ? annual_other_incomes[i] : 0,
+                                i < landing_costs_percents.size() ? landing_costs_percents[i] : 0,
+                                i < crewshare_and_unpaid_labour_costs_percents.size()
+                                ? crewshare_and_unpaid_labour_costs_percents[i] : 0,
+                                i < other_variable_costs_per_unit_efforts.size()
+                                ? other_variable_costs_per_unit_efforts[i] : 0,
+                                i < annual_insurance_costs_per_crews.size() ? annual_insurance_costs_per_crews[i] : 0,
+                                i < standard_labour_hour_opportunity_costss.size()
+                                ? standard_labour_hour_opportunity_costss[i] : 0,
+                                i < standard_annual_full_time_employement_hourss.size()
+                                ? standard_annual_full_time_employement_hourss[i] : 0,
+                                i < other_annual_fixed_costss.size() ? other_annual_fixed_costss[i] : 0,
+                                i < vessel_values.size() ? vessel_values[i] : 0,
+                                i < annual_depreciation_rates.size() ? annual_depreciation_rates[i] : 0,
+                                i < opportunity_interest_rates.size() ? opportunity_interest_rates[i] : 0,
+                                i < annual_discount_rates.size() ? annual_discount_rates[i] : 0
+        );
 
         /*
          * if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {
@@ -3351,18 +3357,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i]->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
         vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
         vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
-        if(spe_vessel_betas_per_pop.size()!=nbpops)
-             {
-               std::stringstream er;
-               er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
-                    nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-                     spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
-               throw std::runtime_error(er.str());
+        if (spe_vessel_betas_per_pop.size() != nbpops) {
+            std::stringstream er;
+            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
+               nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+               spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
+            throw std::runtime_error(er.str());
 
-               //possibly, fix dim in R for the oldest dataset:
-               //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
+            //possibly, fix dim in R for the oldest dataset:
+            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
 
-             }
+        }
 
         vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
         vessels[i]->set_spe_possible_metiers(possible_metiers);
@@ -3411,40 +3416,36 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 */
 
 
-        if(dyn_alloc_sce.option(Options::fishing_credits))
-        {
+        if (dyn_alloc_sce.option(Options::fishing_credits)) {
             vessels[i]->set_fishing_credits(spe_fishing_credits);
         }
 
 
         // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
         // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
-        {
+        if (dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
             // a decrease by 10%...
-            vessels[i]->set_speed(  vessels[i]->get_speed()*0.9   );
+            vessels[i]->set_speed(vessels[i]->get_speed() * 0.9);
             // corresponds to a decrease by 30% in fuelcons
-            vessels[i]->set_fuelcons( vessels[i]->get_fuelcons()*0.7 );
+            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.7);
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
         // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
-        {
+        if (dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
             // a decrease by 20%...
-            vessels[i]->set_speed(  vessels[i]->get_speed()*0.8   );
+            vessels[i]->set_speed(vessels[i]->get_speed() * 0.8);
             // corresponds to a decrease by 48.8% in fuelcons
-            vessels[i]->set_fuelcons( vessels[i]->get_fuelcons()*0.512 );
+            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.512);
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
         // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_30percent))
-        {
+        if (dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
             // a decrease by 30%...
-            vessels[i]->set_speed(  vessels[i]->get_speed()*0.7   );
+            vessels[i]->set_speed(vessels[i]->get_speed() * 0.7);
             // corresponds to a decrease by 65.7% in fuelcons
-            vessels[i]->set_fuelcons( vessels[i]->get_fuelcons()*0.343 );
+            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.343);
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -3455,32 +3456,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // we use a vector of vector instead of a multimap in order to speed up the simulation
         // by avoiding a (costly) call to find_entries_i_d() in the do_catch() method
         vector<types::NodeId> gshape_name_nodes_with_cpue;
-        for(auto iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
-            iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
-        {
-            gshape_name_nodes_with_cpue.push_back (iter->first);
+        for (auto iter = gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+             iter = gshape_cpue_per_stk_on_nodes.upper_bound(iter->first)) {
+            gshape_name_nodes_with_cpue.push_back(iter->first);
         }
 
         // sort and unique
         sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        auto it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
+        auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
 
 
         // init cpue_nodes_species for this vessel
-        int nbnodes=gshape_name_nodes_with_cpue.size();
+        int nbnodes = gshape_name_nodes_with_cpue.size();
         // init the vector of vector with Os
         vessels.at(i)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
         // init the vector of vector with Os
         vessels.at(i)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-        for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
-        {
+        for (unsigned int n = 0; n < gshape_name_nodes_with_cpue.size(); n++) {
             // look into the multimap...
-            auto gshape_cpue_species = find_entries (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            auto gshape_cpue_species = find_entries(gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
             // look into the multimap...
-            auto gscale_cpue_species = find_entries (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
-            if(!gshape_cpue_species.empty())
-            {
+            auto gscale_cpue_species = find_entries(gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            if (!gshape_cpue_species.empty()) {
                 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
                 vessels.at(i)->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
                 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
@@ -3490,39 +3488,36 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // need to compute expected cpue (averaged over node but cumulated over species)
         // for this particular vessel, in order to scale the prior guess (see below)
-        double expected_cpue=0;
-        vector <vector<double> > gshape_cpue_nodes_species = vessels.at(i)->get_gshape_cpue_nodes_species();
-        vector <vector<double> > gscale_cpue_nodes_species = vessels.at(i)->get_gscale_cpue_nodes_species();
-        const auto &fgrounds= vessels.at(i)->get_fgrounds();
-        vector <double> expected_cpue_this_pop (nbpops);
-        for(int pop = 0; pop < nbpops; pop++)
-        {
+        double expected_cpue = 0;
+        vector<vector<double> > gshape_cpue_nodes_species = vessels.at(i)->get_gshape_cpue_nodes_species();
+        vector<vector<double> > gscale_cpue_nodes_species = vessels.at(i)->get_gscale_cpue_nodes_species();
+        const auto &fgrounds = vessels.at(i)->get_fgrounds();
+        vector<double> expected_cpue_this_pop(nbpops);
+        for (int pop = 0; pop < nbpops; pop++) {
 
-            vector<double> cpue_per_fground (fgrounds.size());
+            vector<double> cpue_per_fground(fgrounds.size());
             // init
-            expected_cpue_this_pop.at(pop)=0;
+            expected_cpue_this_pop.at(pop) = 0;
 
             // compute cpue on nodes
-            for(unsigned int f = 0; f < fgrounds.size(); f++)
-            {
+            for (unsigned int f = 0; f < fgrounds.size(); f++) {
                 // look into the vector of vector....
                 double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
                 // look into the vector of vector....
                 double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
 
                 // a dangerous fix:
-                if(a_shape<0 || a_scale <0)
-                {
+                if (a_shape < 0 || a_scale < 0) {
 
-                  //  cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                    //  cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
                     //cout <<  " this vessel is is: " << vessels.at(i)->get_name() << endl;
                     //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                     //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                     //}
-                    a_shape=1;
-                    a_scale=0;
+                    a_shape = 1;
+                    a_scale = 0;
                 }
 
                 cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
@@ -3531,42 +3526,42 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
             }
             // compute the average cpue for this pop across all nodes
-            for(unsigned int f = 0; f < fgrounds.size(); f++)
-            {
-                expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
+            for (unsigned int f = 0; f < fgrounds.size(); f++) {
+                expected_cpue_this_pop.at(pop) += cpue_per_fground.at(f);
             }
             // do the mean
-            if(expected_cpue_this_pop.at(pop)!=0) expected_cpue_this_pop.at(pop)= expected_cpue_this_pop.at(pop)/fgrounds.size();
+            if (expected_cpue_this_pop.at(pop) != 0) {
+                expected_cpue_this_pop.at(pop) = expected_cpue_this_pop.at(pop) / fgrounds.size();
+            }
 
             // sum over pop
-            expected_cpue+= expected_cpue_this_pop.at(pop);
+            expected_cpue += expected_cpue_this_pop.at(pop);
         }
 
-        dout(cout  << "expected_cpue for this vessel is " <<expected_cpue << endl);
+        dout(cout << "expected_cpue for this vessel is " << expected_cpue << endl);
 
         // init at 0 cumcatch and cumeffort per trip,
         // init at best guest the experiencedcpue_fgrounds
-        dout(cout  << "init dynamic object related to fgrounds" << endl);
-        const vector<double > &freq_fgrounds= vessels.at(i)->get_freq_fgrounds();
-        vector<double > init_for_fgrounds(fgrounds.size());
-        vector<double > cumeffort_fgrounds= init_for_fgrounds;
-        vector<double > cumcatch_fgrounds= init_for_fgrounds;
-        vector<double > cumdiscard_fgrounds= init_for_fgrounds;
-        vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
-        vector<double > experienced_avoided_stks_bycatch_prop_on_fgrounds= init_for_fgrounds;
-        vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
-        vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
-        vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        for(unsigned int f = 0; f < fgrounds.size(); f++)
-        {
+        dout(cout << "init dynamic object related to fgrounds" << endl);
+        const vector<double> &freq_fgrounds = vessels.at(i)->get_freq_fgrounds();
+        vector<double> init_for_fgrounds(fgrounds.size());
+        vector<double> cumeffort_fgrounds = init_for_fgrounds;
+        vector<double> cumcatch_fgrounds = init_for_fgrounds;
+        vector<double> cumdiscard_fgrounds = init_for_fgrounds;
+        vector<double> experienced_bycatch_prop_on_fgrounds = init_for_fgrounds;
+        vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds = init_for_fgrounds;
+        vector<double> experiencedcpue_fgrounds = init_for_fgrounds;
+        vector<double> freq_experiencedcpue_fgrounds = init_for_fgrounds;
+        vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+        for (unsigned int f = 0; f < fgrounds.size(); f++) {
             cumcatch_fgrounds[f] = 0;
             cumdiscard_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
-            experienced_bycatch_prop_on_fgrounds[f] =0;
-            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] =0;
+            experienced_bycatch_prop_on_fgrounds[f] = 0;
+            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] = 0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
             // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
@@ -3578,8 +3573,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             //dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
 
             // init the ones per pop
-            for(int pop = 0; pop < nbpops; pop++)
-            {
+            for (int pop = 0; pop < nbpops; pop++) {
                 // init
                 cumcatch_fgrounds_per_pop[f][pop] = 0;
                 cumdiscard_fgrounds_per_pop[f][pop] = 0;
@@ -3590,7 +3584,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
         vessels.at(i)->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         vessels.at(i)->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
-        vessels.at(i)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(experienced_avoided_stks_bycatch_prop_on_fgrounds);
+        vessels.at(i)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
+                experienced_avoided_stks_bycatch_prop_on_fgrounds);
         vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
         vessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
         vessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
@@ -3610,18 +3605,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // and vice versa...
 
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-        if(is_tacs)
-        {
-            for (unsigned int sp=0; sp<populations.size(); sp++)
-            {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1, 0.0);
+        if (is_tacs) {
+            for (unsigned int sp = 0; sp < populations.size(); sp++) {
+                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1,
+                                                           0.0);
             }
         }
 
         // check
-        outc(cout << "create vessel " << vessels[i]->get_idx()  << " " << vessels[i]->get_name() << " " << vessels[i]->get_nationality() <<" on "
-             << vessels[i]->get_loc()->get_idx_node() << " with coordinates "
-             << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
+        outc(cout << "create vessel " << vessels[i]->get_idx() << " " << vessels[i]->get_name() << " "
+                  << vessels[i]->get_nationality() << " on "
+                  << vessels[i]->get_loc()->get_idx_node() << " with coordinates "
+                  << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
         //   << " and metier " << vessels[i]->get_metier()->get_name() <<  endl;
         //vector<double> a_ogive = vessels[i]->get_metier()->get_selectivity_ogive() ;
         //cout << "with selectivity ogive " << endl;
@@ -3637,27 +3632,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     //check vessel specifications
-    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl);
+    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specific harbours:" << endl);
     auto harbs = vessels[0]->get_harbours();
-    for (unsigned int i=0; i<harbs.size(); i++)
-    {
-        outc(cout <<  harbs[i] << " "  << endl);
+    for (unsigned int i = 0; i < harbs.size(); i++) {
+        outc(cout << harbs[i] << " " << endl);
     }
 
     //check vessel specifications
-    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl);
+    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specfic grounds:" << endl);
     auto grds = vessels[0]->get_fgrounds();
-    for (unsigned int i=0; i<grds.size(); i++)
-    {
-        outc(cout <<  grds[i] << " "  << endl);
+    for (unsigned int i = 0; i < grds.size(); i++) {
+        outc(cout << grds[i] << " " << endl);
     }
 
     //check vessel specifications
-    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have a max speed of "
-                                                   << vessels[0]->get_speed() << " "  << endl);
+    outc(cout << " vessel" << vessels[0]->get_idx() << " have a max speed of "
+              << vessels[0]->get_speed() << " " << endl);
 
-    cout << " vessel"<< vessels[0]->get_idx()  <<" have a kW of "
-         << vessels[0]->get_KW() << " "  << endl;
+    cout << " vessel" << vessels[0]->get_idx() << " have a kW of "
+         << vessels[0]->get_KW() << " " << endl;
 
 
     /*  //check movement
@@ -3685,11 +3678,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " FIRM-RELATED STUFFS       " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " FIRM-RELATED STUFFS       " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     // read general firm features
     vector<int> all_firm_ids;
@@ -3704,43 +3697,39 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    cout<<"find out vessels_of_the_firm for firm " << endl;
+    cout << "find out vessels_of_the_firm for firm " << endl;
 
 
-    vector <Firm*> firms(all_firm_ids.size());
-    for (unsigned int i=0; i<all_firm_ids.size(); i++)
-    {
+    vector<Firm *> firms(all_firm_ids.size());
+    for (unsigned int i = 0; i < all_firm_ids.size(); i++) {
 
-       // vector <Vessel*> vessels_of_the_firm(vessels.size());
-        vector <Vessel*> vessels_of_the_firm;
+        // vector <Vessel*> vessels_of_the_firm(vessels.size());
+        vector<Vessel *> vessels_of_the_firm;
 
-        cout<<"vessels_of_the_firm with " << vessels_of_the_firm.size() << " vessels..." << endl;
+        cout << "vessels_of_the_firm with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
 
         // select from a vector of objects
         std::remove_copy_if(
-                    vessels.begin(),
-                    vessels.end(),
-                    std::back_inserter(vessels_of_the_firm),
-                    boost::bind(test_not_belong_to_firm, _1, all_firm_ids[i]) );
+                vessels.begin(),
+                vessels.end(),
+                std::back_inserter(vessels_of_the_firm),
+                boost::bind(test_not_belong_to_firm, _1, all_firm_ids[i]));
 
 
-        cout<<"create firm " << all_firm_ids[i] << endl;
-        cout<<"with " << vessels_of_the_firm.size() << " vessels..." << endl;
+        cout << "create firm " << all_firm_ids[i] << endl;
+        cout << "with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
-        firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
-                           some_longs[i], some_lats[i], vessels_of_the_firm);
+        firms[i] = new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
+                            some_longs[i], some_lats[i], vessels_of_the_firm);
         firms[i]->set_idx_firm(all_firm_ids[i]);
 
-        cout<<"at (" << firms[i]->get_x() << "," << firms[i]->get_y()  << ") "   << endl;
+        cout << "at (" << firms[i]->get_x() << "," << firms[i]->get_y() << ") " << endl;
         //   cout<<" one of the vessel of this firm is " << firms[i]->get_bunch_of_vessels().at(0)->get_name()    << endl;
 
 
     }
-    cout<<"Number of firms created: " << firms.size()  << endl;
-
-
-
+    cout << "Number of firms created: " << firms.size() << endl;
 
 
 #ifdef PROFILE
@@ -3748,58 +3737,52 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
-
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " TEST GRAPH-RELATED STUFFS " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " TEST GRAPH-RELATED STUFFS " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     /* input data, graph connections and distance */
     // CAUTION INDEXATION C++ from 0 to n while in R from 1 to n+1
     // so take care to have idx of node starting from 0 in the input file
     ifstream graph;
-    string filename_graph_test=inputfolder+"/graphsspe/graph"+a_graph_s+".dat";
+    string filename_graph_test = inputfolder + "/graphsspe/graph" + a_graph_s + ".dat";
     graph.open(filename_graph_test.c_str());
-    if(graph.fail())
-    {
+    if (graph.fail()) {
         open_file_error(filename_graph_test.c_str());
         return 1;
     }
     vector<int> graph_idx_dep;
     vector<int> graph_idx_arr;
-    vector<int> graph_dist_km;	 // caution: use integer here to speed up c++
+    vector<int> graph_dist_km;     // caution: use integer here to speed up c++
     fill_from_graph(graph, graph_idx_dep, graph_idx_arr, graph_dist_km, nrow_graph);
 
     /* fill in an adjacency map */
 
-    for (unsigned int i=0; i<graph_coord_x.size(); i++)
-    {
+    for (unsigned int i = 0; i < graph_coord_x.size(); i++) {
         string s;
         stringstream out;
         out << i;
         s = out.str();
-        vertex_names.push_back( s ) ;
+        vertex_names.push_back(s);
     }
 
     // the graph is non-oriented so need to inform in both ways i.e. dep->arr, arr->dep....
     // col 1
-    for(unsigned int i=0; i<graph_idx_dep.size(); i++)
-    {
-        adjacency_map[graph_idx_dep[i]].push_back(edge(graph_idx_arr[i],  graph_dist_km[i]));
+    for (unsigned int i = 0; i < graph_idx_dep.size(); i++) {
+        adjacency_map[graph_idx_dep[i]].push_back(edge(graph_idx_arr[i], graph_dist_km[i]));
         //dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl);
     }
     // col 2
-    for(unsigned int i=0; i<graph_idx_dep.size(); i++)
-    {
-        adjacency_map[graph_idx_arr[i]].push_back(edge(graph_idx_dep[i],  graph_dist_km[i]));
+    for (unsigned int i = 0; i < graph_idx_dep.size(); i++) {
+        adjacency_map[graph_idx_arr[i]].push_back(edge(graph_idx_dep[i], graph_dist_km[i]));
         //dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl);
     }
 
     // then need to remove the duplicates if any.....
     adjacency_map_t::iterator it_adj;
-    for ( it_adj=adjacency_map.begin() ; it_adj != adjacency_map.end(); it_adj++ )
-    {
+    for (it_adj = adjacency_map.begin(); it_adj != adjacency_map.end(); it_adj++) {
         //  adjacency_map[(*it_adj).first].sort(); // first sort() before unique()
         //  adjacency_map[(*it_adj).first].unique(); // remove duplicate on a sorted list
     }
@@ -3807,18 +3790,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     graph.close();
 
     // test removing some nodes for steaming.....
-    vector <int> nodes_to_be_closed;
+    vector<int> nodes_to_be_closed;
     //nodes_to_be_closed.push_back(1908);
     //closeSomeNodes(nodes_to_be_closed, adjacency_map);
 
     // create a shop of paths
 
 
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " BUILD A PATHS_SHOP        " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " BUILD A PATHS_SHOP        " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -3828,7 +3811,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     try {
         GeoGraphLoader loader;
         loader.load(geoGraph, filename_graph, filename_graph_test);
-        cout << "Loading the graph "<< filename_graph << " ...ok" << endl;
+        cout << "Loading the graph " << filename_graph << " ...ok" << endl;
     } catch (std::exception &x) {
         std::cerr << "Cannot read Node graphs: " << x.what();
         return 2;
@@ -3844,29 +3827,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // check
     outc(cout << "relevant nodes: " << endl);
-    for(unsigned int i=0; i<relevant_nodes.size(); i++)
-    {
-        outc(cout << relevant_nodes.at(i).toIndex() << " " );
+    for (unsigned int i = 0; i < relevant_nodes.size(); i++) {
+        outc(cout << relevant_nodes.at(i).toIndex() << " ");
     }
     outc(cout << endl);
 
 
-
-    if(!use_static_paths)
-    {
-        cout << "In Simulation Setup, you have chosen not to use pre-defined static paths... The computation of the paths on the fly might take more time" << endl;
-    }
-    else
-    {
+    if (!use_static_paths) {
+        cout
+                << "In Simulation Setup, you have chosen not to use pre-defined static paths... The computation of the paths on the fly might take more time"
+                << endl;
+    } else {
         cout << "reading pre-existing paths shop....wait" << endl;
 
         // for-loop over potential departure nodes
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
-        for (unsigned int i=0; i<relevant_nodes.size(); i++)
-        {
+        for (unsigned int i = 0; i < relevant_nodes.size(); i++) {
             outc(cout << ".");
 
-            PathShop curr_path_shop =read_graph_details(relevant_nodes.at(i),  namefolderinput,   inputfolder,  a_graph_name);
+            PathShop curr_path_shop = read_graph_details(relevant_nodes.at(i), namefolderinput, inputfolder,
+                                                         a_graph_name);
             pathshops.push_back(curr_path_shop);
 
         }
@@ -3878,18 +3858,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cout << "reading pre-existing paths shop....ok" << endl;
 
 
-
     }
 
 
-
-
-
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << " SETTING UP GNUPLOT        " << endl);
-    dout(cout  << "---------------------------" << endl);
-    dout(cout  << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << " SETTING UP GNUPLOT        " << endl);
+    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << endl);
 
     // short note on the R code to get a map.dat file
     // for coastline map:
@@ -3899,7 +3875,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // then replace the NA by nothing
 
 #ifdef _WIN32
-    // realtime gnuplot
+                                                                                                                            // realtime gnuplot
     if(use_gnuplot)
     {
         pipe2 = _popen(path, "w");
@@ -3944,11 +3920,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 #endif
 
-    dout(cout  << "---------------------------------" << endl);
-    dout(cout  << "---------------------------------" << endl);
-    dout(cout  << " THE FOR-LOOP OVER TIME STEPS    " << endl);
-    dout(cout  << "---------------------------------" << endl);
-    dout(cout  << "---------------------------------" << endl);
+    dout(cout << "---------------------------------" << endl);
+    dout(cout << "---------------------------------" << endl);
+    dout(cout << " THE FOR-LOOP OVER TIME STEPS    " << endl);
+    dout(cout << "---------------------------------" << endl);
+    dout(cout << "---------------------------------" << endl);
 
     //	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
     //	vmslike.open(filename.c_str());
@@ -3959,202 +3935,238 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //    std::string loglike_filename = filename;
 
     ofstream loglike_prop_met;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/loglike_prop_met_" + namesimu +
+            ".dat";
     loglike_prop_met.open(filename.c_str());
 
     ofstream popstats;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popstats_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popstats_" + namesimu + ".dat";
     popstats.open(filename.c_str());
     std::string popstats_filename = filename;
 
     ofstream quotasuptake;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/quotasuptake_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/quotasuptake_" + namesimu +
+               ".dat";
     quotasuptake.open(filename.c_str());
     std::string quotasuptake_filename = filename;
 
     ofstream popdyn_N;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_" + namesimu + ".dat";
     popdyn_N.open(filename.c_str());
     std::string popdyn_N_filename = filename;
 
     ofstream popdyn_F;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_F_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_F_" + namesimu + ".dat";
     popdyn_F.open(filename.c_str());
     std::string popdyn_F_filename = filename;
 
     ofstream popdyn_SSB;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_SSB_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_SSB_" + namesimu +
+               ".dat";
     popdyn_SSB.open(filename.c_str());
     std::string popdyn_SSB_filename = filename;
 
     ofstream popdyn_annual_indic;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_annual_indic_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_annual_indic_" +
+               namesimu + ".dat";
     popdyn_annual_indic.open(filename.c_str());
 
     ofstream popdyn_test;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_test" + namesimu +
+               ".dat";
     popdyn_test.open(filename.c_str());
 
     ofstream popdyn_test2;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test2"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popdyn_test2" + namesimu +
+               ".dat";
     popdyn_test2.open(filename.c_str());
 
     ofstream popnodes_start;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_start_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_start_" + namesimu +
+            ".dat";
     popnodes_start.open(filename.c_str());
     std::string popnodes_start_filename = filename;
 
     ofstream popnodes_inc;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_inc_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_inc_" + namesimu +
+               ".dat";
     popnodes_inc.open(filename.c_str());
     std::string popnodes_inc_filename = filename;
 
     lock();
     ofstream popnodes_end;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_end_" + namesimu +
+               ".dat";
     popnodes_end.open(filename.c_str());
     std::string popnodes_end_filename = filename;
     unlock();
 
     ofstream popnodes_impact;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_impact_" + namesimu +
+            ".dat";
     popnodes_impact.open(filename.c_str());
     std::string popnodes_impact_filename = filename;
 
     ofstream popnodes_cumulcatches_per_pop;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumulcatches_per_pop_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput +
+               "/popnodes_cumulcatches_per_pop_" + namesimu + ".dat";
     popnodes_cumulcatches_per_pop.open(filename.c_str());
     std::string popnodes_cumulcatches_per_pop_filename = filename;
 
     ofstream nodes_envt;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/nodes_envt_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/nodes_envt_" + namesimu +
+               ".dat";
     nodes_envt.open(filename.c_str());
     std::string nodes_envt_filename = filename;
 
     ofstream popnodes_impact_per_szgroup;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_impact_per_szgroup_" +
+            namesimu + ".dat";
     popnodes_impact_per_szgroup.open(filename.c_str());
 
     ofstream popnodes_cumftime;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumftime_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_cumftime_" +
+               namesimu + ".dat";
     popnodes_cumftime.open(filename.c_str());
     std::string popnodes_cumftime_filename = filename;
 
     ofstream popnodes_cumsweptarea;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumsweptarea_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_cumsweptarea_" +
+               namesimu + ".dat";
     popnodes_cumsweptarea.open(filename.c_str());
     std::string popnodes_cumsweptarea_filename = filename;
 
     ofstream popnodes_cumcatches;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_cumcatches_" +
+               namesimu + ".dat";
     popnodes_cumcatches.open(filename.c_str());
     std::string popnodes_cumcatches_filename = filename;
 
     ofstream popnodes_cumcatches_with_threshold;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_with_threshold_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput +
+               "/popnodes_cumcatches_with_threshold_" + namesimu + ".dat";
     popnodes_cumcatches_with_threshold.open(filename.c_str());
     std::string popnodes_cumcatches_with_threshold_filename = filename;
 
     ofstream popnodes_cumdiscards;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscards_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_cumdiscards_" +
+               namesimu + ".dat";
     popnodes_cumdiscards.open(filename.c_str());
     std::string popnodes_cumdiscards_filename = filename;
 
     ofstream popnodes_cumdiscardsratio;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscardsratio_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_cumdiscardsratio_" +
+            namesimu + ".dat";
     popnodes_cumdiscardsratio.open(filename.c_str());
     std::string popnodes_cumdiscardsratio_filename = filename;
 
     ofstream popnodes_nbchoked;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_nbchoked_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_nbchoked_" +
+               namesimu + ".dat";
     popnodes_nbchoked.open(filename.c_str());
     std::string popnodes_nbchoked_filename = filename;
 
     ofstream popnodes_tariffs;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_tariffs_" + namesimu +
+            ".dat";
     popnodes_tariffs.open(filename.c_str());
     std::string popnodes_tariffs_filename = filename;
 
     ofstream benthosbiomassnodes;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/benthosnodes_tot_biomasses_" +
+            namesimu + ".dat";
     benthosbiomassnodes.open(filename.c_str());
     std::string popnodes_benthos_biomass_filename = filename;
 
     ofstream benthosnumbernodes;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_numbers_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/benthosnodes_tot_numbers_" +
+               namesimu + ".dat";
     benthosnumbernodes.open(filename.c_str());
     std::string popnodes_benthos_number_filename = filename;
 
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
+    filename =
+            outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/freq_cpue" + namesimu + ".dat";
     freq_cpue.open(filename.c_str());
 
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_profit"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/freq_profit" + namesimu +
+               ".dat";
     freq_profit.open(filename.c_str());
 
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_distance"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/freq_distance" + namesimu +
+               ".dat";
     freq_distance.open(filename.c_str());
 
     ofstream fishfarmslogs;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/fishfarmslogs_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/fishfarmslogs_" + namesimu +
+               ".dat";
     fishfarmslogs.open(filename.c_str());
     std::string fishfarmslogs_filename = filename;
 
     ofstream windmillslogs;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/windmillslogs_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/windmillslogs_" + namesimu +
+               ".dat";
     windmillslogs.open(filename.c_str());
     std::string windmillslogs_filename = filename;
 
     ofstream shipslogs;
-    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/shipslogs_"+namesimu+".dat";
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/shipslogs_" + namesimu +
+               ".dat";
     shipslogs.open(filename.c_str());
     std::string shipslogs_filename = filename;
 
     // read list of tsteps with discrete events
-    vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, inputfolder);
-    vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, inputfolder);
-    vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,inputfolder);
-    vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
+    vector<int> tsteps_quarters = read_tsteps_quarters(folder_name_parameterization, inputfolder);
+    vector<int> tsteps_semesters = read_tsteps_semesters(folder_name_parameterization, inputfolder);
+    vector<int> tsteps_years = read_tsteps_years(folder_name_parameterization, inputfolder);
+    vector<int> tsteps_months = read_tsteps_months(folder_name_parameterization, inputfolder);
 
     if (enable_sqlite_out) {
-        outSqlite->exportCalendar (tsteps_months, tsteps_quarters, tsteps_semesters, tsteps_years);
+        outSqlite->exportCalendar(tsteps_months, tsteps_quarters, tsteps_semesters, tsteps_years);
     }
 
-    int count_quarters=1;
-    int count_months=1;
-    double a_year=1.0;
+    int count_quarters = 1;
+    int count_months = 1;
+    double a_year = 1.0;
 
     // get a vector v filled in with 1 to n
     int nbvessels = vessels.size();
     glob_mutex.lock();
-    ve = vector<int> (nbvessels);
-    for (unsigned int idx =0; idx < ve.size(); idx++)
-    {
-        ve[idx] =  idx ;
+    ve = vector<int>(nbvessels);
+    for (unsigned int idx = 0; idx < ve.size(); idx++) {
+        ve[idx] = idx;
     }
     glob_mutex.unlock();
 
     // init
-    vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-    vector< vector<double> > a_ping_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-    vector< vector<double> > a_discards_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_ping_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_discards_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
 
     // write down initial pop number in popdyn
-    for (unsigned int sp=0; sp<populations.size(); sp++)
-    {
+    for (unsigned int sp = 0; sp < populations.size(); sp++) {
 
-        dout(cout  << "write down the popdyn...");
+        dout(cout << "write down the popdyn...");
         // get total N from summing up N over nodes
         populations.at(sp)->aggregate_N();
         popdyn_N << setprecision(0) << fixed;
         // tstep / pop / tot N at szgroup
         popdyn_N << 0 << " " << sp << " ";
-        vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
-        for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
-        {
+        vector<double> tot_N_at_szgroup = populations.at(sp)->get_tot_N_at_szgroup();
+        for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++) {
             // output in thousands of individuals
-            popdyn_N  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
+            popdyn_N << tot_N_at_szgroup.at(sz) / 1000 << " ";
         }
-        popdyn_N << " " <<  endl;
+        popdyn_N << " " << endl;
     }
 
     popdyn_N.flush();
@@ -4188,24 +4200,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // if(dyn_pop_sce.option(Options::include_forcing_layers))
     //{
 
-        // Flush and updates all statistics for nodes envt
-        if (use_gui)
-        {
-           nodes_envt.flush();
-           for (unsigned int n=0; n<nodes.size(); n++)
-               {
-                  nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
-               }
-           guiSendUpdateCommand(nodes_envt_filename, tstep);
-         }
-
-        if (enable_sqlite_out)
-        {
-           for (unsigned int n=0; n<nodes.size(); n++)
-           {
-               outSqlite->exportEnvtNodes(tstep, nodes.at(n));
-           }
+    // Flush and updates all statistics for nodes envt
+    if (use_gui) {
+        nodes_envt.flush();
+        for (unsigned int n = 0; n < nodes.size(); n++) {
+            nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
         }
+        guiSendUpdateCommand(nodes_envt_filename, tstep);
+    }
+
+    if (enable_sqlite_out) {
+        for (unsigned int n = 0; n < nodes.size(); n++) {
+            outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+        }
+    }
     //}
 
     //----------------------//
@@ -4216,27 +4224,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //----------------------//
     //----------------------//
 
-    int LastMonth=-1;
-    int CurrentMonth=0;
-    int nb_y_left_to_tgrt_year=5; // init for EffortControl Option
+    int LastMonth = -1;
+    int CurrentMonth = 0;
+    int nb_y_left_to_tgrt_year = 5; // init for EffortControl Option
 
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
 
-    for (tstep =0; tstep < nbsteps; ++tstep)
-    {
+    for (tstep = 0; tstep < nbsteps; ++tstep) {
         if (enable_sqlite_out && (tstep % numStepTransactions) == 0) {
             std::cout << "Start Transaction " << tstep << "\n";
             outSqlite->startDayLoop();
         }
 
 #ifdef PROFILE
-        mLoopProfile.start();
+            mLoopProfile.start();
 #endif
 
-        dout(cout  << endl);
-        dout(cout  << endl);
-        dout(cout  << "---------------" << endl);
+        dout(cout << endl);
+        dout(cout << endl);
+        dout(cout << "---------------" << endl);
 
         guiSendCurrentStep(tstep);
 
@@ -4247,14 +4254,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         os << "tstep " << tstep << endl;
         guiSendTerminalMessage(os.str());
 
-        dout(cout  << "---------------" << endl);
+        dout(cout << "---------------" << endl);
 
-        if(use_gnuplot)
-        {
-            filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat";
+        if (use_gnuplot) {
+            filename =
+                    outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/vmslike2_" + namesimu +
+                    ".dat";
             vmslike2.open(filename.c_str());
 
-            filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat";
+            filename =
+                    outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/vmslike3_" + namesimu +
+                    ".dat";
             vmslike3.open(filename.c_str());
         }
 
@@ -4269,98 +4279,95 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        if(!applyBiologicalModule2(tstep,
-                                             a_month_i,
-                                             namesimu,
-                                             namefolderinput,
-                                             namefolderoutput,
-                                             outdir,
-                                             popstats,
-                                             popdyn_N,
-                                             popdyn_F,
-                                             popdyn_SSB,
-                                             popdyn_annual_indic,
-                                             popnodes_inc,
-                                             popnodes_impact,
-                                             popnodes_cumulcatches_per_pop,
-                                             nodes_envt,
-                                             popnodes_cumftime,
-                                             popnodes_cumsweptarea,
-                                             popnodes_cumcatches,
-                                             popnodes_cumcatches_with_threshold,
-                                             popnodes_cumdiscards,
-                                             popnodes_cumdiscardsratio,
-                                             popnodes_nbchoked,
-                                             popnodes_tariffs,
-                                             export_individual_tacs,
-                                             popnodes_end,
-                                             benthosbiomassnodes,
-                                             benthosnumbernodes,
-                                             nbbenthospops,
-                                             use_gui,
-                                             popstats_filename,
-                                             popdyn_N_filename,
-                                             popdyn_F_filename,
-                                             popdyn_SSB_filename,
-                                             popnodes_inc_filename,
-                                             popnodes_end_filename,
-                                             popnodes_impact_filename,
-                                             popnodes_cumulcatches_per_pop_filename,
-                                             nodes_envt_filename,
-                                             popnodes_cumftime_filename,
-                                             popnodes_cumsweptarea_filename,
-                                             popnodes_cumcatches_filename,
-                                             popnodes_cumcatches_with_threshold_filename,
-                                             popnodes_cumdiscards_filename,
-                                             popnodes_cumdiscardsratio_filename,
-                                             popnodes_nbchoked_filename,
-                                             popnodes_tariffs_filename,
-                                             popnodes_benthos_biomass_filename,
-                                             popnodes_benthos_number_filename,
-                                             tsteps_quarters,
-                                             tsteps_semesters,
-                                             tsteps_years,
-                                             tsteps_months,
-                                             implicit_pops,
-                                             calib_oth_landings,
-                                             selectivity_per_stock_ogives_for_oth_land,
-                                             is_tacs,
-                                             export_vmslike,
-                                             freq_do_growth,
-                                             init_weight_per_szgroup,
-                                             species_interactions_mortality_proportion_matrix,
-                                             populations,
-                                             nodes,
-                                             vessels,
-                                             benthoss,
-                                             dyn_pop_sce,
-                                             dyn_alloc_sce,
-                                             Ws_at_szgroup,
-                                             predKernel,
-                                             searchVolMat,
-                                             juveniles_diet_preference,
-                                             adults_diet_preference,
-                                             mat_cats
-                                           ) )
-                throw std::runtime_error("Error while executing: applyBiologicalModule2");
+        if (!applyBiologicalModule2(tstep,
+                                    a_month_i,
+                                    namesimu,
+                                    namefolderinput,
+                                    namefolderoutput,
+                                    outdir,
+                                    popstats,
+                                    popdyn_N,
+                                    popdyn_F,
+                                    popdyn_SSB,
+                                    popdyn_annual_indic,
+                                    popnodes_inc,
+                                    popnodes_impact,
+                                    popnodes_cumulcatches_per_pop,
+                                    nodes_envt,
+                                    popnodes_cumftime,
+                                    popnodes_cumsweptarea,
+                                    popnodes_cumcatches,
+                                    popnodes_cumcatches_with_threshold,
+                                    popnodes_cumdiscards,
+                                    popnodes_cumdiscardsratio,
+                                    popnodes_nbchoked,
+                                    popnodes_tariffs,
+                                    export_individual_tacs,
+                                    popnodes_end,
+                                    benthosbiomassnodes,
+                                    benthosnumbernodes,
+                                    nbbenthospops,
+                                    use_gui,
+                                    popstats_filename,
+                                    popdyn_N_filename,
+                                    popdyn_F_filename,
+                                    popdyn_SSB_filename,
+                                    popnodes_inc_filename,
+                                    popnodes_end_filename,
+                                    popnodes_impact_filename,
+                                    popnodes_cumulcatches_per_pop_filename,
+                                    nodes_envt_filename,
+                                    popnodes_cumftime_filename,
+                                    popnodes_cumsweptarea_filename,
+                                    popnodes_cumcatches_filename,
+                                    popnodes_cumcatches_with_threshold_filename,
+                                    popnodes_cumdiscards_filename,
+                                    popnodes_cumdiscardsratio_filename,
+                                    popnodes_nbchoked_filename,
+                                    popnodes_tariffs_filename,
+                                    popnodes_benthos_biomass_filename,
+                                    popnodes_benthos_number_filename,
+                                    tsteps_quarters,
+                                    tsteps_semesters,
+                                    tsteps_years,
+                                    tsteps_months,
+                                    implicit_pops,
+                                    calib_oth_landings,
+                                    selectivity_per_stock_ogives_for_oth_land,
+                                    is_tacs,
+                                    export_vmslike,
+                                    freq_do_growth,
+                                    init_weight_per_szgroup,
+                                    species_interactions_mortality_proportion_matrix,
+                                    populations,
+                                    nodes,
+                                    vessels,
+                                    benthoss,
+                                    dyn_pop_sce,
+                                    dyn_alloc_sce,
+                                    Ws_at_szgroup,
+                                    predKernel,
+                                    searchVolMat,
+                                    juveniles_diet_preference,
+                                    adults_diet_preference,
+                                    mat_cats
+        )) {
+            throw std::runtime_error("Error while executing: applyBiologicalModule2");
+        }
 
 
-
-
-        if(dyn_pop_sce.option(Options::diffusePopN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-        {
+        if (dyn_pop_sce.option(Options::diffusePopN) &&
+            binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
             // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
             // so a relevant proxy could actually be (the inverse of) full_avai_szgroup_nodes_with_pop
             // converted in a point porportion field....
-            for (unsigned int sp=0; sp<populations.size(); sp++)
-            {
+            for (unsigned int sp = 0; sp < populations.size(); sp++) {
                 outc(cout << "...pop " << sp << endl;)
-                        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
-                {
+                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
                     outc(cout << "......pop " << sp << endl;)
-                            populations.at(sp)->diffuse_N_from_field (adjacency_map); // per sz group
+                    populations.at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
                 }
             }
         }
@@ -4378,48 +4385,44 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-         if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-         {
-            a_year+=1;
+        if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+            a_year += 1;
 
 
-            if(dyn_alloc_sce.option(Options::TechCreeping3Per))
-            {
-                tech_creeping_multiplier=pow(1.03,a_year); //  this is a rate per year...so multiply over years
-            } else{
-                tech_creeping_multiplier=1.0;
+            if (dyn_alloc_sce.option(Options::TechCreeping3Per)) {
+                tech_creeping_multiplier = pow(1.03, a_year); //  this is a rate per year...so multiply over years
+            } else {
+                tech_creeping_multiplier = 1.0;
             }
 
 
 
-             // fishfarms for new year
-             for(unsigned int i=0; i<fishfarms.size();++i)
-             {
-                 fishfarms.at(i)->set_is_running(1);
-             }
+            // fishfarms for new year
+            for (unsigned int i = 0; i < fishfarms.size(); ++i) {
+                fishfarms.at(i)->set_is_running(1);
+            }
 
 
-         }
-         //cout << "a_year " << a_year << endl;
+        }
+        //cout << "a_year " << a_year << endl;
 
 
 
-        dout(cout  << "RE-READ DATA----------" << endl);
+        dout(cout << "RE-READ DATA----------" << endl);
 
         // RE-READ DATA FOR EVENT => change of month
-        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-        {
-            CurrentMonth+=1;
+        if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            CurrentMonth += 1;
 
-            count_months+=1;
+            count_months += 1;
             a_month_i = count_months % 12;
-            if(a_month_i==0) a_month_i=12;
-            if(a_month_i==1 || a_month_i==2 || a_month_i==3) a_quarter_i=1;
-            if(a_month_i==4 || a_month_i==5 || a_month_i==6) a_quarter_i=2;
-            if(a_month_i==7 || a_month_i==8 || a_month_i==9) a_quarter_i=3;
-            if(a_month_i==10 || a_month_i==11 || a_month_i==12) a_quarter_i=4;
-            if(a_quarter_i==1 || a_quarter_i==2) a_semester_i=1;
-            if(a_quarter_i==3 || a_quarter_i==4) a_semester_i=2;
+            if (a_month_i == 0) { a_month_i = 12; }
+            if (a_month_i == 1 || a_month_i == 2 || a_month_i == 3) { a_quarter_i = 1; }
+            if (a_month_i == 4 || a_month_i == 5 || a_month_i == 6) { a_quarter_i = 2; }
+            if (a_month_i == 7 || a_month_i == 8 || a_month_i == 9) { a_quarter_i = 3; }
+            if (a_month_i == 10 || a_month_i == 11 || a_month_i == 12) { a_quarter_i = 4; }
+            if (a_quarter_i == 1 || a_quarter_i == 2) { a_semester_i = 1; }
+            if (a_quarter_i == 3 || a_quarter_i == 4) { a_semester_i = 2; }
 
 
 
@@ -4427,31 +4430,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             stringstream strg0;
             stringstream strg1;
             stringstream strg2;
-            strg0 <<  a_month_i;
-            strg1 <<  a_quarter_i;
-            strg2 <<  a_semester_i;
-            a_month= "month" + strg0.str();
-            a_quarter= "quarter" + strg1.str();
-            a_semester= "semester" + strg2.str();
+            strg0 << a_month_i;
+            strg1 << a_quarter_i;
+            strg2 << a_semester_i;
+            a_month = "month" + strg0.str();
+            a_quarter = "quarter" + strg1.str();
+            a_semester = "semester" + strg2.str();
 
-               // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
-               // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-               //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+            // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+            // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+            //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
             // this month, re-read for vessel-related data
-            if(dyn_alloc_sce.option(Options::area_monthly_closure))
-            {
-                cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
+            if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
+                cout << "a_month: " << a_month << ", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
 
-                for (unsigned int v=0; v<vessels.size(); v++)
-                {
+                for (unsigned int v = 0; v < vessels.size(); v++) {
                     vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
                 // update the monthly closures
-                if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+                if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization,
+                                                  inputfolder)) {
                     exit(1);
                 }
-                if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+                if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization,
+                                                 inputfolder)) {
                     exit(1);
                 }
 
@@ -4466,10 +4469,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             // this month, re-read for population-related data
-            for (unsigned int i=0; i<populations.size(); i++)
-            {
+            for (unsigned int i = 0; i < populations.size(); i++) {
                 // read a other landings per node for this species
-                auto oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
+                auto oth_land = read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization,
+                                                             inputfolder, fleetsce);
                 populations.at(i)->set_oth_land(oth_land);
             }
 
@@ -4478,7 +4481,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // RE-READ DATA FOR EVENT => change of quarter
-        if(tstep>2000 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
+        if (tstep > 2000 && binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
             //   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
         {
 
@@ -4513,7 +4516,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             calendars.clear();
 
             // then, re-read...
-            if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives, vid_is_part_of_ref_fleets,
+            if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                                        speeds, fuelcons, lengths, vKWs,
                                        carrycapacities, tankcapacities, nbfpingspertrips,
                                        resttime_par1s, resttime_par2s, av_trip_duration,
@@ -4542,36 +4545,41 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
             vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-            if(is_tacs) vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
-            dout(cout  << "re-read data...OK" << endl);
+            if (is_tacs) { vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder); }
+            dout(cout << "re-read data...OK" << endl);
 
             // LOOP OVER VESSELS
-            for (unsigned int v=0; v<vessels.size(); v++)
-            {   
+            for (unsigned int v = 0; v < vessels.size(); v++) {
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
 
-                if(dyn_alloc_sce.option(Options::ExitVessels10Per))
-                {
-                    double exit_vessels_per_year=0.1; //  this is a rate of vessel leaving per year
-                    if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-                    {
+                if (dyn_alloc_sce.option(Options::ExitVessels10Per)) {
+                    double exit_vessels_per_year = 0.1; //  this is a rate of vessel leaving per year
+                    if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
 
-                        if((rand() % 2) <exit_vessels_per_year) vessels.at(v)-> set_vessel_exited(1);
+                        if ((rand() % 2) < exit_vessels_per_year) { vessels.at(v)->set_vessel_exited(1); }
 
                     }
                 }
 
-                if(a_quarter=="quarter1")
-                {
-                    double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;
+                if (a_quarter == "quarter1") {
+                    double new_vessel_value =
+                            vessels.at(v)->get_vessel_value() * (100 - vessels.at(v)->get_annual_depreciation_rate()) /
+                            100;
                     vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
 
-                    for (unsigned int pop=0; pop<nbpops; ++pop) vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
+                    for (unsigned int pop = 0; pop < nbpops; ++pop)
+                        vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
-                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
+                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization,
+                                                         inputfolder);
+                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v),
+                                                                   folder_name_parameterization, inputfolder);
+                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v),
+                                                                                 folder_name_parameterization,
+                                                                                 inputfolder);
+                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v),
+                                                                                 folder_name_parameterization,
+                                                                                 inputfolder);
                 spe_fgrounds = find_entries(fgrounds, vesselids.at(v));
                 spe_fgrounds_init = find_entries(fgrounds_init, vesselids.at(v));
                 spe_harbours = find_entries(harbours, vesselids.at(v));
@@ -4579,28 +4587,30 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
                 spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
                 spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
-                if(is_tacs) spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v));
+                if (is_tacs) { spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v)); }
 
                 // correct if missing harbour for this quarter
-                if(spe_harbours.empty())
-                {
+                if (spe_harbours.empty()) {
                     // if missing info for a given vessel for this quarter
                     outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
                     // CAUTION: TAKEN FROM THE PREVIOUS QUARTER!
-                    auto start_harbour=vessels.at(v)->get_harbours()[0];
+                    auto start_harbour = vessels.at(v)->get_harbours()[0];
                     spe_harbours.push_back(start_harbour);
                     spe_freq_harbours.push_back(1);
                     outc(cout << "then take node: " << start_harbour << endl);
                 }
 
                 // RE-SET VESSELS..
-                dout(cout << "re-set vessels step1..."  << endl);
+                dout(cout << "re-set vessels step1..." << endl);
                 vessels.at(v)->set_resttime_par1(resttime_par1s.at(v));
                 vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
                 vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
-                if(dyn_alloc_sce.option(Options::area_closure)) if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
-                    exit(1);
+                if (dyn_alloc_sce.option(Options::area_closure)) {
+                    if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization,
+                                                        inputfolder)) {
+                        exit(1);
+                    }
                 }
 
 
@@ -4611,16 +4621,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
                 vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
                 vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
-                for(unsigned int i = 0; i < init_for_fgrounds.size(); i++)
-                {
+                for (unsigned int i = 0; i < init_for_fgrounds.size(); i++) {
                     init_for_fgrounds[i] = 0;
                 }
-                vessels.at(v)->set_spe_cumcatch_fgrounds (init_for_fgrounds);
-                vessels.at(v)->set_spe_cumdiscard_fgrounds (init_for_fgrounds);
+                vessels.at(v)->set_spe_cumcatch_fgrounds(init_for_fgrounds);
+                vessels.at(v)->set_spe_cumdiscard_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
-                vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
+                vessels.at(v)->set_spe_cumeffort_fgrounds(init_for_fgrounds);
+                vessels.at(v)->set_spe_experiencedcpue_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
 
                 // uncomment for use if TACs are semester-based....otherwise don´t refresh the annual TAC!
@@ -4644,32 +4653,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                 // ...also for the particular cpue_nodes_species element
-                dout(cout << "re-set vessels step2..."  << endl);
+                dout(cout << "re-set vessels step2..." << endl);
                 vector<types::NodeId> gshape_name_nodes_with_cpue;
-                for(auto iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
-                    iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
-                {
-                    gshape_name_nodes_with_cpue.push_back (iter->first);
+                for (auto iter = gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+                     iter = gshape_cpue_per_stk_on_nodes.upper_bound(iter->first)) {
+                    gshape_name_nodes_with_cpue.push_back(iter->first);
                 }
                 // sort and unique
                 sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-                auto it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-                gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
+                auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+                gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
 
                 // init cpue_nodes_species for this vessel
-                int nbnodes=gshape_name_nodes_with_cpue.size();
+                int nbnodes = gshape_name_nodes_with_cpue.size();
                 // init the vector of vector with Os
                 vessels.at(v)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
                 // init the vector of vector with Os
                 vessels.at(v)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-                for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
-                {
+                for (unsigned int n = 0; n < gshape_name_nodes_with_cpue.size(); n++) {
                     // look into the multimap...
-                    auto gshape_cpue_species = find_entries (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+                    auto gshape_cpue_species = find_entries(gshape_cpue_per_stk_on_nodes,
+                                                            gshape_name_nodes_with_cpue[n]);
                     // look into the multimap...
-                    auto gscale_cpue_species = find_entries (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
-                    if(!gshape_cpue_species.empty())
-                    {
+                    auto gscale_cpue_species = find_entries(gscale_cpue_per_stk_on_nodes,
+                                                            gshape_name_nodes_with_cpue[n]);
+                    if (!gshape_cpue_species.empty()) {
                         // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
                         vessels.at(v)->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
                         // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
@@ -4679,21 +4687,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // need to compute expected cpue (averaged over node but cumulated over species)
                 // for this particular vessel, in order to scale the prior guess (see below)
-                dout(cout << "re-set vessels step3..."  << endl);
-                double expected_cpue=0;
-                vector <vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
-                vector <vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
-                const auto &fgrounds= vessels.at(v)->get_fgrounds();
-                vector <double> expected_cpue_this_pop (nbpops);
-                for(int pop = 0; pop < nbpops; pop++)
-                {
-                    vector<double> cpue_per_fground (fgrounds.size());
+                dout(cout << "re-set vessels step3..." << endl);
+                double expected_cpue = 0;
+                vector<vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
+                vector<vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
+                const auto &fgrounds = vessels.at(v)->get_fgrounds();
+                vector<double> expected_cpue_this_pop(nbpops);
+                for (int pop = 0; pop < nbpops; pop++) {
+                    vector<double> cpue_per_fground(fgrounds.size());
                     // init
-                    expected_cpue_this_pop.at(pop)=0;
+                    expected_cpue_this_pop.at(pop) = 0;
 
                     // compute cpue on nodes
-                    for(unsigned int g = 0; g < fgrounds.size(); g++)
-                    {
+                    for (unsigned int g = 0; g < fgrounds.size(); g++) {
                         // look into the vector of vector....
                         double a_shape = gshape_cpue_nodes_species.at(g).at(pop);
                         // look into the vector of vector....
@@ -4701,86 +4707,86 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                         // a dangerous fix:
-                        if(a_shape<0 || a_scale <0)
-                        {
+                        if (a_shape < 0 || a_scale < 0) {
 
-                            cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                            cout << "Something weird with the Gamma parameters: some negative values loaded...."
+                                 << endl;
                             //for(size_t f = 0; f < fgrounds.size(); ++f)
                             //{
                             //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                             //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                             //}
-                            a_shape=1;
-                            a_scale=0;
+                            a_shape = 1;
+                            a_scale = 0;
                         }
 
                         cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
-                        dout(cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl);
+                        dout(cout << "cpue_per_fground.at(g)" << cpue_per_fground.at(g) << endl);
                         //if(vessels.at(v)->get_name()=="DNK000041435") cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
                     }
 
-                    dout(cout << "re-set vessels step3.1..."  << endl);
+                    dout(cout << "re-set vessels step3.1..." << endl);
 
                     // compute the average cpue for this pop across all nodes
-                    for(unsigned int g = 0; g < fgrounds.size(); g++)
-                    {
-                        expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(g);
+                    for (unsigned int g = 0; g < fgrounds.size(); g++) {
+                        expected_cpue_this_pop.at(pop) += cpue_per_fground.at(g);
                     }
                     // do the mean
-                    expected_cpue_this_pop.at(pop)= expected_cpue_this_pop.at(pop)/fgrounds.size();
+                    expected_cpue_this_pop.at(pop) = expected_cpue_this_pop.at(pop) / fgrounds.size();
 
                     // sum over pop
-                    expected_cpue+= expected_cpue_this_pop.at(pop);
+                    expected_cpue += expected_cpue_this_pop.at(pop);
                 }
 
-                dout(cout  << "expected_cpue for this vessel is " <<expected_cpue << endl);
+                dout(cout << "expected_cpue for this vessel is " << expected_cpue << endl);
 
                 // init at 0 cumcatch and cumeffort per trip,
                 // init at best guest the experiencedcpue_fgrounds
-                dout(cout << "re-set vessels step4..."  << endl);
-                dout(cout  << "init dynamic object related to fgrounds" << endl);
-                const vector<double > &a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
-                vector<double > a_init_for_fgrounds(fgrounds.size());
-                vector<double > a_cumeffort_fgrounds= a_init_for_fgrounds;
-                vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
-                vector<double > a_cumdiscard_fgrounds= a_init_for_fgrounds;
-                vector<double > a_experienced_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
-                vector<double > a_experienced_avoided_stks_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
-                vector<double > a_experiencedcpue_fgrounds= a_init_for_fgrounds;
-                vector<double > a_freq_experiencedcpue_fgrounds= a_init_for_fgrounds;
-                vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-                vector<vector<double> > a_cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-                vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-                vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+                dout(cout << "re-set vessels step4..." << endl);
+                dout(cout << "init dynamic object related to fgrounds" << endl);
+                const vector<double> &a_freq_fgrounds = vessels.at(v)->get_freq_fgrounds();
+                vector<double> a_init_for_fgrounds(fgrounds.size());
+                vector<double> a_cumeffort_fgrounds = a_init_for_fgrounds;
+                vector<double> a_cumcatch_fgrounds = a_init_for_fgrounds;
+                vector<double> a_cumdiscard_fgrounds = a_init_for_fgrounds;
+                vector<double> a_experienced_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
+                vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
+                vector<double> a_experiencedcpue_fgrounds = a_init_for_fgrounds;
+                vector<double> a_freq_experiencedcpue_fgrounds = a_init_for_fgrounds;
+                vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+                vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+                vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+                vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
+                                                                                vector<double>(nbpops));
 
-                for(unsigned int g = 0; g < fgrounds.size(); g++)
-                {
+                for (unsigned int g = 0; g < fgrounds.size(); g++) {
                     a_cumcatch_fgrounds[g] = 0;
                     a_cumdiscard_fgrounds[g] = 0;
                     a_experienced_bycatch_prop_on_fgrounds[g] = 0;
-                    a_experienced_avoided_stks_bycatch_prop_on_fgrounds[g] =0;
+                    a_experienced_avoided_stks_bycatch_prop_on_fgrounds[g] = 0;
                     a_cumeffort_fgrounds[g] = 0;
                     a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
                     // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
                     // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
                     // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
                     // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-                    dout(cout  << "a_experiencedcpue_fgrounds" <<a_experiencedcpue_fgrounds[g] << endl);
+                    dout(cout << "a_experiencedcpue_fgrounds" << a_experiencedcpue_fgrounds[g] << endl);
                     // init the ones per pop
-                    for(int pop = 0; pop < nbpops; pop++)
-                    {
+                    for (int pop = 0; pop < nbpops; pop++) {
                         // init
                         a_cumcatch_fgrounds_per_pop[g][pop] = 0;
                         //a_cumdiscard_fgrounds_per_pop[g][pop] = 0;
-                        a_experiencedcpue_fgrounds_per_pop[g][pop] = a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop);
+                        a_experiencedcpue_fgrounds_per_pop[g][pop] =
+                                a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop);
                     }
                 }
                 // per total...
-                dout(cout << "re-set vessels step5..."  << endl);
+                dout(cout << "re-set vessels step5..." << endl);
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
                 vessels.at(v)->set_cumdiscard_fgrounds(a_cumdiscard_fgrounds);
                 vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
-                vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
+                vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
+                        a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
                 vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
                 vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
                 vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
@@ -4811,17 +4817,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // message 1 means: "please, change of grounds as soon as possible"
                 vessels.at(v)->receive_message(1);
 
-                dout(cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "...OK" << endl);
-            }					 // end a_vesselid
+                dout(cout << "re-read data for this vessel..." << vessels.at(v)->get_name() << "...OK" << endl);
+            }                     // end a_vesselid
 
             // RE-read for metiers
-            dout(cout << "re-read metiers..."  << endl);
+            dout(cout << "re-read metiers..." << endl);
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
             discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
             is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
-            for (unsigned int m=0; m<metiers.size(); m++)
-            {
+            for (unsigned int m = 0; m < metiers.size(); m++) {
                 // casting m into a string
                 //stringstream out;
                 //out << m;
@@ -4829,59 +4834,53 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double> metier_betas = find_entries_i_d(metiers_betas, m);
                 vector<double> discardratio_limits = find_entries_i_d(discards_rate_limits, m);
                 vector<int> is_avoided_stocks = find_entries_i_i(is_avoided_stockss, m);
-                vector<int>    metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
+                vector<int> metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
                 metiers[m]->set_betas_per_pop(metier_betas);
                 metiers[m]->set_discardratio_limits(discardratio_limits);
                 metiers[m]->set_is_avoided_stocks(is_avoided_stocks);
 
-            }					 // end a_met
-            dout(cout << "re-read metiers...OK"  << endl);
+            }                     // end a_met
+            dout(cout << "re-read metiers...OK" << endl);
+
+
+        }                         // END RE-READ DATA FOR VESSEL AND METIER...
 
 
 
 
-
-        }						 // END RE-READ DATA FOR VESSEL AND METIER...
-
-
-
-
-        int redispatch_the_pop=0;
-        switch(freq_redispatch_the_pop)
-        {
-        case 0:
-            if((tstep % 24)==7) redispatch_the_pop=1;
-            // daily update
-            break;
-        case 1:
-            if((tstep % 168)==7) redispatch_the_pop=1;
-            // weekly update
-            break;
-        case 2:
-            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)) redispatch_the_pop=1;
-            // monthly update
-            break;
-        case 3:
-            if(binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) redispatch_the_pop=1;
-            // quartely update
-            break;
-        case 4:
-            if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep)) redispatch_the_pop=1;
-            // semester update
-            break;
+        int redispatch_the_pop = 0;
+        switch (freq_redispatch_the_pop) {
+            case 0:
+                if ((tstep % 24) == 7) { redispatch_the_pop = 1; }
+                // daily update
+                break;
+            case 1:
+                if ((tstep % 168) == 7) { redispatch_the_pop = 1; }
+                // weekly update
+                break;
+            case 2:
+                if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) { redispatch_the_pop = 1; }
+                // monthly update
+                break;
+            case 3:
+                if (binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) { redispatch_the_pop = 1; }
+                // quartely update
+                break;
+            case 4:
+                if (binary_search(tsteps_semesters.begin(), tsteps_semesters.end(), tstep)) { redispatch_the_pop = 1; }
+                // semester update
+                break;
         }
 
 
-        if(redispatch_the_pop)	 // EVENT => re-read pop data
+        if (redispatch_the_pop)     // EVENT => re-read pop data
         {
             cout << "redispatch the population over its spatial extent...." << endl;
 
             // aggregate from nodes to set the tot_N_at_szgroup per pop
-            for (unsigned int sp=0; sp<populations.size(); sp++)
-            {
+            for (unsigned int sp = 0; sp < populations.size(); sp++) {
                 // aggregate from nodes (caution: do it before changing of list_nodes)
-                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
-                {
+                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
 
                     /*
                     if(sp==1){
@@ -4905,66 +4904,60 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
+            if (dyn_pop_sce.option(Options::nbcpCoupling)) {
+                string a_command_for_R;
 
-            if(dyn_pop_sce.option(Options::nbcpCoupling) )
-            {
-              string a_command_for_R;
+                for (unsigned int p = 0; p < populations.size(); p++) {
+                    if (binary_search(nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(), p)) {
+                        stringstream out;
+                        out << p;
+                        string a_pop = out.str();
 
-              for (unsigned int p=0; p<populations.size(); p++)
-              {
-                  if (binary_search (nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(),  p  ) )
-                  {
-                     stringstream out;
-                     out << p;
-                     string a_pop = out.str();
+                        stringstream outtstep;
+                        outtstep << tstep;
+                        string atstep = outtstep.str();
 
-                     stringstream outtstep;
-                     outtstep << tstep;
-                     string atstep = outtstep.str();
-
-                     #if defined(_WIN32)
-                        cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+#if defined(_WIN32)
+                                                                                                                                                cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
                         a_command_for_R = "Rscript .\\interactiverscripts\\nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                         cout << "executing " << a_command_for_R << endl;
                         system(a_command_for_R.c_str());
-                    #else
-                       cout << "nbcp_coupling...done" << endl;
-                       // caution with HPC, annoying lower cases in file names and paths required!
-                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
-                       system(a_command_for_R.c_str());
-                    #endif
-                  }  // end nbcp coupling pops
+#else
+                        cout << "nbcp_coupling...done" << endl;
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        a_command_for_R =
+                                "Rscript " + inputfolder + "/interactiverscripts/nbcpcoupling.r " + a_pop + " " +
+                                atstep + " " + namefolderoutput + " " + namesimu + " " + a_graph_s;
+                        system(a_command_for_R.c_str());
+#endif
+                    }  // end nbcp coupling pops
                 }  // end pop
             }
 
 
+            if (dyn_pop_sce.option(Options::avai_shuffler_on) || dyn_pop_sce.option(Options::avai_updater_on)) {
 
 
-            if(dyn_pop_sce.option(Options::avai_shuffler_on) || dyn_pop_sce.option(Options::avai_updater_on)){
+                // alter the availability field, if required
+                for (unsigned int p = 0; p < populations.size(); p++) {
+                    if (!binary_search(implicit_pops.begin(), implicit_pops.end(), p)) {
+                        stringstream out;
+                        out << p;
+                        string a_pop = out.str();
 
+                        stringstream out2;
+                        out2 << nrow_coord;
+                        string a_nrow_coord = out2.str();
 
-                    // alter the availability field, if required
-               for (unsigned int p=0; p<populations.size(); p++)
-               {
-                   if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  p  ) )
-                   {
-                       stringstream out;
-                       out << p;
-                       string a_pop = out.str();
+                        string a_command;
+                        string a_command_for_R;
+                        stringstream outtstep;
+                        outtstep << tstep;
+                        string atstep = outtstep.str();
 
-                       stringstream out2;
-                       out2 << nrow_coord;
-                       string a_nrow_coord = out2.str();
-
-                       string a_command;
-                       string a_command_for_R;
-                       stringstream outtstep;
-                       outtstep << tstep;
-                       string atstep = outtstep.str();
-
-                       // the system command line
-                       #if defined(_WIN32)
-                       if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
+                        // the system command line
+#if defined(_WIN32)
+                                                                                                                                                if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
                            // note that nothing is done before end of 1st month (745) to get enough catch data for an update
                            type_of_avai_field_to_read="_updated";
                            //system("dir");
@@ -4985,49 +4978,61 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                            system(a_command.c_str());
                        }
-                       #else
-                       if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
-                           type_of_avai_field_to_read="_updated";
-                           // caution with HPC, annoying lower cases in file names and paths required!
-                           a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
-                           system(a_command_for_R.c_str());
-                           a_command = inputfolder+"/avaifieldupdatertool -tstep " +atstep+" -f "+namefolderinput+ " -a " +inputfolder+ " -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
-                           system(a_command.c_str());
-                       }
-                       if(dyn_pop_sce.option(Options::avai_shuffler_on)){
-                           a_command = inputfolder+"/avaifieldshufflertool -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
-                           system(a_command.c_str());
-                       }
-                       cout << "avaifieldshuffler...done" << endl;
-                       #endif
+#else
+                        if (dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
+                            type_of_avai_field_to_read = "_updated";
+                            // caution with HPC, annoying lower cases in file names and paths required!
+                            a_command_for_R =
+                                    "Rscript " + inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
+                                    " " + atstep + " " + namefolderoutput + " " + namesimu + " " + a_graph_s;
+                            system(a_command_for_R.c_str());
+                            a_command =
+                                    inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + namefolderinput +
+                                    " -a " + inputfolder + " -s " + a_semester + " -graph " + graphnum.str() + " -nr " +
+                                    a_nrow_coord + " -dist 30 -shepard_p 0.5";
+                            system(a_command.c_str());
+                        }
+                        if (dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                            a_command =
+                                    inputfolder + "/avaifieldshufflertool -f " + namefolderinput + " -s " + a_semester +
+                                    " -p " + a_pop;
+                            system(a_command.c_str());
+                        }
+                        cout << "avaifieldshuffler...done" << endl;
+#endif
 
-                   }
-               }
+                    }
+                }
             }
 
 
             // then, clean up all nodes before changing of spatial avai
             // (necessary to remove any fish in now wrong locations)
-            for (unsigned int i=0; i<nodes.size(); i++)
-            {
+            for (unsigned int i = 0; i < nodes.size(); i++) {
                 nodes.at(i)->clear_pop_names_on_node();
                 nodes.at(i)->clear_Ns_pops_at_szgroup();
                 nodes.at(i)->clear_avai_pops_at_selected_szgroup();
             }
 
             // RE-read for populations
-            for (unsigned int i=0; i<populations.size(); i++)
-            {
-                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  i  ) )
-                {
+            for (unsigned int i = 0; i < populations.size(); i++) {
+                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), i)) {
                     stringstream out;
                     out << i;
 
-                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " << folder_name_parameterization << " " << inputfolder << endl;
+                    cout << "RE-read for population " << populations.at(i)->get_name() << " from "
+                         << folder_name_parameterization << " " << inputfolder << endl;
 
                     // read a new spatial_availability
-                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file,  type_of_avai_field_to_read);
-                    auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, type_of_avai_field_to_read);
+                    auto avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, i,
+                                                                                        folder_name_parameterization,
+                                                                                        inputfolder, str_rand_avai_file,
+                                                                                        type_of_avai_field_to_read);
+                    auto full_avai_szgroup_nodes_with_pop = read_full_avai_szgroup_nodes_with_pop(a_semester, i,
+                                                                                                  folder_name_parameterization,
+                                                                                                  inputfolder,
+                                                                                                  str_rand_avai_file,
+                                                                                                  type_of_avai_field_to_read);
                     populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 
@@ -5036,20 +5041,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //populations.at(i)->set_oth_land(oth_land);
 
                     // read migration fluxes in proportion per size group (if any)
-                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, i, folder_name_parameterization, inputfolder, biolsce);
+                    multimap<int, double> overall_migration_fluxes = read_overall_migration_fluxes(a_semester, i,
+                                                                                                   folder_name_parameterization,
+                                                                                                   inputfolder,
+                                                                                                   biolsce);
                     populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                     // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
-                    if(!dyn_pop_sce.option(Options::stop_mig_35065) || tstep<35065) populations.at(i)->apply_overall_migration_fluxes(populations);
+                    if (!dyn_pop_sce.option(Options::stop_mig_35065) || tstep < 35065) {
+                        populations.at(i)->apply_overall_migration_fluxes(populations);
+                    }
 
                     //then, re-set the list_nodes and the pop_names_on_node
                     // from the new area distribution given by this new spatial avai
-                    vector<Node* > list_nodes;
-                    for(auto iter=avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();
-                        iter = avai_szgroup_nodes_with_pop.upper_bound( iter->first ) )
-                    {
-                        list_nodes.push_back (nodes[  iter->first.toIndex()  ]);
-                        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(i);
+                    vector<Node *> list_nodes;
+                    for (auto iter = avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();
+                         iter = avai_szgroup_nodes_with_pop.upper_bound(iter->first)) {
+                        list_nodes.push_back(nodes[iter->first.toIndex()]);
+                        nodes[iter->first.toIndex()]->set_pop_names_on_node(i);
                         //   check per node
                         //   vector <int> pop_names = nodes[ iter->first ]->get_pop_names_on_node();
                         //   cout << "Node " << iter->first << endl;
@@ -5059,7 +5068,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     populations.at(i)->set_list_nodes(list_nodes);
 
                     // add the current Ns to the vectors of vectors of the concerned nodes
-                    vector <double> tot_N_at_szgroup =populations.at(i)->get_tot_N_at_szgroup();
+                    vector<double> tot_N_at_szgroup = populations.at(i)->get_tot_N_at_szgroup();
 
                     /*if( populations.at(i)->get_name()==1){
                         vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
@@ -5068,12 +5077,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     */
 
 
-                    for(unsigned int n=0; n<list_nodes.size(); n++)
-                    {
+                    for (unsigned int n = 0; n < list_nodes.size(); n++) {
                         list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
-                        dout(cout   << list_nodes[n]->get_idx_node().toIndex() << " ");
+                        dout(cout << list_nodes[n]->get_idx_node().toIndex() << " ");
                     }
-                    dout(cout  << endl);
+                    dout(cout << endl);
 
                     // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
                     // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
@@ -5087,46 +5095,43 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //}
 
                     //...and compute the Ns on nodes at the start of this month!
-                    for (unsigned int n=0; n<nodes.size(); n++)
-                    {
+                    for (unsigned int n = 0; n < nodes.size(); n++) {
                         nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
                     }
 
                     // re-read presence node for this semester
-                    auto lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
+                    auto lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization,
+                                                                            inputfolder, str_rand_avai_file);
 
                     // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
                     // 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
                     outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-                    vector <types::NodeId> nodes_with_presence;
+                    vector<types::NodeId> nodes_with_presence;
                     auto lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
                     auto upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
-                    for (auto a_pos=lower_pop; a_pos != upper_pop; a_pos++)
-                    {
-                        nodes_with_presence.push_back (a_pos->second);
+                    for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
+                        nodes_with_presence.push_back(a_pos->second);
                     }
 
                     outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
                     // 2. init avai on each node (we know the presence...) for this pop for selected szgroup
-                    for (unsigned int n=0; n< nodes_with_presence.size(); n++)
-                    {
-                        dout(cout  << ".");
-                        auto spat_avai_per_selected_szgroup = find_entries (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
-                        if(!spat_avai_per_selected_szgroup.empty())
-                        {
-                            nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i, spat_avai_per_selected_szgroup);
-                        }
-                        else
-                        {
+                    for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                        dout(cout << ".");
+                        auto spat_avai_per_selected_szgroup = find_entries(avai_szgroup_nodes_with_pop,
+                                                                           nodes_with_presence.at(n));
+                        if (!spat_avai_per_selected_szgroup.empty()) {
+                            nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
+                                                                                                             spat_avai_per_selected_szgroup);
+                        } else {
                             // inconsistence between lst_idx_nodes and avai files if this happen...
-                            outc(cout << nodes_with_presence.at(n) );
+                            outc(cout << nodes_with_presence.at(n));
                         }
                     }
 
-                }				 // end if not implicit
+                }                 // end if not implicit
             }
 
-            dout(cout  << "re-read data for this period...OK" << endl);
+            dout(cout << "re-read data for this period...OK" << endl);
 
             // CHECK...CHECK...CHECK...
             // write done  pop number in popdyn_test
@@ -5152,7 +5157,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
             */
 
-        }						 // END RE-READ DATA FOR POP...
+        }                         // END RE-READ DATA FOR POP...
 
 
 
@@ -5162,14 +5167,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-        if(tstep==0 || binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)){
+        if (tstep == 0 || binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) {
 
             // fill in the usual_fgrounds on harbours
-            for (unsigned int i=0; i<nodes.size(); ++i)
-            {
-                if(nodes.at(i)->get_is_harbour())
-                {
-                    vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
+            for (unsigned int i = 0; i < nodes.size(); ++i) {
+                if (nodes.at(i)->get_is_harbour()) {
+                    vector<int> vids_on_harbours = nodes.at(i)->get_vid();
                     vector<types::NodeId> fgrounds;
                     multimap<types::NodeId, double> grounds_cpues_harbour_knowledge;
                     multimap<int, types::NodeId> grounds_mets_harbour_knowledge;
@@ -5177,39 +5180,35 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     vector<double> cpue_fgrounds;
                     vector<double> freq_fgrounds;
 
-                    if(vids_on_harbours.size()>0)
-                    {
-                        dout(cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl);
-                        for (unsigned int vi=0; vi<vids_on_harbours.size(); ++vi)
-                        {
+                    if (vids_on_harbours.size() > 0) {
+                        dout(cout << "there are some vids on " << nodes.at(i)->get_name() << endl);
+                        for (unsigned int vi = 0; vi < vids_on_harbours.size(); ++vi) {
                             auto some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
-                            auto some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
+                            auto some_cpues = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
 
-                            const auto &poss_met  = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
-                            for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
-                            {
+                            const auto &poss_met = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
+                            for (unsigned int gr = 0; gr < some_grounds.size(); ++gr) {
 
                                 // cpues
                                 auto a_ground = some_grounds.at(gr);
-                                double a_cpue= some_cpues.at(gr);
-                                grounds_cpues_harbour_knowledge.insert(make_pair(a_ground,a_cpue));
+                                double a_cpue = some_cpues.at(gr);
+                                grounds_cpues_harbour_knowledge.insert(make_pair(a_ground, a_cpue));
                                 fgrounds.push_back(some_grounds.at(gr));
 
                                 // mets
-                                auto metiers_on_grd = find_entries( poss_met, a_ground );
-                                if(metiers_on_grd.size()!=0)
-                                {
+                                auto metiers_on_grd = find_entries(poss_met, a_ground);
+                                if (metiers_on_grd.size() != 0) {
 
-                                    int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
+                                    int a_met = metiers_on_grd.at(0); // take only one, the first as it comes....
 
 
-                                    bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, make_pair(a_met, a_ground));
-                                    if(is_present)
-                                    {
+                                    bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge,
+                                                                            make_pair(a_met, a_ground));
+                                    if (is_present) {
                                         // EQUAL FREQ (TO BE CHANGED, BUT DOESNT MATTER IF A ChooseGround DTREES IN USE)
                                         freq_grounds_mets_harbour_knowledge.insert(make_pair(a_met, 1.0));
                                     }
-                                } else{}
+                                } else {}
                             }
                         }
 
@@ -5217,35 +5216,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         remove_dups(fgrounds);
 
                         // do an average of cpues for each fgrounds
-                        for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
-                        {
+                        for (unsigned int gr = 0; gr < fgrounds.size(); ++gr) {
                             int cnt = grounds_cpues_harbour_knowledge.count(fgrounds.at(gr));
-                            double sum =0;
-                            for (auto it=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).first; it!=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).second; ++it)
-                            {
+                            double sum = 0;
+                            for (auto it = grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).first;
+                                 it != grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).second; ++it) {
                                 sum += (*it).second;
                             }
-                            dout(cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl);
+                            dout(cout << "average for: " << fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt
+                                      << endl);
                             cpue_fgrounds.push_back(sum / cnt);
                         }
                         //  ...and scale to 1 to transform into probas
-                        double cum_cpue=0;
-                        for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
-                        {
-                            cum_cpue+=cpue_fgrounds.at(gr);
+                        double cum_cpue = 0;
+                        for (unsigned int gr = 0; gr < fgrounds.size(); ++gr) {
+                            cum_cpue += cpue_fgrounds.at(gr);
                         }
-                        if(cum_cpue!=0)
-                        {
-                            for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
-                            {
+                        if (cum_cpue != 0) {
+                            for (unsigned int gr = 0; gr < fgrounds.size(); ++gr) {
                                 freq_fgrounds.push_back(cpue_fgrounds.at(gr) / cum_cpue);
                             }
-                        }
-                        else
-                        {
-                            for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
-                            {
-                                freq_fgrounds.push_back(1/fgrounds.size());
+                        } else {
+                            for (unsigned int gr = 0; gr < fgrounds.size(); ++gr) {
+                                freq_fgrounds.push_back(1 / fgrounds.size());
                             }
                         }
 
@@ -5264,22 +5257,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-                    }
-                    else
-                    {
-                        dout(cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl);
-                        fgrounds.push_back(types::NodeId(i)); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+                    } else {
+                        dout(cout << "there are NO vids on " << nodes.at(i)->get_name() << endl);
+                        fgrounds.push_back(types::NodeId(
+                                i)); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                         //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                     }
 
                     // update the harbour
-                    dout(cout << "update the harbour for grounds (node: " <<  nodes.at(i)->get_name() << endl);
-                    nodes.at(i)-> set_usual_fgrounds(fgrounds);
-                    nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
+                    dout(cout << "update the harbour for grounds (node: " << nodes.at(i)->get_name() << endl);
+                    nodes.at(i)->set_usual_fgrounds(fgrounds);
+                    nodes.at(i)->set_freq_usual_fgrounds(freq_fgrounds);
 
                     // TO DO:
-                    nodes.at(i)-> set_usual_fgrounds_per_met(grounds_mets_harbour_knowledge);
-                    nodes.at(i)-> set_freq_usual_fgrounds_per_met(freq_grounds_mets_harbour_knowledge);
+                    nodes.at(i)->set_usual_fgrounds_per_met(grounds_mets_harbour_knowledge);
+                    nodes.at(i)->set_freq_usual_fgrounds_per_met(freq_grounds_mets_harbour_knowledge);
 
                     // a check
                     /*
@@ -5298,81 +5290,80 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
+            if (dyn_alloc_sce.option(Options::shared_harbour_knowledge)) {
 
-
-            if(dyn_alloc_sce.option(Options::shared_harbour_knowledge)){
-
-                for (unsigned int v=0; v<vessels.size(); v++)
-                {
+                for (unsigned int v = 0; v < vessels.size(); v++) {
 
                     //1. draw a ground
-                    auto grds      = vessels.at(v)->get_fgrounds();
+                    auto grds = vessels.at(v)->get_fgrounds();
                     auto freq_grds = vessels.at(v)->get_freq_fgrounds();
                     // need to convert in array, see myRutils.cpp
-                    if(!grds.empty())
-                    {
-                        int idx_max = max_element (freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
-                        auto ground=grds.at(idx_max);
+                    if (!grds.empty()) {
+                        int idx_max = max_element(freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
+                        auto ground = grds.at(idx_max);
                         cout << vessels.at(v)->get_name() << ": ground is " << ground << endl;
 
 
                         //2. get possible metiers on this ground
-                        const auto    &poss_met        = vessels.at(v)->get_possible_metiers();
-                        const auto &freq_poss_met   = vessels.at(v)->get_freq_possible_metiers();
-                        auto metiers_on_grd      = find_entries( poss_met, ground );
-                        auto freq_metiers_on_grd = find_entries( freq_poss_met, ground );
+                        const auto &poss_met = vessels.at(v)->get_possible_metiers();
+                        const auto &freq_poss_met = vessels.at(v)->get_freq_possible_metiers();
+                        auto metiers_on_grd = find_entries(poss_met, ground);
+                        auto freq_metiers_on_grd = find_entries(freq_poss_met, ground);
                         // need to convert in array, see myRutils.cpp
-                        auto a_met               = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
+                        auto a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
 
-                        if(metiers_on_grd.size()!=0)
-                        {
-                            vessels.at(v)->set_metier(  metiers[ a_met.at(0) ]  );
-                        }
-                        else
-                        {
-                            vessels.at(v)->set_metier(  metiers[ 0 ]  );   // dangerous fix
+                        if (metiers_on_grd.size() != 0) {
+                            vessels.at(v)->set_metier(metiers[a_met.at(0)]);
+                        } else {
+                            vessels.at(v)->set_metier(metiers[0]);   // dangerous fix
                         }
 
-                        auto harbs      = vessels.at(v)->get_harbours();
+                        auto harbs = vessels.at(v)->get_harbours();
                         auto freq_harbs = vessels.at(v)->get_freq_harbours();
-                        if(freq_harbs.empty())
-                        {
+                        if (freq_harbs.empty()) {
                             cout << "check why..." << endl;
                         }
 
-                        int idx_max2               = max_element (freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
+                        int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
                         auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
-                        cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node() << " is in harb?`" <<
-                                nodes.at(a_node.toIndex())->get_is_harbour() << " ...cause the decision is taken in harbour..." << endl;
+                        cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node()
+                             << " is in harb?`" <<
+                             nodes.at(a_node.toIndex())->get_is_harbour()
+                             << " ...cause the decision is taken in harbour..." << endl;
                         int current_metier = vessels.at(v)->get_metier()->get_name();
                         cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
-                        int nbpops         = nodes.at(a_node.toIndex())->get_nbpops();
+                        int nbpops = nodes.at(a_node.toIndex())->get_nbpops();
                         // TO DO:
-                        auto grounds_from_harbours        = nodes.at(a_node.toIndex())->get_usual_fgrounds_this_met(current_metier);
-                        auto freq_grounds_from_harbours   = nodes.at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(current_metier);
+                        auto grounds_from_harbours = nodes.at(a_node.toIndex())->get_usual_fgrounds_this_met(
+                                current_metier);
+                        auto freq_grounds_from_harbours = nodes.at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(
+                                current_metier);
                         //vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
                         //vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
-                        if(grounds_from_harbours.size()==1)
-                        {   // few cases for which the harbour has been badly informed...
-                            grounds_from_harbours        = vessels.at(v)->get_fgrounds();
-                            freq_grounds_from_harbours   = vessels.at(v)->get_freq_fgrounds();
+                        if (grounds_from_harbours.size() ==
+                            1) {   // few cases for which the harbour has been badly informed...
+                            grounds_from_harbours = vessels.at(v)->get_fgrounds();
+                            freq_grounds_from_harbours = vessels.at(v)->get_freq_fgrounds();
                         }
-                        vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
-                        vector <double>         experiencedcpue_fgrounds(grounds_from_harbours.size());
-                        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
-                        vector <double>         freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
-                        multimap  <types::NodeId,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
-                        multimap  <types::NodeId,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
-                        for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
-                        { // rebuild assuming deploying one metier spread over the entire range from this harbour...
-                            possible_metiers_from_harbours.insert(std::make_pair(grounds_from_harbours.at(gr),current_metier));
-                            freq_possible_metiers_from_harbours.insert(std::make_pair(grounds_from_harbours.at(gr), 1.0));
+                        vector<vector<double> > experiencedcpue_fgrounds_per_pop(grounds_from_harbours.size(),
+                                                                                 vector<double>(nbpops));
+                        vector<double> experiencedcpue_fgrounds(grounds_from_harbours.size());
+                        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(grounds_from_harbours.size(),
+                                                                                      vector<double>(nbpops));
+                        vector<double> freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
+                        multimap<types::NodeId, int> possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+                        multimap<types::NodeId, double> freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+                        for (unsigned int gr = 0; gr <
+                                                  grounds_from_harbours.size(); ++gr) { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+                            possible_metiers_from_harbours.insert(
+                                    std::make_pair(grounds_from_harbours.at(gr), current_metier));
+                            freq_possible_metiers_from_harbours.insert(
+                                    std::make_pair(grounds_from_harbours.at(gr), 1.0));
                         }
 
-                        cout << vessels.at(v)->get_name() << ": grounds_from_harbours is " <<  endl;
-                        for (unsigned int a_gr=0; a_gr<grounds_from_harbours.size();++a_gr)
-                        {
-                            cout << grounds_from_harbours.at(a_gr) << " " ;
+                        cout << vessels.at(v)->get_name() << ": grounds_from_harbours is " << endl;
+                        for (unsigned int a_gr = 0; a_gr < grounds_from_harbours.size(); ++a_gr) {
+                            cout << grounds_from_harbours.at(a_gr) << " ";
                         }
                         cout << endl;
 
@@ -5381,30 +5372,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         // and experiencedcpue_fgrounds_per_pop
                         // NO OTHER CHOICE FOR NOW BECAUSE NO SHARED KNOWLEDGE ON THIS ASPECT
                         vector<double> cum_cpue_over_pop(grounds_from_harbours.size());
-                        double cum_cpue=0;
-                        for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
-                        {
+                        double cum_cpue = 0;
+                        for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++) {
 
-                            double a_number= freq_grounds_from_harbours.at(a_node); // because in this case freq from harbours is actually a proxy for cpue (see grounds_cpues_harbour_knowledge)
-                            experiencedcpue_fgrounds.at(a_node)= a_number;
-                            cum_cpue +=experiencedcpue_fgrounds.at(a_node);
+                            double a_number = freq_grounds_from_harbours.at(
+                                    a_node); // because in this case freq from harbours is actually a proxy for cpue (see grounds_cpues_harbour_knowledge)
+                            experiencedcpue_fgrounds.at(a_node) = a_number;
+                            cum_cpue += experiencedcpue_fgrounds.at(a_node);
 
 
                             cum_cpue_over_pop.push_back(0);
 
-                            for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
-                            {
-                                experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= a_number; // assuming the node effect on cpue larger than the pop effect to make it simple here
+                            for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++) {
+                                experiencedcpue_fgrounds_per_pop.at(a_node).at(
+                                        pop) = a_number; // assuming the node effect on cpue larger than the pop effect to make it simple here
 
                                 // cumul to scale to 1 (just below)
-                                cum_cpue_over_pop.at(a_node) +=experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
+                                cum_cpue_over_pop.at(a_node) += experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
 
                                 //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
-                                if(cum_cpue_over_pop.at(a_node)!=0)
-                                {
-                                    for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
-                                    {
-                                        freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
+                                if (cum_cpue_over_pop.at(a_node) != 0) {
+                                    for (unsigned int pop = 0;
+                                         pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++) {
+                                        freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) =
+                                                experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) /
+                                                cum_cpue_over_pop.at(a_node);
                                     }
                                 }
 
@@ -5413,11 +5405,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
 
                         //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds
-                        if(cum_cpue!=0)
-                        {
-                            for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
-                            {
-                                freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
+                        if (cum_cpue != 0) {
+                            for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++) {
+                                freq_experiencedcpue_fgrounds.at(a_node) =
+                                        experiencedcpue_fgrounds.at(a_node) / cum_cpue;
                             }
                         }
 
@@ -5426,32 +5417,35 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         // 5- then apply the changes to the vessel
                         vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                         vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
-                        vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-                        vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                        vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(
+                                freq_grounds_from_harbours);// re-dimensioned
+                        vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
+                                freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessels.at(v)->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         //vessels.at(v)->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessels.at(v)->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
-                        vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
-                        vessels.at(v)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds); // re-dimensioned
-                        vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                        vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(
+                                experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                        vessels.at(v)->set_freq_experiencedcpue_fgrounds(
+                                freq_experiencedcpue_fgrounds); // re-dimensioned
+                        vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(
+                                freq_experiencedcpue_fgrounds_per_pop); // re-dimensioned
                         vessels.at(v)->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
                         vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
 
                         // inform grounds in closed areas
                         auto new_grds = vessels.at(v)->get_fgrounds();
                         vector<types::NodeId> fgrounds_in_closed_areas;
-                        for(unsigned int i=0; i<new_grds.size();++i)
-                        {
-                            if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
+                        for (unsigned int i = 0; i < new_grds.size(); ++i) {
+                            if (nodes.at(new_grds.at(i).toIndex())->evaluateAreaType() == 1) {
                                 fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                            }
                         }
                         vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
-                    }
-                    else
-                    {
+                    } else {
                         // otherwise, no activity this vessel this quarter
                         cout << " --> no activity for " << vessels.at(v)->get_name() << endl;
 
@@ -5478,100 +5472,90 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // UPDATE THE TARIFF MAP & RE-READ FISHING_CREDITS PER VESSEL
-        if(dyn_alloc_sce.option(Options::fishing_credits) )
-        {
+        if (dyn_alloc_sce.option(Options::fishing_credits)) {
 
             // 1- annual tariff HCR (currently pooling all tariff pops together)
-            if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-            {
+            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
                 cout << "Annual tariff HCR... " << endl;
-                double fbar_py_allpopav=0.0;
-                double ftarget_allpopav=0.0;
-                double change_per_year=tariff_annual_hcr_percent_change/100;
+                double fbar_py_allpopav = 0.0;
+                double ftarget_allpopav = 0.0;
+                double change_per_year = tariff_annual_hcr_percent_change / 100;
                 cout << "...change_per_year is " << change_per_year << endl;
-                for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                {
-                    vector<double> fbar_ages_min_max =populations.at(tariff_pop.at(ipop))-> get_fbar_ages_min_max();
+                for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                    vector<double> fbar_ages_min_max = populations.at(tariff_pop.at(ipop))->get_fbar_ages_min_max();
                     double ftarget = fbar_ages_min_max.at(2);
                     cout << "...the ftarget at y-1 for this pop is " << ftarget << endl;
-                    ftarget_allpopav +=ftarget; // cumul...
-                    cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop) << endl;
-                    double fbar_py= populations.at(tariff_pop.at(ipop))->get_fbar();
-                    fbar_py_allpopav +=fbar_py; // cumul...
+                    ftarget_allpopav += ftarget; // cumul...
+                    cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop)
+                         << endl;
+                    double fbar_py = populations.at(tariff_pop.at(ipop))->get_fbar();
+                    fbar_py_allpopav += fbar_py; // cumul...
                     cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
                 }
-                ftarget_allpopav=ftarget_allpopav/tariff_pop.size(); // ...then average
-                fbar_py_allpopav=fbar_py_allpopav/tariff_pop.size(); // ...then average
+                ftarget_allpopav = ftarget_allpopav / tariff_pop.size(); // ...then average
+                fbar_py_allpopav = fbar_py_allpopav / tariff_pop.size(); // ...then average
 
-                cout << "...decide on the fmultiplier "  << endl;
-                double fmultiplier=1.0;
-                if(fbar_py_allpopav > ftarget_allpopav)
-                {
+                cout << "...decide on the fmultiplier " << endl;
+                double fmultiplier = 1.0;
+                if (fbar_py_allpopav > ftarget_allpopav) {
                     // harvest rate is too high, we need more restrictive categories
-                    fmultiplier = 1.0 - change_per_year ; // or (Fpercent/100); ?
-                }
-                else
-                {   // harvest rate is too low, we need less restrictive categories (e.g. higher lpue allowed for the same tariff)
+                    fmultiplier = 1.0 - change_per_year; // or (Fpercent/100); ?
+                } else {   // harvest rate is too low, we need less restrictive categories (e.g. higher lpue allowed for the same tariff)
                     fmultiplier = 1.0 + change_per_year; // or  (Fpercent/100); ?
                 }
                 cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
-                        " given the target F " <<  ftarget_allpopav << "  and the assessed F averaged over tariff pops " <<  fbar_py_allpopav  << endl;
-                for (unsigned int icl=0; icl <arbitary_breaks_for_tariff.size();++icl)
-                {
+                     " given the target F " << ftarget_allpopav << "  and the assessed F averaged over tariff pops "
+                     << fbar_py_allpopav << endl;
+                for (unsigned int icl = 0; icl < arbitary_breaks_for_tariff.size(); ++icl) {
                     arbitary_breaks_for_tariff.at(icl) * fmultiplier;
                 }
 
-               // 2 - Re-init vessel total credits
-                tout(cout<< "Re-init vessel total credits..." << endl);
+                // 2 - Re-init vessel total credits
+                tout(cout << "Re-init vessel total credits..." << endl);
                 fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
-                for (unsigned int v=0; v<vessels.size(); v++)
-                {
-                   dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
-                   vector <double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
-                   for (int icr=0; icr <spe_fishing_credits.size();++icr)
-                   {
-                       spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
-                   }
+                for (unsigned int v = 0; v < vessels.size(); v++) {
+                    dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
+                    vector<double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
+                    for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
+                        spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
+                    }
 
-                   // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-                   while (spe_fishing_credits.size() <= 3) spe_fishing_credits.push_back(0);
+                    // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
+                    while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
 
-                   vessels.at(v)->set_fishing_credits(spe_fishing_credits);
+                    vessels.at(v)->set_fishing_credits(spe_fishing_credits);
                 }
             }
 
 
 
             // timing (update at 7 a.m.)
-            int do_update=0;
-            switch(freq_update_tariff_code)
-            {
-            case 0:
-                if((tstep % 24)==7) do_update=1;
-                // daily update
-                break;
-            case 1:
-                if((tstep % 168)==7) do_update=1;
-                // weekly update
-                break;
-            case 2:
-                if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)) do_update=1;
-                // monthly update
-                break;
+            int do_update = 0;
+            switch (freq_update_tariff_code) {
+                case 0:
+                    if ((tstep % 24) == 7) { do_update = 1; }
+                    // daily update
+                    break;
+                case 1:
+                    if ((tstep % 168) == 7) { do_update = 1; }
+                    // weekly update
+                    break;
+                case 2:
+                    if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) { do_update = 1; }
+                    // monthly update
+                    break;
             }
 
-            if(do_update)
-            {
+            if (do_update) {
                 cout << " Update the tariff map....at " << tstep << endl;
 
                 // obtain the list of idx relevant nodes for these tariff pops
-                vector <types::NodeId> list_nodes_idx;
-                for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                {
-                    dout(cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl);
-                    vector<Node* > a_list_nodes       = populations.at(tariff_pop.at(ipop))->get_list_nodes();
-                    for (unsigned int inode=0; inode <a_list_nodes.size();++inode)
-                    {
+                vector<types::NodeId> list_nodes_idx;
+                for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                    dout(cout << "Get the list of nodes for the tariff pop "
+                              << populations.at(tariff_pop.at(ipop))->get_name() << endl);
+                    vector<Node *> a_list_nodes = populations.at(tariff_pop.at(ipop))->get_list_nodes();
+                    for (unsigned int inode = 0; inode < a_list_nodes.size(); ++inode) {
                         list_nodes_idx.push_back(a_list_nodes.at(inode)->get_idx_node());
                     }
                 }
@@ -5590,66 +5574,59 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // loop over to find out the mean pue
                 double cumcatches = 0, cumdiscards = 0, cumeffort = 0, mean_pue;
-                for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
-                {
-                    if(update_tariffs_based_on_lpue_or_dpue_code==1)
-                    {
-                       dout(cout << "Updating tariffs based on lpue" << endl);
-                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                       {
-                        cumcatches+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
-                       }
+                for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode) {
+                    if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
+                        dout(cout << "Updating tariffs based on lpue" << endl);
+                        for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                            cumcatches += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                        }
                     }
-                    if(update_tariffs_based_on_lpue_or_dpue_code==2)
-                    {
-                       dout(cout << "Updating tariffs based on dpue" << endl);
-                       for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                        {
-                         cumdiscards+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                    if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
+                        dout(cout << "Updating tariffs based on dpue" << endl);
+                        for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                            cumdiscards += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(
+                                    ipop);
                         }
                     }
 
-                    cumeffort+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
+                    cumeffort += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                 }
                 //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
                 //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
-                if(cumeffort!=0){
-                    if(update_tariffs_based_on_lpue_or_dpue_code==1) mean_pue =cumcatches/cumeffort;
-                    if(update_tariffs_based_on_lpue_or_dpue_code==2) mean_pue =cumdiscards/cumeffort;
+                if (cumeffort != 0) {
+                    if (update_tariffs_based_on_lpue_or_dpue_code == 1) { mean_pue = cumcatches / cumeffort; }
+                    if (update_tariffs_based_on_lpue_or_dpue_code == 2) { mean_pue = cumdiscards / cumeffort; }
                     dout(cout << " mean_pue of reference for the update is.... " << mean_pue << endl);
 
 
                     // loop over to scale the tariff (on each node) up or down (caution: by one category)
                     double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
-                    for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
-                    {
-                        tariff_this_node =  nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
+                    for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode) {
+                        tariff_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
                         effort_on_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
-                        double cumcatches_this_node=0;
-                        if(update_tariffs_based_on_lpue_or_dpue_code==1)
-                        {
-                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                           {
-                            cumcatches_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
-                           }
+                        double cumcatches_this_node = 0;
+                        if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
+                            for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                                cumcatches_this_node += nodes[list_nodes_idx.at(
+                                        inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                            }
                         }
-                        double cumdiscards_this_node=0;
-                        if(update_tariffs_based_on_lpue_or_dpue_code==2)
-                        {
-                           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
-                           {
-                            cumdiscards_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
-                           }
+                        double cumdiscards_this_node = 0;
+                        if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
+                            for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                                cumdiscards_this_node += nodes[list_nodes_idx.at(
+                                        inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                            }
                         }
-                        if(update_tariffs_based_on_lpue_or_dpue_code==1) {
-                            node_pue = cumcatches_this_node /effort_on_this_node;
-                            nb_times_diff    =  node_pue/mean_pue;
+                        if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
+                            node_pue = cumcatches_this_node / effort_on_this_node;
+                            nb_times_diff = node_pue / mean_pue;
                         }
 
-                        if(update_tariffs_based_on_lpue_or_dpue_code==2) {
-                            node_pue = cumdiscards_this_node /effort_on_this_node;
-                            nb_times_diff    =  node_pue/mean_pue;
+                        if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
+                            node_pue = cumdiscards_this_node / effort_on_this_node;
+                            nb_times_diff = node_pue / mean_pue;
                         }
 
                         //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
@@ -5658,30 +5635,32 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                         // find out which category the tariff should be
-                        unsigned int count1=0;
-                        while (nb_times_diff > arbitary_breaks_for_tariff.at(count1))
-                        {
-                            if((count1) >= arbitary_breaks_for_tariff.size()-1) break;
-                            count1 = count1+1;
+                        unsigned int count1 = 0;
+                        while (nb_times_diff > arbitary_breaks_for_tariff.at(count1)) {
+                            if ((count1) >= arbitary_breaks_for_tariff.size() - 1) { break; }
+                            count1 = count1 + 1;
                         }
 
                         // constraint +/-1 category
                         double updated_tariff;
                         //cout << "...tariff_this_node is "  << tariff_this_node << endl;
-                        unsigned int count2=0;
-                        while (tariff_this_node > arbitary_breaks_for_tariff.at(count2))
-                        {
-                            if((count2) >= arbitary_breaks_for_tariff.size()-1) break;
-                            count2 = count2+1;
+                        unsigned int count2 = 0;
+                        while (tariff_this_node > arbitary_breaks_for_tariff.at(count2)) {
+                            if ((count2) >= arbitary_breaks_for_tariff.size() - 1) { break; }
+                            count2 = count2 + 1;
                         }
 
                         // if landing/effort or discard/effort increases we want to increase the tariff on this areas
-                        if(count1>count2 && ((count2+1) < arbitary_breaks_for_tariff.size()))  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
-                        if(count1<count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2-1);
-                        if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);
+                        if (count1 > count2 && ((count2 + 1) < arbitary_breaks_for_tariff.size())) {
+                            updated_tariff = arbitary_breaks_for_tariff.at(count2 + 1);
+                        }
+                        if (count1 < count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2 - 1); }
+                        if (count1 == count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2); }
 
                         // update the tariff (unless the effort on this node is 0)
-                        if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
+                        if (effort_on_this_node != 0) {
+                            nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
+                        }
                         //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
 
                     }
@@ -5692,161 +5671,135 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
+        dout(cout << "THE WINDFARM LOOP----------" << endl);
+        for (unsigned int i = 0; i < windmills.size(); i++) {
 
-        dout(cout  << "THE WINDFARM LOOP----------" << endl);
-        for(unsigned int i=0; i<windmills.size();i++)
-        {
+            if (windmills.at(i)->get_is_active() == 1) {
+                windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
+                //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
+                if (export_hugefiles) {
+                    windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+                }
 
-            if(windmills.at(i)->get_is_active()==1)
-            {
-                  windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
-                  //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
-                  if (export_hugefiles) {
-                      windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
-                  }
-
-                  if (enable_sqlite_out) {
-                      outSqlite->exportWindmillsLog(windmills.at(i), tstep);
-                  }
-             }
+                if (enable_sqlite_out) {
+                    outSqlite->exportWindmillsLog(windmills.at(i), tstep);
+                }
+            }
 
         }
 
         // Flush and updates all statistics for fsihfarms
-        if (use_gui)
-        {
+        if (use_gui) {
 
-            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-            {
-            windmillslogs.flush();
-            guiSendUpdateCommand(windmillslogs_filename, tstep);
+            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                windmillslogs.flush();
+                guiSendUpdateCommand(windmillslogs_filename, tstep);
             }
         }
 
 
-
-
-        dout(cout  << "THE SHIP LOOP----------" << endl);
-        for(unsigned int i=0; i<ships.size();i++)
-        {
-            if(ships.at(i)->get_is_active()==1)
-            {
-                  ships.at(i)->compute_emissions_in_ship(); // discrete event
-                  //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
-                  if (export_hugefiles)
-                  {
-                      ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
-                  }
-                  if (enable_sqlite_out)
-                      outSqlite->exportShip(tstep, ships.at(i));
+        dout(cout << "THE SHIP LOOP----------" << endl);
+        for (unsigned int i = 0; i < ships.size(); i++) {
+            if (ships.at(i)->get_is_active() == 1) {
+                ships.at(i)->compute_emissions_in_ship(); // discrete event
+                //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
+                if (export_hugefiles) {
+                    ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
+                }
+                if (enable_sqlite_out) {
+                    outSqlite->exportShip(tstep, ships.at(i));
+                }
             }
 
         }
 
         // Flush and updates all statistics for ships
-        if (use_gui)
-        {
+        if (use_gui) {
 
-            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-            {
-            shipslogs.flush();
-            guiSendUpdateCommand(shipslogs_filename, tstep);
+            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                shipslogs.flush();
+                guiSendUpdateCommand(shipslogs_filename, tstep);
             }
         }
 
 
+        dout(cout << "THE FISHFARM LOOP----------" << endl);
+        for (unsigned int i = 0; i < fishfarms.size(); i++) {
 
+            if (fishfarms.at(i)->get_is_active() == 1) {
+                int start = fishfarms.at(i)->get_start_day_growing();
+                int end = fishfarms.at(i)->get_end_day_harvest();
+                if ((int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) == end &&
+                    fishfarms.at(i)->get_is_running() == 1) {
+                    fishfarms.at(i)->compute_profit_in_farm(); // discrete event
+                    //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
+                    fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
 
+                    if (enable_sqlite_out) {
+                        outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+                    }
 
+                    //...and reset
+                    fishfarms.at(i)->set_is_running(0);
+                    fishfarms.at(i)->set_sim_individual_mean_kg(0.0);
+                    fishfarms.at(i)->set_sim_kg_harvested(0.0);
+                    fishfarms.at(i)->set_sim_kg_eggs_harvested(0.0);
+                    fishfarms.at(i)->set_sim_net_discharge_N(0.0);
+                    fishfarms.at(i)->set_sim_net_discharge_P(0.0);
+                    fishfarms.at(i)->set_sim_annual_profit(0.0);
+                } else {
+                    if (fishfarms.at(i)->get_is_running() == 1 &&
+                        (int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) > start) {
+                        // fish growth...
+                        fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
 
-        dout(cout  << "THE FISHFARM LOOP----------" << endl);
-        for(unsigned int i=0; i<fishfarms.size();i++)
-        {
+                        //...environmental impact
+                        fishfarms.at(i)->compute_discharge_on_farm(tstep);
+                        //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
+                        //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
-            if(fishfarms.at(i)->get_is_active()==1)
-            {
-               int start  = fishfarms.at(i)->get_start_day_growing();
-               int end    = fishfarms.at(i)->get_end_day_harvest();
-               if((int)((tstep+1)/24  -(8762.0/24*(a_year-1))) ==end && fishfarms.at(i)->get_is_running()==1)
-               {
-                  fishfarms.at(i)->compute_profit_in_farm(); // discrete event
-                  //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
-                  fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+                        if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
 
-                  if (enable_sqlite_out)
-                      outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+                            if (enable_sqlite_out) {
+                                outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+                            }
 
-                  //...and reset
-                  fishfarms.at(i)->set_is_running(0);
-                  fishfarms.at(i)->set_sim_individual_mean_kg(0.0);
-                  fishfarms.at(i)->set_sim_kg_harvested(0.0);
-                  fishfarms.at(i)->set_sim_kg_eggs_harvested(0.0);
-                  fishfarms.at(i)->set_sim_net_discharge_N(0.0);
-                  fishfarms.at(i)->set_sim_net_discharge_P(0.0);
-                  fishfarms.at(i)->set_sim_annual_profit(0.0);
-               }
-               else
-               {
-                 if(fishfarms.at(i)->get_is_running()==1 && (int)( (tstep+1)/24 -(8762.0/24*(a_year-1)) ) >start)
-
-                  {
-                      // fish growth...
-                      fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
-
-                      //...environmental impact
-                      fishfarms.at(i)->compute_discharge_on_farm(tstep);
-                      //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
-                      //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
-
-                       if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-                       {
-
-                           if (enable_sqlite_out)
-                               outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
-
-                           if (export_hugefiles)
-                            {
-                               fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
+                            if (export_hugefiles) {
+                                fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs,
+                                                                             tstep); // export event to file
                             }
                         }
-                   }
-               }
+                    }
+                }
             }
 
         }
 
         // Flush and updates all statistics for fishfarms
-        if (use_gui)
-        {
+        if (use_gui) {
 
-            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-            {
-            fishfarmslogs.flush();
-            guiSendUpdateCommand(fishfarmslogs_filename, tstep);
+            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                fishfarmslogs.flush();
+                guiSendUpdateCommand(fishfarmslogs_filename, tstep);
             }
         }
 
 
-
-
-
-        dout(cout  << "THE VESSEL LOOP----------" << endl);
+        dout(cout << "THE VESSEL LOOP----------" << endl);
         // get a random order for acting vessels
         // random permutation
 
         lock();
-        random_shuffle(ve.begin(),ve.end());
+        random_shuffle(ve.begin(), ve.end());
         unlock();
 
         // check that departure is done from harbours that are
         // informed as such in graph_coord_harbour...if not then check spe_harbour
-        if(tstep==0)
-        {
-            for (unsigned int i =0; i < ve.size(); i++)
-            {
-                bool is_harbour = vessels[ i ]->get_loc()->get_is_harbour();
-                cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
-                     <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl;
+        if (tstep == 0) {
+            for (unsigned int i = 0; i < ve.size(); i++) {
+                bool is_harbour = vessels[i]->get_loc()->get_is_harbour();
+                cout << vessels[i]->get_name() << " departure from an harbour? " << is_harbour
+                     << " idx node: " << vessels[i]->get_loc()->get_idx_node() << endl;
 
 
                 //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
@@ -5864,35 +5817,39 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if(dyn_alloc_sce.option(Options::EffortMinControl))
-         {
-           if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-            {
-             if(nb_y_left_to_tgrt_year>1) nb_y_left_to_tgrt_year= nb_y_left_to_tgrt_year-1; // target year for reaching the FMSY. HARDCODED FOR NOW
+        if (dyn_alloc_sce.option(Options::EffortMinControl)) {
+            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+                if (nb_y_left_to_tgrt_year > 1) {
+                    nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
+                                             1;
+                } // target year for reaching the FMSY. HARDCODED FOR NOW
 
-             // will alter GoFishing dtree final leaf proba
-             if(!computeEffortMultiplier(populations,
-                                              vessels,
-                                              nb_y_left_to_tgrt_year,
-                                              1))
-                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                // will alter GoFishing dtree final leaf proba
+                if (!computeEffortMultiplier(populations,
+                                             vessels,
+                                             nb_y_left_to_tgrt_year,
+                                             1)) {
+                                                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                }
             }
-         }
+        }
 
-        if(dyn_alloc_sce.option(Options::EffortMaxControl))
-         {
-           if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-            {
-             if(nb_y_left_to_tgrt_year>1) nb_y_left_to_tgrt_year= nb_y_left_to_tgrt_year-1; // target year for reaching the FMSY. HARDCODED FOR NOW
+        if (dyn_alloc_sce.option(Options::EffortMaxControl)) {
+            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+                if (nb_y_left_to_tgrt_year > 1) {
+                    nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
+                                             1;
+                } // target year for reaching the FMSY. HARDCODED FOR NOW
 
-             // will alter GoFishing dtree final leaf proba
-             if(!computeEffortMultiplier(populations,
-                                              vessels,
-                                              nb_y_left_to_tgrt_year,
-                                              2))
-                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                // will alter GoFishing dtree final leaf proba
+                if (!computeEffortMultiplier(populations,
+                                             vessels,
+                                             nb_y_left_to_tgrt_year,
+                                             2)) {
+                                                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                }
             }
-         }
+        }
 
 
         ///------------------------------///
@@ -5906,15 +5863,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
         thread_vessel_prepare();
-        for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
-        {
+        for (unsigned int idx_v = 0; idx_v < ve.size(); idx_v++) {
             int index_v = ve[idx_v];
             thread_vessel_insert_job(index_v);
         }
 
-        for (unsigned int s=0; s<ships.size(); s++)
-        {
-            thread_vessel_insert_job(5000+s);
+        for (unsigned int s = 0; s < ships.size(); s++) {
+            thread_vessel_insert_job(5000 + s);
         }
 
 
@@ -5930,46 +5885,44 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if(dyn_alloc_sce.option(Options::TACs))
-        {
+        if (dyn_alloc_sce.option(Options::TACs)) {
 
-            for (unsigned int pop=0; pop<populations.size(); pop++)
-            {
+            for (unsigned int pop = 0; pop < populations.size(); pop++) {
 
                 outc(cout << "...pop " << pop << endl;)
-                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) )
-                {
+                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), pop)) {
 
-                   double so_far = populations.at(pop)->get_landings_so_far();
-                   global_quotas_uptake.at(pop) =  (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac());
+                    double so_far = populations.at(pop)->get_landings_so_far();
+                    global_quotas_uptake.at(pop) =
+                            (so_far / 1000) / (populations.at(pop)->get_tac()->get_current_tac());
 
-                   populations.at(pop)->set_quota_uptake(global_quotas_uptake.at(pop));
-                   populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
+                    populations.at(pop)->set_quota_uptake(global_quotas_uptake.at(pop));
+                    populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
 
-                   if (enable_sqlite_out)
-                       outSqlite->exportPopQuotas(populations.at(pop),pop,  tstep);
+                    if (enable_sqlite_out) {
+                        outSqlite->exportPopQuotas(populations.at(pop), pop, tstep);
+                    }
 
-                   //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+                    //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
 
-                   // export in file
-                   quotasuptake << setprecision(6) << fixed;
-                   quotasuptake << tstep << " " <<pop << " " <<
-                                   global_quotas_uptake.at(pop) << " " <<
-                                     populations.at(pop)->get_tac()->get_current_tac() << endl;
+                    // export in file
+                    quotasuptake << setprecision(6) << fixed;
+                    quotasuptake << tstep << " " << pop << " " <<
+                                 global_quotas_uptake.at(pop) << " " <<
+                                 populations.at(pop)->get_tac()->get_current_tac() << endl;
 
 
 
-                   // if more than x% of vessels choked then declare this stock as choking fisheries
-                   int nbchoked=0;
-                   for (unsigned int v=0; v<vessels.size(); v++)
-                   {
-                       nbchoked+=vessels.at(v)->get_is_choked().at(pop);
-                   }
-                   // HARDCODED threshold...
-                   if(nbchoked>=ceil(0.3*vessels.size())) populations.at(pop)->set_is_choking_fisheries(1);
+                    // if more than x% of vessels choked then declare this stock as choking fisheries
+                    int nbchoked = 0;
+                    for (unsigned int v = 0; v < vessels.size(); v++) {
+                        nbchoked += vessels.at(v)->get_is_choked().at(pop);
+                    }
+                    // HARDCODED threshold...
+                    if (nbchoked >= ceil(0.3 * vessels.size())) { populations.at(pop)->set_is_choking_fisheries(1); }
 
                 }
-           }
+            }
         }
 
 
@@ -5979,207 +5932,192 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///  THE DIFFUSIVE ENVT          ///
         ///------------------------------///
         ///------------------------------///
-        if(dyn_pop_sce.option(Options::diffuseNutrients))
-        {
+        if (dyn_pop_sce.option(Options::diffuseNutrients)) {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
-            if((tstep % numStepDiffusions) == (numStepDiffusions-1))
-            {
+            if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
 
-               // naive diffusion
-               double coeff_diffusion =0.4;
-               //bool r= diffuse_Nitrogen_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+                // naive diffusion
+                double coeff_diffusion = 0.4;
+                //bool r= diffuse_Nitrogen_in_every_directions(nodes, adjacency_map, coeff_diffusion);
 
-               // gradient diffusion
-               // using the rtree
-                bool r=  diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-               // bool r=  diffuse_Phosphorus_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-               // bool r=  diffuse_Oxygen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-               // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-
+                // gradient diffusion
+                // using the rtree
+                bool r = diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Phosphorus_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Oxygen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
 
 
-                if (enable_sqlite_out)
-                {
-                   for (unsigned int n=0; n<nodes.size(); n++)
-                   {
-                       outSqlite->exportEnvtNodes(tstep, nodes.at(n));
-                   }
+
+                if (enable_sqlite_out) {
+                    for (unsigned int n = 0; n < nodes.size(); n++) {
+                        outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+                    }
                 }
 
 
             }
-          }
+        }
 
-          // Flush and updates all statistics for nodes envt
-          if (use_gui)
-          {
-               if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-               {
-                   nodes_envt.flush();
-                   for (unsigned int n=0; n<nodes.size(); n++)
-                   {
-                      nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
-                   }
-                   guiSendUpdateCommand(nodes_envt_filename, tstep);
-               }
-          }
-
-          ///------------------------------///
-          ///------------------------------///
-          ///  THE DIFFUSIVE BENTHOS       ///
-          ///------------------------------///
-          ///------------------------------///
-          if(dyn_pop_sce.option(Options::diffuseBenthos))
-          {
-              int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
-              if((tstep % numStepDiffusions) == (numStepDiffusions-1))
-              {
-
-                 // naive diffusion
-                 double coeff_diffusion =0.01;
-                 bool r= diffuse_Benthos_in_every_directions(nodes, adjacency_map, coeff_diffusion);
-
-                 // gradient diffusion
-                 // using the rtree
-                 // bool r=  diffuse_Benthos_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-
-
-
-
-
-              }
+        // Flush and updates all statistics for nodes envt
+        if (use_gui) {
+            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                nodes_envt.flush();
+                for (unsigned int n = 0; n < nodes.size(); n++) {
+                    nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+                }
+                guiSendUpdateCommand(nodes_envt_filename, tstep);
             }
+        }
+
+        ///------------------------------///
+        ///------------------------------///
+        ///  THE DIFFUSIVE BENTHOS       ///
+        ///------------------------------///
+        ///------------------------------///
+        if (dyn_pop_sce.option(Options::diffuseBenthos)) {
+            int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
+            if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
+
+                // naive diffusion
+                double coeff_diffusion = 0.01;
+                bool r = diffuse_Benthos_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+
+                // gradient diffusion
+                // using the rtree
+                // bool r=  diffuse_Benthos_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
 
 
 
 
-          ///------------------------------///
-          ///------------------------------///
-          ///  SHIPPING DISTURBING BENTHOS ///
-          ///------------------------------///
-          ///------------------------------///
 
-       if(dyn_pop_sce.option(Options::modelShippingOnBenthos))
-        {
-          if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
-          {
-              double shippingdensity=0;
-              double bathymetry=0;
-              for (unsigned int i=0; i<nodes.size(); i++)
-              {
-                 shippingdensity = nodes.at(i)->get_shippingdensity();
-                 if(dyn_alloc_sce.option(Options::halfShippingDensity)) shippingdensity=shippingdensity/2;
-                 if(shippingdensity>0)
-                 {
-                     bathymetry =nodes.at(i)->get_bathymetry();
-                     for (unsigned int funcid=0; funcid< nodes.at(i)->get_benthos_tot_biomass().size(); funcid++)
-                     {
-                        double scaling =1000;
-                        double loss_after_1_month_shipping_here = -1;
-                        if(bathymetry!=0) loss_after_1_month_shipping_here =(shippingdensity/12)/scaling *1/abs(bathymetry);
-                        //look at scaling range: 1-exp( (6000/12/(100:1000)) * 1/abs(-10)) // e.g at 10 m deep
-                        // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
-                        double decrease_factor_on_benthos_funcgroup=0;
-
-                        if(dyn_pop_sce.option(Options::modelBenthosInN))
-                        {
-                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
-                         double current_nb                    = nodes.at(i)->get_benthos_tot_number(funcid);
-                         double next_nb                       = current_nb*(1+decrease_factor_on_benthos_funcgroup);
-                         nodes.at(i)->set_benthos_tot_number(funcid, next_nb); // update
-                        }
-                        else
-                        { // impact on biomass instead...
-                         decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_month_shipping_here);
-                         double current_bio                    = nodes.at(i)->get_benthos_tot_biomass(funcid);
-                         double next_bio                       = current_bio*(1+decrease_factor_on_benthos_funcgroup);
-                         nodes.at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
-                        }
-
-                     } // end funcid
-
-
-                 }
-              }
-          }
+            }
         }
 
 
 
-          ///------------------------------///
-          ///------------------------------///
-          ///  HOURLY BENTHOS RECOVERY     ///
-          ///------------------------------///
-          ///------------------------------///
-          // van Denderen et al. 2019
-          if(dyn_pop_sce.option(Options::modelBenthosInLongevity))
-          {
 
-             for (unsigned int b=0; b<benthoss.size(); b++)
-                {
-                 benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(1);
+        ///------------------------------///
+        ///------------------------------///
+        ///  SHIPPING DISTURBING BENTHOS ///
+        ///------------------------------///
+        ///------------------------------///
+
+        if (dyn_pop_sce.option(Options::modelShippingOnBenthos)) {
+            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                double shippingdensity = 0;
+                double bathymetry = 0;
+                for (unsigned int i = 0; i < nodes.size(); i++) {
+                    shippingdensity = nodes.at(i)->get_shippingdensity();
+                    if (dyn_alloc_sce.option(Options::halfShippingDensity)) { shippingdensity = shippingdensity / 2; }
+                    if (shippingdensity > 0) {
+                        bathymetry = nodes.at(i)->get_bathymetry();
+                        for (unsigned int funcid = 0;
+                             funcid < nodes.at(i)->get_benthos_tot_biomass().size(); funcid++) {
+                            double scaling = 1000;
+                            double loss_after_1_month_shipping_here = -1;
+                            if (bathymetry != 0) {
+                                loss_after_1_month_shipping_here =
+                                        (shippingdensity / 12) / scaling * 1 / abs(bathymetry);
+                            }
+                            //look at scaling range: 1-exp( (6000/12/(100:1000)) * 1/abs(-10)) // e.g at 10 m deep
+                            // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
+                            double decrease_factor_on_benthos_funcgroup = 0;
+
+                            if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+                                decrease_factor_on_benthos_funcgroup = 1 - exp(loss_after_1_month_shipping_here);
+                                double current_nb = nodes.at(i)->get_benthos_tot_number(funcid);
+                                double next_nb = current_nb * (1 + decrease_factor_on_benthos_funcgroup);
+                                nodes.at(i)->set_benthos_tot_number(funcid, next_nb); // update
+                            } else { // impact on biomass instead...
+                                decrease_factor_on_benthos_funcgroup = 1 - exp(loss_after_1_month_shipping_here);
+                                double current_bio = nodes.at(i)->get_benthos_tot_biomass(funcid);
+                                double next_bio = current_bio * (1 + decrease_factor_on_benthos_funcgroup);
+                                nodes.at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
+                            }
+
+                        } // end funcid
+
+
+                    }
                 }
-          }
+            }
+        }
 
 
-          ///------------------------------///
-          ///------------------------------///
-          ///  REINIT SOME VALUES ON NODES ///
-          ///------------------------------///
-          ///------------------------------///
 
-          if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-          {
-              for (unsigned int i=0; i<nodes.size(); i++)
-              {
-              nodes.at(i)->set_nbchoked(0);
-              }
-          }
+        ///------------------------------///
+        ///------------------------------///
+        ///  HOURLY BENTHOS RECOVERY     ///
+        ///------------------------------///
+        ///------------------------------///
+        // van Denderen et al. 2019
+        if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+
+            for (unsigned int b = 0; b < benthoss.size(); b++) {
+                benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(1);
+            }
+        }
 
 
-       ///------------------------------///
+        ///------------------------------///
+        ///------------------------------///
+        ///  REINIT SOME VALUES ON NODES ///
+        ///------------------------------///
+        ///------------------------------///
+
+        if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+            for (unsigned int i = 0; i < nodes.size(); i++) {
+                nodes.at(i)->set_nbchoked(0);
+            }
+        }
+
+
+        ///------------------------------///
         ///------------------------------///
         ///  EXPORTING TO DB             ///
         ///------------------------------///
         ///------------------------------///
-       // export
+        // export
         {
             std::unique_lock<std::mutex> m(listVesselMutex);
-            if(export_hugefiles) for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
-            {
-               //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+            if (export_hugefiles) {
+                for (unsigned int idx = 0; idx < listVesselIdForVmsLikeToExport.size(); idx++) {
+                    //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
 
-                OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+                    OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+                }
             }
             listVesselIdForVmsLikeToExport.clear();
 
-            for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
-            {
-               if (LastMonth < CurrentMonth)
-                   {
-                       if (enable_sqlite_out) {
-                          outSqlite->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
-                       }
-                       LastMonth = CurrentMonth;
-                   }
+            for (unsigned int idx = 0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++) {
+                if (LastMonth < CurrentMonth) {
+                    if (enable_sqlite_out) {
+                        outSqlite->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth(CurrentMonth);
+                    }
+                    LastMonth = CurrentMonth;
+                }
 
-                  OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
-                  vessels[ listVesselIdForVmsLikeFPingsOnlyToExport.at(idx) ]->clear_ping_catch_pop_at_szgroup();
+                OutputExporter::instance().exportVmsLikeFPingsOnly(tstep,
+                                                                   vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(
+                                                                           idx)], populations, implicit_pops);
+                vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)]->clear_ping_catch_pop_at_szgroup();
             }
             listVesselIdForVmsLikeFPingsOnlyToExport.clear();
 
 
-            for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
-            {
-                  //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
-                 OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
-                 vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
+            for (unsigned int idx = 0; idx < listVesselIdForLogLikeToExport.size(); idx++) {
+                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)],
+                                                         populations, implicit_pops);
+                vessels[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();
 
-            for (unsigned int idx =0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++)
-            {
-                 OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(idx)], populations, implicit_pops);
+            for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
+                OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep,
+                                                                        vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(
+                                                                                idx)], populations, implicit_pops);
             }
             listVesselIdForTripCatchPopPerSzgroupExport.clear();
 
@@ -6200,7 +6138,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //}
 
 #ifdef _WIN32
-        if(use_gnuplot)
+                                                                                                                                if(use_gnuplot)
         {
             // export ships current coordinates for plotting purpose
             for(int s=0; s<ships.size(); s++)
@@ -6230,15 +6168,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
-        if (metadata)
+        if (metadata) {
             metadata->setLastTStep(tstep);
+        }
 
-        if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions-1)) {
+        if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions - 1)) {
             std::cout << "End Transaction " << tstep << "\n";
             outSqlite->endDayLoop();
         }
 #ifdef PROFILE
-        mLoopProfile.elapsed_ms();
+                                                                                                                                mLoopProfile.elapsed_ms();
 
         if ((mLoopProfile.runs() % 50) == 0) {
             memInfo.update();
@@ -6251,7 +6190,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             unlock();
         }
 #endif
-    }							 // end FOR LOOP OVER TIME
+    }                             // end FOR LOOP OVER TIME
 
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;
@@ -6264,7 +6203,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     thread_vessel_signal_exit();
 
 #ifdef PROFILE
-    guiSendCapture(true);
+                                                                                                                            guiSendCapture(true);
 
     std::ostringstream ss;
 
@@ -6292,20 +6231,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     {
-        string memstat = outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
+        string memstat =
+                outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/memstats_" + namesimu +
+                ".dat";
 
 
-        std::ofstream stats (memstat);
-        std::ostringstream sstat ;
+        std::ofstream stats(memstat);
+        std::ostringstream sstat;
 
         sstat << "*** Memory Statistics:\n";
 #if !defined (__linux)
 
-        sstat << "  RSS: " << getCurrentRSS()/(1024*1024) << "Mb\n";
-        sstat << " Peak: " << getPeakRSS()/(1024*1024) << "Mb\n";
+        sstat << "  RSS: " << getCurrentRSS() / (1024 * 1024) << "Mb\n";
+        sstat << " Peak: " << getPeakRSS() / (1024 * 1024) << "Mb\n";
         sstat << "\n\n";
 #else
-        MemStats statsColl;
+                                                                                                                                MemStats statsColl;
         statsColl.collect();
 
         sstat << "       VM: " << statsColl.vm()/(1024*1024) << "Mb\n";
@@ -6316,7 +6257,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         stats << sstat.str();
 
 #if 0
-        std::ostringstream ss;
+                                                                                                                                std::ostringstream ss;
         std::ifstream status("/proc/self/status", std::ios_base::in);
         std::string line;
         while (std::getline(status,line)) {
@@ -6355,7 +6296,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // disable gnuplot
 #if 0
-    #ifdef _WIN32
+                                                                                                                            #ifdef _WIN32
     if(use_gnuplot)
     {
        outc(cout << "type a char to close" << endl);
@@ -6373,7 +6314,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 }
 
 
-int main(int argc, char const* argv[])
+int main(int argc, char const *argv[])
 {
     int return_code = 0;
     try {

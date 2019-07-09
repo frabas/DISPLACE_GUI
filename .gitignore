@@ -39,7 +39,6 @@ docs/latex
 build-*
 run.sh
 
-mSqliteCpp
 sparsepp/
 cmake-build-*
 

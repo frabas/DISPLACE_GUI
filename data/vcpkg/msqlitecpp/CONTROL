@@ -1,0 +1,5 @@
+Source: msqlitecpp
+Version: 1.99.1
+Description: A Modern C++ interface to Sqlite
+Build-Depends: sqlite3, boost-optional
+

@@ -1,0 +1,60 @@
+From 18a7c46700b35e0fa6fe740c36e786473a60b8e7 Mon Sep 17 00:00:00 2001
+From: Federico Fuga <fuga@studiofuga.com>
+Date: Tue, 9 Jul 2019 18:22:22 +0200
+Subject: [PATCH] Windows Fixes
+
+Signed-off-by: Federico Fuga <fuga@studiofuga.com>
+---
+ include/msqlitecpp/v1/sqlitestorage.h | 3 ++-
+ include/msqlitecpp/v2/storage.h       | 1 +
+ profiler/CMakeLists.txt               | 8 ++++++++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/include/msqlitecpp/v1/sqlitestorage.h b/include/msqlitecpp/v1/sqlitestorage.h
+index ae3335c..0906795 100644
+--- a/include/msqlitecpp/v1/sqlitestorage.h
++++ b/include/msqlitecpp/v1/sqlitestorage.h
+@@ -2,7 +2,8 @@
+ #define SQLITERESULTSTORAGE_H
+ 
+ #include "msqlitecpp/v1/msqlitecpp.h"
+-#include "sqlite3.h"
++
++#include <sqlite3.h>
+ 
+ #include <string>
+ #include <memory>
+diff --git a/include/msqlitecpp/v2/storage.h b/include/msqlitecpp/v2/storage.h
+index 1a10462..01c886e 100644
+--- a/include/msqlitecpp/v2/storage.h
++++ b/include/msqlitecpp/v2/storage.h
+@@ -10,6 +10,7 @@
+ #include "msqlitecpp/v2/msqlitecpp.h"
+ 
+ #include <memory>
++#include <string>
+ 
+ struct sqlite3;
+ 
+diff --git a/profiler/CMakeLists.txt b/profiler/CMakeLists.txt
+index c0e7428..03ae532 100644
+--- a/profiler/CMakeLists.txt
++++ b/profiler/CMakeLists.txt
+@@ -6,6 +6,14 @@ if (NOT DISABLE_V1)
+         set(EXTRA_LIB pthread)
+     endif (UNIX AND NOT APPLE)
+ 
++	target_include_directories(runProfiler
++        PRIVATE
++        ${Boost_INCLUDE_DIRS}
++        ${SQLITE_INCLUDE_DIRS}
++        )
++		
++	target_compile_features(runProfiler PUBLIC cxx_std_14)
++
+     # Extra linking for the project.
+     target_link_libraries(runProfiler msqlitecpp ${EXTRA_LIB})
+ 
+-- 
+2.20.1.windows.1
+

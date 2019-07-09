@@ -28,6 +28,7 @@ This is a list of the packages that must be explicitly installed from vcpkg:
     *msqlitecpp
     *boost-program-options
     *boost-interprocess
+	*boost-geometry
 	*sparsepp
 	qt5-base (optional)
 

@@ -1,0 +1,8 @@
+GeographicLib
+cgal
+gdal
+msqlitecpp
+boost-program-options
+boost-interprocess
+boost-geometry
+sparsepp

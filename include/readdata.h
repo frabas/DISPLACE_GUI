@@ -31,12 +31,14 @@
 #include <options.h>
 #include <comstructs.h>
 
+namespace msqlitecpp { namespace v2 { class Storage; }}
+
 using namespace std;
 
 std::string COMMONSSHARED_EXPORT getLastErrorMessage();
 void COMMONSSHARED_EXPORT open_file_error(string filename);
 
-bool COMMONSSHARED_EXPORT read_config_file (string folder_name_parameterization,
+bool COMMONSSHARED_EXPORT read_config_file (std::shared_ptr<msqlitecpp::v2::Storage> db,string folder_name_parameterization,
 string inputfolder,
 int& a_int_line2,
 int& a_int_line4,

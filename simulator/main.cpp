@@ -154,6 +154,7 @@ using namespace sqlite;
 
 #include <version.h>
 #include <mutex>
+#include <chrono>
 
 #include "boost/bind.hpp"
 #include "boost/program_options.hpp"
@@ -670,7 +671,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // config at the simusspe level
-    if (!read_config_file(
+    if (!read_config_file(indb,
             folder_name_parameterization,
             inputfolder,
             nbpops,

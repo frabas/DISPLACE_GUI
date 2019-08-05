@@ -226,7 +226,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     std::vector <double> calib_weight_at_szgroup;
     std::vector <double> calib_cpue_multiplier;
 
-    if (!read_config_file (
+    if (!read_config_file (nullptr,
         path.toStdString(),
         modelname.toStdString(),
         config.nbpops,

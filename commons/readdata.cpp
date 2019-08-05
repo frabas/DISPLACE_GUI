@@ -31,6 +31,10 @@
 #include <numeric> // iota()
 
 #include <legacy/binarygraphfilereader.h>
+#include "inputdbstruct.h"
+
+#include <msqlitecpp/v2/storage.h>
+#include <msqlitecpp/v2/selectstatement.h>
 
 using namespace displace::formats;
 
@@ -56,7 +60,8 @@ void open_file_error(string filename)
 read the settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-bool read_config_file(string folder_name_parameterization,
+bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
+        string folder_name_parameterization,
                       string inputfolder,
                       int& nbpops,
                       int& nbbenthospops,
@@ -70,12 +75,53 @@ bool read_config_file(string folder_name_parameterization,
                       vector<types::NodeId> &interesting_harbours)
 {
 
+    if (indb) {
+        displace::in::ConfigTable t;
+        auto select = db::makeSelectStatement(*indb, t.TableName,
+                t.NbPops,
+                t.NbBenthosPops,
+                t.ImplicitStocks,
+                t.CalibLandings,
+                t.CalibW,
+                t.CalibCpue,
+                t.IntHarbours,
+                t.ImplicitLevel2,
+                t.GroupedTacs,
+                t.NbCouplingPops
+                );
+
+        try {
+            select.execute([&nbpops, &nbbenthospops, &calib_oth_landings, &calib_w, &calib_cpue,
+                            &interesting_harbours,
+                            &implicit_pops,
+                            &implicit_pops_level2, &grouped_tacs, &nbcp_coupling_pops]
+                                   (int np, int nb, std::string is, std::string cl, std::string cw,
+                                           std::string cc, std::string h, std::string implev2,
+                                           std::string gtacs, std::string nbcp) {
+                nbpops = np;
+                nbbenthospops = nb;
+                implicit_pops = displace::formats::utils::stringToVector<int>(is);
+                implicit_pops_level2 = displace::formats::utils::stringToVector<int>(implev2);
+                grouped_tacs = displace::formats::utils::stringToVector<int>(gtacs);
+                nbcp_coupling_pops = displace::formats::utils::stringToVector<int>(nbcp);
+                calib_oth_landings = displace::formats::utils::stringToVector<double>(cw);
+                calib_w = displace::formats::utils::stringToVector<double>(cw);
+                calib_cpue = displace::formats::utils::stringToVector<double>(cc);
+                interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(h));
+                return true;
+            });
+        } catch (std::exception &x) {
+            return false;
+        }
+        return true;
+    } else {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
     std::cout << "Reading config file from " << filename << std::endl;
 
     std::ifstream fstream (filename.c_str(), std::ios_base::in);
     return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
                             calib_w, calib_cpue, interesting_harbours);
+    }
 }
 
 bool read_config_file(std::istream &stream,

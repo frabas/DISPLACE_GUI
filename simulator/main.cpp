@@ -4913,13 +4913,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                      #if defined(_WIN32)
                         cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                        a_command_for_R = "Rscript .\\interactiverscripts\\nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                        a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                         cout << "executing " << a_command_for_R << endl;
                         system(a_command_for_R.c_str());
                     #else
                        cout << "nbcp_coupling...done" << endl;
                        // caution with HPC, annoying lower cases in file names and paths required!
-                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                        system(a_command_for_R.c_str());
                     #endif
                   }  // end nbcp coupling pops

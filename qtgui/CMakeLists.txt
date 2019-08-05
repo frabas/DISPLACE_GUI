@@ -101,6 +101,11 @@ target_link_libraries(displacegui
         ${EXTRA_LIBRARIES}
         )
 
+target_include_directories(displacegui
+        PRIVATE
+        ${GDAL_INCLUDE_DIRS}
+        )
+
 # Set target directory
 install(TARGETS displacegui
         BUNDLE DESTINATION . COMPONENT gui

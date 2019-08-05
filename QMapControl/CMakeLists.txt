@@ -35,6 +35,11 @@ target_link_libraries(QMapControl
         Qt5::Network
         )
 
+target_include_directories(QMapControl
+        PRIVATE
+        ${GDAL_INCLUDE_DIRS}
+        )
+
 # Set target directory
 install(TARGETS QMapControl
         LIBRARY DESTINATION lib

@@ -36,5 +36,10 @@ target_link_libraries(objeditor
         QMapControl
         )
 
+target_include_directories(objeditor
+        PRIVATE
+        ${GDAL_INCLUDE_DIRS}
+        )
+
 # Set target directory
 install(TARGETS objeditor RUNTIME DESTINATION bin COMPONENT tools)

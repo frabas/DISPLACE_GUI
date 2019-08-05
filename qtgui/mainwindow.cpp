@@ -150,6 +150,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowIcon(QIcon(":/icons/displace.png"));
+
     QActionGroup *grp = new QActionGroup(this);
     grp->addAction(ui->actionNode_Editor);
     grp->addAction(ui->actionEdge_Edit);

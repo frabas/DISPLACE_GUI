@@ -50,6 +50,8 @@
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
 
+#include <boost/filesystem.hpp>
+
 using namespace sqlite;
 
 #include "msqlitecpp/v2/storage.h"
@@ -592,7 +594,16 @@ int app_main(int argc, char const *argv[])
     string filename;
 
     if (!inputdb.empty()) {
-        indb = std::make_shared<sql::Storage>(inputdb);
+        boost::filesystem::path inpath = boost::filesystem::path{inputfolder} / inputdb;
+        inpath = boost::filesystem::absolute(inpath);
+        std::cout << "Loading input db: " << inpath.string() << "\n";
+
+        if (!boost::filesystem::exists(inpath)) {
+            std::cerr << "Input file " << inputdb << " doesn't exist.\n";
+            return 2;
+        }
+
+        indb = std::make_shared<sql::Storage>(inpath.string(), sql::Storage::OpenMode::DelayedOpen);
         indb->open();
     }
 

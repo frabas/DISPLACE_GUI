@@ -1,5 +1,5 @@
 find_package(Boost REQUIRED
-        COMPONENTS program_options
+        COMPONENTS program_options filesystem
         )
 
 add_definitions(-DBOOST_PROGRAM_OPTIONS_DYN_LINK)
@@ -56,6 +56,7 @@ target_link_libraries(displace
         msqlitecpp::msqlitecpp
 
         Boost::program_options
+        Boost::filesystem
         )
 
 

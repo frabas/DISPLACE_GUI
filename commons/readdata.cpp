@@ -76,41 +76,23 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
 {
 
     if (indb) {
-        displace::in::ConfigTable t;
-        auto select = db::makeSelectStatement(*indb, t.TableName,
-                t.NbPops,
-                t.NbBenthosPops,
-                t.ImplicitStocks,
-                t.CalibLandings,
-                t.CalibW,
-                t.CalibCpue,
-                t.IntHarbours,
-                t.ImplicitLevel2,
-                t.GroupedTacs,
-                t.NbCouplingPops
-                );
-
         try {
-            select.execute([&nbpops, &nbbenthospops, &calib_oth_landings, &calib_w, &calib_cpue,
-                            &interesting_harbours,
-                            &implicit_pops,
-                            &implicit_pops_level2, &grouped_tacs, &nbcp_coupling_pops]
-                                   (int np, int nb, std::string is, std::string cl, std::string cw,
-                                           std::string cc, std::string h, std::string implev2,
-                                           std::string gtacs, std::string nbcp) {
-                nbpops = np;
-                nbbenthospops = nb;
-                implicit_pops = displace::formats::utils::stringToVector<int>(is);
-                implicit_pops_level2 = displace::formats::utils::stringToVector<int>(implev2);
-                grouped_tacs = displace::formats::utils::stringToVector<int>(gtacs);
-                nbcp_coupling_pops = displace::formats::utils::stringToVector<int>(nbcp);
-                calib_oth_landings = displace::formats::utils::stringToVector<double>(cw);
-                calib_w = displace::formats::utils::stringToVector<double>(cw);
-                calib_cpue = displace::formats::utils::stringToVector<double>(cc);
-                interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(h));
-                return true;
-            });
+            displace::in::ConfigTable t;
+            t.query(*indb);
+
+            nbpops = t.getNbPops();
+            nbbenthospops = t.getNbBenthosPops();
+            implicit_pops = t.getImplicitStocks();
+            implicit_pops_level2 = t.getImplicitPopLevels2();
+            grouped_tacs = t.getGroupedTacs();
+            nbcp_coupling_pops = t.getNbCouplingPops();
+            calib_oth_landings = t.getCalibLandingsStock();
+            calib_w = t.getCalibW();
+            calib_cpue = t.getCalibCpue();
+            interesting_harbours = t.getInterestingArbours();
+            return true;
         } catch (std::exception &x) {
+            std::cerr << "Cannot read config database: " << x.what() << "\n";
             return false;
         }
         return true;

@@ -32,6 +32,7 @@
 
 #include <legacy/binarygraphfilereader.h>
 #include "db/ConfigTable.h"
+#include "db/ScenarioConfigTable.h"
 
 #include <msqlitecpp/v2/storage.h>
 #include <msqlitecpp/v2/selectstatement.h>
@@ -168,42 +169,9 @@ bool read_config_file(std::istream &stream,
     return true;
 }
 
-
-/**
-read the scenario specific settings for the siums given the case study
-@param the vectors to be filled in, ...
-*/
-bool read_scenario_config_file (string folder_name_parameterization,
-                                string inputfolder,
-                                string namefolderoutput,
-                                displace::commons::Scenario &scenario)
+template<typename Reader>
+bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
 {
-    string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
-    std::cout << "Reading Scenario file from " << filename << std::endl;
-
-    std::ifstream f (filename.c_str(), std::ios_base::in);
-    return read_scenario_config_file(f,scenario);
-}
-
-bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
-{
-    helpers::LineNumberReader reader;
-
-    static const helpers::LineNumberReader::Specifications specs {
-        {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"fleetsce"},{9,"freq_do_growth"},{11,"freq_redispatch_the_pop"},
-        {13,"a_graph"},{15,"nrow_coord"},{17,"nrow_graph"},{19,"a_port"},{21,"graph_res"},
-        {23,"is_individual_vessel_quotas"},{25,"check_all_stocks_before_going_fishing"},{27,"dt_go_fishing"},
-        {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
-        {37,"dt_change_port"},{39,"use_dtrees"},
-        {41,"tariff_pop"},{43,"freq_update_tariff_code"},
-        {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
-        {51,"update_tariffs_based_on_lpue_or_dpue_code"},
-        {53,"metier_closures"}
-    };
-
-    if (!reader.importFromStream(stream, specs))
-        return false;
-
     try {
         auto dasf = reader.get("dyn_alloc_sce");
         std::vector<std::string> das;
@@ -231,33 +199,40 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         }
         scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
 
-        scenario.biolsce=reader.get("biolsce");
-        scenario.fleetsce=reader.get("fleetsce");
-        scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
-        scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");
-        scenario.a_graph=reader.getAs<int>("a_graph");
-        scenario.nrow_coord=reader.getAs<int>("nrow_coord");
-        scenario.nrow_graph=reader.getAs<int>("nrow_graph");
-        scenario.a_port=types::NodeId(reader.getAs<int>("a_port"));
-        scenario.graph_res= displace::formats::utils::stringToVector<double>(reader.get("graph_res"), " ");
-        if(scenario.graph_res.size()==1) scenario.graph_res.push_back(scenario.graph_res.at(0)); //res x and y required
-        scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
-        scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
-        scenario.dt_go_fishing=reader.get("dt_go_fishing");
-        scenario.dt_choose_ground=reader.get("dt_choose_ground");
-        scenario.dt_start_fishing=reader.get("dt_start_fishing");
-        scenario.dt_change_ground=reader.get("dt_change_ground");
-        scenario.dt_stop_fishing=reader.get("dt_stop_fishing");
-        scenario.dt_change_port=reader.get("dt_change_port");
-        scenario.use_dtrees=(reader.getAs<int>("use_dtrees") != 0);
+        scenario.biolsce = reader.get("biolsce");
+        scenario.fleetsce = reader.get("fleetsce");
+        scenario.freq_do_growth = reader.template getAs<int>("freq_do_growth");
+        scenario.freq_redispatch_the_pop = reader.template getAs<int>("freq_redispatch_the_pop");
+        scenario.a_graph = reader.template getAs<int>("a_graph");
+        scenario.nrow_coord = reader.template getAs<int>("nrow_coord");
+        scenario.nrow_graph = reader.template getAs<int>("nrow_graph");
+        scenario.a_port = types::NodeId(reader.template getAs<int>("a_port"));
+        scenario.graph_res = displace::formats::utils::stringToVector<double>(reader.get("graph_res"), " ");
+        if (scenario.graph_res.size() == 1) {
+            scenario.graph_res.push_back(scenario.graph_res.at(0));
+        } //res x and y required
+        scenario.is_individual_vessel_quotas = (reader.template getAs<int>("is_individual_vessel_quotas") != 0);
+        scenario.check_all_stocks_before_going_fishing = (
+                reader.template getAs<int>("check_all_stocks_before_going_fishing") !=
+                0);
+        scenario.dt_go_fishing = reader.get("dt_go_fishing");
+        scenario.dt_choose_ground = reader.get("dt_choose_ground");
+        scenario.dt_start_fishing = reader.get("dt_start_fishing");
+        scenario.dt_change_ground = reader.get("dt_change_ground");
+        scenario.dt_stop_fishing = reader.get("dt_stop_fishing");
+        scenario.dt_change_port = reader.get("dt_change_port");
+        scenario.use_dtrees = (reader.template getAs<int>("use_dtrees") != 0);
 
         scenario.tariff_pop = displace::formats::utils::stringToVector<int>(reader.get("tariff_pop"), " ");
-        scenario.freq_update_tariff_code = reader.getAs<int>("freq_update_tariff_code");
-        scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(reader.get("arbitary_breaks_for_tariff"), " ");
+        scenario.freq_update_tariff_code = reader.template getAs<int>("freq_update_tariff_code");
+        scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(
+                reader.get("arbitary_breaks_for_tariff"), " ");
 
-        scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
-        scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
-        scenario.update_tariffs_based_on_lpue_or_dpue_code = reader.getAs<int>("update_tariffs_based_on_lpue_or_dpue_code", 0);
+        scenario.total_amount_credited = reader.template getAs<int>("total_amount_credited", 0);
+        scenario.tariff_annual_hcr_percent_change = reader.template getAs<double>("tariff_annual_hcr_percent_change",
+                                                                                  0);
+        scenario.update_tariffs_based_on_lpue_or_dpue_code = reader.template getAs<int>(
+                "update_tariffs_based_on_lpue_or_dpue_code", 0);
 
     } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
@@ -275,6 +250,53 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
     scenario.closure_opts.update();
 
     return true;
+}
+
+
+/**
+read the scenario specific settings for the siums given the case study
+@param the vectors to be filled in, ...
+*/
+bool read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
+                               string folder_name_parameterization,
+                               string inputfolder,
+                               string namefolderoutput,
+                               displace::commons::Scenario &scenario)
+{
+    if (db) {
+        displace::in::ScenarioConfigTable table;
+        table.query(*db);
+
+        return importScenario(table, scenario);
+    } else {
+        string filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput + ".dat";
+        std::cout << "Reading Scenario file from " << filename << std::endl;
+
+        std::ifstream f(filename.c_str(), std::ios_base::in);
+        return read_scenario_config_file(f, scenario);
+    }
+}
+
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
+{
+    helpers::LineNumberReader reader;
+
+    static const helpers::LineNumberReader::Specifications specs {
+        {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"fleetsce"},{9,"freq_do_growth"},{11,"freq_redispatch_the_pop"},
+        {13,"a_graph"},{15,"nrow_coord"},{17,"nrow_graph"},{19,"a_port"},{21,"graph_res"},
+        {23,"is_individual_vessel_quotas"},{25,"check_all_stocks_before_going_fishing"},{27,"dt_go_fishing"},
+        {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
+        {37,"dt_change_port"},{39,"use_dtrees"},
+        {41,"tariff_pop"},{43,"freq_update_tariff_code"},
+        {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
+        {51,"update_tariffs_based_on_lpue_or_dpue_code"},
+        {53,"metier_closures"}
+    };
+
+    if (!reader.importFromStream(stream, specs))
+        return false;
+
+    return importScenario(reader, scenario);
 }
 
 vector <int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder)

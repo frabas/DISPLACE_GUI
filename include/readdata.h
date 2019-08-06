@@ -63,10 +63,11 @@ vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
 vector<types::NodeId> &interesting_harbours);
 
-bool COMMONSSHARED_EXPORT read_scenario_config_file(string folder_name_parameterization,
-    string inputfolder,
-    string namefolderoutput,
-    displace::commons::Scenario &scenario);
+bool COMMONSSHARED_EXPORT read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
+                                                    string folder_name_parameterization,
+                                                    string inputfolder,
+                                                    string namefolderoutput,
+                                                    displace::commons::Scenario &scenario);
 
 bool COMMONSSHARED_EXPORT read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
 

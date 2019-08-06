@@ -700,11 +700,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 2;
     }
 
-    if (!read_scenario_config_file(
-            folder_name_parameterization,
-            inputfolder,
-            namefolderoutput,
-            scenario)) {
+    if (!read_scenario_config_file(indb,
+                                   folder_name_parameterization,
+                                   inputfolder,
+                                   namefolderoutput,
+                                   scenario)) {
         cerr << "Cannot read scenario config file, Bad Format.\n";
         return 2;
     }

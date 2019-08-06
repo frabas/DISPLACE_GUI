@@ -135,7 +135,7 @@ set(SOURCES
         shortestpath/AStarShortestPathFinder.h shortestpath/AStarShortestPathFinder.cpp
         shortestpath/GeoGraph.h shortestpath/GeoGraph.cpp
         shortestpath/GeoGraphLoader.h shortestpath/GeoGraphLoader.cpp
-        ../include/db/ConfigTable.h)
+        ../include/db/ConfigTable.h ../include/db/ScenarioConfigTable.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

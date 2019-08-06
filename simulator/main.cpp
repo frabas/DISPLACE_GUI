@@ -157,6 +157,7 @@ using namespace sqlite;
 #include <version.h>
 #include <mutex>
 #include <chrono>
+#include <runtime_tests/NodeTester.h>
 
 #include "boost/bind.hpp"
 #include "boost/program_options.hpp"
@@ -1062,14 +1063,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    // check the class Node
-    Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, nbpops, nbbenthospops, 5);
-    dout (cout << "is the node at 1,1? "
-               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
-    node.set_xy(2, 2);
-    dout (cout << "is the node now at 2,2? "
-               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
+    // NOTE: do this test if the proper command line argument is passed...
+    {
+        NodeTester nodeTester(nbpops, nbbenthospops);
+        nodeTester.test();
+    }
+
+
+
+    // ---------------------------------------------- //
 
     // input data, coord nodes of the graph
     ifstream coord_graph;

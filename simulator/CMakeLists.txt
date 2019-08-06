@@ -18,7 +18,7 @@ set(SOURCES
         getRSS.cpp
         biomodule2.cpp
         fisheriesmanagmt.cpp
-        )
+        Loader.cpp Loader.h runtime_tests/NodeTester.cpp runtime_tests/NodeTester.h)
 
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)

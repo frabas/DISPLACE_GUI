@@ -2,8 +2,8 @@
 // Created by happycactus on 05/08/19.
 //
 
-#ifndef DISPLACE_INPUTDBSTRUCT_H
-#define DISPLACE_INPUTDBSTRUCT_H
+#ifndef DISPLACE_CONFIGTABLE_H
+#define DISPLACE_CONFIGTABLE_H
 
 #include "msqlitecpp/v2/storage.h"
 #include "msqlitecpp/v2/fields.h"
@@ -137,4 +137,4 @@ public:
 }
 }
 
-#endif //DISPLACE_INPUTDBSTRUCT_H
+#endif //DISPLACE_CONFIGTABLE_H

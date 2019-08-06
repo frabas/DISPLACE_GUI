@@ -31,7 +31,7 @@
 #include <numeric> // iota()
 
 #include <legacy/binarygraphfilereader.h>
-#include "inputdbstruct.h"
+#include "db/ConfigTable.h"
 
 #include <msqlitecpp/v2/storage.h>
 #include <msqlitecpp/v2/selectstatement.h>

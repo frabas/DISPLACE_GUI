@@ -14,11 +14,6 @@ namespace db = msqlitecpp::v2;
 namespace displace {
 namespace in {
 
-enum class TypeConversion {
-    Int, Double, String,
-    VectorOfInts, VectorOfDoubles, VectorOfStrings
-};
-
 class ConfigTable {
     static constexpr char * const TableName = "Config";
 
@@ -115,7 +110,7 @@ public:
 
     auto getInterestingArbours() const
     {
-        return types::helpers::toIdVector<types::NodeId>(getVector<double>("Interesting_harbours"));
+        return types::helpers::toIdVector<types::NodeId>(getVector<double>("interesting_harbours"));
     }
 
     auto getImplicitPopLevels2() const

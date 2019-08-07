@@ -53,4 +53,4 @@ if (NOT WITHOUT_GUI)
 endif ()
 
 add_subdirectory(commons/commons_tests)
-
+add_subdirectory(simulator/tests)

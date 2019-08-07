@@ -3,9 +3,11 @@
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 ## Common packages to all modules
-find_package(Boost 1.55 REQUIRED COMPONENTS date_time system thread program_options unit_test_framework)
+find_package(Boost 1.55 REQUIRED COMPONENTS date_time system thread program_options log unit_test_framework)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
+
+add_definitions(-DBOOST_LOG_DYN_LINK)
 
 find_package(GeographicLib REQUIRED)
 message("GeographicLib version: ${GeographicLib_VERSION}")

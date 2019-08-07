@@ -9,6 +9,14 @@
 #include "msqlitecpp/v2/fields.h"
 #include "msqlitecpp/v2/selectstatement.h"
 
+#include "idtypes.h"
+#include "idtypeshelpers.h"
+#include "utils/vectorsdata.h"
+
+#include <boost/lexical_cast.hpp>
+
+#include <map>
+
 namespace db = msqlitecpp::v2;
 
 namespace displace {

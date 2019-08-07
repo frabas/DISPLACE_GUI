@@ -418,7 +418,8 @@ bool test_not_belong_to_firm(const Vessel *v, int id)
 }
 
 
-string type_of_avai_field_to_read=""; // by default, use the initial input
+vector<string> type_of_avai_field_to_read;
+
 
 // parameters
 
@@ -2050,6 +2051,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, folder_name_parameterization, inputfolder);
+
+
+    for (int st=0; st < nbpops; st++)
+    {
+       type_of_avai_field_to_read.push_back("");
+    }
+    // by default, will use the initial avai input
 
     // read the pop-specific betas related to the availability
     // szgroup0
@@ -4903,6 +4911,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               {
                   if (binary_search (nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(),  p  ) )
                   {
+                     type_of_avai_field_to_read.at(p)="_updated";
+
                      stringstream out;
                      out << p;
                      string a_pop = out.str();
@@ -4955,7 +4965,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        #if defined(_WIN32)
                        if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
                            // note that nothing is done before end of 1st month (745) to get enough catch data for an update
-                           type_of_avai_field_to_read="_updated";
+                           type_of_avai_field_to_read.at(p)="_updated";
                            //system("dir");
                            // caution with HPC, annoying lower cases in file names and paths required!
                            cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
@@ -4969,14 +4979,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             system(a_command.c_str());
                        }
                        if(dyn_pop_sce.option(Options::avai_shuffler_on)){
-                           type_of_avai_field_to_read="_shuffled";
+                           type_of_avai_field_to_read.at(p)="_shuffled";
                            a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
                            cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                            system(a_command.c_str());
                        }
                        #else
                        if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
-                           type_of_avai_field_to_read="_updated";
+                           type_of_avai_field_to_read.at(p)="_updated";
                            // caution with HPC, annoying lower cases in file names and paths required!
                            a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                            system(a_command_for_R.c_str());
@@ -5012,7 +5022,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     stringstream out;
                     out << i;
 
-                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " << folder_name_parameterization << " " << inputfolder << endl;
+                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " <<
+                            folder_name_parameterization << " " << inputfolder << " " <<  type_of_avai_field_to_read.at(i) << endl;
 
                     // read a new spatial_availability
                     auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file,  type_of_avai_field_to_read);

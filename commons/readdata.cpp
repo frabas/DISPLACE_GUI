@@ -2813,25 +2813,26 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester,
                                                                  int a_pop, string folder_name_parameterization, string inputfolder,
                                                                  string str_rand_avai_file,
-                                                                 string type_of_avai_field_to_read)
+                                                                 vector<string> type_of_avai_field_to_read)
 {
     // casting a_pop into a string
     stringstream out;
     out << a_pop;
     string a_pop_s = out.str();
 
-    //cout << "type_of_avai_field_to_read is " << type_of_avai_field_to_read << endl;
+    string a_type_of_avai_field_to_read = type_of_avai_field_to_read.at(a_pop);
+    //cout << "a_type_of_avai_field_to_read is " << a_type_of_avai_field_to_read << endl;
 
     string filename;
     if(str_rand_avai_file=="baseline")
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
-                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
+                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
     else
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
-                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
+                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;
@@ -2871,23 +2872,25 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
 multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
                                                                       string folder_name_parameterization, string inputfolder,
                                                                       string str_rand_avai_file,
-                                                                      string type_of_avai_field_to_read)
+                                                                      vector<string> type_of_avai_field_to_read)
 {
     // casting a_pop into a string
     stringstream out;
     out << a_pop;
     string a_pop_s = out.str();
 
+    string a_type_of_avai_field_to_read = type_of_avai_field_to_read.at(a_pop);
+
     string filename;
     if(str_rand_avai_file=="baseline")
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
-                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
+                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
     else
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
-                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+type_of_avai_field_to_read+".dat";
+                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+a_type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;

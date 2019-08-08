@@ -27,6 +27,8 @@ db::Column<db::ColumnTypes::Real> fieldX{"x"};
 db::Column<db::ColumnTypes::Real> fieldY{"y"};
 db::Column<db::ColumnTypes::Integer> fieldHIdx{"hidx"};
 db::Column<db::ColumnTypes::Integer> fieldGraphSce{"graphsce"};
+db::Column<db::ColumnTypes::Integer> fieldCodeArea{"code_area"};
+db::Column<db::ColumnTypes::Integer> fieldMarineLandscape{"landscape"};
 }
 
 NodesLoader::NodesLoader(std::string inputFolder, std::string folder_name_parameterization, int nrow)
@@ -44,15 +46,21 @@ std::vector<Node *> NodesLoader::load(int agraph)
 {
     std::vector<Node *> nodes;
 
-    auto query = db::makeSelectStatement(p->db, NodesTableName, fieldId, fieldX, fieldY, fieldHIdx);
+    auto query = db::makeSelectStatement(p->db, NodesTableName,
+                                         fieldId, fieldX, fieldY, fieldHIdx,
+                                         fieldCodeArea, fieldMarineLandscape
+    );
     query.where(fieldGraphSce == "agraph");
 
     query.bind(agraph);
-    query.execute([&nodes](int id, double x, double y, int hidx) {
+    query.execute([&nodes](int id, double x, double y, int hidx, int codeArea, int marineLandscape) {
         auto node = new Node();
         node->set_idx_node(types::NodeId{static_cast<uint16_t>(id)});
         node->set_xy(x, y);
         node->set_is_harbour(hidx);
+
+        node->setMarineLandscape(marineLandscape);
+        node->setCodeArea(codeArea);
 
         nodes.push_back(node);
         return true;

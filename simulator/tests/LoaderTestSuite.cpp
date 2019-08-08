@@ -7,6 +7,7 @@
 #include "db/ConfigTable.h"
 #include "db/ScenarioConfigTable.h"
 #include "NodesLoader.h"
+#include "Node.h"
 
 #include <boost/log/trivial.hpp>
 
@@ -17,6 +18,9 @@ struct LoaderTestSuite::Impl {
     displace::in::ScenarioConfigTable scenario;
 
     int graphsce;
+    int biosce;
+
+    std::vector<Node *> nodes;
 
     explicit Impl(msqlitecpp::v2::Storage &db_)
             : db(db_)
@@ -39,6 +43,7 @@ void LoaderTestSuite::prepare()
     p->scenario.query(p->db);
 
     p->graphsce = p->scenario.getAs<int>("a_graph");
+    p->biosce = p->scenario.getAs<int>("biolsce");
 
     BOOST_LOG_TRIVIAL(info) << "Graph Scenario: " << p->graphsce;
 }
@@ -47,4 +52,8 @@ void LoaderTestSuite::loadNodes()
 {
     BOOST_LOG_TRIVIAL(info) << "Loading nodes for graphsce " << p->graphsce;
 
+    NodesLoader loader(p->db);
+    p->nodes = loader.load(p->graphsce);
+
+    BOOST_LOG_TRIVIAL(info) << "Nodes loaded: " << p->nodes.size() << " nodes";
 }

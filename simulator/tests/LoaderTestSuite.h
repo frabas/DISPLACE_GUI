@@ -18,6 +18,8 @@ public:
     void prepare();
 
     void loadNodes();
+
+    void loadEdges();
 };
 
 

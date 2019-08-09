@@ -1,5 +1,6 @@
 add_executable(runLoaderTest
         ../data/NodesLoader.cpp ../data/NodesLoader.h
+        ../data/EdgesLoader.cpp ../data/EdgesLoader.h
         main.cpp
         LoaderTestSuite.cpp LoaderTestSuite.h)
 

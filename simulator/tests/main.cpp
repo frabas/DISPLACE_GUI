@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     LoaderTestSuite testSuite(db);
     testSuite.prepare();
     testSuite.loadNodes();
+    testSuite.loadEdges();
 
     return 0;
 }

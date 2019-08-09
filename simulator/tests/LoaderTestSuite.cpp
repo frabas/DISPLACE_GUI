@@ -7,6 +7,7 @@
 #include "db/ConfigTable.h"
 #include "db/ScenarioConfigTable.h"
 #include "NodesLoader.h"
+#include "EdgesLoader.h"
 #include "Node.h"
 
 #include <boost/log/trivial.hpp>
@@ -21,6 +22,7 @@ struct LoaderTestSuite::Impl {
     int biosce;
 
     std::vector<Node *> nodes;
+    adjacency_map_t admap;
 
     explicit Impl(msqlitecpp::v2::Storage &db_)
             : db(db_)
@@ -56,4 +58,20 @@ void LoaderTestSuite::loadNodes()
     p->nodes = loader.load(p->graphsce);
 
     BOOST_LOG_TRIVIAL(info) << "Nodes loaded: " << p->nodes.size() << " nodes";
+}
+
+void LoaderTestSuite::loadEdges()
+{
+    BOOST_LOG_TRIVIAL(info) << "Loading edges for graphsce " << p->graphsce;
+
+    EdgesLoader loader(p->db);
+    p->admap = loader.load(p->graphsce);
+
+    size_t nnum = p->admap.size();
+    size_t ednum = 0;
+    for (auto &nn : p->admap) {
+        ednum += nn.second.size();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Edges: loaded " << nnum << " nodes adjancencies, total " << ednum << " edges";
 }

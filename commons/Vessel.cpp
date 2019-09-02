@@ -2863,13 +2863,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
                                 // init
                                 double val=0;
-                               // if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                               //    {
-                               //     val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                               //     new_avai_pops_at_selected_szgroup.at(a_count)=val;
-                               //     if(a_count<(selected_szgroups.size()-1)) a_count+=1;
-                               //     }
-                               // nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
+                                if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                                   {
+                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
+                                    new_avai_pops_at_selected_szgroup.at(a_count)=val;
+                                    if(a_count<(selected_szgroups.size()-1)) a_count+=1;
+                                    }
+                                nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
 
                                 /*
 

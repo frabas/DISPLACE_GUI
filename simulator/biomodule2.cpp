@@ -1210,7 +1210,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if (export_vmslike) {
             for (unsigned int n=0; n<nodes.size(); n++)
             {
-                nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
+                //nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
                 if (enable_sqlite_out) {
                     bool r=outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
                 }
@@ -1276,7 +1276,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         nodes.at(n)->export_popnodes_nbchoked(popnodes_nbchoked, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output
 
      }
 

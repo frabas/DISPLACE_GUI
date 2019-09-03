@@ -3237,6 +3237,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         }
         else  // implicit pop:
         {
+           if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
+           {
+
+
             dout(cout  << "this pop " << populations.at(pop)->get_name() << " is implicit (or outside the range)...catch knowing cpue only! " << endl);
             // tips: put tot catch into the first bin...we don´t care which szgroup here...
             //vector<double> cpues = find_entries_i_d (cpue_per_stk_on_nodes, idx_node);
@@ -3371,7 +3375,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 catch_pop_at_szgroup.at(pop).at(0) +=0;
                 ping_catch_pop_at_szgroup.at(pop).at(0)+=0;
             }
-        }
+
+          } // endif pop present on this node
+        } // endif implicit species
 
 
 

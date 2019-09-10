@@ -5017,8 +5017,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // RE-read for populations
             for (unsigned int i=0; i<populations.size(); i++)
             {
-                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  i  ) )
-                {
                     stringstream out;
                     out << i;
 
@@ -5078,18 +5076,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
                     // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
                     // divide on nodes according to avai
-                    populations.at(i)->distribute_N();
-
-                    //if(populations.at(i)->get_name()==1){
-                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
-                    //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                    //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                    //}
-
-                    //...and compute the Ns on nodes at the start of this month!
-                    for (unsigned int n=0; n<nodes.size(); n++)
+                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  i  ) )
                     {
-                        nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
+                        populations.at(i)->distribute_N();
+
+                       //if(populations.at(i)->get_name()==1){
+                       //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                       //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                       //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                       //}
+
+                       //...and compute the Ns on nodes at the start of this month!
+                       for (unsigned int n=0; n<nodes.size(); n++)
+                       {
+                           nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
+                       }
                     }
 
                     // re-read presence node for this semester
@@ -5123,7 +5124,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
                     }
 
-                }				 // end if not implicit
             }
 
             dout(cout  << "re-read data for this period...OK" << endl);

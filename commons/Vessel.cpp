@@ -1171,6 +1171,11 @@ void Vessel::set_course(double _course)
 }
 
 
+void Vessel::set_tankcapacity(double _tankcapacity)
+{
+    tankcapacity= _tankcapacity;
+}
+
 void Vessel::receive_message(int _message)
 {
     message= _message;
@@ -2583,12 +2588,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
 
-                  //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
-                  //    cout  << "-------------------------" << endl;
-                  //    cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << endl;
-                  //    cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << endl;
-                  //    cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << endl;
-                  //  }
+                  /*if(this->get_name()=="FIN000020014"){
+                      cout  << "-------------------------" << endl;
+                      cout  << "pop" << pop << endl;
+                      cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << endl;
+                      cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << endl;
+                      cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << endl;
+                    }
+                  */
 
                     // cumul
                     tot = tot+avail_biomass[szgroup];
@@ -2675,10 +2682,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
                     dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl);
 
-                    //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
-                    //   cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
-                    //   cout  << "explicit: given  that avai biomass is " << tot << endl;
-                    //}
+                    /*
+                     * if(this->get_name()=="FIN000020014"){
+                       cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
+                       cout  << "explicit: given  that avai biomass is " << tot << endl;
+                    }
+                    */
 
                     // REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
                     // BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)
@@ -2688,7 +2697,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     //for(int i = 0; i < cumcatch_fgrounds.size(); i++){
                     //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
                     //}
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
 
 
                     // compute the landings vs. discard part
@@ -2893,8 +2901,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                             // caution: cumul landings at the trip level
-//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
-//if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
+//if(this->get_name()=="FIN000020014") cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
+//if(this->get_name()=="FIN000020014") cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
                             // CUMUL PER TRIP FOR THIS VESSEL (note that catch_pop_at_szgroup is LANDINGS)
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
@@ -3223,14 +3231,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
             // CHECK
             // what is exported in loglike file for this pop is:
-            //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
-            //   double cumul=0.0;
-            //    for(size_t sz = 0; sz < catch_pop_at_szgroup[pop].size(); sz++)
-            //    {
-            //        cumul = cumul + catch_pop_at_szgroup[pop][sz];
-            //    }
-            //cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << endl;
-            //}
+            /*
+             * if(this->get_name()=="FIN000020014"){
+               double cumul=0.0;
+                for(size_t sz = 0; sz < catch_pop_at_szgroup[pop].size(); sz++)
+                {
+                    cumul = cumul + catch_pop_at_szgroup[pop][sz];
+                }
+            cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << endl;
+            }
+            */
 
 
 
@@ -3247,7 +3257,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             auto grds = this->get_fgrounds();
             // relative node index to this vessel
             int idx_node_v= find(grds.begin(), grds.end(), idx_node) - grds.begin();
-            //if((this->get_name())=="DNK000007718")cout <<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
+            //if((this->get_name())=="FIN000020014")cout <<this->get_name() << ": the first guess cpue for this implicit pop " << populations.at(pop)->get_name()
             //        << " on this node "<< idx_node << endl;
 
             //double cpue = cpue_nodes_species.at(idx_node_v).at(pop); // look into the vector of vector....
@@ -3331,6 +3341,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             }
 
 
+            //if((this->get_name())=="FIN000020014") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
+            //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
             dout (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
                   << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl);
 

@@ -364,6 +364,7 @@ public:
 		void set_av_trip_duration (double val);
 		void set_fuelcons (double val);
 		void set_course (double val);
+        void set_tankcapacity (double val);
         void set_fgrounds (int val);
         void set_fgrounds_init (int val);
         //void set_fgrounds_int_closed_areas (std::vector<int> grounds);

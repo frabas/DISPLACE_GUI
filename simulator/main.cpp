@@ -3425,6 +3425,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
+
+        if(namefolderinput=="BalticSea") vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
+
         // dyn sce.
         if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
         {

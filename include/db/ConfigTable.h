@@ -23,7 +23,7 @@ namespace displace {
 namespace in {
 
 class ConfigTable {
-    static constexpr char * const TableName = "Config";
+    static const char * const TableName;
 
     db::Column<db::ColumnTypes::Text> Param{"param"};
     db::Column<db::ColumnTypes::Text> Value{"value"};
@@ -84,6 +84,8 @@ public:
             mParams[field] = value;
             return true;
         });
+
+		return true;
     }
 
     auto getNbPops() const

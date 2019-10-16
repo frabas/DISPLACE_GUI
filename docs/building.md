@@ -29,6 +29,7 @@ This is a list of the packages that must be explicitly installed from vcpkg:
     *boost-program-options
     *boost-interprocess
 	*boost-geometry
+	*boost-log
 	*sparsepp
 	qt5-base (optional)
 

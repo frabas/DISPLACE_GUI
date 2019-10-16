@@ -20,7 +20,7 @@ namespace db = msqlitecpp::v2;
 namespace displace {
 namespace in {
 class ScenarioConfigTable {
-    static constexpr char *const TableName = "ScenarioConfig";
+    static const char *const TableName;
 
     db::Column<db::ColumnTypes::Text> Scenario{"sce"};
     db::Column<db::ColumnTypes::Text> Param{"param"};
@@ -60,6 +60,7 @@ public:
             mParams[field] = value;
             return true;
         });
+		return true;
     }
 
     std::string get(std::string const &field, std::string defaultValue = std::string())

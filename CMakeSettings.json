@@ -1,4 +1,9 @@
 ﻿{
+  "environments": [
+    {
+      "VCToolsVersion":  "14.16"
+    }
+  ],
   "configurations": [
     {
       "name": "x64-Debug",

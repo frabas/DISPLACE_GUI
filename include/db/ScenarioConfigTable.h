@@ -5,6 +5,8 @@
 #ifndef DISPLACE_SCENARIOCONFIGTABLE_H
 #define DISPLACE_SCENARIOCONFIGTABLE_H
 
+#include "commons_global.h"
+
 #include "msqlitecpp/v2/storage.h"
 #include "msqlitecpp/v2/fields.h"
 #include "msqlitecpp/v2/selectstatement.h"
@@ -19,7 +21,7 @@ namespace db = msqlitecpp::v2;
 
 namespace displace {
 namespace in {
-class ScenarioConfigTable {
+class COMMONSSHARED_EXPORT ScenarioConfigTable {
     static const char *const TableName;
 
     db::Column<db::ColumnTypes::Text> Scenario{"sce"};

@@ -337,7 +337,8 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 {
     displace::commons::Scenario scenario;
 
-    if (!read_scenario_config_file (
+	// TODO pass the correct db when it will be available.
+    if (!read_scenario_config_file (nullptr,
                 path.toStdString(),
                 modelname.toStdString(),
                 outputname.toStdString(),

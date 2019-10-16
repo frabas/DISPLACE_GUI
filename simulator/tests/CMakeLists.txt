@@ -12,9 +12,14 @@ target_include_directories(runLoaderTest
         ${CMAKE_SOURCE_DIR}/commons
         )
 
+if (NOT APPLE AND NOT WIN32)
+    list(APPEND OS_LIBRARIES pthread rt)
+endif (NOT APPLE AND NOT WIN32)
+
+
 target_link_libraries(runLoaderTest
         commons
         Boost::program_options
         Boost::log
-        pthread
+        ${OS_LIBRARIES}
         )

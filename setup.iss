@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.17"
+#define MyAppVersion "0.9.18"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -16,8 +16,8 @@
 
 #define Build "release"
 #define QT_DEBUG ""
-#define QT_DIR "C:\Qt\5.11.1\msvc2017_64"
-#define QT_PLUGINS_DIR "C:\Qt\5.11.1\msvc2017_64\plugins"
+#define QT_DIR "C:\Qt\5.12.5\msvc2017_64"
+#define QT_PLUGINS_DIR "C:\Qt\5.12.5\msvc2017_64\plugins"
 #define SDK_DIR "install\msvc"
 
 [Setup]

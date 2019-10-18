@@ -70,26 +70,16 @@ Install CMake on your computer.
 
 Unzip the Displace sdk e.g. vcpkg-export-20181211-212458.7z (build with https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017, 
 see Building.md, you will found the sdk on the DISPLACE_release\WindowsSupport on
- google drive https://drive.google.com/drive/folders/0B7xTkBu0-QI5bnIxS3c4dy0tSUU ) in DISPLACE_GUI install and rename 
-the folder for e.g. displacesdk
-
-```bash
-cd <your sdk position>
-```
-
-Install Python 3  https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/python.html
- and run the python >=3.7.0 script for a fix on hardcoded absolute paths with
-
-```bash
-python.exe <your-displace-position>/tools/vcpkg-fixup.py
-```
+ google drive https://drive.google.com/drive/folders/0B7xTkBu0-QI5bnIxS3c4dy0tSUU ) imperatively in C:\\ and rename 
+the folder for "vcpkg"
 
  Open the DISPLACE project e.g. in QtCreator or CLion with the CMakeList.txt file
 
  Configure CMake by adding a arg variable, for example:
 ```bash
-CMAKE_TOOLCHAIN_FILE=C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\install\displacesdk\scripts\buildsystems\vcpkg.cmake
+CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
 ```
+Also erase in the Release output folder or the cmake CMakeCache.txt and the subfolder CMakeFiles in the Release folder if something goes wrong. 
 
 In QtCreator:
 

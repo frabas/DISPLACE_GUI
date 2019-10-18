@@ -1111,9 +1111,25 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                    outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
                                    // to do next time oth_land will be applied: oth_land * TACy+1 / TACy
                                    vector<double> ts_tac  = populations.at(sp)->get_tac()->get_ts_tac();
-                                   double TAC_y_plus_1    = ts_tac.at(ts_tac.size()-1);
-                                   double TAC_y           = ts_tac.at(ts_tac.size()-2);
-                                   populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
+                                   double TAC_y_plus_1;
+                                   double TAC_y;
+                                   if(tstep==8761) // year2
+                                   {
+                                      TAC_y_plus_1    = ts_tac.at(ts_tac.size()-2);
+                                      TAC_y           = ts_tac.at(0);
+                                   }
+                                   else
+                                   {
+                                       TAC_y_plus_1    = ts_tac.at(ts_tac.size()-1);
+                                       TAC_y           = ts_tac.at(ts_tac.size()-2);
+
+                                   }
+                                   double a_multiplier = TAC_y_plus_1 / TAC_y;
+                                   if(TAC_y_plus_1==10000) a_multiplier=1; // edge case for non-binding TAC set in computeTAC()
+                                   populations.at(sp)->set_oth_land_multiplier (a_multiplier);
+                                   cout<< "The multiplier for oth_land on "<< sp << " in consequence of the TAC change is..." <<  a_multiplier << endl;
+                                   cout<< "since TAC_y_plus_1 is " <<  TAC_y_plus_1 << endl;
+                                   cout<< "since TAC_y is " <<  TAC_y << endl;
                                    outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change...ok" << endl);
                                    if(populations.at(sp)->get_oth_land_multiplier()!=
                                      // i.e. a trick to check if nan
@@ -1194,7 +1210,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if (export_vmslike) {
             for (unsigned int n=0; n<nodes.size(); n++)
             {
-                nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
+                //nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
                 if (enable_sqlite_out) {
                     bool r=outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
                 }
@@ -1260,7 +1276,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         nodes.at(n)->export_popnodes_nbchoked(popnodes_nbchoked, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output
 
      }
 

@@ -148,7 +148,7 @@ private:
 public:
     VesselCatchVolumeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.5)  ? 1.0 : 0.0; //0: "still ok" node; 1: "fullfilled"
+          return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.9)  ? 1.0 : 0.0; //0: "still ok" node; 1: "fullfilled"
         }
 };
 

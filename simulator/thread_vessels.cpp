@@ -207,6 +207,7 @@ static void manage_vessel(int idx_v,
     bool inharbour = vessels[ index_v ]->get_inharbour();
     bool inactive = vessels[ index_v ]-> get_inactive();
     int is_exited   = vessels[ index_v ]-> get_is_vessel_exited();
+    bool freshly_departed_from_port=0;
     vessels[index_v]->unlock();
 
     if(!is_exited)
@@ -291,12 +292,13 @@ static void manage_vessel(int idx_v,
                                 metiers,
                                 freq_cpue, freq_profit, freq_distance
                                 );
-
+                    freshly_departed_from_port=1;
 
                 }
                 if(!go_fishing || do_nothing) // if not going and forced to do nothing because every locations is closed for this vessel, then:
                 {
                     //have some rest in the harbour
+                    //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  "STAY IN HARBOUR" << endl;
                     outc(cout  << "STAY IN HARBOUR" << endl);
                     // and decrease the rest time...
                     vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
@@ -310,6 +312,7 @@ static void manage_vessel(int idx_v,
             {
 
                 outc(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
+                //if((vessels[index_v]->get_name())=="POL023600922") cout  << vessels[index_v]->get_name() << "NOT IN HARB...SO ON A FISHING GROUND!" << endl;
                 // ***************make a decision************************************
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
@@ -342,11 +345,24 @@ static void manage_vessel(int idx_v,
                     vessels[ index_v ]->reset_message();
                 }
 
+                if(freshly_departed_from_port && stop_fishing) outc(cout  << "OH! SOMETHING WRONG WITH MY CHOICE! CHECK MY -STOP FISHING- TRIGGERS" << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
+
+                /*if((vessels[index_v]->get_name())=="POL023600922"){
+                    cout  << vessels[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;
+                    cout << "given cum fuel cons is: " << vessels[index_v]->get_cumfuelcons() << endl;
+                    cout << "given total tank capacity is: " << vessels[index_v]->get_tankcapacity() << endl;
+                    cout << "given cumcatches is: " << vessels[index_v]->get_cumcatches() << endl;
+                    cout << "given vessel carrying cap is: " << vessels[index_v]->get_carrycapacity() << endl;
+                }
+                */
+
                 // ***************implement a decision************************************
                 // go on fishing...
                 if(!stop_fishing)
                 {
+                    freshly_departed_from_port=0;
                     outc(cout  << "OK, I´LL CONTINUE FISHING!" << endl);
+                    //if((vessels[index_v]->get_name())=="POL023600922") cout  << vessels[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << endl;
 
                     // ***************make a decision************************************
                     map<string,int> external_states_relevant_for_change_ground;
@@ -364,6 +380,7 @@ static void manage_vessel(int idx_v,
                     if(shall_I_change_to_another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
+                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
                         is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
                                     tstep,
                                     dyn_alloc_sce, use_static_paths,
@@ -374,6 +391,7 @@ static void manage_vessel(int idx_v,
                                     freq_cpue, freq_distance
                                     );
                         outc(cout  << "GOOD JOB, FISHERS! "  << endl);
+                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << endl;
 
                     }
                     // ***************implement a decision************************************
@@ -381,6 +399,7 @@ static void manage_vessel(int idx_v,
                      // keep go on catching on this ground...
                      {
                         outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
+                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " DO CATCH, FISHERS! " << endl;
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check your mail! :" << vessels[ index_v ]->read_message() << endl);
@@ -432,12 +451,16 @@ static void manage_vessel(int idx_v,
 
 
 
+                    } else{
+                        outc(cout  << "go elsewhere... "  << endl);
+                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
                     }
                 }
                 // ***************implement a decision************************************
                 else
                 {
                     outc(cout  << "RETURN TO PORT, NOW! "  << endl);
+                    //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                     glob_mutex.lock();
                     vessels[ index_v ]->choose_a_port_and_then_return(
                                 tstep,

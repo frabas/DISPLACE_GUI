@@ -440,7 +440,8 @@ bool test_not_belong_to_firm(const Vessel *v, int id)
 }
 
 
-string type_of_avai_field_to_read = ""; // by default, use the initial input
+vector<string> type_of_avai_field_to_read;
+
 
 // parameters
 
@@ -2053,6 +2054,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, folder_name_parameterization, inputfolder);
 
+
+    for (int st=0; st < nbpops; st++)
+    {
+       type_of_avai_field_to_read.push_back("");
+    }
+    // by default, will use the initial avai input
+
     // read the pop-specific betas related to the availability
     // szgroup0
     multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, inputfolder);
@@ -3445,6 +3453,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
+
+        if(namefolderinput=="BalticSea") vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
+
         // dyn sce.
         if (dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
             // a decrease by 20%...
@@ -4918,33 +4929,37 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
-            if (dyn_pop_sce.option(Options::nbcpCoupling)) {
-                string a_command_for_R;
 
-                for (unsigned int p = 0; p < populations.size(); p++) {
-                    if (binary_search(nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(), p)) {
-                        stringstream out;
-                        out << p;
-                        string a_pop = out.str();
+            if(dyn_pop_sce.option(Options::nbcpCoupling) )
+            {
+              string a_command_for_R;
+
+              for (unsigned int p=0; p<populations.size(); p++)
+              {
+                  if (binary_search (nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(),  p  ) )
+                  {
+                     type_of_avai_field_to_read.at(p)="_updated";
+
+                     stringstream out;
+                     out << p;
+                     string a_pop = out.str();
 
                         stringstream outtstep;
                         outtstep << tstep;
                         string atstep = outtstep.str();
 
-#if defined(_WIN32)
-                                                                                                                                                cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                        a_command_for_R = "Rscript .\\interactiverscripts\\nbcpcoupling.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                     #if defined(_WIN32)
+                        cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+                        a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                         cout << "executing " << a_command_for_R << endl;
                         system(a_command_for_R.c_str());
-#else
-                        cout << "nbcp_coupling...done" << endl;
-                        // caution with HPC, annoying lower cases in file names and paths required!
-                        a_command_for_R =
-                                "Rscript " + inputfolder + "/interactiverscripts/nbcpcoupling.r " + a_pop + " " +
-                                atstep + " " + namefolderoutput + " " + namesimu + " " + a_graph_s;
-                        system(a_command_for_R.c_str());
-#endif
-                    }  // end nbcp coupling pops
+                    #else
+                       cout << "nbcp_coupling...done" << endl;
+                       // caution with HPC, annoying lower cases in file names and paths required!
+                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                       system(a_command_for_R.c_str());
+                    #endif
+                  }  // end nbcp coupling pops
                 }  // end pop
             }
 
@@ -4973,7 +4988,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #if defined(_WIN32)
                                                                                                                                                 if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
                            // note that nothing is done before end of 1st month (745) to get enough catch data for an update
-                           type_of_avai_field_to_read="_updated";
+                           type_of_avai_field_to_read.at(p)="_updated";
                            //system("dir");
                            // caution with HPC, annoying lower cases in file names and paths required!
                            cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
@@ -4987,33 +5002,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             system(a_command.c_str());
                        }
                        if(dyn_pop_sce.option(Options::avai_shuffler_on)){
-                           type_of_avai_field_to_read="_shuffled";
+                           type_of_avai_field_to_read.at(p)="_shuffled";
                            a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
                            cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                            system(a_command.c_str());
                        }
-#else
-                        if (dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
-                            type_of_avai_field_to_read = "_updated";
-                            // caution with HPC, annoying lower cases in file names and paths required!
-                            a_command_for_R =
-                                    "Rscript " + inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
-                                    " " + atstep + " " + namefolderoutput + " " + namesimu + " " + a_graph_s;
-                            system(a_command_for_R.c_str());
-                            a_command =
-                                    inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + namefolderinput +
-                                    " -a " + inputfolder + " -s " + a_semester + " -graph " + graphnum.str() + " -nr " +
-                                    a_nrow_coord + " -dist 30 -shepard_p 0.5";
-                            system(a_command.c_str());
-                        }
-                        if (dyn_pop_sce.option(Options::avai_shuffler_on)) {
-                            a_command =
-                                    inputfolder + "/avaifieldshufflertool -f " + namefolderinput + " -s " + a_semester +
-                                    " -p " + a_pop;
-                            system(a_command.c_str());
-                        }
-                        cout << "avaifieldshuffler...done" << endl;
-#endif
+                       #else
+                       if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
+                           type_of_avai_field_to_read.at(p)="_updated";
+                           // caution with HPC, annoying lower cases in file names and paths required!
+                           a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
+                           system(a_command_for_R.c_str());
+                           a_command = inputfolder+"/avaifieldupdatertool -tstep " +atstep+" -f "+namefolderinput+ " -a " +inputfolder+ " -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
+                           system(a_command.c_str());
+                       }
+                       if(dyn_pop_sce.option(Options::avai_shuffler_on)){
+                           a_command = inputfolder+"/avaifieldshufflertool -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                           system(a_command.c_str());
+                       }
+                       cout << "avaifieldshuffler...done" << endl;
+                       #endif
 
                     }
                 }
@@ -5029,13 +5037,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
             // RE-read for populations
-            for (unsigned int i = 0; i < populations.size(); i++) {
-                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), i)) {
+            for (unsigned int i=0; i<populations.size(); i++)
+            {
                     stringstream out;
                     out << i;
 
-                    cout << "RE-read for population " << populations.at(i)->get_name() << " from "
-                         << folder_name_parameterization << " " << inputfolder << endl;
+                    cout << "RE-read for population "<< populations.at(i)->get_name() << " from " <<
+                            folder_name_parameterization << " " << inputfolder << " " <<  type_of_avai_field_to_read.at(i) << endl;
 
                     // read a new spatial_availability
                     auto avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, i,
@@ -5100,17 +5108,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
                     // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
                     // divide on nodes according to avai
-                    populations.at(i)->distribute_N();
+                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  i  ) )
+                    {
+                        populations.at(i)->distribute_N();
 
-                    //if(populations.at(i)->get_name()==1){
-                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
-                    //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                    //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                    //}
+                       //if(populations.at(i)->get_name()==1){
+                       //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                       //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                       //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                       //}
 
-                    //...and compute the Ns on nodes at the start of this month!
-                    for (unsigned int n = 0; n < nodes.size(); n++) {
-                        nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
+                       //...and compute the Ns on nodes at the start of this month!
+                       for (unsigned int n=0; n<nodes.size(); n++)
+                       {
+                           nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
+                       }
                     }
 
                     // re-read presence node for this semester
@@ -5142,7 +5154,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
                     }
 
-                }                 // end if not implicit
             }
 
             dout(cout << "re-read data for this period...OK" << endl);

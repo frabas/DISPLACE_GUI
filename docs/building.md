@@ -27,6 +27,7 @@ This is a list of the packages that must be explicitly installed from vcpkg:
     *gdal
     *msqlitecpp
     *boost-program-options
+	*boost-filesystem
     *boost-interprocess
 	*boost-geometry
 	*boost-log

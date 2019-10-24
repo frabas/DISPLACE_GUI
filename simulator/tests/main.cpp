@@ -8,6 +8,7 @@
 
 #include <boost/log/trivial.hpp>
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 #include <iostream>
 
@@ -32,13 +33,22 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    db::Storage db(dbname);
+    if (!boost::filesystem::exists(dbname) || !boost::filesystem::is_regular_file(dbname)) {
+        std::cerr << "Db: " << dbname << " doesn't exist or is not a file\n";
+        return 1;
+    }
 
-    LoaderTestSuite testSuite(db);
-    testSuite.prepare();
-    testSuite.loadNodes();
-    testSuite.loadEdges();
+    try {
+        db::Storage db(dbname);
 
+        LoaderTestSuite testSuite(db);
+        testSuite.prepare();
+        testSuite.loadNodes();
+        testSuite.loadEdges();
+    } catch (std::exception &x) {
+        std::cerr << "Error: " << x.what() << "\n";
+        return 2;
+    }
     return 0;
 }
 

@@ -245,8 +245,12 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
         for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
           {
           benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
-          new_benthos_tot_biomass= benthos_tot_biomass + get_recovery_rates_per_funcgr().at(funcgr)*benthos_tot_biomass*((K - benthos_tot_biomass)/ K ) +0.0000001;
 
+          double sd=0.39; // default
+          double r_error=0;
+          r_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
+          double recovery= get_recovery_rates_per_funcgr().at(funcgr) * r_error; // for boostrap on recovery r
+          new_benthos_tot_biomass= benthos_tot_biomass + (recovery*benthos_tot_biomass*((K - benthos_tot_biomass)/ K )) +0.00000001;
 
           list_nodes_this_landsc.at(n)->set_benthos_tot_biomass(funcgr,  new_benthos_tot_biomass); // update on node
          }

@@ -20,6 +20,8 @@ public:
     void loadNodes();
 
     void loadEdges();
+
+    void loadVessels();
 };
 
 

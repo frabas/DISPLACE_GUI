@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
         testSuite.prepare();
         testSuite.loadNodes();
         testSuite.loadEdges();
+        testSuite.loadVessels();
     } catch (std::exception &x) {
         std::cerr << "Error: " << x.what() << "\n";
         return 2;

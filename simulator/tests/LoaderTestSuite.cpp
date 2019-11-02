@@ -8,6 +8,7 @@
 #include "db/ScenarioConfigTable.h"
 #include "NodesLoader.h"
 #include "EdgesLoader.h"
+#include "VesselsLoader.h"
 #include "Node.h"
 
 #include <boost/log/trivial.hpp>
@@ -20,6 +21,7 @@ struct LoaderTestSuite::Impl {
 
     int graphsce;
     int biosce;
+    int fleetsce;
 
     std::vector<Node *> nodes;
     adjacency_map_t admap;
@@ -46,6 +48,7 @@ void LoaderTestSuite::prepare()
 
     p->graphsce = p->scenario.getAs<int>("a_graph");
     p->biosce = p->scenario.getAs<int>("biolsce");
+    p->fleetsce = p->scenario.getAs<int>("fleetsce");
 
     BOOST_LOG_TRIVIAL(info) << "Graph Scenario: " << p->graphsce;
 }
@@ -74,4 +77,33 @@ void LoaderTestSuite::loadEdges()
     }
 
     BOOST_LOG_TRIVIAL(info) << "Edges: loaded " << nnum << " nodes adjancencies, total " << ednum << " edges";
+}
+
+void LoaderTestSuite::loadVessels()
+{
+    BOOST_LOG_TRIVIAL(info) << "Loading edges for fleetsce " << p->fleetsce;
+
+    VesselsLoader loader(p->db);
+    auto allvessels = loader.getListOfAllVessels();
+
+    BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << allvessels.size() << " Vessels name";
+
+    auto fuelprices = loader.getInitFuelPrices();
+
+    BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << fuelprices.size() << " Initial fuel prices";
+
+	std::vector<std::shared_ptr<VesselsLoader::VesselData>> v;
+    size_t count = 0, ecount = 0;
+    for (auto &vessel : allvessels) {
+        for (int quarter = 1; quarter <= 4; ++quarter) {
+            auto data = loader.getVesselData(vessel, quarter);
+            ++count;
+			v.push_back(data);
+        }
+
+        auto ecfeat = loader.getEconomicFeature(vessel);
+        ecount += ecfeat.size();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << ecount << " Economic Features and " << count << " Records";
 }

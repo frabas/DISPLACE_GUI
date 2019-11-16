@@ -10,6 +10,8 @@
 #include "EdgesLoader.h"
 #include "VesselsLoader.h"
 #include "Node.h"
+#include "ClosuresLoader.h"
+#include "readdata.h"
 
 #include <boost/log/trivial.hpp>
 
@@ -106,4 +108,36 @@ void LoaderTestSuite::loadVessels()
     }
 
     BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << ecount << " Economic Features and " << count << " Records";
+}
+
+void LoaderTestSuite::loadMetierClosures()
+{
+    BOOST_LOG_TRIVIAL(info) << "Loading Metier Closures for graphsce " << p->graphsce;
+
+    ClosuresLoader loader(p->db);
+    vector<NodeBanningInfo> ban_info[12];
+
+    size_t count = 0;
+    for (int period = 1; period <= 12; ++period) {
+        loader.read_metier_closures(p->graphsce, period, ban_info[period - 1]);
+        count += ban_info[period - 1].size();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Closures for metiers loaded: " << count;
+}
+
+void LoaderTestSuite::loadVSizeClosures()
+{
+    BOOST_LOG_TRIVIAL(info) << "Loading Vsize Closures for graphsce " << p->graphsce;
+
+    ClosuresLoader loader(p->db);
+    vector<NodeBanningInfo> ban_info[12];
+
+    size_t count = 0;
+    for (int period = 1; period <= 12; ++period) {
+        loader.read_vsize_closures(p->graphsce, period, ban_info[period - 1]);
+        count += ban_info[period - 1].size();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Closures for Vsize loaded: " << count;
 }

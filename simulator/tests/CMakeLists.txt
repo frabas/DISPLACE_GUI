@@ -2,7 +2,7 @@ add_executable(runLoaderTest
         ../data/NodesLoader.cpp ../data/NodesLoader.h
         ../data/EdgesLoader.cpp ../data/EdgesLoader.h
         main.cpp
-        LoaderTestSuite.cpp LoaderTestSuite.h ../data/VesselsLoader.cpp ../data/VesselsLoader.h)
+        LoaderTestSuite.cpp LoaderTestSuite.h ../data/VesselsLoader.cpp ../data/VesselsLoader.h ../data/ClosuresLoader.cpp ../data/ClosuresLoader.h)
 
 target_include_directories(runLoaderTest
         PRIVATE

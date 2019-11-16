@@ -22,6 +22,9 @@ public:
     void loadEdges();
 
     void loadVessels();
+
+    void loadMetierClosures();
+    void loadVSizeClosures();
 };
 
 

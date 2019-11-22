@@ -11,11 +11,13 @@ int Dataloaderbenthos::gettype()
     return(2);
 }
 
-void Dataloaderbenthos::features(const string &folder_name_parameterization,
+void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
+                                 const string &folder_name_parameterization,
                                  const string &inputfolder,
                                  PopSceOptions &dyn_pop_sce)
 {
-  this->Dataloader::features(folder_name_parameterization,
+  this->Dataloader::features(indb,
+                             folder_name_parameterization,
                              inputfolder,
                              dyn_pop_sce);
   cout << "Loading benthos features" << endl;

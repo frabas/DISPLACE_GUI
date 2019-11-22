@@ -21,6 +21,9 @@
 #include "helpers.h"
 #include "options.h"
 
+#include "msqlitecpp/v2/storage.h"
+
+namespace sql = msqlitecpp::v2;
 using namespace std;
 
 
@@ -30,7 +33,7 @@ class Dataloaderbenthos : public virtual Dataloader
 public:
     Dataloaderbenthos();
     int gettype (void);
-    void features(const string& folder_name_parameterization,
+    void features(std::shared_ptr<msqlitecpp::v2::Storage> indb, const string& folder_name_parameterization,
                   const string& inputfolder,
                   PopSceOptions& dyn_pop_sce);
 

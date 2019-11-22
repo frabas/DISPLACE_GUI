@@ -7,6 +7,9 @@
 #include <string>
 #include <options.h>
 
+#include "msqlitecpp/v2/storage.h"
+
+namespace sql = msqlitecpp::v2;
 using namespace std;
 
 
@@ -16,7 +19,8 @@ class Dataloader
 public:
     Dataloader(){}
     virtual int gettype(void)=0;
-    virtual void features(const string& folder_name_parameterization,
+    virtual void features(std::shared_ptr<sql::Storage> indb,
+                          const string& folder_name_parameterization,
                           const string& inputfolder,
                           PopSceOptions& dyn_pop_sce){ cout << "Loading features" << endl;}
 };
@@ -26,13 +30,15 @@ class Loader
 {
 public:
     void loadfeatures(Dataloader *dl,
+                      std::shared_ptr<sql::Storage> indb,
                       const string& folder_name_parameterization,
                       const string& inputfolder,
                       PopSceOptions& dyn_pop_sce)
     {
-       dl->features(folder_name_parameterization,
-                       inputfolder,
-                       dyn_pop_sce);
+       dl->features(indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce);
     }
 };
 

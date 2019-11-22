@@ -3,11 +3,12 @@
 
 #include<dataloader.h>
 
-class dataloadervessels : public virtual dataloader
+class Dataloadervessels : public virtual Dataloader
 {
 public:
-    dataloadervessels();
+    Dataloadervessels();
     int gettype (void);
+    void features();
 
 };
 

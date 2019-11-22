@@ -1,11 +1,20 @@
 #include "dataloaderbenthos.h"
+#include<iostream>
 
-dataloaderbenthos::dataloaderbenthos()
+using namespace std;
+
+Dataloaderbenthos::Dataloaderbenthos()
 {
 
 }
 
-int dataloaderbenthos::gettype()
+int Dataloaderbenthos::gettype()
 {
     return(2);
+}
+
+void Dataloaderbenthos::features()
+{
+  this->Dataloader::features();
+  cout << "Loading benthos features" << endl;
 }

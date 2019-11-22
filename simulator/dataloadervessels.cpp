@@ -1,11 +1,21 @@
 #include "dataloadervessels.h"
+#include<iostream>
 
-dataloadervessels::dataloadervessels()
+using namespace std;
+
+Dataloadervessels::Dataloadervessels()
 {
 
 }
 
-int dataloadervessels::gettype()
+int Dataloadervessels::gettype()
 {
     return(1);
 }
+
+void Dataloadervessels::features()
+{
+  this->Dataloader::features();
+  cout << "Loading vessels features" << endl;
+}
+

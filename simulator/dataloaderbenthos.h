@@ -3,11 +3,12 @@
 
 #include<dataloader.h>
 
-class dataloaderbenthos : public virtual dataloader
+class Dataloaderbenthos : public virtual Dataloader
 {
 public:
-    dataloaderbenthos();
+    Dataloaderbenthos();
     int gettype (void);
+    void features();
 
 
 };

@@ -877,19 +877,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         is_benthos_in_longevity_classes = 0;
     }
 
-
-    if (dyn_pop_sce.option(Options::modeldirectKillingOnBenthos)) {
-        is_direct_killing_on_benthos = 1;
-    } else {
-        is_direct_killing_on_benthos = 0; // direct fishing effect on benthos
-    }
-
-    if (dyn_pop_sce.option(Options::modelResuspensionEffectOnBenthos)) {
-        is_resuspension_effect_on_benthos = 1;
-    } else {
-        is_resuspension_effect_on_benthos = 0; // indirect fishing effect on benthos
-    }
-
     if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
                                      namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;

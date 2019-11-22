@@ -21,6 +21,21 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
   cout << "Loading benthos features" << endl;
 
 
+  bool is_benthos_in_numbers;
+  bool is_benthos_in_longevity_classes;
+
+  if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+      is_benthos_in_numbers = 1;
+  } else {
+      is_benthos_in_numbers = 0; // if not N then it impacts the benthos biomass by default
+  }
+
+  if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+      is_benthos_in_longevity_classes = 1;
+  } else {
+      is_benthos_in_longevity_classes = 0;
+  }
+
 
   // read estimates
   multimap<int, double> meanw_funcgr_per_node = read_meanw_funcgr_per_landscape(folder_name_parameterization,
@@ -61,14 +76,16 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
 
 
   // 2. sort and unique
-  sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
+  vector<int> all_landscapes;
+  for (auto iter = habitat_deltas_per_pop.begin(); iter != habitat_deltas_per_pop.end();
+       iter = habitat_deltas_per_pop.upper_bound(iter->first)) {
+      all_landscapes.push_back(iter->first);
+  }
+  sort(all_landscapes.begin(), all_landscapes.end());
   std::vector<int>::iterator it;
-  it = std::unique(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-  graph_point_code_landscape.resize(std::distance(graph_point_code_landscape.begin(), it));
-  int nbland = graph_point_code_landscape.size();
-
-  // creation of a vector of benthos shared (one benthos shared per landscape)
-  benthoss = vector<Benthos *>(nbland);
+  it = std::unique(all_landscapes.begin(), all_landscapes.end());
+  all_landscapes.resize(std::distance(all_landscapes.begin(), it));
+  int nbland = all_landscapes.size();
 
   outc(cout << "nb of marine landscapes " << nbland << endl);
 
@@ -82,7 +99,7 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
       vector<double> init_recovery_rates_per_funcgr;
       vector<double> init_h_betas_per_pop;
 
-      int a_marine_landscape = graph_point_code_landscape.at(landscape);
+      int a_marine_landscape = all_landscapes.at(landscape);
 
       outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
@@ -96,13 +113,13 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
           }
 
 
-          if (a_vector.size() != (size_t) nbbenthospops) {
-              cout << "on node 0: " << " nb longevity class is " << a_vector.size() <<
-                   ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run."
-                   << endl;
-              int aa;
-              cin >> aa;
-          }
+          //if (a_vector.size() != (size_t) nbbenthospops) {
+          //    cout << "on node 0: " << " nb longevity class is " << a_vector.size() <<
+          //         ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run."
+          //         << endl;
+          //    int aa;
+          //    cin >> aa;
+          //}
 
           multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
                   a_marine_landscape);
@@ -150,13 +167,14 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
               }
 
 
-              if (init_prop_funcgr_biomass_per_node.size() != (size_t) nbbenthospops) {
-                  cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
-                       ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
-                       << endl;
-                  int aa;
-                  cin >> aa;
-              }
+             // if (init_prop_funcgr_biomass_per_node.size() != (size_t) nbbenthospops) {
+             //     cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
+             //          ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
+             //          << endl;
+             //     int aa;
+             //     cin >> aa;
+             // }
+
 
               multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
                       a_marine_landscape);
@@ -198,58 +216,6 @@ void Dataloaderbenthos::features(const string &folder_name_parameterization,
           init_h_betas_per_pop.push_back(pos->second);
       }
 
-
-      // add e.g. 2 functional groups per shared
-      // and init with an arbitrary biomass.
-      // init_biomass will be distributed evenly among nodes
-      // belonging to this particular landscape
-
-      benthoss[landscape] = new Benthos(landscape,
-                                        a_marine_landscape,
-                                        nodes,
-                                        init_prop_funcgr_biomass_per_node,
-                                        init_prop_funcgr_number_per_node,
-                                        init_meanw_funcgr_per_node,
-                                        init_recovery_rates_per_funcgr,
-                                        init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
-                                        init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                        is_benthos_in_numbers,
-                                        is_benthos_in_longevity_classes,
-                                        init_h_betas_per_pop,
-                                        longevity_classes_condition_per_node
-      );
-      //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
-      //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
-
-  }
-
-  // check
-  for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
-      dout(cout << "this node " << nodes.at(a_idx)->get_idx_node().toIndex() <<
-                " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
-
-      if (nodes.at(a_idx)->get_benthos_tot_biomass().size() != (size_t) nbbenthospops) {
-          cout
-                  << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again"
-                  << endl;
-          int aa;
-          cin >> aa;
-      }
-  }
-
-  // check the area distribution for benthos shared 0
-  //vector<Node* > some_nodes= benthoss.at(0)-> get_list_nodes();
-  //for(int a_idx=0; a_idx<some_nodes.size(); a_idx++){
-  //    cout << some_nodes.at(a_idx)->get_idx_node() << endl;
-  //}
-
-  // check the biomasses
-  vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_biomass_per_node();
-  outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
-  for (unsigned int gr = 0; gr < a_prop_funcgr_per_node.size(); gr++) {
-      outc(cout << a_prop_funcgr_per_node[gr] << " ");
-  }
-  outc(cout << endl);
-
+   }
 
 }

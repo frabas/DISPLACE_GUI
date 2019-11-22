@@ -18,6 +18,7 @@ set(SOURCES
         getRSS.cpp
         biomodule2.cpp
         fisheriesmanagmt.cpp
+        dataloadervessels.cpp dataloaderbenthos.cpp
         runtime_tests/NodeTester.cpp runtime_tests/NodeTester.h data/NodesLoader.cpp data/NodesLoader.h data/VesselsLoader.cpp data/VesselsLoader.h)
 
 if (WIN32)

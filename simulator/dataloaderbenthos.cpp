@@ -1,6 +1,8 @@
 #include "dataloaderbenthos.h"
 
 
+
+
 Dataloaderbenthos::Dataloaderbenthos()
 {
 
@@ -14,12 +16,14 @@ int Dataloaderbenthos::gettype()
 void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
                                  const string &folder_name_parameterization,
                                  const string &inputfolder,
-                                 PopSceOptions &dyn_pop_sce)
+                                 PopSceOptions &dyn_pop_sce,
+                                 LoadedData & loadedData)
 {
   this->Dataloader::features(indb,
                              folder_name_parameterization,
                              inputfolder,
-                             dyn_pop_sce);
+                             dyn_pop_sce,
+                             loadedData);
   cout << "Loading benthos features" << endl;
 
 

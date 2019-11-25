@@ -12,6 +12,32 @@
 namespace sql = msqlitecpp::v2;
 using namespace std;
 
+struct LoadedData {
+    std::vector<double> param1;
+    std::vector<double> param2;
+    std::vector<double> param3;
+    std::vector<double> param4;
+    std::vector<double> param5;
+    std::vector<double> param6;
+    std::vector<double> param7;
+    std::vector<double> param8;
+    std::vector<double> param9;
+    std::vector<double> param10;
+};
+
+
+// e.g. for Benthos() we need to pass:
+//init_prop_funcgr_biomass_per_node,
+//init_prop_funcgr_number_per_node,
+//init_meanw_funcgr_per_node,
+//init_recovery_rates_per_funcgr,
+//init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
+//init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
+//init_h_betas_per_pop,
+//longevity_classes_condition_per_node
+
+
+
 
 // abstract class
 class Dataloader
@@ -22,7 +48,8 @@ public:
     virtual void features(std::shared_ptr<sql::Storage> indb,
                           const string& folder_name_parameterization,
                           const string& inputfolder,
-                          PopSceOptions& dyn_pop_sce){ cout << "Loading features" << endl;}
+                          PopSceOptions& dyn_pop_sce,
+                          LoadedData& loadedData){ cout << "Loading features" << endl;}
 };
 
 
@@ -33,12 +60,14 @@ public:
                       std::shared_ptr<sql::Storage> indb,
                       const string& folder_name_parameterization,
                       const string& inputfolder,
-                      PopSceOptions& dyn_pop_sce)
+                      PopSceOptions& dyn_pop_sce,
+                      LoadedData& loadedData)
     {
        dl->features(indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce);
+                    dyn_pop_sce,
+                    loadedData);
     }
 };
 

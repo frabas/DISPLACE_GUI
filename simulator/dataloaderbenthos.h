@@ -28,6 +28,8 @@ using namespace std;
 
 
 
+
+
 class Dataloaderbenthos : public virtual Dataloader
 {
 public:
@@ -35,7 +37,8 @@ public:
     int gettype (void);
     void features(std::shared_ptr<msqlitecpp::v2::Storage> indb, const string& folder_name_parameterization,
                   const string& inputfolder,
-                  PopSceOptions& dyn_pop_sce);
+                  PopSceOptions& dyn_pop_sce,
+                  LoadedData & loadedData);
 
 
 };

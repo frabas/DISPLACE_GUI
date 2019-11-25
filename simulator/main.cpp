@@ -150,6 +150,11 @@ using namespace sqlite;
 #include "myutils.h"
 #include <memoryinfo.h>
 
+#include "dataloader.h"
+#include "dataloaderbenthos.h"
+#include "dataloadervessels.h"
+
+
 #ifdef PROFILE
 #include <profiler.h>
 #endif
@@ -1597,7 +1602,68 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
+    Loader *l = new Loader;
 
+    LoadedData loadedData;
+
+    Dataloaderbenthos bl;
+    l->loadFeatures(&bl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    loadedData);
+
+
+    // sort and unique
+    sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
+    std::vector<int>::iterator it;
+    it = std::unique(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
+    graph_point_code_landscape.resize(std::distance(graph_point_code_landscape.begin(), it));
+    int nbland = graph_point_code_landscape.size();
+
+    // creation of a vector of benthos shared (one benthos shared per landscape)
+    benthoss = vector<Benthos *>(nbland);
+
+    outc(cout << "nb of marine landscapes " << nbland << endl);
+
+    for (int landscape = 0; landscape < nbland; landscape++)
+    {
+
+        //loadedData.vectparam1 replacing vector<double> init_meanw_funcgr_per_node;
+        //loadedData.vectparam2 replacing vector<double> init_prop_funcgr_number_per_node;
+        //loadedData.vectparam3 replacing vector<double> init_prop_funcgr_biomass_per_node;
+        //loadedData.vectparam4 replacing vector<double> init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
+        //loadedData.vectparam5 replacing vector<double> init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
+        //loadedData.vectparam6 replacing vector<double> init_recovery_rates_per_funcgr;
+        //loadedData.vectparam7 replacing vector<double> init_h_betas_per_pop;
+        //loadedData.mmapidparam1 longevity_classes_condition_per_node
+        //loadedData.int1   is_benthos_in_numbers,
+        //loadedData.int2     is_benthos_in_longevity_classes,
+
+        int a_marine_landscape = graph_point_code_landscape.at(landscape);
+
+        outc(cout << "a marine landscape " << a_marine_landscape << endl);
+
+        benthoss[landscape] = new Benthos(landscape,
+                                      a_marine_landscape,
+                                      nodes,
+                                      loadedData.vectparam3,
+                                      loadedData.vectparam2,
+                                      loadedData.vectparam1,
+                                      loadedData.vectparam6,
+                                      loadedData.vectparam5,
+                                      loadedData.vectparam4,
+                                      loadedData.int1,
+                                      loadedData.int2,
+                                      loadedData.vectparam7,
+                                      loadedData.mmapidparam1
+        );
+
+    }
+
+
+    /*
     // read estimates
     multimap<int, double> meanw_funcgr_per_node = read_meanw_funcgr_per_landscape(folder_name_parameterization,
                                                                                   inputfolder);
@@ -1839,7 +1905,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
 
 
-
+*/
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);

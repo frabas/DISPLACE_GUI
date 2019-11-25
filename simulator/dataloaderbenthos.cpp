@@ -110,8 +110,8 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
       outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
       if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-          multimap<int, double>::iterator lower_it_lgy = longevity_classes_condition_per_node.lower_bound(0);
-          multimap<int, double>::iterator upper_it_lgy = longevity_classes_condition_per_node.upper_bound(0);
+          multimap<int, double>::iterator lower_it_lgy = loadedData.mmapidparam1.lower_bound(0);
+          multimap<int, double>::iterator upper_it_lgy = loadedData.mmapidparam1.upper_bound(0);
 
           vector<double> a_vector;
           for (multimap<int, double>::iterator pos = lower_it_lgy; pos != upper_it_lgy; pos++) {

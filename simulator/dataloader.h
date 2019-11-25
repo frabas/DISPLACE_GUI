@@ -23,6 +23,10 @@ struct LoadedData {
     std::vector<double> vectparam8;
     std::vector<double> vectparam9;
     std::vector<double> vectparam10;
+    std::multimap<int,double> mmapidparam1;
+    std::multimap<int,double> mmapidparam2;
+    int int1;
+    int int2;
 };
 
 
@@ -56,7 +60,7 @@ public:
 class Loader
 {
 public:
-    void loadfeatures(Dataloader *dl,
+    void loadFeatures(Dataloader *dl,
                       std::shared_ptr<sql::Storage> indb,
                       const string& folder_name_parameterization,
                       const string& inputfolder,

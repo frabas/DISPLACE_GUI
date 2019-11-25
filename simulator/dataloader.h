@@ -13,16 +13,16 @@ namespace sql = msqlitecpp::v2;
 using namespace std;
 
 struct LoadedData {
-    std::vector<double> param1;
-    std::vector<double> param2;
-    std::vector<double> param3;
-    std::vector<double> param4;
-    std::vector<double> param5;
-    std::vector<double> param6;
-    std::vector<double> param7;
-    std::vector<double> param8;
-    std::vector<double> param9;
-    std::vector<double> param10;
+    std::vector<double> vectparam1;
+    std::vector<double> vectparam2;
+    std::vector<double> vectparam3;
+    std::vector<double> vectparam4;
+    std::vector<double> vectparam5;
+    std::vector<double> vectparam6;
+    std::vector<double> vectparam7;
+    std::vector<double> vectparam8;
+    std::vector<double> vectparam9;
+    std::vector<double> vectparam10;
 };
 
 

@@ -97,13 +97,13 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
 
   for (int landscape = 0; landscape < nbland; landscape++) {
 
-      vector<double> init_meanw_funcgr_per_node;
-      vector<double> init_prop_funcgr_number_per_node;
-      vector<double> init_prop_funcgr_biomass_per_node;
-      vector<double> init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
-      vector<double> init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-      vector<double> init_recovery_rates_per_funcgr;
-      vector<double> init_h_betas_per_pop;
+      //loadedData.vectparam1 replacing vector<double> init_meanw_funcgr_per_node;
+      //loadedData.vectparam2 replacing vector<double> init_prop_funcgr_number_per_node;
+      //loadedData.vectparam3 replacing vector<double> init_prop_funcgr_biomass_per_node;
+      //loadedData.vectparam4 replacing vector<double> init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
+      //loadedData.vectparam5 replacing vector<double> init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
+      //loadedData.vectparam6 replacing vector<double> init_recovery_rates_per_funcgr;
+      //loadedData.vectparam7 replacing vector<double> init_h_betas_per_pop;
 
       int a_marine_landscape = all_landscapes.at(landscape);
 
@@ -134,7 +134,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
           for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
               outc(cout << pos->second << endl);
               // logistic recovery rates for this group specific to this landscape
-              init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+              loadedData.vectparam5.push_back(pos->second);
           }
       } else {
           if (dyn_pop_sce.option(Options::modelBenthosInN)) {
@@ -145,7 +145,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
               for (multimap<int, double>::iterator pos = lower_land; pos != upper_land; pos++) {
                   outc(cout << pos->second << endl);
                   // biomass per cell for this group specific to this landscape
-                  init_prop_funcgr_number_per_node.push_back(pos->second);
+                  loadedData.vectparam2.push_back(pos->second);
               }
 
               multimap<int, double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
@@ -155,7 +155,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
               for (multimap<int, double>::iterator pos = lower_landddd; pos != upper_landddd; pos++) {
                   outc(cout << pos->second << endl);
                   // logistic recovery rates for this group specific to this landscape
-                  init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+                  loadedData.vectparam4.push_back(pos->second);
               }
 
 
@@ -169,12 +169,12 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
               for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
                   outc(cout << "check this: " << pos->second << endl);
                   // biomass per cell for this group specific to this landscape
-                  init_prop_funcgr_biomass_per_node.push_back(pos->second);
+                  loadedData.vectparam3.push_back(pos->second);
               }
 
 
-             // if (init_prop_funcgr_biomass_per_node.size() != (size_t) nbbenthospops) {
-             //     cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
+             // if (loadedData->vectparam3.size() != (size_t) nbbenthospops) {
+             //     cout << a_marine_landscape << " nb funcgr is " << loadedData->vectparam3.size() <<
              //          ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
              //          << endl;
              //     int aa;
@@ -189,7 +189,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
               for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                   outc(cout << pos->second << endl);
                   // logistic recovery rates for this group specific to this landscape
-                  init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+                  loadedData.vectparam5.push_back(pos->second);
               }
 
 
@@ -202,7 +202,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
       for (multimap<int, double>::iterator pos = lower_land3; pos != upper_land3; pos++) {
           outc(cout << pos->second << endl);
           // biomass per cell for this group specific to this landscape
-          init_meanw_funcgr_per_node.push_back(pos->second);
+          loadedData.vectparam2.push_back(pos->second);
       }
 
 
@@ -211,7 +211,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
       for (multimap<int, double>::iterator pos = lower_landd; pos != upper_landd; pos++) {
           outc(cout << pos->second << endl);
           // logistic recovery rates for this group specific to this landscape
-          init_recovery_rates_per_funcgr.push_back(pos->second);
+          loadedData.vectparam6.push_back(pos->second);
       }
 
       multimap<int, double>::iterator lower_land2 = habitat_deltas_per_pop.lower_bound(a_marine_landscape);
@@ -219,7 +219,7 @@ void Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
       for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
           outc(cout << pos->second << endl);
           // habitat_deltas_per_pop specific to this landscape
-          init_h_betas_per_pop.push_back(pos->second);
+          loadedData.vectparam7.push_back(pos->second);
       }
 
    }

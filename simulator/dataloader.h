@@ -1,7 +1,6 @@
 #ifndef DATALOADER_H
 #define DATALOADER_H
 
-#include<dataloader.h>
 
 #include <iostream>
 #include <string>
@@ -28,6 +27,9 @@ struct LoadedData {
     int int1;
     int int2;
 };
+
+
+
 
 
 // e.g. for Benthos() we need to pass:

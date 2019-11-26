@@ -239,20 +239,20 @@ map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_a(string folder_nam
 map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_b(string folder_name_parameterization, string inputfolder);
 map<int, string> COMMONSSHARED_EXPORT read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_habitat_deltas_per_pop(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_for_oth_land(int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
 
 // benthos specific
-multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_meanw_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_longevity_classes_condition_per_node(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_meanw_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_longevity_classes_condition_per_node(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_habitat_deltas_per_pop(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 
 // fishfarms specific
 map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);

@@ -3,8 +3,6 @@
 
 #include<dataloader.h>
 
-#include<dataloader.h>
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,7 +16,6 @@
 #include "Node.h"
 #include "Benthos.h"
 
-#include "readdata.h"
 #include "myutils.h"
 #include "helpers.h"
 #include "options.h"
@@ -41,5 +38,8 @@ public:
                   LoadedData &loadedData);
 
 };
+
+
+
 
 #endif // DATALOADERVESSELS_H

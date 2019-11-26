@@ -78,7 +78,6 @@ Benthos::Benthos(int _id,
 	{
        list_nodes.push_back(p_spe_nodes[i]);
 
-
         vector<double> init_longevity_classes_condition_per_node;
         if(is_benthos_in_longevity_classes)
         {

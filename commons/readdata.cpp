@@ -1607,6 +1607,8 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
     return(metiers_loss_after_one_passage);
 }
 
+
+/*
 multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder)
 {
 
@@ -1687,6 +1689,7 @@ multimap<int, double> read_benthos_number_carrying_capacity_K_per_landscape_per_
     return(K_per_landscape_per_funcgr);
 }
 
+*/
 
 multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)
 {
@@ -1976,7 +1979,8 @@ multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_pa
 
 
 // FOR BENTHOS
-multimap<int, double> read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder)
+/*
+ * multimap<int, double> read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder)
 {
 
     string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/prop_funcgr_biomass_per_node_per_landscape.dat";
@@ -2054,7 +2058,7 @@ multimap<int, double> read_meanw_funcgr_per_landscape(string folder_name_paramet
 
     return(meanw_funcgr_per_node);
 }
-
+*/
 
 // FOR FISHFARMS
 map<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder)

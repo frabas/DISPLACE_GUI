@@ -8,8 +8,12 @@
 
 #include "msqlitecpp/v2/storage.h"
 
+#include "myutils.h"
+
 namespace sql = msqlitecpp::v2;
 using namespace std;
+
+
 
 struct LoadedData {
     std::vector<double> vectparam1;
@@ -24,9 +28,44 @@ struct LoadedData {
     std::vector<double> vectparam10;
     std::multimap<int,double> mmapidparam1;
     std::multimap<int,double> mmapidparam2;
+    std::multimap<types::NodeId,int> mmapniparam1;
+    std::multimap<types::NodeId,double> mmapndparam1;
     int int1;
     int int2;
-};
+    int int3;
+    int int4;
+    int int5;
+    double double1;
+    double double2;
+    double double3;
+    double double4;
+    double double5;
+    double double6;
+    double double7;
+    double double8;
+    double double9;
+    double double10;
+    double double11;
+    double double12;
+    double double13;
+    double double14;
+    double double15;
+    double double16;
+    double double17;
+    double double18;
+    double double19;
+    double double20;
+    double double21;
+    double double22;
+    double double23;
+    double double24;
+    double double25;
+    double double26;
+    double double27;
+    double double28;
+    double double29;
+    double double30;
+ };
 
 
 

@@ -16,7 +16,6 @@
 #include "Node.h"
 #include "Benthos.h"
 
-#include "myutils.h"
 #include "helpers.h"
 #include "options.h"
 

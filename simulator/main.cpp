@@ -1615,53 +1615,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     loadedData);
 
 
-    // sort and unique
-    sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-    std::vector<int>::iterator it;
-    it = std::unique(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-    graph_point_code_landscape.resize(std::distance(graph_point_code_landscape.begin(), it));
-    int nbland = graph_point_code_landscape.size();
-
-    // creation of a vector of benthos shared (one benthos shared per landscape)
-    benthoss = vector<Benthos *>(nbland);
-
-    outc(cout << "nb of marine landscapes " << nbland << endl);
-
-    for (int landscape = 0; landscape < nbland; landscape++)
-    {
-
-        //loadedData.vectparam1 replacing vector<double> init_meanw_funcgr_per_node;
-        //loadedData.vectparam2 replacing vector<double> init_prop_funcgr_number_per_node;
-        //loadedData.vectparam3 replacing vector<double> init_prop_funcgr_biomass_per_node;
-        //loadedData.vectparam4 replacing vector<double> init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
-        //loadedData.vectparam5 replacing vector<double> init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
-        //loadedData.vectparam6 replacing vector<double> init_recovery_rates_per_funcgr;
-        //loadedData.vectparam7 replacing vector<double> init_h_betas_per_pop;
-        //loadedData.mmapidparam1 longevity_classes_condition_per_node
-        //loadedData.int1   is_benthos_in_numbers,
-        //loadedData.int2     is_benthos_in_longevity_classes,
-
-        int a_marine_landscape = graph_point_code_landscape.at(landscape);
-
-        outc(cout << "a marine landscape " << a_marine_landscape << endl);
-
-        benthoss[landscape] = new Benthos(landscape,
-                                      a_marine_landscape,
-                                      nodes,
-                                      loadedData.vectparam3,
-                                      loadedData.vectparam2,
-                                      loadedData.vectparam1,
-                                      loadedData.vectparam6,
-                                      loadedData.vectparam5,
-                                      loadedData.vectparam4,
-                                      loadedData.int1,
-                                      loadedData.int2,
-                                      loadedData.vectparam7,
-                                      loadedData.mmapidparam1
-        );
-
-    }
-
 
     /*
     // read estimates
@@ -1701,7 +1654,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                                                inputfolder);
 
 
-
+*/
     // 2. sort and unique
     sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
     std::vector<int>::iterator it;
@@ -1714,6 +1667,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     outc(cout << "nb of marine landscapes " << nbland << endl);
 
+    // LOOP OVER BENTHOS OBJECT
     for (int landscape = 0; landscape < nbland; landscape++) {
 
         vector<double> init_meanw_funcgr_per_node;
@@ -1729,8 +1683,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
         if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-            multimap<int, double>::iterator lower_it_lgy = longevity_classes_condition_per_node.lower_bound(0);
-            multimap<int, double>::iterator upper_it_lgy = longevity_classes_condition_per_node.upper_bound(0);
+            multimap<int, double>::iterator lower_it_lgy = loadedData.mmapidparam2.lower_bound(0);
+            multimap<int, double>::iterator upper_it_lgy = loadedData.mmapidparam2.upper_bound(0);
 
             vector<double> a_vector;
             for (multimap<int, double>::iterator pos = lower_it_lgy; pos != upper_it_lgy; pos++) {
@@ -1746,9 +1700,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 cin >> aa;
             }
 
-            multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+            multimap<int, double>::iterator lower_landdd = loadedData.mmapidparam3.lower_bound(
                     a_marine_landscape);
-            multimap<int, double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+            multimap<int, double>::iterator upper_landdd = loadedData.mmapidparam3.upper_bound(
                     a_marine_landscape);
             for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                 outc(cout << pos->second << endl);
@@ -1757,9 +1711,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
         } else {
             if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-                multimap<int, double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(
+                multimap<int, double>::iterator lower_land = loadedData.mmapidparam4.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(
+                multimap<int, double>::iterator upper_land = loadedData.mmapidparam4.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_land; pos != upper_land; pos++) {
                     outc(cout << pos->second << endl);
@@ -1767,9 +1721,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     init_prop_funcgr_number_per_node.push_back(pos->second);
                 }
 
-                multimap<int, double>::iterator lower_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+                multimap<int, double>::iterator lower_landddd = loadedData.mmapidparam5.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_landddd = benthos_number_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+                multimap<int, double>::iterator upper_landddd = loadedData.mmapidparam5.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landddd; pos != upper_landddd; pos++) {
                     outc(cout << pos->second << endl);
@@ -1780,9 +1734,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             } else {
 
-                multimap<int, double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(
+                multimap<int, double>::iterator lower_land2 = loadedData.mmapidparam6.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(
+                multimap<int, double>::iterator upper_land2 = loadedData.mmapidparam6.upper_bound(
                         a_marine_landscape);
 
                 for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
@@ -1800,9 +1754,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     cin >> aa;
                 }
 
-                multimap<int, double>::iterator lower_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(
+                multimap<int, double>::iterator lower_landdd = loadedData.mmapidparam3.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_landdd = benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(
+                multimap<int, double>::iterator upper_landdd = loadedData.mmapidparam3.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                     outc(cout << pos->second << endl);
@@ -1815,8 +1769,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-        multimap<int, double>::iterator lower_land3 = meanw_funcgr_per_node.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_land3 = meanw_funcgr_per_node.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_land3 = loadedData.mmapidparam1.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_land3 = loadedData.mmapidparam1.upper_bound(a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land3; pos != upper_land3; pos++) {
             outc(cout << pos->second << endl);
             // biomass per cell for this group specific to this landscape
@@ -1824,16 +1778,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-        multimap<int, double>::iterator lower_landd = recovery_rates_per_funcgr.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_landd = recovery_rates_per_funcgr.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_landd = loadedData.mmapidparam7.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_landd = loadedData.mmapidparam7.upper_bound(a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_landd; pos != upper_landd; pos++) {
             outc(cout << pos->second << endl);
             // logistic recovery rates for this group specific to this landscape
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
 
-        multimap<int, double>::iterator lower_land2 = habitat_deltas_per_pop.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_land2 = habitat_deltas_per_pop.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_land2 = loadedData.mmapidparam8.lower_bound(a_marine_landscape);
+        multimap<int, double>::iterator upper_land2 = loadedData.mmapidparam8.upper_bound(a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
             outc(cout << pos->second << endl);
             // habitat_deltas_per_pop specific to this landscape
@@ -1858,7 +1812,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                           is_benthos_in_numbers,
                                           is_benthos_in_longevity_classes,
                                           init_h_betas_per_pop,
-                                          longevity_classes_condition_per_node
+                                          loadedData.mmapidparam2
         );
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
@@ -1905,7 +1859,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
 
 
-*/
+
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);

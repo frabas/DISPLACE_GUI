@@ -28,6 +28,12 @@ struct LoadedData {
     std::vector<double> vectparam10;
     std::multimap<int,double> mmapidparam1;
     std::multimap<int,double> mmapidparam2;
+    std::multimap<int,double> mmapidparam3;
+    std::multimap<int,double> mmapidparam4;
+    std::multimap<int,double> mmapidparam5;
+    std::multimap<int,double> mmapidparam6;
+    std::multimap<int,double> mmapidparam7;
+    std::multimap<int,double> mmapidparam8;
     std::multimap<types::NodeId,int> mmapniparam1;
     std::multimap<types::NodeId,double> mmapndparam1;
     int int1;

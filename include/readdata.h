@@ -196,7 +196,7 @@ bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
 
 
 
-
+/*
 multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
@@ -217,7 +217,7 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on
 
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
-
+*/
 
 // harbour specific
 multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);

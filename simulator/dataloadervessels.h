@@ -34,17 +34,18 @@ class Dataloadervessels : public virtual Dataloader
 public:
     Dataloadervessels();
     int gettype (void);
-    void features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
+    int features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
                   const string &folder_name_parameterization,
                   const string &inputfolder,
                   PopSceOptions &dyn_pop_sce,
+                  DynAllocOptions &dyn_alloc_sce,
                   LoadedData &loadedData);
 
 };
 
 
 // vessel specific
-/*bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
+bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
                            vector<int>& vid_is_actives,
                            vector<int>& vid_is_part_of_ref_fleets,
@@ -85,6 +86,26 @@ bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vessel
                            string inputfolder
                            );
 
-*/
+
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, double> COMMONSSHARED_EXPORT read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, double> COMMONSSHARED_EXPORT read_vessels_betas(string a_semester, string folder_name_parameterization, string inputfolder);
+multimap<string, double> COMMONSSHARED_EXPORT read_vessels_tacs(string a_semester, string folder_name_parameterization, string inputfolder);
+
+multimap<string, double> COMMONSSHARED_EXPORT read_initial_fishing_credits(string folder_name_parameterization, string inputfolder);
+
+multimap<types::NodeId, int> COMMONSSHARED_EXPORT read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+
 
 #endif // DATALOADERVESSELS_H

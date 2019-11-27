@@ -33,9 +33,10 @@ class Dataloaderbenthos : public virtual Dataloader
 public:
     Dataloaderbenthos();
     int gettype (void);
-    void features(std::shared_ptr<msqlitecpp::v2::Storage> indb, const string& folder_name_parameterization,
+    int features(std::shared_ptr<msqlitecpp::v2::Storage> indb, const string& folder_name_parameterization,
                   const string& inputfolder,
                   PopSceOptions& dyn_pop_sce,
+                  DynAllocOptions& dyn_alloc_sce,
                   LoadedData & loadedData);
 
 

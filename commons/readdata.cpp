@@ -1030,6 +1030,7 @@ int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
 }
 
 
+/*
 multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1259,7 +1260,7 @@ multimap<string, double> read_vessels_betas(string a_semester, string folder_nam
     return(vessels_betas);
 }
 
-
+/*
 multimap<string, double> read_vessels_tacs(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1284,22 +1285,14 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
     fill_multimap_from_specifications_s_d(vesselsspe_tacs_file, vessels_tacs);
     vesselsspe_tacs_file.close();
 
-    /*
-    // check input
-    multimap<string,double>::iterator lower5 = vessels_tacs.lower_bound("DNK000001744");
-    multimap<string,double>::iterator upper5 = vessels_tacs.upper_bound("DNK000001744");
-    cout << "specific tac per pop: ";
-    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
-    {
-        cout << pos->second << " ";
-    }
-    cout << endl;
-    */
 
     return(vessels_tacs);
 }
 
 
+*/
+
+/*
 multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder)
 {
 
@@ -1316,23 +1309,11 @@ multimap<string, double> read_initial_fishing_credits(string folder_name_paramet
     fill_multimap_from_specifications_s_d(vesselsspe_credits_file, initial_fishing_credits);
     vesselsspe_credits_file.close();
 
-    /*
-    // check input
-    multimap<string,double>::iterator lower5 = initial_fishing_credits.lower_bound("DNK000001744");
-    multimap<string,double>::iterator upper5 = initial_fishing_credits.upper_bound("DNK000001744");
-    cout << "specific tac per pop: ";
-    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
-    {
-        cout << pos->second << " ";
-    }
-    cout << endl;
-    */
-
-    return(initial_fishing_credits);
+     return(initial_fishing_credits);
 }
 
-
-
+*/
+/*
 
 multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
@@ -1369,8 +1350,9 @@ multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_ve
 
     return(types::helpers::toKeyIdMultimap<types::NodeId>(possible_metiers));
 }
+*/
 
-
+/*
 multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1406,8 +1388,8 @@ multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, str
 
     return(types::helpers::toKeyIdMultimap<types::NodeId>(freq_possible_metiers));
 }
-
-
+*/
+/*
 multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1443,8 +1425,8 @@ multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, str
 
     return(types::helpers::toKeyIdMultimap<types::NodeId>(cpue_per_stk_on_nodes));
 }
-
-
+*/
+/*
 multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1481,6 +1463,8 @@ multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quart
     return(types::helpers::toKeyIdMultimap<types::NodeId>(gshape_cpue_per_stk_on_nodes));
 }
 
+*/
+/*
 
 multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
@@ -1518,6 +1502,7 @@ multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quart
     return(types::helpers::toKeyIdMultimap<types::NodeId>(gscale_cpue_per_stk_on_nodes));
 }
 
+*/
 
 
 multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name)

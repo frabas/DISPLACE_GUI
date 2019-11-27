@@ -16,7 +16,7 @@ int Dataloadervessels::gettype()
 }
 
 
-/*
+
 bool read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
                            vector<int>& vid_is_actives,
@@ -137,22 +137,548 @@ bool read_vessels_economics_features(
     return true;
 }
 
-*/
 
 
-void Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
+
+
+multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: fishing grounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_fgrounds;
+    vessels_fgrounds.open(filename.c_str());
+    if(vessels_fgrounds.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    multimap<string, int> fgrounds;
+    fill_multimap_from_specifications_s_i(vessels_fgrounds,  fgrounds);
+    vessels_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower_fg = fgrounds.lower_bound("DNK001");
+    multimap<string,int>::iterator upper_fg = fgrounds.upper_bound("DNK001");
+
+    dout(cout << "fishing grounds: ");
+    for (multimap<string, int>::iterator pos=lower_fg; pos != upper_fg; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(types::helpers::toValueIdMultimap<types::NodeId>(fgrounds));
+}
+
+
+
+multimap<string, types::NodeId> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: fishing grounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_fgrounds;
+    vessels_fgrounds.open(filename.c_str());
+    if(vessels_fgrounds.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+   }
+    multimap<string, int> fgrounds_init;
+    fill_multimap_from_specifications_s_i(vessels_fgrounds,  fgrounds_init);
+    vessels_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower_fg = fgrounds_init.lower_bound("DNK001");
+    multimap<string,int>::iterator upper_fg = fgrounds_init.upper_bound("DNK001");
+
+    dout(cout << "fishing grounds: ");
+    for (multimap<string, int>::iterator pos=lower_fg; pos != upper_fg; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(types::helpers::toValueIdMultimap<types::NodeId>(fgrounds_init));
+}
+
+
+
+multimap<string, types::NodeId> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: specfic-harbour list
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_harbours_"+a_quarter+".dat";
+    ifstream vessels_harbours;
+    vessels_harbours.open(filename.c_str());
+    if(vessels_harbours.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<string, int> harbours;
+    fill_multimap_from_specifications_s_i(vessels_harbours,  harbours);
+    vessels_harbours.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower2 = harbours.lower_bound("DNK001");
+    multimap<string,int>::iterator upper2 = harbours.upper_bound("DNK001");
+    dout(cout << "specific harbours: ");
+    for (multimap<string, int>::iterator pos=lower2; pos != upper2; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(types::helpers::toValueIdMultimap<types::NodeId>(harbours));
+}
+
+
+multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: frequency for fgrounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_freq_fgrounds;
+    vessels_freq_fgrounds.open(filename.c_str());
+    if(vessels_freq_fgrounds.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    multimap<string, double> freq_fgrounds;
+    fill_multimap_from_specifications_s_d(vessels_freq_fgrounds,  freq_fgrounds);
+    vessels_freq_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,double>::iterator lower3 = freq_fgrounds.lower_bound("DNK001");
+    multimap<string,double>::iterator upper3 = freq_fgrounds.upper_bound("DNK001");
+    dout(cout << "specific freq fgrounds: ");
+    for (multimap<string, double>::iterator pos=lower3; pos != upper3; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+
+    return(freq_fgrounds);
+}
+
+multimap<string, double> read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: frequency for fgrounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_freq_fgrounds;
+    vessels_freq_fgrounds.open(filename.c_str());
+    if(vessels_freq_fgrounds.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<string, double> freq_fgrounds_init;
+    fill_multimap_from_specifications_s_d(vessels_freq_fgrounds,  freq_fgrounds_init);
+    vessels_freq_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,double>::iterator lower3 = freq_fgrounds_init.lower_bound("DNK001");
+    multimap<string,double>::iterator upper3 = freq_fgrounds_init.upper_bound("DNK001");
+    dout(cout << "specific freq fgrounds: ");
+    for (multimap<string, double>::iterator pos=lower3; pos != upper3; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+
+    return(freq_fgrounds_init);
+}
+
+
+
+multimap<string, double> read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: frequency for harbours
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_harbours_"+a_quarter+".dat";
+    ifstream vessels_freq_harbours;
+    vessels_freq_harbours.open(filename.c_str());
+    if(vessels_freq_harbours.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    multimap<string, double> freq_harbours;
+    fill_multimap_from_specifications_s_d(vessels_freq_harbours,  freq_harbours);
+    vessels_freq_harbours.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,double>::iterator lower4 = freq_harbours.lower_bound("DNK001");
+    multimap<string,double>::iterator upper4 = freq_harbours.upper_bound("DNK001");
+    dout(cout << "specific freq harbours: ");
+    for (multimap<string, double>::iterator pos=lower4; pos != upper4; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(freq_harbours);
+}
+
+
+multimap<string, double> read_vessels_betas(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel catching power/skipping effect i.e. the vessel betas
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+    ifstream vesselsspe_betas_file;
+    vesselsspe_betas_file.open(filename.c_str());
+    if(vesselsspe_betas_file.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<string, double> vessels_betas;
+    fill_multimap_from_specifications_s_d(vesselsspe_betas_file, vessels_betas);
+    vesselsspe_betas_file.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,double>::iterator lower5 = vessels_betas.lower_bound("DNK000004561");
+    multimap<string,double>::iterator upper5 = vessels_betas.upper_bound("DNK000004561");
+    dout(cout << "specific catching power/skipper effect beta parameter per pop: ");
+    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(vessels_betas);
+}
+
+
+multimap<string, double> read_vessels_tacs(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel catching power/skipping effect i.e. the vessel betas
+    string filename;
+    if(folder_name_parameterization=="final")
+    {
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+    }
+    else
+    {
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_percent_tacs_per_pop_"+a_semester+".dat";
+    }
+    ifstream vesselsspe_tacs_file;
+    vesselsspe_tacs_file.open(filename.c_str());
+    if(vesselsspe_tacs_file.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<string, double> vessels_tacs;
+    fill_multimap_from_specifications_s_d(vesselsspe_tacs_file, vessels_tacs);
+    vesselsspe_tacs_file.close();
+
+    /*
+    // check input
+    multimap<string,double>::iterator lower5 = vessels_tacs.lower_bound("DNK000001744");
+    multimap<string,double>::iterator upper5 = vessels_tacs.upper_bound("DNK000001744");
+    cout << "specific tac per pop: ";
+    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
+    {
+        cout << pos->second << " ";
+    }
+    cout << endl;
+    */
+
+    return(vessels_tacs);
+}
+
+
+multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/initial_share_fishing_credits_per_vid.dat";
+
+    ifstream vesselsspe_credits_file;
+    vesselsspe_credits_file.open(filename.c_str());
+    if(vesselsspe_credits_file.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<string, double> initial_fishing_credits;
+    fill_multimap_from_specifications_s_d(vesselsspe_credits_file, initial_fishing_credits);
+    vesselsspe_credits_file.close();
+
+    /*
+    // check input
+    multimap<string,double>::iterator lower5 = initial_fishing_credits.lower_bound("DNK000001744");
+    multimap<string,double>::iterator upper5 = initial_fishing_credits.upper_bound("DNK000001744");
+    cout << "specific tac per pop: ";
+    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
+    {
+        cout << pos->second << " ";
+    }
+    cout << endl;
+    */
+
+    return(initial_fishing_credits);
+}
+
+
+
+
+multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: possible metiers for this vessel
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_possible_metiers_"+a_quarter+".dat";
+    ifstream vessels_possible_metiers;
+    vessels_possible_metiers.open(filename.c_str());
+    if(vessels_possible_metiers.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    //key=fground, value=metier name
+    multimap<int, int> possible_metiers;
+    fill_multimap_from_specifications_i_i(vessels_possible_metiers,  possible_metiers);
+    vessels_possible_metiers.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,int>::iterator lower_g = possible_metiers.lower_bound(1600);
+        multimap<int,int>::iterator upper_g = possible_metiers.upper_bound(1600);
+        dout(cout << "for this vessel, possible metiers for this specific ground (1600): ");
+        for (multimap<int, int>::iterator pos=lower_g; pos != upper_g; pos++)
+        {
+            dout(cout << pos->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(possible_metiers));
+}
+
+
+multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+{
+
+    // frequence on ground of possible metiers for this vessels
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_freq_possible_metiers_"+a_quarter+".dat";
+    ifstream vessels_freq_possible_metiers;
+    vessels_freq_possible_metiers.open(filename.c_str());
+    if(vessels_freq_possible_metiers.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    //key=fground, value=freq
+    multimap<int, double> freq_possible_metiers;
+    fill_multimap_from_specifications_i_d(vessels_freq_possible_metiers,  freq_possible_metiers);
+    vessels_freq_possible_metiers.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,double>::iterator lower_gr = freq_possible_metiers.lower_bound(1600);
+        multimap<int,double>::iterator upper_gr = freq_possible_metiers.upper_bound(1600);
+        dout(cout << "for this vessel, frequence of possible metiers for this specific ground (1600): ");
+        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
+        {
+            dout(cout << pos2->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(freq_possible_metiers));
+}
+
+
+multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+{
+
+    // frequence on ground of possible metiers for this vessels
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    ifstream vessels_cpue_per_stk_on_nodes;
+    vessels_cpue_per_stk_on_nodes.open(filename.c_str());
+    if(vessels_cpue_per_stk_on_nodes.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    //key=fground, value=cpue kghour
+    multimap<int, double> cpue_per_stk_on_nodes;
+    fill_multimap_from_specifications_i_d(vessels_cpue_per_stk_on_nodes,  cpue_per_stk_on_nodes);
+    vessels_cpue_per_stk_on_nodes.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,double>::iterator lower_gr = cpue_per_stk_on_nodes.lower_bound(1600);
+        multimap<int,double>::iterator upper_gr = cpue_per_stk_on_nodes.upper_bound(1600);
+        dout(cout << "for this vessel, frequence of possible metiers for this specific ground (1600): ");
+        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
+        {
+            dout(cout << pos2->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(cpue_per_stk_on_nodes));
+}
+
+
+multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+{
+
+    // frequence on ground of possible metiers for this vessels
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gshape_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    ifstream vessels_gshape_cpue_per_stk_on_nodes;
+    vessels_gshape_cpue_per_stk_on_nodes.open(filename.c_str());
+    if(vessels_gshape_cpue_per_stk_on_nodes.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    //key=fground, value= gamma shape param
+    multimap<int, double> gshape_cpue_per_stk_on_nodes;
+    fill_multimap_from_specifications_i_d(vessels_gshape_cpue_per_stk_on_nodes,  gshape_cpue_per_stk_on_nodes);
+    vessels_gshape_cpue_per_stk_on_nodes.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,double>::iterator lower_gr = gshape_cpue_per_stk_on_nodes.lower_bound(1600);
+        multimap<int,double>::iterator upper_gr = gshape_cpue_per_stk_on_nodes.upper_bound(1600);
+        dout(cout << "for this vessel,  for this specific ground (1600): ");
+        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
+        {
+            dout(cout << pos2->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(gshape_cpue_per_stk_on_nodes));
+}
+
+
+multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+{
+
+    // frequence on ground of possible metiers for this vessels
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    ifstream vessels_gscale_cpue_per_stk_on_nodes;
+    vessels_gscale_cpue_per_stk_on_nodes.open(filename.c_str());
+    if(vessels_gscale_cpue_per_stk_on_nodes.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    //key=fground, value=gamma scale param
+    multimap<int, double> gscale_cpue_per_stk_on_nodes;
+    fill_multimap_from_specifications_i_d(vessels_gscale_cpue_per_stk_on_nodes,  gscale_cpue_per_stk_on_nodes);
+    vessels_gscale_cpue_per_stk_on_nodes.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,double>::iterator lower_gr = gscale_cpue_per_stk_on_nodes.lower_bound(1600);
+        multimap<int,double>::iterator upper_gr = gscale_cpue_per_stk_on_nodes.upper_bound(1600);
+        dout(cout << "for this vessel,  for this specific ground (1600): ");
+        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
+        {
+            dout(cout << pos2->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(gscale_cpue_per_stk_on_nodes));
+}
+
+
+
+
+
+
+
+
+int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
                                  const string& folder_name_parameterization,
                                  const string& inputfolder,
                                  PopSceOptions &dyn_pop_sce,
+                                 DynAllocOptions &dyn_alloc_sce,
                                  LoadedData& loadedData)
 {
 
 
-/*
+
     this->Dataloader::features(indb,
                              folder_name_parameterization,
                              inputfolder,
                              dyn_pop_sce,
+                             dyn_alloc_sce,
                              loadedData);
   cout << "Loading vessels features" << endl;
 
@@ -178,6 +704,14 @@ void Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
   vector<double> mult_fuelcons_when_inactive;
   vector<int> firm_ids;
   vector<VesselCalendar> calendars;
+
+  // TODO: pass these as input to the function
+  string a_quarter  = "quarter1";
+  string a_month    = "month1";
+  string a_semester = "semester1";
+  int selected_vessels_only = 0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
+  //...
+
 
   if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                              speeds, fuelcons, lengths, vKWs,
@@ -205,7 +739,7 @@ void Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
   vector<double> opportunity_interest_rates;
   vector<double> annual_discount_rates;
 
-  cout << "read_vessels_economic_features()" << endl;
+  cout << "read_vessels_economic_features() in loadVessels()" << endl;
   if (!read_vessels_economics_features(
           vesselids,
           this_vessel_nb_crews,
@@ -228,51 +762,105 @@ void Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
   }
 
 
+  // read the more complex objects (i.e. when several info for a same vessel)...
+  // also quarter specific but semester specific for the betas because of the survey design they are comning from...
+  auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+  auto fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+  auto harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
+
+  multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+  multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization,
+                                                                        inputfolder);
+  multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
+  multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
+  multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
+
+
+
+  multimap<string, double> fishing_credits;
+  if (dyn_alloc_sce.option(Options::fishing_credits)) {
+      fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
+  }
+
+
+
+  // loop over vids
+  vector <multimap<types::NodeId, int> > vect_of_possible_metiers_mmap(vesselids.size());
+  vector <multimap<types::NodeId, double> > vect_of_freq_possible_metiers_mmap(vesselids.size());
+  vector <multimap<types::NodeId, double> > vect_of_gshape_cpue_per_stk_on_nodes_mmap(vesselids.size());
+  vector <multimap<types::NodeId, double> > vect_of_gscale_cpue_per_stk_on_nodes_mmap(vesselids.size());
+
+  for (unsigned int i = 0; i < vesselids.size(); i++)
+  {
+      outc(cout << "create vessel " << i << endl);
+
+      // read vessel and quarter specific multimap
+      // quarter specific to capture a piece of seasonality in the fishnig activity
+      vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+      vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
+                                                         inputfolder);
+
+      //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
+      vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                       folder_name_parameterization, inputfolder);
+      vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                       folder_name_parameterization, inputfolder);
+
+
+
+    }
+
+
+
   //  export
-  loadedData.vectparam1 =spe_harbours;
-  loadedData.vectparam2 =spe_fgrounds;
-  loadedData.vectparam3 =spe_fgrounds_init;
-  loadedData.vectparam4 =spe_freq_harbours;
-  loadedData.vectparam5 =spe_freq_fgrounds;
-  loadedData.vectparam6 =spe_freq_fgrounds_init;
-  loadedData.vectparam7 =spe_vessel_betas_per_pop;
-  loadedData.vectparam8 =spe_percent_tac_per_pop;
-  loadedData.mmapniparam1=possible_metiers;
-  loadedData.mmapndparam1=freq_possible_metiers;
-  loadedData.int1=param8vid_is_actives[i];
-  loadedData.int2=vid_is_part_of_ref_fleets[i];
-  loadedData.double1=speeds[i];
-  loadedData.double2=fuelcons[i];
-  loadedData.double3=lengths[i];
-  loadedData.double4=vKWs[i];
-  loadedData.double5=carrycapacities[i];
-  loadedData.double6=tankcapacities[i];
-  loadedData.double7=nbfpingspertrips[i];
-  loadedData.double8=resttime_par1s[i];
-  loadedData.double9=resttime_par2s[i];
-  loadedData.double10=av_trip_duration[i];
-  loadedData.double11=mult_fuelcons_when_steaming[i];
-  loadedData.double12=mult_fuelcons_when_fishing[i];
-  loadedData.double13=mult_fuelcons_when_returning[i];
-  loadedData.double14=mult_fuelcons_when_inactive[i];
-  loadedData.double15=firm_ids[i];
-  loadedData.calendar1=calendars[i];
-  loadedData.double16=i < this_vessel_nb_crews.size() ? this_vessel_nb_crews[i] : 0;
-  loadedData.double17=i < annual_other_incomes.size() ? annual_other_incomes[i] : 0;
-  loadedData.double18=i < landing_costs_percents.size() ? landing_costs_percents[i] : 0;
-  loadedData.double19=i < crewshare_and_unpaid_labour_costs_percents.size() ? crewshare_and_unpaid_labour_costs_percents[i] : 0;
-  loadedData.double20=i < other_variable_costs_per_unit_efforts.size() ? other_variable_costs_per_unit_efforts[i] : 0;
-  loadedData.double21=i < annual_insurance_costs_per_crews.size() ? annual_insurance_costs_per_crews[i] : 0;
-  loadedData.double22=i < standard_labour_hour_opportunity_costss.size() ? standard_labour_hour_opportunity_costss[i] : 0;
-  loadedData.double23=i < standard_annual_full_time_employement_hourss.size() ? standard_annual_full_time_employement_hourss[i] : 0;
-  loadedData.double24=i < other_annual_fixed_costss.size() ? other_annual_fixed_costss[i] : 0;
-  loadedData.double25=i < vessel_values.size() ? vessel_values[i] : 0;
-  loadedData.double26=i < annual_depreciation_rates.size() ? annual_depreciation_rates[i] : 0;
-  loadedData.double27=i < opportunity_interest_rates.size() ? opportunity_interest_rates[i] : 0;
-  loadedData.double28=i < annual_discount_rates.size() ? annual_discount_rates[i] : 0;
+  loadedData.vectsparam1 =vesselids;
+  loadedData.mmapsnparam1 =harbours;
+  loadedData.mmapsnparam2 =fgrounds;
+  loadedData.mmapsnparam3 =fgrounds_init;
+  loadedData.mmapsdparam1 =freq_harbours;
+  loadedData.mmapsdparam2 =freq_fgrounds;
+  loadedData.mmapsdparam3 =freq_fgrounds_init;
+  loadedData.mmapsdparam4 =vessels_betas;
+  loadedData.mmapsdparam5 =vessels_tacs;
+  loadedData.mmapsdparam6 =fishing_credits;
+  loadedData.vectmmapniparam1=vect_of_possible_metiers_mmap;
+  loadedData.vectmmapndparam1=vect_of_freq_possible_metiers_mmap;
+  loadedData.vectmmapndparam2=vect_of_gshape_cpue_per_stk_on_nodes_mmap;
+  loadedData.vectmmapndparam3=vect_of_gscale_cpue_per_stk_on_nodes_mmap;
+  loadedData.vectiparam1=vid_is_actives;
+  loadedData.vectiparam2=vid_is_part_of_ref_fleets;
+  loadedData.vectdparam1=speeds;
+  loadedData.vectdparam2=fuelcons;
+  loadedData.vectdparam3=lengths;
+  loadedData.vectdparam4=vKWs;
+  loadedData.vectdparam5=carrycapacities;
+  loadedData.vectdparam6=tankcapacities;
+  loadedData.vectdparam7=nbfpingspertrips;
+  loadedData.vectdparam8=resttime_par1s;
+  loadedData.vectdparam9=resttime_par2s;
+  loadedData.vectdparam10=av_trip_duration;
+  loadedData.vectdparam11=mult_fuelcons_when_steaming;
+  loadedData.vectdparam12=mult_fuelcons_when_fishing;
+  loadedData.vectdparam13=mult_fuelcons_when_returning;
+  loadedData.vectdparam14=mult_fuelcons_when_inactive;
+  loadedData.vectiparam3=firm_ids;
+  loadedData.vectcalendar1=calendars;
+  loadedData.vectdparam16=this_vessel_nb_crews;
+  loadedData.vectdparam17=annual_other_incomes;
+  loadedData.vectdparam18=landing_costs_percents;
+  loadedData.vectdparam19=crewshare_and_unpaid_labour_costs_percents;
+  loadedData.vectdparam20=other_variable_costs_per_unit_efforts;
+  loadedData.vectdparam21=annual_insurance_costs_per_crews;
+  loadedData.vectdparam22=standard_labour_hour_opportunity_costss;
+  loadedData.vectdparam23=standard_annual_full_time_employement_hourss;
+  loadedData.vectdparam24=other_annual_fixed_costss;
+  loadedData.vectdparam25=vessel_values;
+  loadedData.vectdparam26=annual_depreciation_rates;
+  loadedData.vectdparam27=opportunity_interest_rates;
+  loadedData.vectdparam28=annual_discount_rates;
 
 
- */
+
 
 
 }

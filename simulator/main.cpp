@@ -1612,6 +1612,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     folder_name_parameterization,
                     inputfolder,
                     dyn_pop_sce,
+                    dyn_alloc_sce,
                     loadedData);
 
 
@@ -3080,6 +3081,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
+
+    Dataloadervessels vl;
+    l->loadFeatures(&vl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    loadedData);
+
+
+/*
     // read general vessel features
     // (quarter specific, mainly because of the gamma parameters)
     vector<string> vesselids;
@@ -3165,27 +3178,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
 
 
- #if 0
-    // debug
-    if(fgrounds.size() != freq_fgrounds.size())
-    {
-        lock();
-        cout << "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
-        unlock();
-        int tmp;
-        cin >> tmp;				 // pause
-    }
-    if(harbours.size() != freq_harbours.size())
-    {
-        lock();
-        cout<< "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
-        unlock();
-        int tmp;
-        cin >> tmp;				 // pause
-    }*/
-
-#endif
-
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
@@ -3239,75 +3231,42 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-#if 0
-                                                                                                                                // check
-        cout << "possible metiers for " << vesselids[i] << " are " << endl;
-        for ( std::multimap< int, int, std::less< int > >::const_iterator iter =possible_metiers.begin();
-              iter != possible_metiers.end(); ++iter )
-            cout << iter->first << '\t' << iter->second << '\n';
-        cout << endl;
+    }
 
-        // check
-        cout << "freq possible metiers for " << vesselids[i] << " are " << endl;
-        for ( std::multimap< int, double, std::less< int > >::const_iterator iter =freq_possible_metiers.begin();
-              iter != freq_possible_metiers.end(); ++iter )
-            cout << iter->first << '\t' << iter->second << '\n';
-        cout << endl;
-
-
-    if (possible_metiers.size() != freq_possible_metiers.size())
-        {
-            unlock();
-            cout << "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
-                 << "for the vessel " << vesselids[i] << endl;
-            unlock();
-
-            int tmp;
-            cin >> tmp;             // pause
-        }
-
-
-        // debug
-        //if(possible_metiers.size()==0)
-        //{
-        //    possible_metiers.insert(std::pair<int,int>(0, 0));
-        //    freq_possible_metiers.insert(std::pair<int,double>(0, 1.0));
-        //}
-#endif
-}
-
-
+*/
 
 
 
     // LOOP OVER VESSELIDS:
-    vessels = vector<Vessel *>(vesselids.size());
+    int nbvessels= loadedData.vectsparam1.size();
+    vessels = vector<Vessel *>(nbvessels);
     multimap<types::NodeId, int> possible_metiers;
     multimap<types::NodeId, double> freq_possible_metiers;
     multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
     multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
-    for (unsigned int i = 0; i < vesselids.size(); i++)
+    for (unsigned int i = 0; i < nbvessels; i++)
     {
+        string vname= loadedData.vectsparam1.at(i);
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
-        possible_metiers             = vect_of_possible_metiers_mmap.at(i);
-        freq_possible_metiers        = vect_of_freq_possible_metiers_mmap.at(i);
-        gshape_cpue_per_stk_on_nodes = vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i);
-        gscale_cpue_per_stk_on_nodes = vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i);
-        spe_fgrounds                 = find_entries(fgrounds, vesselids[i]);
-        spe_fgrounds_init            = find_entries(fgrounds_init, vesselids[i]);
-        spe_freq_fgrounds            = find_entries_s_d(freq_fgrounds, vesselids[i]);
-        spe_freq_fgrounds_init       = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
-        spe_harbours                 = find_entries(harbours, vesselids[i]);
-        spe_freq_harbours            = find_entries_s_d(freq_harbours, vesselids[i]);
-        spe_vessel_betas_per_pop     = find_entries_s_d(vessels_betas, vesselids[i]);
-        spe_percent_tac_per_pop      = find_entries_s_d(vessels_tacs, vesselids[i]);
+        possible_metiers             = loadedData.vectmmapniparam1.at(i);
+        freq_possible_metiers        = loadedData.vectmmapndparam1.at(i);
+        gshape_cpue_per_stk_on_nodes = loadedData.vectmmapndparam2.at(i);
+        gscale_cpue_per_stk_on_nodes = loadedData.vectmmapndparam3.at(i);
+        spe_fgrounds                 = find_entries(loadedData.mmapsnparam2, vname);
+        spe_fgrounds_init            = find_entries(loadedData.mmapsnparam3, vname);
+        spe_freq_fgrounds            = find_entries_s_d(loadedData.mmapsdparam2, vname);
+        spe_freq_fgrounds_init       = find_entries_s_d(loadedData.mmapsdparam3, vname);
+        spe_harbours                 = find_entries(loadedData.mmapsnparam1, vname);
+        spe_freq_harbours            = find_entries_s_d(loadedData.mmapsdparam1, vname);
+        spe_vessel_betas_per_pop     = find_entries_s_d(loadedData.mmapsdparam4, vname);
+        spe_percent_tac_per_pop      = find_entries_s_d(loadedData.mmapsdparam5, vname);
 
         if (spe_vessel_betas_per_pop.size() != nbpops) {
             std::stringstream er;
             er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
                nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-               spe_vessel_betas_per_pop.size() << " for vessel " << vesselids[i];
+               spe_vessel_betas_per_pop.size() << " for vessel " << vname;
             throw std::runtime_error(er.str());
 
             //possibly, fix dim in R for the oldest dataset:
@@ -3318,24 +3277,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          // dyn sce.
         if (dyn_alloc_sce.option(Options::fishing_credits))
         {
-            tout(cout << "Read in fishing credits for this vessel " << vesselids[i] << endl);
-            spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+            tout(cout << "Read in fishing credits for this vessel " << loadedData.vectsparam1.at(i) << endl);
+            spe_fishing_credits = find_entries_s_d(loadedData.mmapsdparam6, loadedData.vectsparam1.at(i));
             for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
                 spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
             }
 
             // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
             while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
-            cout << "Fishing credits 0 for this vessel " << vesselids[i] << " is " << spe_fishing_credits.at(0) << endl;
+            cout << "Fishing credits 0 for this vessel " << loadedData.vectsparam1.at(i) << " is " << spe_fishing_credits.at(0) << endl;
 
         }
 
         if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
         {
             // a decrease by 20%...
-            speeds[i] = speeds[i]*0.8;
+            loadedData.vectdparam1.at(i) = loadedData.vectdparam1.at(i)*0.8;
             // corresponds to a decrease by 48.8% in fuelcons
-            fuelcons[i] = fuelcons[i]* 0.512;
+            loadedData.vectdparam2.at(i) = loadedData.vectdparam2.at(i)* 0.512;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -3343,9 +3302,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (dyn_alloc_sce.option(Options::reduced_speed_30percent))
         {
             // a decrease by 30%...
-            speeds[i] = speeds[i] * 0.7;
+            loadedData.vectdparam1.at(i) = loadedData.vectdparam1.at(i)*0.7;
             // corresponds to a decrease by 65.7% in fuelcons
-            fuelcons[i] = fuelcons[i] * 0.343;
+            loadedData.vectdparam2.at(i) = loadedData.vectdparam2.at(i)* 0.343;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -3353,9 +3312,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
         {
             // a decrease by 10%...
-             speeds[i] = speeds[i] * 0.9;
+             loadedData.vectdparam1.at(i) = loadedData.vectdparam1.at(i)*0.9;
             // corresponds to a decrease by 30% in fuelcons
-            fuelcons[i] = fuelcons[i]  * 0.7;
+            loadedData.vectdparam2.at(i) = loadedData.vectdparam2.at(i)* 0.7;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -3376,7 +3335,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // if missing info for a given vessel for this quarter
             outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
             // CAUTION: LIKE A MAGIC NUMBER HERE!!!
-            start_harbour = find_entries(harbours, vesselids[0])[0];
+            start_harbour = find_entries(loadedData.mmapsnparam1, loadedData.vectsparam1.at(0))[0];
             spe_harbours.push_back(start_harbour);
             spe_freq_harbours.push_back(1);
             outc(cout << "then take node: " << start_harbour << endl);
@@ -3385,7 +3344,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         vessels[i] = new Vessel(nodes[start_harbour.toIndex()],
                                 i,
-                                vesselids[i],
+                                loadedData.vectsparam1.at(i),
                                 nbpops,
                                 NBSZGROUP,
                                 spe_harbours,
@@ -3400,41 +3359,37 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                 freq_possible_metiers,
                                 gshape_cpue_per_stk_on_nodes,
                                 gscale_cpue_per_stk_on_nodes,
-                                vid_is_actives[i],
-                                vid_is_part_of_ref_fleets[i],
-                                speeds[i],
-                                fuelcons[i],
-                                lengths[i],
-                                vKWs[i],
-                                carrycapacities[i],
-                                tankcapacities[i],
-                                nbfpingspertrips[i],
-                                resttime_par1s[i],
-                                resttime_par2s[i],
-                                av_trip_duration[i],
-                                mult_fuelcons_when_steaming[i],
-                                mult_fuelcons_when_fishing[i],
-                                mult_fuelcons_when_returning[i],
-                                mult_fuelcons_when_inactive[i],
-                                firm_ids[i],
-                                calendars[i],
-                                i < this_vessel_nb_crews.size() ? this_vessel_nb_crews[i] : 0,
-                                i < annual_other_incomes.size() ? annual_other_incomes[i] : 0,
-                                i < landing_costs_percents.size() ? landing_costs_percents[i] : 0,
-                                i < crewshare_and_unpaid_labour_costs_percents.size()
-                                ? crewshare_and_unpaid_labour_costs_percents[i] : 0,
-                                i < other_variable_costs_per_unit_efforts.size()
-                                ? other_variable_costs_per_unit_efforts[i] : 0,
-                                i < annual_insurance_costs_per_crews.size() ? annual_insurance_costs_per_crews[i] : 0,
-                                i < standard_labour_hour_opportunity_costss.size()
-                                ? standard_labour_hour_opportunity_costss[i] : 0,
-                                i < standard_annual_full_time_employement_hourss.size()
-                                ? standard_annual_full_time_employement_hourss[i] : 0,
-                                i < other_annual_fixed_costss.size() ? other_annual_fixed_costss[i] : 0,
-                                i < vessel_values.size() ? vessel_values[i] : 0,
-                                i < annual_depreciation_rates.size() ? annual_depreciation_rates[i] : 0,
-                                i < opportunity_interest_rates.size() ? opportunity_interest_rates[i] : 0,
-                                i < annual_discount_rates.size() ? annual_discount_rates[i] : 0
+                                loadedData.vectiparam1.at(i),
+                                loadedData.vectiparam2.at(i),
+                                loadedData.vectdparam1.at(i),
+                                loadedData.vectdparam2.at(i),
+                                loadedData.vectdparam3.at(i),
+                                loadedData.vectdparam4.at(i),
+                                loadedData.vectdparam5.at(i),
+                                loadedData.vectdparam6.at(i),
+                                loadedData.vectdparam7.at(i),
+                                loadedData.vectdparam8.at(i),
+                                loadedData.vectdparam9.at(i),
+                                loadedData.vectdparam10.at(i),
+                                loadedData.vectdparam11.at(i),
+                                loadedData.vectdparam12.at(i),
+                                loadedData.vectdparam13.at(i),
+                                loadedData.vectdparam14.at(i),
+                                loadedData.vectiparam3.at(i),
+                                loadedData.vectcalendar1.at(i),
+                                i < loadedData.vectdparam16.size() ? loadedData.vectdparam16.at(i) : 0,
+                i < loadedData.vectdparam17.size() ? loadedData.vectdparam17.at(i) : 0,
+                i < loadedData.vectdparam18.size() ? loadedData.vectdparam18.at(i) : 0,
+                i < loadedData.vectdparam19.size() ? loadedData.vectdparam19.at(i) : 0,
+                i < loadedData.vectdparam20.size() ? loadedData.vectdparam20.at(i) : 0,
+                i < loadedData.vectdparam21.size() ? loadedData.vectdparam21.at(i) : 0,
+                i < loadedData.vectdparam22.size() ? loadedData.vectdparam22.at(i) : 0,
+                i < loadedData.vectdparam23.size() ? loadedData.vectdparam23.at(i) : 0,
+                i < loadedData.vectdparam24.size() ? loadedData.vectdparam24.at(i) : 0,
+                i < loadedData.vectdparam25.size() ? loadedData.vectdparam25.at(i) : 0,
+                i < loadedData.vectdparam26.size() ? loadedData.vectdparam26.at(i) : 0,
+                i < loadedData.vectdparam27.size() ? loadedData.vectdparam27.at(i) : 0,
+                i < loadedData.vectdparam28.size() ? loadedData.vectdparam28.at(i) : 0
         );
 
 
@@ -3532,6 +3487,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
+    // read nodes in closed area this month for area-based management,
+    // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
+    if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
+
+        if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+            exit(1);
+        }
+        if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+            exit(1);
+        }
+
+    }
+    if (dyn_alloc_sce.option(Options::area_closure)) {
+
+        if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization,
+                                            inputfolder)) {
+            exit(1);
+        }
+    }
 
 
     dout(cout << "---------------------------" << endl);

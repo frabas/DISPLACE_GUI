@@ -3164,7 +3164,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
     multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
 
-    /*
+
+ #if 0
     // debug
     if(fgrounds.size() != freq_fgrounds.size())
     {
@@ -3182,6 +3183,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         int tmp;
         cin >> tmp;				 // pause
     }*/
+
+#endif
 
 
     // read nodes in closed area this month for area-based management,
@@ -3210,22 +3213,30 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
     }
 
-    //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
-    // and check the start coord
-    //here
-    vessels = vector<Vessel *>(vesselids.size());
+
+
+    // loop over vids
+    vector <multimap<types::NodeId, int> > vect_of_possible_metiers_mmap(vesselids.size());
+    vector <multimap<types::NodeId, double> > vect_of_freq_possible_metiers_mmap(vesselids.size());
+    vector <multimap<types::NodeId, double> > vect_of_gshape_cpue_per_stk_on_nodes_mmap(vesselids.size());
+    vector <multimap<types::NodeId, double> > vect_of_gscale_cpue_per_stk_on_nodes_mmap(vesselids.size());
+
     for (unsigned int i = 0; i < vesselids.size(); i++)
-        //vector <Vessel*> vessels(7); //here
-        //vesselids.erase (vesselids.begin());
-        //for (int i=0; i<7; i++)
     {
         outc(cout << "create vessel " << i << endl);
 
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
-        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
+        vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
                                                            inputfolder);
+
+        //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
+        vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                         folder_name_parameterization, inputfolder);
+        vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+                                                                         folder_name_parameterization, inputfolder);
+
 
 
 #if 0
@@ -3242,18 +3253,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               iter != freq_possible_metiers.end(); ++iter )
             cout << iter->first << '\t' << iter->second << '\n';
         cout << endl;
-# endif
-
-        //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
-                                                                         folder_name_parameterization, inputfolder);
-        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
-                                                                         folder_name_parameterization, inputfolder);
 
 
-
-        // debug
-        if (possible_metiers.size() != freq_possible_metiers.size())
+    if (possible_metiers.size() != freq_possible_metiers.size())
         {
             unlock();
             cout << "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
@@ -3271,17 +3273,35 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //    possible_metiers.insert(std::pair<int,int>(0, 0));
         //    freq_possible_metiers.insert(std::pair<int,double>(0, 1.0));
         //}
+#endif
+}
 
+
+
+
+
+    // LOOP OVER VESSELIDS:
+    vessels = vector<Vessel *>(vesselids.size());
+    multimap<types::NodeId, int> possible_metiers;
+    multimap<types::NodeId, double> freq_possible_metiers;
+    multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
+    multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
+    for (unsigned int i = 0; i < vesselids.size(); i++)
+    {
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
-        spe_fgrounds             = find_entries(fgrounds, vesselids[i]);
-        spe_fgrounds_init        = find_entries(fgrounds_init, vesselids[i]);
-        spe_freq_fgrounds        = find_entries_s_d(freq_fgrounds, vesselids[i]);
-        spe_freq_fgrounds_init   = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
-        spe_harbours             = find_entries(harbours, vesselids[i]);
-        spe_freq_harbours        = find_entries_s_d(freq_harbours, vesselids[i]);
-        spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
-        spe_percent_tac_per_pop  = find_entries_s_d(vessels_tacs, vesselids[i]);
+        possible_metiers             = vect_of_possible_metiers_mmap.at(i);
+        freq_possible_metiers        = vect_of_freq_possible_metiers_mmap.at(i);
+        gshape_cpue_per_stk_on_nodes = vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i);
+        gscale_cpue_per_stk_on_nodes = vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i);
+        spe_fgrounds                 = find_entries(fgrounds, vesselids[i]);
+        spe_fgrounds_init            = find_entries(fgrounds_init, vesselids[i]);
+        spe_freq_fgrounds            = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init       = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
+        spe_harbours                 = find_entries(harbours, vesselids[i]);
+        spe_freq_harbours            = find_entries_s_d(freq_harbours, vesselids[i]);
+        spe_vessel_betas_per_pop     = find_entries_s_d(vessels_betas, vesselids[i]);
+        spe_percent_tac_per_pop      = find_entries_s_d(vessels_tacs, vesselids[i]);
 
         if (spe_vessel_betas_per_pop.size() != nbpops) {
             std::stringstream er;
@@ -3417,8 +3437,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                 i < annual_discount_rates.size() ? annual_discount_rates[i] : 0
         );
 
-        /*
-         * if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {
+
+#if 0
+         if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {
            cout << "debug here" << endl;
            cout << "i is " << i << endl;
            cout << "other_variable_costs_per_unit_efforts[i] is " << other_variable_costs_per_unit_efforts[i];
@@ -3426,8 +3447,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             int aa; cin >> aa;
         }
-        */
 
+#endif
 
         // Give super power to each vessel (so that he can consult the common tariff map for example)
         vessels[i]->set_map_of_nodes(nodes);
@@ -3455,20 +3476,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   << vessels[i]->get_nationality() << " on "
                   << vessels[i]->get_loc()->get_idx_node() << " with coordinates "
                   << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
-        //   << " and metier " << vessels[i]->get_metier()->get_name() <<  endl;
-        //vector<double> a_ogive = vessels[i]->get_metier()->get_selectivity_ogive() ;
-        //cout << "with selectivity ogive " << endl;
-        //for (int i=0; i<a_ogive.size(); i++)
-        //{
-        //   outc(cout  << " " << a_ogive[i] << " " );
-        //}
-        //out(cout << endl); // well...nothing there because a metier is still not assigned at this stage...
 
         if (enable_sqlite_out) {
             outSqlite->getVesselDefTable()->feedVesselsDefTable(vessels[i]);
         }
     }
 
+
+#if 0
     //check vessel specifications
     outc(cout << " vessel" << vessels[0]->get_idx() << " have the specific harbours:" << endl);
     auto harbs = vessels[0]->get_harbours();
@@ -3513,6 +3528,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       dout(cout  << endl);
 
     */
+
+#endif
+
 
 
 

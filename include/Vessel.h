@@ -204,6 +204,8 @@ public:
                const std::vector<double> &percent_tac_per_pop,
                const multimap<types::NodeId, int> &possible_metiers,
                const multimap<types::NodeId, double> &freq_possible_metiers,
+               const multimap<types::NodeId, double> &gshape_cpue_per_stk_on_nodes,
+               const multimap<types::NodeId, double> &gscale_cpue_per_stk_on_nodes,
                int vid_is_active, int vid_is_part_of_ref_fleet,
                double speed, double fuelcons, double length, double KW,
                double  carrycapacity, double tankcapacity, double nbfpingspertrip,

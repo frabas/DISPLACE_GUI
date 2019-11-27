@@ -2713,6 +2713,8 @@ bool DisplaceModel::loadVessels()
                                              spe_percent_tac_per_pop,
                                              possible_metiers,
                                              freq_possible_metiers,
+                                             gshape_cpue_per_stk_on_nodes,
+                                             gscale_cpue_per_stk_on_nodes,
                                              vid_is_actives[i],
                                              vid_is_part_of_ref_fleets[i],
                                              speeds[i],

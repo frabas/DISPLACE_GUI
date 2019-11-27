@@ -3287,7 +3287,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             std::stringstream er;
             er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
                nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-               spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
+               spe_vessel_betas_per_pop.size() << " for vessel " << vesselids[i];
             throw std::runtime_error(er.str());
 
             //possibly, fix dim in R for the oldest dataset:

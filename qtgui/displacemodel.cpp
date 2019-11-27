@@ -2598,19 +2598,6 @@ bool DisplaceModel::loadVessels()
         // cin >> tmp;				 // pause
     }
 
-    // read nodes in polygons for area-based management
-#if 0
-    cout << "nodes_in_polygons() in loadVessels()" << endl;
-    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
-
-
-    // check
-    //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-    //{
-    //    cout << " a polygon node is " << pos->second << endl;
-    //}
-    //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
-# endif
 
 
     multimap<string, double> fishing_credits;
@@ -2680,6 +2667,31 @@ bool DisplaceModel::loadVessels()
             }
 
         }
+
+
+        // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
+        // for creating the vessel object, search into the multimaps
+        spe_fgrounds             = find_entries(fgrounds, vesselids[i]);
+        spe_fgrounds_init        = find_entries(fgrounds_init, vesselids[i]);
+        spe_freq_fgrounds        = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init   = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
+        spe_harbours             = find_entries(harbours, vesselids[i]);
+        spe_freq_harbours        = find_entries_s_d(freq_harbours, vesselids[i]);
+        spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
+        spe_percent_tac_per_pop  = find_entries_s_d(vessels_tacs, vesselids[i]);
+
+        if (spe_vessel_betas_per_pop.size() != nbpops) {
+            std::stringstream er;
+            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
+               nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+               spe_vessel_betas_per_pop.size() << " for vessel " << vesselids[i];
+            throw std::runtime_error(er.str());
+
+            //possibly, fix dim in R for the oldest dataset:
+            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
+
+        }
+
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
         types::NodeId start_harbour;
@@ -2756,250 +2768,6 @@ bool DisplaceModel::loadVessels()
         std::shared_ptr<VesselData> vd(new VesselData(v));
         mVessels.push_back(vd);
 
-        // some useful setters...
-        // will also be useful when change of YEAR-QUARTER
-        v->set_spe_fgrounds(spe_fgrounds);
-        v->set_spe_fgrounds_init(spe_fgrounds_init);
-        v->set_spe_harbours(spe_harbours);
-        v->set_spe_freq_fgrounds(spe_freq_fgrounds);
-        v->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
-        v->set_spe_freq_harbours(spe_freq_harbours);
-        v->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
-        v->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
-        v->set_spe_possible_metiers(possible_metiers);
-        v->set_spe_freq_possible_metiers(freq_possible_metiers);
-
-        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits")) {
-            v->set_fishing_credits(spe_fishing_credits);
-        }
-
-        // inform grounds in closed areas
-# if 0
-        vector <int> grds = v->get_fgrounds();
-        vector <int> fgrounds_in_closed_areas;
-        vector<int> polygons;
-        vector<int> polygon_nodes;
-        for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-            {
-                // get all values across the keys
-                polygons.push_back(pos->first);
-                polygon_nodes.push_back(pos->second);
-            }
-        sort (polygon_nodes.begin(), polygon_nodes.end());
-        for(unsigned int i=0; i<grds.size();++i){
-            int ground=grds.at(i);
-            std::vector<int>::iterator it=find(polygon_nodes.begin(), polygon_nodes.end(), grds.at(i));
-            if(it!=polygon_nodes.end()) fgrounds_in_closed_areas.push_back(ground); // found
-        }
-        v->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
-
-        // check
-        cout << "for this vessel, check included fgrounds in polygon_nodes" << endl;
-        for (unsigned int i=0;i<fgrounds_in_closed_areas.size();++i)
-          {
-          cout << fgrounds_in_closed_areas.at(i) << " ";
-          }
-        cout << endl;
-# endif
-
-        // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
-        // dyn sce.
-        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_10percent")) {
-            // a decrease by 10%...
-            v->set_speed(v->get_speed() * 0.9);
-            // corresponds to a decrease by 30% in fuelcons
-            v->set_fuelcons(v->get_fuelcons() * 0.7);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-        // dyn sce.
-        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_20percent")) {
-            // a decrease by 20%...
-            v->set_speed(v->get_speed() * 0.8);
-            // corresponds to a decrease by 48.8% in fuelcons
-            v->set_fuelcons(v->get_fuelcons() * 0.512);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-        // dyn sce.
-        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_30percent")) {
-            // a decrease by 30%...
-            v->set_speed(v->get_speed() * 0.7);
-            // corresponds to a decrease by 65.7% in fuelcons
-            v->set_fuelcons(v->get_fuelcons() * 0.343);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-        // a particular setters for the CPUE STUFF...
-        // for implicit pops or "out of range" fishing: create cpue_nodes_species
-        // a vector of vector (with dims [relative index of fishing ground nodes;  pops])
-        // we use a vector of vector instead of a multimap in order to speed up the simulation
-        // by avoiding a (costly) call to find_entries_i_d() in the do_catch() method
-        vector<types::NodeId> gshape_name_nodes_with_cpue;
-        for (auto iter = gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
-             iter = gshape_cpue_per_stk_on_nodes.upper_bound(iter->first)) {
-            gshape_name_nodes_with_cpue.push_back(iter->first);
-        }
-
-        // sort and unique
-        sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
-
-
-        // init cpue_nodes_species for this vessel
-        int nbnodes = gshape_name_nodes_with_cpue.size();
-        // init the vector of vector with Os
-        mVessels.at(i)->mVessel->init_gshape_cpue_nodes_species(nbnodes, nbpops);
-        // init the vector of vector with Os
-        mVessels.at(i)->mVessel->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-        for (size_t n = 0; n < gshape_name_nodes_with_cpue.size(); n++) {
-            // look into the multimap...
-            auto gshape_cpue_species = find_entries(gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
-            // look into the multimap...
-            auto gscale_cpue_species = find_entries(gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
-            if (!gshape_cpue_species.empty()) {
-                // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                mVessels.at(i)->mVessel->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
-                // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                mVessels.at(i)->mVessel->set_gscale_cpue_nodes_species(n, gscale_cpue_species);
-            }
-        }
-
-        cout
-                << "is everything OK in the gshape_cpue_nodes_species and gscale_cpue_nodes_species file? if not check pop dim"
-                << endl;
-        // need to compute expected cpue (averaged over node but cumulated over species)
-        // for this particular vessel, in order to scale the prior guess (see below)
-        double expected_cpue = 0;
-        vector<vector<double> > gshape_cpue_nodes_species = mVessels.at(i)->mVessel->get_gshape_cpue_nodes_species();
-        vector<vector<double> > gscale_cpue_nodes_species = mVessels.at(i)->mVessel->get_gscale_cpue_nodes_species();
-        auto fgrounds = mVessels.at(i)->mVessel->get_fgrounds();
-        vector<double> expected_cpue_this_pop(nbpops);
-        for (int pop = 0; pop < nbpops; pop++) {
-            cout << "...for pop" << pop << endl;
-            cout << "... on " << fgrounds.size() << " grounds" << endl;
-            cout << "... given " << gshape_cpue_nodes_species.size() << " size gshape" << endl;
-            cout << "... given " << gscale_cpue_nodes_species.size() << " size gscale" << endl;
-
-            vector<double> cpue_per_fground(fgrounds.size());
-            // init
-            expected_cpue_this_pop.at(pop) = 0;
-
-            // compute cpue on nodes
-            for (size_t f = 0; f < fgrounds.size(); ++f) {
-                // look into the vector of vector....
-                double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
-                // look into the vector of vector....
-                double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
-
-                // a dangerous fix:
-                if (a_shape < 0 || a_scale < 0) {
-
-                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
-                    for (size_t f = 0; f < fgrounds.size(); ++f) {
-                        cout << " this vessel is is: " << mVessels.at(i)->mVessel->get_name() << endl;
-                        cout << " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-                        cout << " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
-                    }
-                    a_shape = 1;
-                    a_scale = 0;
-                }
-
-
-                cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
-                //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
-                // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
-            }
-
-            //cout << "compute the average cpue for this pop across all nodes" << endl;
-            // compute the average cpue for this pop across all nodes
-            for (size_t f = 0; f < fgrounds.size(); ++f) {
-                expected_cpue_this_pop.at(pop) += cpue_per_fground.at(f);
-
-            }
-            // do the mean
-            if (expected_cpue_this_pop.at(pop) != 0) {
-                expected_cpue_this_pop.at(pop) = expected_cpue_this_pop.at(pop) / fgrounds.size();
-            }
-
-            // sum over pop
-            expected_cpue += expected_cpue_this_pop.at(pop);
-        }
-        cout << "expected_cpue_this_pop computation was successful...." << endl;
-
-
-        // init at 0 cumcatch and cumeffort per trip,
-        // init at best guest the experiencedcpue_fgrounds
-        vector<double> freq_fgrounds = mVessels.at(i)->mVessel->get_freq_fgrounds();
-        vector<double> init_for_fgrounds(fgrounds.size());
-        vector<double> cumeffort_fgrounds = init_for_fgrounds;
-        vector<double> cumcatch_fgrounds = init_for_fgrounds;
-        vector<double> cumdiscard_fgrounds = init_for_fgrounds;
-        vector<double> experienced_bycatch_prop_on_fgrounds = init_for_fgrounds;
-        vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds = init_for_fgrounds;
-        vector<double> experiencedcpue_fgrounds = init_for_fgrounds;
-        vector<double> freq_experiencedcpue_fgrounds = init_for_fgrounds;
-        vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-        for (size_t f = 0; f < fgrounds.size(); f++) {
-            cumcatch_fgrounds[f] = 0;
-            cumdiscard_fgrounds[f] = 0;
-            experienced_bycatch_prop_on_fgrounds[f] = 0;
-            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] = 0;
-            cumeffort_fgrounds[f] = 0;
-            experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
-            // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
-            // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
-            // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
-            // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-
-            // init the ones per pop
-            for (int pop = 0; pop < nbpops; pop++) {
-                // init
-                cumcatch_fgrounds_per_pop[f][pop] = 0;
-                cumdiscard_fgrounds_per_pop[f][pop] = 0;
-                experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
-            }
-        }
-
-        // per total...
-        mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
-        mVessels.at(i)->mVessel->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
-        mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
-        mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(
-                experienced_avoided_stks_bycatch_prop_on_fgrounds);
-        mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);
-        mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
-        mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
-        // compute for the first time, to get freq_experiencedcpue_fgrounds...
-        mVessels.at(i)->mVessel->compute_experiencedcpue_fgrounds();
-        // ...or per pop
-        mVessels.at(i)->mVessel->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
-        mVessels.at(i)->mVessel->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
-        mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
-        mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
-        // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
-        mVessels.at(i)->mVessel->compute_experiencedcpue_fgrounds_per_pop();
-
-        // note that, at the start of the simu, freq of visit will be equivalent to freq_fgrounds
-        // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...
-        // the expected_cpue is to scale to the encountered cpue i.e. freq of visit will decrease if experienced cpue < expected cpue
-        // and vice versa...
-
-        // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-
-
-//TODO: check this!
-#if 0
-        for (unsigned int sp=0; sp<populations.size(); sp++)
-        {
-            mVessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1, 0.0);
-        }
-#endif
 
         // check
         cout << "create vessel " << v->get_idx() << " " << v->get_name() << " " << v->get_nationality() << " on "

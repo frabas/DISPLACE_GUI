@@ -3253,7 +3253,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // debug
-        if (possible_metiers.size() != freq_possible_metiers.size()) {
+        if (possible_metiers.size() != freq_possible_metiers.size())
+        {
             unlock();
             cout << "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
                  << "for the vessel " << vesselids[i] << endl;
@@ -3273,16 +3274,30 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
-        spe_fgrounds = find_entries(fgrounds, vesselids[i]);
-        spe_fgrounds_init = find_entries(fgrounds_init, vesselids[i]);
-        spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
-        spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
-        spe_harbours = find_entries(harbours, vesselids[i]);
-        spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
+        spe_fgrounds             = find_entries(fgrounds, vesselids[i]);
+        spe_fgrounds_init        = find_entries(fgrounds_init, vesselids[i]);
+        spe_freq_fgrounds        = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init   = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
+        spe_harbours             = find_entries(harbours, vesselids[i]);
+        spe_freq_harbours        = find_entries_s_d(freq_harbours, vesselids[i]);
         spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
-        spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
+        spe_percent_tac_per_pop  = find_entries_s_d(vessels_tacs, vesselids[i]);
 
-        if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        if (spe_vessel_betas_per_pop.size() != nbpops) {
+            std::stringstream er;
+            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
+               nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+               spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
+            throw std::runtime_error(er.str());
+
+            //possibly, fix dim in R for the oldest dataset:
+            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
+
+        }
+
+         // dyn sce.
+        if (dyn_alloc_sce.option(Options::fishing_credits))
+        {
             tout(cout << "Read in fishing credits for this vessel " << vesselids[i] << endl);
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
             for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
@@ -3291,11 +3306,45 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
             while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
-
-
             cout << "Fishing credits 0 for this vessel " << vesselids[i] << " is " << spe_fishing_credits.at(0) << endl;
 
         }
+
+        if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
+        {
+            // a decrease by 20%...
+            speeds[i] = speeds[i]*0.8;
+            // corresponds to a decrease by 48.8% in fuelcons
+            fuelcons[i] = fuelcons[i]* 0.512;
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+
+        if (dyn_alloc_sce.option(Options::reduced_speed_30percent))
+        {
+            // a decrease by 30%...
+            speeds[i] = speeds[i] * 0.7;
+            // corresponds to a decrease by 65.7% in fuelcons
+            fuelcons[i] = fuelcons[i] * 0.343;
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+
+        if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
+        {
+            // a decrease by 10%...
+             speeds[i] = speeds[i] * 0.9;
+            // corresponds to a decrease by 30% in fuelcons
+            fuelcons[i] = fuelcons[i]  * 0.7;
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+
+        if(namefolderinput=="BalticSea")
+        {
+            vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
+        }
+
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
         types::NodeId start_harbour;
@@ -3312,6 +3361,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             spe_freq_harbours.push_back(1);
             outc(cout << "then take node: " << start_harbour << endl);
         }
+
 
         vessels[i] = new Vessel(nodes[start_harbour.toIndex()],
                                 i,
@@ -3377,110 +3427,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         */
 
 
-        // some useful setters...
-        // will also be useful when change of YEAR-QUARTER
-        vessels[i]->set_spe_fgrounds(spe_fgrounds);
-        vessels[i]->set_spe_fgrounds_init(spe_fgrounds_init);
-        vessels[i]->set_spe_harbours(spe_harbours);
-        vessels[i]->set_spe_freq_fgrounds(spe_freq_fgrounds);
-        vessels[i]->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
-        vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
-        vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
-        if (spe_vessel_betas_per_pop.size() != nbpops) {
-            std::stringstream er;
-            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
-               nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-               spe_vessel_betas_per_pop.size() << " for vessel " << vessels[i]->get_name();
-            throw std::runtime_error(er.str());
-
-            //possibly, fix dim in R for the oldest dataset:
-            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
-
-        }
-
-        vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
-        vessels[i]->set_spe_possible_metiers(possible_metiers);
-        vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers);
-
-
         // Give super power to each vessel (so that he can consult the common tariff map for example)
         vessels[i]->set_map_of_nodes(nodes);
 
 
-
-        // inform grounds in closed areas
-        // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
-//        const auto &grds = vessels[i]->get_fgrounds();
-//        vector <types::NodeId> fgrounds_in_closed_areas;
-//        for(unsigned int i=0; i<grds.size();++i){
-//            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
-//        }
-//        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
-
-
-        /*
-        if(vessels[i]->get_name()=="SWN21"){
-          cout << "CLOSED:" << endl;
-            vector<int> grs = vessels[i]->get_fgrounds_in_closed_areas();
-                  for (int i=0;i<grs.size();++i)
-                  {
-                  cout << grs.at(i) << " " ;
-                  }
-              cout << endl;
-
-              cout << "ALL:" << endl;
-                    for (int i=0;i<grds.size();++i)
-                    {
-                    cout << grds.at(i) << " " ;
-                    }
-                cout << endl;
-
-                bool Istype =nodes.at(1087)->evaluateAreaType()==1;
-                cout << " node 1087 type is: " << Istype;
-
-                int aa;
-              cin >> aa;
-
-        }
-*/
-
-
-        if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        if (dyn_alloc_sce.option(Options::fishing_credits))
+        {
             vessels[i]->set_fishing_credits(spe_fishing_credits);
         }
 
-
-        // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
-        // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
-            // a decrease by 10%...
-            vessels[i]->set_speed(vessels[i]->get_speed() * 0.9);
-            // corresponds to a decrease by 30% in fuelcons
-            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.7);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-        if(namefolderinput=="BalticSea") vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
-
-        // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
-            // a decrease by 20%...
-            vessels[i]->set_speed(vessels[i]->get_speed() * 0.8);
-            // corresponds to a decrease by 48.8% in fuelcons
-            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.512);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-        // dyn sce.
-        if (dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
-            // a decrease by 30%...
-            vessels[i]->set_speed(vessels[i]->get_speed() * 0.7);
-            // corresponds to a decrease by 65.7% in fuelcons
-            vessels[i]->set_fuelcons(vessels[i]->get_fuelcons() * 0.343);
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
 
         // a particular setters for the CPUE STUFF...
         // for implicit pops or "out of range" fishing: create cpue_nodes_species

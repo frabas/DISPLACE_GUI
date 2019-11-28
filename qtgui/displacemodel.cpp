@@ -33,6 +33,8 @@
 #include <GeographicLib/Geodesic.hpp>
 
 #include <readdata.h>
+#include <dataloadervessels.h>
+
 #include <qdebug.h>
 #include <QtAlgorithms>
 #include <QtDebug>

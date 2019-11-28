@@ -28,7 +28,7 @@ using namespace std;
 
 
 
-class Dataloaderbenthos : public virtual Dataloader
+class COMMONSSHARED_EXPORT Dataloaderbenthos : public virtual Dataloader
 {
 public:
     Dataloaderbenthos();

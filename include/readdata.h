@@ -73,6 +73,7 @@ bool COMMONSSHARED_EXPORT read_scenario_config_file(std::istream &stream, displa
 
 // vessel specific
 
+/*
 bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
                            vector<int>& vid_is_actives,
@@ -114,6 +115,7 @@ bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vessel
                            string inputfolder
                            );
 
+*/
 
 bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
@@ -215,9 +217,10 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
+*/
+
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
-*/
 
 // harbour specific
 multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);

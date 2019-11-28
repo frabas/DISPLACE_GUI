@@ -461,6 +461,7 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
 //----------------
 
+/*
 bool read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
                            vector<int>& vid_is_actives,
@@ -583,9 +584,10 @@ bool read_vessels_features(string a_quarter,
 
     return true;
 }
-
+*/
 
 //----------------
+/*
 bool read_vessels_economics_features(
                            vector<string>& vesselids,
                            vector<double>& this_vessel_nb_crews,
@@ -640,7 +642,7 @@ bool read_vessels_economics_features(
 
     return true;
 }
-
+*/
 
 
 //----------------

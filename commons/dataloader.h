@@ -18,7 +18,7 @@ using namespace std;
 
 
 
-struct LoadedData {
+struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<string> vectsparam1;
     std::vector<VesselCalendar> vectcalendar1;
     std::vector<double> vectdparam1;
@@ -150,7 +150,7 @@ struct LoadedData {
 
 
 // abstract class
-class Dataloader
+class COMMONSSHARED_EXPORT Dataloader
 {
 public:
     Dataloader(){}

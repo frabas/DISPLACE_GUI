@@ -16,6 +16,11 @@ include_directories(
 
 set(SOURCES
         commons_global.h
+        dataloader.h
+        dataloaderbenthos.h
+        dataloadervessels.h
+        dataloaderbenthos.cpp
+        dataloadervessels.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp

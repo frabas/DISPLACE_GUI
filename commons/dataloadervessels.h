@@ -29,7 +29,7 @@ using namespace std;
 
 class Node;
 
-class Dataloadervessels : public virtual Dataloader
+class COMMONSSHARED_EXPORT Dataloadervessels : public virtual Dataloader
 {
 public:
     Dataloadervessels();
@@ -105,7 +105,6 @@ multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
 
 #endif // DATALOADERVESSELS_H

@@ -3291,7 +3291,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
         {
-            // a decrease by 20%...
+            // a decrease of vessel speed by 20%...
             loadedData.vectdparam1.at(i) = loadedData.vectdparam1.at(i)*0.8;
             // corresponds to a decrease by 48.8% in fuelcons
             loadedData.vectdparam2.at(i) = loadedData.vectdparam2.at(i)* 0.512;
@@ -3969,7 +3969,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     double a_year = 1.0;
 
     // get a vector v filled in with 1 to n
-    int nbvessels = vessels.size();
     glob_mutex.lock();
     ve = vector<int>(nbvessels);
     for (unsigned int idx = 0; idx < ve.size(); idx++) {
@@ -4239,6 +4238,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout << "RE-READ DATA----------" << endl);
+        multimap <string, double> reloaded_fcredits;
 
         // RE-READ DATA FOR EVENT => change of month
         if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
@@ -4325,58 +4325,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-
-            vesselids.clear();
-            vid_is_actives.clear();
-            vid_is_part_of_ref_fleets.clear();
-            speeds.clear();
-            fuelcons.clear();
-            lengths.clear();
-            carrycapacities.clear();
-            tankcapacities.clear();
-            nbfpingspertrips.clear();
-            // quarter-specific: those ones change....
-            resttime_par1s.clear();
-            resttime_par2s.clear();
-            av_trip_duration.clear();
-            mult_fuelcons_when_steaming.clear();
-            mult_fuelcons_when_fishing.clear();
-            mult_fuelcons_when_returning.clear();
-            mult_fuelcons_when_inactive.clear();
-            calendars.clear();
-
-            // then, re-read...
-            if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
-                                       speeds, fuelcons, lengths, vKWs,
-                                       carrycapacities, tankcapacities, nbfpingspertrips,
-                                       resttime_par1s, resttime_par2s, av_trip_duration,
-                                       mult_fuelcons_when_steaming,
-                                       mult_fuelcons_when_fishing,
-                                       mult_fuelcons_when_returning,
-                                       mult_fuelcons_when_inactive,
-                                       firm_ids,
-                                       folder_name_parameterization, inputfolder, selected_vessels_only, calendars)) {
-                std::cerr << "Cannot read vessels features.\n";
-                return -1;
-            }
+            Dataloadervessels vrl;
+            l->loadFeatures(&vrl,
+                            indb,
+                            folder_name_parameterization,
+                            inputfolder,
+                            dyn_pop_sce,
+                            dyn_alloc_sce,
+                            loadedData);
 
 
-            // NOTE read_vessels_economic_features()  not read again because annual parameters...
-
-
-
-
-            // RE-read the more complex objects (i.e. when several info for a same vessel)...
-            // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-            fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-            fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
-            harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
-            freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-            freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
-            freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
-            vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-            if (is_tacs) { vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder); }
-            dout(cout << "re-read data...OK" << endl);
 
             // LOOP OVER VESSELS
             for (unsigned int v = 0; v < vessels.size(); v++) {
@@ -4400,24 +4358,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     for (unsigned int pop = 0; pop < nbpops; ++pop)
                         vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
-                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization,
-                                                         inputfolder);
-                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v),
-                                                                   folder_name_parameterization, inputfolder);
-                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v),
-                                                                                 folder_name_parameterization,
-                                                                                 inputfolder);
-                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v),
-                                                                                 folder_name_parameterization,
-                                                                                 inputfolder);
-                spe_fgrounds = find_entries(fgrounds, vesselids.at(v));
-                spe_fgrounds_init = find_entries(fgrounds_init, vesselids.at(v));
-                spe_harbours = find_entries(harbours, vesselids.at(v));
-                spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
-                spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
-                spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
-                spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
-                if (is_tacs) { spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v)); }
+
+                possible_metiers             = loadedData.vectmmapniparam1.at(v);
+                freq_possible_metiers        = loadedData.vectmmapndparam1.at(v);
+                gshape_cpue_per_stk_on_nodes = loadedData.vectmmapndparam2.at(v);
+                gscale_cpue_per_stk_on_nodes = loadedData.vectmmapndparam3.at(v);
+                vector<string> vesselids= loadedData.vectsparam1;
+                spe_fgrounds = find_entries(loadedData.mmapsnparam2, vesselids.at(v));
+                spe_fgrounds_init = find_entries(loadedData.mmapsnparam3, vesselids.at(v));
+                spe_harbours = find_entries(loadedData.mmapsnparam1, vesselids.at(v));
+                spe_freq_fgrounds = find_entries_s_d(loadedData.mmapsdparam2, vesselids.at(v));
+                spe_freq_fgrounds_init = find_entries_s_d(loadedData.mmapsdparam3, vesselids.at(v));
+                spe_freq_harbours = find_entries_s_d(loadedData.mmapsdparam1, vesselids.at(v));
+                spe_vessel_betas_per_pop = find_entries_s_d(loadedData.mmapsdparam4, vesselids.at(v));
+                if (is_tacs) { spe_percent_tac_per_pop = find_entries_s_d(loadedData.mmapsdparam5, vesselids.at(v)); }
+                reloaded_fcredits =loadedData.mmapsdparam6;
 
                 // correct if missing harbour for this quarter
                 if (spe_harbours.empty()) {
@@ -4432,9 +4387,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // RE-SET VESSELS..
                 dout(cout << "re-set vessels step1..." << endl);
-                vessels.at(v)->set_resttime_par1(resttime_par1s.at(v));
-                vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
-                vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
+                vessels.at(v)->set_resttime_par1(loadedData.vectdparam8.at(v));
+                vessels.at(v)->set_resttime_par2(loadedData.vectdparam9.at(v));
+                vessels.at(v)->set_av_trip_duration(loadedData.vectdparam10.at(v));
 
                 if (dyn_alloc_sce.option(Options::area_closure)) {
                     if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization,
@@ -4467,7 +4422,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 vessels.at(v)->set_spe_possible_metiers(possible_metiers);
                 vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
-                vessels.at(v)->updateCalendar(calendars[v]);
+                vessels.at(v)->updateCalendar(loadedData.vectcalendar1.at(v));
 
                 // inform grounds in closed areas
                 // TO DO: TO BE REMOVED BECAUSE DEPRECATED
@@ -5342,10 +5297,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // 2 - Re-init vessel total credits
                 tout(cout << "Re-init vessel total credits..." << endl);
-                fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
                 for (unsigned int v = 0; v < vessels.size(); v++) {
                     dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
-                    vector<double> spe_fishing_credits = find_entries_s_d(fishing_credits, vessels.at(v)->get_name());
+                    vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessels.at(v)->get_name());
                     for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
                         spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
                     }

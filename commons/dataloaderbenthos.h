@@ -37,6 +37,13 @@ public:
                   const string& inputfolder,
                   PopSceOptions& dyn_pop_sce,
                   DynAllocOptions& dyn_alloc_sce,
+                  string biolsce,
+                  string fleetsce,
+                  string &quarter,
+                  string &month,
+                  string &semester,
+                  int NBAGE,
+                  int NBSZGROUP,
                   LoadedData & loadedData);
 
 

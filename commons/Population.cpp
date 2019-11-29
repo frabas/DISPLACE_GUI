@@ -42,7 +42,6 @@ Population::Population(int a_name,
                        vector<double> init_M_at_szgroup,
                        const vector<double> &init_proprecru_at_szgroup,
                        const vector<double> &_param_sr,
-                       const multimap<int, types::NodeId> &lst_idx_nodes_per_pop,
                        const multimap<types::NodeId, double> &_full_spatial_availability,
                        const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
                        const map<types::NodeId, double> &_oth_land,
@@ -56,12 +55,11 @@ Population::Population(int a_name,
                        const vector<double> &init_tac,
                        double tac_percent_simulated,
                        double hyperstability_param,
-                       double landings_so_far,
                        double a_calib_cpue_multiplier,
                        double a_calib_weight_at_szgroup)
 {
-    UNUSED(lst_idx_nodes_per_pop);
-    UNUSED(landings_so_far);
+  //  UNUSED(lst_idx_nodes_per_pop);
+  //  UNUSED(landings_so_far);
 
     name=a_name;
     pop_name=a_pop_name;

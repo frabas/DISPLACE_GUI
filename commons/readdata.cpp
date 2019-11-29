@@ -938,6 +938,7 @@ int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, 
     }
 }
 
+/*
 void read_pop_names_in_string(map<int, string>& pop_names,
                                 string folder_name_parameterization, string inputfolder)
 {
@@ -959,6 +960,7 @@ void read_pop_names_in_string(map<int, string>& pop_names,
     }
 }
 
+*/
 
 void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter,
                                 map<int, double>& fuel_prices_per_vsize,
@@ -2143,7 +2145,7 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
 */
 
 
-
+/*
 // FOR POPULATION
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder)
 {
@@ -2483,7 +2485,7 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
     fill_multimap_from_specifications_i_i(file_comcat_per_szgroup,  comcat_per_szgroup);
     file_comcat_per_szgroup.close();
 
-    /*
+
     // check input
     multimap<int,int>::iterator lower_init_we = comcat_per_szgroup.lower_bound(0);
     multimap<int,int>::iterator upper_init_we = comcat_per_szgroup.upper_bound(0);
@@ -2493,10 +2495,12 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
         cout << pos->second << " ";
     }
     cout << endl;
-    */
+
 
     return(comcat_per_szgroup);
 }
+
+
 
 
 multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
@@ -2645,7 +2649,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
     fill_multimap_from_specifications_i_i(file_the_selected_szgroups,  the_selected_szgroups);
     file_the_selected_szgroups.close();
 
-    /*
+
     // check input
     multimap<int,int>::iterator lower_idx = the_selected_szgroups.lower_bound(0);
     multimap<int,int>::iterator upper_idx = the_selected_szgroups.upper_bound(0);
@@ -2654,12 +2658,14 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
     {
         cout << pos->second << " ";
     }
-    cout << endl;*/
+    cout << endl;
 
     return(the_selected_szgroups);
 }
 
+*/
 
+/*
 map<int, int> read_tac_percent_simulated(string folder_name_parameterization, string inputfolder)
 {
 
@@ -3162,6 +3168,7 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
 }
 
 
+*/
 
 vector< vector<double> > read_selectivity_per_stock_ogives(int a_met,
                                                            int nbpops,
@@ -3221,7 +3228,7 @@ vector< vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpo
 
 
 
-
+/*
 vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce)
 {
     // casting a_pop into a string
@@ -3253,7 +3260,9 @@ vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, s
     return(param_sr);
 }
 
+*/
 
+/*
 vector<double>  read_initial_tac(int a_pop,  string folder_name_parameterization,  string inputfolder)
 {
     // casting a_pop into a string
@@ -3310,6 +3319,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
     return(fbar_ages_min_max);
 }
 
+*/
 
 spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {

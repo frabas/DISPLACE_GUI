@@ -156,6 +156,7 @@ using namespace sqlite;
 #include "dataloaderfishfarms.h"
 #include "dataloaderwindmills.h"
 #include "dataloadercommercialships.h"
+#include "dataloaderpops.h"
 
 
 #ifdef PROFILE
@@ -2146,6 +2147,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
+
+    Dataloaderpops ppl;
+    l->loadFeatures(&ppl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    loadedData);
+
+
+
+    /*
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, folder_name_parameterization, inputfolder);
 
@@ -2231,8 +2245,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             nbpops, folder_name_parameterization, inputfolder, biolsce);
 
 
-    // creation of a vector of populations
-    populations = vector<Population *>(nbpops);
 
     // get the name of the pops
     // copy only unique elements of init_pops_per_szgroup into name_pops
@@ -2249,7 +2261,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "
          << endl;
 
-    // FOR-LOOP OVER POP
+
+ */
+
+
+
+
+/*
+
     for (unsigned int sp = 0; sp < populations.size(); sp++) {
         dout(cout << endl);
 
@@ -2448,6 +2467,57 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //    preferences_for_species_matrix= read_preferences_for_species_matrix(sp, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
         //}
 
+}
+
+*/
+
+
+
+    // FOR-LOOP OVER POP
+    // creation of a vector of populations
+    populations = vector<Population *>(nbpops);
+
+    for (unsigned int sp = 0; sp < populations.size(); sp++) {
+        dout(cout << endl);
+
+
+
+
+        cout << " create pop... " << endl;
+        populations[sp] = new Population(sp,
+           loadedData.vectsparam1.at(sp),
+           loadedData.vectdparam1.at(sp),
+           loadedData.vectdparam2.at(sp),
+           loadedData.vectdparam3.at(sp),
+           loadedData.vectdparam4.at(sp),
+           loadedData.vovi1.at(sp),
+           loadedData.vovi2.at(sp),
+           loadedData.vovd1.at(sp),
+           loadedData.vovd2.at(sp),
+           loadedData.vovd4.at(sp),
+           loadedData.vovi3.at(sp),
+           loadedData.vovd3.at(sp),
+           loadedData.vovd5.at(sp),
+           loadedData.vovd6.at(sp),
+           loadedData.vovd7.at(sp),
+           loadedData.vectmmapndparam1.at(sp),
+           loadedData.vectmmapndparam2.at(sp),
+           loadedData.vectmmapndparam3.at(sp),
+           loadedData.vectmmapidparam1.at(sp),
+           loadedData.vectmapsdparam1.at(sp),
+           loadedData.vovovd2.at(sp),
+           loadedData.vovovd3.at(sp),
+           loadedData.vovovd1.at(sp),
+           nodes,
+           loadedData.vovd8.at(sp),
+           loadedData.vovd9.at(sp),
+           loadedData.vectdparam7.at(sp),
+           loadedData.vectdparam8.at(sp),
+           loadedData.vectdparam5.at(sp),
+           loadedData.vectdparam6.at(sp)
+          );
+
+/*
         cout << " create pop... " << endl;
         populations[sp] = (new Population(sp,
                                           pop_name,
@@ -2483,7 +2553,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                           landings_so_far,
                                           a_calib_cpue_multiplier,
                                           a_calib_weight_at_szgroup));
-        cout << " ...done " << endl;
+
+  */
+
+
+
+  cout << " ...done " << endl;
+
+        global_quotas_uptake.push_back(0.0);
+
 
         if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
             outc(cout << "inform avai on nodes " << endl);

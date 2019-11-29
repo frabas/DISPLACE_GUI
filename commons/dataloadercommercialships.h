@@ -33,11 +33,18 @@ public:
     Dataloaderships();
     int gettype (void);
     int features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
-                  const string &folder_name_parameterization,
-                  const string &inputfolder,
-                  PopSceOptions &dyn_pop_sce,
-                  DynAllocOptions &dyn_alloc_sce,
-                  LoadedData &loadedData);
+                 const string& folder_name_parameterization,
+                  const string& inputfolder,
+                  PopSceOptions& dyn_pop_sce,
+                  DynAllocOptions& dyn_alloc_sce,
+                  string biolsce,
+                  string fleetsce,
+                  string &quarter,
+                  string &month,
+                  string &semester,
+                  int NBAGE,
+                  int NBSZGROUP,
+                  LoadedData & loadedData);
 
 };
 

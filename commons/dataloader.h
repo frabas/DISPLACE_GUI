@@ -105,6 +105,7 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::multimap<string,types::NodeId > mmapsnparam1;
     std::multimap<string,types::NodeId > mmapsnparam2;
     std::multimap<string,types::NodeId > mmapsnparam3;
+    std::multimap<string,types::NodeId > mmapsnparam4;
     std::multimap<types::NodeId,int> mmapniparam1;
     std::multimap<types::NodeId,int> mmapniparam2;
     std::multimap<types::NodeId,int> mmapniparam3;
@@ -116,10 +117,31 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::multimap<types::NodeId,int> mmapniparam9;
     std::multimap<types::NodeId,int> mmapniparam10;
     std::multimap<types::NodeId,double> mmapndparam1;
+    std::multimap<types::NodeId,double> mmapndparam2;
+    std::map<string,double> vectmapsdparam1;
     std::vector<multimap<types::NodeId,int> > vectmmapniparam1;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam1;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam2;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam3;
+    std::vector<multimap<types::NodeId,double> > vectmmapndparam4;
+    std::vector<multimap<int,types::NodeId> > vectmmapidparam1;
+    std::vector<vector <double> > vovd1;
+    std::vector<vector <double> > vovd2;
+    std::vector<vector <double> > vovd3;
+    std::vector<vector <double> > vovd4;
+    std::vector<vector <double> > vovd5;
+    std::vector<vector <double> > vovd6;
+    std::vector<vector <double> > vovd7;
+    std::vector<vector <double> > vovd8;
+    std::vector<vector <double> > vovd9;
+    std::vector<vector <int> > vovi1;
+    std::vector<vector <int> > vovi2;
+    std::vector<vector <int> > vovi3;
+    std::vector<vector <int> > vovi4;
+    std::vector<vector <int> > vovi5;
+    std::vector<vector<vector <double> > > vovovd1;
+    std::vector<vector<vector <double> > > vovovd2;
+    std::vector<vector<vector <double> > > vovovd3;
     int int1;
     int int2;
     int int3;
@@ -185,8 +207,17 @@ public:
                           const string& inputfolder,
                           PopSceOptions& dyn_pop_sce,
                           DynAllocOptions& dyn_alloc_sce,
+                          string &biolsce,
+                          string &fleetsce,
+                          string &quarter,
+                          string &month,
+                          string &semester,
+                          int NBAGE,
+                          int NBSZGROUP,
                           LoadedData& loadedData){ cout << "Loading features" << endl; return(0);}
 };
+
+
 
 
 class Loader
@@ -198,6 +229,13 @@ public:
                       const string& inputfolder,
                       PopSceOptions& dyn_pop_sce,
                       DynAllocOptions& dyn_alloc_sce,
+                      string &biolsce,
+                      string &fleetsce,
+                      string &quarter,
+                      string &month,
+                      string &semester,
+                      int NBAGE,
+                      int NBSZGROUP,
                       LoadedData& loadedData)
     {
        dl->features(indb,
@@ -205,6 +243,13 @@ public:
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    quarter,
+                    month,
+                    semester,
+                    NBAGE,
+                    NBSZGROUP,
                     loadedData);
     }
 };

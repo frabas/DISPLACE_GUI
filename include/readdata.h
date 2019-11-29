@@ -266,7 +266,7 @@ vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_
 map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);
 
 // windmills specific
-map<int, double> COMMONSSHARED_EXPORT read_size_per_windmill(string folder_name_parameterization, string inputfolder);
+//map<int, double> COMMONSSHARED_EXPORT read_size_per_windmill(string folder_name_parameterization, string inputfolder);
 
 // shipping specific
 multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lon(string folder_name_parameterization, string inputfolder);

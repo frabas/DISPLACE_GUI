@@ -84,7 +84,8 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<int> vectiparam7;
     std::vector<int> vectiparam8;
     std::vector<int> vectiparam9;
-    std::vector<int> vectiparam10;
+    std::vector<int> vectiparam10;   
+    std::map<int,double> mapidparam1;
     std::multimap<int,double> mmapidparam1;
     std::multimap<int,double> mmapidparam2;
     std::multimap<int,double> mmapidparam3;

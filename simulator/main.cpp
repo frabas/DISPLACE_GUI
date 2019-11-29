@@ -154,6 +154,7 @@ using namespace sqlite;
 #include "dataloaderbenthos.h"
 #include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
+#include "dataloaderwindmills.h"
 
 
 #ifdef PROFILE
@@ -2110,14 +2111,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    map<int, double> init_size_per_windmill = read_size_per_windmill(folder_name_parameterization, inputfolder);
+    Dataloaderfishfarms wml;
+    l->loadFeatures(&wml,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    loadedData);
+
+    /*
+     * map<int, double> init_size_per_windmill = read_size_per_windmill(folder_name_parameterization, inputfolder);
     cout << "Does the size_per_windmill need a check?" << endl;
+*/
 
     //TODO: extend variables in read_size_per_windmill() e.g. read kWh from files etc.
 
 
-    for (map<int, double>::iterator iter = init_size_per_windmill.begin();
-         iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound(iter->first)) {
+    for (map<int, double>::iterator iter = loadedData.mmapidparam1.begin();
+         iter != loadedData.mmapidparam1.end(); iter = loadedData.mmapidparam1.upper_bound(iter->first)) {
         Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 1, 500,
                                     1); // Caution: type is 1, kW is 500, is_active at 1
         windmills.push_back(wm);

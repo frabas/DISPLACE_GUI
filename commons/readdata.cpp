@@ -2069,6 +2069,7 @@ map<int, double> read_size_per_farm(string folder_name_parameterization, string 
     return(size_per_farm);
 }
 
+/*
 // FOR WINDMILLS
 map<int, double> read_size_per_windmill(string folder_name_parameterization, string inputfolder)
 {
@@ -2088,6 +2089,8 @@ map<int, double> read_size_per_windmill(string folder_name_parameterization, str
 
     return(size_per_windmill);
 }
+*/
+
 
 // FOR SHIPPING LANES
 multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder)

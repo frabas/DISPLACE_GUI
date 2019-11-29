@@ -679,6 +679,7 @@ bool read_firms_features(vector<int>& firm_ids,
 
 
 //----------------
+/*
 bool read_fishfarms_features(vector<int>& fishfarms_ids,
                          vector<string>& fishfarms_names,
                          vector<int>& idx_nodes,
@@ -816,7 +817,7 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
     return r;
 }
 
-
+*/
 
 
 //----------------

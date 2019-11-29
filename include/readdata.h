@@ -130,6 +130,7 @@ bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<do
                          vector<double>& vmaxs, vector<double>& vcruises, vector<double>& lane_ids,
                          string folder_name_parameterization, string inputfolder);
 
+/*
 bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
                          vector<string>& fishfarms_names,
                          vector<int>& idx_nodes,
@@ -188,6 +189,9 @@ bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
                              vector<double>& annual_profits,
                              string folder_name_parameterization,
                              string inputfolder);
+
+*/
+
 bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
                          vector<string>& firm_names,
                          vector<int>& nb_vessels,

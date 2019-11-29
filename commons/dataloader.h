@@ -20,6 +20,10 @@ using namespace std;
 
 struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<string> vectsparam1;
+    std::vector<string> vectsparam2;
+    std::vector<string> vectsparam3;
+    std::vector<string> vectsparam4;
+    std::vector<string> vectsparam5;
     std::vector<VesselCalendar> vectcalendar1;
     std::vector<double> vectdparam1;
     std::vector<double> vectdparam2;
@@ -51,6 +55,26 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<double> vectdparam28;
     std::vector<double> vectdparam29;
     std::vector<double> vectdparam30;
+    std::vector<double> vectdparam31;
+    std::vector<double> vectdparam32;
+    std::vector<double> vectdparam33;
+    std::vector<double> vectdparam34;
+    std::vector<double> vectdparam35;
+    std::vector<double> vectdparam36;
+    std::vector<double> vectdparam37;
+    std::vector<double> vectdparam38;
+    std::vector<double> vectdparam39;
+    std::vector<double> vectdparam40;
+    std::vector<double> vectdparam41;
+    std::vector<double> vectdparam42;
+    std::vector<double> vectdparam43;
+    std::vector<double> vectdparam44;
+    std::vector<double> vectdparam45;
+    std::vector<double> vectdparam46;
+    std::vector<double> vectdparam47;
+    std::vector<double> vectdparam48;
+    std::vector<double> vectdparam49;
+    std::vector<double> vectdparam50;
     std::vector<int> vectiparam1;
     std::vector<int> vectiparam2;
     std::vector<int> vectiparam3;

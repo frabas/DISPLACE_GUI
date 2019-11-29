@@ -16,47 +16,147 @@ int Dataloaderfishfarms::gettype()
 }
 
 
-/*
 
-multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+bool read_fishfarms_features(vector<int>& fishfarms_ids,
+                         vector<string>& fishfarms_names,
+                         vector<int>& idx_nodes,
+                         vector<int>& is_actives,
+                         vector<double>& sizes,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                         vector<double>& mean_SSTs,
+                         vector<double>& mean_salinities,
+                         vector<double>& mean_windspeeds,
+                         vector<double>& mean_currentspeeds,
+                         vector<double>& max_depths,
+                         vector<double>& diss_O2_mg_per_ls,
+                         vector<double>& Linf_mms,
+                         vector<double>& K_ys,
+                         vector<double>& t0_ys,
+                         vector<double>& fulton_condition_factors,
+                         vector<string>& meanw_growth_model_types,
+                         vector<int>&    start_day_growings,
+                         vector<int>&    end_day_harvests,
+                         vector<int>&    nbyears_for_growths,
+                         vector<int>&    nb_days_fallowing_periods,
+                         vector<int>&    nb_fish_at_starts,
+                         vector<double>& meanw_at_starts,
+                         vector<double>& price_per_kg_at_starts,
+                         vector<double>& target_meanw_at_harvests,
+                         vector<int>& nb_fish_at_harvests,
+                         vector<double>& meanw_at_harvests,
+                         vector<double>& prop_harvest_kg_solds,
+                         vector<double>& kg_eggs_per_kgs,
+                         vector<double>& price_eggs_per_kgs,
+                         vector<double>& N_in_fish_kg_3pers,
+                         vector<double>& P_in_fish_kg_0_5pers,
+                         vector<string>& feed_types,
+                         vector<double>& feed_price_per_kgs,
+                         vector<double>& total_feed_kgs,
+                         vector<double>& prop_N_in_feeds,
+                         vector<double>& prop_P_in_feeds,
+                         vector<double>& total_feed_N_kgs,
+                         vector<double>& total_feed_P_kgs,
+                         vector<string>& feed_type_vets,
+                         vector<double>& feed_vet_price_per_kgs,
+                         vector<double>& total_feed_vet_kgs,
+                         vector<double>& prop_N_in_feed_vets,
+                         vector<double>& prop_P_in_feed_vets,
+                         vector<double>& total_feed_vet_N_kgs,
+                         vector<double>& total_feed_vet_P_kgs,
+                         vector<double>& annual_discharge_N_kgs,
+                         vector<double>& annual_discharge_P_kgs,
+                         vector<double>& annual_discharge_C_kgs,
+                         vector<double>& annual_discharge_heavymetals_kgs,
+                         vector<double>& annual_discharge_medecine_kgs,
+                         vector<double>& net_harvest_kg_per_sqkm_ys,
+                         vector<double>& market_price_sold_fishs,
+                         vector<double>& operating_cost_per_days,
+                         vector<double>& annual_profits,
+                         string folder_name_parameterization,
+                         string inputfolder
+                         )
 {
 
-    // frequence on ground of possible metiers for this vessels
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_"+a_quarter+".dat";
-    ifstream vessels_gscale_cpue_per_stk_on_nodes;
-    vessels_gscale_cpue_per_stk_on_nodes.open(filename.c_str());
-    if(vessels_gscale_cpue_per_stk_on_nodes.fail())
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/fishfarmsspe_features.dat";
+
+    ifstream fishfarms_features;
+    fishfarms_features.open(filename.c_str());
+    if(fishfarms_features.fail())
     {
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
         exit(-1);
     }
-    //key=fground, value=gamma scale param
-    multimap<int, double> gscale_cpue_per_stk_on_nodes;
-    fill_multimap_from_specifications_i_d(vessels_gscale_cpue_per_stk_on_nodes,  gscale_cpue_per_stk_on_nodes);
-    vessels_gscale_cpue_per_stk_on_nodes.close();
 
-#ifdef VERBOSE
-    // check input
-    bool check = 0;
-    if(check)
-    {
-        multimap<int,double>::iterator lower_gr = gscale_cpue_per_stk_on_nodes.lower_bound(1600);
-        multimap<int,double>::iterator upper_gr = gscale_cpue_per_stk_on_nodes.upper_bound(1600);
-        dout(cout << "for this vessel,  for this specific ground (1600): ");
-        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
-        {
-            dout(cout << pos2->second << " ");
-        }
-        dout(cout << endl);
-    }
-#endif
 
-    return(types::helpers::toKeyIdMultimap<types::NodeId>(gscale_cpue_per_stk_on_nodes));
+
+    bool r = fill_from_fishfarms_specifications(fishfarms_features,
+                                                fishfarms_ids,
+                                                fishfarms_names,
+                                                idx_nodes,
+                                                is_actives,
+                                                sizes,
+                                                longs,
+                                                lats,
+                                                mean_SSTs,
+                                                mean_salinities,
+                                                mean_windspeeds,
+                                                mean_currentspeeds,
+                                                max_depths,
+                                                diss_O2_mg_per_ls,
+                                                Linf_mms,
+                                                K_ys,
+                                                t0_ys,
+                                                fulton_condition_factors,
+                                                meanw_growth_model_types,
+                                                start_day_growings,
+                                                end_day_harvests,
+                                                nbyears_for_growths,
+                                                nb_days_fallowing_periods,
+                                                nb_fish_at_starts,
+                                                meanw_at_starts,
+                                                price_per_kg_at_starts,
+                                                target_meanw_at_harvests,
+                                                nb_fish_at_harvests,
+                                                meanw_at_harvests,
+                                                prop_harvest_kg_solds,
+                                                kg_eggs_per_kgs,
+                                                price_eggs_per_kgs,
+                                                N_in_fish_kg_3pers,
+                                                P_in_fish_kg_0_5pers,
+                                                feed_types,
+                                                feed_price_per_kgs,
+                                                total_feed_kgs,
+                                                prop_N_in_feeds,
+                                                prop_P_in_feeds,
+                                                total_feed_N_kgs,
+                                                total_feed_P_kgs,
+                                                feed_type_vets,
+                                                feed_vet_price_per_kgs,
+                                                total_feed_vet_kgs,
+                                                prop_N_in_feed_vets,
+                                                prop_P_in_feed_vets,
+                                                total_feed_vet_N_kgs,
+                                                total_feed_vet_P_kgs,
+                                                annual_discharge_N_kgs,
+                                                annual_discharge_P_kgs,
+                                                annual_discharge_C_kgs,
+                                                annual_discharge_heavymetals_kgs,
+                                                annual_discharge_medecine_kgs,
+                                                net_harvest_kg_per_sqkm_ys,
+                                                market_price_sold_fishs,
+                                                operating_cost_per_days,
+                                                annual_profits
+                                                );
+    fishfarms_features.close();
+
+    return r;
 }
 
-*/
+
 
 
 
@@ -79,188 +179,190 @@ int Dataloaderfishfarms::features(std::shared_ptr<sql::Storage> indb,
                              dyn_pop_sce,
                              dyn_alloc_sce,
                              loadedData);
-  cout << "Loading windmills features" << endl;
+  cout << "Loading fishfarms features" << endl;
 
 
-/*
-  // read general vessel features
-  // (quarter specific, mainly because of the gamma parameters)
-  vector<string> vesselids;
-  vector<int> vid_is_actives;
-  vector<int> vid_is_part_of_ref_fleets;
-  vector<double> speeds;
-  vector<double> fuelcons;
-  vector<double> lengths;
-  vector<double> vKWs;
-  vector<double> carrycapacities;
-  vector<double> tankcapacities;
-  vector<double> nbfpingspertrips;
-  vector<double> resttime_par1s;
-  vector<double> resttime_par2s;
-  vector<double> av_trip_duration;
-  vector<double> mult_fuelcons_when_steaming;
-  vector<double> mult_fuelcons_when_fishing;
-  vector<double> mult_fuelcons_when_returning;
-  vector<double> mult_fuelcons_when_inactive;
-  vector<int> firm_ids;
-  vector<VesselCalendar> calendars;
+  // read general firm features
+  vector<int> all_fishfarms_ids;
+  vector<string> fishfarms_names;
+  vector<int> idx_nodes;
+  vector<int> is_actives;
+  vector<double> fishfarms_sizes;
+  vector<double> fishfarms_longs;
+  vector<double> fishfarms_lats;
+  vector<double> mean_SSTs;
+  vector<double> mean_salinities;
+  vector<double> mean_windspeeds;
+  vector<double> mean_currentspeeds;
+  vector<double> max_depths;
+  vector<double> diss_O2_mg_per_ls;
+  vector<double> Linf_mms;
+  vector<double> K_ys;
+  vector<double> t0_ys;
+  vector<double> fulton_condition_factors;
+  vector<string> meanw_growth_model_types;
+  vector<int> start_day_growings;
+  vector<int> end_day_harvests;
+  vector<int> nbyears_for_growths;
+  vector<int> nb_days_fallowing_periods;
+  vector<int> nb_fish_at_starts;
+  vector<double> meanw_at_starts;
+  vector<double> price_per_kg_at_starts;
+  vector<double> target_meanw_at_harvests;
+  vector<int> nb_fish_at_harvests;
+  vector<double> meanw_at_harvests;
+  vector<double> prop_harvest_kg_solds;
+  vector<double> kg_eggs_per_kgs;
+  vector<double> price_eggs_per_kgs;
+  vector<double> N_in_fish_kg_3pers;
+  vector<double> P_in_fish_kg_0_5pers;
+  vector<string> feed_types;
+  vector<double> feed_price_per_kgs;
+  vector<double> total_feed_kgs;
+  vector<double> prop_N_in_feeds;
+  vector<double> prop_P_in_feeds;
+  vector<double> total_feed_N_kgs;
+  vector<double> total_feed_P_kgs;
+  vector<string> feed_type_vets;
+  vector<double> feed_vet_price_per_kgs;
+  vector<double> total_feed_vet_kgs;
+  vector<double> prop_N_in_feed_vets;
+  vector<double> prop_P_in_feed_vets;
+  vector<double> total_feed_vet_N_kgs;
+  vector<double> total_feed_vet_P_kgs;
+  vector<double> annual_discharge_N_kgs;
+  vector<double> annual_discharge_P_kgs;
+  vector<double> annual_discharge_C_kgs;
+  vector<double> annual_discharge_heavymetals_kgs;
+  vector<double> annual_discharge_medecine_kgs;
+  vector<double> net_harvest_kg_per_sqkm_ys;
+  vector<double> market_price_sold_fishs;
+  vector<double> operating_cost_per_days;
+  vector<double> annual_profits;
 
-  // TODO: pass these as input to the function
-  string a_quarter  = "quarter1";
-  string a_month    = "month1";
-  string a_semester = "semester1";
-  int selected_vessels_only = 0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
-  //...
 
-
-  if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
-                             speeds, fuelcons, lengths, vKWs,
-                             carrycapacities, tankcapacities, nbfpingspertrips,
-                             resttime_par1s, resttime_par2s, av_trip_duration,
-                             mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-                             mult_fuelcons_when_returning, mult_fuelcons_when_inactive, firm_ids,
-                             folder_name_parameterization, inputfolder, selected_vessels_only, calendars)) {
-      std::cerr << "Cannot read vessel features.\n";
-      return -1;
+  if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes,
+                               fishfarms_longs, fishfarms_lats,
+                               mean_SSTs,
+                               mean_salinities,
+                               mean_windspeeds,
+                               mean_currentspeeds,
+                               max_depths,
+                               diss_O2_mg_per_ls,
+                               Linf_mms,
+                               K_ys,
+                               t0_ys,
+                               fulton_condition_factors,
+                               meanw_growth_model_types,
+                               start_day_growings,
+                               end_day_harvests,
+                               nbyears_for_growths,
+                               nb_days_fallowing_periods,
+                               nb_fish_at_starts,
+                               meanw_at_starts,
+                               price_per_kg_at_starts,
+                               target_meanw_at_harvests,
+                               nb_fish_at_harvests,
+                               meanw_at_harvests,
+                               prop_harvest_kg_solds,
+                               kg_eggs_per_kgs,
+                               price_eggs_per_kgs,
+                               N_in_fish_kg_3pers,
+                               P_in_fish_kg_0_5pers,
+                               feed_types,
+                               feed_price_per_kgs,
+                               total_feed_kgs,
+                               prop_N_in_feeds,
+                               prop_P_in_feeds,
+                               total_feed_N_kgs,
+                               total_feed_P_kgs,
+                               feed_type_vets,
+                               feed_vet_price_per_kgs,
+                               total_feed_vet_kgs,
+                               prop_N_in_feed_vets,
+                               prop_P_in_feed_vets,
+                               total_feed_vet_N_kgs,
+                               total_feed_vet_P_kgs,
+                               annual_discharge_N_kgs,
+                               annual_discharge_P_kgs,
+                               annual_discharge_C_kgs,
+                               annual_discharge_heavymetals_kgs,
+                               annual_discharge_medecine_kgs,
+                               net_harvest_kg_per_sqkm_ys,
+                               market_price_sold_fishs,
+                               operating_cost_per_days,
+                               annual_profits,
+                               folder_name_parameterization, inputfolder)) {
+      cerr << "Error loading fishfarms features. Bailing out.\n";
+      return 2;
   }
 
-
-  vector<double> this_vessel_nb_crews;
-  vector<double> annual_other_incomes;
-  vector<double> landing_costs_percents;
-  vector<double> crewshare_and_unpaid_labour_costs_percents;
-  vector<double> other_variable_costs_per_unit_efforts;
-  vector<double> annual_insurance_costs_per_crews;
-  vector<double> standard_labour_hour_opportunity_costss;
-  vector<double> standard_annual_full_time_employement_hourss;
-  vector<double> other_annual_fixed_costss;
-  vector<double> vessel_values;
-  vector<double> annual_depreciation_rates;
-  vector<double> opportunity_interest_rates;
-  vector<double> annual_discount_rates;
-
-  cout << "read_vessels_economic_features() in loadVessels()" << endl;
-  if (!read_vessels_economics_features(
-          vesselids,
-          this_vessel_nb_crews,
-          annual_other_incomes,
-          landing_costs_percents,
-          crewshare_and_unpaid_labour_costs_percents,
-          other_variable_costs_per_unit_efforts,
-          annual_insurance_costs_per_crews,
-          standard_labour_hour_opportunity_costss,
-          standard_annual_full_time_employement_hourss,
-          other_annual_fixed_costss,
-          vessel_values,
-          annual_depreciation_rates,
-          opportunity_interest_rates,
-          annual_discount_rates,
-          folder_name_parameterization, inputfolder
-  )) {
-      std::cerr << "Cannot read vessel economic features.\n";
-      return -1;
-  }
-
-
-  // read the more complex objects (i.e. when several info for a same vessel)...
-  // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-  auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-  auto fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
-  auto harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
-
-  multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-  multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization,
-                                                                        inputfolder);
-  multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
-  multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-  multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
-
-
-
-  multimap<string, double> fishing_credits;
-  if (dyn_alloc_sce.option(Options::fishing_credits)) {
-      fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
-  }
-
-
-
-  // loop over vids
-  vector <multimap<types::NodeId, int> > vect_of_possible_metiers_mmap(vesselids.size());
-  vector <multimap<types::NodeId, double> > vect_of_freq_possible_metiers_mmap(vesselids.size());
-  vector <multimap<types::NodeId, double> > vect_of_gshape_cpue_per_stk_on_nodes_mmap(vesselids.size());
-  vector <multimap<types::NodeId, double> > vect_of_gscale_cpue_per_stk_on_nodes_mmap(vesselids.size());
-
-  for (unsigned int i = 0; i < vesselids.size(); i++)
-  {
-      outc(cout << "create vessel " << i << endl);
-
-      // read vessel and quarter specific multimap
-      // quarter specific to capture a piece of seasonality in the fishnig activity
-      vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-      vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
-                                                         inputfolder);
-
-      //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-      vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
-                                                                       folder_name_parameterization, inputfolder);
-      vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
-                                                                       folder_name_parameterization, inputfolder);
-
-
-
-    }
 
 
 
   //  export
-  loadedData.vectsparam1 =vesselids;
-  loadedData.mmapsnparam1 =harbours;
-  loadedData.mmapsnparam2 =fgrounds;
-  loadedData.mmapsnparam3 =fgrounds_init;
-  loadedData.mmapsdparam1 =freq_harbours;
-  loadedData.mmapsdparam2 =freq_fgrounds;
-  loadedData.mmapsdparam3 =freq_fgrounds_init;
-  loadedData.mmapsdparam4 =vessels_betas;
-  loadedData.mmapsdparam5 =vessels_tacs;
-  loadedData.mmapsdparam6 =fishing_credits;
-  loadedData.vectmmapniparam1=vect_of_possible_metiers_mmap;
-  loadedData.vectmmapndparam1=vect_of_freq_possible_metiers_mmap;
-  loadedData.vectmmapndparam2=vect_of_gshape_cpue_per_stk_on_nodes_mmap;
-  loadedData.vectmmapndparam3=vect_of_gscale_cpue_per_stk_on_nodes_mmap;
-  loadedData.vectiparam1=vid_is_actives;
-  loadedData.vectiparam2=vid_is_part_of_ref_fleets;
-  loadedData.vectdparam1=speeds;
-  loadedData.vectdparam2=fuelcons;
-  loadedData.vectdparam3=lengths;
-  loadedData.vectdparam4=vKWs;
-  loadedData.vectdparam5=carrycapacities;
-  loadedData.vectdparam6=tankcapacities;
-  loadedData.vectdparam7=nbfpingspertrips;
-  loadedData.vectdparam8=resttime_par1s;
-  loadedData.vectdparam9=resttime_par2s;
-  loadedData.vectdparam10=av_trip_duration;
-  loadedData.vectdparam11=mult_fuelcons_when_steaming;
-  loadedData.vectdparam12=mult_fuelcons_when_fishing;
-  loadedData.vectdparam13=mult_fuelcons_when_returning;
-  loadedData.vectdparam14=mult_fuelcons_when_inactive;
-  loadedData.vectiparam3=firm_ids;
-  loadedData.vectcalendar1=calendars;
-  loadedData.vectdparam16=this_vessel_nb_crews;
-  loadedData.vectdparam17=annual_other_incomes;
-  loadedData.vectdparam18=landing_costs_percents;
-  loadedData.vectdparam19=crewshare_and_unpaid_labour_costs_percents;
-  loadedData.vectdparam20=other_variable_costs_per_unit_efforts;
-  loadedData.vectdparam21=annual_insurance_costs_per_crews;
-  loadedData.vectdparam22=standard_labour_hour_opportunity_costss;
-  loadedData.vectdparam23=standard_annual_full_time_employement_hourss;
-  loadedData.vectdparam24=other_annual_fixed_costss;
-  loadedData.vectdparam25=vessel_values;
-  loadedData.vectdparam26=annual_depreciation_rates;
-  loadedData.vectdparam27=opportunity_interest_rates;
-  loadedData.vectdparam28=annual_discount_rates;
+  loadedData.vectiparam1=all_fishfarms_ids;
+  loadedData.vectsparam1=fishfarms_names;
+  loadedData.vectiparam2=idx_nodes;
+  loadedData.vectiparam3=is_actives;
+  loadedData.vectdparam1=fishfarms_sizes;
+  loadedData.vectdparam2=fishfarms_longs;
+  loadedData.vectdparam3=fishfarms_lats;
+  loadedData.vectdparam4=mean_SSTs;
+  loadedData.vectdparam5=mean_salinities;
+  loadedData.vectdparam6=mean_windspeeds;
+  loadedData.vectdparam7=mean_currentspeeds;
+  loadedData.vectdparam8=max_depths;
+  loadedData.vectdparam9=diss_O2_mg_per_ls;
+  loadedData.vectdparam10=Linf_mms;
+  loadedData.vectdparam11=K_ys;
+  loadedData.vectdparam12=t0_ys;
+  loadedData.vectdparam13=fulton_condition_factors;
+  loadedData.vectsparam2=meanw_growth_model_types;
+  loadedData.vectiparam4=start_day_growings;
+  loadedData.vectiparam5=end_day_harvests;
+  loadedData.vectiparam6=nbyears_for_growths;
+  loadedData.vectiparam7=nb_days_fallowing_periods;
+  loadedData.vectiparam8=nb_fish_at_starts;
+  loadedData.vectdparam14=meanw_at_starts;
+  loadedData.vectdparam15=price_per_kg_at_starts;
+  loadedData.vectdparam16=target_meanw_at_harvests;
+  loadedData.vectiparam9=nb_fish_at_harvests;
+  loadedData.vectdparam17=meanw_at_harvests;
+  loadedData.vectdparam18=prop_harvest_kg_solds;
+  loadedData.vectdparam19=kg_eggs_per_kgs;
+  loadedData.vectdparam20=price_eggs_per_kgs;
+  loadedData.vectdparam21=N_in_fish_kg_3pers;
+  loadedData.vectdparam22=P_in_fish_kg_0_5pers;
+  loadedData.vectsparam3=feed_types;
+  loadedData.vectdparam23=feed_price_per_kgs;
+  loadedData.vectdparam24=total_feed_kgs;
+  loadedData.vectdparam25=prop_N_in_feeds;
+  loadedData.vectdparam26=prop_P_in_feeds;
+  loadedData.vectdparam27=total_feed_N_kgs;
+  loadedData.vectdparam28=total_feed_P_kgs;
+  loadedData.vectsparam4=feed_type_vets;
+  loadedData.vectdparam29=feed_vet_price_per_kgs;
+  loadedData.vectdparam30=total_feed_vet_kgs;
+  loadedData.vectdparam31=prop_N_in_feed_vets;
+  loadedData.vectdparam32=prop_P_in_feed_vets;
+  loadedData.vectdparam33=total_feed_vet_N_kgs;
+  loadedData.vectdparam34=total_feed_vet_P_kgs;
+  loadedData.vectdparam35=annual_discharge_N_kgs;
+  loadedData.vectdparam36=annual_discharge_P_kgs;
+  loadedData.vectdparam37=annual_discharge_C_kgs;
+  loadedData.vectdparam38=annual_discharge_heavymetals_kgs;
+  loadedData.vectdparam39=annual_discharge_medecine_kgs;
+  loadedData.vectdparam40=net_harvest_kg_per_sqkm_ys;
+  loadedData.vectdparam41=market_price_sold_fishs;
+  loadedData.vectdparam42=operating_cost_per_days;
+  loadedData.vectdparam43=annual_profits;
 
 
-*/
+
+
+
+
 
 return 0;
 }

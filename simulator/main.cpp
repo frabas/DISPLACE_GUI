@@ -153,6 +153,7 @@ using namespace sqlite;
 #include "dataloader.h"
 #include "dataloaderbenthos.h"
 #include "dataloadervessels.h"
+#include "dataloaderfishfarms.h"
 
 
 #ifdef PROFILE
@@ -1869,6 +1870,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
+    Dataloaderfishfarms ffl;
+    l->loadFeatures(&ffl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    loadedData);
+
+
+/*
     // read general firm features
     vector<int> all_fishfarms_ids;
     vector<string> fishfarms_names;
@@ -1984,11 +1996,72 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 2;
     }
 
+ */
 
-    vector<Fishfarm *> fishfarms(all_fishfarms_ids.size());
-    for (unsigned int i = 0; i < all_fishfarms_ids.size(); i++) {
+    vector<Fishfarm *> fishfarms(loadedData.vectiparam1.size());
+    for (unsigned int i = 0; i < loadedData.vectiparam1.size(); i++) {
 
-        fishfarms[i] = new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), 0, is_actives[i],
+        fishfarms[i] = new Fishfarm(
+                loadedData.vectiparam1.at(i),
+                loadedData.vectsparam1.at(i),
+                nodes.at(loadedData.vectiparam2.at(i)),
+                0,
+                loadedData.vectiparam3.at(i),
+                loadedData.vectdparam1.at(i),
+                loadedData.vectdparam2.at(i),
+                loadedData.vectdparam3.at(i),
+                loadedData.vectdparam4.at(i),
+                loadedData.vectdparam5.at(i),
+                loadedData.vectdparam6.at(i),
+                loadedData.vectdparam7.at(i),
+                loadedData.vectdparam8.at(i),
+                loadedData.vectdparam9.at(i),
+                loadedData.vectdparam10.at(i),
+                loadedData.vectdparam11.at(i),
+                loadedData.vectdparam12.at(i),
+                loadedData.vectdparam13.at(i),
+                loadedData.vectsparam2.at(i),
+                loadedData.vectiparam4.at(i),
+                loadedData.vectiparam5.at(i),
+                loadedData.vectiparam6.at(i),
+                loadedData.vectiparam7.at(i),
+                loadedData.vectiparam8.at(i),
+                loadedData.vectdparam14.at(i),
+                loadedData.vectdparam15.at(i),
+                loadedData.vectdparam16.at(i),
+                loadedData.vectiparam9.at(i),
+                loadedData.vectdparam17.at(i),
+                loadedData.vectdparam18.at(i),
+                loadedData.vectdparam19.at(i),
+                loadedData.vectdparam20.at(i),
+                loadedData.vectdparam21.at(i),
+                loadedData.vectdparam22.at(i),
+                loadedData.vectsparam3.at(i),
+                loadedData.vectdparam23.at(i),
+                loadedData.vectdparam24.at(i),
+                loadedData.vectdparam25.at(i),
+                loadedData.vectdparam26.at(i),
+                loadedData.vectdparam27.at(i),
+                loadedData.vectdparam28.at(i),
+                loadedData.vectsparam4.at(i),
+                loadedData.vectdparam29.at(i),
+                loadedData.vectdparam30.at(i),
+                loadedData.vectdparam31.at(i),
+                loadedData.vectdparam32.at(i),
+                loadedData.vectdparam33.at(i),
+                loadedData.vectdparam34.at(i),
+                loadedData.vectdparam35.at(i),
+                loadedData.vectdparam36.at(i),
+                loadedData.vectdparam37.at(i),
+                loadedData.vectdparam38.at(i),
+                loadedData.vectdparam39.at(i),
+                loadedData.vectdparam40.at(i),
+                loadedData.vectdparam41.at(i),
+                loadedData.vectdparam42.at(i),
+                loadedData.vectdparam43.at(i));
+
+
+  /*              all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), 0, is_actives[i],
                                     fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
                                     mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i],
                                     max_depths[i], diss_O2_mg_per_ls[i],
@@ -2012,14 +2085,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     annual_discharge_medecine_kgs[i], net_harvest_kg_per_sqkm_ys[i],
                                     market_price_sold_fishs[i], operating_cost_per_days[i], annual_profits[i]
         );
+*/
 
-        nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
+        nodes.at(loadedData.vectiparam2.at(i))->set_ff_names_on_node(loadedData.vectiparam1.at(i));
 
         cout << fishfarms[i]->get_name() << endl;
-        cout << "on node " << idx_nodes[i] << " put ffarm " << nodes.at(idx_nodes[i])->get_ff_names_on_node().at(0)
+        cout << "on node " << loadedData.vectiparam2.at(i) << " put ffarm " << nodes.at(loadedData.vectiparam2.at(i))->get_ff_names_on_node().at(0)
              << endl;
         cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << endl;
-        cout << "end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()
+        cout << "end for harvest at " << loadedData.vectiparam5.at(i) << " given " << fishfarms[i]->get_end_day_harvest()
              << endl;
 
         if (outSqlite) {

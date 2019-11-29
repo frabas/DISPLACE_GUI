@@ -2147,6 +2147,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
+    ParamsForLoad paramsForLoad;
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.vdparam1= calib_cpue_multiplier;
+    paramsForLoad.vdparam2= calib_weight_at_szgroup;
 
     Dataloaderpops ppl;
     l->loadFeatures(&ppl,
@@ -2490,6 +2499,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            loadedData.vectdparam2.at(sp),
            loadedData.vectdparam3.at(sp),
            loadedData.vectdparam4.at(sp),
+           loadedData.vectdparam5.at(sp),
            loadedData.vovi1.at(sp),
            loadedData.vovi2.at(sp),
            loadedData.vovd1.at(sp),
@@ -2502,7 +2512,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            loadedData.vovd7.at(sp),
            loadedData.vectmmapndparam1.at(sp),
            loadedData.vectmmapndparam2.at(sp),
-           loadedData.vectmmapndparam3.at(sp),
+           loadedData.vectmapndparam1.at(sp),
            loadedData.vectmmapidparam1.at(sp),
            loadedData.vectmapsdparam1.at(sp),
            loadedData.vovovd2.at(sp),
@@ -2511,10 +2521,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            nodes,
            loadedData.vovd8.at(sp),
            loadedData.vovd9.at(sp),
-           loadedData.vectdparam7.at(sp),
-           loadedData.vectdparam8.at(sp),
-           loadedData.vectdparam5.at(sp),
-           loadedData.vectdparam6.at(sp)
+           loadedData.vectmapiiparam1.at(sp),
+           loadedData.vectmapidparam1.at(sp),
+           loadedData.vectdparam6.at(sp),
+           loadedData.vectdparam7.at(sp)
           );
 
 /*
@@ -3178,6 +3188,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
 
     Dataloaderships csl;
     l->loadFeatures(&csl,
@@ -3277,6 +3293,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
+   paramsForLoad.sparam1= a_month;
+   paramsForLoad.sparam2= a_quarter;
+   paramsForLoad.sparam3= a_semester;
+   paramsForLoad.iparam1= nbpops;
+   paramsForLoad.iparam2= NBAGE;
+   paramsForLoad.iparam3= NBSZGROUP;
 
     Dataloadervessels vl;
     l->loadFeatures(&vl,
@@ -3285,6 +3307,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    paramsForLoad,
                     loadedData);
 
 

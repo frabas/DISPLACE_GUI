@@ -1213,13 +1213,9 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
                                  const string& inputfolder,
                                  PopSceOptions &dyn_pop_sce,
                                  DynAllocOptions &dyn_alloc_sce,
-                                 string& biolsce,
-                                 string& fleetsce,
-                                 string& quarter,
-                                 string& month,
-                                 string& semester,
-                                 int NBAGE,
-                                 int NBSZGROUP,
+                                 string &biolsce,
+                                 string &fleetsce,
+                                 ParamsForLoad &paramsForLoad,
                                  LoadedData& loadedData)
 {
 
@@ -1232,44 +1228,44 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
                              dyn_alloc_sce,
                              biolsce,
                              fleetsce,
-                             quarter,
-                             month,
-                             semester,
-                             NBAGE,
-                             NBSZGROUP,
+                             paramsForLoad,
                              loadedData);
   cout << "Loading pops features" << endl;
 
 
-  // TODO: pass these as input to the function
-  string a_quarter  = "quarter1";
-  string a_month    = "month1";
-  string a_semester = "semester1";
-  //...
+  // paramsForLoad.sparam1; // a_month
+  // paramsForLoad.sparam2;// a_quarter
+  // paramsForLoad.sparam3; //a_semester
+  // paramsForLoad.iparam1; //nbpops
+  // paramsForLoad.iparam2; //NBAGE
+  // paramsForLoad.iparam3; //NBSZGROUP
+
 
 
 
   map<int, string> pop_names;
   read_pop_names_in_string(pop_names, folder_name_parameterization, inputfolder);
 
+  vector<string > type_of_avai_field_to_read(paramsForLoad.iparam1);
 
-  for (int st=0; st < pop_names.size(); st++)
+  for (int st=0; st < paramsForLoad.iparam1; st++)
   {
-     type_of_avai_field_to_read.push_back("");
+     type_of_avai_field_to_read.at(st) ="";
   }
+  string str_rand_avai_file="baseline"; // deprecated?
   // by default, will use the initial avai input
 
   // read the pop-specific betas related to the availability
   // szgroup0
-  multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, inputfolder);
+  multimap<int, double> avai0_betas = read_avai_betas(paramsForLoad.sparam3, "0", folder_name_parameterization, inputfolder);
   // szgroup2
-  multimap<int, double> avai2_betas = read_avai_betas(a_semester, "2", folder_name_parameterization, inputfolder);
+  multimap<int, double> avai2_betas = read_avai_betas(paramsForLoad.sparam3, "2", folder_name_parameterization, inputfolder);
   // szgroup3
-  multimap<int, double> avai3_betas = read_avai_betas(a_semester, "3", folder_name_parameterization, inputfolder);
+  multimap<int, double> avai3_betas = read_avai_betas(paramsForLoad.sparam3, "3", folder_name_parameterization, inputfolder);
   // szgroup5
-  multimap<int, double> avai5_betas = read_avai_betas(a_semester, "5", folder_name_parameterization, inputfolder);
+  multimap<int, double> avai5_betas = read_avai_betas(paramsForLoad.sparam3, "5", folder_name_parameterization, inputfolder);
   // szgroup7
-  multimap<int, double> avai7_betas = read_avai_betas(a_semester, "7", folder_name_parameterization, inputfolder);
+  multimap<int, double> avai7_betas = read_avai_betas(paramsForLoad.sparam3, "7", folder_name_parameterization, inputfolder);
 
   // read other stuffs...
   // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
@@ -1318,8 +1314,8 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   }
 
   for (unsigned int i = 0; i < nodes.size(); i++) {
-      nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
-      nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops, selected_szgroups_pop0.size());
+      nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
+      nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, selected_szgroups_pop0.size());
   }
 
 
@@ -1332,7 +1328,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   // input data, read proportion of natural mortality from other species when spatial co-occurences on node
   cout << "Do the species_interactions_mortality_proportion_matrix creation  need a check?" << endl;
   vector<vector<double> > species_interactions_mortality_proportion_matrix = read_species_interactions_mortality_proportion_matrix(
-          nbpops, folder_name_parameterization, inputfolder, biolsce);
+          paramsForLoad.iparam1, folder_name_parameterization, inputfolder, biolsce);
 
 
 
@@ -1358,6 +1354,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   // initiate for loading loop over sp
   vector <double > vect_of_avai0_beta_v(name_pops.size());
   vector <double > vect_of_avai2_beta_v(name_pops.size());
+  vector <double > vect_of_avai3_beta_v(name_pops.size());
   vector <double > vect_of_avai5_beta_v(name_pops.size());
   vector <double > vect_of_avai7_beta_v(name_pops.size());
   vector <vector<int> > vect_of_init_selected_szgroups_vov(name_pops.size());
@@ -1373,7 +1370,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   //vector <multimap<types::NodeId, double> > vect_of_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
   vector <multimap<types::NodeId, double> > vect_of_full_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
   vector <multimap<types::NodeId, double> > vect_of_field_of_coeff_diffusion_this_pop_mmap(name_pops.size());
-  vector <multimap<types::NodeId, double> > vect_of_oth_land_mmap(name_pops.size());
+  vector <map<types::NodeId, double> > vect_of_oth_land_map(name_pops.size());
   vector <map<string, double> > vect_of_relative_stability_key_map(name_pops.size());
   vector <vector<vector<double> > > vect_of_growth_transition_matrix_vov(name_pops.size());
   vector <vector<vector<double> > > vect_of_percent_szgroup_per_age_matrix_vov(name_pops.size());
@@ -1384,43 +1381,44 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   vector <multimap<int, double> > vect_of_overall_migration_fluxes_mmap(name_pops.size());
   vector<double> landings_so_far(name_pops.size());
 
+  vector <string> popnames (name_pops.size());
 
-  for (unsigned int sp = 0; sp < populations.size(); sp++) {
+  for (unsigned int sp = 0; sp < paramsForLoad.iparam1; sp++) {
       dout(cout << endl);
 
-      string pop_name = pop_names[sp];
-      cout << "pop_name: " << sp << ": " << pop_name << endl;
+      popnames.at(sp) = pop_names[sp];
+      cout << "pop_name: " << sp << ": " <<  popnames.at(sp) << endl;
 
 
       // avai0 beta for this particular pop
       multimap<int, double>::iterator lower_0 = avai0_betas.lower_bound(sp);
       multimap<int, double>::iterator upper_0 = avai0_betas.upper_bound(sp);
       for (multimap<int, double>::iterator pos = lower_0; pos != upper_0; pos++)
-          vect_of_avai0_beta_v.(sp) = pos->second;
+          vect_of_avai0_beta_v.at(sp) = pos->second;
 
       // avai2 beta for this particular pop
       multimap<int, double>::iterator lower_2 = avai2_betas.lower_bound(sp);
       multimap<int, double>::iterator upper_2 = avai2_betas.upper_bound(sp);
       for (multimap<int, double>::iterator pos = lower_2; pos != upper_2; pos++)
-          vect_of_avai2_beta_v.(sp)= pos->second;
+          vect_of_avai2_beta_v.at(sp)= pos->second;
 
       // avai3 beta for this particular pop
       multimap<int, double>::iterator lower_3 = avai3_betas.lower_bound(sp);
       multimap<int, double>::iterator upper_3 = avai3_betas.upper_bound(sp);
       for (multimap<int, double>::iterator pos = lower_3; pos != upper_3; pos++)
-          vect_of_avai3_beta_v.(sp)= pos->second;
+          vect_of_avai3_beta_v.at(sp)= pos->second;
 
       // avai5 beta for this particular pop
       multimap<int, double>::iterator lower_5 = avai5_betas.lower_bound(sp);
       multimap<int, double>::iterator upper_5 = avai5_betas.upper_bound(sp);
       for (multimap<int, double>::iterator pos = lower_5; pos != upper_5; pos++)
-          vect_of_avai5_beta_v.(sp)= pos->second;
+          vect_of_avai5_beta_v.at(sp)= pos->second;
 
       // avai7 beta for this particular pop
       multimap<int, double>::iterator lower_7 = avai7_betas.lower_bound(sp);
       multimap<int, double>::iterator upper_7 = avai7_betas.upper_bound(sp);
       for (multimap<int, double>::iterator pos = lower_7; pos != upper_7; pos++)
-          vect_of_avai7_beta_v.(sp) = pos->second;
+          vect_of_avai7_beta_v.at(sp) = pos->second;
 
       // initial selected szgroups
       multimap<int, int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
@@ -1488,7 +1486,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
       //                                                                                               str_rand_avai_file,
       //                                                                                               type_of_avai_field_to_read);
       vect_of_full_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_full_avai_szgroup_nodes_with_pop(
-                                                                                         a_semester, sp,
+                                                                                         paramsForLoad.sparam3, sp,
                                                                                                      folder_name_parameterization,
                                                                                                      inputfolder, str_rand_avai_file,
                                                                                                      type_of_avai_field_to_read);
@@ -1496,33 +1494,33 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
       // input data
       if (dyn_pop_sce.option(Options::diffusePopN)) {
           cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
-          vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp)  = read_field_of_coeff_diffusion_this_pop(a_semester, sp,
+          vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp)  = read_field_of_coeff_diffusion_this_pop(paramsForLoad.sparam3, sp,
                                                                                      folder_name_parameterization,
                                                                                      inputfolder, biolsce);
       }
 
       // input data, read a other landings per node for this species
-      vect_of_oth_land_mmap.at(sp)  = read_oth_land_nodes_with_pop(a_semester, a_month, sp,
+      vect_of_oth_land_map.at(sp)  = read_oth_land_nodes_with_pop(paramsForLoad.sparam3, paramsForLoad.sparam1, sp,
                                                                          folder_name_parameterization, inputfolder,
                                                                          fleetsce);
 
-      vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(a_semester, sp,
+      vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(paramsForLoad.sparam3, sp,
                                                                                 folder_name_parameterization,
                                                                                 inputfolder);
 
       // input data, growth transition, percent_szgroup_per_age_matrix
-      vect_of_growth_transition_matrix_vov.at(sp) = read_growth_transition_matrix(sp, NBSZGROUP,
+      vect_of_growth_transition_matrix_vov.at(sp) = read_growth_transition_matrix(sp, paramsForLoad.iparam3,
                                                                                        folder_name_parameterization,
                                                                                        inputfolder, biolsce);
 
-      vect_of_percent_szgroup_per_age_matrix_vov.at(sp) = read_percent_szgroup_per_age_matrix(sp, NBSZGROUP,
-                                                                                                   NBAGE,
+      vect_of_percent_szgroup_per_age_matrix_vov.at(sp) = read_percent_szgroup_per_age_matrix(sp, paramsForLoad.iparam3,
+                                                                                                   paramsForLoad.iparam2,
                                                                                                    folder_name_parameterization,
                                                                                                    inputfolder,
                                                                                                    biolsce);
 
-      vect_of_percent_age_per_szgroup_matrix_vov.at(sp) = read_percent_age_per_szgroup_matrix(sp, NBSZGROUP,
-                                                                                                   NBAGE,
+      vect_of_percent_age_per_szgroup_matrix_vov.at(sp) = read_percent_age_per_szgroup_matrix(sp, paramsForLoad.iparam3,
+                                                                                                   paramsForLoad.iparam2,
                                                                                                    folder_name_parameterization,
                                                                                                    inputfolder,
                                                                                                    biolsce);
@@ -1551,7 +1549,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
 
       // input data, read migration fluxes in proportion per size group (if any)
       dout(cout << "read overall migration..." << endl);
-      vect_of_overall_migration_fluxes_mmap.at(sp) = read_overall_migration_fluxes(a_semester, sp,
+      vect_of_overall_migration_fluxes_mmap.at(sp) = read_overall_migration_fluxes(paramsForLoad.sparam3, sp,
                                                                                      folder_name_parameterization,
                                                                                      inputfolder, biolsce);
       dout(cout << "overall migration has been read correctly" << endl);
@@ -1568,11 +1566,12 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
 
 
   //  export 
-  loadedData.vectsparam1=pop_names;
+  loadedData.vectsparam1=popnames;
   loadedData.vectdparam1=vect_of_avai0_beta_v;
   loadedData.vectdparam2=vect_of_avai2_beta_v;
-  loadedData.vectdparam3=vect_of_avai5_beta_v;
-  loadedData.vectdparam4=vect_of_avai7_beta_v;
+  loadedData.vectdparam3=vect_of_avai3_beta_v;
+  loadedData.vectdparam4=vect_of_avai5_beta_v;
+  loadedData.vectdparam5=vect_of_avai7_beta_v;
   loadedData.vovi1= vect_of_init_selected_szgroups_vov;
   loadedData.vovi2= vect_of_init_tot_N_per_szgroup_vov;
   loadedData.vovd1= vect_of_init_prop_migrants_in_N_per_szgroup_vov;
@@ -1584,7 +1583,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   loadedData.vovd6= vect_of_init_proprecru_per_szgroup_vov;
   loadedData.vectmmapndparam1=vect_of_full_avai_szgroup_nodes_with_pop_mmap;
   loadedData.vectmmapndparam2=vect_of_field_of_coeff_diffusion_this_pop_mmap;
-  loadedData.vectmmapndparam3=vect_of_oth_land_mmap;
+  loadedData.vectmapndparam1=vect_of_oth_land_map;
   loadedData.vectmapsdparam1=vect_of_relative_stability_key_map;
   loadedData.vovovd1=vect_of_growth_transition_matrix_vov;
   loadedData.vovovd2=vect_of_percent_szgroup_per_age_matrix_vov;
@@ -1593,10 +1592,10 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   loadedData.vovd8= vect_of_fbar_ages_min_max_and_ftarget_this_pop_v;
   loadedData.vovd9= vect_of_tac_this_pop;
   loadedData.vectmmapidparam1=vect_of_overall_migration_fluxes_mmap;
-  loadedData.vectdparam5=calib_cpue_multiplier;
-  loadedData.vectdparam6=calib_weight_at_szgroup;
-  loadedData.vectdparam7=tac_percent_simulated;
-  loadedData.vectdparam8=hyperstability_param;
+  loadedData.vectdparam6=paramsForLoad.vdparam1; // calib_cpue_multiplier;
+  loadedData.vectdparam7=paramsForLoad.vdparam2;  // calib_weight_at_szgroup;
+  loadedData.mapiiparam1=tac_percent_simulated;
+  loadedData.mapidparam1=hyperstability_param;
 
 
 

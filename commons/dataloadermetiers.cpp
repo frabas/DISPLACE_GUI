@@ -70,11 +70,7 @@ int Dataloadermetiers::features(std::shared_ptr<sql::Storage> indb,
                                  DynAllocOptions &dyn_alloc_sce,
                                  string biolsce,
                                  string fleetsce,
-                                 string& quarter,
-                                 string& month,
-                                 string& semester,
-                                 int NBAGE,
-                                 int NBSZGROUP,
+                                 ParamsForLoad &paramsForLoad,
                                 LoadedData& loadedData)
 {
 
@@ -87,11 +83,7 @@ int Dataloadermetiers::features(std::shared_ptr<sql::Storage> indb,
                             dyn_alloc_sce,
                             biolsce,
                             fleetsce,
-                            quarter,
-                            month,
-                            semester,
-                            NBAGE,
-                            NBSZGROUP,
+                            paramsForLoad,
                             loadedData);
   cout << "Loading metiers features" << endl;
 

@@ -85,7 +85,6 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<int> vectiparam8;
     std::vector<int> vectiparam9;
     std::vector<int> vectiparam10;   
-    std::map<int,double> mapidparam1;
     std::multimap<int,double> mmapidparam1;
     std::multimap<int,double> mmapidparam2;
     std::multimap<int,double> mmapidparam3;
@@ -118,13 +117,16 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::multimap<types::NodeId,int> mmapniparam10;
     std::multimap<types::NodeId,double> mmapndparam1;
     std::multimap<types::NodeId,double> mmapndparam2;
-    std::map<string,double> vectmapsdparam1;
+    std::vector<map<string,double> > vectmapsdparam1;
+    std::map<int,int> mapiiparam1;
+    std::map<int,double> mapidparam1;
+    std::vector<map<types::NodeId,double> > vectmapndparam1;
     std::vector<multimap<types::NodeId,int> > vectmmapniparam1;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam1;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam2;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam3;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam4;
-    std::vector<multimap<int,types::NodeId> > vectmmapidparam1;
+    std::vector<multimap<int,double> > vectmmapidparam1;
     std::vector<vector <double> > vovd1;
     std::vector<vector <double> > vovd2;
     std::vector<vector <double> > vovd3;
@@ -180,6 +182,20 @@ struct COMMONSSHARED_EXPORT LoadedData {
  };
 
 
+struct COMMONSSHARED_EXPORT ParamsForLoad {
+    string sparam1;
+    string sparam2;
+    string sparam3;
+    string sparam4;
+    int iparam1;
+    int iparam2;
+    int iparam3;
+    double dparam1;
+    double dparam2;
+    double dparam3;
+    vector <double > vdparam1;
+    vector <double > vdparam2;
+};
 
 
 
@@ -209,11 +225,7 @@ public:
                           DynAllocOptions& dyn_alloc_sce,
                           string &biolsce,
                           string &fleetsce,
-                          string &quarter,
-                          string &month,
-                          string &semester,
-                          int NBAGE,
-                          int NBSZGROUP,
+                          ParamsForLoad &paramsForLoad,
                           LoadedData& loadedData){ cout << "Loading features" << endl; return(0);}
 };
 
@@ -231,11 +243,7 @@ public:
                       DynAllocOptions& dyn_alloc_sce,
                       string &biolsce,
                       string &fleetsce,
-                      string &quarter,
-                      string &month,
-                      string &semester,
-                      int NBAGE,
-                      int NBSZGROUP,
+                      ParamsForLoad &paramsForLoad,
                       LoadedData& loadedData)
     {
        dl->features(indb,
@@ -245,11 +253,7 @@ public:
                     dyn_alloc_sce,
                     biolsce,
                     fleetsce,
-                    quarter,
-                    month,
-                    semester,
-                    NBAGE,
-                    NBSZGROUP,
+                    paramsForLoad,
                     loadedData);
     }
 };

@@ -669,13 +669,9 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
                                  const string& inputfolder,
                                  PopSceOptions &dyn_pop_sce,
                                  DynAllocOptions &dyn_alloc_sce,
-                                 string biolsce,
-                                 string fleetsce,
-                                 string& quarter,
-                                 string& month,
-                                 string& semester,
-                                 int NBAGE,
-                                 int NBSZGROUP,
+                                 string &biolsce,
+                                 string &fleetsce,
+                                 ParamsForLoad &paramsForLoad,
                                  LoadedData& loadedData)
 {
 
@@ -688,11 +684,7 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
                             dyn_alloc_sce,
                             biolsce,
                             fleetsce,
-                            quarter,
-                            month,
-                            semester,
-                            NBAGE,
-                            NBSZGROUP,
+                            paramsForLoad,
                             loadedData);
   cout << "Loading vessels features" << endl;
 
@@ -719,15 +711,17 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
   vector<int> firm_ids;
   vector<VesselCalendar> calendars;
 
-  // TODO: pass these as input to the function
-  string a_quarter  = "quarter1";
-  string a_month    = "month1";
-  string a_semester = "semester1";
-  int selected_vessels_only = 0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
-  //...
+  // paramsForLoad.sparam1; // a_month
+  // paramsForLoad.sparam2;// a_quarter
+  // paramsForLoad.sparam3; //a_semester
+  // paramsForLoad.iparam1; //nbpops
+  // paramsForLoad.iparam2; //NBAGE
+  // paramsForLoad.iparam3; //NBSZGROUP
+
+  int selected_vessels_only = 0;
 
 
-  if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
+  if (!read_vessels_features(paramsForLoad.sparam2, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                              speeds, fuelcons, lengths, vKWs,
                              carrycapacities, tankcapacities, nbfpingspertrips,
                              resttime_par1s, resttime_par2s, av_trip_duration,
@@ -778,16 +772,16 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
 
   // read the more complex objects (i.e. when several info for a same vessel)...
   // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-  auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-  auto fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
-  auto harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
+  auto fgrounds = read_fgrounds(paramsForLoad.sparam2, folder_name_parameterization, inputfolder);
+  auto fgrounds_init = read_fgrounds_init(paramsForLoad.sparam2, folder_name_parameterization, inputfolder);
+  auto harbours = read_harbours(paramsForLoad.sparam2, folder_name_parameterization, inputfolder);
 
-  multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-  multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization,
+  multimap<string, double> freq_fgrounds = read_freq_fgrounds(paramsForLoad.sparam2, folder_name_parameterization, inputfolder);
+  multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(paramsForLoad.sparam2, folder_name_parameterization,
                                                                         inputfolder);
-  multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
-  multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-  multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
+  multimap<string, double> freq_harbours = read_freq_harbours(paramsForLoad.sparam2, folder_name_parameterization, inputfolder);
+  multimap<string, double> vessels_betas = read_vessels_betas(paramsForLoad.sparam3, folder_name_parameterization, inputfolder);
+  multimap<string, double> vessels_tacs = read_vessels_tacs(paramsForLoad.sparam3, folder_name_parameterization, inputfolder);
 
 
 
@@ -810,14 +804,14 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
 
       // read vessel and quarter specific multimap
       // quarter specific to capture a piece of seasonality in the fishnig activity
-      vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-      vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization,
+      vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(paramsForLoad.sparam2, vesselids[i], folder_name_parameterization, inputfolder);
+      vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(paramsForLoad.sparam2, vesselids[i], folder_name_parameterization,
                                                          inputfolder);
 
       //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-      vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+      vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(paramsForLoad.sparam2, vesselids[i],
                                                                        folder_name_parameterization, inputfolder);
-      vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i],
+      vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(paramsForLoad.sparam2, vesselids[i],
                                                                        folder_name_parameterization, inputfolder);
 
 

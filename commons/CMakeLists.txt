@@ -19,8 +19,16 @@ set(SOURCES
         dataloader.h
         dataloaderbenthos.h
         dataloadervessels.h
+        dataloaderpops.h
+        dataloadermetiers.h
+        dataloaderfishfarms.h
+        dataloaderwindmills.h
         dataloaderbenthos.cpp
         dataloadervessels.cpp
+        dataloaderpops.cpp
+        dataloadermetiers.cpp
+        dataloaderfishfarms.cpp
+        dataloaderwindmills.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp

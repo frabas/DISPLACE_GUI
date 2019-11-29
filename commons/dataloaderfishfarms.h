@@ -102,4 +102,8 @@ bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
                              string inputfolder);
 
 
+map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);
+
+
+
 #endif // DATALOADERFISHFARMS_H

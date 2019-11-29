@@ -155,6 +155,7 @@ using namespace sqlite;
 #include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
 #include "dataloaderwindmills.h"
+#include "dataloadercommercialships.h"
 
 
 #ifdef PROFILE
@@ -3098,6 +3099,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
+
+
+    Dataloaderships csl;
+    l->loadFeatures(&csl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    loadedData);
+
+
+    /*
     // read general ship features (incl. their specific lanes)
     vector<string> shipids;
     vector<double> imos;
@@ -3134,20 +3148,38 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     vector<double> lats;
     vector<double> longs;
+*/
 
-    ships = vector<Ship *>(shipids.size());
-    for (unsigned int i = 0; i < shipids.size(); i++) {
-        cout << "create ship " << shipids[i] << endl;
 
-        lats = find_entries_i_d(shiplanes_lat, lane_ids[i]);
-        longs = find_entries_i_d(shiplanes_lon, lane_ids[i]);
-        ships[i] = new Ship(i, shipids[i], 1, imos[i], yearbuilds[i], flags[i],
-                            types[i], typecodes[i], KWs[i], loas[i], breadths[i],
-                            grosstonnages[i], nbunits[i],
-                            fueluses[i], NOxEmission_gperKWhs[i],
-                            SOxEmission_percentpertotalfuelmasss[i],
-                            GHGEmissions[i], PMEmissions[i],
-                            vmaxs[i], vcruises[i], longs, lats);
+
+    ships = vector<Ship *>(loadedData.vectsparam1.size());
+    for (unsigned int i = 0; i < loadedData.vectsparam1.size(); i++) {
+        cout << "create ship " << loadedData.vectsparam1.at(i) << endl;
+
+        vector <double> longs = find_entries_i_d(loadedData.mmapidparam1, loadedData.vectdparam16.at(i));
+        vector <double> lats = find_entries_i_d(loadedData.mmapidparam2, loadedData.vectdparam16.at(i));
+        ships[i] = new Ship(i,
+                            loadedData.vectsparam1.at(i),
+                            1,
+                            loadedData.vectdparam1.at(i),
+                            loadedData.vectdparam2.at(i),
+                            loadedData.vectsparam2.at(i),
+                            loadedData.vectsparam3.at(i),
+                            loadedData.vectdparam3.at(i),
+                            loadedData.vectdparam5.at(i),
+                            loadedData.vectdparam4.at(i),
+                            loadedData.vectdparam6.at(i),
+                            loadedData.vectdparam7.at(i),
+                            loadedData.vectdparam8.at(i),
+                            loadedData.vectdparam9.at(i),
+                            loadedData.vectdparam10.at(i),
+                            loadedData.vectdparam11.at(i),
+                            loadedData.vectdparam12.at(i),
+                            loadedData.vectdparam13.at(i),
+                            loadedData.vectdparam14.at(i),
+                            loadedData.vectdparam15.at(i),
+                            longs,
+                            lats);
         ships[i]->set_idx_ship(i);
 
         cout << "at (" << ships[i]->get_x() << "," << ships[i]->get_y() << ") " << endl;

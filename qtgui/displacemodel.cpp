@@ -36,6 +36,7 @@
 #include <dataloadervessels.h>
 #include <dataloaderfishfarms.h>
 #include <dataloaderwindmills.h>
+#include <dataloadercommercialships.h>
 
 #include <qdebug.h>
 #include <QtAlgorithms>

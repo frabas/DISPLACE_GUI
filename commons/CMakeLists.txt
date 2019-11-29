@@ -23,12 +23,14 @@ set(SOURCES
         dataloadermetiers.h
         dataloaderfishfarms.h
         dataloaderwindmills.h
+        dataloadercommercialships.h
         dataloaderbenthos.cpp
         dataloadervessels.cpp
         dataloaderpops.cpp
         dataloadermetiers.cpp
         dataloaderfishfarms.cpp
         dataloaderwindmills.cpp
+        dataloadercommercialships.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp

@@ -117,7 +117,8 @@ bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vessel
 
 */
 
-bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<double> &imos,
+/*
+ bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
                          vector<string> &types, vector<double> &typecodes,
                          vector<double> &loas, vector<double> &KWs, vector<double> &breadths,
@@ -129,6 +130,7 @@ bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<do
                          vector<double> &PMEmissions,
                          vector<double>& vmaxs, vector<double>& vcruises, vector<double>& lane_ids,
                          string folder_name_parameterization, string inputfolder);
+*/
 
 /*
 bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
@@ -263,14 +265,14 @@ vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_
 //multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 
 // fishfarms specific
-map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);
+//map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);
 
 // windmills specific
 //map<int, double> COMMONSSHARED_EXPORT read_size_per_windmill(string folder_name_parameterization, string inputfolder);
 
 // shipping specific
-multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
+//multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
 
 // pop specific
 void COMMONSSHARED_EXPORT  read_pop_names_in_string(map<int, string>& pop_names, string folder_name_parameterization, string inputfolder);

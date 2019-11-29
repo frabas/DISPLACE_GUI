@@ -819,7 +819,7 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
 
 */
 
-
+/*
 //----------------
 bool read_ships_features(vector<string>& shipids,
                          vector<double> &imos,
@@ -863,6 +863,9 @@ bool read_ships_features(vector<string>& shipids,
 
     return r;
 }
+
+*/
+
 
 
 multimap<types::NodeId, string> read_harbour_names(string folder_name_parameterization, string inputfolder)
@@ -2091,7 +2094,7 @@ map<int, double> read_size_per_windmill(string folder_name_parameterization, str
 }
 */
 
-
+/*
 // FOR SHIPPING LANES
 multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder)
 {
@@ -2137,7 +2140,7 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
     return(shipsspe_lanes_lon);
 }
 
-
+*/
 
 
 

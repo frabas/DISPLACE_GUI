@@ -497,7 +497,7 @@ multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_paramet
     return(init_proprecru_per_szgroup);
 }
 
-/*
+
 multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file)
 {
 
@@ -519,8 +519,10 @@ multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, strin
     {
         cout << "Unfortunately the lst_idx_nodes_per_pop_.dat vector is not informed  "<< endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
-        open_file_error(filename.c_str());
-        // return 1;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
     }
     multimap<int, int> lst_idx_nodes_per_pop;
     fill_multimap_from_specifications_i_i(file_lst_idx_nodes_per_pop,  lst_idx_nodes_per_pop);
@@ -542,7 +544,7 @@ multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, strin
 
     return(types::helpers::toValueIdMultimap<types::NodeId>(lst_idx_nodes_per_pop));
 }
-*/
+
 
 
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder)
@@ -893,14 +895,13 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     file_avai_szgroup_nodes_with_pop.close();
 
     // check input
-    //multimap<int,double>::iterator lower = full_avai_szgroup_nodes_with_pop.lower_bound(1600); //node 1600
-    //multimap<int,double>::iterator upper = full_avai_szgroup_nodes_with_pop.upper_bound(1600);
-    //dout << "avai on node 1600: ";
-    //for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+    //cout << "avai on node 9510: ";
+    //for(auto iter=full_avai_szgroup_nodes_with_pop.begin(); iter != full_avai_szgroup_nodes_with_pop.end();
+    //    iter = full_avai_szgroup_nodes_with_pop.upper_bound( iter->first ) )
     //{
-    //    dout << pos->second << " ";
+    //    cout << iter->first.toIndex() <<" : " << iter->second << " - ";
     //}
-    //dout << endl;
+    //cout << endl;
     // TODO (fba#5#): check avai sum to 1 for a given szgroup
 
     return(full_avai_szgroup_nodes_with_pop);
@@ -1294,9 +1295,9 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization,
                                                                                      inputfolder, biolsce);
   //cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
-  //multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester,
-  //                                                                                folder_name_parameterization,
-  //                                                                                inputfolder, str_rand_avai_file);
+  multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(paramsForLoad.sparam3,
+                                                                                  folder_name_parameterization,
+                                                                                  inputfolder, str_rand_avai_file);
 
   cout << "Do the pop files selected_szgroups need a check?" << endl;
   multimap<int, int> selected_szgroups = read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
@@ -1375,6 +1376,8 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   vector <vector<double> > vect_of_tac_this_pop(name_pops.size());
   vector <multimap<int, double> > vect_of_overall_migration_fluxes_mmap(name_pops.size());
   vector<double> landings_so_far(name_pops.size());
+
+  vector <vector<types::NodeId> > vect_of_lst_idx_nodes_per_pop_vov(name_pops.size());
 
   vector <string> popnames (name_pops.size());
 
@@ -1486,6 +1489,16 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
                                                                                                      inputfolder, str_rand_avai_file,
                                                                                                      type_of_avai_field_to_read);
 
+
+      // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
+      outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
+      auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
+      auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
+      for (multimap<int, types::NodeId>::iterator a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
+          vect_of_lst_idx_nodes_per_pop_vov.at(sp).push_back(a_pos->second);
+      }
+
+
       // input data
       if (dyn_pop_sce.option(Options::diffusePopN)) {
           cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
@@ -1561,6 +1574,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
 
 
   //  export 
+  // used in the Population() creator
   loadedData.vectsparam1=popnames;
   loadedData.vectdparam1=vect_of_avai0_beta_v;
   loadedData.vectdparam2=vect_of_avai2_beta_v;
@@ -1593,10 +1607,13 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   loadedData.vectdparam6=paramsForLoad.vdparam1; // calib_cpue_multiplier;
   loadedData.vectdparam7=paramsForLoad.vdparam2;  // calib_weight_at_szgroup;
  
+  // not used in the Population() creator
   loadedData.vectiparam1=selected_szgroups_pop0;
+  loadedData.vovn1=vect_of_lst_idx_nodes_per_pop_vov; // nodes_with_presence
 
-
-
+  // used in simulator main.cpp
+  loadedData.mmapidparam_init_weight_per_szgroup=init_weight_per_szgroup;
+  loadedData.vovd_species_interactions_mortality_proportion_matrix=species_interactions_mortality_proportion_matrix;
 
 
 return 0;

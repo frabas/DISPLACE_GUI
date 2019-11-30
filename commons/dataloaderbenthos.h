@@ -33,12 +33,13 @@ class COMMONSSHARED_EXPORT Dataloaderbenthos : public virtual Dataloader
 public:
     Dataloaderbenthos();
     int gettype (void);
-    int features(std::shared_ptr<msqlitecpp::v2::Storage> indb, const string& folder_name_parameterization,
+    int features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
+                 const string& folder_name_parameterization,
                   const string& inputfolder,
                   PopSceOptions& dyn_pop_sce,
                   DynAllocOptions& dyn_alloc_sce,
-                  string biolsce,
-                  string fleetsce,
+                  string &biolsce,
+                  string &fleetsce,
                   ParamsForLoad &paramsForLoad,
                   LoadedData & loadedData);
 

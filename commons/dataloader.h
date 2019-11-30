@@ -11,6 +11,7 @@
 #include "myutils.h"
 #include "vesselcalendar.h"
 #include "helpers.h"
+#include "idtypes.h"
 #include "idtypeshelpers.h"
 
 namespace sql = msqlitecpp::v2;
@@ -138,6 +139,7 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<vector <double> > vovd8;
     std::vector<vector <double> > vovd9;
     std::vector<vector <double> > vovd10;
+    std::vector<vector <types::NodeId> > vovn1;
     std::vector<vector <int> > vovi1;
     std::vector<vector <int> > vovi2;
     std::vector<vector <int> > vovi3;
@@ -181,6 +183,8 @@ struct COMMONSSHARED_EXPORT LoadedData {
     double double28;
     double double29;
     double double30;
+    multimap <int, double> mmapidparam_init_weight_per_szgroup;
+    vector<vector<double> >vovd_species_interactions_mortality_proportion_matrix;
  };
 
 

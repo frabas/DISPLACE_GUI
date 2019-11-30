@@ -243,9 +243,11 @@ Population::Population(int a_name,
     for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
 		iter = full_spatial_availability.upper_bound( iter->first ) )
 	{
+        cout << iter->first.toIndex() <<" : " << iter->second << " - ";
+
         dout(if(iter->first.toIndex()>nodes.size()) cout << "error in the avai field: trying to push back node idx " << iter->first.toIndex() << " for max nb of nodes " << nodes.size() << endl);
         p_spe_nodes.push_back (nodes[  iter->first.toIndex()  ]);
-        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);;
+        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);
 
 	}
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
@@ -255,7 +257,9 @@ Population::Population(int a_name,
     dout(cout << " lst nodes: " << endl);
 	for(unsigned int i=0; i<list_nodes.size(); i++)
 	{
-								 // caution: here is tot N on the node! need to call distribute_N()
+    cout << "i: " << i << endl;
+    cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ";
+        // caution: here is tot N on the node! need to call distribute_N()
 		list_nodes.at(i)->set_Ns_pops_at_szgroup(a_name, tot_N_at_szgroup);
         dout(cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ");
 	}

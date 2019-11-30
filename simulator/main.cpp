@@ -2199,6 +2199,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     paramsForLoad,
                     loadedData);
 
+    multimap<int, double> init_weight_per_szgroup=loadedData.mmapidparam_init_weight_per_szgroup;
+    vector<vector<double> > species_interactions_mortality_proportion_matrix=loadedData.vovd_species_interactions_mortality_proportion_matrix;
 
 
     /*
@@ -2514,7 +2516,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 */
 
 
-
     // FOR-LOOP OVER POP
     // creation of a vector of populations
     populations = vector<Population *>(nbpops);
@@ -2617,16 +2618,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             outc(cout << "inform avai on nodes " << endl);
 
             // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
-            outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-            vector<types::NodeId> nodes_with_presence;
-            auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
-            auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
-            for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
-                nodes_with_presence.push_back(a_pos->second);
-            }
+ //           outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
+ //           vector<types::NodeId> nodes_with_presence;
+ //           auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
+ //           auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
+ //           for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
+ //               nodes_with_presence.push_back(a_pos->second);
+ //           }
 
             outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
             // init avai on each node (we know the presence...) for this pop for selected szgroup
+            vector<types::NodeId> nodes_with_presence=loadedData.vovn1.at(sp);
+            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedData.vectmmapndparam1.at(sp);
+
             for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
                 dout(cout << ".");
                 auto spat_avai_per_selected_szgroup = find_entries(avai_szgroup_nodes_with_pop,
@@ -4271,6 +4275,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     if (enable_sqlite_out) {
         outSqlite->startDayLoop();
     }
+
 
     for (unsigned int n = 0; n < nodes.size(); n++) {
         nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);

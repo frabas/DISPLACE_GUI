@@ -196,8 +196,8 @@ int Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
                                  const string &inputfolder,
                                  PopSceOptions &dyn_pop_sce,
                                  DynAllocOptions &dyn_alloc_sce,
-                                 string biolsce,
-                                 string fleetsce,
+                                 string &biolsce,
+                                 string &fleetsce,
                                  ParamsForLoad &paramsForLoad,
                                  LoadedData& loadedData)
 {

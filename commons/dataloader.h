@@ -196,6 +196,7 @@ struct COMMONSSHARED_EXPORT ParamsForLoad {
     int iparam1;
     int iparam2;
     int iparam3;
+    int iparam4;
     double dparam1;
     double dparam2;
     double dparam3;

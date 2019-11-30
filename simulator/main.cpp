@@ -2184,6 +2184,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam1= nbpops;
     paramsForLoad.iparam2= NBAGE;
     paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.iparam4= SEL_NBSZGROUP;
     paramsForLoad.vdparam1= calib_cpue_multiplier;
     paramsForLoad.vdparam2= calib_weight_at_szgroup;
 
@@ -2201,6 +2202,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     multimap<int, double> init_weight_per_szgroup=loadedData.mmapidparam_init_weight_per_szgroup;
     vector<vector<double> > species_interactions_mortality_proportion_matrix=loadedData.vovd_species_interactions_mortality_proportion_matrix;
+
+
+    for (unsigned int i = 0; i < nodes.size(); i++) {
+        nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
+        nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam4);
+    }
+
 
 
     /*
@@ -2525,7 +2533,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-
         cout << " create pop... " << endl;
         populations[sp] = new Population(sp,
                                          loadedData.vectsparam1.at(sp),
@@ -2562,10 +2569,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           );
 
 
-        for (unsigned int i = 0; i < nodes.size(); i++) {
-            nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
-            nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, loadedData.vectiparam1.size());
-        }
 
 
         /*

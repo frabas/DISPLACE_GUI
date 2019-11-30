@@ -1615,6 +1615,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   loadedData.mmapidparam_init_weight_per_szgroup=init_weight_per_szgroup;
   loadedData.vovd_species_interactions_mortality_proportion_matrix=species_interactions_mortality_proportion_matrix;
 
+  loadedData.vectsparam2=type_of_avai_field_to_read;
 
 return 0;
 }

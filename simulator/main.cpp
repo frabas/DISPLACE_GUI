@@ -2210,7 +2210,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     multimap<int, double> init_weight_per_szgroup=loadedDataPops.mmapidparam_init_weight_per_szgroup;
     vector<vector<double> > species_interactions_mortality_proportion_matrix=loadedDataPops.vovd_species_interactions_mortality_proportion_matrix;
-
+    type_of_avai_field_to_read=loadedDataPops.vectsparam2;
 
     for (unsigned int i = 0; i < nodes.size(); i++) {
         nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
@@ -4954,6 +4954,37 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if (redispatch_the_pop)     // EVENT => re-read pop data
         {
+
+            paramsForLoad.sparam1= a_month;
+            paramsForLoad.sparam2= a_quarter;
+            paramsForLoad.sparam3= a_semester;
+            paramsForLoad.iparam1= nbpops;
+            paramsForLoad.iparam2= NBAGE;
+            paramsForLoad.iparam3= NBSZGROUP;
+            paramsForLoad.iparam4= SEL_NBSZGROUP;
+            paramsForLoad.vdparam1= calib_cpue_multiplier;
+            paramsForLoad.vdparam2= calib_weight_at_szgroup;
+
+            LoadedData loadedDataPops;
+
+            cout << "Reload population data" << endl;
+            Dataloaderpops ppl;
+            l->loadFeatures(&ppl,
+                            indb,
+                            folder_name_parameterization,
+                            inputfolder,
+                            dyn_pop_sce,
+                            dyn_alloc_sce,
+                            biolsce,
+                            fleetsce,
+                            paramsForLoad,
+                            loadedDataPops);
+
+
+
+
+
+
             cout << "redispatch the population over its spatial extent...." << endl;
 
             // aggregate from nodes to set the tot_N_at_szgroup per pop
@@ -4981,6 +5012,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 }
             }
+            cout << "aggregate_N over all pops....done" << endl;
 
 
 
@@ -5084,11 +5116,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // then, clean up all nodes before changing of spatial avai
             // (necessary to remove any fish in now wrong locations)
+            cout << "clear pops on nodes" << endl;
             for (unsigned int i = 0; i < nodes.size(); i++) {
                 nodes.at(i)->clear_pop_names_on_node();
                 nodes.at(i)->clear_Ns_pops_at_szgroup();
                 nodes.at(i)->clear_avai_pops_at_selected_szgroup();
             }
+            cout << "clear pops on nodes...done" << endl;
 
             // RE-read for populations
             for (unsigned int i=0; i<populations.size(); i++)

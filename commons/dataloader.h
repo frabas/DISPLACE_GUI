@@ -119,6 +119,7 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::multimap<types::NodeId,double> mmapndparam2;
     std::vector<map<string,double> > vectmapsdparam1;
     std::map<int,int> mapiiparam1;
+    std::map<int,int> mapiiparam2;
     std::map<int,double> mapidparam1;
     std::vector<map<types::NodeId,double> > vectmapndparam1;
     std::vector<multimap<types::NodeId,int> > vectmmapniparam1;
@@ -136,6 +137,7 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::vector<vector <double> > vovd7;
     std::vector<vector <double> > vovd8;
     std::vector<vector <double> > vovd9;
+    std::vector<vector <double> > vovd10;
     std::vector<vector <int> > vovi1;
     std::vector<vector <int> > vovi2;
     std::vector<vector <int> > vovi3;

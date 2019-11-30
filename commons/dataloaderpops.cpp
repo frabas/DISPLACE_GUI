@@ -1313,11 +1313,6 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
       selected_szgroups_pop0.push_back(pos->second);
   }
 
-  for (unsigned int i = 0; i < nodes.size(); i++) {
-      nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
-      nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, selected_szgroups_pop0.size());
-  }
-
 
   cout << "Does the pop file tac_percent_simulated need a check?" << endl;
   map<int, int> tac_percent_simulated = read_tac_percent_simulated(folder_name_parameterization, inputfolder);
@@ -1358,7 +1353,7 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   vector <double > vect_of_avai5_beta_v(name_pops.size());
   vector <double > vect_of_avai7_beta_v(name_pops.size());
   vector <vector<int> > vect_of_init_selected_szgroups_vov(name_pops.size());
-  vector <vector<int> > vect_of_init_tot_N_per_szgroup_vov(name_pops.size());
+  vector <vector<double> > vect_of_init_tot_N_per_szgroup_vov(name_pops.size());
   vector <vector<double> > vect_of_init_prop_migrants_in_N_per_szgroup_vov(name_pops.size());
   vector <vector<double> > vect_of_init_fecundity_per_szgroup_vov(name_pops.size());
   vector <vector<double> > vect_of_init_maturity_per_szgroup_vov(name_pops.size());
@@ -1573,29 +1568,33 @@ int Dataloaderpops::features(std::shared_ptr<sql::Storage> indb,
   loadedData.vectdparam4=vect_of_avai5_beta_v;
   loadedData.vectdparam5=vect_of_avai7_beta_v;
   loadedData.vovi1= vect_of_init_selected_szgroups_vov;
-  loadedData.vovi2= vect_of_init_tot_N_per_szgroup_vov;
-  loadedData.vovd1= vect_of_init_prop_migrants_in_N_per_szgroup_vov;
-  loadedData.vovd2= vect_of_init_fecundity_per_szgroup_vov;
-  loadedData.vovd3= vect_of_init_maturity_per_szgroup_vov;
+  loadedData.vovd1= vect_of_init_tot_N_per_szgroup_vov;
+  loadedData.vovd2= vect_of_init_prop_migrants_in_N_per_szgroup_vov;
+  loadedData.vovd3= vect_of_init_fecundity_per_szgroup_vov;
   loadedData.vovd4= vect_of_init_weight_per_szgroup_vov;
-  loadedData.vovi3= vect_of_init_comcat_per_szgroup_vov;
-  loadedData.vovd5= vect_of_init_M_per_szgroup_vov;
-  loadedData.vovd6= vect_of_init_proprecru_per_szgroup_vov;
+  loadedData.vovi2= vect_of_init_comcat_per_szgroup_vov;
+  loadedData.vovd5= vect_of_init_maturity_per_szgroup_vov;
+  loadedData.vovd6= vect_of_init_M_per_szgroup_vov;
+  loadedData.vovd7= vect_of_init_proprecru_per_szgroup_vov;
+  loadedData.vovd8= vect_of_param_sr_v;
   loadedData.vectmmapndparam1=vect_of_full_avai_szgroup_nodes_with_pop_mmap;
   loadedData.vectmmapndparam2=vect_of_field_of_coeff_diffusion_this_pop_mmap;
   loadedData.vectmapndparam1=vect_of_oth_land_map;
+  loadedData.vectmmapidparam1=vect_of_overall_migration_fluxes_mmap;
   loadedData.vectmapsdparam1=vect_of_relative_stability_key_map;
-  loadedData.vovovd1=vect_of_growth_transition_matrix_vov;
   loadedData.vovovd2=vect_of_percent_szgroup_per_age_matrix_vov;
   loadedData.vovovd3=vect_of_percent_age_per_szgroup_matrix_vov;
-  loadedData.vovd7= vect_of_param_sr_v;
-  loadedData.vovd8= vect_of_fbar_ages_min_max_and_ftarget_this_pop_v;
-  loadedData.vovd9= vect_of_tac_this_pop;
-  loadedData.vectmmapidparam1=vect_of_overall_migration_fluxes_mmap;
-  loadedData.vectdparam6=paramsForLoad.vdparam1; // calib_cpue_multiplier;
-  loadedData.vectdparam7=paramsForLoad.vdparam2;  // calib_weight_at_szgroup;
+  loadedData.vovovd1=vect_of_growth_transition_matrix_vov;
+  // nodes,
+  loadedData.vovd9= vect_of_fbar_ages_min_max_and_ftarget_this_pop_v;
+  loadedData.vovd10= vect_of_tac_this_pop;
   loadedData.mapiiparam1=tac_percent_simulated;
   loadedData.mapidparam1=hyperstability_param;
+  loadedData.vectdparam6=paramsForLoad.vdparam1; // calib_cpue_multiplier;
+  loadedData.vectdparam7=paramsForLoad.vdparam2;  // calib_weight_at_szgroup;
+ 
+  loadedData.vectiparam1=selected_szgroups_pop0;
+
 
 
 

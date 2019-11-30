@@ -313,6 +313,8 @@ vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
 
 std::shared_ptr<sql::Storage> indb;
 
+ParamsForLoad paramsForLoad;
+
 #ifdef NO_IPC
 #include <messages/noipc.h>
 #endif
@@ -1610,6 +1612,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     LoadedData loadedData;
 
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
+
     Dataloaderbenthos bl;
     l->loadFeatures(&bl,
                     indb,
@@ -1617,8 +1626,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
                     loadedData);
-
 
 
     /*
@@ -1872,6 +1883,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
+
 
     Dataloaderfishfarms ffl;
     l->loadFeatures(&ffl,
@@ -1880,6 +1898,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
                     loadedData);
 
 
@@ -2113,6 +2134,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
+
     Dataloaderfishfarms wml;
     l->loadFeatures(&wml,
                     indb,
@@ -2120,6 +2148,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
                     loadedData);
 
     /*
@@ -2147,7 +2178,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    ParamsForLoad paramsForLoad;
     paramsForLoad.sparam1= a_month;
     paramsForLoad.sparam2= a_quarter;
     paramsForLoad.sparam3= a_semester;
@@ -2164,6 +2194,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
                     loadedData);
 
 
@@ -2494,40 +2527,47 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << " create pop... " << endl;
         populations[sp] = new Population(sp,
-           loadedData.vectsparam1.at(sp),
-           loadedData.vectdparam1.at(sp),
-           loadedData.vectdparam2.at(sp),
-           loadedData.vectdparam3.at(sp),
-           loadedData.vectdparam4.at(sp),
-           loadedData.vectdparam5.at(sp),
-           loadedData.vovi1.at(sp),
-           loadedData.vovi2.at(sp),
-           loadedData.vovd1.at(sp),
-           loadedData.vovd2.at(sp),
-           loadedData.vovd4.at(sp),
-           loadedData.vovi3.at(sp),
-           loadedData.vovd3.at(sp),
-           loadedData.vovd5.at(sp),
-           loadedData.vovd6.at(sp),
-           loadedData.vovd7.at(sp),
-           loadedData.vectmmapndparam1.at(sp),
-           loadedData.vectmmapndparam2.at(sp),
-           loadedData.vectmapndparam1.at(sp),
-           loadedData.vectmmapidparam1.at(sp),
-           loadedData.vectmapsdparam1.at(sp),
-           loadedData.vovovd2.at(sp),
-           loadedData.vovovd3.at(sp),
-           loadedData.vovovd1.at(sp),
-           nodes,
-           loadedData.vovd8.at(sp),
-           loadedData.vovd9.at(sp),
-           loadedData.vectmapiiparam1.at(sp),
-           loadedData.vectmapidparam1.at(sp),
-           loadedData.vectdparam6.at(sp),
-           loadedData.vectdparam7.at(sp)
+                                         loadedData.vectsparam1.at(sp),
+                                           loadedData.vectdparam1.at(sp),
+                                           loadedData.vectdparam2.at(sp),
+                                           loadedData.vectdparam3.at(sp),
+                                           loadedData.vectdparam4.at(sp),
+                                           loadedData.vectdparam5.at(sp),
+                                           loadedData.vovi1.at(sp),
+                                           loadedData.vovd1.at(sp),
+                                           loadedData.vovd2.at(sp),
+                                           loadedData.vovd3.at(sp),
+                                           loadedData.vovd4.at(sp),
+                                           loadedData.vovi2.at(sp),
+                                           loadedData.vovd5.at(sp),
+                                           loadedData.vovd6.at(sp),
+                                           loadedData.vovd7.at(sp),
+                                           loadedData.vovd8.at(sp),
+                                           loadedData.vectmmapndparam1.at(sp),
+                                           loadedData.vectmmapndparam2.at(sp),
+                                           loadedData.vectmapndparam1.at(sp),
+                                           loadedData.vectmmapidparam1.at(sp),
+                                           loadedData.vectmapsdparam1.at(sp),
+                                           loadedData.vovovd2.at(sp),
+                                           loadedData.vovovd3.at(sp),
+                                           loadedData.vovovd1.at(sp),
+                                           nodes,
+                                           loadedData.vovd9.at(sp),
+                                           loadedData.vovd10.at(sp),
+                                           loadedData.mapiiparam1.at(sp),
+                                           loadedData.mapidparam1.at(sp),
+                                           loadedData.vectdparam6.at(sp),
+                                           loadedData.vectdparam7.at(sp)
           );
 
-/*
+
+        for (unsigned int i = 0; i < nodes.size(); i++) {
+            nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
+            nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, loadedData.vectiparam1.size());
+        }
+
+
+        /*
         cout << " create pop... " << endl;
         populations[sp] = (new Population(sp,
                                           pop_name,
@@ -3202,6 +3242,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
                     loadedData);
 
 
@@ -3307,6 +3350,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     inputfolder,
                     dyn_pop_sce,
                     dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
                     paramsForLoad,
                     loadedData);
 
@@ -4544,6 +4589,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
+            paramsForLoad.sparam1= a_month;
+            paramsForLoad.sparam2= a_quarter;
+            paramsForLoad.sparam3= a_semester;
+            paramsForLoad.iparam1= nbpops;
+            paramsForLoad.iparam2= NBAGE;
+            paramsForLoad.iparam3= NBSZGROUP;
+
             Dataloadervessels vrl;
             l->loadFeatures(&vrl,
                             indb,
@@ -4551,6 +4603,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             inputfolder,
                             dyn_pop_sce,
                             dyn_alloc_sce,
+                            biolsce,
+                            fleetsce,
+                            paramsForLoad,
                             loadedData);
 
 

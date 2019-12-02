@@ -472,11 +472,17 @@ int Dataloadermetiers::features(std::shared_ptr<sql::Storage> indb,
 
 
 
-  // loop over metiers
-  vector <vector<double> > vect_of_metier_betas_vovd(name_metiers.size());
-  vector <vector<double> > vect_of_discardratio_limits_vovd(name_metiers.size());
-  vector <vector<int> > vect_of_is_avoided_stocks_vovi(name_metiers.size());
-  vector <vector<int> > vect_of_metier_mls_cat_vovi(name_metiers.size());
+  // loop over metiers and fill in vectors
+  vector <int> met_types(name_metiers.size());
+  vector <double> met_speeds(name_metiers.size());
+  vector <double> met_gear_widths_param_a(name_metiers.size());
+  vector <double> met_gear_widths_param_b(name_metiers.size());
+  vector <string> met_gear_widths_model_type(name_metiers.size());
+  vector <double> met_percent_revenue_completenesses(name_metiers.size());
+  vector <vector<double> > vect_of_metier_betas_vovd(name_metiers.size(), vector<double>(paramsForLoad.iparam1));
+  vector <vector<double> > vect_of_discardratio_limits_vovd(name_metiers.size(), vector<double>(paramsForLoad.iparam1));
+  vector <vector<int> > vect_of_is_avoided_stocks_vovi(name_metiers.size(),vector<int>(paramsForLoad.iparam1));
+  vector <vector<int> > vect_of_metier_mls_cat_vovi(name_metiers.size(), vector<int>(paramsForLoad.iparam1));
   vector <multimap<int, double> > vect_of_loss_after_1_passage_mmapid(name_metiers.size());
   vector <vector<int> > vect_of_the_metier_target_stocks_vovi(name_metiers.size());
   vector <vector<int> > vect_of_the_metier_suitable_seabottomtypes_vovi(name_metiers.size());
@@ -486,19 +492,35 @@ int Dataloadermetiers::features(std::shared_ptr<sql::Storage> indb,
   for (unsigned int i = 0; i < name_metiers.size(); i++) {
 
           int metier_name = i;
-          cout << "creating metier " << i << endl;
+          outc(cout << "creating metier " << i << endl);
+
+          met_types.at(i)=metiers_types[i];
+          met_speeds.at(i)=metiers_fspeed[i];
+          met_gear_widths_param_a.at(i)=metiers_gear_widths_param_a[i];
+          met_gear_widths_param_b.at(i)=metiers_gear_widths_param_b[i];
+          met_gear_widths_model_type.at(i)=metiers_gear_widths_model_type[i];
+          met_percent_revenue_completenesses.at(i)=percent_revenue_completenesses[i];
 
           vect_of_metier_betas_vovd.at(i) = find_entries_i_d(metiers_betas, metier_name);
+          cout << "Read metier_betas this met "<< i << endl;
+          for(int ii=0; ii<vect_of_metier_betas_vovd.at(i).size();++ii) cout << vect_of_metier_betas_vovd.at(i).at(ii) << " ";
+          cout << endl;
+
           vect_of_discardratio_limits_vovd.at(i) = find_entries_i_d(discards_rate_limits, metier_name);
+
           vect_of_is_avoided_stocks_vovi.at(i) = find_entries_i_i(is_avoided_stockss, metier_name);
+
           vect_of_metier_mls_cat_vovi.at(i) = find_entries_i_i(metiers_mls_cat, metier_name);
+          cout << "Read metier_mls this met "<< i << endl;
+          for(int ii=0; ii<vect_of_metier_mls_cat_vovi.at(i).size();++ii) cout << vect_of_metier_mls_cat_vovi.at(i).at(ii) << " ";
+          cout << endl;
 
           vect_of_loss_after_1_passage_mmapid.at(i) = read_loss_after_1_passage_per_landscape_per_func_group(metier_name,
                                                                                                               folder_name_parameterization,
                                                                                                               inputfolder);
 
 
-          vect_of_selectivity_per_stock_ogives_vovovd.at(i) = read_selectivity_per_stock_ogives(i, paramsForLoad.iparam1, paramsForLoad.iparam4,
+          vect_of_selectivity_per_stock_ogives_vovovd.at(i) = read_selectivity_per_stock_ogives(i, paramsForLoad.iparam1, paramsForLoad.iparam3,
                                                                                                    folder_name_parameterization,
                                                                                                    inputfolder, fleetsce);
 
@@ -527,29 +549,30 @@ int Dataloadermetiers::features(std::shared_ptr<sql::Storage> indb,
 
 
 
-  cout << "export metier loaded data to simulator.cpp " << endl;
+  cout << "export metier loaded data back to simulator.cpp " << endl;
 
   //  export
   // for Metier() creator
   loadedData.vectiparam1 =name_metiers;
-  loadedData.mapiiparam1 =metiers_types;
-  loadedData.mapidparam1 =percent_revenue_completenesses;
+  loadedData.vectiparam2 =met_types;
+  loadedData.vectdparam1 =met_percent_revenue_completenesses;
   loadedData.vovovd1     =vect_of_selectivity_per_stock_ogives_vovovd;
   loadedData.vovd1       =vect_of_metier_betas_vovd;
   loadedData.vovd2       =vect_of_discardratio_limits_vovd;
   loadedData.vovi1       =vect_of_is_avoided_stocks_vovi;
   loadedData.vovi2       =vect_of_metier_mls_cat_vovi;
-  loadedData.mapidparam2 =metiers_fspeed;
-  loadedData.mapidparam3 =metiers_gear_widths_param_a;
-  loadedData.mapidparam4 =metiers_gear_widths_param_b;
-  loadedData.mapisparam1 =metiers_gear_widths_model_type;
+  loadedData.vectdparam2 =met_speeds;
+  loadedData.vectdparam3 =met_gear_widths_param_a;
+  loadedData.vectdparam4 =met_gear_widths_param_b;
+  loadedData.vectsparam1 =met_gear_widths_model_type;
   loadedData.vectmmapidparam1=vect_of_loss_after_1_passage_mmapid;
-  loadedData.vovi1       =vect_of_the_metier_target_stocks_vovi;
-  loadedData.vovi2       =vect_of_the_metier_suitable_seabottomtypes_vovi;
+  loadedData.vovi3       =vect_of_the_metier_target_stocks_vovi;
+  loadedData.vovi4       =vect_of_the_metier_suitable_seabottomtypes_vovi;
 
   // NOT for Metier() creator
   loadedData.vovd5       =selectivity_per_stock_ogives_for_oth_land;
 
+  cout << "export metier loaded data back to simulator.cpp....done " << endl;
 
 return 0;
 }

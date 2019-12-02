@@ -2445,8 +2445,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double v_vsize                  = this->get_length ();
 
     // METIER EFFECT
-    //vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
-    //vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
     vector< vector<double> > selectivity_per_stock = this->get_metier()->get_selectivity_per_stock_ogives();
     vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
     vector<double> discardratio_limits  = this->get_metier()->get_discardratio_limits();
@@ -2881,7 +2879,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive and the N
-                    vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
+                   vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
                     for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));

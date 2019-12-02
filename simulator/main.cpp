@@ -3165,9 +3165,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 */
 
     // creation of a vector of metier from input data...
+   vector<int> name_metiers=loadedDataMetiers.vectiparam1;
     metiers = vector<Metier *>(name_metiers.size());
 
-    for (unsigned int i = 0; i < metiers.size(); i++) {
+    for (unsigned int i = 0; i < name_metiers.size(); i++) {
+
+        cout << "Create metier " << i << endl;
 
 /*
         int metier_name = i;
@@ -3237,6 +3240,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cout << "done.... " << endl;
 
 */
+
+
          metiers[i] = new Metier(loadedDataMetiers.vectiparam1.at(i),
                                  loadedDataMetiers.vectiparam2.at(i),
                                  loadedDataMetiers.vectdparam1.at(i),
@@ -3245,17 +3250,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  loadedDataMetiers.vovd2.at(i),
                                  loadedDataMetiers.vovi1.at(i),
                                  loadedDataMetiers.vovi2.at(i),
-                                 loadedDataMetiers.mapidparam2.at(i),
-                                 loadedDataMetiers.mapidparam3.at(i),
-                                 loadedDataMetiers.mapidparam4.at(i),
-                                 loadedDataMetiers.mapisparam1.at(i),
+                                 loadedDataMetiers.vectdparam2.at(i),
+                                 loadedDataMetiers.vectdparam3.at(i),
+                                 loadedDataMetiers.vectdparam4.at(i),
+                                 loadedDataMetiers.vectsparam1.at(i),
                                  loadedDataMetiers.vectmmapidparam1.at(i),
-                                 loadedDataMetiers.vovi1.at(i),
-                                 loadedDataMetiers.vovi2.at(i));
+                                 loadedDataMetiers.vovi3.at(i),
+                                 loadedDataMetiers.vovi4.at(i));
+
+        cout << "Create metier " << i << "...done" << endl;
 
         selectivity_per_stock_ogives_for_oth_land=loadedDataMetiers.vovd5;
 
-         cout << "done.... " << endl;
 
 
   }

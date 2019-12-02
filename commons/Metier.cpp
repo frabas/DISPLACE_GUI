@@ -24,9 +24,7 @@
 Metier::Metier(int _name,
 int _type,
 double _percent_revenue_completeness,
-//vector<double> _selectivity,
 const vector< vector <double> > &_selectivity_per_stock,
-//vector<double> _discards,
 vector<double> _betas_per_pop,
 vector<double> _discardratio_limits,
 vector<int>    _is_avoided_stocks,
@@ -39,25 +37,24 @@ multimap<int, double> _loss_after_1_passage,
 vector<int> _metier_target_stocks,
 vector<int> _metier_suitable_seabottomtypes)
 {
-	name=_name;
-	type=_type;
+    name=_name;
+    type=_type;
     percent_revenue_completeness=_percent_revenue_completeness;
     selectivity_per_stock=_selectivity_per_stock;
-	betas_per_pop=_betas_per_pop;
+    betas_per_pop=_betas_per_pop;
     if(_betas_per_pop.size()!=_mls_cat_per_pop.size())
          throw std::runtime_error("Error while reading: pop_betas_per_pop: check the dimension i.e. nbpops in the file");
-
     discardratio_limits=_discardratio_limits;
     is_avoided_stocks=_is_avoided_stocks;
     mls_cat_per_pop=_mls_cat_per_pop;
     fspeed= _fspeed;
     gear_width_a=_gear_width_a;
-	gear_width_b=_gear_width_b;
-	gear_width_model=_gear_width_model;
-	loss_after_1_passage=_loss_after_1_passage;
+    gear_width_b=_gear_width_b;
+    gear_width_model=_gear_width_model;
+    loss_after_1_passage=_loss_after_1_passage;
     metier_target_stocks=_metier_target_stocks;
     metier_suitable_seabottomtypes=_metier_suitable_seabottomtypes;
-}
+ }
 
 
 Metier::Metier()

@@ -819,6 +819,7 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
     }
 
 
+  outc(cout << "export back the loaded vessel data to simulator.cpp " << endl);
 
   //  export
   loadedData.vectsparam1 =vesselids;

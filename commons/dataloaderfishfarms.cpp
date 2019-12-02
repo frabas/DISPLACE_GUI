@@ -160,6 +160,27 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
 
 
 
+// FOR FISHFARMS
+map<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/size_per_farm.dat";
+
+    ifstream file_size_per_farm;
+    file_size_per_farm.open(filename.c_str());
+    if(file_size_per_farm.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+     }
+    map<int, double> size_per_farm;
+    fill_map_from_specifications(file_size_per_farm,  size_per_farm);
+    file_size_per_farm.close();
+
+    return(size_per_farm);
+}
 
 
 

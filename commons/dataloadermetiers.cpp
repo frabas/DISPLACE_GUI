@@ -306,6 +306,33 @@ multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_
 }
 
 
+multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/"+a_met_s+"loss_after_one_passage_per_landscape_per_func_group.dat";
+
+    ifstream metiers_loss_after_one_passage_per_landscape_per_func_group;
+    metiers_loss_after_one_passage_per_landscape_per_func_group.open(filename.c_str());
+    if(metiers_loss_after_one_passage_per_landscape_per_func_group.fail())
+    {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> metiers_loss_after_one_passage;
+    fill_multimap_from_specifications_i_d(metiers_loss_after_one_passage_per_landscape_per_func_group,  metiers_loss_after_one_passage);
+    metiers_loss_after_one_passage_per_landscape_per_func_group.close();
+
+    return(metiers_loss_after_one_passage);
+}
+
+
 
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
 {

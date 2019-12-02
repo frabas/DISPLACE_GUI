@@ -2642,10 +2642,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vector<types::NodeId> nodes_with_presence=loadedDataPops.vovn1.at(sp);
             multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedDataPops.vectmmapndparam1.at(sp);
 
-            for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+            for (unsigned int n = 0; n < nodes_with_presence.size(); n++)
+            {
                 dout(cout << ".");
-                auto spat_avai_per_selected_szgroup = find_entries(avai_szgroup_nodes_with_pop,
+                auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
                                                                    nodes_with_presence.at(n));
+
+                vector<double> spat_avai_per_selected_szgroup;
+                vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
+                for (int sz=0; sz<spat_avai_this_pop_this_node.size(); ++sz)
+                {
+                    it = find (selected_szgroups.begin(), selected_szgroups.end(), sz);
+                     if (it != selected_szgroups.end())
+                         spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                }
                 if (!spat_avai_per_selected_szgroup.empty()) {
                     nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
                                                                                                      spat_avai_per_selected_szgroup);
@@ -5134,7 +5144,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             folder_name_parameterization << " " << inputfolder << " " <<  type_of_avai_field_to_read.at(i) << endl;
 
                     // read a new spatial_availability
-                    auto avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, i,
+/*                    auto avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, i,
                                                                                         folder_name_parameterization,
                                                                                         inputfolder, str_rand_avai_file,
                                                                                         type_of_avai_field_to_read);
@@ -5143,6 +5153,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                                                                   inputfolder,
                                                                                                   str_rand_avai_file,
                                                                                                   type_of_avai_field_to_read);
+*/
+                    auto full_avai_szgroup_nodes_with_pop= loadedDataPops.vectmmapndparam1.at(i);
                     populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 
@@ -5165,8 +5177,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //then, re-set the list_nodes and the pop_names_on_node
                     // from the new area distribution given by this new spatial avai
                     vector<Node *> list_nodes;
-                    for (auto iter = avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();
-                         iter = avai_szgroup_nodes_with_pop.upper_bound(iter->first)) {
+                    for (auto iter = full_avai_szgroup_nodes_with_pop.begin(); iter != full_avai_szgroup_nodes_with_pop.end();
+                         iter = full_avai_szgroup_nodes_with_pop.upper_bound(iter->first)) {
                         list_nodes.push_back(nodes[iter->first.toIndex()]);
                         nodes[iter->first.toIndex()]->set_pop_names_on_node(i);
                         //   check per node
@@ -5214,25 +5226,36 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     }
 
                     // re-read presence node for this semester
-                    auto lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization,
-                                                                            inputfolder, str_rand_avai_file);
+ //                   auto lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization,
+ //                                                                           inputfolder, str_rand_avai_file);
 
                     // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
                     // 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
                     outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-                    vector<types::NodeId> nodes_with_presence;
-                    auto lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
-                    auto upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
-                    for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
-                        nodes_with_presence.push_back(a_pos->second);
-                    }
+//                    vector<types::NodeId> nodes_with_presence;
+//                    auto lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
+//                    auto upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
+//                    for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
+//                        nodes_with_presence.push_back(a_pos->second);
+//                    }
 
-                    outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
-                    // 2. init avai on each node (we know the presence...) for this pop for selected szgroup
-                    for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                    vector<types::NodeId> nodes_with_presence=loadedDataPops.vovn1.at(i);
+                    multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedDataPops.vectmmapndparam1.at(i);
+
+                    for (unsigned int n = 0; n < nodes_with_presence.size(); n++)
+                    {
                         dout(cout << ".");
-                        auto spat_avai_per_selected_szgroup = find_entries(avai_szgroup_nodes_with_pop,
+                        auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
                                                                            nodes_with_presence.at(n));
+
+                        vector<double> spat_avai_per_selected_szgroup;
+                        vector<int> selected_szgroups = populations.at(i)->get_selected_szgroups();
+                        for (int sz=0; sz<spat_avai_this_pop_this_node.size(); ++sz)
+                        {
+                            it = find (selected_szgroups.begin(), selected_szgroups.end(), sz);
+                             if (it != selected_szgroups.end())
+                                 spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                        }
                         if (!spat_avai_per_selected_szgroup.empty()) {
                             nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
                                                                                                              spat_avai_per_selected_szgroup);
@@ -5240,7 +5263,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             // inconsistence between lst_idx_nodes and avai files if this happen...
                             outc(cout << nodes_with_presence.at(n));
                         }
+
                     }
+
 
             }
 

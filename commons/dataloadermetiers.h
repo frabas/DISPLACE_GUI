@@ -37,76 +37,33 @@ public:
                   const string& inputfolder,
                   PopSceOptions& dyn_pop_sce,
                   DynAllocOptions& dyn_alloc_sce,
-                  string biolsce,
-                  string fleetsce,
+                  string &biolsce,
+                  string &fleetsce,
                   ParamsForLoad &paramsForLoad,
                   LoadedData & loadedData);
 
 };
 
 
-/*
-// vessel specific
-bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
-                           vector<string>& vesselids,
-                           vector<int>& vid_is_actives,
-                           vector<int>& vid_is_part_of_ref_fleets,
-                           vector<double>& speeds,
-                           vector<double>& fuelcons,
-                           vector<double>& lengths,
-                           vector<double>& vKWs,
-                           vector<double>& carrycapacities,
-                           vector<double>& tankcapacities,
-                           vector<double>& nbfpingspertrips,
-                           vector<double>& resttime_par1s,
-                           vector<double>& resttime_par2s,
-                           vector<double>& av_trip_duration,
-                           vector<double>& mult_fuelcons_when_steaming,
-                           vector<double>& mult_fuelcons_when_fishing,
-                           vector<double>& mult_fuelcons_when_returning,
-                           vector<double>& mult_fuelcons_when_inactive,
-                           vector<int>& firm_ids,
-                           string folder_name_parameterization,
-                           string inputfolder,
-                           int selected_vessels_only, vector<VesselCalendar> &calendars);
-
-bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vesselids,
-                           vector<double>& this_vessel_nb_crews,
-                           vector<double>& annual_other_incomes,
-                           vector<double>& landing_costs_percents,
-                           vector<double>& crewshare_and_unpaid_labour_costs_percents,
-                           vector<double>& other_variable_costs_per_unit_efforts,
-                           vector<double>& annual_insurance_costs_per_crews,
-                           vector<double>& standard_labour_hour_opportunity_costss,
-                           vector<double>& standard_annual_full_time_employement_hourss,
-                           vector<double>& other_annual_fixed_costss,
-                           vector<double>& vessel_values,
-                           vector<double>& annual_depreciation_rates,
-                           vector<double>& opportunity_interest_rates,
-                           vector<double>& annual_discount_rates,
-                           string folder_name_parameterization,
-                           string inputfolder
-                           );
+// metier specific
+map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_sel_ogives(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_dis_ogives(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, double> COMMONSSHARED_EXPORT read_discardratio_limits(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, int> COMMONSSHARED_EXPORT read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, int> COMMONSSHARED_EXPORT read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder) ;
+map<int, double> COMMONSSHARED_EXPORT read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_metiers_fspeed(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_a(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_b(string folder_name_parameterization, string inputfolder);
+map<int, string> COMMONSSHARED_EXPORT read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
+multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
+multimap<int, int> COMMONSSHARED_EXPORT read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder);
+vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
+vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_for_oth_land(int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
 
 
-multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, double> COMMONSSHARED_EXPORT read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, double> COMMONSSHARED_EXPORT read_vessels_betas(string a_semester, string folder_name_parameterization, string inputfolder);
-multimap<string, double> COMMONSSHARED_EXPORT read_vessels_tacs(string a_semester, string folder_name_parameterization, string inputfolder);
-
-multimap<string, double> COMMONSSHARED_EXPORT read_initial_fishing_credits(string folder_name_parameterization, string inputfolder);
-
-multimap<types::NodeId, int> COMMONSSHARED_EXPORT read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-
-*/
 
 #endif // DATALOADERMETIERS_H

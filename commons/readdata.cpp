@@ -1685,6 +1685,7 @@ multimap<int, double> read_benthos_number_carrying_capacity_K_per_landscape_per_
 
 */
 
+/*
 multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1971,6 +1972,7 @@ multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_pa
     return(metierspe_mls_cat);
 }
 
+*/
 
 // FOR BENTHOS
 /*
@@ -3170,6 +3172,7 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
 
 */
 
+/*
 vector< vector<double> > read_selectivity_per_stock_ogives(int a_met,
                                                            int nbpops,
                                                            int nbszgroup,
@@ -3226,7 +3229,7 @@ vector< vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpo
     return(selectivity_per_stock_ogives_for_oth_land);
 }
 
-
+*/
 
 /*
 vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce)

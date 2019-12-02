@@ -157,6 +157,7 @@ using namespace sqlite;
 #include "dataloaderwindmills.h"
 #include "dataloadercommercialships.h"
 #include "dataloaderpops.h"
+#include "dataloadermetiers.h"
 
 
 #ifdef PROFILE
@@ -304,6 +305,7 @@ vector<PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
 ofstream shipslogs;
+vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
 
 std::mutex listVesselMutex;
 vector<int> listVesselIdForVmsLikeToExport;
@@ -3090,6 +3092,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
+
+    paramsForLoad.sparam1= a_month;
+    paramsForLoad.sparam2= a_quarter;
+    paramsForLoad.sparam3= a_semester;
+    paramsForLoad.iparam1= nbpops;
+    paramsForLoad.iparam2= NBAGE;
+    paramsForLoad.iparam3= NBSZGROUP;
+
+    LoadedData loadedDataMetiers;
+
+    Dataloadermetiers mtl;
+    l->loadFeatures(&mtl,
+                    indb,
+                    folder_name_parameterization,
+                    inputfolder,
+                    dyn_pop_sce,
+                    dyn_alloc_sce,
+                    biolsce,
+                    fleetsce,
+                    paramsForLoad,
+                    loadedDataMetiers);
+
+  /*
     //input data, metier characteristics: selectivty ogives, beta per pop
     //multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder); // DEPRECATED
     //multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);// DEPRECATED
@@ -3137,11 +3162,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! "
             << endl;
 
+*/
+
     // creation of a vector of metier from input data...
     metiers = vector<Metier *>(name_metiers.size());
 
     for (unsigned int i = 0; i < metiers.size(); i++) {
 
+/*
         int metier_name = i;
         cout << "creating metier " << i << endl;
 
@@ -3189,7 +3217,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
              pos != upper_metier_suitable_seabottomtypes; pos++)
             the_metier_suitable_seabottomtypes.push_back(pos->second);
 
-
+*/
+/*
         metiers[i] = new Metier(metier_name,
                                 metier_type,
                                 percent_revenue_completeness,
@@ -3206,8 +3235,30 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                 the_metier_target_stocks,
                                 the_metier_suitable_seabottomtypes);
         cout << "done.... " << endl;
-    }
 
+*/
+         metiers[i] = new Metier(loadedDataMetiers.vectiparam1.at(i),
+                                 loadedDataMetiers.vectiparam2.at(i),
+                                 loadedDataMetiers.vectdparam1.at(i),
+                                 loadedDataMetiers.vovovd1.at(i),
+                                 loadedDataMetiers.vovd1.at(i),
+                                 loadedDataMetiers.vovd2.at(i),
+                                 loadedDataMetiers.vovi1.at(i),
+                                 loadedDataMetiers.vovi2.at(i),
+                                 loadedDataMetiers.mapidparam2.at(i),
+                                 loadedDataMetiers.mapidparam3.at(i),
+                                 loadedDataMetiers.mapidparam4.at(i),
+                                 loadedDataMetiers.mapisparam1.at(i),
+                                 loadedDataMetiers.vectmmapidparam1.at(i),
+                                 loadedDataMetiers.vovi1.at(i),
+                                 loadedDataMetiers.vovi2.at(i));
+
+        selectivity_per_stock_ogives_for_oth_land=loadedDataMetiers.vovd5;
+
+         cout << "done.... " << endl;
+
+
+  }
 
     // check selectivity per metier
     /*vector<double> ogive = metiers[0]->get_selectivity_ogive();
@@ -4593,6 +4644,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             // this month, re-read for population-related data
+            // CAUTION: THE ONLY POP READING DONE ON MONTH TSTEP...THE OTHERS ARE DONE ON QUARTER BASIS
             for (unsigned int i = 0; i < populations.size(); i++) {
                 // read a other landings per node for this species
                 auto oth_land = read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization,
@@ -4727,18 +4779,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_spe_possible_metiers(possible_metiers);
                 vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
                 vessels.at(v)->updateCalendar(loadedDataVessels.vectcalendar1.at(v));
-
-                // inform grounds in closed areas
-                // TO DO: TO BE REMOVED BECAUSE DEPRECATED
-                //const auto &new_grds = vessels.at(v)->get_fgrounds();
-                //vector<types::NodeId> fgrounds_in_closed_areas;
-                //for(unsigned int i=0; i<new_grds.size();++i)
-                //{
-                //    if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
-                //        fgrounds_in_closed_areas.push_back(new_grds.at(i));
-                //}
-                //vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
-
 
 
                 // ...also for the particular cpue_nodes_species element
@@ -4911,22 +4951,40 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // RE-read for metiers
             dout(cout << "re-read metiers..." << endl);
+
+            paramsForLoad.sparam1= a_month;
+            paramsForLoad.sparam2= a_quarter;
+            paramsForLoad.sparam3= a_semester;
+            paramsForLoad.iparam1= nbpops;
+            paramsForLoad.iparam2= NBAGE;
+            paramsForLoad.iparam3= NBSZGROUP;
+
+            Dataloadermetiers mrl;
+            l->loadFeatures(&mrl,
+                            indb,
+                            folder_name_parameterization,
+                            inputfolder,
+                            dyn_pop_sce,
+                            dyn_alloc_sce,
+                            biolsce,
+                            fleetsce,
+                            paramsForLoad,
+                            loadedDataMetiers);
+
+            /*
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
             discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
             is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
+*/
             for (unsigned int m = 0; m < metiers.size(); m++) {
                 // casting m into a string
                 //stringstream out;
                 //out << m;
                 //string a_met = "met" + out.str();
-                vector<double> metier_betas = find_entries_i_d(metiers_betas, m);
-                vector<double> discardratio_limits = find_entries_i_d(discards_rate_limits, m);
-                vector<int> is_avoided_stocks = find_entries_i_i(is_avoided_stockss, m);
-                vector<int> metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
-                metiers[m]->set_betas_per_pop(metier_betas);
-                metiers[m]->set_discardratio_limits(discardratio_limits);
-                metiers[m]->set_is_avoided_stocks(is_avoided_stocks);
+                metiers[m]->set_betas_per_pop(loadedDataMetiers.vovd1.at(m));
+                metiers[m]->set_discardratio_limits(loadedDataMetiers.vovd2.at(m));
+                metiers[m]->set_is_avoided_stocks(loadedDataMetiers.vovi1.at(m));
 
             }                     // end a_met
             dout(cout << "re-read metiers...OK" << endl);
@@ -4978,8 +5036,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             LoadedData loadedDataPops;
 
             cout << "Reload population data" << endl;
-            Dataloaderpops ppl;
-            l->loadFeatures(&ppl,
+            Dataloaderpops pprl;
+            l->loadFeatures(&pprl,
                             indb,
                             folder_name_parameterization,
                             inputfolder,
@@ -5143,30 +5201,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     cout << "RE-read for population "<< populations.at(i)->get_name() << " from " <<
                             folder_name_parameterization << " " << inputfolder << " " <<  type_of_avai_field_to_read.at(i) << endl;
 
-                    // read a new spatial_availability
-/*                    auto avai_szgroup_nodes_with_pop = read_avai_szgroup_nodes_with_pop(a_semester, i,
-                                                                                        folder_name_parameterization,
-                                                                                        inputfolder, str_rand_avai_file,
-                                                                                        type_of_avai_field_to_read);
-                    auto full_avai_szgroup_nodes_with_pop = read_full_avai_szgroup_nodes_with_pop(a_semester, i,
-                                                                                                  folder_name_parameterization,
-                                                                                                  inputfolder,
-                                                                                                  str_rand_avai_file,
-                                                                                                  type_of_avai_field_to_read);
-*/
                     auto full_avai_szgroup_nodes_with_pop= loadedDataPops.vectmmapndparam1.at(i);
                     populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 
-                    // read a other landings per node for this species
+                    // read a other landings per node for this species (DEPRECATED - DONE AT MONTH TSTEP INSTEAD)
                     //map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
                     //populations.at(i)->set_oth_land(oth_land);
 
-                    // read migration fluxes in proportion per size group (if any)
-                    multimap<int, double> overall_migration_fluxes = read_overall_migration_fluxes(a_semester, i,
-                                                                                                   folder_name_parameterization,
-                                                                                                   inputfolder,
-                                                                                                   biolsce);
+                    multimap<int, double> overall_migration_fluxes= loadedDataPops.vectmmapidparam1.at(i);
                     populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                     // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
@@ -5225,19 +5268,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        }
                     }
 
-                    // re-read presence node for this semester
- //                   auto lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization,
- //                                                                           inputfolder, str_rand_avai_file);
-
-                    // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
-                    // 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
-                    outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-//                    vector<types::NodeId> nodes_with_presence;
-//                    auto lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
-//                    auto upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
-//                    for (auto a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
-//                        nodes_with_presence.push_back(a_pos->second);
-//                    }
 
                     vector<types::NodeId> nodes_with_presence=loadedDataPops.vovn1.at(i);
                     multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedDataPops.vectmmapndparam1.at(i);

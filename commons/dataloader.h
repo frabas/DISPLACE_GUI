@@ -122,6 +122,12 @@ struct COMMONSSHARED_EXPORT LoadedData {
     std::map<int,int> mapiiparam1;
     std::map<int,int> mapiiparam2;
     std::map<int,double> mapidparam1;
+    std::map<int,double> mapidparam2;
+    std::map<int,double> mapidparam3;
+    std::map<int,double> mapidparam4;
+    std::map<int,string> mapisparam1;
+    std::vector<map<int,int> > vectmapiiparam1;
+    std::vector<map<int,double> > vectmapidparam1;
     std::vector<map<types::NodeId,double> > vectmapndparam1;
     std::vector<multimap<types::NodeId,int> > vectmmapniparam1;
     std::vector<multimap<types::NodeId,double> > vectmmapndparam1;

@@ -236,7 +236,8 @@ void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(types::NodeId i, string a_q
 
 
 // metier specific
-map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_parameterization, string inputfolder);
+/*
+  map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_sel_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_dis_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
@@ -253,6 +254,7 @@ multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, str
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives_for_oth_land(int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder, string fleetsce);
+*/
 
 // benthos specific
 //multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder);

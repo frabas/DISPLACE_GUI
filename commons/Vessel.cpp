@@ -187,22 +187,19 @@ Vessel::Vessel(Node* p_location,
     next_y=y;
     course=0;
     name = a_name;
-    harbours = _harbours;		 // overwrite by the setter() in main...
-    fgrounds = _fgrounds;		 // overwrite by the setter() in main...
-    fgrounds_init = _fgrounds_init;		 // overwrite by the setter() in main...
-    // overwrite by the setter() in main...
-    freq_harbours = _freq_harbours;
-    // overwrite by the setter() in main...
-    freq_fgrounds = _freq_fgrounds;
-    freq_fgrounds_init = _freq_fgrounds_init;
-    // overwrite by the setter() in main...
-    vessel_betas_per_pop = _vessel_betas_per_pop;
-    // overwrite by the setter() in main...
-    percent_tac_per_pop = _percent_tac_per_pop;
-    // overwrite by the setter() in main...
-    possible_metiers = _possible_metiers;
-    // overwrite by the setter() in main...
-    freq_possible_metiers = _freq_possible_metiers;
+
+    this->set_spe_possible_metiers(_possible_metiers);
+    this->set_spe_freq_possible_metiers(_freq_possible_metiers);
+    this->set_spe_fgrounds(_fgrounds);
+    this->set_spe_fgrounds_init(_fgrounds_init);
+    this->set_spe_harbours(_harbours);
+    this->set_spe_freq_fgrounds(_freq_fgrounds);
+    this->set_spe_freq_fgrounds_init(_freq_fgrounds_init);
+    this->set_spe_freq_harbours(_freq_harbours);
+    this->set_spe_betas_per_pop(_vessel_betas_per_pop);
+    this->set_spe_percent_tac_per_pop(_percent_tac_per_pop);
+
+
     vid_is_active=a_vid_is_active;
     vid_is_part_of_ref_fleet=a_vid_is_part_of_ref_fleet;
     speed = a_speed;			 //  *0.8; // CAUTION try to calib
@@ -461,6 +458,7 @@ Vessel::Vessel(Node* p_location,
     this->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
     // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
     this->compute_experiencedcpue_fgrounds_per_pop();
+
 
     // note that, at the start of the simu, freq of visit will be equivalent to freq_fgrounds
     // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...
@@ -1474,7 +1472,9 @@ void Vessel::set_spe_possible_metiers (const multimap<types::NodeId, int> &_poss
 {
     possible_metiers=_possible_metiers;
 
+
     if(_possible_metiers.size()>0){
+
 
     // find max idx metier among possible metiers this vessel is having
     auto max_idx_possible_metiers = std::max_element(_possible_metiers.begin(), _possible_metiers.end(),
@@ -1484,7 +1484,9 @@ void Vessel::set_spe_possible_metiers (const multimap<types::NodeId, int> &_poss
     // then fill in with 0 up to this idx
     while (daysSpentInRestrictedAreaThisMonth.size() <= max_idx_possible_metiers->second)
         daysSpentInRestrictedAreaThisMonth.push_back(0.0);
-   }
+
+
+    }
    else
     {
      daysSpentInRestrictedAreaThisMonth.push_back(0.0);
@@ -4632,6 +4634,9 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
             double nbDaysSpent=0.0;
             double nbOpenedDays=0.0;
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth() " << endl);
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().at(0) is: " << this->daysSpentInRestrictedAreaThisMonth.at(0) << endl);
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().size() is: " << this->daysSpentInRestrictedAreaThisMonth.size() << endl);
             nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
             outc(cout << "for "<< this->get_name() << ", metier " << met_idx << " nbDaysSpent: " << nbDaysSpent << endl);
             for (int i=0; i<grds.size();++i)
@@ -4665,7 +4670,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                 // }
 
             }
-           //cout << " alloc accounting for monthly area closures.....ok" << endl;
+           outc(cout << " alloc accounting for monthly area closures.....ok" << endl);
 
         }
 

@@ -816,6 +816,14 @@ int Dataloadervessels::features(std::shared_ptr<sql::Storage> indb,
 
 
 
+      //auto max_idx_possible_metiers = std::max_element(vect_of_possible_metiers_mmap.at(i).begin(), vect_of_possible_metiers_mmap.at(i).end(),
+      //    [](const pair<types::NodeId, int>& p1, const pair<types::NodeId, int>& p2) {
+      //        return p1.second < p2.second; });
+      //cout << "check here!" << endl;
+      //cout <<"  max_idx_possible_metiers->second in loader is " << max_idx_possible_metiers->second << endl;
+
+
+
     }
 
 

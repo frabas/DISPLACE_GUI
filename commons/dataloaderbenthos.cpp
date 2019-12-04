@@ -264,4 +264,5 @@ int Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
 
 
 
+  return 0;
 }

@@ -35,93 +35,119 @@ namespace msqlitecpp { namespace v2 { class Storage; }}
 
 using namespace std;
 
-std::string COMMONSSHARED_EXPORT getLastErrorMessage();
-void COMMONSSHARED_EXPORT open_file_error(string filename);
+std::string getLastErrorMessage();
 
-bool COMMONSSHARED_EXPORT read_config_file (std::shared_ptr<msqlitecpp::v2::Storage> db,string folder_name_parameterization,
-string inputfolder,
-int& a_int_line2,
-int& a_int_line4,
-vector<int>& a_vector_line6,
-vector<int> &implicit_pops_level2,
-vector<int> &grouped_tacs,
-vector<int> &nbcp_coupling_pops,
-vector<double>& a_vector_line8,
-vector<double>& a_vector_line10,
-vector<double>& a_vector_line12,
-vector<types::NodeId> &interesting_harbours);
-
-bool COMMONSSHARED_EXPORT read_config_file (std::istream &stream,
-int& a_int_line2,
-int& a_int_line4,
-vector<int>& a_vector_line6,
-vector<int> &implicit_pops_level2,
-vector<int> &grouped_tacs,
-vector<int> &nbcp_coupling_pops,
-vector<double>& a_vector_line8,
-vector<double>& a_vector_line10,
-vector<double>& a_vector_line12,
-vector<types::NodeId> &interesting_harbours);
-
-bool COMMONSSHARED_EXPORT read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
-                                                    string folder_name_parameterization,
-                                                    string inputfolder,
-                                                    string namefolderoutput,
-                                                    displace::commons::Scenario &scenario);
-
-bool COMMONSSHARED_EXPORT read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
+void open_file_error(string filename);
 
 
+bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db, string folder_name_parameterization,
+                      string inputfolder,
+                      int &a_int_line2,
+                      int &a_int_line4,
+                      vector<int> &a_vector_line6,
+                      vector<int> &implicit_pops_level2,
+                      vector<int> &grouped_tacs,
+                      vector<int> &nbcp_coupling_pops,
+                      vector<double> &a_vector_line8,
+                      vector<double> &a_vector_line10,
+                      vector<double> &a_vector_line12,
+                      vector<types::NodeId> &interesting_harbours);
 
-multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+bool read_config_file(std::istream &stream,
+                      int &a_int_line2,
+                      int &a_int_line4,
+                      vector<int> &a_vector_line6,
+                      vector<int> &implicit_pops_level2,
+                      vector<int> &grouped_tacs,
+                      vector<int> &nbcp_coupling_pops,
+                      vector<double> &a_vector_line8,
+                      vector<double> &a_vector_line10,
+                      vector<double> &a_vector_line12,
+                      vector<types::NodeId> &interesting_harbours);
+
+bool read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
+                               string folder_name_parameterization,
+                               string inputfolder,
+                               string namefolderoutput,
+                               displace::commons::Scenario &scenario);
+
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
+
+
+multimap<types::NodeId, double>
+read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
 
 // harbour specific
-multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);
-int COMMONSSHARED_EXPORT read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
-int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
-void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(types::NodeId i, string a_quarter, map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
+
+int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double> &prices_per_harbour,
+                            string folder_name_parameterization, string inputfolder);
+
+int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
+                                             multimap<int, double> &prices_per_harbour_each_species_per_cat,
+                                             string folder_name_parameterization, string inputfolder);
+
+void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter, map<int, double> &fuel_prices_per_vsize,
+                                string folder_name_parameterization, string inputfolder);
 
 
-bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
-                         vector<string>& firm_names,
-                         vector<int>& nb_vessels,
-                         vector<double>& longs,
-                         vector<double>& lats,
+bool read_firms_features(vector<int> &firm_ids,
+                         vector<string> &firm_names,
+                         vector<int> &nb_vessels,
+                         vector<double> &longs,
+                         vector<double> &lats,
                          string folder_name_parameterization,
                          string inputfolder);
 
 
-
 // simu settings
-vector <int> COMMONSSHARED_EXPORT read_tsteps_quarters(string folder_name_parameterization, string inputfolder);
-vector <int> COMMONSSHARED_EXPORT read_tsteps_semesters(string folder_name_parameterization, string inputfolder);
-vector <int> COMMONSSHARED_EXPORT read_tsteps_months(string folder_name_parameterization, string inputfolder);
-vector <int> COMMONSSHARED_EXPORT read_tsteps_years(string folder_name_parameterization, string inputfolder);
+vector<int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder);
+
+vector<int> read_tsteps_semesters(string folder_name_parameterization, string inputfolder);
+
+vector<int> read_tsteps_months(string folder_name_parameterization, string inputfolder);
+
+vector<int> read_tsteps_years(string folder_name_parameterization, string inputfolder);
 
 //shortPaths
-spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> COMMONSSHARED_EXPORT read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
-spp::sparse_hash_map<types::NodeId::type, int> COMMONSSHARED_EXPORT read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
-PathShop COMMONSSHARED_EXPORT read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type>
+read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+
+spp::sparse_hash_map<types::NodeId::type, int>
+read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+
+PathShop read_graph_details(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
 
 // area based management
-multimap<int, int> COMMONSSHARED_EXPORT read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
+multimap<int, int>
+read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 
 // Closure reading
-struct COMMONSSHARED_EXPORT NodeBanningInfo {
+struct NodeBanningInfo {
     types::NodeId nodeId;
     std::vector<int> banned;
     std::vector<double> nbOfDaysClosedPerMonth;
 };
 
 // area_closure and area_monthly_closure options
-bool COMMONSSHARED_EXPORT read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
-bool COMMONSSHARED_EXPORT read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
-bool COMMONSSHARED_EXPORT read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
-bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
-bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
+bool read_metier_quarterly_closures(vector<Node *> &nodes, string a_quarter, string a_graph,
+                                    string folder_name_parameterization, string inputfolder);
 
-bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const std::string &separator, std::vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string> > &biological_traits_params);
+bool
+read_metier_monthly_closures(vector<Node *> &nodes, string a_month, string a_graph, string folder_name_parameterization,
+                             string inputfolder);
+
+bool
+read_vsize_monthly_closures(vector<Node *> &nodes, string a_month, string a_graph, string folder_name_parameterization,
+                            string inputfolder);
+
+bool read_metier_closures(std::istream &stream, const string &separator, vector<NodeBanningInfo> &nodes);
+
+bool read_vsize_closures(std::istream &stream, const string &separator, vector<NodeBanningInfo> &nodes);
+
+bool read_biological_traits_params(istream &stream, const std::string &separator,
+                                   std::vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string> > &biological_traits_params);
 
 struct EnvironmentDataRecord {
     double x;
@@ -156,12 +182,16 @@ struct EnvironmentDataRecord {
     double siltfraction;
 };
 
-bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator, std::vector <EnvironmentDataRecord> & environment_on_coord);
-
+bool read_environment_on_coord(istream &stream, const std::string &separator,
+                               std::vector<EnvironmentDataRecord> &environment_on_coord);
 
 
 // SMS
-void COMMONSSHARED_EXPORT write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
-void COMMONSSHARED_EXPORT write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);
-void COMMONSSHARED_EXPORT read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages, string sms_folder, string namesimu);
+void write_SMS_OP_N_in_file(ofstream &SMS_N_in, vector<Population *> &populations, vector<int> stock_numbers,
+                            vector<int> a_unit, vector<int> a_number_of_ages);
+
+void write_SMS_OP_F_in_file(ofstream &SMS_F_in, vector<Population *> &populations, vector<int> stock_numbers);
+
+void read_SMS_OP_N_out_file(vector<Population *> &populations, vector<int> stock_numbers, vector<int> a_unit,
+                            vector<int> a_number_of_ages, string sms_folder, string namesimu);
 

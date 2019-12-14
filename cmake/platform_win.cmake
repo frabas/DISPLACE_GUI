@@ -3,6 +3,8 @@ if (NOT WIN32)
     message(FATAL "platform_win.cmake must be included only on Win32 interface")
 endif()
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS on)
+
 add_definitions(-D_WINSOCKAPI_)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)

@@ -15,7 +15,7 @@ using namespace sqlite;
 
 class Windmill;
 
-class COMMONSSHARED_EXPORT WindfarmsTable : public SQLiteTable {
+class  WindfarmsTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 

@@ -41,7 +41,7 @@ class Node;
 class Metier;
 class Vessel;
 
-class COMMONSSHARED_EXPORT Firm
+class  Firm
 {
 public:
 

@@ -51,11 +51,11 @@ struct gui_msgtype {
          type;
 };
 
-struct COMMONSSHARED_EXPORT gui_currstep {
+struct  gui_currstep {
     unsigned int tstep;
 };
 
-struct COMMONSSHARED_EXPORT gui_movevessel {
+struct  gui_movevessel {
     unsigned int vid;
 };
 

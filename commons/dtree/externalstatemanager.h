@@ -9,7 +9,7 @@
 
 /** \brief A monostate/singleton class to manage External States variables
  * */
-class COMMONSSHARED_EXPORT ExternalStateManager
+class  ExternalStateManager
 {
     static ExternalStateManager *sInstance;
 

@@ -16,7 +16,7 @@ using namespace sqlite;
 #include <boost/lexical_cast.hpp>
 
 
-class COMMONSSHARED_EXPORT  MetadataTable : public SQLiteTable {
+class   MetadataTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 

@@ -9,7 +9,7 @@
 #include <vector>
 #include <tuple>
 
-class COMMONSSHARED_EXPORT PathShop
+class  PathShop
 {
     using weight_t = uint16_t;
 

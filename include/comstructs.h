@@ -29,7 +29,7 @@
 namespace displace {
 namespace commons {
 
-struct COMMONSSHARED_EXPORT Scenario {
+struct  Scenario {
     DynAllocOptions dyn_alloc_sce;
     PopSceOptions dyn_pop_sce;
     ClosureOptions closure_opts;

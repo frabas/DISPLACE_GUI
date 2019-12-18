@@ -36,7 +36,7 @@
 /** @brief implements a CircularBuffer to be used in a boost::interprocess::managed_heap_memory
  * @note DO NOT implements ANY virtual method in this class! Pointers are not portable across processes!
  */
-class COMMONSSHARED_EXPORT IpcQueue
+class  IpcQueue
 {
 public:
     IpcQueue();

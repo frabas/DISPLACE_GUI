@@ -15,7 +15,7 @@ using namespace sqlite;
 
 class Fishfarm;
 
-class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable {
+class  FishfarmsTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 public:

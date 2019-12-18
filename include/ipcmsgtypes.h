@@ -56,20 +56,20 @@ enum IpcMessageTypes {
 namespace displace {
 namespace ipc {
 
-struct COMMONSSHARED_EXPORT MoveVesselMessage {
+struct  MoveVesselMessage {
     unsigned int tstep = 0, tstep_dep = 0;
     unsigned int idx = -1;
     double x = 0,y = 0,course = 0,cumfuelcons = 0;
     int state = -1;
 };
 
-struct COMMONSSHARED_EXPORT MoveShipMessage {
+struct  MoveShipMessage {
     unsigned int tstep = 0;
     unsigned int idx = -1;
     double x = 0,y = 0,course = 0;
 };
 
-struct COMMONSSHARED_EXPORT VesselLogbookMessage {
+struct  VesselLogbookMessage {
     unsigned int tstep = 0, tstepdep = 0;
     int rtbb = 0, node = -1, idx = -1;
     double count= 1;

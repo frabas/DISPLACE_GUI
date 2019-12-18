@@ -22,13 +22,13 @@ class DecisionTree;
 /** \brief A class that implements a Singleton for managing the Decision Trees for vessels
  *
  * */
-class COMMONSSHARED_EXPORT DecisionTreeManager
-{
+class DecisionTreeManager {
 private:
     DecisionTreeManager();
 
     /** \brief Class destructor, not implemented to prevent desctruction. */
     ~DecisionTreeManager();
+
 public:
 
     /** \brief An enumerated type to identify which tree to refer.
@@ -71,7 +71,7 @@ private:
     std::vector<std::shared_ptr<dtree::DecisionTree> > mTrees;
     std::vector<std::set<dtree::Variable> > mVariableDictionary;
 
-    static DecisionTreeManager *mInstance;
+    static COMMONSSHARED_EXPORT DecisionTreeManager *mInstance;
 
     static const char * const mCodes[];
 };

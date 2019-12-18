@@ -17,7 +17,7 @@ using namespace sqlite;
 class Vessel;
 class Node;
 
-class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
+class  VesselDefTable : public sqlite::SQLiteTable
 {
     struct Impl;
     std::unique_ptr<Impl> p;

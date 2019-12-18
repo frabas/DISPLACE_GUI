@@ -15,7 +15,7 @@ using namespace sqlite;
 
 class Population;
 
-class COMMONSSHARED_EXPORT PopDynTable : public SQLiteTable {
+class  PopDynTable : public SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

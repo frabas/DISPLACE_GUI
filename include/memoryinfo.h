@@ -27,7 +27,7 @@
 
 class MemoryInfoImpl;
 
-class COMMONSSHARED_EXPORT MemoryInfo
+class  MemoryInfo
 {
 public:
     MemoryInfo();

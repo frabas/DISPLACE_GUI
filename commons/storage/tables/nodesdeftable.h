@@ -19,7 +19,7 @@ class Node;
 
 class Harbour;
 
-class COMMONSSHARED_EXPORT NodesDefTable : public SQLiteTable {
+class  NodesDefTable : public SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

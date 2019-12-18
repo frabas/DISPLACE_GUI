@@ -31,7 +31,7 @@
 #include "Tac.h"
 #include <options.h>
 
-class COMMONSSHARED_EXPORT Population
+class  Population
 {
 	public:
         Population(int name,

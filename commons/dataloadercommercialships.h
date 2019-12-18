@@ -27,7 +27,7 @@ using namespace std;
 
 class Node;
 
-class COMMONSSHARED_EXPORT Dataloaderships : public virtual Dataloader
+class  Dataloaderships : public virtual Dataloader
 {
 public:
     Dataloaderships();
@@ -45,7 +45,7 @@ public:
 };
 
 
-bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<double> &imos,
+bool  read_ships_features(vector<string>& shipids, vector<double> &imos,
                         vector<double> &yearbuilds, vector<string> &flags,
                         vector<string> &types, vector<double> &typecodes,
                         vector<double> &loas, vector<double> &KWs, vector<double> &breadths,
@@ -60,8 +60,8 @@ bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<do
 
 
 
-multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
+multimap<int, double>  read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
+multimap<int, double>  read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
 
 
 

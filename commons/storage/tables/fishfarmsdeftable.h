@@ -15,7 +15,7 @@
 
 class Fishfarm;
 
-class COMMONSSHARED_EXPORT FishFarmsDefTable {
+class  FishFarmsDefTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 public:

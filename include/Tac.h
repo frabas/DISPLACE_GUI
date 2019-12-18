@@ -28,7 +28,7 @@
 #include <iostream>
 #include "myutils.h"
 
-class COMMONSSHARED_EXPORT Tac
+class  Tac
 {
 
 	public:

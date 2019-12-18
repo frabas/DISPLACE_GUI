@@ -17,7 +17,7 @@ using namespace sqlite;
 
 class Node;
 
-class COMMONSSHARED_EXPORT PopTable : public SQLiteTable {
+class  PopTable : public SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 

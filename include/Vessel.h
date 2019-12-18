@@ -48,7 +48,7 @@ class Metier;
 class Population;
 class Benthos;
 
-class COMMONSSHARED_EXPORT Vessel
+class  Vessel
 {
 public:
     enum LengthClass {

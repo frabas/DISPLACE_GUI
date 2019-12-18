@@ -64,20 +64,23 @@ enum Variable {
     VarLast
 };
 
-class COMMONSSHARED_EXPORT VariableNames {
+class VariableNames {
 public:
     static const int VERSION;
 
     static const char *variableName(Variable);
-    static Variable variableCode (const std::string &name);
+
+    static Variable variableCode(const std::string &name);
 
     static int variableBinCount(Variable var);
-    static const char *variableBin(Variable var, int ndx) { return bins[var][ndx]; }
+
+    static const char *variableBin(Variable var, int ndx)
+    { return bins[var][ndx]; }
 
 private:
-    static const char *const names[];
+    static COMMONSSHARED_EXPORT const char *const names[];
 
-    static const char *const bins[][40];
+    static COMMONSSHARED_EXPORT const char *const bins[][40];
 };
 
 }

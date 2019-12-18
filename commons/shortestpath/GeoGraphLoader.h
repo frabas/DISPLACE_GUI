@@ -12,7 +12,7 @@
 
 class GeoGraph;
 
-class COMMONSSHARED_EXPORT GeoGraphLoader {
+class  GeoGraphLoader {
     void loadNodes(GeoGraph &graph,std::istream &is);
     void loadEdges(GeoGraph &graph,std::istream &is);
 public:

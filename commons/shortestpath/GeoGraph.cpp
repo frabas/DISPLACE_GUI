@@ -6,15 +6,16 @@
 
 #include <boost/graph/astar_search.hpp>
 
-GeoGraph COMMONSSHARED_EXPORT geoGraph;
+COMMONSSHARED_EXPORT GeoGraph geoGraph;
 
 using namespace boost;
 
 void GeoGraph::addNode(int node, float x, float y)
 {
-    while (locations.size() <= node)
+    while (locations.size() <= node) {
         locations.push_back(location{});
-    locations[node] = { x, y };
+    }
+    locations[node] = {x, y};
 }
 
 bool GeoGraph::addEdge(int node_from, int node_to, GeoGraph::cost weight)

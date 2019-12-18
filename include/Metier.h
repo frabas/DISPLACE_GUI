@@ -30,7 +30,7 @@
 
 using namespace std;
 
-class COMMONSSHARED_EXPORT Metier
+class  Metier
 {
 	private:
         int name = -1;

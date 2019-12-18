@@ -34,7 +34,7 @@ namespace sqlite {
 class SQLiteStorage;
 }
 
-class COMMONSSHARED_EXPORT SQLiteOutputStorage
+class  SQLiteOutputStorage
 {
     struct Impl;
     std::unique_ptr<Impl> p;

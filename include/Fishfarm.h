@@ -30,7 +30,7 @@
 #include "myutils.h"
 #include "Node.h"
 
-class COMMONSSHARED_EXPORT Fishfarm
+class  Fishfarm
 {
     public:
         Fishfarm(Node *node, int id, string name, int farmtype);

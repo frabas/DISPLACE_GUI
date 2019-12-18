@@ -27,7 +27,7 @@ using namespace std;
 
 class Node;
 
-class COMMONSSHARED_EXPORT Dataloaderwindmills : public virtual Dataloader
+class  Dataloaderwindmills : public virtual Dataloader
 {
 public:
     Dataloaderwindmills();
@@ -45,7 +45,7 @@ public:
 };
 
 
-map<int, double> COMMONSSHARED_EXPORT read_size_per_windmill(string folder_name_parameterization, string inputfolder);
+map<int, double>  read_size_per_windmill(string folder_name_parameterization, string inputfolder);
 
 
 

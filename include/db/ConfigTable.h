@@ -24,8 +24,8 @@ namespace db = msqlitecpp::v2;
 namespace displace {
 namespace in {
 
-class COMMONSSHARED_EXPORT ConfigTable {
-    static const char * const TableName;
+class ConfigTable {
+    static COMMONSSHARED_EXPORT const char *const TableName;
 
     db::Column<db::ColumnTypes::Text> Param{"param"};
     db::Column<db::ColumnTypes::Text> Value{"value"};

@@ -18,7 +18,7 @@ using namespace sqlite;
 
 class Node;
 
-class COMMONSSHARED_EXPORT NodesEnvtTable : public SQLiteTable {
+class  NodesEnvtTable : public SQLiteTable {
 private:
     struct Impl;
 

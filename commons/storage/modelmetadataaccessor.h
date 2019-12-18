@@ -10,7 +10,7 @@
 
 class MetadataTable;
 
-class COMMONSSHARED_EXPORT ModelMetadataAccessor
+class  ModelMetadataAccessor
 {
     std::shared_ptr<MetadataTable> meta;
 public:

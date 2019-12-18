@@ -14,7 +14,7 @@
 
 using namespace sqlite;
 
-class COMMONSSHARED_EXPORT VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteTable {
+class  VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

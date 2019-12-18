@@ -16,7 +16,7 @@
 struct siginfo_t;
 #endif
 
-class COMMONSSHARED_EXPORT CrashHandler {
+class  CrashHandler {
 public:
     CrashHandler();
     bool initialize();

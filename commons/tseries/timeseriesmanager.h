@@ -11,7 +11,7 @@ namespace simulation {
 
 class TimeSeries;
 
-class COMMONSSHARED_EXPORT TimeSeriesManager
+class  TimeSeriesManager
 {
 public:
     enum Variables { Fishprice = 0, Fuelprice, WSpeed,

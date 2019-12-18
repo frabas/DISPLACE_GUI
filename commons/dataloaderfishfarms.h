@@ -27,7 +27,7 @@ using namespace std;
 
 class Node;
 
-class COMMONSSHARED_EXPORT Dataloaderfishfarms : public virtual Dataloader
+class  Dataloaderfishfarms : public virtual Dataloader
 {
 public:
     Dataloaderfishfarms();
@@ -45,7 +45,7 @@ public:
 };
 
 
-bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
+bool  read_fishfarms_features(vector<int>& fishfarms_ids,
                          vector<string>& fishfarms_names,
                          vector<int>& idx_nodes,
                          vector<int>& is_actives,
@@ -105,7 +105,7 @@ bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
                              string inputfolder);
 
 
-map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);
+map<int, double>  read_size_per_farm(string folder_name_parameterization, string inputfolder);
 
 
 

@@ -16,7 +16,7 @@ class NodeExtra;
 /** \brief a decision tree node.
  *
  */
-class COMMONSSHARED_EXPORT Node
+class  Node
 {
 public:
     explicit Node(std::shared_ptr<DecisionTree> node);

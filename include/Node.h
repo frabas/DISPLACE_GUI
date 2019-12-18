@@ -36,7 +36,7 @@
 
 using namespace std;
 
-class COMMONSSHARED_EXPORT Node
+class  Node
 {
 	public:
 

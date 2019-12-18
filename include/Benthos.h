@@ -29,7 +29,7 @@
 #include "myutils.h"
 #include "Node.h"
 
-class COMMONSSHARED_EXPORT Benthos
+class  Benthos
 {
 	public:
         Benthos(int id,

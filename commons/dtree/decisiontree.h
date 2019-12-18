@@ -10,7 +10,7 @@ namespace dtree {
 
 class Node;
 
-class COMMONSSHARED_EXPORT DecisionTree : public std::enable_shared_from_this<DecisionTree>
+class  DecisionTree : public std::enable_shared_from_this<DecisionTree>
 {
 public:
     DecisionTree();

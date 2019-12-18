@@ -17,7 +17,7 @@ using namespace sqlite;
 
 class Node;
 
-class COMMONSSHARED_EXPORT FuncGroupsTable : public SQLiteTable {
+class  FuncGroupsTable : public SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

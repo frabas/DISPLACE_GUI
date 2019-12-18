@@ -11,7 +11,7 @@ namespace dtree {
 
 /** \brief An abstract class to allow internal/External states to be evaluated
  */
-class COMMONSSHARED_EXPORT StateEvaluator
+class  StateEvaluator
 {
 public:
     StateEvaluator() {}

@@ -20,7 +20,7 @@
 #endif
 #else
 
-#define COMMONSSHARED_EXPORT
+#define
 #endif
 
 

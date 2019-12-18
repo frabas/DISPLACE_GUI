@@ -14,11 +14,10 @@
 #include <vector>
 #include <ctime>
 
-class COMMONSSHARED_EXPORT GeoGraph {
+class GeoGraph {
 public:
     // auxiliary types
-    struct location
-    {
+    struct location {
         float y, x; // lat, long
     };
 
@@ -51,6 +50,6 @@ public:
     size_t numEdges() const { return boost::num_edges(graph); }
 };
 
-extern COMMONSSHARED_EXPORT GeoGraph geoGraph;
+extern COMMONSSHARED_EXPORT  GeoGraph geoGraph;
 
 #endif //GEOGRAPH_H

@@ -17,7 +17,7 @@
 typedef types::NodeId::type vertex_t;
 
 
-class COMMONSSHARED_EXPORT AStarShortestPathFinder {
+class  AStarShortestPathFinder {
 public:
     std::list<types::NodeId> findShortestPath (GeoGraph &graph, GeoGraph::vertex from, GeoGraph::vertex to);
 };

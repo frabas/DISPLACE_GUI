@@ -150,19 +150,19 @@ enum Closure_Opt {
 
 } // namespace
 
-class COMMONSSHARED_EXPORT DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last, bool>
+class  DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last, bool>
 {
 public:
     DynAllocOptions();
 };
 
-class COMMONSSHARED_EXPORT PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last, bool>
+class  PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last, bool>
 {
 public:
     PopSceOptions();
 };
 
-class COMMONSSHARED_EXPORT ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
+class  ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
     std::vector<bool> mBannedMetiers;
 public:
     void update();

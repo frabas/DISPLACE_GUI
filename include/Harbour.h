@@ -33,7 +33,7 @@
 
 using namespace std;
 
-class COMMONSSHARED_EXPORT Harbour : public Node
+class  Harbour : public Node
 {
 	public:
         Harbour(types::NodeId idx,

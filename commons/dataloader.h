@@ -19,7 +19,7 @@ using namespace std;
 
 
 
-struct COMMONSSHARED_EXPORT LoadedData {
+struct  LoadedData {
     std::vector<string> vectsparam1;
     std::vector<string> vectsparam2;
     std::vector<string> vectsparam3;
@@ -194,7 +194,7 @@ struct COMMONSSHARED_EXPORT LoadedData {
  };
 
 
-struct COMMONSSHARED_EXPORT ParamsForLoad {
+struct  ParamsForLoad {
     string sparam1;
     string sparam2;
     string sparam3;
@@ -226,7 +226,7 @@ struct COMMONSSHARED_EXPORT ParamsForLoad {
 
 
 // abstract class
-class COMMONSSHARED_EXPORT Dataloader
+class  Dataloader
 {
 public:
     Dataloader(){}

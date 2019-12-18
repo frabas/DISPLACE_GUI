@@ -15,7 +15,7 @@ using namespace sqlite;
 
 class Population;
 
-class COMMONSSHARED_EXPORT PopQuotasTable : public SQLiteTable {
+class  PopQuotasTable : public SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

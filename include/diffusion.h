@@ -47,15 +47,15 @@ typedef std::pair<box, unsigned> value;
 
 
 
-bool COMMONSSHARED_EXPORT diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes,
+bool  diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes,
                                                                adjacency_map_t& adjacency_map, double coeff);
-bool COMMONSSHARED_EXPORT diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes,
+bool  diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes,
                                                                adjacency_map_t& adjacency_map, double coeff);
-bool COMMONSSHARED_EXPORT diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
+bool  diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
                                                           adjacency_map_t& adjacency_map,
                                                           bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree,
                                                           double coeff);
 
-void COMMONSSHARED_EXPORT createRTreeFromNodes(vector<Node*>& nodes,
+void  createRTreeFromNodes(vector<Node*>& nodes,
                                                bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree);
 

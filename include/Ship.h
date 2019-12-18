@@ -33,7 +33,7 @@
 
 #include <mutex>
 
-class COMMONSSHARED_EXPORT Ship
+class  Ship
 {
 	private:
 		string name;

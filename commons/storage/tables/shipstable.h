@@ -12,7 +12,7 @@
 
 class Ship;
 
-class COMMONSSHARED_EXPORT ShipsTable : public sqlite::SQLiteTable {
+class  ShipsTable : public sqlite::SQLiteTable {
     struct Impl;
     std::unique_ptr<Impl> p;
 

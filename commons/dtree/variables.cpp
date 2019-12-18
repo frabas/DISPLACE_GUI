@@ -29,17 +29,17 @@ const int VariableNames::VERSION = 7;
  * \note The name must not contain spaces or other character used as separator by the parsers.
  * */
 const char *const VariableNames::names[] = {
-    "vesselMetierIs",      // goFishing
-    "vesselSizeIs",             // goFishing
-    "lastTripProfitIs",          // goFishing
-    "lastTripRevenueIs",         // goFishing
-    "windSpeedIs",                // goFishing
-    "fishPriceTargetStockIs",      // goFishing
-    "fuelPriceIs",                  // goFishing
-    "todayIs",                      // goFishing
-    "monthIs",                      // goFishing
-    "stockTargetIs",                      // goFishing
-    "riskOfBycatchAvoidedStksNowIs", // goFishing
+        "vesselMetierIs",      // goFishing
+        "vesselSizeIs",             // goFishing
+        "lastTripProfitIs",          // goFishing
+        "lastTripRevenueIs",         // goFishing
+        "windSpeedIs",                // goFishing
+        "fishPriceTargetStockIs",      // goFishing
+        "fuelPriceIs",                  // goFishing
+        "todayIs",                      // goFishing
+        "monthIs",                      // goFishing
+        "stockTargetIs",                      // goFishing
+        "riskOfBycatchAvoidedStksNowIs", // goFishing
     "individualQuotaLeftOnAvoidedStksNowIs", // goFishing
     "globalQuotaLeftOnAvoidedStksNowIs", // goFishing
 
@@ -67,46 +67,46 @@ const char *const VariableNames::names[] = {
     "globalQuotaLeftOnAvoidedStksHereIs",   // StartFishing
     "otherVesselFishingHere",          // StartFishing
 
-    "feelingForCatchingElsewhere",  // ChangeGround
-    "seeingOtherVesselFishingElsewhere",  // ChangeGround
+        "feelingForCatchingElsewhere",  // ChangeGround
+        "seeingOtherVesselFishingElsewhere",  // ChangeGround
 
-    "catchVolumeIs", // StopFishing
-    "fuelTankIs", // StopFishing
-    "endOfTheDayIs", // StopFishing
-    "nbOfDaysAtSeaSoFarIs", // StopFishing
+        "catchVolumeIs", // StopFishing
+        "fuelTankIs", // StopFishing
+        "endOfTheDayIs", // StopFishing
+        "nbOfDaysAtSeaSoFarIs", // StopFishing
 //  "windSpeedIs", // goFishing and StopFishing
 
-    "distanceToPortIs",   // ChoosePort
-    "fuelPriceInPortIs",     // ChoosePort
-    "fishPriceThisStockInPortIs",   // ChoosePort
-    "portNationalityIs",   // ChoosePort
+        "distanceToPortIs",   // ChoosePort
+        "fuelPriceInPortIs",     // ChoosePort
+        "fishPriceThisStockInPortIs",   // ChoosePort
+        "portNationalityIs",   // ChoosePort
 
-    "probability",
-    // keep this last
-    0
+        "probability",
+        // keep this last
+        0
 };
 
 const char *const VariableNames::bins[][40] = {
-    { "0", "1","2","3","4","5","6","7","8","9",
-      "10", "11","12","13","14","15","16","17","18","19",
-      "20", "21","22","23","24", 0  },
-    { "u15m", "15-18m", "18-24m", "24-40m", "o40m", 0},    // given by length_class in Vessel::Vessel()
-    { "below av.", "above av.", 0 },   //lastTripProfitIs
-    {  "below av.", "above av.",0 },      //lastTripRevenueIs
-    { "low", "medium", "large",0 }, // or { "<5knots", "5-10knots", ">10knots" },
-    { "low","medium", "high",0 },
-    { "low", "medium", "high",0 },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targeted stock(s)
-    { "week start", "week ending",0 },
-    { "Jan", "Feb","Mar", "Apr","May", "Jun","Jul", "Aug","Sep", "Oct","Nov", "Dec", 0 }, // current_month
-    { "0", "1","2","3","4","5","6","7","8","9",
-      "10", "11","12","13","14","15","16","17","18","19",
-      "20", "21","22","23","24", "25","26", "27","28","29","30", "31","32", "33","34", "35","36", 0  },
-    { "<20% bycatch", ">20%",0 },
-    { ">10% quota left", "<10%",0 },
-    { ">10% quota left", "<10%",0 },
+        {"0",               "1",           "2",      "3",      "4",    "5",   "6",   "7",   "8",   "9",
+                                                                                                          "10",  "11",  "12", "13", "14", "15", "16", "17", "18", "19",
+                "20", "21", "22", "23", "24", 0},
+        {"u15m",            "15-18m",      "18-24m", "24-40m", "o40m", 0},    // given by length_class in Vessel::Vessel()
+        {"below av.",       "above av.",   0},   //lastTripProfitIs
+        {"below av.",       "above av.",   0},      //lastTripRevenueIs
+        {"low",             "medium",      "large",  0}, // or { "<5knots", "5-10knots", ">10knots" },
+        {"low",             "medium",      "high",   0},
+        {"low",             "medium",      "high",   0},  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targeted stock(s)
+        {"week start",      "week ending", 0},
+        {"Jan",             "Feb",         "Mar",    "Apr",    "May",  "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 0}, // current_month
+        {"0",               "1",           "2",      "3",      "4",    "5",   "6",   "7",   "8",   "9",
+                                                                                                          "10",  "11",  "12", "13", "14", "15", "16", "17", "18", "19",
+                "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", 0},
+        {"<20% bycatch",    ">20%",        0},
+        {">10% quota left", "<10%",        0},
+        {">10% quota left", "<10%",        0},
 
 
-    { "no", "yes",0 },
+        {"no",              "yes",         0},
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },

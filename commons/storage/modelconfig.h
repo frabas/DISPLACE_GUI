@@ -5,7 +5,7 @@
 
 #include <vector>
 
-struct COMMONSSHARED_EXPORT ModelConfig {
+struct  ModelConfig {
     int nbpops;
     int nbbenthospops;
     int szGroups;

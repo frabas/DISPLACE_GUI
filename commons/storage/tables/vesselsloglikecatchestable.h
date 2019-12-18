@@ -14,7 +14,7 @@ using namespace sqlite;
 
 class Population;
 
-class COMMONSSHARED_EXPORT VesselsLoglikeCatchesTable : public SQLiteTable {
+class  VesselsLoglikeCatchesTable : public SQLiteTable {
 private:
     struct Impl;
     std::unique_ptr<Impl> p;

@@ -11,7 +11,7 @@ using namespace sqlite;
 #include <vector>
 #include <string>
 
-class COMMONSSHARED_EXPORT VesselsLoglikeTable : public SQLiteTable
+class  VesselsLoglikeTable : public SQLiteTable
 {
 private:
     struct Impl;

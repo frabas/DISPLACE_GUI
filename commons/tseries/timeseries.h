@@ -9,7 +9,7 @@
 namespace displace {
 namespace simulation {
 
-class COMMONSSHARED_EXPORT TimeSeries
+class  TimeSeries
 {
 public:
     TimeSeries();

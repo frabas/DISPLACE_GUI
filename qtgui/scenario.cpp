@@ -23,6 +23,7 @@
 #include <exceptions.h>
 #include <options.h>
 #include <comstructs.h>
+#include "utils/safe_strerror.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -338,14 +339,15 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     displace::commons::Scenario scenario;
 
 	// TODO pass the correct db when it will be available.
-    if (!read_scenario_config_file (nullptr,
-                path.toStdString(),
-                modelname.toStdString(),
-                outputname.toStdString(),
-                scenario))
+    if (!read_scenario_config_file(nullptr,
+                                   path.toStdString(),
+                                   modelname.toStdString(),
+                                   outputname.toStdString(),
+                                   scenario)) {
         throw DisplaceException(QString(QObject::tr("Cannot load scenario file: %1 - %2"))
-                                .arg(::getLastErrorMessage().c_str())
-                                .arg(strerror(errno)));
+                                        .arg(::getLastErrorMessage().c_str())
+                                        .arg(safe_strerror(errno).c_str()));
+    }
 
     Scenario s;
 

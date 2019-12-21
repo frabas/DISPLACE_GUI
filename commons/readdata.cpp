@@ -19,6 +19,8 @@
 // --------------------------------------------------------------------------
 
 #include "readdata.h"
+#include "utils/safe_strerror.h"
+
 #include <helpers.h>
 #include <idtypes.h>
 #include <idtypeshelpers.h>
@@ -706,8 +708,8 @@ spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previou
     }
 
     if (!r) {
-        cerr << "Error loading graph file " << filename << " " << strerror(errno) << endl;
-        throw std::runtime_error("Error loading graph file " + filename + " " + strerror(errno)) ;
+        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << endl;
+        throw std::runtime_error("Error loading graph file " + filename + " " + safe_strerror(errno));
     }
     //dout(cout <<"END: read map previous" << endl);
 
@@ -737,8 +739,8 @@ spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId s
     }
 
     if (!r) {
-        cerr << "Error loading graph file " << filename << " " << strerror(errno) << endl;
-        throw std::runtime_error("Error loading graph file " + filename + " " + strerror(errno)) ;
+        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << endl;
+        throw std::runtime_error("Error loading graph file " + filename + " " + safe_strerror(errno));
     }
 
 

@@ -19,6 +19,8 @@
 // --------------------------------------------------------------------------
 
 #include "displacemodel.h"
+#include "utils/safe_strerror.h"
+
 #include <exceptions.h>
 #include <dbhelper.h>
 #include <calendar.h>
@@ -1993,7 +1995,7 @@ bool DisplaceModel::loadNodes()
     if (coord_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_coord_x;
     vector<double> graph_coord_y;
@@ -2010,7 +2012,7 @@ bool DisplaceModel::loadNodes()
     if (code_area_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_code_area_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<int> graph_point_code_area;
     if (!fill_from_code_area(code_area_graph, graph_point_code_area, nrow_coord)) {
@@ -2024,7 +2026,7 @@ bool DisplaceModel::loadNodes()
     if (code_landscape_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_code_marine_landscape_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<int> graph_point_code_landscape;
     if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord)) {
@@ -2038,7 +2040,7 @@ bool DisplaceModel::loadNodes()
     if (wind_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_wind_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_wind;
     if (!fill_from_wind(wind_graph, graph_point_wind, nrow_coord)) {
@@ -2052,7 +2054,7 @@ bool DisplaceModel::loadNodes()
     if (sst_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_sst_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_sst;
     if (!fill_from_sst(sst_graph, graph_point_sst, nrow_coord)) {
@@ -2066,7 +2068,7 @@ bool DisplaceModel::loadNodes()
     if (salinity_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_salinity_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_salinity;
     if (!fill_from_salinity(salinity_graph, graph_point_salinity, nrow_coord)) {
@@ -2081,7 +2083,7 @@ bool DisplaceModel::loadNodes()
     if (Nitrogen_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_Nitrogen_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_Nitrogen;
     if (!fill_from_Nitrogen(Nitrogen_graph, graph_point_Nitrogen, nrow_coord)) {
@@ -2095,7 +2097,7 @@ bool DisplaceModel::loadNodes()
     if (Phosphorus_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_Phosphorus_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_Phosphorus;
     if (!fill_from_Phosphorus(Phosphorus_graph, graph_point_Phosphorus, nrow_coord)) {
@@ -2109,7 +2111,7 @@ bool DisplaceModel::loadNodes()
     if (Oxygen_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_Oxygen_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_Oxygen;
     if (!fill_from_Oxygen(Oxygen_graph, graph_point_Oxygen, nrow_coord)) {
@@ -2123,7 +2125,7 @@ bool DisplaceModel::loadNodes()
     if (DissolvedCarbon_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_DissolvedCarbon_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_DissolvedCarbon;
     if (!fill_from_DissolvedCarbon(DissolvedCarbon_graph, graph_point_DissolvedCarbon, nrow_coord)) {
@@ -2137,7 +2139,7 @@ bool DisplaceModel::loadNodes()
     if (bathymetry_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_bathymetry_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_bathymetry;
     if (!fill_from_bathymetry(bathymetry_graph, graph_point_bathymetry, nrow_coord)) {
@@ -2151,7 +2153,7 @@ bool DisplaceModel::loadNodes()
     if (shippingdensity_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_shippingdensity_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_shippingdensity;
     if (!fill_from_shippingdensity(shippingdensity_graph, graph_point_shippingdensity, nrow_coord)) {
@@ -2164,7 +2166,7 @@ bool DisplaceModel::loadNodes()
     if (siltfraction_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_siltfraction_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_siltfraction;
     if (!fill_from_siltfraction(siltfraction_graph, graph_point_siltfraction, nrow_coord)) {
@@ -2197,7 +2199,7 @@ bool DisplaceModel::loadNodes()
     if (code_benthos_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_code_benthos_biomass_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_benthos_biomass;
     if (!fill_from_benthos_biomass(code_benthos_graph, graph_point_benthos_biomass, nrow_coord)) {
@@ -2211,7 +2213,7 @@ bool DisplaceModel::loadNodes()
     if (code_benthos_number_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                         .arg(filename_code_benthos_number_graph.c_str())
-                                        .arg(strerror(errno)));
+                                        .arg(QString::fromStdString(safe_strerror(errno))));
     }
     vector<double> graph_point_benthos_number;
     if (!fill_from_benthos_number(code_benthos_number_graph, graph_point_benthos_number, nrow_coord)) {

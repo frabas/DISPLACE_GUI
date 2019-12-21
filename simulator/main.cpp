@@ -50,6 +50,8 @@
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
 
+#include "utils/safe_strerror.h"
+
 #include <boost/filesystem.hpp>
 
 using namespace sqlite;
@@ -656,7 +658,7 @@ int app_main(int argc, char const *argv[])
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if (status < 0) {
-        cerr << "could not create directory" << an_output_folder << ": " << strerror(errno) << endl;
+        cerr << "could not create directory" << an_output_folder << ": " << safe_strerror(errno) << endl;
         return -1;
     }
 
@@ -664,7 +666,7 @@ int app_main(int argc, char const *argv[])
     status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     if (status < 0) {
-        cerr << "could not create directory" << a_basic_output_folder << ": " << strerror(errno) << endl;
+        cerr << "could not create directory" << a_basic_output_folder << ": " << safe_strerror(errno) << endl;
         return -1;
     }
 
@@ -672,7 +674,7 @@ int app_main(int argc, char const *argv[])
     namefolder = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput;
     status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if (status < 0) {
-        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+        cerr << "could not create directory" << namefolder << ": " << safe_strerror(errno) << endl;
         return -1;
     }
 #endif

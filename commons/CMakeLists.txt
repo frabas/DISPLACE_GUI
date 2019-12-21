@@ -152,7 +152,7 @@ set(SOURCES
         shortestpath/GeoGraphLoader.h shortestpath/GeoGraphLoader.cpp
         ../include/db/ConfigTable.h ../include/db/ScenarioConfigTable.h
 		ConfigTables.cpp
-		)
+        ../include/utils/safe_strerror.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

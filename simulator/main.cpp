@@ -1117,9 +1117,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // input data, code area for each point of the graph (e.g. 1: NS, 2: BW, 3: BE, 10: open sea)
     ifstream code_area_graph;
-    code_area_graph.open(filename_code_area_graph.c_str());
+    code_area_graph.open(filename_code_area_graph);
     if (code_area_graph.fail()) {
-        open_file_error(filename_code_area_graph.c_str());
+        open_file_error(filename_code_area_graph);
         return 1;
     }
     vector<int> graph_point_code_area;
@@ -1130,9 +1130,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // input data, for the marine landscape for each point of the graph (e.g. 111, 112, etc. e.g. see the BALANCE map coding)
     ifstream code_landscape_graph;
-    code_landscape_graph.open(filename_code_marine_landscape_graph.c_str());
+    code_landscape_graph.open(filename_code_marine_landscape_graph);
     if (code_landscape_graph.fail()) {
-        open_file_error(filename_code_marine_landscape_graph.c_str());
+        open_file_error(filename_code_marine_landscape_graph);
         return 1;
     }
     vector<int> graph_point_code_landscape;
@@ -1143,9 +1143,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // input data, for the WIND for each point of the graph
     ifstream wind_graph;
-    wind_graph.open(filename_wind_graph.c_str());
+    wind_graph.open(filename_wind_graph);
     if (wind_graph.fail()) {
-        open_file_error(filename_wind_graph.c_str());
+        open_file_error(filename_wind_graph);
         return 1;
     }
     vector<double> graph_point_wind;
@@ -1156,9 +1156,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // input data, for the SST for each point of the graph
     ifstream sst_graph;
-    sst_graph.open(filename_sst_graph.c_str());
+    sst_graph.open(filename_sst_graph);
     if (sst_graph.fail()) {
-        open_file_error(filename_sst_graph.c_str());
+        open_file_error(filename_sst_graph);
         return 1;
     }
     vector<double> graph_point_sst;
@@ -1169,9 +1169,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // input data, for the SST for each point of the graph
     ifstream salinity_graph;
-    salinity_graph.open(filename_salinity_graph.c_str());
+    salinity_graph.open(filename_salinity_graph);
     if (salinity_graph.fail()) {
-        open_file_error(filename_salinity_graph.c_str());
+        open_file_error(filename_salinity_graph);
         return 1;
     }
     vector<double> graph_point_salinity;

@@ -37,7 +37,7 @@ class ConfigTable {
     {
         try {
             return boost::lexical_cast<T>(mParams.at(v));
-        } catch (std::out_of_range &x) {
+        } catch (std::out_of_range &) {
             std::ostringstream ss;
             ss << "Field not found: " << v;
             throw std::out_of_range(ss.str());
@@ -59,7 +59,7 @@ class ConfigTable {
     {
         try {
             return displace::formats::utils::stringToVector<T>(mParams.at(v));
-        } catch (std::out_of_range &x) {
+        } catch (std::out_of_range &) {
             std::ostringstream ss;
             ss << "Field not found: " << v;
             throw std::out_of_range(ss.str());

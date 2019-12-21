@@ -239,6 +239,8 @@ bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
     } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
         cerr << x.what() << endl;
+#else
+        (void) x;
 #endif
         return false;
     }

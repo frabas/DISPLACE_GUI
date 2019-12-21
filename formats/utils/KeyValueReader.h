@@ -30,7 +30,8 @@ namespace displace {
                 std::string get(const std::string &key, std::string value = std::string()) const;
                 bool isSet(const std::string &key) const;
 
-                unsigned long numKeyValues() const {
+                auto numKeyValues() const
+                {
                     return mConfig.size();
                 }
             private:

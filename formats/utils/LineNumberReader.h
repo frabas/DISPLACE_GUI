@@ -5,9 +5,9 @@
 #ifndef DISPLACE_LINENUMBERREADER_H
 #define DISPLACE_LINENUMBERREADER_H
 
-#include <formats_globals.h>
+#include "formats_globals.h"
 
-#include <formatexception.h>
+#include "formatexception.h"
 
 #include <map>
 #include <string>
@@ -58,8 +58,9 @@ namespace displace {
                 T getAs(const std::string &key, T&& defvalue) const {
                     try {
                         auto v = get(key);
-                        if (v.empty())
+                        if (v.empty()) {
                             return std::forward<T>(defvalue);
+                        }
                         return boost::lexical_cast<T>(v);
                     } catch (boost::bad_lexical_cast &) {
                         return std::forward<T>(defvalue);
@@ -67,21 +68,22 @@ namespace displace {
                 }
 
 
-                unsigned long numValues() const {
+                auto numValues() const
+                {
                     return mConfig.size();
                 }
 
 #ifndef AVOID_MSVC_C1001_BUG
-                friend std::ostream &operator << (std::ostream &strm, const LineNumberReader &rdr) {
-                    return strm << rdr.mConfig;
-                }
+            friend std::ostream &operator << (std::ostream &strm, const LineNumberReader &rdr) {
+                return strm << rdr.mConfig;
+            }
 #endif
-            private:
-                bool set(const std::string &key, const std::string &value);
+        private:
+            bool set(const std::string &key, const std::string &value);
 
-                using Container = std::map<std::string,std::string>;
-                Container mConfig;
-            };
+            using Container = std::map<std::string, std::string>;
+            Container mConfig;
+        };
 
         }
     }

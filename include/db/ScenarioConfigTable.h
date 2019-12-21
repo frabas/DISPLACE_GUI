@@ -69,7 +69,7 @@ public:
     {
         try {
             return mParams.at(field);
-        } catch (std::out_of_range &x) {
+        } catch (std::out_of_range &) {
             return defaultValue;
         }
     }
@@ -79,9 +79,9 @@ public:
     {
         try {
             return boost::lexical_cast<T>(mParams.at(v));
-        } catch (std::out_of_range &x) {
+        } catch (std::out_of_range &) {
             return defaultValue;
-        } catch (boost::bad_lexical_cast &x) {
+        } catch (boost::bad_lexical_cast &) {
             std::cout << "WARNING: Bad Lexical Cast converting field: " << v << "\n";
             return defaultValue;
         }

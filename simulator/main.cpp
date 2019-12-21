@@ -1616,25 +1616,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     LoadedData loadedDataBenthos;
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
     Dataloaderbenthos bl;
-    l->loadFeatures(&bl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
-                    paramsForLoad,
-                    loadedDataBenthos);
-
+    bl.features(indb,
+                folder_name_parameterization,
+                inputfolder,
+                dyn_pop_sce,
+                dyn_alloc_sce,
+                biolsce,
+                fleetsce,
+                paramsForLoad,
+                loadedDataBenthos);
 
 
     sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());

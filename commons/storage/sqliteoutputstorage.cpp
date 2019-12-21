@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "sqliteoutputstorage.h"
 
 #include "msqlitecpp/v1/sqlitestorage.h"
@@ -27,7 +29,6 @@
 #include "Vessel.h"
 #include "Metier.h"
 #include "Population.h"
-
 
 
 const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 4;
@@ -193,7 +194,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
 
     log.revenuePerSweptArea = 0;
     if(log.sweptArea>10) // i.e. at least 10 sqr meters
-          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea/1e6); // euro per km^2
+        log.revenuePerSweptArea=log.revenueAV/(log.sweptArea/1e6); // euro per km^2
 
     log.GVA = v->get_GVA();
     log.GVAPerRevenue = v->get_GVAPerRevenue();
@@ -250,89 +251,89 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
 
     FieldDef<FieldType::Real> f("");
     switch (stattype) {
-    case NationsStat::Catches:
-        f = p->mVesselLoglikeCatchesTable->fldCatches;
-        break;
-    case NationsStat::Discards:
-        f = p->mVesselLoglikeCatchesTable->fldDiscards;
-        break;
-    case NationsStat::Earnings:
-        f = p->mVesselLoglikeTable->fldRevenueAV;
-        break;
-    case NationsStat::ExEarnings:
-        f = p->mVesselLoglikeTable->revenueExAV;
-        break;
-    case NationsStat::TimeAtSea:
-        f = p->mVesselLoglikeTable->timeAtSea;
-        break;
-    case NationsStat::Gav:
-        f = p->mVesselLoglikeTable->gav;
-        break;
-    case NationsStat::Vpuf:
-        f = p->mVesselLoglikeTable->vpuf;
-        break;
-    case NationsStat::SweptArea:
-        f = p->mVesselLoglikeTable->sweptArea;
-        break;
-    case NationsStat::RevenuePerSweptArea:
-        f = p->mVesselLoglikeTable->revenuePerSweptArea;
-        break;
-    case NationsStat::GVA:
-        f = p->mVesselLoglikeTable->GVA;
-        break;
-    case NationsStat::GVAPerRevenue:
-        f = p->mVesselLoglikeTable->GVAPerRevenue;
-        break;
-    case NationsStat::LabourSurplus:
-        f = p->mVesselLoglikeTable->LabourSurplus;
-        break;
-    case NationsStat::GrossProfit:
-        f = p->mVesselLoglikeTable->GrossProfit;
-        break;
-    case NationsStat::NetProfit:
-        f = p->mVesselLoglikeTable->NetProfit;
-        break;
-    case NationsStat::NetProfitMargin:
-        f = p->mVesselLoglikeTable->NetProfitMargin;
-        break;
-    case NationsStat::GVAPerFTE:
-        f = p->mVesselLoglikeTable->GVAPerFTE;
-        break;
-    case NationsStat::RoFTA:
-        f = p->mVesselLoglikeTable->RoFTA;
-        break;
-    case NationsStat::BER:
-        f = p->mVesselLoglikeTable->BER;
-        break;
-    case NationsStat::CRBER:
-        f = p->mVesselLoglikeTable->CRBER;
-        break;
-    case NationsStat::NetPresentValue:
-        f = p->mVesselLoglikeTable->NetPresentValue;
-        break;
-    case NationsStat::numTrips:
-        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
-        break;
-    default:
-        throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
+        case NationsStat::Catches:
+            f = p->mVesselLoglikeCatchesTable->fldCatches;
+            break;
+        case NationsStat::Discards:
+            f = p->mVesselLoglikeCatchesTable->fldDiscards;
+            break;
+        case NationsStat::Earnings:
+            f = p->mVesselLoglikeTable->fldRevenueAV;
+            break;
+        case NationsStat::ExEarnings:
+            f = p->mVesselLoglikeTable->revenueExAV;
+            break;
+        case NationsStat::TimeAtSea:
+            f = p->mVesselLoglikeTable->timeAtSea;
+            break;
+        case NationsStat::Gav:
+            f = p->mVesselLoglikeTable->gav;
+            break;
+        case NationsStat::Vpuf:
+            f = p->mVesselLoglikeTable->vpuf;
+            break;
+        case NationsStat::SweptArea:
+            f = p->mVesselLoglikeTable->sweptArea;
+            break;
+        case NationsStat::RevenuePerSweptArea:
+            f = p->mVesselLoglikeTable->revenuePerSweptArea;
+            break;
+        case NationsStat::GVA:
+            f = p->mVesselLoglikeTable->GVA;
+            break;
+        case NationsStat::GVAPerRevenue:
+            f = p->mVesselLoglikeTable->GVAPerRevenue;
+            break;
+        case NationsStat::LabourSurplus:
+            f = p->mVesselLoglikeTable->LabourSurplus;
+            break;
+        case NationsStat::GrossProfit:
+            f = p->mVesselLoglikeTable->GrossProfit;
+            break;
+        case NationsStat::NetProfit:
+            f = p->mVesselLoglikeTable->NetProfit;
+            break;
+        case NationsStat::NetProfitMargin:
+            f = p->mVesselLoglikeTable->NetProfitMargin;
+            break;
+        case NationsStat::GVAPerFTE:
+            f = p->mVesselLoglikeTable->GVAPerFTE;
+            break;
+        case NationsStat::RoFTA:
+            f = p->mVesselLoglikeTable->RoFTA;
+            break;
+        case NationsStat::BER:
+            f = p->mVesselLoglikeTable->BER;
+            break;
+        case NationsStat::CRBER:
+            f = p->mVesselLoglikeTable->CRBER;
+            break;
+        case NationsStat::NetPresentValue:
+            f = p->mVesselLoglikeTable->NetPresentValue;
+            break;
+        case NationsStat::numTrips:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        default:
+            throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
     }
 
     switch (op) {
-    case Operation::Sum:
-        f = sqlite::op::sum(f);
-        break;
-    case Operation::Average:
-        f = sqlite::op::avg(f);
-        break;
-    case Operation::Count:
-        f = sqlite::op::count(f);
-        break;
+        case Operation::Sum:
+            f = sqlite::op::sum(f);
+            break;
+        case Operation::Average:
+            f = sqlite::op::avg(f);
+            break;
+        case Operation::Count:
+            f = sqlite::op::count(f);
+            break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
-                                                    p->mVesselLoglikeTable->fldTStep,
-                                                    f
-                                                    );
+                                             p->mVesselLoglikeTable->fldTStep,
+                                             f
+    );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
     if (isAggregate)
@@ -367,89 +368,89 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat statt
 
     FieldDef<FieldType::Real> f("");
     switch (stattype) {
-    case VesselsStat::Catches:
-        f = p->mVesselLoglikeCatchesTable->fldCatches;
-        break;
-    case VesselsStat::Discards:
-        f = p->mVesselLoglikeCatchesTable->fldDiscards;
-        break;
-    case VesselsStat::Earnings:
-        f = p->mVesselLoglikeTable->fldRevenueAV;
-        break;
-    case VesselsStat::ExEarnings:
-        f = p->mVesselLoglikeTable->revenueExAV;
-        break;
-    case VesselsStat::TimeAtSea:
-        f = p->mVesselLoglikeTable->timeAtSea;
-        break;
-    case VesselsStat::Gav:
-        f = p->mVesselLoglikeTable->gav;
-        break;
-    case VesselsStat::Vpuf:
-        f = p->mVesselLoglikeTable->vpuf;
-        break;
-    case VesselsStat::SweptArea:
-        f = p->mVesselLoglikeTable->sweptArea;
-        break;
-    case VesselsStat::RevenuePerSweptArea:
-        f = p->mVesselLoglikeTable->revenuePerSweptArea;
-        break;
-    case VesselsStat::GVA:
-        f = p->mVesselLoglikeTable->GVA;
-        break;
-    case VesselsStat::GVAPerRevenue:
-        f = p->mVesselLoglikeTable->GVAPerRevenue;
-        break;
-    case VesselsStat::LabourSurplus:
-        f = p->mVesselLoglikeTable->LabourSurplus;
-        break;
-    case VesselsStat::GrossProfit:
-        f = p->mVesselLoglikeTable->GrossProfit;
-        break;
-    case VesselsStat::NetProfit:
-        f = p->mVesselLoglikeTable->NetProfit;
-        break;
-    case VesselsStat::NetProfitMargin:
-        f = p->mVesselLoglikeTable->NetProfitMargin;
-        break;
-    case VesselsStat::GVAPerFTE:
-        f = p->mVesselLoglikeTable->GVAPerFTE;
-        break;
-    case VesselsStat::RoFTA:
-        f = p->mVesselLoglikeTable->RoFTA;
-        break;
-    case VesselsStat::BER:
-        f = p->mVesselLoglikeTable->BER;
-        break;
-    case VesselsStat::CRBER:
-        f = p->mVesselLoglikeTable->CRBER;
-        break;
-    case VesselsStat::NetPresentValue:
-        f = p->mVesselLoglikeTable->NetPresentValue;
-        break;
-    case VesselsStat::numTrips:
-        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
-        break;
-    default:
-        throw std::runtime_error("getVesselLoglikeDataByVessel case not handled.");
+        case VesselsStat::Catches:
+            f = p->mVesselLoglikeCatchesTable->fldCatches;
+            break;
+        case VesselsStat::Discards:
+            f = p->mVesselLoglikeCatchesTable->fldDiscards;
+            break;
+        case VesselsStat::Earnings:
+            f = p->mVesselLoglikeTable->fldRevenueAV;
+            break;
+        case VesselsStat::ExEarnings:
+            f = p->mVesselLoglikeTable->revenueExAV;
+            break;
+        case VesselsStat::TimeAtSea:
+            f = p->mVesselLoglikeTable->timeAtSea;
+            break;
+        case VesselsStat::Gav:
+            f = p->mVesselLoglikeTable->gav;
+            break;
+        case VesselsStat::Vpuf:
+            f = p->mVesselLoglikeTable->vpuf;
+            break;
+        case VesselsStat::SweptArea:
+            f = p->mVesselLoglikeTable->sweptArea;
+            break;
+        case VesselsStat::RevenuePerSweptArea:
+            f = p->mVesselLoglikeTable->revenuePerSweptArea;
+            break;
+        case VesselsStat::GVA:
+            f = p->mVesselLoglikeTable->GVA;
+            break;
+        case VesselsStat::GVAPerRevenue:
+            f = p->mVesselLoglikeTable->GVAPerRevenue;
+            break;
+        case VesselsStat::LabourSurplus:
+            f = p->mVesselLoglikeTable->LabourSurplus;
+            break;
+        case VesselsStat::GrossProfit:
+            f = p->mVesselLoglikeTable->GrossProfit;
+            break;
+        case VesselsStat::NetProfit:
+            f = p->mVesselLoglikeTable->NetProfit;
+            break;
+        case VesselsStat::NetProfitMargin:
+            f = p->mVesselLoglikeTable->NetProfitMargin;
+            break;
+        case VesselsStat::GVAPerFTE:
+            f = p->mVesselLoglikeTable->GVAPerFTE;
+            break;
+        case VesselsStat::RoFTA:
+            f = p->mVesselLoglikeTable->RoFTA;
+            break;
+        case VesselsStat::BER:
+            f = p->mVesselLoglikeTable->BER;
+            break;
+        case VesselsStat::CRBER:
+            f = p->mVesselLoglikeTable->CRBER;
+            break;
+        case VesselsStat::NetPresentValue:
+            f = p->mVesselLoglikeTable->NetPresentValue;
+            break;
+        case VesselsStat::numTrips:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        default:
+            throw std::runtime_error("getVesselLoglikeDataByVessel case not handled.");
     }
 
     switch (op) {
-    case Operation::Sum:
-        f = sqlite::op::sum(f);
-        break;
-    case Operation::Average:
-        f = sqlite::op::avg(f);
-        break;
-    case Operation::Count:
-        f = sqlite::op::count(f);
-        break;
+        case Operation::Sum:
+            f = sqlite::op::sum(f);
+            break;
+        case Operation::Average:
+            f = sqlite::op::avg(f);
+            break;
+        case Operation::Count:
+            f = sqlite::op::count(f);
+            break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
-                                                    p->mVesselLoglikeTable->fldTStep,
-                                                    f
-                                                    );
+                                             p->mVesselLoglikeTable->fldTStep,
+                                             f
+    );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
     if (isAggregate)
@@ -485,83 +486,83 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
 
     FieldDef<FieldType::Real> f("");
     switch (stattype) {
-    case HarboursStat::H_Catches:
-        f = p->mVesselLoglikeCatchesTable->fldCatches;
-        break;
-    case HarboursStat::H_Discards:
-        f = p->mVesselLoglikeCatchesTable->fldDiscards;
-        break;
-    case HarboursStat::H_Earnings:
-        f = p->mVesselLoglikeTable->fldRevenueAV;
-        break;
-    case HarboursStat::H_Gav:
-        f = p->mVesselLoglikeTable->gav;
-        break;
-    case HarboursStat::H_Vpuf:
-        f = p->mVesselLoglikeTable->vpuf;
-        break;
-    case HarboursStat::H_SweptArea:
-        f = p->mVesselLoglikeTable->sweptArea;
-        break;
-    case HarboursStat::H_RevenuePerSweptArea:
-        f = p->mVesselLoglikeTable->revenuePerSweptArea;
-        break;
-    case HarboursStat::H_GVA:
-        f = p->mVesselLoglikeTable->GVA;
-        break;
-    case HarboursStat::H_GVAPerRevenue:
-        f = p->mVesselLoglikeTable->GVAPerRevenue;
-        break;
-    case HarboursStat::H_LabourSurplus:
-        f = p->mVesselLoglikeTable->LabourSurplus;
-        break;
-    case HarboursStat::H_GrossProfit:
-        f = p->mVesselLoglikeTable->GrossProfit;
-        break;
-    case HarboursStat::H_NetProfit:
-        f = p->mVesselLoglikeTable->NetProfit;
-        break;
-    case HarboursStat::H_NetProfitMargin:
-        f = p->mVesselLoglikeTable->NetProfitMargin;
-        break;
-    case HarboursStat::H_GVAPerFTE:
-        f = p->mVesselLoglikeTable->GVAPerFTE;
-        break;
-    case HarboursStat::H_RoFTA:
-        f = p->mVesselLoglikeTable->RoFTA;
-        break;
-    case HarboursStat::H_BER:
-        f = p->mVesselLoglikeTable->BER;
-        break;
-    case HarboursStat::H_CRBER:
-        f = p->mVesselLoglikeTable->CRBER;
-        break;
-    case HarboursStat::H_NetPresentValue:
-        f = p->mVesselLoglikeTable->NetPresentValue;
-        break;
-    case HarboursStat::H_numTrips:
-        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
-        break;
-    default:
-        throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
+        case HarboursStat::H_Catches:
+            f = p->mVesselLoglikeCatchesTable->fldCatches;
+            break;
+        case HarboursStat::H_Discards:
+            f = p->mVesselLoglikeCatchesTable->fldDiscards;
+            break;
+        case HarboursStat::H_Earnings:
+            f = p->mVesselLoglikeTable->fldRevenueAV;
+            break;
+        case HarboursStat::H_Gav:
+            f = p->mVesselLoglikeTable->gav;
+            break;
+        case HarboursStat::H_Vpuf:
+            f = p->mVesselLoglikeTable->vpuf;
+            break;
+        case HarboursStat::H_SweptArea:
+            f = p->mVesselLoglikeTable->sweptArea;
+            break;
+        case HarboursStat::H_RevenuePerSweptArea:
+            f = p->mVesselLoglikeTable->revenuePerSweptArea;
+            break;
+        case HarboursStat::H_GVA:
+            f = p->mVesselLoglikeTable->GVA;
+            break;
+        case HarboursStat::H_GVAPerRevenue:
+            f = p->mVesselLoglikeTable->GVAPerRevenue;
+            break;
+        case HarboursStat::H_LabourSurplus:
+            f = p->mVesselLoglikeTable->LabourSurplus;
+            break;
+        case HarboursStat::H_GrossProfit:
+            f = p->mVesselLoglikeTable->GrossProfit;
+            break;
+        case HarboursStat::H_NetProfit:
+            f = p->mVesselLoglikeTable->NetProfit;
+            break;
+        case HarboursStat::H_NetProfitMargin:
+            f = p->mVesselLoglikeTable->NetProfitMargin;
+            break;
+        case HarboursStat::H_GVAPerFTE:
+            f = p->mVesselLoglikeTable->GVAPerFTE;
+            break;
+        case HarboursStat::H_RoFTA:
+            f = p->mVesselLoglikeTable->RoFTA;
+            break;
+        case HarboursStat::H_BER:
+            f = p->mVesselLoglikeTable->BER;
+            break;
+        case HarboursStat::H_CRBER:
+            f = p->mVesselLoglikeTable->CRBER;
+            break;
+        case HarboursStat::H_NetPresentValue:
+            f = p->mVesselLoglikeTable->NetPresentValue;
+            break;
+        case HarboursStat::H_numTrips:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        default:
+            throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
     }
 
     switch (op) {
-    case Operation::Sum:
-        f = sqlite::op::sum(f);
-        break;
-    case Operation::Average:
-        f = sqlite::op::avg(f);
-        break;
-    case Operation::Count:
-        f = sqlite::op::count(f);
-        break;
+        case Operation::Sum:
+            f = sqlite::op::sum(f);
+            break;
+        case Operation::Average:
+            f = sqlite::op::avg(f);
+            break;
+        case Operation::Count:
+            f = sqlite::op::count(f);
+            break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
-                                                    p->mVesselLoglikeTable->fldTStep,
-                                                    f
-                                                    );
+                                             p->mVesselLoglikeTable->fldTStep,
+                                             f
+    );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
     if (isAggregate)
@@ -595,83 +596,83 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
 
     FieldDef<FieldType::Real> f("");
     switch (stattype) {
-    case MetiersStat::M_Catches:
-        f = p->mVesselLoglikeCatchesTable->fldCatches;
-        break;
-    case MetiersStat::M_Discards:
-        f = p->mVesselLoglikeCatchesTable->fldDiscards;
-        break;
-    case MetiersStat::M_Revenues:
-        f = p->mVesselLoglikeTable->fldRevenueAV;
-        break;
-    case MetiersStat::M_Gav:
-        f = p->mVesselLoglikeTable->gav;
-        break;
-    case MetiersStat::M_Vpuf:
-        f = p->mVesselLoglikeTable->vpuf;
-        break;
-    case MetiersStat::M_SweptArea:
-        f = p->mVesselLoglikeTable->sweptArea;
-        break;
-    case MetiersStat::M_RevenuesPerSweptArea:
-        f = p->mVesselLoglikeTable->revenuePerSweptArea;
-        break;
-    case MetiersStat::M_GVA:
-        f = p->mVesselLoglikeTable->GVA;
-        break;
-    case MetiersStat::M_GVAPerRevenue:
-        f = p->mVesselLoglikeTable->GVAPerRevenue;
-        break;
-    case MetiersStat::M_LabourSurplus:
-        f = p->mVesselLoglikeTable->LabourSurplus;
-        break;
-    case MetiersStat::M_GrossProfit:
-        f = p->mVesselLoglikeTable->GrossProfit;
-        break;
-    case MetiersStat::M_NetProfit:
-        f = p->mVesselLoglikeTable->NetProfit;
-        break;
-    case MetiersStat::M_NetProfitMargin:
-        f = p->mVesselLoglikeTable->NetProfitMargin;
-        break;
-    case MetiersStat::M_GVAPerFTE:
-        f = p->mVesselLoglikeTable->GVAPerFTE;
-        break;
-    case MetiersStat::M_RoFTA:
-        f = p->mVesselLoglikeTable->RoFTA;
-        break;
-    case MetiersStat::M_BER:
-        f = p->mVesselLoglikeTable->BER;
-        break;
-    case MetiersStat::M_CRBER:
-        f = p->mVesselLoglikeTable->CRBER;
-        break;
-    case MetiersStat::M_NetPresentValue:
-        f = p->mVesselLoglikeTable->NetPresentValue;
-        break;
-    case MetiersStat::M_numTrips:
-        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
-        break;
-    default:
-        throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
+        case MetiersStat::M_Catches:
+            f = p->mVesselLoglikeCatchesTable->fldCatches;
+            break;
+        case MetiersStat::M_Discards:
+            f = p->mVesselLoglikeCatchesTable->fldDiscards;
+            break;
+        case MetiersStat::M_Revenues:
+            f = p->mVesselLoglikeTable->fldRevenueAV;
+            break;
+        case MetiersStat::M_Gav:
+            f = p->mVesselLoglikeTable->gav;
+            break;
+        case MetiersStat::M_Vpuf:
+            f = p->mVesselLoglikeTable->vpuf;
+            break;
+        case MetiersStat::M_SweptArea:
+            f = p->mVesselLoglikeTable->sweptArea;
+            break;
+        case MetiersStat::M_RevenuesPerSweptArea:
+            f = p->mVesselLoglikeTable->revenuePerSweptArea;
+            break;
+        case MetiersStat::M_GVA:
+            f = p->mVesselLoglikeTable->GVA;
+            break;
+        case MetiersStat::M_GVAPerRevenue:
+            f = p->mVesselLoglikeTable->GVAPerRevenue;
+            break;
+        case MetiersStat::M_LabourSurplus:
+            f = p->mVesselLoglikeTable->LabourSurplus;
+            break;
+        case MetiersStat::M_GrossProfit:
+            f = p->mVesselLoglikeTable->GrossProfit;
+            break;
+        case MetiersStat::M_NetProfit:
+            f = p->mVesselLoglikeTable->NetProfit;
+            break;
+        case MetiersStat::M_NetProfitMargin:
+            f = p->mVesselLoglikeTable->NetProfitMargin;
+            break;
+        case MetiersStat::M_GVAPerFTE:
+            f = p->mVesselLoglikeTable->GVAPerFTE;
+            break;
+        case MetiersStat::M_RoFTA:
+            f = p->mVesselLoglikeTable->RoFTA;
+            break;
+        case MetiersStat::M_BER:
+            f = p->mVesselLoglikeTable->BER;
+            break;
+        case MetiersStat::M_CRBER:
+            f = p->mVesselLoglikeTable->CRBER;
+            break;
+        case MetiersStat::M_NetPresentValue:
+            f = p->mVesselLoglikeTable->NetPresentValue;
+            break;
+        case MetiersStat::M_numTrips:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        default:
+            throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
     }
 
     switch (op) {
-    case Operation::Sum:
-        f = sqlite::op::sum(f);
-        break;
-    case Operation::Average:
-        f = sqlite::op::avg(f);
-        break;
-    case Operation::Count:
-        f = sqlite::op::count(f);
-        break;
+        case Operation::Sum:
+            f = sqlite::op::sum(f);
+            break;
+        case Operation::Average:
+            f = sqlite::op::avg(f);
+            break;
+        case Operation::Count:
+            f = sqlite::op::count(f);
+            break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
-                                                    p->mVesselLoglikeTable->fldTStep,
-                                                    f
-                                                    );
+                                             p->mVesselLoglikeTable->fldTStep,
+                                             f
+    );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
     if (isAggregate)
@@ -697,8 +698,6 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
 }
 
 
-
-
 TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid,
                                                         vector<int> szid)
 {
@@ -712,133 +711,132 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     FieldDef<FieldType::Integer> fldGroup("");
 
 
-
     switch (stat) {
-    case displace::plot::PopulationStat::Aggregate:
-        fld = p->mPopDynTable->fldNz;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::Catches:
-        fld = p->mPopDynTable->fldC;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::Discards:
-        fld = p->mPopDynTable->fldD;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::Mortality:
-        fld = p->mPopDynTable->fldF;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::RavFMortality:
-        fld = p->mPopDynTable->fldravF;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::NatMortality:
-        fld = p->mPopDynTable->fldM;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::NumberAtAge:
-        fld = p->mPopDynTable->fldNa;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::WeightAtAge:
-        fld = p->mPopDynTable->fldW;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::MaturityAtAge:
-        fld = p->mPopDynTable->fldMat;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::SSB:
-        fld = p->mPopDynTable->fldSSB;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::QuotasUptake:
-        fld = p->mPopQuotasTable->fldQuotasUptake;
-        name= p->mPopQuotasTable->name();
-        fldTStep = p->mPopQuotasTable->fldTStep;
-        fldPopId = p->mPopQuotasTable->fldPopId;
-        fldGroup = p->mPopQuotasTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::Quotas:
-        fld = p->mPopQuotasTable->fldQuotas;
-        name= p->mPopQuotasTable->name();
-        fldTStep = p->mPopQuotasTable->fldTStep;
-        fldPopId = p->mPopQuotasTable->fldPopId;
-        fldGroup = p->mPopQuotasTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::Choking:
-        fld = p->mPopQuotasTable->fldChoking;
-        name= p->mPopQuotasTable->name();
-        fldTStep = p->mPopQuotasTable->fldTStep;
-        fldPopId = p->mPopQuotasTable->fldPopId;
-        fldGroup = p->mPopQuotasTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::FFmsy:
-        fld = p->mPopDynTable->fldFFmsy;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
-    case displace::plot::PopulationStat::PropMature:
-        fld = p->mPopDynTable->fldPropMature;
-        name= p->mPopDynTable->name();
-        fldTStep = p->mPopDynTable->fldTStep;
-        fldPopId = p->mPopDynTable->fldPopId;
-        fldGroup = p->mPopDynTable->fldGroup;
-        break;
+        case displace::plot::PopulationStat::Aggregate:
+            fld = p->mPopDynTable->fldNz;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::Catches:
+            fld = p->mPopDynTable->fldC;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::Discards:
+            fld = p->mPopDynTable->fldD;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::Mortality:
+            fld = p->mPopDynTable->fldF;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::RavFMortality:
+            fld = p->mPopDynTable->fldravF;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::NatMortality:
+            fld = p->mPopDynTable->fldM;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::NumberAtAge:
+            fld = p->mPopDynTable->fldNa;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::WeightAtAge:
+            fld = p->mPopDynTable->fldW;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::MaturityAtAge:
+            fld = p->mPopDynTable->fldMat;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::SSB:
+            fld = p->mPopDynTable->fldSSB;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::QuotasUptake:
+            fld = p->mPopQuotasTable->fldQuotasUptake;
+            name= p->mPopQuotasTable->name();
+            fldTStep = p->mPopQuotasTable->fldTStep;
+            fldPopId = p->mPopQuotasTable->fldPopId;
+            fldGroup = p->mPopQuotasTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::Quotas:
+            fld = p->mPopQuotasTable->fldQuotas;
+            name= p->mPopQuotasTable->name();
+            fldTStep = p->mPopQuotasTable->fldTStep;
+            fldPopId = p->mPopQuotasTable->fldPopId;
+            fldGroup = p->mPopQuotasTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::Choking:
+            fld = p->mPopQuotasTable->fldChoking;
+            name= p->mPopQuotasTable->name();
+            fldTStep = p->mPopQuotasTable->fldTStep;
+            fldPopId = p->mPopQuotasTable->fldPopId;
+            fldGroup = p->mPopQuotasTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::FFmsy:
+            fld = p->mPopDynTable->fldFFmsy;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
+        case displace::plot::PopulationStat::PropMature:
+            fld = p->mPopDynTable->fldPropMature;
+            name= p->mPopDynTable->name();
+            fldTStep = p->mPopDynTable->fldTStep;
+            fldPopId = p->mPopDynTable->fldPopId;
+            fldGroup = p->mPopDynTable->fldGroup;
+            break;
     }
 
     switch (aggtype) {
-    case displace::plot::AggregationType::Avg:
-        f = op::avg(fld); break;
-    case displace::plot::AggregationType::Min:
-        f = op::min(fld); break;
-    case displace::plot::AggregationType::Max:
-        f = op::max(fld); break;
-    case displace::plot::AggregationType::Sum:
-        f = op::sum(fld); break;
-    case displace::plot::AggregationType::None:
-        f = fld;
-        break;
+        case displace::plot::AggregationType::Avg:
+            f = op::avg(fld); break;
+        case displace::plot::AggregationType::Min:
+            f = op::min(fld); break;
+        case displace::plot::AggregationType::Max:
+            f = op::max(fld); break;
+        case displace::plot::AggregationType::Sum:
+            f = op::sum(fld); break;
+        case displace::plot::AggregationType::None:
+            f = fld;
+            break;
     }
 
     auto select = sqlite::statements::Select(name,
-                                                    fldTStep,
-                                                    f
-                                                    );
+                                             fldTStep,
+                                             f
+    );
 
     if (szid.size() > 0) {
         std::ostringstream ss;
@@ -891,41 +889,41 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
     FieldDef<FieldType::Real> f("");
     FieldDef<FieldType::Real> fld("");
     switch (stat) {
-    case displace::plot::BenthosStat::B_MeanWeight:
-        fld = p->mFuncGroupsTable->benthosMeanW;
-        break;
-    case displace::plot::BenthosStat::B_Number:
-        fld = p->mFuncGroupsTable->benthosNumTot;
-        break;
-    case displace::plot::BenthosStat::B_NumberOverK:
-        fld = p->mFuncGroupsTable->benthosNumK;
-        break;
-    case displace::plot::BenthosStat::B_TotBiomass:
-        fld = p->mFuncGroupsTable->benthosBio;
-        break;
-    case displace::plot::BenthosStat::B_TotBiomassOverK:
-        fld = p->mFuncGroupsTable->benthosBioK;
-        break;
+        case displace::plot::BenthosStat::B_MeanWeight:
+            fld = p->mFuncGroupsTable->benthosMeanW;
+            break;
+        case displace::plot::BenthosStat::B_Number:
+            fld = p->mFuncGroupsTable->benthosNumTot;
+            break;
+        case displace::plot::BenthosStat::B_NumberOverK:
+            fld = p->mFuncGroupsTable->benthosNumK;
+            break;
+        case displace::plot::BenthosStat::B_TotBiomass:
+            fld = p->mFuncGroupsTable->benthosBio;
+            break;
+        case displace::plot::BenthosStat::B_TotBiomassOverK:
+            fld = p->mFuncGroupsTable->benthosBioK;
+            break;
     }
 
     switch (aggtype) {
-    case displace::plot::AggregationType::Avg:
-        f = op::avg(fld); break;
-    case displace::plot::AggregationType::Min:
-        f = op::min(fld); break;
-    case displace::plot::AggregationType::Max:
-        f = op::max(fld); break;
-    case displace::plot::AggregationType::Sum:
-        f = op::sum(fld); break;
-    case displace::plot::AggregationType::None:
-        f = fld;
-        break;
+        case displace::plot::AggregationType::Avg:
+            f = op::avg(fld); break;
+        case displace::plot::AggregationType::Min:
+            f = op::min(fld); break;
+        case displace::plot::AggregationType::Max:
+            f = op::max(fld); break;
+        case displace::plot::AggregationType::Sum:
+            f = op::sum(fld); break;
+        case displace::plot::AggregationType::None:
+            f = fld;
+            break;
     }
 
     auto select = sqlite::statements::Select(p->mFuncGroupsTable->name(),
-                                                    p->mFuncGroupsTable->fldTStep,
-                                                    f
-                                                    );
+                                             p->mFuncGroupsTable->fldTStep,
+                                             f
+    );
 
     if (btype.size() > 0) {
         std::ostringstream ss;
@@ -983,30 +981,30 @@ TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsS
             fld = p->mFishfarmsTable->fldProfit;
             break;
         case displace::plot::FishfarmsStat::FF_FishMeanWeight:
-        fld = p->mFishfarmsTable->fldMeanW;
-        break;
+            fld = p->mFishfarmsTable->fldMeanW;
+            break;
         case displace::plot::FishfarmsStat::FF_NetDischargeN:
-        fld = p->mFishfarmsTable->fldNetDisNperH;
-        break;
+            fld = p->mFishfarmsTable->fldNetDisNperH;
+            break;
         case displace::plot::FishfarmsStat::FF_NetDischargeP:
-        fld = p->mFishfarmsTable->fldNetDisCperH;
-        break;
+            fld = p->mFishfarmsTable->fldNetDisCperH;
+            break;
         case displace::plot::FishfarmsStat::FF_NetDischargeC:
-        fld = p->mFishfarmsTable->fldNetDisCperH;
-        break;
+            fld = p->mFishfarmsTable->fldNetDisCperH;
+            break;
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeN:
-        fld = p->mFishfarmsTable->fldNetDisNcum;
-        break;
+            fld = p->mFishfarmsTable->fldNetDisNcum;
+            break;
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeP:
-        fld = p->mFishfarmsTable->fldNetDisPcum;
-        break;
+            fld = p->mFishfarmsTable->fldNetDisPcum;
+            break;
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeC:
-        fld = p->mFishfarmsTable->fldNetDisCcum;
-        break;
-       //     std::ostringstream ss;
-       //     ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
-       //     std::cerr << ss.str() << "\n";
-       //     throw std::logic_error(ss.str());
+            fld = p->mFishfarmsTable->fldNetDisCcum;
+            break;
+            //     std::ostringstream ss;
+            //     ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
+            //     std::cerr << ss.str() << "\n";
+            //     throw std::logic_error(ss.str());
     }
 
     switch (aggtype) {
@@ -1088,7 +1086,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
     p->mVesselVmslikeFPingsOnlyTable->dropAndCreate();
-    p->mNodesDefTable->dropAndCreate(); 
+    p->mNodesDefTable->dropAndCreate();
     p->mNodesEnvtTable->dropAndCreate();
     p->mNodesStatTable->dropAndCreate();
     p->mNodesTariffStatTable->dropAndCreate();

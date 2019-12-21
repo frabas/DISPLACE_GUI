@@ -12,7 +12,13 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 endif (CMAKE_BUILD_TYPE MATCHES Debug)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")     # Visual studio
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /permissive-")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+    message("Apply MSVC fixups")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /permissive-")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+
+    # Fix visual studio Bug with boo: error C2116: 'boost::interprocess::winapi::CreateDirectoryA'
+    add_definitions(-DBOOST_USE_WINDOWS_H -DNOMINMAX)
+
+    message("MSVC: ${CMAKE_CXX_FLAGS}")
 endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 

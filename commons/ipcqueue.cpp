@@ -18,12 +18,14 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+#define NOMINMAX
+
 #include "ipcqueue.h"
 #include <algorithm>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 
 const size_t IpcQueue::SharedMemorySize = sizeof(MessageManager);    /* shared memory size */
-const char* IpcQueue::SharedListName = "OutQueue";
+const char *IpcQueue::SharedListName = "OutQueue";
 
 using namespace boost::interprocess;
 

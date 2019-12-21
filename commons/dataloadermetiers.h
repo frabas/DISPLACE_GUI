@@ -27,17 +27,18 @@ using namespace std;
 
 class Node;
 
-class  Dataloadermetiers : public virtual Dataloader
-{
+class [[deprecated]] Dataloadermetiers : public virtual Dataloader {
 public:
     Dataloadermetiers();
-    int gettype (void);
+
+    int gettype(void);
+
     int features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
-                 const string& folder_name_parameterization,
-                  const string& inputfolder,
-                  PopSceOptions& dyn_pop_sce,
-                  DynAllocOptions& dyn_alloc_sce,
-                  string &biolsce,
+                 const string &folder_name_parameterization,
+                 const string &inputfolder,
+                 PopSceOptions &dyn_pop_sce,
+                 DynAllocOptions &dyn_alloc_sce,
+                 string &biolsce,
                   string &fleetsce,
                   ParamsForLoad &paramsForLoad,
                   LoadedData & loadedData);

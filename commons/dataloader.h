@@ -19,7 +19,7 @@ using namespace std;
 
 
 
-struct  LoadedData {
+struct [[deprecated]] LoadedData {
     std::vector<string> vectsparam1;
     std::vector<string> vectsparam2;
     std::vector<string> vectsparam3;
@@ -194,7 +194,7 @@ struct  LoadedData {
  };
 
 
-struct  ParamsForLoad {
+struct [[deprecated]] ParamsForLoad {
     string sparam1;
     string sparam2;
     string sparam3;
@@ -226,34 +226,33 @@ struct  ParamsForLoad {
 
 
 // abstract class
-class  Dataloader
-{
+class [[deprecated]] Dataloader {
 public:
-    Dataloader(){}
-    virtual int gettype(void)=0;
+    Dataloader()
+    {}
+
+    virtual int gettype(void) = 0;
+
     virtual int features(std::shared_ptr<sql::Storage> indb,
-                          const string& folder_name_parameterization,
-                          const string& inputfolder,
-                          PopSceOptions& dyn_pop_sce,
-                          DynAllocOptions& dyn_alloc_sce,
-                          string &biolsce,
+                         const string &folder_name_parameterization,
+                         const string &inputfolder,
+                         PopSceOptions &dyn_pop_sce,
+                         DynAllocOptions &dyn_alloc_sce,
+                         string &biolsce,
                           string &fleetsce,
                           ParamsForLoad &paramsForLoad,
                           LoadedData& loadedData){ cout << "Loading features" << endl; return(0);}
 };
 
 
-
-
-class Loader
-{
+class [[deprecated]] Loader {
 public:
     void loadFeatures(Dataloader *dl,
                       std::shared_ptr<sql::Storage> indb,
-                      const string& folder_name_parameterization,
-                      const string& inputfolder,
-                      PopSceOptions& dyn_pop_sce,
-                      DynAllocOptions& dyn_alloc_sce,
+                      const string &folder_name_parameterization,
+                      const string &inputfolder,
+                      PopSceOptions &dyn_pop_sce,
+                      DynAllocOptions &dyn_alloc_sce,
                       string &biolsce,
                       string &fleetsce,
                       ParamsForLoad &paramsForLoad,

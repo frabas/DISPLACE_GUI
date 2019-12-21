@@ -11,9 +11,6 @@ class Storage;
 }
 }
 
-struct ParamsForLoad;
-struct LoadedData;
-
 class PopSceOptions;
 
 class DynAllocOptions;
@@ -30,9 +27,26 @@ public:
                  PopSceOptions &dyn_pop_sce,
                  DynAllocOptions &dyn_alloc_sce,
                  std::string &biolsce,
-                 std::string &fleetsce,
-                 ParamsForLoad &paramsForLoad,
-                 LoadedData &loadedData);
+                 std::string &fleetsce);
+
+    struct Data {
+        int int1;
+        int int2;
+        std::multimap<int, double> mmapidparam1;
+        std::multimap<int, double> mmapidparam2;
+        std::multimap<int, double> mmapidparam3;
+        std::multimap<int, double> mmapidparam4;
+        std::multimap<int, double> mmapidparam5;
+        std::multimap<int, double> mmapidparam6;
+        std::multimap<int, double> mmapidparam7;
+        std::multimap<int, double> mmapidparam8;
+    };
+
+    Data const &loadedData() const
+    { return data; }
+
+private:
+    Data data;
 };
 
 

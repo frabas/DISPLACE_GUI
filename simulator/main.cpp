@@ -1614,7 +1614,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     Loader *l = new Loader;
 
-    LoadedData loadedDataBenthos;
+    //LoadedData loadedDataBenthos;
 
     paramsForLoad.sparam1 = a_month;
     paramsForLoad.sparam2 = a_quarter;
@@ -1630,10 +1630,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 dyn_pop_sce,
                 dyn_alloc_sce,
                 biolsce,
-                fleetsce,
-                paramsForLoad,
-                loadedDataBenthos);
+                fleetsce);
 
+    auto loadedDataBenthos = bl.loadedData();
 
     sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
     std::vector<int>::iterator it;

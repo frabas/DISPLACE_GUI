@@ -207,63 +207,59 @@ int Dataloaderbenthos::gettype()
 }
 
 int Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
-                                 const string &folder_name_parameterization,
-                                 const string &inputfolder,
-                                 PopSceOptions &dyn_pop_sce,
-                                 DynAllocOptions &dyn_alloc_sce,
-                                 string &biolsce,
-                                 string &fleetsce,
-                                 ParamsForLoad &paramsForLoad,
-                                 LoadedData& loadedData)
+                                const string &folder_name_parameterization,
+                                const string &inputfolder,
+                                PopSceOptions &dyn_pop_sce,
+                                DynAllocOptions &dyn_alloc_sce,
+                                string &biolsce,
+                                string &fleetsce)
 {
   cout << "Loading benthos features" << endl;
 
   if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-      loadedData.int1=1; // is_benthos_in_numbers
+      data.int1 = 1; // is_benthos_in_numbers
   } else {
-      loadedData.int1=0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
+      data.int1 = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
   }
 
-  if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-      loadedData.int2=1; //is_benthos_in_longevity_classes
-  } else {
-      loadedData.int2=0; // is_benthos_in_longevity_classes
-  }
+    if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        data.int2 = 1; //is_benthos_in_longevity_classes
+    } else {
+        data.int2 = 0; // is_benthos_in_longevity_classes
+    }
 
 
-  // read estimates
-  loadedData.mmapidparam1 = read_meanw_funcgr_per_landscape(folder_name_parameterization,
+    // read estimates
+    data.mmapidparam1 = read_meanw_funcgr_per_landscape(folder_name_parameterization,
+                                                        inputfolder);
+
+
+    if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        data.mmapidparam2 = read_longevity_classes_condition_per_node(folder_name_parameterization,
+                                                                      inputfolder);
+        data.mmapidparam3 = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+                folder_name_parameterization, inputfolder);
+    } else {
+        if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+            data.mmapidparam4 = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,
+                                                                               inputfolder);
+            data.mmapidparam5 = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(
+                    folder_name_parameterization, inputfolder);
+        } else {
+            data.mmapidparam6 = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,
                                                                                 inputfolder);
+            data.mmapidparam3 = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+                    folder_name_parameterization, inputfolder);
+        }
+    }
 
 
-  if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-      loadedData.mmapidparam2  = read_longevity_classes_condition_per_node(folder_name_parameterization,
-                                                                                       inputfolder);
-      loadedData.mmapidparam3  = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
-              folder_name_parameterization, inputfolder);
-  } else {
-      if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-          loadedData.mmapidparam4  = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,
-                                                                                       inputfolder);
-          loadedData.mmapidparam5  = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(
-                  folder_name_parameterization, inputfolder);
-      } else {
-          loadedData.mmapidparam6  = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,
-                                                                                         inputfolder);
-          loadedData.mmapidparam3  = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
-                  folder_name_parameterization, inputfolder);
-      }
-  }
+    data.mmapidparam7 = read_logistic_recovery_rates_per_month_per_funcgr(
+            folder_name_parameterization, inputfolder);
+
+    data.mmapidparam8 = read_habitat_deltas_per_pop(folder_name_parameterization,
+                                                    inputfolder);
 
 
-  loadedData.mmapidparam7 = read_logistic_recovery_rates_per_month_per_funcgr(
-          folder_name_parameterization, inputfolder);
-
-  loadedData.mmapidparam8 = read_habitat_deltas_per_pop(folder_name_parameterization,
-                                                                             inputfolder);
-
-
-
-
-  return 0;
+    return 0;
 }

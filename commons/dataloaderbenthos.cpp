@@ -206,21 +206,20 @@ int Dataloaderbenthos::gettype()
     return(2);
 }
 
-int Dataloaderbenthos::features(std::shared_ptr<sql::Storage> indb,
-                                const string &folder_name_parameterization,
+int Dataloaderbenthos::features(const string &folder_name_parameterization,
                                 const string &inputfolder,
-                                PopSceOptions &dyn_pop_sce,
-                                DynAllocOptions &dyn_alloc_sce,
-                                string &biolsce,
-                                string &fleetsce)
+                                PopSceOptions const &dyn_pop_sce,
+                                DynAllocOptions const &dyn_alloc_sce,
+                                string const &biolsce,
+                                string const &fleetsce)
 {
-  cout << "Loading benthos features" << endl;
+    cout << "Loading benthos features" << endl;
 
-  if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-      data.int1 = 1; // is_benthos_in_numbers
-  } else {
-      data.int1 = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
-  }
+    if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+        data.int1 = 1; // is_benthos_in_numbers
+    } else {
+        data.int1 = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
+    }
 
     if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
         data.int2 = 1; //is_benthos_in_longevity_classes

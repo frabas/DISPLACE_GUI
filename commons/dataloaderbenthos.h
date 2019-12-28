@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "ModelLoader.h"
+
 namespace msqlitecpp {
 namespace v2 {
 class Storage;
@@ -21,35 +23,21 @@ public:
 
     int gettype(void);
 
-    int features(std::shared_ptr<msqlitecpp::v2::Storage> indb,
-                 const std::string &folder_name_parameterization,
+    int features(const std::string &folder_name_parameterization,
                  const std::string &inputfolder,
-                 PopSceOptions &dyn_pop_sce,
-                 DynAllocOptions &dyn_alloc_sce,
-                 std::string &biolsce,
-                 std::string &fleetsce);
+                 PopSceOptions const &dyn_pop_sce,
+                 DynAllocOptions const &dyn_alloc_sce,
+                 std::string const &biolsce,
+                 std::string const &fleetsce);
 
-    struct Data {
-        int int1;
-        int int2;
-        std::multimap<int, double> mmapidparam1;
-        std::multimap<int, double> mmapidparam2;
-        std::multimap<int, double> mmapidparam3;
-        std::multimap<int, double> mmapidparam4;
-        std::multimap<int, double> mmapidparam5;
-        std::multimap<int, double> mmapidparam6;
-        std::multimap<int, double> mmapidparam7;
-        std::multimap<int, double> mmapidparam8;
-    };
-
-    Data const &loadedData() const
+    ModelLoader::BenthosData const &loadedData() const
     { return data; }
 
 private:
-    Data data;
+    ModelLoader::BenthosData data;
 };
 
-
+#if 0
 std::multimap<int, double>
 read_prop_funcgr_biomass_per_node_per_landscape(std::string folder_name_parameterization, std::string inputfolder);
 
@@ -75,6 +63,6 @@ read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(std::string fo
 std::multimap<int, double>
 read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(std::string folder_name_parameterization,
                                                                  std::string inputfolder);
-
+#endif
 
 #endif // DATALOADERBENTHOS_H

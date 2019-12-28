@@ -19,6 +19,13 @@ inline std::string safe_strerror(int errnumber)
 }
 
 #else
+inline std::string safe_strerror(int errnumber)
+{
+    constexpr size_t MaxBuffer = 128;
+    std::string theString(MaxBuffer, '\0');
+    strerror_r(errnumber, &theString[0], MaxBuffer);
+    return theString;
+}
 #endif
 
 #endif //DISPLACE_SAFE_STRERROR_H

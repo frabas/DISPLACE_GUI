@@ -630,6 +630,7 @@ int app_main(int argc, char const *argv[])
         indb->open();
 
         // TODO instantiate here the model loader
+        throw std::logic_error("Db Model Loader not implemented!");
     } else {
         modelLoader = std::make_unique<TextfileModelLoader>(folder_name_parameterization, inputfolder);
     }
@@ -705,23 +706,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // a mistake in these files are of great consequences.
     string a_graph_name = "a_graph";
 
-
-
-    // config at the simusspe level
-    if (!read_config_file(indb,
-            folder_name_parameterization,
-            inputfolder,
-            nbpops,
-            nbbenthospops,
-            implicit_pops,
-            implicit_pops_level2,
-            grouped_tacs,
-            nbcp_coupling_pops,
-            calib_oth_landings,
-            calib_weight_at_szgroup,
-            calib_cpue_multiplier,
-            int_harbours
-    )) {
+    if (!modelLoader->loadConfig(nbpops,
+                                 nbbenthospops,
+                                 implicit_pops,
+                                 implicit_pops_level2,
+                                 grouped_tacs,
+                                 nbcp_coupling_pops,
+                                 calib_oth_landings,
+                                 calib_weight_at_szgroup,
+                                 calib_cpue_multiplier,
+                                 int_harbours)) {
+        // config at the simusspe level
         cerr << "Cannot read Config File: Bad format\n";
         return 2;
     }

@@ -5,6 +5,8 @@
 #ifndef DISPLACE_MODELLOADER_H
 #define DISPLACE_MODELLOADER_H
 
+#include "modeltypes.h"
+
 #include <vector>
 #include <map>
 #include <msqlitecpp/utils/spimpl.h>
@@ -35,6 +37,17 @@ public:
             std::string const &biolsce,
             std::string const &fleetsce);
 
+    bool loadConfig(int &nbpops,
+                    int &nbbenthospops,
+                    std::vector<int> &implicit_pops,
+                    std::vector<int> &implicit_pops_level2,
+                    std::vector<int> &grouped_tacs,
+                    std::vector<int> &nbcp_coupling_pops,
+                    std::vector<double> &calib_oth_landings,
+                    std::vector<double> &calib_w,
+                    std::vector<double> &calib_cpue,
+                    std::vector<types::NodeId> &interesting_harbours);
+
     struct BenthosData {
         int int1;
         int int2;
@@ -49,6 +62,17 @@ public:
     };
 
 protected:
+    virtual bool loadConfigImpl(int &nbpops,
+                                int &nbbenthospops,
+                                std::vector<int> &implicit_pops,
+                                std::vector<int> &implicit_pops_level2,
+                                std::vector<int> &grouped_tacs,
+                                std::vector<int> &nbcp_coupling_pops,
+                                std::vector<double> &calib_oth_landings,
+                                std::vector<double> &calib_w,
+                                std::vector<double> &calib_cpue,
+                                std::vector<types::NodeId> &interesting_harbours) = 0;
+
     virtual BenthosData loadBenthosData(
             PopSceOptions const &dyn_pop_sce,
             DynAllocOptions const &dyn_alloc_sce,

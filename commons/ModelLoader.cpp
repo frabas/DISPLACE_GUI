@@ -247,3 +247,22 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
     //     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
 
 }
+
+bool ModelLoader::loadConfig(int &nbpops, int &nbbenthospops, std::vector<int> &implicit_pops,
+                             std::vector<int> &implicit_pops_level2, std::vector<int> &grouped_tacs,
+                             std::vector<int> &nbcp_coupling_pops, std::vector<double> &calib_oth_landings,
+                             std::vector<double> &calib_w, std::vector<double> &calib_cpue,
+                             std::vector<types::NodeId> &interesting_harbours)
+{
+    p->configLoaded = loadConfigImpl(nbpops,
+                                     nbbenthospops,
+                                     implicit_pops,
+                                     implicit_pops_level2,
+                                     grouped_tacs,
+                                     nbcp_coupling_pops,
+                                     calib_oth_landings,
+                                     calib_w,
+                                     calib_cpue,
+                                     interesting_harbours);
+    return p->configLoaded;
+}

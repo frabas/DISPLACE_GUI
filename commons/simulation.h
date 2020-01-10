@@ -18,8 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#ifndef SCENARIO_H
-#define SCENARIO_H
+#ifndef COMMONS_SCENARIO_H
+#define COMMONS_SCENARIO_H
 
 #include <tseries/timeseriesmanager.h>
 #include <string>
@@ -60,4 +60,4 @@ private:
 } } // ns displace::simulation
 
 
-#endif // SCENARIO_H
+#endif // COMMONS_SCENARIO_H

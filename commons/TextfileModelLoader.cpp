@@ -11,14 +11,17 @@
 struct TextfileModelLoader::Impl {
     std::string folder_name_parameterization;
     std::string inputfolder;
+    std::string scenarioname;
 };
 
 TextfileModelLoader::TextfileModelLoader(std::string folder_name_parameterization,
-                                         std::string inputfolder)
+                                         std::string inputfolder,
+                                         std::string scenarioname)
         : p(spimpl::make_unique_impl<Impl>())
 {
     p->folder_name_parameterization = folder_name_parameterization;
     p->inputfolder = inputfolder;
+    p->scenarioname = scenarioname;
 }
 
 ModelLoader::BenthosData TextfileModelLoader::loadBenthosData(
@@ -64,4 +67,13 @@ bool TextfileModelLoader::loadConfigImpl(int &nbpops,
                             calib_cpue,
                             interesting_harbours
     );
+}
+
+bool TextfileModelLoader::loadScenarioImpl(displace::commons::Scenario &scenario)
+{
+    return read_scenario_config_file(nullptr,
+                                     p->folder_name_parameterization,
+                                     p->inputfolder,
+                                     p->scenarioname,
+                                     scenario);
 }

@@ -266,3 +266,9 @@ bool ModelLoader::loadConfig(int &nbpops, int &nbbenthospops, std::vector<int> &
                                      interesting_harbours);
     return p->configLoaded;
 }
+
+bool ModelLoader::loadScenario(displace::commons::Scenario &scenario)
+{
+    p->scenarioLoaded = loadScenarioImpl(scenario);
+    return p->scenarioLoaded;
+}

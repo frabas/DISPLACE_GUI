@@ -6,6 +6,7 @@
 #define DISPLACE_MODELLOADER_H
 
 #include "modeltypes.h"
+#include "comstructs.h"
 
 #include <vector>
 #include <map>
@@ -48,6 +49,8 @@ public:
                     std::vector<double> &calib_cpue,
                     std::vector<types::NodeId> &interesting_harbours);
 
+    bool loadScenario(displace::commons::Scenario &scenario);
+
     struct BenthosData {
         int int1;
         int int2;
@@ -72,6 +75,8 @@ protected:
                                 std::vector<double> &calib_w,
                                 std::vector<double> &calib_cpue,
                                 std::vector<types::NodeId> &interesting_harbours) = 0;
+
+    virtual bool loadScenarioImpl(displace::commons::Scenario &scenario) = 0;
 
     virtual BenthosData loadBenthosData(
             PopSceOptions const &dyn_pop_sce,

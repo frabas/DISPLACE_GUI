@@ -15,7 +15,7 @@ class DynAllocOptions;
 class TextfileModelLoader : public ModelLoader {
 public:
     TextfileModelLoader(std::string folder_name_parameterization,
-                        std::string inputfolder);
+                        std::string inputfolder, std::string scenarioname);
 
 protected:
     bool loadConfigImpl(int &nbpops,
@@ -28,6 +28,8 @@ protected:
                         std::vector<double> &calib_w,
                         std::vector<double> &calib_cpue,
                         std::vector<types::NodeId> &interesting_harbours) override;
+
+    bool loadScenarioImpl(displace::commons::Scenario &scenario) override;
 
     BenthosData loadBenthosData(PopSceOptions const &dyn_pop_sce,
                                 DynAllocOptions const &dyn_alloc_sce,

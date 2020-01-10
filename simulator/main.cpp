@@ -632,7 +632,8 @@ int app_main(int argc, char const *argv[])
         // TODO instantiate here the model loader
         throw std::logic_error("Db Model Loader not implemented!");
     } else {
-        modelLoader = std::make_unique<TextfileModelLoader>(folder_name_parameterization, inputfolder);
+        modelLoader = std::make_unique<TextfileModelLoader>(folder_name_parameterization, inputfolder,
+                                                            namefolderoutput);
     }
 
     // scenarios for dynamic allocation of effort and biol sce
@@ -721,11 +722,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 2;
     }
 
-    if (!read_scenario_config_file(indb,
-                                   folder_name_parameterization,
-                                   inputfolder,
-                                   namefolderoutput,
-                                   scenario)) {
+    if (!modelLoader->loadScenario(scenario)) {
         cerr << "Cannot read scenario config file, Bad Format.\n";
         return 2;
     }

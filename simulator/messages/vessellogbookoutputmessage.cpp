@@ -10,7 +10,9 @@
 extern std::mutex glob_mutex;
 extern bool use_gui;
 
-VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations, vector<int> &implicit_pops)
+VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v,
+                                                       const std::vector<Population *> &populations,
+                                                       vector<int> const &implicit_pops)
 {
     // (caution: hardcoding to be removed)
     //vector <int> explicit_pops;

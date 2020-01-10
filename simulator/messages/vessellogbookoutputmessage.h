@@ -31,17 +31,20 @@
 class Vessel;
 class Population;
 
-class VesselLogbookOutputMessage : public OutputMessage
-{
+class VesselLogbookOutputMessage : public OutputMessage {
 public:
-    VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v, const std::vector<Population *> &populations, std::vector <int> &implicit_pops);
+    VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v,
+                               const std::vector<Population *> &populations, std::vector<int> const &implicit_pops);
 
-    virtual IpcMessageTypes getType() const {
+    virtual IpcMessageTypes getType() const
+    {
         return VesselLogbook;
     }
 
     bool process();
+
     bool send(std::ostream &);
+
     virtual size_t sendBinary(void *buffer, size_t maxlen);
 
 private:

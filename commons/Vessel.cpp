@@ -1870,11 +1870,12 @@ void Vessel::set_effort_multiplier(double val)
     effort_multiplier=val;
 }
 
-void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep,
+void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
+                                   vector<int> const &implicit_pops, int tstep,
                                    const DynAllocOptions &dyn_alloc_sce)
 {
 
-    outc(cout  << "...updateTripsStatistics()" << endl);
+    outc(cout << "...updateTripsStatistics()" << endl);
 
     double cumProfit = avgProfit * numTrips;
     double cumRevenues = avgRevenues * numTrips;
@@ -2420,14 +2421,18 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
-                      vector<int>& implicit_pops, vector<int>& grouped_tacs, int& tstep, vector<double>& graph_res, bool& is_tacs, bool& is_individual_vessel_quotas,
-                      bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_grouped_tacs, double& tech_creeping_multiplier,
-                      bool& is_fishing_credits,  bool& direct_killing_on_benthos, bool& resuspension_effect_on_benthos, bool& is_benthos_in_numbers)
+void Vessel::do_catch(ofstream &export_individual_tacs, vector<Population *> &populations, vector<Node *> &nodes,
+                      vector<Benthos *> &benthoshabs,
+                      vector<int> const &implicit_pops, vector<int> const &grouped_tacs, int &tstep,
+                      vector<double> const &graph_res, bool &is_tacs, bool &is_individual_vessel_quotas,
+                      bool &check_all_stocks_before_going_fishing, bool &is_discard_ban, bool &is_grouped_tacs,
+                      double &tech_creeping_multiplier,
+                      bool &is_fishing_credits, bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos,
+                      bool &is_benthos_in_numbers)
 {
     lock();
 
-    dout(cout  << "BEGIN do_catch()" << endl);
+    dout(cout << "BEGIN do_catch()" << endl);
 
     // check the matrix of catches
     //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << endl);
@@ -5496,8 +5501,9 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& populations,
-                                bool use_the_tree, const DynAllocOptions& dyn_alloc_sce, vector<int>& implicit_pops,
+int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &populations,
+                                bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
+                                vector<int> const &implicit_pops,
                                 int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing)
 {
 

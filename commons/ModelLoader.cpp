@@ -6,6 +6,8 @@
 #include "Benthos.h"
 #include "helpers.h"
 #include "options.h"
+#include "comstructs.h"
+#include "SimModel.h"
 
 #include <boost/optional.hpp>
 
@@ -254,22 +256,20 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
 
 }
 
-bool ModelLoader::loadConfig(int &nbpops, int &nbbenthospops, std::vector<int> &implicit_pops,
-                             std::vector<int> &implicit_pops_level2, std::vector<int> &grouped_tacs,
-                             std::vector<int> &nbcp_coupling_pops, std::vector<double> &calib_oth_landings,
-                             std::vector<double> &calib_w, std::vector<double> &calib_cpue,
-                             std::vector<types::NodeId> &interesting_harbours)
+bool ModelLoader::loadConfig()
 {
-    p->configLoaded = loadConfigImpl(nbpops,
-                                     nbbenthospops,
-                                     implicit_pops,
-                                     implicit_pops_level2,
-                                     grouped_tacs,
-                                     nbcp_coupling_pops,
-                                     calib_oth_landings,
-                                     calib_w,
-                                     calib_cpue,
-                                     interesting_harbours);
+    auto config = std::make_unique<displace::commons::Config>();
+    p->configLoaded = loadConfigImpl(config->nbpops,
+                                     config->nbbenthospops,
+                                     config->implicit_pops,
+                                     config->implicit_pops_level2,
+                                     config->grouped_tacs,
+                                     config->nbcp_coupling_pops,
+                                     config->calib_oth_landings,
+                                     config->calib_weight_at_szgroup,
+                                     config->calib_cpue_multiplier,
+                                     config->interesting_harbours);
+    p->model->setConfig(std::move(config));
     return p->configLoaded;
 }
 

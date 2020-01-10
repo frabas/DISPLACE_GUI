@@ -229,8 +229,6 @@ vector<Population *> populations;
 vector<Fishfarm *> fishfarms;
 vector<Windmill *> windmills;
 int tstep;
-int nbpops;
-int nbbenthospops;
 int a_graph;
 types::NodeId a_port;
 int nrow_coord;
@@ -262,16 +260,8 @@ std::string outSqlitePath;
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
 bool use_dtrees;
-vector<int> implicit_pops;
-vector<int> implicit_pops_level2;
-vector<int> grouped_tacs;
-vector<int> nbcp_coupling_pops;
 vector<double> global_quotas_uptake;
 vector<int> explicit_pops;
-vector<double> calib_oth_landings;
-vector<double> calib_weight_at_szgroup;
-vector<double> calib_cpue_multiplier;
-vector<types::NodeId> int_harbours;
 displace::commons::Scenario scenario;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
@@ -600,7 +590,7 @@ int app_main(int argc, char const *argv[])
     }
 
     initIpcQueue();
-    thread_vessel_init(num_threads);
+    thread_vessel_init(num_threads, simModel);
 
     cwd = std::string(getcwd(buf, MAXPATH));
 
@@ -707,20 +697,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // for the file name if stochastic variation on availability keys
     string str_rand_avai_file;
 
-    // nbpops, etc.: caution= config numbers here, read from config files.
+    // simModel->config().nbpops, etc.: caution= config numbers here, read from config files.
     // a mistake in these files are of great consequences.
     string a_graph_name = "a_graph";
 
-    if (!modelLoader->loadConfig(nbpops,
-                                 nbbenthospops,
-                                 implicit_pops,
-                                 implicit_pops_level2,
-                                 grouped_tacs,
-                                 nbcp_coupling_pops,
-                                 calib_oth_landings,
-                                 calib_weight_at_szgroup,
-                                 calib_cpue_multiplier,
-                                 int_harbours)) {
+    if (!modelLoader->loadConfig()) {
         // config at the simusspe level
         cerr << "Cannot read Config File: Bad format\n";
         return 2;
@@ -776,21 +757,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     // check if config reading OK
-    outc(cout << nbpops << endl);
-    for (unsigned int a_pop = 0; a_pop < implicit_pops.size(); a_pop++) {
-        outc(cout << " " << implicit_pops.at(a_pop));
+    outc(cout << simModel->config().nbpops << endl);
+    for (unsigned int a_pop = 0; a_pop < simModel->config().implicit_pops.size(); a_pop++) {
+        outc(cout << " " << simModel->config().implicit_pops.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
-        outc(cout << " " << calib_oth_landings.at(a_pop));
+    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
+        outc(cout << " " << simModel->config().calib_oth_landings.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
-        outc(cout << " " << calib_weight_at_szgroup.at(a_pop));
+    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
+        outc(cout << " " << simModel->config().calib_weight_at_szgroup.at(a_pop));
     }
     outc(cout << endl);
-    for (int a_pop = 0; a_pop < nbpops; a_pop++) {
-        outc(cout << " " << calib_cpue_multiplier.at(a_pop));
+    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
+        outc(cout << " " << simModel->config().calib_cpue_multiplier.at(a_pop));
     }
     outc(cout << endl);
 
@@ -928,8 +909,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     if (metadata) {
-        metadata->setNbPops(nbpops);
-        metadata->setNbBenthos(nbbenthospops);
+        metadata->setNbPops(simModel->config().nbpops);
+        metadata->setNbBenthos(simModel->config().nbbenthospops);
         metadata->setNbSizes(NBSZGROUP);
     }
 
@@ -1073,7 +1054,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // NOTE: do this test if the proper command line argument is passed...
     {
-        NodeTester nodeTester(nbpops, nbbenthospops);
+        NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbbenthospops);
         nodeTester.test();
     }
 
@@ -1532,8 +1513,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     0, // meanweight not set from a GIS layer....
                                     0, // biomass_K not set from a GIS layer....
                                     0, // number_K not set from a GIS layer....
-                                    nbpops,
-                                    nbbenthospops,
+                                    simModel->config().nbpops,
+                                    simModel->config().nbbenthospops,
                                     NBSZGROUP,
                                     a_name,
                                     fishprices_each_species_per_cat,
@@ -1583,8 +1564,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  0, // meanweight not set from a GIS layer....
                                  0, // biomass_K not set from a GIS layer....
                                  0, // number_K not set from a GIS layer....
-                                 nbpops,
-                                 nbbenthospops,
+                                 simModel->config().nbpops,
+                                 simModel->config().nbbenthospops,
                                  NBSZGROUP));
             dout (cout << nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
                        << " " << nodes[i]->get_code_area() << endl);
@@ -1624,7 +1605,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.sparam1 = a_month;
     paramsForLoad.sparam2 = a_quarter;
     paramsForLoad.sparam3 = a_semester;
-    paramsForLoad.iparam1 = nbpops;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
@@ -1641,12 +1622,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
     LoadedData loadedDataFishfarms;
 
@@ -1753,12 +1734,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
     LoadedData loadedDataWindmills;
 
@@ -1794,15 +1775,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
-    paramsForLoad.iparam4= SEL_NBSZGROUP;
-    paramsForLoad.vdparam1= calib_cpue_multiplier;
-    paramsForLoad.vdparam2= calib_weight_at_szgroup;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
+    paramsForLoad.iparam4 = SEL_NBSZGROUP;
+    paramsForLoad.vdparam1 = simModel->config().calib_cpue_multiplier;
+    paramsForLoad.vdparam2 = simModel->config().calib_weight_at_szgroup;
 
     LoadedData loadedDataPops;
 
@@ -1832,17 +1813,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // FOR-LOOP OVER POP
     // creation of a vector of populations
-    populations = vector<Population *>(nbpops);
+    populations = vector<Population *>(simModel->config().nbpops);
 
     for (unsigned int sp = 0; sp < populations.size(); sp++) {
         dout(cout << endl);
 
 
-
         cout << " create pop... " << endl;
         populations[sp] = new Population(sp,
                                          loadedDataPops.vectsparam1.at(sp),
-                                           loadedDataPops.vectdparam1.at(sp),
+                                         loadedDataPops.vectdparam1.at(sp),
                                            loadedDataPops.vectdparam2.at(sp),
                                            loadedDataPops.vectdparam3.at(sp),
                                            loadedDataPops.vectdparam4.at(sp),
@@ -1882,27 +1862,26 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         global_quotas_uptake.push_back(0.0);
 
 
-        if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
+        if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(), sp)) {
             outc(cout << "inform avai on nodes " << endl);
 
             outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
             // init avai on each node (we know the presence...) for this pop for selected szgroup
-            vector<types::NodeId> nodes_with_presence=loadedDataPops.vovn1.at(sp);
-            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedDataPops.vectmmapndparam1.at(sp);
+            vector <types::NodeId> nodes_with_presence = loadedDataPops.vovn1.at(sp);
+            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedDataPops.vectmmapndparam1.at(sp);
 
-            for (unsigned int n = 0; n < nodes_with_presence.size(); n++)
-            {
+            for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
                 dout(cout << ".");
                 auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
-                                                                   nodes_with_presence.at(n));
+                                                                 nodes_with_presence.at(n));
 
                 vector<double> spat_avai_per_selected_szgroup;
                 vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
-                for (int sz=0; sz<spat_avai_this_pop_this_node.size(); ++sz)
-                {
-                    it = find (selected_szgroups.begin(), selected_szgroups.end(), sz);
-                     if (it != selected_szgroups.end())
-                         spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
+                    it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
+                    if (it != selected_szgroups.end()) {
+                        spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                    }
                 }
                 if (!spat_avai_per_selected_szgroup.empty()) {
                     nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
@@ -2096,21 +2075,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
     cout << "initiate size-spectra-related objects..." << endl;
-    vector<vector<double> > Ws_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-    vector<vector<vector<vector<double> > > > predKernel(nbpops,
+    vector<vector<double> > Ws_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
+    vector<vector<vector<vector<double> > > > predKernel(simModel->config().nbpops,
                                                          vector<vector<vector<double>>>(NBSZGROUP,
                                                                                         vector<vector<double> >(
                                                                                                 NBSZGROUP,
-                                                                                                vector<double>(nbpops,
-                                                                                                               0.0)
+                                                                                                vector<double>(
+                                                                                                        simModel->config().nbpops,
+                                                                                                        0.0)
                                                                                         )
                                                          )
     );
-    vector<vector<double> > searchVolMat(nbpops, vector<double>(NBSZGROUP));
-    vector<vector<double> > juveniles_diet_preference(nbpops, vector<double>(nbpops));
-    vector<vector<double> > adults_diet_preference(nbpops, vector<double>(nbpops));
+    vector<vector<double> > searchVolMat(simModel->config().nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > juveniles_diet_preference(simModel->config().nbpops,
+                                                      vector<double>(simModel->config().nbpops));
+    vector<vector<double> > adults_diet_preference(simModel->config().nbpops,
+                                                   vector<double>(simModel->config().nbpops));
     int mat_cat = 0; //init - split juveniles vs. adult categories
-    vector<int> mat_cats(nbpops, 0);
+    vector<int> mat_cats(simModel->config().nbpops, 0);
 
     if (dyn_pop_sce.option(Options::sizeSpectra)) {
         cout << "sizeSpectra option is on..." << endl;
@@ -2126,7 +2108,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         cout << "compute Ws_at_szgroup..." << endl;
-        for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+        for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
             vector<double> W_this_pop = populations.at(j)->get_weight_at_szgroup();
             for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                 Ws_at_szgroup.at(j).at(k) = W_this_pop.at(k);
@@ -2135,8 +2117,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         cout << "initialize PredKernel..." << endl;
-        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
-            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+        for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
+            for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                     for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
                         predKernel.at(j).at(kprey).at(k).at(prey) = Ws_at_szgroup.at(j).at(k); // init
@@ -2163,16 +2145,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         cout << "compute PredKernel..." << endl;
-        vector<double> sigma(nbpops,
+        vector<double> sigma(simModel->config().nbpops,
                              1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-        //vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        //vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
         // replace with logistic per 14 weight class
         // beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
         vector<double> beta{100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150,
                             111.1882, 118.4140, 130.5108, 150.4701, 180.9963};
 
-        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
-            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+        for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
+            for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                     for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
                         if (Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey)) {
@@ -2245,7 +2227,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         cout << "compute the searchVolMat..." << endl;
-        for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
+        for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
 
 
             double eta_m = get<29>(biological_traits_params.at(prey));
@@ -2265,7 +2247,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cout << " reading lambda is " << lambda << endl;
 
 
-            for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+            for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {
                     double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta.at(k), (lambda - 2)) *
                                     exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
@@ -2300,7 +2282,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         cout << "Read in the diet preference..." << endl;
-        for (unsigned int j = 0; j < nbpops; ++j) {  // loop over predators
+        for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
             multimap<int, double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
             multimap<int, double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
             multimap<int, double>::iterator lower_ij = juveniles_diet_preference_per_stock_allstks.lower_bound(j);
@@ -2311,12 +2293,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vector<double> juv_diet_pref;
             for (multimap<int, double>::iterator pos = lower_ij; pos != upper_ij; pos++)
                 juv_diet_pref.push_back(pos->second);
-            if (ad_diet_pref.size() != nbpops) { cout << "error dim in input file for adults diet preference" << endl; }
-            if (juv_diet_pref.size() != nbpops) {
+            if (ad_diet_pref.size() != simModel->config().nbpops) {
+                cout << "error dim in input file for adults diet preference" << endl;
+            }
+            if (juv_diet_pref.size() != simModel->config().nbpops) {
                 cout << "error dim in input file for juveniles diet preference" << endl;
             }
 
-            for (unsigned int prey = 0; prey < nbpops; ++prey) {  // loop over prey
+            for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
                 // assign diet info to this stock
                 adults_diet_preference.at(j).at(prey) = ad_diet_pref.at(prey);
                 juveniles_diet_preference.at(j).at(prey) = juv_diet_pref.at(prey);
@@ -2339,12 +2323,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
     LoadedData loadedDataMetiers;
 
@@ -2429,12 +2413,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
-    paramsForLoad.sparam1= a_month;
-    paramsForLoad.sparam2= a_quarter;
-    paramsForLoad.sparam3= a_semester;
-    paramsForLoad.iparam1= nbpops;
-    paramsForLoad.iparam2= NBAGE;
-    paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
     LoadedData loadedDataShips;
 
@@ -2499,14 +2483,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
-   paramsForLoad.sparam1= a_month;
-   paramsForLoad.sparam2= a_quarter;
-   paramsForLoad.sparam3= a_semester;
-   paramsForLoad.iparam1= nbpops;
-   paramsForLoad.iparam2= NBAGE;
-   paramsForLoad.iparam3= NBSZGROUP;
+    paramsForLoad.sparam1 = a_month;
+    paramsForLoad.sparam2 = a_quarter;
+    paramsForLoad.sparam3 = a_semester;
+    paramsForLoad.iparam1 = simModel->config().nbpops;
+    paramsForLoad.iparam2 = NBAGE;
+    paramsForLoad.iparam3 = NBSZGROUP;
 
-   LoadedData loadedDataVessels;
+    LoadedData loadedDataVessels;
 
     Dataloadervessels vl;
     l->loadFeatures(&vl,
@@ -2547,15 +2531,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         spe_vessel_betas_per_pop     = find_entries_s_d(loadedDataVessels.mmapsdparam4, vname);
         spe_percent_tac_per_pop      = find_entries_s_d(loadedDataVessels.mmapsdparam5, vname);
 
-        if (spe_vessel_betas_per_pop.size() != nbpops) {
+        if (spe_vessel_betas_per_pop.size() != simModel->config().nbpops) {
             std::stringstream er;
-            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. nbpops is" <<
-               nbpops << " while spe_vessel_betas_per_pop.size() is " <<
+            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. simModel->config().nbpops is" <<
+               simModel->config().nbpops << " while spe_vessel_betas_per_pop.size() is " <<
                spe_vessel_betas_per_pop.size() << " for vessel " << vname;
             throw std::runtime_error(er.str());
 
             //possibly, fix dim in R for the oldest dataset:
-            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:nbpops,]))
+            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:simModel->config().nbpops,]))
 
         }
 
@@ -2626,7 +2610,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels[i] = new Vessel(nodes[start_harbour.toIndex()],
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
-                                nbpops,
+                                simModel->config().nbpops,
                                 NBSZGROUP,
                                 spe_harbours,
                                 spe_fgrounds,
@@ -2659,18 +2643,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                 loadedDataVessels.vectiparam3.at(i),
                                 loadedDataVessels.vectcalendar1.at(i),
                                 i < loadedDataVessels.vectdparam16.size() ? loadedDataVessels.vectdparam16.at(i) : 0,
-                i < loadedDataVessels.vectdparam17.size() ? loadedDataVessels.vectdparam17.at(i) : 0,
-                i < loadedDataVessels.vectdparam18.size() ? loadedDataVessels.vectdparam18.at(i) : 0,
-                i < loadedDataVessels.vectdparam19.size() ? loadedDataVessels.vectdparam19.at(i) : 0,
-                i < loadedDataVessels.vectdparam20.size() ? loadedDataVessels.vectdparam20.at(i) : 0,
-                i < loadedDataVessels.vectdparam21.size() ? loadedDataVessels.vectdparam21.at(i) : 0,
-                i < loadedDataVessels.vectdparam22.size() ? loadedDataVessels.vectdparam22.at(i) : 0,
-                i < loadedDataVessels.vectdparam23.size() ? loadedDataVessels.vectdparam23.at(i) : 0,
-                i < loadedDataVessels.vectdparam24.size() ? loadedDataVessels.vectdparam24.at(i) : 0,
-                i < loadedDataVessels.vectdparam25.size() ? loadedDataVessels.vectdparam25.at(i) : 0,
-                i < loadedDataVessels.vectdparam26.size() ? loadedDataVessels.vectdparam26.at(i) : 0,
-                i < loadedDataVessels.vectdparam27.size() ? loadedDataVessels.vectdparam27.at(i) : 0,
-                i < loadedDataVessels.vectdparam28.size() ? loadedDataVessels.vectdparam28.at(i) : 0
+                                i < loadedDataVessels.vectdparam17.size() ? loadedDataVessels.vectdparam17.at(i) : 0,
+                                i < loadedDataVessels.vectdparam18.size() ? loadedDataVessels.vectdparam18.at(i) : 0,
+                                i < loadedDataVessels.vectdparam19.size() ? loadedDataVessels.vectdparam19.at(i) : 0,
+                                i < loadedDataVessels.vectdparam20.size() ? loadedDataVessels.vectdparam20.at(i) : 0,
+                                i < loadedDataVessels.vectdparam21.size() ? loadedDataVessels.vectdparam21.at(i) : 0,
+                                i < loadedDataVessels.vectdparam22.size() ? loadedDataVessels.vectdparam22.at(i) : 0,
+                                i < loadedDataVessels.vectdparam23.size() ? loadedDataVessels.vectdparam23.at(i) : 0,
+                                i < loadedDataVessels.vectdparam24.size() ? loadedDataVessels.vectdparam24.at(i) : 0,
+                                i < loadedDataVessels.vectdparam25.size() ? loadedDataVessels.vectdparam25.at(i) : 0,
+                                i < loadedDataVessels.vectdparam26.size() ? loadedDataVessels.vectdparam26.at(i) : 0,
+                                i < loadedDataVessels.vectdparam27.size() ? loadedDataVessels.vectdparam27.at(i) : 0,
+                                i < loadedDataVessels.vectdparam28.size() ? loadedDataVessels.vectdparam28.at(i) : 0
         );
 
 
@@ -2702,11 +2686,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-        if (is_tacs)
-        {
-            for (unsigned int sp = 0; sp < populations.size(); sp++)
-            {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1,
+        if (is_tacs) {
+            for (unsigned int sp = 0; sp < populations.size(); sp++) {
+                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
+                                                           simModel->config().implicit_pops, sp, 1,
                                                            0.0);
             }
         }
@@ -2751,7 +2734,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       // (caution: take really care of this piece of code that is able to uncouple the vessel to the graph if altered,
       // i.e. the "go straight" symptom)
       int old_node = vessels[0]->get_loc()->get_idx_node();
-      Node* p_node = new Node(1588, graph_coord_x, graph_coord_y, graph_coord_harbour, nbpops, 5);
+      Node* p_node = new Node(1588, graph_coord_x, graph_coord_y, graph_coord_harbour, simModel->config().nbpops, 5);
       vessels[0]->move_to(p_node);
       dout << "move vessel "<< vessels[0]->get_idx() <<" on "
       << vessels[0]->get_loc()->get_x() << " " << vessels[0]->get_loc()->get_y() << endl;
@@ -3263,9 +3246,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     glob_mutex.unlock();
 
     // init
-    vector<vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-    vector<vector<double> > a_ping_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-    vector<vector<double> > a_discards_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_catch_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_ping_catch_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
+    vector<vector<double> > a_discards_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
 
     // write down initial pop number in popdyn
     for (unsigned int sp = 0; sp < populations.size(); sp++) {
@@ -3422,7 +3405,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     popnodes_end,
                                     benthosbiomassnodes,
                                     benthosnumbernodes,
-                                    nbbenthospops,
+                                    simModel->config().nbbenthospops,
                                     use_gui,
                                     popstats_filename,
                                     popdyn_N_filename,
@@ -3447,8 +3430,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     tsteps_semesters,
                                     tsteps_years,
                                     tsteps_months,
-                                    implicit_pops,
-                                    calib_oth_landings,
+                                    simModel->config().implicit_pops,
+                                    simModel->config().calib_oth_landings,
                                     selectivity_per_stock_ogives_for_oth_land,
                                     is_tacs,
                                     export_vmslike,
@@ -3481,7 +3464,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // converted in a point porportion field....
             for (unsigned int sp = 0; sp < populations.size(); sp++) {
                 outc(cout << "...pop " << sp << endl;)
-                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
+                if (!binary_search(simModel->config().implicit_pops.begin(),
+                                   simModel->config().implicit_pops.end(), sp)) {
                     outc(cout << "......pop " << sp << endl;)
                     populations.at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
                 }
@@ -3613,12 +3597,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-            paramsForLoad.sparam1= a_month;
-            paramsForLoad.sparam2= a_quarter;
-            paramsForLoad.sparam3= a_semester;
-            paramsForLoad.iparam1= nbpops;
-            paramsForLoad.iparam2= NBAGE;
-            paramsForLoad.iparam3= NBSZGROUP;
+            paramsForLoad.sparam1 = a_month;
+            paramsForLoad.sparam2 = a_quarter;
+            paramsForLoad.sparam3 = a_semester;
+            paramsForLoad.iparam1 = simModel->config().nbpops;
+            paramsForLoad.iparam2 = NBAGE;
+            paramsForLoad.iparam3 = NBSZGROUP;
 
             Dataloadervessels vrl;
             l->loadFeatures(&vrl,
@@ -3653,7 +3637,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             100;
                     vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
 
-                    for (unsigned int pop = 0; pop < nbpops; ++pop)
+                    for (unsigned int pop = 0; pop < simModel->config().nbpops; ++pop)
                         vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
 
@@ -3738,9 +3722,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // init cpue_nodes_species for this vessel
                 int nbnodes = gshape_name_nodes_with_cpue.size();
                 // init the vector of vector with Os
-                vessels.at(v)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
+                vessels.at(v)->init_gshape_cpue_nodes_species(nbnodes, simModel->config().nbpops);
                 // init the vector of vector with Os
-                vessels.at(v)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
+                vessels.at(v)->init_gscale_cpue_nodes_species(nbnodes, simModel->config().nbpops);
                 for (unsigned int n = 0; n < gshape_name_nodes_with_cpue.size(); n++) {
                     // look into the multimap...
                     auto gshape_cpue_species = find_entries(gshape_cpue_per_stk_on_nodes,
@@ -3763,8 +3747,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
                 vector<vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
                 const auto &fgrounds = vessels.at(v)->get_fgrounds();
-                vector<double> expected_cpue_this_pop(nbpops);
-                for (int pop = 0; pop < nbpops; pop++) {
+                vector<double> expected_cpue_this_pop(simModel->config().nbpops);
+                for (int pop = 0; pop < simModel->config().nbpops; pop++) {
                     vector<double> cpue_per_fground(fgrounds.size());
                     // init
                     expected_cpue_this_pop.at(pop) = 0;
@@ -3824,11 +3808,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
                 vector<double> a_experiencedcpue_fgrounds = a_init_for_fgrounds;
                 vector<double> a_freq_experiencedcpue_fgrounds = a_init_for_fgrounds;
-                vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-                vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-                vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
+                vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(),
+                                                                    vector<double>(simModel->config().nbpops));
+                vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(),
+                                                                      vector<double>(simModel->config().nbpops));
+                vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
+                                                                           vector<double>(simModel->config().nbpops));
                 vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
-                                                                                vector<double>(nbpops));
+                                                                                vector<double>(
+                                                                                        simModel->config().nbpops));
 
                 for (unsigned int g = 0; g < fgrounds.size(); g++) {
                     a_cumcatch_fgrounds[g] = 0;
@@ -3843,7 +3831,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
                     dout(cout << "a_experiencedcpue_fgrounds" << a_experiencedcpue_fgrounds[g] << endl);
                     // init the ones per pop
-                    for (int pop = 0; pop < nbpops; pop++) {
+                    for (int pop = 0; pop < simModel->config().nbpops; pop++) {
                         // init
                         a_cumcatch_fgrounds_per_pop[g][pop] = 0;
                         //a_cumdiscard_fgrounds_per_pop[g][pop] = 0;
@@ -3894,12 +3882,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // RE-read for metiers
             dout(cout << "re-read metiers..." << endl);
 
-            paramsForLoad.sparam1= a_month;
-            paramsForLoad.sparam2= a_quarter;
-            paramsForLoad.sparam3= a_semester;
-            paramsForLoad.iparam1= nbpops;
-            paramsForLoad.iparam2= NBAGE;
-            paramsForLoad.iparam3= NBSZGROUP;
+            paramsForLoad.sparam1 = a_month;
+            paramsForLoad.sparam2 = a_quarter;
+            paramsForLoad.sparam3 = a_semester;
+            paramsForLoad.iparam1 = simModel->config().nbpops;
+            paramsForLoad.iparam2 = NBAGE;
+            paramsForLoad.iparam3 = NBSZGROUP;
 
             Dataloadermetiers mrl;
             l->loadFeatures(&mrl,
@@ -3959,15 +3947,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (redispatch_the_pop)     // EVENT => re-read pop data
         {
 
-            paramsForLoad.sparam1= a_month;
-            paramsForLoad.sparam2= a_quarter;
-            paramsForLoad.sparam3= a_semester;
-            paramsForLoad.iparam1= nbpops;
-            paramsForLoad.iparam2= NBAGE;
-            paramsForLoad.iparam3= NBSZGROUP;
-            paramsForLoad.iparam4= SEL_NBSZGROUP;
-            paramsForLoad.vdparam1= calib_cpue_multiplier;
-            paramsForLoad.vdparam2= calib_weight_at_szgroup;
+            paramsForLoad.sparam1 = a_month;
+            paramsForLoad.sparam2 = a_quarter;
+            paramsForLoad.sparam3 = a_semester;
+            paramsForLoad.iparam1 = simModel->config().nbpops;
+            paramsForLoad.iparam2 = NBAGE;
+            paramsForLoad.iparam3 = NBSZGROUP;
+            paramsForLoad.iparam4 = SEL_NBSZGROUP;
+            paramsForLoad.vdparam1 = simModel->config().calib_cpue_multiplier;
+            paramsForLoad.vdparam2 = simModel->config().calib_weight_at_szgroup;
 
             LoadedData loadedDataPops;
 
@@ -3994,7 +3982,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // aggregate from nodes to set the tot_N_at_szgroup per pop
             for (unsigned int sp = 0; sp < populations.size(); sp++) {
                 // aggregate from nodes (caution: do it before changing of list_nodes)
-                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), sp)) {
+                if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
+                                   sp)) {
 
                     /*
                     if(sp==1){
@@ -4020,36 +4009,36 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-            if(dyn_pop_sce.option(Options::nbcpCoupling) )
-            {
-              string a_command_for_R;
+            if(dyn_pop_sce.option(Options::nbcpCoupling) ) {
+                string a_command_for_R;
 
-              for (unsigned int p=0; p<populations.size(); p++)
-              {
-                  if (binary_search (nbcp_coupling_pops.begin(), nbcp_coupling_pops.end(),  p  ) )
-                  {
-                     type_of_avai_field_to_read.at(p)="_updated";
+                for (unsigned int p = 0; p < populations.size(); p++) {
+                    if (binary_search(simModel->config().nbcp_coupling_pops.begin(),
+                                      simModel->config().nbcp_coupling_pops.end(), p)) {
+                        type_of_avai_field_to_read.at(p) = "_updated";
 
-                     stringstream out;
-                     out << p;
-                     string a_pop = out.str();
+                        stringstream out;
+                        out << p;
+                        string a_pop = out.str();
 
                         stringstream outtstep;
                         outtstep << tstep;
                         string atstep = outtstep.str();
 
-                     #if defined(_WIN32)
+#if defined(_WIN32)
                         cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
                         a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                         cout << "executing " << a_command_for_R << endl;
                         system(a_command_for_R.c_str());
-                    #else
-                       cout << "nbcp_coupling...done" << endl;
-                       // caution with HPC, annoying lower cases in file names and paths required!
-                       a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/nbcp_displace_coupling_part02.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
-                       system(a_command_for_R.c_str());
-                    #endif
-                  }  // end nbcp coupling pops
+#else
+                        cout << "nbcp_coupling...done" << endl;
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        a_command_for_R =
+                                "Rscript " + inputfolder + "/interactiverscripts/nbcp_displace_coupling_part02.r " +
+                                a_pop + " " + atstep + " " + namefolderoutput + " " + namesimu + " " + a_graph_s;
+                        system(a_command_for_R.c_str());
+#endif
+                    }  // end nbcp coupling pops
                 }  // end pop
             }
 
@@ -4059,7 +4048,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // alter the availability field, if required
                 for (unsigned int p = 0; p < populations.size(); p++) {
-                    if (!binary_search(implicit_pops.begin(), implicit_pops.end(), p)) {
+                    if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
+                                       p)) {
                         stringstream out;
                         out << p;
                         string a_pop = out.str();
@@ -4168,51 +4158,49 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     }
                     populations.at(i)->set_list_nodes(list_nodes);
 
-                    // add the current Ns to the vectors of vectors of the concerned nodes
-                    vector<double> tot_N_at_szgroup = populations.at(i)->get_tot_N_at_szgroup();
+                // add the current Ns to the vectors of vectors of the concerned nodes
+                vector<double> tot_N_at_szgroup = populations.at(i)->get_tot_N_at_szgroup();
 
-                    /*if( populations.at(i)->get_name()==1){
-                        vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
-                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                           cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                    */
+                /*if( populations.at(i)->get_name()==1){
+                    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                       cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                */
 
 
-                    for (unsigned int n = 0; n < list_nodes.size(); n++) {
-                        list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
-                        dout(cout << list_nodes[n]->get_idx_node().toIndex() << " ");
+                for (unsigned int n = 0; n < list_nodes.size(); n++) {
+                    list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
+                    dout(cout << list_nodes[n]->get_idx_node().toIndex() << " ");
+                }
+                dout(cout << endl);
+
+                // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
+                // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
+                // divide on nodes according to avai
+                if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
+                                   i)) {
+                    populations.at(i)->distribute_N();
+
+                    //if(populations.at(i)->get_name()==1){
+                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                    //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                    //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    //}
+
+                    //...and compute the Ns on nodes at the start of this month!
+                    for (unsigned int n = 0; n < nodes.size(); n++) {
+                        nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
                     }
-                    dout(cout << endl);
-
-                    // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
-                    // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
-                    // divide on nodes according to avai
-                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  i  ) )
-                    {
-                        populations.at(i)->distribute_N();
-
-                       //if(populations.at(i)->get_name()==1){
-                       //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
-                       //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                       //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                       //}
-
-                       //...and compute the Ns on nodes at the start of this month!
-                       for (unsigned int n=0; n<nodes.size(); n++)
-                       {
-                           nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
-                       }
-                    }
+                }
 
 
-                    vector<types::NodeId> nodes_with_presence=loadedDataPops.vovn1.at(i);
-                    multimap<types::NodeId, double> avai_szgroup_nodes_with_pop=loadedDataPops.vectmmapndparam1.at(i);
+                vector<types::NodeId> nodes_with_presence = loadedDataPops.vovn1.at(i);
+                multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedDataPops.vectmmapndparam1.at(i);
 
-                    for (unsigned int n = 0; n < nodes_with_presence.size(); n++)
-                    {
-                        dout(cout << ".");
-                        auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
-                                                                           nodes_with_presence.at(n));
+                for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                    dout(cout << ".");
+                    auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
+                                                                     nodes_with_presence.at(n));
 
                         vector<double> spat_avai_per_selected_szgroup;
                         vector<int> selected_szgroups = populations.at(i)->get_selected_szgroups();
@@ -4450,10 +4438,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             freq_grounds_from_harbours = vessels.at(v)->get_freq_fgrounds();
                         }
                         vector<vector<double> > experiencedcpue_fgrounds_per_pop(grounds_from_harbours.size(),
-                                                                                 vector<double>(nbpops));
+                                                                                 vector<double>(
+                                                                                         simModel->config().nbpops));
                         vector<double> experiencedcpue_fgrounds(grounds_from_harbours.size());
                         vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(grounds_from_harbours.size(),
-                                                                                      vector<double>(nbpops));
+                                                                                      vector<double>(
+                                                                                              simModel->config().nbpops));
                         vector<double> freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
                         multimap<types::NodeId, int> possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
                         multimap<types::NodeId, double> freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
@@ -4993,7 +4983,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int pop = 0; pop < populations.size(); pop++) {
 
                 outc(cout << "...pop " << pop << endl;)
-                if (!binary_search(implicit_pops.begin(), implicit_pops.end(), pop)) {
+                if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
+                                   pop)) {
 
                     double so_far = populations.at(pop)->get_landings_so_far();
                     global_quotas_uptake.at(pop) =
@@ -5203,7 +5194,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 OutputExporter::instance().exportVmsLikeFPingsOnly(tstep,
                                                                    vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(
-                                                                           idx)], populations, implicit_pops);
+                                                                           idx)], populations,
+                                                                   simModel->config().implicit_pops);
                 vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)]->clear_ping_catch_pop_at_szgroup();
             }
             listVesselIdForVmsLikeFPingsOnlyToExport.clear();
@@ -5212,7 +5204,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int idx = 0; idx < listVesselIdForLogLikeToExport.size(); idx++) {
                 //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                 OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)],
-                                                         populations, implicit_pops);
+                                                         populations, simModel->config().implicit_pops);
                 vessels[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();
@@ -5220,7 +5212,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
                 OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep,
                                                                         vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(
-                                                                                idx)], populations, implicit_pops);
+                                                                                idx)], populations,
+                                                                        simModel->config().implicit_pops);
             }
             listVesselIdForTripCatchPopPerSzgroupExport.clear();
 

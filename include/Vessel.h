@@ -433,28 +433,46 @@ public:
         void set_subsurfacesweptareathistrip(double _subsurfacesweptareathistrip);
         void set_cumcatches (double _cumcatches);
         void set_cumdiscards (double _cumdiscards);
-        void set_nbfpingspertrip (int _nbfpingspertrip);
-		void set_xy (double _x, double _y);
-		void set_next_xy (double nx, double ny);
-        void set_effort_multiplier(double multi);
-        void erode_roadmap ();
-		void move_to(double nx, double ny);
-		void move_to(Node* next_node);
-		void set_metier(Metier* new_metier);
-        void set_is_choked(int pop, int val);
-        void find_next_point_on_the_graph(std::vector<Node* >& nodes);
-        void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations,
-                      std::vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
-                      std::vector<int>& implicit_pops, vector<int>& grouped_tacs,
-                      int& tstep, vector<double> &graph_res,
-                      bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
-                      bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier, bool &is_fishing_credits,
-                      bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos, bool &is_benthos_in_numbers);
-		void clear_catch_pop_at_szgroup();
-        void clear_ping_catch_pop_at_szgroup();
-        void clear_discards_pop_at_szgroup();
-        void compute_experiencedcpue_fgrounds();
-		void compute_experiencedcpue_fgrounds_per_pop();
+
+    void set_nbfpingspertrip(int _nbfpingspertrip);
+
+    void set_xy(double _x, double _y);
+
+    void set_next_xy(double nx, double ny);
+
+    void set_effort_multiplier(double multi);
+
+    void erode_roadmap();
+
+    void move_to(double nx, double ny);
+
+    void move_to(Node *next_node);
+
+    void set_metier(Metier *new_metier);
+
+    void set_is_choked(int pop, int val);
+
+    void find_next_point_on_the_graph(std::vector<Node *> &nodes);
+
+    void do_catch(std::ofstream &export_individual_tacs, std::vector<Population *> &populations,
+                  std::vector<Node *> &nodes, vector<Benthos *> &benthoshabs,
+                  std::vector<int> const &implicit_pops, vector<int> const &grouped_tacs,
+                  int &tstep, vector<double> const &graph_res,
+                  bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
+                  bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier,
+                  bool &is_fishing_credits,
+                  bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos,
+                  bool &is_benthos_in_numbers);
+
+    void clear_catch_pop_at_szgroup();
+
+    void clear_ping_catch_pop_at_szgroup();
+
+    void clear_discards_pop_at_szgroup();
+
+    void compute_experiencedcpue_fgrounds();
+
+    void compute_experiencedcpue_fgrounds_per_pop();
 		void clear_cumcatch_and_cumeffort();
 		void receive_message(int message);
 		void reset_message();
@@ -499,95 +517,128 @@ public:
 
 
         int choose_another_ground_and_go_fishing(int tstep,
-            const DynAllocOptions &dyn_alloc_sce,
-            int use_static_paths,
-            const std::vector<PathShop> &pathshops,
-            adjacency_map_t& adjacency_map,
-            vector<types::NodeId> &relevant_nodes,
-            const std::multimap<int, int> &nodes_in_polygons,
-            std::vector<Node* >& nodes,
-            std::vector <Metier*>& metiers,
-            std::ofstream& freq_cpue,
-            std::ofstream& freq_distance);
-        void choose_a_port_and_then_return(int tstep,
-            const DynAllocOptions &dyn_alloc_sce,
-            int use_static_paths,
-            const std::vector<PathShop> &pathshops,
-            adjacency_map_t& adjacency_map,
-            vector<types::NodeId> &relevant_nodes,
-            std::vector<Node* >& nodes,
-            std::vector <Metier*>& metiers,
-            std::ofstream& freq_cpue,
-            std::ofstream& freq_distance,
-            std::vector <double>& dist_to_ports
-            );
-        void which_metier_should_i_go_for(std::vector <Metier*>& metiers);
-                                 //yes:1; no=0
-        int should_i_go_fishing(int tstep, std::vector<Population* >& populations, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
-                                std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
-        types::NodeId should_i_choose_this_ground(int tstep, int use_static_paths,
-                                        std::vector<Node*>& nodes,
-                                        const std::vector <types::NodeId>& relevant_nodes,
-                                        const std::vector<PathShop> &pathshops,
-                                        const DynAllocOptions &dyn_alloc_sce);
-        int should_i_change_ground(std::map<std::string, int>& external_states, bool use_the_tree);
-								 //yes:1; no=0
-        int should_i_stop_fishing(const std::map<std::string, int> &external_states, bool use_the_tree,
-            int tstep,
-            const DynAllocOptions& dyn_alloc_sce,
-            int use_static_paths,
-            const std::vector<PathShop> &pathshops,
-            adjacency_map_t& adjacency_map,
-            const vector<types::NodeId> &relevant_nodes,
-            std::vector<Node* >& nodes,
-            std::vector <Metier*>& metiers,
-            std::ofstream& freq_cpue,
-            std::ofstream& freq_distance,
-            std::vector <double>& dist_to_ports);
-        int should_i_choose_this_port(std::map<std::string,int>& external_states, bool use_the_tree);
+                                                 const DynAllocOptions &dyn_alloc_sce,
+                                                 int use_static_paths,
+                                                 const std::vector<PathShop> &pathshops,
+                                                 adjacency_map_t &adjacency_map,
+                                                 vector<types::NodeId> &relevant_nodes,
+                                                 const std::multimap<int, int> &nodes_in_polygons,
+                                                 std::vector<Node *> &nodes,
+                                                 std::vector<Metier *> &metiers,
+                                                 std::ofstream &freq_cpue,
+                                                 std::ofstream &freq_distance);
 
-        void set_individual_tac_this_pop(std::ofstream& export_individual_tacs, int tstep, std::vector<Population* >& populations, std::vector<int> implicit_pops, int pop, int init, double a_tac);
-		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
+    void choose_a_port_and_then_return(int tstep,
+                                       const DynAllocOptions &dyn_alloc_sce,
+                                       int use_static_paths,
+                                       const std::vector<PathShop> &pathshops,
+                                       adjacency_map_t &adjacency_map,
+                                       vector<types::NodeId> &relevant_nodes,
+                                       std::vector<Node *> &nodes,
+                                       std::vector<Metier *> &metiers,
+                                       std::ofstream &freq_cpue,
+                                       std::ofstream &freq_distance,
+                                       std::vector<double> &dist_to_ports
+    );
 
-        double getLastTripRevenues() const {
-            return lastTrip_revenues;
-        }
-        double getLastTripExplicitRevenues() const {
-            return lastTrip_explicit_revenues;
-        }
-        double getAvgTripRevenues() const {
-            return avgRevenues;
-        }
-        double getLastTripProfit() const {
-            return lastTrip_profit;
-        }
-        double getAvgTripProfit() const {
-            return avgProfit;
-        }
-        int getNumTrips() const {
-            return numTrips;
-        }
+    void which_metier_should_i_go_for(std::vector<Metier *> &metiers);
 
-        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops, int tstep,
-                                   const DynAllocOptions &dyn_alloc_sce);
+    //yes:1; no=0
+    int should_i_go_fishing(int tstep, std::vector<Population *> &populations, bool use_the_tree,
+                            const DynAllocOptions &dyn_alloc_sce,
+                            std::vector<int> const &implicit_pops, int is_individual_vessel_quotas,
+                            int check_all_stocks_before_going_fishing);
 
-        double traverseDtree (int tstep, dtree::DecisionTree *tree);
+    types::NodeId should_i_choose_this_ground(int tstep, int use_static_paths,
+                                              std::vector<Node *> &nodes,
+                                              const std::vector<types::NodeId> &relevant_nodes,
+                                              const std::vector<PathShop> &pathshops,
+                                              const DynAllocOptions &dyn_alloc_sce);
 
-        // Calendar values access functions
-        void updateCalendar(const VesselCalendar &c) {
-            calendar = c;
-        }
+    int should_i_change_ground(std::map<std::string, int> &external_states, bool use_the_tree);
 
-        int getWeekEndStartDay() const { return calendar.weekEndStartDay; }
-        int getWeekEndEndDay() const { return calendar.weekEndEndDay; }
-        int getWorkDayStartHour() const { return calendar.workStartHour; }
-        int getWorkDayEndHour() const { return calendar.workEndHour; }
+    //yes:1; no=0
+    int should_i_stop_fishing(const std::map<std::string, int> &external_states, bool use_the_tree,
+                              int tstep,
+                              const DynAllocOptions &dyn_alloc_sce,
+                              int use_static_paths,
+                              const std::vector<PathShop> &pathshops,
+                              adjacency_map_t &adjacency_map,
+                              const vector<types::NodeId> &relevant_nodes,
+                              std::vector<Node *> &nodes,
+                              std::vector<Metier *> &metiers,
+                              std::ofstream &freq_cpue,
+                              std::ofstream &freq_distance,
+                              std::vector<double> &dist_to_ports);
 
-        /** \brief the State evaluators. Since the current vessel is passed as variable to evaluate()
-         * we can put a static instance and avoid wasting a lot of memory.
-         * The table is initialized once in init() (lazy initialization)
-         */
-        static std::vector<std::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
-        static std::string nationalityFromName (const std::string &name);
+    int should_i_choose_this_port(std::map<std::string, int> &external_states, bool use_the_tree);
+
+    void set_individual_tac_this_pop(std::ofstream &export_individual_tacs, int tstep,
+                                     std::vector<Population *> &populations, std::vector<int> implicit_pops, int pop,
+                                     int init, double a_tac);
+
+    void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
+
+    double getLastTripRevenues() const
+    {
+        return lastTrip_revenues;
+    }
+
+    double getLastTripExplicitRevenues() const
+    {
+        return lastTrip_explicit_revenues;
+    }
+
+    double getAvgTripRevenues() const
+    {
+        return avgRevenues;
+    }
+
+    double getLastTripProfit() const
+    {
+        return lastTrip_profit;
+    }
+
+    double getAvgTripProfit() const
+    {
+        return avgProfit;
+    }
+
+    int getNumTrips() const
+    {
+        return numTrips;
+    }
+
+    void updateTripsStatistics(const std::vector<Population *> &populations,
+                               std::vector<int> const &implicit_pops, int tstep,
+                               const DynAllocOptions &dyn_alloc_sce);
+
+    double traverseDtree(int tstep, dtree::DecisionTree *tree);
+
+    // Calendar values access functions
+    void updateCalendar(const VesselCalendar &c)
+    {
+        calendar = c;
+    }
+
+    int getWeekEndStartDay() const
+    { return calendar.weekEndStartDay; }
+
+    int getWeekEndEndDay() const
+    { return calendar.weekEndEndDay; }
+
+    int getWorkDayStartHour() const
+    { return calendar.workStartHour; }
+
+    int getWorkDayEndHour() const
+    { return calendar.workEndHour; }
+
+    /** \brief the State evaluators. Since the current vessel is passed as variable to evaluate()
+     * we can put a static instance and avoid wasting a lot of memory.
+     * The table is initialized once in init() (lazy initialization)
+     */
+    static std::vector<std::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
+
+    static std::string nationalityFromName(const std::string &name);
 };
 #endif							 // VESSEL_H

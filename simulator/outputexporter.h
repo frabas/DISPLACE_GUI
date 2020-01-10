@@ -26,29 +26,50 @@ public:
     OutputExporter(const std::string &basepath, const std::string &namesimu);
 
     void exportVmsLike(unsigned int tstep, Vessel *vessel);
-    void exportVmsLikeFPingsOnly (unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
-    void exportLogLike(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
-    void exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
+
+    void exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
+                                 std::vector<int> const &implicit_pops);
+
+    void exportLogLike(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
+                       std::vector<int> const &implicit_pops);
+
+    void exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
+                                      std::vector<int> const &implicit_pops);
 
     void close();
 
-    void setUseSqlite(bool sql) { useSql = sql; }
-    void setUsePlainText(bool pt) { usePlainText = pt; }
-    void setSQLiteDb(std::shared_ptr<SQLiteOutputStorage> db) { mSqlDb = db; }
+    void setUseSqlite(bool sql)
+    { useSql = sql; }
+
+    void setUsePlainText(bool pt)
+    { usePlainText = pt; }
+
+    void setSQLiteDb(std::shared_ptr<SQLiteOutputStorage> db)
+    { mSqlDb = db; }
 
     /* --- Statics --- */
     static bool instantiate(const std::string &basepath, const std::string &namesimu);
-    static OutputExporter &instance() { return *mInstance; }
+
+    static OutputExporter &instance()
+    { return *mInstance; }
 
 private:
-    void exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
-    void exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+    void exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
+                                std::vector<int> const &implicit_pops);
+
+    void exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
+                             std::vector<int> const &implicit_pops);
 
     void exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel);
+
     void exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel);
 
-    void exportVmsLikeFPingsOnlyPlaintext(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
-    void exportVmsLikeFPingsOnlySQLite(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+    void
+    exportVmsLikeFPingsOnlyPlaintext(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
+                                     std::vector<int> const &implicit_pops);
+
+    void exportVmsLikeFPingsOnlySQLite(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
+                                       std::vector<int> const &implicit_pops);
 
 };
 

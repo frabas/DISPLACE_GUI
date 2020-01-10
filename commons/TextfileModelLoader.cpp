@@ -14,10 +14,12 @@ struct TextfileModelLoader::Impl {
     std::string scenarioname;
 };
 
-TextfileModelLoader::TextfileModelLoader(std::string folder_name_parameterization,
+TextfileModelLoader::TextfileModelLoader(std::shared_ptr<SimModel> model,
+                                         std::string folder_name_parameterization,
                                          std::string inputfolder,
                                          std::string scenarioname)
-        : p(spimpl::make_unique_impl<Impl>())
+        : ModelLoader(model),
+          p(spimpl::make_unique_impl<Impl>())
 {
     p->folder_name_parameterization = folder_name_parameterization;
     p->inputfolder = inputfolder;

@@ -14,7 +14,8 @@ class DynAllocOptions;
 
 class TextfileModelLoader : public ModelLoader {
 public:
-    TextfileModelLoader(std::string folder_name_parameterization,
+    TextfileModelLoader(std::shared_ptr<SimModel> model,
+                        std::string folder_name_parameterization,
                         std::string inputfolder, std::string scenarioname);
 
 protected:

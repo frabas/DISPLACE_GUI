@@ -40,17 +40,18 @@
  */
 
 
-#include <idtypes.h>
+#include "idtypes.h"
 
-#include "msqlitecpp/v1/sqlitestorage.h"
+#include "SimModel.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
 #include "storage/tables/vesselvmslikefpingsonlytable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
-
 #include "utils/safe_strerror.h"
+
+#include <msqlitecpp/v1/sqlitestorage.h>
 
 #include <boost/filesystem.hpp>
 
@@ -586,6 +587,8 @@ int app_main(int argc, char const *argv[])
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
 
+    auto simModel = std::make_shared<SimModel>();
+
     memInfo.update();
     guiSendMemoryInfo(memInfo);
 
@@ -632,7 +635,8 @@ int app_main(int argc, char const *argv[])
         // TODO instantiate here the model loader
         throw std::logic_error("Db Model Loader not implemented!");
     } else {
-        modelLoader = std::make_unique<TextfileModelLoader>(folder_name_parameterization, inputfolder,
+        modelLoader = std::make_unique<TextfileModelLoader>(simModel,
+                                                            folder_name_parameterization, inputfolder,
                                                             namefolderoutput);
     }
 

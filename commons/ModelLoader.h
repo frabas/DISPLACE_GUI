@@ -22,12 +22,14 @@ class ConsistencyTestFailed : public std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 
+class SimModel;
+
 /**
  * @brief Implements an abstract interface to a loader for the whole model
  */
 class ModelLoader {
 public:
-    ModelLoader();
+    explicit ModelLoader(std::shared_ptr<SimModel> model);
 
     virtual ~ModelLoader() = default;
 

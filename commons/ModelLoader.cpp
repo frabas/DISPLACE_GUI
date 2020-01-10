@@ -10,6 +10,8 @@
 #include <boost/optional.hpp>
 
 struct ModelLoader::Impl {
+    std::shared_ptr<SimModel> model;
+
     bool scenarioLoaded = false;
     bool configLoaded = false;
     bool nodesLoaded = false;
@@ -21,10 +23,14 @@ struct ModelLoader::Impl {
     bool is_benthos_in_longevity_classes = false;
 
     vector<Node *> nodes;
+
+    Impl(std::shared_ptr<SimModel> theModel)
+            : model(theModel)
+    {}
 };
 
-ModelLoader::ModelLoader()
-        : p(spimpl::make_unique_impl<Impl>())
+ModelLoader::ModelLoader(std::shared_ptr<SimModel> model)
+        : p(spimpl::make_unique_impl<Impl>(model))
 {
 
 }

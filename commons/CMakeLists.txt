@@ -155,7 +155,7 @@ set(SOURCES
         ../include/utils/safe_strerror.h
         ModelLoader.h ModelLoader.cpp
         TextfileModelLoader.cpp TextfileModelLoader.h
-        )
+        SimModel.cpp SimModel.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

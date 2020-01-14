@@ -7,12 +7,16 @@
 
 #include "utils/spimpl.h"
 
+#include <vector>
+
 namespace displace {
 namespace commons {
 struct Config;
 struct Scenario;
 }
 }
+class Node;
+
 
 class SimModel {
     struct Impl;
@@ -27,6 +31,24 @@ public:
     void setScenario(std::unique_ptr<displace::commons::Scenario> config);
 
     displace::commons::Scenario const &scenario() const;
+
+    void setNodes(std::vector<Node *> nodes);
+
+    std::vector<Node *> const &nodes() const;
+
+    std::vector<Node *> &nodes();
+
+    void setQuarter(int quarter);
+
+    int quarter() const;
+
+    void setMonth(int month);
+
+    int month() const;
+
+    void setSemester(int semester);
+
+    int semester() const;
 };
 
 

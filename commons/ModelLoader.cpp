@@ -9,8 +9,6 @@
 #include "comstructs.h"
 #include "SimModel.h"
 
-#include <boost/optional.hpp>
-
 struct ModelLoader::Impl {
     std::shared_ptr<SimModel> model;
 
@@ -256,6 +254,11 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
 
 }
 
+bool ModelLoader::doNodesAndGraphConsistencyTest()
+{
+    return true;
+}
+
 bool ModelLoader::loadConfig()
 {
     auto config = std::make_unique<displace::commons::Config>();
@@ -277,4 +280,43 @@ bool ModelLoader::loadScenario(displace::commons::Scenario &scenario)
 {
     p->scenarioLoaded = loadScenarioImpl(scenario);
     return p->scenarioLoaded;
+}
+
+bool ModelLoader::loadNodesAndGraphs()
+{
+    if (!loadNodesAndGraphsDataImpl()) {
+        return false;
+    }
+
+    if (!doNodesAndGraphConsistencyTest()) {
+        return false;
+    }
+
+    p->nodesLoaded = true;
+    return true;
+}
+
+SimModel &ModelLoader::model()
+{
+    return *p->model;
+}
+
+SimModel const &ModelLoader::model() const
+{
+    return *p->model;
+}
+
+std::string ModelLoader::quarterString() const
+{
+    return "quarter" + std::to_string(model().quarter());
+}
+
+std::string ModelLoader::monthString() const
+{
+    return "month" + std::to_string(model().month());
+}
+
+std::string ModelLoader::semesterString() const
+{
+    return "semester" + std::to_string(model().semester());
 }

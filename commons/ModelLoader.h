@@ -44,6 +44,8 @@ public:
 
     bool loadScenario(displace::commons::Scenario &scenario);
 
+    bool loadNodesAndGraphs();
+
     struct BenthosData {
         int int1;
         int int2;
@@ -56,6 +58,17 @@ public:
         std::multimap<int, double> mmapidparam7;
         std::multimap<int, double> mmapidparam8;
     };
+
+    SimModel &model();
+
+    SimModel const &model() const;
+
+    // TODO: consider to calculate semester and quarter from month
+    std::string quarterString() const;
+
+    std::string monthString() const;
+
+    std::string semesterString() const;
 
 protected:
     virtual bool loadConfigImpl(int &nbpops,
@@ -71,6 +84,8 @@ protected:
 
     virtual bool loadScenarioImpl(displace::commons::Scenario &scenario) = 0;
 
+    virtual bool loadNodesAndGraphsDataImpl() = 0;
+
     virtual BenthosData loadBenthosData(
             PopSceOptions const &dyn_pop_sce,
             DynAllocOptions const &dyn_alloc_sce,
@@ -78,6 +93,8 @@ protected:
             std::string const &fleetsce) = 0;
 
     void doBenthosConsistencyTest(std::vector<Benthos *> const &benthoss);
+
+    bool doNodesAndGraphConsistencyTest();
 
     void ensure(bool condition)
     {

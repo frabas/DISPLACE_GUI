@@ -35,8 +35,7 @@ ModelLoader::ModelLoader(std::shared_ptr<SimModel> model)
 
 }
 
-std::vector<Benthos *> ModelLoader::loadBenthos(std::vector<int> const &graph_point_code_landscape,
-                                                PopSceOptions const &dyn_pop_sce,
+std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce,
                                                 DynAllocOptions const &dyn_alloc_sce,
                                                 std::string const &biolsce,
                                                 std::string const &fleetsce)
@@ -45,8 +44,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(std::vector<int> const &graph_po
 
     auto loadedDataBenthos = loadBenthosData(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
 
-    int nbland = graph_point_code_landscape.size();
-
+    int nbland = model().graph_point_code_landscape().size();
 
     // creation of a vector of benthos shared (one benthos shared per landscape)
     auto benthoss = vector<Benthos *>(nbland);
@@ -64,7 +62,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(std::vector<int> const &graph_po
         vector<double> init_recovery_rates_per_funcgr;
         vector<double> init_h_betas_per_pop;
 
-        int a_marine_landscape = graph_point_code_landscape.at(landscape);
+        int a_marine_landscape = model().graph_point_code_landscape().at(landscape);
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 

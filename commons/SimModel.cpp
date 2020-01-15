@@ -3,8 +3,8 @@
 //
 
 #include "SimModel.h"
-
 #include "comstructs.h"
+#include "shortestpath/GeoGraph.h"
 
 struct SimModel::Impl {
     int month = 0, quarter = 0, semester = 0;
@@ -12,7 +12,10 @@ struct SimModel::Impl {
     std::unique_ptr<displace::commons::Config> config;
     std::unique_ptr<displace::commons::Scenario> scenario;
 
+    GeoGraph geoGraph;
     std::vector<Node *> nodes;
+
+    std::vector<int> graph_point_code_landscape;
 };
 
 SimModel::SimModel()
@@ -84,4 +87,34 @@ void SimModel::setSemester(int semester)
 int SimModel::semester() const
 {
     return p->semester;
+}
+
+void SimModel::set_graph_point_code_landscape(std::vector<int> v)
+{
+    p->graph_point_code_landscape = std::move(v);
+
+    // TODO CHECK: should be the graph_point_code_landscape always be unique?
+    sort(p->graph_point_code_landscape.begin(), p->graph_point_code_landscape.end());
+    auto it = std::unique(p->graph_point_code_landscape.begin(), p->graph_point_code_landscape.end());
+    p->graph_point_code_landscape.resize(std::distance(p->graph_point_code_landscape.begin(), it));
+}
+
+std::vector<int> const &SimModel::graph_point_code_landscape() const
+{
+    return p->graph_point_code_landscape;
+}
+
+std::vector<int> &SimModel::graph_point_code_landscape()
+{
+    return p->graph_point_code_landscape;
+}
+
+void SimModel::setGeoGraph(GeoGraph geoGraph)
+{
+    p->geoGraph = std::move(geoGraph);
+}
+
+GeoGraph const &SimModel::geoGraph() const
+{
+    return p->geoGraph;
 }

@@ -17,6 +17,7 @@ struct Scenario;
 }
 class Node;
 
+class GeoGraph;
 
 class SimModel {
     struct Impl;
@@ -37,6 +38,19 @@ public:
     std::vector<Node *> const &nodes() const;
 
     std::vector<Node *> &nodes();
+
+    void set_graph_point_code_landscape(std::vector<int> v);
+
+    std::vector<int> const &graph_point_code_landscape() const;
+
+    std::vector<int> &graph_point_code_landscape();
+
+    //
+    void setGeoGraph(GeoGraph geoGraph);
+
+    GeoGraph const &geoGraph() const;
+
+    /// calendar
 
     void setQuarter(int quarter);
 

@@ -34,7 +34,6 @@ public:
     virtual ~ModelLoader() = default;
 
     std::vector<Benthos *> loadBenthos(
-            std::vector<int> const &graph_point_code_landscape,
             PopSceOptions const &dyn_pop_sce,
             DynAllocOptions const &dyn_alloc_sce,
             std::string const &biolsce,

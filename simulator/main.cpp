@@ -1087,12 +1087,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-    std::vector<int>::iterator it;
-    it = std::unique(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
-    graph_point_code_landscape.resize(std::distance(graph_point_code_landscape.begin(), it));
-
-    benthoss = modelLoader->loadBenthos(graph_point_code_landscape, dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
+    benthoss = modelLoader->loadBenthos(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -1356,7 +1351,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double> spat_avai_per_selected_szgroup;
                 vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
                 for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
-                    it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
+                    auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
                     if (it != selected_szgroups.end()) {
                         spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
                     }
@@ -2387,16 +2382,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #ifdef PROFILE
     mLoadProfile.start();
 #endif
-
-    // ASTAR TODO: Check Loading the nodes
-    try {
-        GeoGraphLoader loader;
-        loader.load(geoGraph, filename_graph, filename_graph_test);
-        cout << "Loading the graph " << filename_graph << " ...ok" << endl;
-    } catch (std::exception &x) {
-        std::cerr << "Cannot read Node graphs: " << x.what();
-        return 2;
-    }
 
     // bound the two vectors
     // copy
@@ -3698,7 +3683,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         vector<int> selected_szgroups = populations.at(i)->get_selected_szgroups();
                         for (int sz=0; sz<spat_avai_this_pop_this_node.size(); ++sz)
                         {
-                            it = find (selected_szgroups.begin(), selected_szgroups.end(), sz);
+                            auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
                              if (it != selected_szgroups.end())
                                  spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
                         }

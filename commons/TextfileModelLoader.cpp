@@ -11,6 +11,8 @@
 #include "Node.h"
 #include "Harbour.h"
 #include "../simulator/values.h"
+#include "shortestpath/GeoGraphLoader.h"
+#include "shortestpath/GeoGraph.h"
 
 struct TextfileModelLoader::Impl {
     std::string folder_name_parameterization;
@@ -149,11 +151,12 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         open_file_error(filename_code_marine_landscape_graph);
         return 1;
     }
-    vector<int> graph_point_code_landscape;
-    if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord)) {
+    vector<int> v;
+    if (!fill_from_code_marine_landscape(code_landscape_graph, v, nrow_coord)) {
         std::cerr << "Cannot parse " << filename_code_marine_landscape_graph << " Bad format\n";
         return 1;
     }
+    model().set_graph_point_code_landscape(std::move(v));
 
     // input data, for the WIND for each point of the graph
     ifstream wind_graph;
@@ -363,7 +366,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             graph_coord_y.at(n) = environment_on_coord.at(n).y; // #1
             graph_coord_harbour.at(n) = environment_on_coord.at(n).harb; // #2
             graph_point_code_area.at(n) = environment_on_coord.at(n).code_area; // #4
-            graph_point_code_landscape.at(n) = environment_on_coord.at(n).landscapes_code; // #5
+            model().graph_point_code_landscape().at(n) = environment_on_coord.at(n).landscapes_code; // #5
             graph_point_landscape_norm.at(n) = environment_on_coord.at(n).landscape_norm;
             graph_point_landscape_alpha.at(n) = environment_on_coord.at(n).landscape_alpha;
             graph_point_wind.at(n) = environment_on_coord.at(n).wind; // #8
@@ -404,7 +407,8 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
 
         cout << "posterior check of environment_on_coord:" << endl;
         cout << graph_coord_x.at(0) << " " << graph_coord_y.at(0) << " " << graph_coord_harbour.at(0) << " " <<
-             graph_point_code_area.at(0) << " " << graph_point_code_landscape.at(0) << " " << graph_point_wind.at(0)
+             graph_point_code_area.at(0) << " " << model().graph_point_code_landscape().at(0) << " "
+             << graph_point_wind.at(0)
              << " " <<
              graph_point_sst.at(0) << " " << graph_point_salinity.at(0) << " " << graph_point_Nitrogen.at(0) << " "
              <<
@@ -493,7 +497,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                     graph_coord_y[i],
                                     graph_coord_harbour[i],
                                     graph_point_code_area[i],
-                                    graph_point_code_landscape[i],
+                                    model().graph_point_code_landscape()[i],
                                     graph_point_landscape_norm[i],
                                     graph_point_landscape_alpha[i],
                                     graph_point_wind[i],
@@ -544,7 +548,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                  graph_coord_y[i],
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
-                                 graph_point_code_landscape[i],
+                                 model().graph_point_code_landscape()[i],
                                  graph_point_landscape_norm[i],
                                  graph_point_landscape_alpha[i],
                                  graph_point_wind[i],
@@ -601,5 +605,19 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     outc(cout << endl);
 
     model().setNodes(std::move(nodes));
+
+    // ASTAR TODO: Check Loading the nodes
+    try {
+        GeoGraph geoGraph;
+        string filename_graph_test = p->inputfolder + "/graphsspe/graph" + a_graph_s + ".dat";
+        GeoGraphLoader loader;
+        loader.load(geoGraph, filename_graph, filename_graph_test);
+        cout << "Loading the graph " << filename_graph << " ...ok" << endl;
+        model().setGeoGraph(std::move(geoGraph));
+    } catch (std::exception &x) {
+        std::cerr << "Cannot read Node graphs: " << x.what();
+        return 2;
+    }
+
     return true;
 }

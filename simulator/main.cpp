@@ -262,7 +262,6 @@ std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 bool use_dtrees;
 vector<double> global_quotas_uptake;
 vector<int> explicit_pops;
-displace::commons::Scenario scenario;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
 ClosureOptions closure_opts;
@@ -700,10 +699,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 2;
     }
 
-    if (!modelLoader->loadScenario(scenario)) {
+    if (!modelLoader->loadScenario()) {
         cerr << "Cannot read scenario config file, Bad Format.\n";
         return 2;
     }
+
+    auto const &scenario = simModel->scenario();
 
     dyn_alloc_sce = scenario.dyn_alloc_sce;
     dyn_pop_sce = scenario.dyn_pop_sce;

@@ -121,7 +121,6 @@ extern bool is_grouped_tacs;
 extern double tech_creeping_multiplier;
 extern bool is_benthos_in_numbers;
 extern vector <int> nbcp_coupling_pops;
-extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
@@ -286,13 +285,13 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         //go fishing
                         outc(cout << "GO FISHING" << endl);
                         do_nothing = vessels[index_v]->choose_a_ground_and_go_fishing(
-                                tstep, scenario, use_dtrees,
-                                dyn_alloc_sce, use_static_paths,  pathshops,
+                                tstep, model->scenario(), use_dtrees,
+                                dyn_alloc_sce, use_static_paths, pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
                                 nodes,
                                 metiers,
                                 freq_cpue, freq_profit, freq_distance
-                                );
+                        );
                     freshly_departed_from_port=1;
 
                 }

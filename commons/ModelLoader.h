@@ -41,7 +41,7 @@ public:
 
     bool loadConfig();
 
-    bool loadScenario(displace::commons::Scenario &scenario);
+    bool loadScenario();
 
     bool loadNodesAndGraphs();
 

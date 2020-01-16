@@ -274,9 +274,13 @@ bool ModelLoader::loadConfig()
     return p->configLoaded;
 }
 
-bool ModelLoader::loadScenario(displace::commons::Scenario &scenario)
+bool ModelLoader::loadScenario()
 {
-    p->scenarioLoaded = loadScenarioImpl(scenario);
+    auto scenario = std::make_unique<displace::commons::Scenario>();
+    p->scenarioLoaded = loadScenarioImpl(*scenario);
+    if (p->scenarioLoaded) {
+        p->model->setScenario(std::move(scenario));
+    }
     return p->scenarioLoaded;
 }
 

@@ -3546,13 +3546,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            cout << "look after " << a_command_for_R << endl;
                            cout << "This supposes StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
                            system(a_command_for_R.c_str());
-                            a_command = "avaifieldupdater.exe -tstep " +atstep+" -f " +namefolderinput+ " -a " +inputfolder+ " -s " +simModel->semester()+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 15 -shepard_p 0.5";
+                            a_command = "avaifieldupdater.exe -tstep " +atstep+" -f " +namefolderinput+ " -a " +inputfolder+ " -s " + std::to_string(simModel->semester())+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 15 -shepard_p 0.5";
                             cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                             system(a_command.c_str());
                        }
                        if(dyn_pop_sce.option(Options::avai_shuffler_on)){
                            type_of_avai_field_to_read.at(p)="_shuffled";
-                           a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +simModel->semester()+ " -p " +a_pop;
+                           a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " + std::to_string(simModel->semester())+ " -p " +a_pop;
                            cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                            system(a_command.c_str());
                        }
@@ -3566,14 +3566,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             system(a_command_for_R.c_str());
                             a_command =
                                     inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + namefolderinput +
-                                    " -a " + inputfolder + " -s " + modelLoader->semesterString() + " -graph " +
+                                    " -a " + inputfolder + " -s " + std::to_string(modelLoader->semesterString()) + " -graph " +
                                     graphnum.str() +
                                     " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
                             system(a_command.c_str());
                         }
                         if (dyn_pop_sce.option(Options::avai_shuffler_on)) {
                             a_command = inputfolder + "/avaifieldshufflertool -f " + namefolderinput + " -s " +
-                                        modelLoader->semesterString() + " -p " + a_pop;
+                                        std::to_string(modelLoader->semesterString()) + " -p " + a_pop;
                             system(a_command.c_str());
                         }
                         cout << "avaifieldshuffler...done" << endl;

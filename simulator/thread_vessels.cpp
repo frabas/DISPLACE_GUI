@@ -58,9 +58,10 @@ using namespace std;
 #ifndef _WIN32
 
 #include <unistd.h>
-#include <SimModel.h>
 
 #endif
+
+#include <SimModel.h>
 
 // for Windows
 #ifdef _WIN32

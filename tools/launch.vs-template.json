@@ -1,0 +1,64 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "runLoaderTest.exe (bin\\runLoaderTest.exe)",
+      "name": "runLoaderTest with minitest",
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "-i ${workspaceRoot}\\apps\\minitest_baseline.db"
+      ],
+      "env": "PATH=C:\\vcpkg\\installed\\x64-windows\\bin;${env.PATH}"
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "runLoaderTest.exe (bin\\runLoaderTest.exe)",
+      "name": "runLoaderTest with myfish",
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "-i ${workspaceRoot}\\apps\\myfish_baseline.db"
+      ],
+      "env": "PATH=C:\\vcpkg\\installed\\x64-windows\\bin;${env.PATH}"
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "displace.exe (bin\\displace.exe)",
+      "name": "Run Displace with Minitest",
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "--outdir",
+        "C:",
+        "-a",
+        "${workspaceRoot}\\apps\\DISPLACE_input_minitest",
+        "-f",
+        "fake",
+        "--f2",
+        "baseline",
+        "-s",
+        "simu1",
+        "-i",
+        "8761",
+        "-p",
+        "0",
+        "-e",
+        "1",
+        "--huge",
+        "1",
+        "-v",
+        "0",
+        "--disable-sqlite",
+        "--without-gnuplot",
+        "-V",
+        "3",
+        "--num_threads",
+        "4"
+      ],
+      "env": "PATH=C:\\vcpkg\\installed\\x64-windows\\bin;${env.PATH}"
+    }
+  ]
+}

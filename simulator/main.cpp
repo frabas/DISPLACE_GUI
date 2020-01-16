@@ -3566,14 +3566,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             system(a_command_for_R.c_str());
                             a_command =
                                     inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + namefolderinput +
-                                    " -a " + inputfolder + " -s " + std::to_string(modelLoader->semesterString()) + " -graph " +
+                                    " -a " + inputfolder + " -s " + modelLoader->semesterString() + " -graph " +
                                     graphnum.str() +
                                     " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
                             system(a_command.c_str());
                         }
                         if (dyn_pop_sce.option(Options::avai_shuffler_on)) {
                             a_command = inputfolder + "/avaifieldshufflertool -f " + namefolderinput + " -s " +
-                                        std::to_string(modelLoader->semesterString()) + " -p " + a_pop;
+                                        modelLoader->semesterString() + " -p " + a_pop;
                             system(a_command.c_str());
                         }
                         cout << "avaifieldshuffler...done" << endl;

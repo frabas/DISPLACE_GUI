@@ -38,16 +38,16 @@
 
 #ifndef NO_IPC
 
-#include <outputqueuemanager.h>
-#include <messages/movevesseloutputmessage.h>
-#include <messages/moveshipoutputmessage.h>
-#include <messages/vessellogbookoutputmessage.h>
+#include "outputqueuemanager.h"
+#include "messages/movevesseloutputmessage.h"
+#include "messages/moveshipoutputmessage.h"
+#include "messages/vessellogbookoutputmessage.h"
 
 #else
-#include <messages/noipc.h>
+#include "messages/noipc.h"
 #endif
 
-#include <outputexporter.h>
+#include "outputexporter.h"
 
 using namespace std;
 
@@ -56,12 +56,10 @@ using namespace std;
 #include <errno.h>
 
 #ifndef _WIN32
-
 #include <unistd.h>
-
 #endif
 
-#include <SimModel.h>
+#include "SimModel.h"
 
 // for Windows
 #ifdef _WIN32

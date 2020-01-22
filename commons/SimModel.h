@@ -42,6 +42,7 @@ public:
     void set_graph_point_code_landscape(std::vector<int> v);
 
     std::vector<int> const &graph_point_code_landscape() const;
+    std::vector<int> const& graph_point_code_landscape_unique() const;
 
     std::vector<int> &graph_point_code_landscape();
 

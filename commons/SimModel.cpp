@@ -16,6 +16,7 @@ struct SimModel::Impl {
     std::vector<Node *> nodes;
 
     std::vector<int> graph_point_code_landscape;
+    std::vector<int> graph_point_code_landscape_unique;
 };
 
 SimModel::SimModel()
@@ -91,17 +92,21 @@ int SimModel::semester() const
 
 void SimModel::set_graph_point_code_landscape(std::vector<int> v)
 {
+    p->graph_point_code_landscape_unique = v;
     p->graph_point_code_landscape = std::move(v);
 
-    // TODO CHECK: should be the graph_point_code_landscape always be unique?
-    sort(p->graph_point_code_landscape.begin(), p->graph_point_code_landscape.end());
-    auto it = std::unique(p->graph_point_code_landscape.begin(), p->graph_point_code_landscape.end());
-    p->graph_point_code_landscape.resize(std::distance(p->graph_point_code_landscape.begin(), it));
+    sort(p->graph_point_code_landscape_unique.begin(), p->graph_point_code_landscape_unique.end());
+    auto it = std::unique(p->graph_point_code_landscape_unique.begin(), p->graph_point_code_landscape_unique.end());
+    p->graph_point_code_landscape_unique.resize(std::distance(p->graph_point_code_landscape_unique.begin(), it));
 }
 
 std::vector<int> const &SimModel::graph_point_code_landscape() const
 {
     return p->graph_point_code_landscape;
+}
+std::vector<int> const& SimModel::graph_point_code_landscape_unique() const
+{
+    return p->graph_point_code_landscape_unique;
 }
 
 std::vector<int> &SimModel::graph_point_code_landscape()

@@ -44,7 +44,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
     auto loadedDataBenthos = loadBenthosData(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
 
-    int nbland = model().graph_point_code_landscape().size();
+    int nbland = model().graph_point_code_landscape_unique().size();
 
     // creation of a vector of benthos shared (one benthos shared per landscape)
     auto benthoss = vector<Benthos *>(nbland);

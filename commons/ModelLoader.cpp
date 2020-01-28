@@ -18,7 +18,6 @@ struct ModelLoader::Impl {
 
     bool doConsistencyTest = false;
 
-    size_t nbbenthospops;
     bool is_benthos_in_numbers = false; // otherwise the impact is on biomass by default
     bool is_benthos_in_longevity_classes = false;
 
@@ -76,7 +75,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
             }
 
 
-            if (a_vector.size() != p->nbbenthospops) {
+            if (a_vector.size() != model().config().nbbenthospops) {
                 cout << "on node 0: " << " nb longevity class is " << a_vector.size() <<
                      ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run."
                      << endl;
@@ -130,7 +129,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 }
 
 
-                if (init_prop_funcgr_biomass_per_node.size() != p->nbbenthospops) {
+                if (init_prop_funcgr_biomass_per_node.size() != model().config().nbbenthospops) {
                     cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
                          ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
                          << endl;
@@ -217,7 +216,7 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
         dout(cout << "this node " << p->nodes.at(a_idx)->get_idx_node().toIndex() <<
                   " nb func. gr. " << p->nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-        if (p->nodes.at(a_idx)->get_benthos_tot_biomass().size() != p->nbbenthospops) {
+        if (p->nodes.at(a_idx)->get_benthos_tot_biomass().size() != model().config().nbbenthospops) {
             cout
                     << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again"
                     << endl;

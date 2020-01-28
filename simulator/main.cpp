@@ -1080,9 +1080,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     //LoadedData loadedDataBenthos;
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1095,9 +1095,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1209,9 +1209,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1251,9 +1251,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1799,9 +1799,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1889,9 +1889,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -1959,9 +1959,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
-    paramsForLoad.sparam1 = simModel->month();
-    paramsForLoad.sparam2 = simModel->quarter();
-    paramsForLoad.sparam3 = simModel->semester();
+    paramsForLoad.sparam1 = std::to_string(simModel->month());
+    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+    paramsForLoad.sparam3 = std::to_string(simModel->semester());
     paramsForLoad.iparam1 = simModel->config().nbpops;
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
@@ -3070,9 +3070,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-            paramsForLoad.sparam1 = simModel->month();
-            paramsForLoad.sparam2 = simModel->quarter();
-            paramsForLoad.sparam3 = simModel->semester();
+            paramsForLoad.sparam1 = std::to_string(simModel->month());
+            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+            paramsForLoad.sparam3 = std::to_string(simModel->semester());
             paramsForLoad.iparam1 = simModel->config().nbpops;
             paramsForLoad.iparam2 = NBAGE;
             paramsForLoad.iparam3 = NBSZGROUP;
@@ -3356,9 +3356,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // RE-read for metiers
             dout(cout << "re-read metiers..." << endl);
 
-            paramsForLoad.sparam1 = simModel->month();
-            paramsForLoad.sparam2 = simModel->quarter();
-            paramsForLoad.sparam3 = simModel->semester();
+            paramsForLoad.sparam1 = std::to_string(simModel->month());
+            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+            paramsForLoad.sparam3 = std::to_string(simModel->semester());
             paramsForLoad.iparam1 = simModel->config().nbpops;
             paramsForLoad.iparam2 = NBAGE;
             paramsForLoad.iparam3 = NBSZGROUP;
@@ -3421,9 +3421,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (redispatch_the_pop)     // EVENT => re-read pop data
         {
 
-            paramsForLoad.sparam1 = simModel->month();
-            paramsForLoad.sparam2 = simModel->quarter();
-            paramsForLoad.sparam3 = simModel->semester();
+            paramsForLoad.sparam1 = std::to_string(simModel->month());
+            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
+            paramsForLoad.sparam3 = std::to_string(simModel->semester());
             paramsForLoad.iparam1 = simModel->config().nbpops;
             paramsForLoad.iparam2 = NBAGE;
             paramsForLoad.iparam3 = NBSZGROUP;

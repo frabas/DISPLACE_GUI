@@ -284,7 +284,6 @@ vector<double> spe_freq_harbours;
 vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
 vector<double> spe_fishing_credits;
-vector<Node *> nodes;
 multimap<types::NodeId, string> harbour_names;
 vector<int> name_metiers;
 ofstream freq_cpue;
@@ -1128,7 +1127,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         fishfarms[i] = new Fishfarm(
                 loadedDataFishfarms.vectiparam1.at(i),
                 loadedDataFishfarms.vectsparam1.at(i),
-                nodes.at(loadedDataFishfarms.vectiparam2.at(i)),
+                simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i)),
                 0,
                 loadedDataFishfarms.vectiparam3.at(i),
                 loadedDataFishfarms.vectdparam1.at(i),
@@ -1185,10 +1184,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 loadedDataFishfarms.vectdparam43.at(i));
 
 
-        nodes.at(loadedDataFishfarms.vectiparam2.at(i))->set_ff_names_on_node(loadedDataFishfarms.vectiparam1.at(i));
+        simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i))->set_ff_names_on_node(
+                loadedDataFishfarms.vectiparam1.at(i));
 
         cout << fishfarms[i]->get_name() << endl;
-        cout << "on node " << loadedDataFishfarms.vectiparam2.at(i) << " put ffarm " << nodes.at(loadedDataFishfarms.vectiparam2.at(i))->get_ff_names_on_node().at(0)
+        cout << "on node " << loadedDataFishfarms.vectiparam2.at(i) << " put ffarm "
+             << simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i))->get_ff_names_on_node().at(0)
              << endl;
         cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << endl;
         cout << "end for harvest at " << loadedDataFishfarms.vectiparam5.at(i) << " given " << fishfarms[i]->get_end_day_harvest()
@@ -1234,7 +1235,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for (map<int, double>::iterator iter = loadedDataWindmills.mmapidparam1.begin();
          iter != loadedDataWindmills.mmapidparam1.end(); iter = loadedDataWindmills.mmapidparam1.upper_bound(iter->first)) {
-        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 1, 500,
+        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name",
+                                    simModel->nodes().at(iter->first), iter->second, 1, 500,
                                     1); // Caution: type is 1, kW is 500, is_active at 1
         windmills.push_back(wm);
     }
@@ -1273,13 +1275,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     paramsForLoad,
                     loadedDataPops);
 
-    multimap<int, double> init_weight_per_szgroup=loadedDataPops.mmapidparam_init_weight_per_szgroup;
-    vector<vector<double> > species_interactions_mortality_proportion_matrix=loadedDataPops.vovd_species_interactions_mortality_proportion_matrix;
-    type_of_avai_field_to_read=loadedDataPops.vectsparam2;
+    multimap<int, double> init_weight_per_szgroup = loadedDataPops.mmapidparam_init_weight_per_szgroup;
+    vector<vector<double> > species_interactions_mortality_proportion_matrix = loadedDataPops.vovd_species_interactions_mortality_proportion_matrix;
+    type_of_avai_field_to_read = loadedDataPops.vectsparam2;
 
-    for (unsigned int i = 0; i < nodes.size(); i++) {
-        nodes.at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
-        nodes.at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam4);
+    for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
+        simModel->nodes().at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
+        simModel->nodes().at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam4);
     }
 
 
@@ -1297,36 +1299,36 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         populations[sp] = new Population(sp,
                                          loadedDataPops.vectsparam1.at(sp),
                                          loadedDataPops.vectdparam1.at(sp),
-                                           loadedDataPops.vectdparam2.at(sp),
-                                           loadedDataPops.vectdparam3.at(sp),
-                                           loadedDataPops.vectdparam4.at(sp),
-                                           loadedDataPops.vectdparam5.at(sp),
-                                           loadedDataPops.vovi1.at(sp),
-                                           loadedDataPops.vovd1.at(sp),
-                                           loadedDataPops.vovd2.at(sp),
-                                           loadedDataPops.vovd3.at(sp),
-                                           loadedDataPops.vovd4.at(sp),
-                                           loadedDataPops.vovi2.at(sp),
-                                           loadedDataPops.vovd5.at(sp),
-                                           loadedDataPops.vovd6.at(sp),
-                                           loadedDataPops.vovd7.at(sp),
-                                           loadedDataPops.vovd8.at(sp),
-                                           loadedDataPops.vectmmapndparam1.at(sp),
-                                           loadedDataPops.vectmmapndparam2.at(sp),
-                                           loadedDataPops.vectmapndparam1.at(sp),
-                                           loadedDataPops.vectmmapidparam1.at(sp),
-                                           loadedDataPops.vectmapsdparam1.at(sp),
-                                           loadedDataPops.vovovd2.at(sp),
-                                           loadedDataPops.vovovd3.at(sp),
-                                           loadedDataPops.vovovd1.at(sp),
-                                           nodes,
-                                           loadedDataPops.vovd9.at(sp),
-                                           loadedDataPops.vovd10.at(sp),
-                                           loadedDataPops.mapiiparam1.at(sp),
-                                           loadedDataPops.mapidparam1.at(sp),
-                                           loadedDataPops.vectdparam6.at(sp),
-                                           loadedDataPops.vectdparam7.at(sp)
-          );
+                                         loadedDataPops.vectdparam2.at(sp),
+                                         loadedDataPops.vectdparam3.at(sp),
+                                         loadedDataPops.vectdparam4.at(sp),
+                                         loadedDataPops.vectdparam5.at(sp),
+                                         loadedDataPops.vovi1.at(sp),
+                                         loadedDataPops.vovd1.at(sp),
+                                         loadedDataPops.vovd2.at(sp),
+                                         loadedDataPops.vovd3.at(sp),
+                                         loadedDataPops.vovd4.at(sp),
+                                         loadedDataPops.vovi2.at(sp),
+                                         loadedDataPops.vovd5.at(sp),
+                                         loadedDataPops.vovd6.at(sp),
+                                         loadedDataPops.vovd7.at(sp),
+                                         loadedDataPops.vovd8.at(sp),
+                                         loadedDataPops.vectmmapndparam1.at(sp),
+                                         loadedDataPops.vectmmapndparam2.at(sp),
+                                         loadedDataPops.vectmapndparam1.at(sp),
+                                         loadedDataPops.vectmmapidparam1.at(sp),
+                                         loadedDataPops.vectmapsdparam1.at(sp),
+                                         loadedDataPops.vovovd2.at(sp),
+                                         loadedDataPops.vovovd3.at(sp),
+                                         loadedDataPops.vovovd1.at(sp),
+                                         simModel->nodes(),
+                                         loadedDataPops.vovd9.at(sp),
+                                         loadedDataPops.vovd10.at(sp),
+                                         loadedDataPops.mapiiparam1.at(sp),
+                                         loadedDataPops.mapidparam1.at(sp),
+                                         loadedDataPops.vectdparam6.at(sp),
+                                         loadedDataPops.vectdparam7.at(sp)
+        );
 
 
 
@@ -1358,8 +1360,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     }
                 }
                 if (!spat_avai_per_selected_szgroup.empty()) {
-                    nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
-                                                                                                     spat_avai_per_selected_szgroup);
+                    simModel->nodes().at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
+                                                                                                                 spat_avai_per_selected_szgroup);
                 } else {
                     // inconsistence between lst_idx_nodes and avai files if this happen...
                     outc(cout << nodes_with_presence.at(n));
@@ -1501,9 +1503,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // init
-        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
+        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
 
-            auto idx_node = nodes.at(a_idx)->get_idx_node();
+            auto idx_node = simModel->nodes().at(a_idx)->get_idx_node();
 
             // initial tariff for this particular node
             auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
@@ -1521,23 +1523,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 init_tariffs.push_back(0);
             } // put 0 if this node is not informed
 
-            nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+            simModel->nodes().at(a_idx)->set_tariffs(init_tariffs); // type 0
         }
 
 
         // check
-        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
-            dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
-                      " has tariffs 0 " << nodes.at(a_idx)->get_tariffs().at(0) << endl);
+        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
+            dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
+                      " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << endl);
 
-            dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
-                      " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
+            dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
+                      " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << endl);
         }
     } else {
         // need to inform with a vector of three zeros at least
         vector<double> init_tariffs(3, 0);
-        for (unsigned int a_idx = 0; a_idx < nodes.size(); a_idx++) {
-            nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
+            simModel->nodes().at(a_idx)->set_tariffs(init_tariffs); // type 0
         }
     }
 
@@ -2081,7 +2083,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-        vessels[i] = new Vessel(nodes[start_harbour.toIndex()],
+        vessels[i] = new Vessel(simModel->nodes()[start_harbour.toIndex()],
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
                                 simModel->config().nbpops,
@@ -2145,7 +2147,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
         // Give super power to each vessel (so that he can consult the common tariff map for example)
-        vessels[i]->set_map_of_nodes(nodes);
+        vessels[i]->set_map_of_nodes(simModel->nodes());
 
 
         if(namefolderinput=="BalticSea")
@@ -2234,11 +2236,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
     if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
 
-        if (!read_metier_monthly_closures(nodes, modelLoader->monthString(), a_graph_name, folder_name_parameterization,
+        if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
+                                          folder_name_parameterization,
                                           inputfolder)) {
             exit(1);
         }
-        if (!read_vsize_monthly_closures(nodes, modelLoader->monthString(), a_graph_name, folder_name_parameterization,
+        if (!read_vsize_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
+                                         folder_name_parameterization,
                                          inputfolder)) {
             exit(1);
         }
@@ -2246,7 +2250,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
     if (dyn_alloc_sce.option(Options::area_closure)) {
 
-        if (!read_metier_quarterly_closures(nodes, modelLoader->quarterString(), a_graph_name,
+        if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                             folder_name_parameterization,
                                             inputfolder)) {
             exit(1);
@@ -2746,11 +2750,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    for (unsigned int n = 0; n < nodes.size(); n++) {
-        nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+    for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+        simModel->nodes()[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
         if (enable_sqlite_out) {
-            outSqlite->getNodesDefTable()->insert(nodes[n]);
-            bool r = outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
+            outSqlite->getNodesDefTable()->insert(simModel->nodes()[n]);
+            bool r = outSqlite->getPopTable()->insert(0, simModel->nodes()[n], init_weight_per_szgroup);
         }
     }
 
@@ -2770,15 +2774,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // Flush and updates all statistics for nodes envt
     if (use_gui) {
         nodes_envt.flush();
-        for (unsigned int n = 0; n < nodes.size(); n++) {
-            nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+        for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+            simModel->nodes().at(n)->export_nodes_envt(nodes_envt, tstep);
         }
         guiSendUpdateCommand(nodes_envt_filename, tstep);
     }
 
     if (enable_sqlite_out) {
-        for (unsigned int n = 0; n < nodes.size(); n++) {
-            outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+        for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+            outSqlite->exportEnvtNodes(tstep, simModel->nodes().at(n));
         }
     }
     //}
@@ -2907,7 +2911,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     init_weight_per_szgroup,
                                     species_interactions_mortality_proportion_matrix,
                                     populations,
-                                    nodes,
+                                    simModel->nodes(),
                                     vessels,
                                     benthoss,
                                     dyn_pop_sce,
@@ -3015,12 +3019,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
                 // update the monthly closures
-                if (!read_metier_monthly_closures(nodes, modelLoader->monthString(), a_graph_name,
+                if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                   folder_name_parameterization,
                                                   inputfolder)) {
                     exit(1);
                 }
-                if (!read_vsize_monthly_closures(nodes, modelLoader->monthString(), a_graph_name,
+                if (!read_vsize_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                  folder_name_parameterization,
                                                  inputfolder)) {
                     exit(1);
@@ -3143,7 +3147,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_av_trip_duration(loadedDataVessels.vectdparam10.at(v));
 
                 if (dyn_alloc_sce.option(Options::area_closure)) {
-                    if (!read_metier_quarterly_closures(nodes, modelLoader->quarterString(), a_graph_name,
+                    if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                                         folder_name_parameterization,
                                                         inputfolder)) {
                         exit(1);
@@ -3588,15 +3592,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // then, clean up all nodes before changing of spatial avai
             // (necessary to remove any fish in now wrong locations)
             cout << "clear pops on nodes" << endl;
-            for (unsigned int i = 0; i < nodes.size(); i++) {
-                nodes.at(i)->clear_pop_names_on_node();
-                nodes.at(i)->clear_Ns_pops_at_szgroup();
-                nodes.at(i)->clear_avai_pops_at_selected_szgroup();
+            for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
+                simModel->nodes().at(i)->clear_pop_names_on_node();
+                simModel->nodes().at(i)->clear_Ns_pops_at_szgroup();
+                simModel->nodes().at(i)->clear_avai_pops_at_selected_szgroup();
             }
             cout << "clear pops on nodes...done" << endl;
 
             // RE-read for populations
-            for (unsigned int i=0; i<populations.size(); i++) {
+            for (unsigned int i = 0; i < populations.size(); i++) {
                 stringstream out;
                 out << i;
 
@@ -3626,14 +3630,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 for (auto iter = full_avai_szgroup_nodes_with_pop.begin();
                      iter != full_avai_szgroup_nodes_with_pop.end();
                      iter = full_avai_szgroup_nodes_with_pop.upper_bound(iter->first)) {
-                    list_nodes.push_back(nodes[iter->first.toIndex()]);
-                    nodes[iter->first.toIndex()]->set_pop_names_on_node(i);
+                    list_nodes.push_back(simModel->nodes()[iter->first.toIndex()]);
+                    simModel->nodes()[iter->first.toIndex()]->set_pop_names_on_node(i);
                     //   check per node
                     //   vector <int> pop_names = nodes[ iter->first ]->get_pop_names_on_node();
-                        //   cout << "Node " << iter->first << endl;
-                        //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
-                        //   cout << endl;
-                    }
+                    //   cout << "Node " << iter->first << endl;
+                    //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
+                    //   cout << endl;
+                }
                     populations.at(i)->set_list_nodes(list_nodes);
 
                 // add the current Ns to the vectors of vectors of the concerned nodes
@@ -3666,8 +3670,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //}
 
                     //...and compute the Ns on nodes at the start of this month!
-                    for (unsigned int n = 0; n < nodes.size(); n++) {
-                        nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(i, nodes.at(n)->get_Ns_pops_at_szgroup(i));
+                    for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+                        simModel->nodes().at(n)->set_Ns_pops_at_szgroup_at_month_start(i, simModel->nodes().at(
+                                n)->get_Ns_pops_at_szgroup(i));
                     }
                 }
 
@@ -3689,8 +3694,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
                         }
                         if (!spat_avai_per_selected_szgroup.empty()) {
-                            nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
-                                                                                                             spat_avai_per_selected_szgroup);
+                            simModel->nodes().at(
+                                    nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
+                                                                                                            spat_avai_per_selected_szgroup);
                         } else {
                             // inconsistence between lst_idx_nodes and avai files if this happen...
                             outc(cout << nodes_with_presence.at(n));
@@ -3740,9 +3746,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (tstep == 0 || binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) {
 
             // fill in the usual_fgrounds on harbours
-            for (unsigned int i = 0; i < nodes.size(); ++i) {
-                if (nodes.at(i)->get_is_harbour()) {
-                    vector<int> vids_on_harbours = nodes.at(i)->get_vid();
+            for (unsigned int i = 0; i < simModel->nodes().size(); ++i) {
+                if (simModel->nodes().at(i)->get_is_harbour()) {
+                    vector<int> vids_on_harbours = simModel->nodes().at(i)->get_vid();
                     vector<types::NodeId> fgrounds;
                     multimap<types::NodeId, double> grounds_cpues_harbour_knowledge;
                     multimap<int, types::NodeId> grounds_mets_harbour_knowledge;
@@ -3751,7 +3757,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     vector<double> freq_fgrounds;
 
                     if (vids_on_harbours.size() > 0) {
-                        dout(cout << "there are some vids on " << nodes.at(i)->get_name() << endl);
+                        dout(cout << "there are some vids on " << simModel->nodes().at(i)->get_name() << endl);
                         for (unsigned int vi = 0; vi < vids_on_harbours.size(); ++vi) {
                             auto some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
                             auto some_cpues = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
@@ -3828,20 +3834,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                     } else {
-                        dout(cout << "there are NO vids on " << nodes.at(i)->get_name() << endl);
+                        dout(cout << "there are NO vids on " << simModel->nodes().at(i)->get_name() << endl);
                         fgrounds.push_back(types::NodeId(
                                 i)); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                         //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                     }
 
                     // update the harbour
-                    dout(cout << "update the harbour for grounds (node: " << nodes.at(i)->get_name() << endl);
-                    nodes.at(i)->set_usual_fgrounds(fgrounds);
-                    nodes.at(i)->set_freq_usual_fgrounds(freq_fgrounds);
+                    dout(cout << "update the harbour for grounds (node: " << simModel->nodes().at(i)->get_name()
+                              << endl);
+                    simModel->nodes().at(i)->set_usual_fgrounds(fgrounds);
+                    simModel->nodes().at(i)->set_freq_usual_fgrounds(freq_fgrounds);
 
                     // TO DO:
-                    nodes.at(i)->set_usual_fgrounds_per_met(grounds_mets_harbour_knowledge);
-                    nodes.at(i)->set_freq_usual_fgrounds_per_met(freq_grounds_mets_harbour_knowledge);
+                    simModel->nodes().at(i)->set_usual_fgrounds_per_met(grounds_mets_harbour_knowledge);
+                    simModel->nodes().at(i)->set_freq_usual_fgrounds_per_met(freq_grounds_mets_harbour_knowledge);
 
                     // a check
                     /*
@@ -3896,17 +3903,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                         int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
                         auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
-                        cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node()
+                        cout << vessels.at(v)->get_name() << ": "
+                             << simModel->nodes().at(a_node.toIndex())->get_idx_node()
                              << " is in harb?`" <<
-                             nodes.at(a_node.toIndex())->get_is_harbour()
+                             simModel->nodes().at(a_node.toIndex())->get_is_harbour()
                              << " ...cause the decision is taken in harbour..." << endl;
                         int current_metier = vessels.at(v)->get_metier()->get_name();
                         cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
-                        int nbpops = nodes.at(a_node.toIndex())->get_nbpops();
+                        int nbpops = simModel->nodes().at(a_node.toIndex())->get_nbpops();
                         // TO DO:
-                        auto grounds_from_harbours = nodes.at(a_node.toIndex())->get_usual_fgrounds_this_met(
+                        auto grounds_from_harbours = simModel->nodes().at(
+                                a_node.toIndex())->get_usual_fgrounds_this_met(
                                 current_metier);
-                        auto freq_grounds_from_harbours = nodes.at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(
+                        auto freq_grounds_from_harbours = simModel->nodes().at(
+                                a_node.toIndex())->get_freq_usual_fgrounds_this_met(
                                 current_metier);
                         //vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
                         //vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
@@ -4012,7 +4022,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         auto new_grds = vessels.at(v)->get_fgrounds();
                         vector<types::NodeId> fgrounds_in_closed_areas;
                         for (unsigned int i = 0; i < new_grds.size(); ++i) {
-                            if (nodes.at(new_grds.at(i).toIndex())->evaluateAreaType() == 1) {
+                            if (simModel->nodes().at(new_grds.at(i).toIndex())->evaluateAreaType() == 1) {
                                 fgrounds_in_closed_areas.push_back(new_grds.at(i));
                             }
                         }
@@ -4149,18 +4159,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
                         dout(cout << "Updating tariffs based on lpue" << endl);
                         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                            cumcatches += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                            cumcatches += simModel->nodes()[list_nodes_idx.at(
+                                    inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
                         }
                     }
                     if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
                         dout(cout << "Updating tariffs based on dpue" << endl);
                         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                            cumdiscards += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumdiscards_per_pop().at(
+                            cumdiscards += simModel->nodes()[list_nodes_idx.at(
+                                    inode).toIndex()]->get_cumdiscards_per_pop().at(
                                     ipop);
                         }
                     }
 
-                    cumeffort += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
+                    cumeffort += simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                 }
                 //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
                 //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
@@ -4173,20 +4185,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // loop over to scale the tariff (on each node) up or down (caution: by one category)
                     double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
                     for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode) {
-                        tariff_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
+                        tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
-                        effort_on_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
+                        effort_on_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
                         double cumcatches_this_node = 0;
                         if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
                             for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                                cumcatches_this_node += nodes[list_nodes_idx.at(
+                                cumcatches_this_node += simModel->nodes()[list_nodes_idx.at(
                                         inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
                             }
                         }
                         double cumdiscards_this_node = 0;
                         if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
                             for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                                cumdiscards_this_node += nodes[list_nodes_idx.at(
+                                cumdiscards_this_node += simModel->nodes()[list_nodes_idx.at(
                                         inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
                             }
                         }
@@ -4230,7 +4242,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                         // update the tariff (unless the effort on this node is 0)
                         if (effort_on_this_node != 0) {
-                            nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
+                            simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
                         }
                         //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
 
@@ -4514,16 +4526,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // gradient diffusion
                 // using the rtree
-                bool r = diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-                // bool r=  diffuse_Phosphorus_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-                // bool r=  diffuse_Oxygen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
-                // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+                bool r = diffuse_Nitrogen_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Phosphorus_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Oxygen_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Dissolvedcarbon_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
 
 
 
                 if (enable_sqlite_out) {
-                    for (unsigned int n = 0; n < nodes.size(); n++) {
-                        outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+                    for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+                        outSqlite->exportEnvtNodes(tstep, simModel->nodes().at(n));
                     }
                 }
 
@@ -4531,12 +4543,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
         }
 
-        // Flush and updates all statistics for nodes envt
+        // Flush and updates all statistics for simModel->nodes() envt
         if (use_gui) {
             if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
                 nodes_envt.flush();
-                for (unsigned int n = 0; n < nodes.size(); n++) {
-                    nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+                for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
+                    simModel->nodes().at(n)->export_nodes_envt(nodes_envt, tstep);
                 }
                 guiSendUpdateCommand(nodes_envt_filename, tstep);
             }
@@ -4553,11 +4565,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // naive diffusion
                 double coeff_diffusion = 0.01;
-                bool r = diffuse_Benthos_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+                bool r = diffuse_Benthos_in_every_directions(simModel->nodes(), adjacency_map, coeff_diffusion);
 
                 // gradient diffusion
                 // using the rtree
-                // bool r=  diffuse_Benthos_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+                // bool r=  diffuse_Benthos_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
 
 
 
@@ -4579,13 +4591,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
                 double shippingdensity = 0;
                 double bathymetry = 0;
-                for (unsigned int i = 0; i < nodes.size(); i++) {
-                    shippingdensity = nodes.at(i)->get_shippingdensity();
+                for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
+                    shippingdensity = simModel->nodes().at(i)->get_shippingdensity();
                     if (dyn_alloc_sce.option(Options::halfShippingDensity)) { shippingdensity = shippingdensity / 2; }
                     if (shippingdensity > 0) {
-                        bathymetry = nodes.at(i)->get_bathymetry();
+                        bathymetry = simModel->nodes().at(i)->get_bathymetry();
                         for (unsigned int funcid = 0;
-                             funcid < nodes.at(i)->get_benthos_tot_biomass().size(); funcid++) {
+                             funcid < simModel->nodes().at(i)->get_benthos_tot_biomass().size(); funcid++) {
                             double scaling = 1000;
                             double loss_after_1_month_shipping_here = -1;
                             if (bathymetry != 0) {
@@ -4598,14 +4610,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                             if (dyn_pop_sce.option(Options::modelBenthosInN)) {
                                 decrease_factor_on_benthos_funcgroup = 1 - exp(loss_after_1_month_shipping_here);
-                                double current_nb = nodes.at(i)->get_benthos_tot_number(funcid);
+                                double current_nb = simModel->nodes().at(i)->get_benthos_tot_number(funcid);
                                 double next_nb = current_nb * (1 + decrease_factor_on_benthos_funcgroup);
-                                nodes.at(i)->set_benthos_tot_number(funcid, next_nb); // update
+                                simModel->nodes().at(i)->set_benthos_tot_number(funcid, next_nb); // update
                             } else { // impact on biomass instead...
                                 decrease_factor_on_benthos_funcgroup = 1 - exp(loss_after_1_month_shipping_here);
-                                double current_bio = nodes.at(i)->get_benthos_tot_biomass(funcid);
+                                double current_bio = simModel->nodes().at(i)->get_benthos_tot_biomass(funcid);
                                 double next_bio = current_bio * (1 + decrease_factor_on_benthos_funcgroup);
-                                nodes.at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
+                                simModel->nodes().at(i)->set_benthos_tot_biomass(funcid, next_bio); // update
                             }
 
                         } // end funcid
@@ -4639,8 +4651,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
 
         if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
-            for (unsigned int i = 0; i < nodes.size(); i++) {
-                nodes.at(i)->set_nbchoked(0);
+            for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
+                simModel->nodes().at(i)->set_nbchoked(0);
             }
         }
 
@@ -4881,7 +4893,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
     #endif
 #endif
-    //delete[] nodes;
+    //delete[] simModel->nodes();
     //delete[] vessels;
 
     return 0;

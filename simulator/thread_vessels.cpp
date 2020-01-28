@@ -143,7 +143,6 @@ extern vector<double> spe_freq_fgrounds_init;
 extern vector<double> spe_freq_harbours;
 extern vector<double> spe_vessel_betas_per_pop;
 extern vector<double> spe_percent_tac_per_pop;
-extern vector <Node* > nodes;
 extern multimap<int, string> harbour_names;
 extern vector<int> name_metiers;
 extern ofstream freq_cpue;
@@ -288,7 +287,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                 tstep, model->scenario(), use_dtrees,
                                 dyn_alloc_sce, use_static_paths, pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
-                                nodes,
+                                model->nodes(),
                                 metiers,
                                 freq_cpue, freq_profit, freq_distance
                         );
@@ -317,16 +316,16 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
-                            external_states_relevant_for_stopping_fishing,
-                            use_dtrees,
-                            tstep,
-                            dyn_alloc_sce, use_static_paths,
-                            pathshops,
-                            adjacency_map, relevant_nodes,
-                            nodes,
-                            metiers,
-                            freq_cpue, freq_distance,
-                            dist_to_ports);
+                        external_states_relevant_for_stopping_fishing,
+                        use_dtrees,
+                        tstep,
+                        dyn_alloc_sce, use_static_paths,
+                        pathshops,
+                        adjacency_map, relevant_nodes,
+                        model->nodes(),
+                        metiers,
+                        freq_cpue, freq_distance,
+                        dist_to_ports);
 
                 //....unless we got a message (e.g. at the end of a year-quarter)
                 dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
@@ -382,14 +381,14 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
                         is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
-                                    tstep,
-                                    dyn_alloc_sce, use_static_paths,
-                                    pathshops,
-                                    adjacency_map,relevant_nodes, nodes_in_polygons,
-                                    nodes,
-                                    metiers,
-                                    freq_cpue, freq_distance
-                                    );
+                                tstep,
+                                dyn_alloc_sce, use_static_paths,
+                                pathshops,
+                                adjacency_map, relevant_nodes, nodes_in_polygons,
+                                model->nodes(),
+                                metiers,
+                                freq_cpue, freq_distance
+                        );
                         outc(cout  << "GOOD JOB, FISHERS! "  << endl);
                         //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << endl;
 
@@ -403,7 +402,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         //#pragma omp critical(docatch)
                          {
                              dout(cout << "please, check your mail! :" << vessels[index_v]->read_message() << endl);
-                             vessels[index_v]->do_catch(export_individual_tacs, populations, nodes, benthoss,
+                             vessels[index_v]->do_catch(export_individual_tacs, populations, model->nodes(), benthoss,
                                                         model->config().implicit_pops, model->config().grouped_tacs,
                                                         tstep, graph_res,
                                                         is_tacs, is_individual_vessel_quotas,
@@ -467,18 +466,18 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                     glob_mutex.lock();
                     vessels[ index_v ]->choose_a_port_and_then_return(
-                                tstep,
-                                dyn_alloc_sce,
-                                use_static_paths,
-                                pathshops,
-                                adjacency_map,
-                                relevant_nodes,
-                                nodes,
-                                metiers,
-                                freq_cpue,
-                                freq_distance,
-                                dist_to_ports
-                                );
+                            tstep,
+                            dyn_alloc_sce,
+                            use_static_paths,
+                            pathshops,
+                            adjacency_map,
+                            relevant_nodes,
+                            model->nodes(),
+                            metiers,
+                            freq_cpue,
+                            freq_distance,
+                            dist_to_ports
+                    );
 
                     glob_mutex.unlock();
                 }
@@ -501,7 +500,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
         //dout(cout  << endl);
 
         // find.next.pt.on.the.graph()
-        vessels[ index_v ]->find_next_point_on_the_graph(nodes);
+        vessels[index_v]->find_next_point_on_the_graph(model->nodes());
 
         outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
 

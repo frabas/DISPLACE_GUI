@@ -234,7 +234,6 @@ types::NodeId a_port;
 int nrow_coord;
 int nrow_graph;
 vector<double> graph_res;
-bool is_individual_vessel_quotas;
 bool check_all_stocks_before_going_fishing;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
@@ -245,14 +244,6 @@ vector<double> arbitary_breaks_for_tariff;
 int total_amount_credited;
 double tariff_annual_hcr_percent_change;
 
-bool is_tacs;
-bool is_fishing_credits;
-bool is_discard_ban;
-bool is_grouped_tacs;
-bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
-bool is_benthos_in_longevity_classes;
-bool is_direct_killing_on_benthos;
-bool is_resuspension_effect_on_benthos;
 double tech_creeping_multiplier = 1;
 bool enable_sqlite_out = true;
 std::string outSqlitePath;
@@ -716,7 +707,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     nrow_graph = scenario.nrow_graph;
     a_port = scenario.a_port;
     graph_res = scenario.graph_res;
-    is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
     check_all_stocks_before_going_fishing = scenario.check_all_stocks_before_going_fishing;
     use_dtrees = scenario.use_dtrees;
     if (dyn_alloc_sce.option(Options::fishing_credits)) {
@@ -780,7 +770,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     outc(cout << "nrow_graph " << nrow_graph << endl);
     outc(cout << "a_port " << a_port << endl);
     outc(cout << "graph res in km xy " << graph_res.at(0) << " " << graph_res.at(1) << endl);
-    outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
+    outc(cout << "is_individual_vessel_quotas " << simModel->scenario().is_individual_vessel_quotas << endl);
     outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
 
     if (dyn_alloc_sce.option(Options::fishing_credits)) {
@@ -831,44 +821,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     } else {
         // no stochastic variation
         str_rand_avai_file = "baseline";
-    }
-
-
-    if (dyn_alloc_sce.option(Options::TACs)) {
-        is_tacs = 1;
-    } else {
-        is_tacs = 0;
-    }
-
-    if (dyn_alloc_sce.option(Options::fishing_credits)) {
-        is_fishing_credits = 1;
-    } else {
-        is_fishing_credits = 0;
-    }
-
-    if (dyn_alloc_sce.option(Options::discard_ban)) {
-        is_discard_ban = 1;
-    } else {
-        is_discard_ban = 0;
-    }
-
-    if (dyn_alloc_sce.option(Options::groupedTACs)) {
-        is_grouped_tacs = 1;
-    } else {
-        is_grouped_tacs = 0;
-    }
-
-
-    if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-        is_benthos_in_numbers = 1;
-    } else {
-        is_benthos_in_numbers = 0; // if not N then it impacts the benthos biomass by default
-    }
-
-    if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-        is_benthos_in_longevity_classes = 1;
-    } else {
-        is_benthos_in_longevity_classes = 0;
     }
 
     if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
@@ -2162,7 +2114,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-        if (is_tacs) {
+        if (simModel->is_tacs()) {
             for (unsigned int sp = 0; sp < populations.size(); sp++) {
                 vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
                                                            simModel->config().implicit_pops, sp, 1,
@@ -2905,7 +2857,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     simModel->config().implicit_pops,
                                     simModel->config().calib_oth_landings,
                                     selectivity_per_stock_ogives_for_oth_land,
-                                    is_tacs,
+                                    simModel->is_tacs(),
                                     export_vmslike,
                                     freq_do_growth,
                                     init_weight_per_szgroup,
@@ -3114,20 +3066,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
 
-                possible_metiers             = loadedDataVessels.vectmmapniparam1.at(v);
-                freq_possible_metiers        = loadedDataVessels.vectmmapndparam1.at(v);
+                possible_metiers = loadedDataVessels.vectmmapniparam1.at(v);
+                freq_possible_metiers = loadedDataVessels.vectmmapndparam1.at(v);
                 gshape_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam2.at(v);
                 gscale_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam3.at(v);
-                vector<string> vesselids     = loadedDataVessels.vectsparam1;
-                spe_fgrounds                 = find_entries(loadedDataVessels.mmapsnparam2, vesselids.at(v));
-                spe_fgrounds_init            = find_entries(loadedDataVessels.mmapsnparam3, vesselids.at(v));
-                spe_harbours                 = find_entries(loadedDataVessels.mmapsnparam1, vesselids.at(v));
-                spe_freq_fgrounds            = find_entries_s_d(loadedDataVessels.mmapsdparam2, vesselids.at(v));
-                spe_freq_fgrounds_init       = find_entries_s_d(loadedDataVessels.mmapsdparam3, vesselids.at(v));
-                spe_freq_harbours            = find_entries_s_d(loadedDataVessels.mmapsdparam1, vesselids.at(v));
-                spe_vessel_betas_per_pop     = find_entries_s_d(loadedDataVessels.mmapsdparam4, vesselids.at(v));
-                if (is_tacs) { spe_percent_tac_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam5, vesselids.at(v)); }
-                reloaded_fcredits =loadedDataVessels.mmapsdparam6;
+                vector<string> vesselids = loadedDataVessels.vectsparam1;
+                spe_fgrounds = find_entries(loadedDataVessels.mmapsnparam2, vesselids.at(v));
+                spe_fgrounds_init = find_entries(loadedDataVessels.mmapsnparam3, vesselids.at(v));
+                spe_harbours = find_entries(loadedDataVessels.mmapsnparam1, vesselids.at(v));
+                spe_freq_fgrounds = find_entries_s_d(loadedDataVessels.mmapsdparam2, vesselids.at(v));
+                spe_freq_fgrounds_init = find_entries_s_d(loadedDataVessels.mmapsdparam3, vesselids.at(v));
+                spe_freq_harbours = find_entries_s_d(loadedDataVessels.mmapsdparam1, vesselids.at(v));
+                spe_vessel_betas_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam4, vesselids.at(v));
+                if (simModel->is_tacs()) {
+                    spe_percent_tac_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam5, vesselids.at(v));
+                }
+                reloaded_fcredits = loadedDataVessels.mmapsdparam6;
 
                 // correct if missing harbour for this quarter
                 if (spe_harbours.empty()) {

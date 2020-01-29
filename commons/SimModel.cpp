@@ -17,6 +17,17 @@ struct SimModel::Impl {
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
+
+    // cached
+
+    bool is_tacs;
+    bool is_fishing_credits;
+    bool is_discard_ban;
+    bool is_grouped_tacs;
+    bool is_benthos_in_numbers;
+    bool is_benthos_in_longevity_classes;
+    bool is_direct_killing_on_benthos;
+    bool is_resuspension_effect_on_benthos;
 };
 
 SimModel::SimModel()
@@ -38,6 +49,42 @@ displace::commons::Config const &SimModel::config() const
 void SimModel::setScenario(std::unique_ptr<displace::commons::Scenario> scenario)
 {
     p->scenario = std::move(scenario);
+
+    if (p->scenario->dyn_alloc_sce.option(Options::TACs)) {
+        p->is_tacs = 1;
+    } else {
+        p->is_tacs = 0;
+    }
+
+    if (p->scenario->dyn_alloc_sce.option(Options::fishing_credits)) {
+        p->is_fishing_credits = 1;
+    } else {
+        p->is_fishing_credits = 0;
+    }
+
+    if (p->scenario->dyn_alloc_sce.option(Options::discard_ban)) {
+        p->is_discard_ban = 1;
+    } else {
+        p->is_discard_ban = 0;
+    }
+
+    if (p->scenario->dyn_alloc_sce.option(Options::groupedTACs)) {
+        p->is_grouped_tacs = 1;
+    } else {
+        p->is_grouped_tacs = 0;
+    }
+
+    if (p->scenario->dyn_pop_sce.option(Options::modelBenthosInN)) {
+        p->is_benthos_in_numbers = 1;
+    } else {
+        p->is_benthos_in_numbers = 0; // if not N then it impacts the benthos biomass by default
+    }
+
+    if (p->scenario->dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        p->is_benthos_in_longevity_classes = 1;
+    } else {
+        p->is_benthos_in_longevity_classes = 0;
+    }
 }
 
 displace::commons::Scenario const &SimModel::scenario() const
@@ -122,4 +169,44 @@ void SimModel::setGeoGraph(GeoGraph geoGraph)
 GeoGraph const &SimModel::geoGraph() const
 {
     return p->geoGraph;
+}
+
+bool SimModel::is_tacs() const
+{
+    return p->is_tacs;
+}
+
+bool SimModel::is_fishing_credits() const
+{
+    return p->is_fishing_credits;
+}
+
+bool SimModel::is_discard_ban() const
+{
+    return p->is_discard_ban;
+}
+
+bool SimModel::is_grouped_tacs() const
+{
+    return p->is_grouped_tacs;
+}
+
+bool SimModel::is_benthos_in_numbers() const
+{
+    return p->is_benthos_in_numbers;
+}
+
+bool SimModel::is_benthos_in_longevity_classes() const
+{
+    return p->is_benthos_in_longevity_classes;
+}
+
+bool SimModel::is_direct_killing_on_benthos() const
+{
+    return p->is_direct_killing_on_benthos;
+}
+
+bool SimModel::is_resuspension_effect_on_benthos() const
+{
+    return p->is_resuspension_effect_on_benthos;
 }

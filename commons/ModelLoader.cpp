@@ -9,9 +9,6 @@
 #include "comstructs.h"
 #include "SimModel.h"
 
-extern bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
-extern bool is_benthos_in_longevity_classes;
-
 struct ModelLoader::Impl {
     std::shared_ptr<SimModel> model;
 
@@ -190,8 +187,8 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                                           init_recovery_rates_per_funcgr,
                                           init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                           init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                          is_benthos_in_numbers,
-                                          is_benthos_in_longevity_classes,
+                                          p->model->is_benthos_in_numbers(),
+                                          p->model->is_benthos_in_longevity_classes(),
                                           init_h_betas_per_pop,
                                           loadedDataBenthos.mmapidparam2
         );

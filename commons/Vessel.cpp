@@ -1784,13 +1784,14 @@ void Vessel::set_nbfpingspertrip(int _nbfpingpertrip)
 }
 
 
-void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, vector<int> implicit_pops, int pop, int init, double a_tac)
+void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int tstep,
+                                         vector<Population *> const &populations, vector<int> implicit_pops, int pop,
+                                         int init, double a_tac)
 {
 
-    if(init)
-    {
+    if (init) {
         // individual vessel share
-        vector<double> percent_tac_per_pop = this->get_percent_tac_per_pop ();
+        vector<double> percent_tac_per_pop = this->get_percent_tac_per_pop();
         // global simulated tac
         double global_tac_this_pop = populations.at(pop)->get_tac()->get_current_tac();
         // contribution compared to "other" landings.
@@ -2421,14 +2422,24 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::do_catch(ofstream &export_individual_tacs, vector<Population *> &populations, vector<Node *> &nodes,
-                      vector<Benthos *> &benthoshabs,
-                      vector<int> const &implicit_pops, vector<int> const &grouped_tacs, int &tstep,
-                      vector<double> const &graph_res, bool &is_tacs, bool &is_individual_vessel_quotas,
-                      bool &check_all_stocks_before_going_fishing, bool &is_discard_ban, bool &is_grouped_tacs,
-                      double &tech_creeping_multiplier,
-                      bool &is_fishing_credits, bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos,
-                      bool &is_benthos_in_numbers)
+void Vessel::do_catch(std::ofstream &export_individual_tacs,
+                      std::vector<Population *> const &populations,
+                      std::vector<Node *> const &nodes,
+                      vector<Benthos *> const &benthoshabs,
+                      std::vector<int> const &implicit_pops,
+                      vector<int> const &grouped_tacs,
+                      int tstep,
+                      vector<double> const &graph_res,
+                      bool is_tacs,
+                      bool is_individual_vessel_quotas,
+                      bool check_all_stocks_before_going_fishing,
+                      bool is_discard_ban,
+                      bool is_grouped_tacs,
+                      double tech_creeping_multiplier,
+                      bool is_fishing_credits,
+                      bool direct_killing_on_benthos,
+                      bool resuspension_effect_on_benthos,
+                      bool is_benthos_in_numbers)
 {
     lock();
 

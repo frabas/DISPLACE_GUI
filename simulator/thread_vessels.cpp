@@ -102,7 +102,6 @@ extern int nbpops;
 extern int export_vmslike;
 extern int export_hugefiles;
 extern vector<double> graph_res;
-extern bool is_individual_vessel_quotas;
 extern bool check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
@@ -112,14 +111,7 @@ extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;
 extern int total_amount_credited;
 extern double tariff_annual_hcr_percent_change;
-extern bool is_tacs;
-extern bool is_fishing_credits;
-extern bool is_direct_killing_on_benthos;
-extern bool is_resuspension_effect_on_benthos;
-extern bool is_discard_ban;
-extern bool is_grouped_tacs;
 extern double tech_creeping_multiplier;
-extern bool is_benthos_in_numbers;
 extern vector <int> nbcp_coupling_pops;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
@@ -274,7 +266,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                                                            use_dtrees,
                                                                            dyn_alloc_sce,
                                                                            model->config().implicit_pops,
-                                                                           is_individual_vessel_quotas,
+                                                                           model->scenario().is_individual_vessel_quotas,
                                                                            check_all_stocks_before_going_fishing);
                     //}
                     // ***************implement a decision*****************************
@@ -405,12 +397,16 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                              vessels[index_v]->do_catch(export_individual_tacs, populations, model->nodes(), benthoss,
                                                         model->config().implicit_pops, model->config().grouped_tacs,
                                                         tstep, graph_res,
-                                                        is_tacs, is_individual_vessel_quotas,
+                                                        model->is_tacs(),
+                                                        model->scenario().is_individual_vessel_quotas,
                                                         check_all_stocks_before_going_fishing,
-                                                        is_discard_ban, is_grouped_tacs, tech_creeping_multiplier,
-                                                        is_fishing_credits,
-                                                        is_direct_killing_on_benthos, is_resuspension_effect_on_benthos,
-                                                        is_benthos_in_numbers);
+                                                        model->is_discard_ban(),
+                                                        model->is_grouped_tacs(),
+                                                        tech_creeping_multiplier,
+                                                        model->is_fishing_credits(),
+                                                        model->is_direct_killing_on_benthos(),
+                                                        model->is_resuspension_effect_on_benthos(),
+                                                        model->is_benthos_in_numbers());
 
                              // check
                              //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)

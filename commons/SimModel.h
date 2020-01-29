@@ -64,6 +64,23 @@ public:
     void setSemester(int semester);
 
     int semester() const;
+
+    bool is_tacs() const;
+
+    bool is_fishing_credits() const;
+
+    bool is_discard_ban() const;
+
+    bool is_grouped_tacs() const;
+
+    bool is_benthos_in_numbers() const;
+
+    bool is_benthos_in_longevity_classes() const;
+
+    bool is_direct_killing_on_benthos() const;
+
+    bool is_resuspension_effect_on_benthos() const;
+
 };
 
 

@@ -454,15 +454,24 @@ public:
 
     void find_next_point_on_the_graph(std::vector<Node *> &nodes);
 
-    void do_catch(std::ofstream &export_individual_tacs, std::vector<Population *> &populations,
-                  std::vector<Node *> &nodes, vector<Benthos *> &benthoshabs,
-                  std::vector<int> const &implicit_pops, vector<int> const &grouped_tacs,
-                  int &tstep, vector<double> const &graph_res,
-                  bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
-                  bool &is_discard_ban, bool &is_grouped_tacs, double &tech_creeping_multiplier,
-                  bool &is_fishing_credits,
-                  bool &direct_killing_on_benthos, bool &resuspension_effect_on_benthos,
-                  bool &is_benthos_in_numbers);
+    void do_catch(std::ofstream &export_individual_tacs,
+                  std::vector<Population *> const &populations,
+                  std::vector<Node *> const &nodes,
+                  vector<Benthos *> const &benthoshabs,
+                  std::vector<int> const &implicit_pops,
+                  vector<int> const &grouped_tacs,
+                  int tstep,
+                  vector<double> const &graph_res,
+                  bool is_tacs,
+                  bool is_individual_vessel_quotas,
+                  bool check_all_stocks_before_going_fishing,
+                  bool is_discard_ban,
+                  bool is_grouped_tacs,
+                  double tech_creeping_multiplier,
+                  bool is_fishing_credits,
+                  bool direct_killing_on_benthos,
+                  bool resuspension_effect_on_benthos,
+                  bool is_benthos_in_numbers);
 
     void clear_catch_pop_at_szgroup();
 
@@ -574,7 +583,8 @@ public:
     int should_i_choose_this_port(std::map<std::string, int> &external_states, bool use_the_tree);
 
     void set_individual_tac_this_pop(std::ofstream &export_individual_tacs, int tstep,
-                                     std::vector<Population *> &populations, std::vector<int> implicit_pops, int pop,
+                                     std::vector<Population *> const &populations, std::vector<int> implicit_pops,
+                                     int pop,
                                      int init, double a_tac);
 
     void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);

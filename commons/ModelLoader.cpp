@@ -309,15 +309,15 @@ SimModel const &ModelLoader::model() const
 
 std::string ModelLoader::quarterString() const
 {
-    return "quarter" + std::to_string(model().quarter());
+    return std::to_string(model().quarter());
 }
 
 std::string ModelLoader::monthString() const
 {
-    return "month" + std::to_string(model().month());
+    return std::to_string(model().month());
 }
 
 std::string ModelLoader::semesterString() const
 {
-    return "semester" + std::to_string(model().semester());
+    return std::to_string(model().semester());
 }

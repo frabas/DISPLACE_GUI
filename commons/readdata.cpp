@@ -538,7 +538,7 @@ int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, 
     out << i.toIndex();
 
     //input data, harbour characteristics
-    string filename=  inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+".dat";
+    string filename=  inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_quarter"+a_quarter+".dat";
     ifstream fish_prices_per_harbour;
     fish_prices_per_harbour.open(filename.c_str());
     if(fish_prices_per_harbour.fail())
@@ -579,7 +579,7 @@ void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter,
     out << i.toIndex();
 
     //input data, harbour characteristics
-    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_fuel_price_per_vessel_size.dat";
+    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_quarter"+a_quarter+"_fuel_price_per_vessel_size.dat";
     ifstream file_fuel_prices_per_vsize;
     file_fuel_prices_per_vsize.open(filename.c_str());
     if(file_fuel_prices_per_vsize.fail())
@@ -615,7 +615,7 @@ int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
     out << i.toIndex();
 
     //input data, harbour characteristics
-    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_each_species_per_cat.dat";
+    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_quarter"+a_quarter+"_each_species_per_cat.dat";
     ifstream fish_prices_per_harbour;
     fish_prices_per_harbour.open(filename.c_str());
     if(fish_prices_per_harbour.fail())
@@ -781,7 +781,7 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
 {
     UNUSED(folder_name_parameterization);
 
-    string filename = inputfolder+"/graphsspe/nodes_in_polygons_"+a_graph+"_"+a_quarter+".dat";
+    string filename = inputfolder+"/graphsspe/nodes_in_polygons_"+a_graph+"_quarter"+a_quarter+".dat";
 
     ifstream file_nodes_in_polygons;
     file_nodes_in_polygons.open(filename.c_str());
@@ -813,7 +813,7 @@ bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, st
 
     const string separator=" ";
 
-    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_"+a_quarter+".dat";
+    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_quarter"+a_quarter+".dat";
 
     ifstream is;
     is.open(filename.c_str());
@@ -848,7 +848,7 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
 
     const string separator=" ";
 
-    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_"+a_month+".dat";
+    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_month"+a_month+".dat";
 
     ifstream is;
     is.open(filename.c_str());
@@ -921,7 +921,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
 
     const string separator=" ";
 
-    string filename = inputfolder+"/graphsspe/vsize_closure_"+a_graph+"_"+a_month+".dat";
+    string filename = inputfolder+"/graphsspe/vsize_closure_"+a_graph+"_month"+a_month+".dat";
 
     ifstream is;
     is.open(filename.c_str());

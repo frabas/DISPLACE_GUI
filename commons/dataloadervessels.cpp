@@ -44,12 +44,12 @@ bool read_vessels_features(string a_quarter,
     string filename;
     if(selected_vessels_only==1)
     {
-        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+"_subset.dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_quarter"+a_quarter+"_subset.dat";
     }
     else
     {
 
-        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_quarter"+a_quarter+".dat";
     }
     ifstream vessels_features;
     vessels_features.open(filename.c_str());
@@ -145,7 +145,7 @@ multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_na
 {
 
     //input data, vessel characteristics: fishing grounds
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_quarter"+a_quarter+".dat";
     ifstream vessels_fgrounds;
     vessels_fgrounds.open(filename.c_str());
     if(vessels_fgrounds.fail())
@@ -181,7 +181,7 @@ multimap<string, types::NodeId> read_fgrounds_init(string a_quarter, string fold
 {
 
     //input data, vessel characteristics: fishing grounds
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_quarter"+a_quarter+".dat";
     ifstream vessels_fgrounds;
     vessels_fgrounds.open(filename.c_str());
     if(vessels_fgrounds.fail())
@@ -217,7 +217,7 @@ multimap<string, types::NodeId> read_harbours(string a_quarter, string folder_na
 {
 
     //input data, vessel characteristics: specfic-harbour list
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_harbours_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_harbours_quarter"+a_quarter+".dat";
     ifstream vessels_harbours;
     vessels_harbours.open(filename.c_str());
     if(vessels_harbours.fail())
@@ -251,7 +251,7 @@ multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name
 {
 
     //input data, vessel characteristics: frequency for fgrounds
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_quarter"+a_quarter+".dat";
     ifstream vessels_freq_fgrounds;
     vessels_freq_fgrounds.open(filename.c_str());
     if(vessels_freq_fgrounds.fail())
@@ -285,7 +285,7 @@ multimap<string, double> read_freq_fgrounds_init(string a_quarter, string folder
 {
 
     //input data, vessel characteristics: frequency for fgrounds
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_quarter"+a_quarter+".dat";
     ifstream vessels_freq_fgrounds;
     vessels_freq_fgrounds.open(filename.c_str());
     if(vessels_freq_fgrounds.fail())
@@ -321,7 +321,7 @@ multimap<string, double> read_freq_harbours(string a_quarter, string folder_name
 {
 
     //input data, vessel characteristics: frequency for harbours
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_harbours_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_harbours_quarter"+a_quarter+".dat";
     ifstream vessels_freq_harbours;
     vessels_freq_harbours.open(filename.c_str());
     if(vessels_freq_harbours.fail())
@@ -355,7 +355,7 @@ multimap<string, double> read_vessels_betas(string a_semester, string folder_nam
 {
 
     //input data, vessel catching power/skipping effect i.e. the vessel betas
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_semester"+a_semester+".dat";
     ifstream vesselsspe_betas_file;
     vesselsspe_betas_file.open(filename.c_str());
     if(vesselsspe_betas_file.fail())
@@ -392,11 +392,11 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
     string filename;
     if(folder_name_parameterization=="final")
     {
-        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_semester"+a_semester+".dat";
     }
     else
     {
-        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_percent_tacs_per_pop_"+a_semester+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_percent_tacs_per_pop_semester"+a_semester+".dat";
     }
     ifstream vesselsspe_tacs_file;
     vesselsspe_tacs_file.open(filename.c_str());
@@ -467,7 +467,7 @@ multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_ve
 {
 
     //input data, vessel characteristics: possible metiers for this vessel
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_possible_metiers_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_possible_metiers_quarter"+a_quarter+".dat";
     ifstream vessels_possible_metiers;
     vessels_possible_metiers.open(filename.c_str());
     if(vessels_possible_metiers.fail())
@@ -506,7 +506,7 @@ multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, str
 {
 
     // frequence on ground of possible metiers for this vessels
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_freq_possible_metiers_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_freq_possible_metiers_quarter"+a_quarter+".dat";
     ifstream vessels_freq_possible_metiers;
     vessels_freq_possible_metiers.open(filename.c_str());
     if(vessels_freq_possible_metiers.fail())
@@ -545,7 +545,7 @@ multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, str
 {
 
     // frequence on ground of possible metiers for this vessels
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_cpue_per_stk_on_nodes_quarter"+a_quarter+".dat";
     ifstream vessels_cpue_per_stk_on_nodes;
     vessels_cpue_per_stk_on_nodes.open(filename.c_str());
     if(vessels_cpue_per_stk_on_nodes.fail())
@@ -584,7 +584,7 @@ multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quart
 {
 
     // frequence on ground of possible metiers for this vessels
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gshape_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gshape_cpue_per_stk_on_nodes_quarter"+a_quarter+".dat";
     ifstream vessels_gshape_cpue_per_stk_on_nodes;
     vessels_gshape_cpue_per_stk_on_nodes.open(filename.c_str());
     if(vessels_gshape_cpue_per_stk_on_nodes.fail())
@@ -623,7 +623,7 @@ multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quart
 {
 
     // frequence on ground of possible metiers for this vessels
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_quarter"+a_quarter+".dat";
     ifstream vessels_gscale_cpue_per_stk_on_nodes;
     vessels_gscale_cpue_per_stk_on_nodes.open(filename.c_str());
     if(vessels_gscale_cpue_per_stk_on_nodes.fail())

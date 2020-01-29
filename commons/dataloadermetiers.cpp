@@ -244,7 +244,7 @@ multimap<int, double> read_dis_ogives(string folder_name_parameterization, strin
 multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_betas_semester"+a_semester+".dat";
 
     ifstream metierspe_betas_file;
     metierspe_betas_file.open(filename.c_str());
@@ -265,7 +265,7 @@ multimap<int, double> read_metiers_betas(string a_semester, string folder_name_p
 multimap<int, double> read_discardratio_limits(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_discardratio_limits_"+a_semester+".dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_discardratio_limits_semester"+a_semester+".dat";
 
     ifstream discardratio_limits_file;
     discardratio_limits_file.open(filename.c_str());
@@ -287,7 +287,7 @@ multimap<int, double> read_discardratio_limits(string a_semester, string folder_
 multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_is_avoided_stocks_"+a_semester+".dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_is_avoided_stocks_semester"+a_semester+".dat";
 
     ifstream is_avoided_stocks_file;
     is_avoided_stocks_file.open(filename.c_str());
@@ -337,7 +337,7 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_mls_cat_"+a_semester+".dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_mls_cat_semester"+a_semester+".dat";
 
     ifstream metierspe_mls_cat_file;
     metierspe_mls_cat_file.open(filename.c_str());

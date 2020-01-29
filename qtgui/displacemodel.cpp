@@ -1937,7 +1937,7 @@ bool DisplaceModel::loadNodes()
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
     int nbbenthospops = mConfig.getNbbenthospops();
-    string a_quarter = "quarter1";// start quarter
+    string a_quarter = "1";// start quarter
 
     // input data, coord nodes of the graph
     ifstream coord_graph;
@@ -2483,8 +2483,8 @@ bool DisplaceModel::loadVessels()
     //auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
-    string a_quarter = "quarter1";// start quarter
-    string a_semester = "semester1";
+    string a_quarter = "1";// start quarter
+    string a_semester = "1";
 
     int selected_vessels_only = 0;
     string a_graph_name = "a_graph";

@@ -44,7 +44,7 @@ void read_pop_names_in_string(map<int, string>& pop_names,
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/avai"+szgroup+"_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/avai"+szgroup+"_betas_semester"+a_semester+".dat";
 
     //input data, pop characteristics: e.g. avai0_betas i.e. betas per pop for szgroup 0
     ifstream avai_betas_file;
@@ -504,12 +504,12 @@ multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, strin
     string filename;
     if(str_rand_avai_file=="baseline")
     {
-        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_semester"+a_semester+".dat";
     }
     else
     {
-        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
-        // filename=  "popsspe_"+folder_name_parameterization+"/stochast_avai/"+"lst_idx_nodes_per_pop_"+a_semester+"_"+str_rand_avai_file+".dat";
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_semester"+a_semester+".dat";
+        // filename=  "popsspe_"+folder_name_parameterization+"/stochast_avai/"+"lst_idx_nodes_per_pop_semester"+a_semester+"_"+str_rand_avai_file+".dat";
     }
 
     //input data, pop characteristics: lst idx nodes with presence
@@ -656,11 +656,11 @@ map<types::NodeId, double> read_oth_land_nodes_with_pop(string a_semester, strin
     string filename;
     if(fleetsce=="")
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_semester"+a_semester+".dat";
     }
     else
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_month+"_fleetsce"+fleetsce+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_month"+a_month+"_fleetsce"+fleetsce+".dat";
     }
 
     ifstream file_oth_land;
@@ -703,13 +703,13 @@ multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop
     out << a_pop;
     string a_pop_s = out.str();
 
-    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_"+a_semester+"_biolsce"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_semester"+a_semester+"_biolsce"+biolsce+".dat";
 
     ifstream file_overall_migration_fluxes;
     file_overall_migration_fluxes.open(filename.c_str());
     if(file_overall_migration_fluxes.fail())
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_"+a_semester+"_biolsce1.dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_semester"+a_semester+"_biolsce1.dat";
         file_overall_migration_fluxes.open(filename.c_str());
         cout << "biolsce ignored for " << filename  << endl;
     }
@@ -755,13 +755,13 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
     if(folder_name_parameterization=="final")
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" +
-                a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+                a_pop_s + "ctrysspe_relative_stability_semester"+a_semester+".dat";
     }
     else
     {
         //=> NEW_VERSION: replaced by:
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" +
-                a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+                a_pop_s + "ctrysspe_relative_stability_semester"+a_semester+".dat";
     }
 
     ifstream file_relative_stability;
@@ -809,12 +809,12 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     if(str_rand_avai_file=="baseline")
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
-                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
+                       a_pop_s + "spe_avai_szgroup_nodes_semester"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
     else
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
-                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
+                       a_pop_s + "spe_avai_szgroup_nodes_semester"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;
@@ -869,12 +869,12 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     if(str_rand_avai_file=="baseline")
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
-                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+a_type_of_avai_field_to_read+".dat";
+                a_pop_s + "spe_full_avai_szgroup_nodes_semester"+a_semester+a_type_of_avai_field_to_read+".dat";
     }
     else
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
-                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+a_type_of_avai_field_to_read+".dat";
+                a_pop_s + "spe_full_avai_szgroup_nodes_semester"+a_semester+"_"+str_rand_avai_file+a_type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;
@@ -919,7 +919,7 @@ multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_
     string a_pop_s = out.str();
 
     string filename;
-    filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_field_of_coeff_diffusion_this_pop_nodes_"+a_semester+"_biolsce"+biolsce+".dat";
+    filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_field_of_coeff_diffusion_this_pop_nodes_semester"+a_semester+"_biolsce"+biolsce+".dat";
 
     ifstream file_field_of_coeff_diffusion_this_pop;
     file_field_of_coeff_diffusion_this_pop.open(filename.c_str());

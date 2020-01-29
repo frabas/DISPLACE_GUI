@@ -9,6 +9,9 @@
 #include "comstructs.h"
 #include "SimModel.h"
 
+extern bool is_benthos_in_numbers; // otherwise the impact is on biomass by default
+extern bool is_benthos_in_longevity_classes;
+
 struct ModelLoader::Impl {
     std::shared_ptr<SimModel> model;
 
@@ -17,11 +20,6 @@ struct ModelLoader::Impl {
     bool nodesLoaded = false;
 
     bool doConsistencyTest = false;
-
-    bool is_benthos_in_numbers = false; // otherwise the impact is on biomass by default
-    bool is_benthos_in_longevity_classes = false;
-
-    vector<Node *> nodes;
 
     Impl(std::shared_ptr<SimModel> theModel)
             : model(theModel)
@@ -185,15 +183,15 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
         benthoss[landscape] = new Benthos(landscape,
                                           a_marine_landscape,
-                                          p->nodes,
+                                          p->model->nodes(),
                                           init_prop_funcgr_biomass_per_node,
                                           init_prop_funcgr_number_per_node,
                                           init_meanw_funcgr_per_node,
                                           init_recovery_rates_per_funcgr,
                                           init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                           init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                          p->is_benthos_in_numbers,
-                                          p->is_benthos_in_longevity_classes,
+                                          is_benthos_in_numbers,
+                                          is_benthos_in_longevity_classes,
                                           init_h_betas_per_pop,
                                           loadedDataBenthos.mmapidparam2
         );
@@ -212,11 +210,11 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthoss)
 {
     // check
-    for (unsigned int a_idx = 0; a_idx < p->nodes.size(); a_idx++) {
-        dout(cout << "this node " << p->nodes.at(a_idx)->get_idx_node().toIndex() <<
-                  " nb func. gr. " << p->nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
+    for (unsigned int a_idx = 0; a_idx < p->model->nodes().size(); a_idx++) {
+        dout(cout << "this node " << p->model->nodes().at(a_idx)->get_idx_node().toIndex() <<
+                  " nb func. gr. " << p->model->nodes().at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-        if (p->nodes.at(a_idx)->get_benthos_tot_biomass().size() != model().config().nbbenthospops) {
+        if (p->model->nodes().at(a_idx)->get_benthos_tot_biomass().size() != model().config().nbbenthospops) {
             cout
                     << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again"
                     << endl;

@@ -2034,8 +2034,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             outc(cout << "then take node: " << start_harbour << endl);
         }
 
-
-        vessels[i] = new Vessel(simModel->nodes()[start_harbour.toIndex()],
+         vessels[i] = new Vessel(simModel->nodes().at(start_harbour.toIndex()),
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
                                 simModel->config().nbpops,

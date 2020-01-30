@@ -13,6 +13,7 @@
 #include "../simulator/values.h"
 #include "shortestpath/GeoGraphLoader.h"
 #include "shortestpath/GeoGraph.h"
+#include "shortestpath/AStarShortestPathFinder.h"
 
 struct TextfileModelLoader::Impl {
     std::string folder_name_parameterization;
@@ -604,6 +605,13 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     }
     outc(cout << endl);
 
+    // fake to check
+    types::NodeId from = nodes.at(0)->get_idx_node();
+    cout << "from is " << from.toIndex() << endl;
+    types::NodeId to = nodes.at(nodes.size()-1)->get_idx_node();
+    cout << "to is " << to.toIndex() << endl;
+
+
     model().setNodes(std::move(nodes));
 
     // ASTAR TODO: Check Loading the nodes
@@ -613,7 +621,12 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         GeoGraphLoader loader;
         loader.load(geoGraph, filename_graph, filename_graph_test);
         cout << "Loading the graph " << filename_graph << " ...ok" << endl;
+        AStarShortestPathFinder aStarPathFinder;
+        list<types::NodeId> path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), to.toIndex());
+        for (auto v : path) std::cout << v << "\n";
+        cout << "Check a shortest path  ...ok" << endl;
         model().setGeoGraph(std::move(geoGraph));
+      
     } catch (std::exception &x) {
         std::cerr << "Cannot read Node graphs: " << x.what();
         return 2;

@@ -3881,7 +3881,8 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
 }
 
 
-void Vessel::alloc_on_high_previous_cpue(int tstep,
+void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel, 
+                                         int tstep,
                                          ofstream& freq_cpue)
 {
 
@@ -3931,7 +3932,8 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 }
 
 
-vector<double> Vessel::expected_profit_on_grounds(int use_static_paths,
+vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel, 
+                                                  int use_static_paths,
                                                   vector<Node* > &nodes,
                                                   const std::vector<types::NodeId> &relevant_nodes,
                                                   const std::vector<PathShop> &pathshops)
@@ -4088,7 +4090,8 @@ vector<double> Vessel::expected_profit_on_grounds(int use_static_paths,
 
 }
 
-void Vessel::alloc_on_high_profit_grounds(int tstep,
+void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel, 
+                                          int tstep,
                                           int use_static_paths,
                                           vector<Node* >&nodes,
                                           const std::vector<types::NodeId> &relevant_nodes,
@@ -4097,7 +4100,8 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 {
 
 
-    vector<double> profit_per_fgrounds = expected_profit_on_grounds(use_static_paths,
+    vector<double> profit_per_fgrounds = expected_profit_on_grounds(simModel, 
+                                                                    use_static_paths,
                                                                     nodes,
                                                                     relevant_nodes,
                                                                     pathshops);
@@ -4163,7 +4167,8 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 }
 
 
-void Vessel::alloc_while_saving_fuel(int tstep,
+void Vessel::alloc_while_saving_fuel(const SimModel& simModel, 
+                                     int tstep,
                                      int use_static_paths,
                                      vector<Node*>& nodes,
                                      const vector <types::NodeId>& relevant_nodes,
@@ -4337,7 +4342,11 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 }
 
 
-void Vessel::alloc_on_closer_grounds(int tstep, int use_static_paths, vector<Node*>&nodes, const vector <types::NodeId>& relevant_nodes,
+void Vessel::alloc_on_closer_grounds(const SimModel& simModel, 
+                                     int tstep, 
+                                     int use_static_paths,
+                                     vector<Node*>&nodes,
+                                     const vector <types::NodeId>& relevant_nodes,
                                      const std::vector<PathShop> &pathshops,
                                      ofstream& freq_distance)
 {
@@ -4516,7 +4525,10 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
 
 
-bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
+bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel, 
+                                            int tstep, 
+                                            const displace::commons::Scenario &scenario,
+                                            bool use_the_tree,
                                             const DynAllocOptions& dyn_alloc_sce,
                                             int use_static_paths,
                                             const vector<PathShop> &pathshops,
@@ -4545,7 +4557,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
 
         outc(cout << " should i choose this ground" << endl);
-        ground=this->should_i_choose_this_ground(tstep,
+        ground=this->should_i_choose_this_ground(simModel,
+                                                 tstep,
                                                  use_static_paths,
                                                  nodes,
                                                  relevant_nodes,
@@ -4566,7 +4579,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
 
             outc(cout << " alloc on high previous cpue" << endl);
-            this->alloc_on_high_previous_cpue(tstep,
+            this->alloc_on_high_previous_cpue(simModel,
+                                              tstep,
                                               freq_cpue);
         }
 
@@ -4575,7 +4589,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
 
             outc(cout << " alloc on high profit grounds" << endl);
-            this->alloc_on_high_profit_grounds(tstep,
+            this->alloc_on_high_profit_grounds(simModel,
+                                               tstep,
                                                use_static_paths,
                                                nodes,
                                                relevant_nodes,
@@ -4593,7 +4608,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             {
 
                 outc(cout << " alloc while saving fuel" << endl);
-                this->alloc_while_saving_fuel(tstep,
+                this->alloc_while_saving_fuel(simModel,
+                                              tstep,
                                               use_static_paths,
                                               nodes,
                                               relevant_nodes,
@@ -4611,7 +4627,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if (dyn_alloc_sce.option(Options::closer_grounds))		 // dyn sce.
         {
             outc(cout << " alloc on closer grounds" << endl);
-            this->alloc_on_closer_grounds(tstep,
+            this->alloc_on_closer_grounds(simModel,
+                                          tstep,
                                           use_static_paths,
                                           nodes,
                                           relevant_nodes,
@@ -4756,11 +4773,12 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     list<types::NodeId> path;
 
+    
     if(!use_static_paths)
     {
         // use ASTAR on the fly
         aStarMutex.lock();
-         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), ground.toIndex());
+         path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
         //cout << from.toIndex() << " test the a-star...ok" <<endl;
 
@@ -4883,7 +4901,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 }
 
 
-int Vessel::choose_another_ground_and_go_fishing(int tstep,
+int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
+                                                  int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
                                                   int use_static_paths,
                                                   const std::vector<PathShop> &pathshops,
@@ -5112,7 +5131,7 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
     {
         // Use ASTAR on the fly
         aStarMutex.lock();
-         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
+         path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), next_ground.toIndex());
         aStarMutex.unlock();
         //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
 
@@ -5153,7 +5172,7 @@ int Vessel::choose_another_ground_and_go_fishing(int tstep,
             {
                 // Use ASTAR on the fly
                 aStarMutex.lock();
-                 path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), next_ground.toIndex());
+                 path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), next_ground.toIndex());
                 aStarMutex.unlock();
                 //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
             }
@@ -5243,7 +5262,8 @@ return 0;
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::choose_a_port_and_then_return(int tstep,
+void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
+                                           int tstep,
                                            const DynAllocOptions &dyn_alloc_sce,
                                            int use_static_paths,
                                            const std::vector<PathShop> &pathshops,
@@ -5337,7 +5357,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     {
         // Use ASTAR on the fly
         aStarMutex.lock();
-         path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
+         path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), arr.toIndex());
         aStarMutex.unlock();
         //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
     }
@@ -5370,7 +5390,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         {
             // Use ASTAR on the fly
             aStarMutex.lock();
-             path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), arr.toIndex());
+             path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), arr.toIndex());
             aStarMutex.unlock();
             //cout << from.toIndex() << " test the a-star for this situation...ok" <<endl;
         }
@@ -5680,7 +5700,8 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
 
 
-types::NodeId Vessel::should_i_choose_this_ground(int tstep,
+types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
+                                                  int tstep,
                                                   int use_static_paths,
                                                   vector<Node *> &nodes,
                                                   const vector<types::NodeId> &relevant_nodes,
@@ -5782,7 +5803,8 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     {
         outc(cout << "compute smartCatchGround"  << endl);
 
-        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(use_static_paths,
+        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(simModel,
+                                                                                     use_static_paths,
                                                                                      nodes,
                                                                                      relevant_nodes,
                                                                                      pathshops);
@@ -6267,7 +6289,9 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
 
 
-int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_the_tree)
+int Vessel::should_i_change_ground(const SimModel& simModel, 
+                                  map<string,int>& external_states,
+                                  bool use_the_tree)
 {
     UNUSED(external_states);
 
@@ -6365,7 +6389,9 @@ return(shall_I_change_to_another_ground_because_of_StartFishing_dtree ||
 }
 
 
-int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool use_the_tree,
+int Vessel::should_i_stop_fishing(const SimModel& simModel, 
+                                  const map<string,int>& external_states, 
+                                  bool use_the_tree,
                                   int tstep,
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int use_static_paths,
@@ -6506,7 +6532,9 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
 }
 
 
-int Vessel::should_i_choose_this_port(map<string,int>& external_states, bool use_the_tree)
+int Vessel::should_i_choose_this_port(const SimModel& simModel,
+                                      map<string,int>& external_states,
+                                      bool use_the_tree)
 {
     UNUSED(external_states);
 

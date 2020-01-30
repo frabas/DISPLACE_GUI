@@ -6,7 +6,6 @@
 
 #include <boost/graph/astar_search.hpp>
 
-COMMONSSHARED_EXPORT GeoGraph geoGraph;
 
 using namespace boost;
 

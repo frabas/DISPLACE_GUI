@@ -23,6 +23,8 @@
 
 #include <commons_global.h>
 
+#include "SimModel.h"
+
 #include <vesselcalendar.h>
 
 #include <string>
@@ -488,30 +490,37 @@ public:
         void export_loglike_prop_met(std::ofstream& loglike_prop_met, int tstep, int nbpops);
 		void reinit_after_a_trip();
         void alter_freq_fgrounds_for_nodes_in_polygons(std::multimap <int, int> nodes_in_polygons);
-		void alloc_on_high_previous_cpue(int tstep,
-            std::ofstream& freq_cpue);
-        void alloc_on_high_profit_grounds(int tstep,
+		void alloc_on_high_previous_cpue(const SimModel& simModel,
+                                         int tstep,
+                                         std::ofstream& freq_cpue);
+        void alloc_on_high_profit_grounds(const SimModel& simModel,
+                                          int tstep,
                                           int use_static_paths,
                                           vector<Node *> &nodes,
                                           const std::vector<types::NodeId> &relevant_nodes,
                                           const std::vector<PathShop> &pathshops,
             std::ofstream& freq_profit);
-        std::vector<double> expected_profit_on_grounds(int use_static_paths,
+        std::vector<double> expected_profit_on_grounds(const SimModel& simModel, 
+                                                       int use_static_paths,
                                                        vector<Node*>& nodes,
                                                        const std::vector<types::NodeId> &relevant_nodes,
                                                        const std::vector<PathShop> &pathshops);
-        void alloc_while_saving_fuel(int tstep,
+        void alloc_while_saving_fuel(const SimModel& simModel, 
+                                     int tstep,
                                      int use_static_paths,
                                      vector<Node*>& nodes,
                                     const std::vector<types::NodeId> &relevant_nodes,
            const std::vector<PathShop> &pathshops);
-        void alloc_on_closer_grounds(int tstep, int use_static_paths,
+        void alloc_on_closer_grounds(const SimModel& simModel, 
+                                     int tstep, int use_static_paths,
                                      vector<Node *> &nodes,
                                      const std::vector<types::NodeId> &relevant_nodes,
             const std::vector<PathShop> &pathshops,
             std::ofstream& freq_distance);
 
-        bool choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
+        bool choose_a_ground_and_go_fishing(const SimModel& simModel,
+                                           int tstep, 
+            const displace::commons::Scenario &scenario, bool use_the_tree,
             const DynAllocOptions &dyn_alloc_sce,
             int use_static_paths,
             const std::vector <PathShop>& pathshops,
@@ -525,7 +534,8 @@ public:
             std::ofstream& freq_distance);
 
 
-        int choose_another_ground_and_go_fishing(int tstep,
+        int choose_another_ground_and_go_fishing(const SimModel& simModel, 
+                                                 int tstep,
                                                  const DynAllocOptions &dyn_alloc_sce,
                                                  int use_static_paths,
                                                  const std::vector<PathShop> &pathshops,
@@ -537,7 +547,8 @@ public:
                                                  std::ofstream &freq_cpue,
                                                  std::ofstream &freq_distance);
 
-    void choose_a_port_and_then_return(int tstep,
+    void choose_a_port_and_then_return(const SimModel& simModel, 
+                                       int tstep,
                                        const DynAllocOptions &dyn_alloc_sce,
                                        int use_static_paths,
                                        const std::vector<PathShop> &pathshops,
@@ -553,21 +564,27 @@ public:
     void which_metier_should_i_go_for(std::vector<Metier *> &metiers);
 
     //yes:1; no=0
-    int should_i_go_fishing(int tstep, std::vector<Population *> &populations, bool use_the_tree,
+    int should_i_go_fishing(int tstep, 
+                            std::vector<Population *> &populations,
+                            bool use_the_tree,
                             const DynAllocOptions &dyn_alloc_sce,
-                            std::vector<int> const &implicit_pops, int is_individual_vessel_quotas,
+                            std::vector<int> const &implicit_pops, 
+                            int is_individual_vessel_quotas,
                             int check_all_stocks_before_going_fishing);
 
-    types::NodeId should_i_choose_this_ground(int tstep, int use_static_paths,
+    types::NodeId should_i_choose_this_ground(const SimModel& simModel, 
+                                              int tstep, int use_static_paths,
                                               std::vector<Node *> &nodes,
                                               const std::vector<types::NodeId> &relevant_nodes,
                                               const std::vector<PathShop> &pathshops,
                                               const DynAllocOptions &dyn_alloc_sce);
 
-    int should_i_change_ground(std::map<std::string, int> &external_states, bool use_the_tree);
+    int should_i_change_ground(const SimModel& simModel, 
+                               std::map<std::string, int> &external_states, bool use_the_tree);
 
     //yes:1; no=0
-    int should_i_stop_fishing(const std::map<std::string, int> &external_states, bool use_the_tree,
+    int should_i_stop_fishing(const SimModel& simModel, 
+                              const std::map<std::string, int> &external_states, bool use_the_tree,
                               int tstep,
                               const DynAllocOptions &dyn_alloc_sce,
                               int use_static_paths,
@@ -580,7 +597,9 @@ public:
                               std::ofstream &freq_distance,
                               std::vector<double> &dist_to_ports);
 
-    int should_i_choose_this_port(std::map<std::string, int> &external_states, bool use_the_tree);
+    int should_i_choose_this_port(const SimModel& simModel, 
+                                 std::map<std::string, int> &external_states,
+                                 bool use_the_tree);
 
     void set_individual_tac_this_pop(std::ofstream &export_individual_tacs, int tstep,
                                      std::vector<Population *> const &populations, std::vector<int> implicit_pops,

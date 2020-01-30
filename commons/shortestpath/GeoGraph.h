@@ -50,6 +50,5 @@ public:
     size_t numEdges() const { return boost::num_edges(graph); }
 };
 
-extern COMMONSSHARED_EXPORT  GeoGraph geoGraph;
 
 #endif //GEOGRAPH_H

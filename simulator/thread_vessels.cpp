@@ -276,6 +276,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         //go fishing
                         outc(cout << "GO FISHING" << endl);
                         do_nothing = vessels[index_v]->choose_a_ground_and_go_fishing(
+                                model,
                                 tstep, model->scenario(), use_dtrees,
                                 dyn_alloc_sce, use_static_paths, pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
@@ -308,6 +309,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
+                        model,
                         external_states_relevant_for_stopping_fishing,
                         use_dtrees,
                         tstep,
@@ -360,6 +362,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
                     int shall_I_change_to_another_ground=1;
                     if(!force_another_ground) shall_I_change_to_another_ground= vessels[ index_v ]->should_i_change_ground(
+                                 model,
                                  external_states_relevant_for_change_ground,
                                  use_dtrees);
                     // note: this do not change of ground if nodes are too far from each other i.e. when code area coded "10"
@@ -373,6 +376,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
                         is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
+                                model,
                                 tstep,
                                 dyn_alloc_sce, use_static_paths,
                                 pathshops,
@@ -462,6 +466,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                     glob_mutex.lock();
                     vessels[ index_v ]->choose_a_port_and_then_return(
+                            model, 
                             tstep,
                             dyn_alloc_sce,
                             use_static_paths,

@@ -69,7 +69,7 @@ AStarShortestPathFinder::findShortestPath(const GeoGraph &ggraph, GeoGraph::vert
         // call astar named parameter interface
         astar_search_tree
                 (graph, from,
-                 distance_heuristic<GeoGraph::Graph, GeoGraph::cost, GeoGraph::location *>
+                 distance_heuristic<GeoGraph::Graph, GeoGraph::cost, GeoGraph::location const *>
                          (ggraph.locations.data(), to),
                  predecessor_map(make_iterator_property_map(p.begin(), get(vertex_index, graph))).
                          distance_map(make_iterator_property_map(d.begin(), get(vertex_index, graph))).

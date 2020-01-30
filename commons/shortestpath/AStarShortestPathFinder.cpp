@@ -15,7 +15,7 @@ struct found_goal {
 };
 
 // euclidean distance heuristic
-template <class Graph, class CostType, class LocMap>
+template <class Graph, class CostType, class LocMap> 
 class distance_heuristic : public astar_heuristic<Graph, CostType>
 {
     const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
@@ -57,7 +57,7 @@ private:
 
 //std::list<int>
 std::list<types::NodeId>
-AStarShortestPathFinder::findShortestPath(GeoGraph &ggraph, GeoGraph::vertex from, GeoGraph::vertex to)
+AStarShortestPathFinder::findShortestPath(const GeoGraph &ggraph, GeoGraph::vertex from, GeoGraph::vertex to)
 {
     auto &graph = ggraph.graph;
 

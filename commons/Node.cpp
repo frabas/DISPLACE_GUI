@@ -2015,12 +2015,15 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
 
     double benthosnumber=0;
     if(!benthos_tot_meanweight.empty() && benthos_tot_meanweight.at(funcgr)!=0)  benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr);
+    dout(cout  << "coucou1" << endl);
 
     double benthosnumberoverK=0;
     if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)  benthosnumberoverK = benthosnumber/benthos_tot_number_K.at(funcgr);
+    dout(cout  << "coucou2" << endl);
 
     double benthosbiomassoverK=0;
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);
+    dout(cout  << "coucou3" << endl);
 
  
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K.at(funcgr)
@@ -2038,6 +2041,7 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
           setprecision(3) << fixed << benthosbiomassoverK  << " " << benthosnumberoverK <<  " " <<
           setprecision(0) << fixed << benthos_tot_biomass_K.at(funcgr) << endl;
 
+    cout  << "export benthos on nodes for use in e.g. a GIS engine....ok" << endl;
 }
 
 void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes, int tstep, int funcgr)

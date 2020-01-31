@@ -270,16 +270,20 @@ int will_stop=0; // see Options::DEBUG_TAC
              }
             else
             {
+                cout << "nodes.size() is " << nodes.size() << endl;
                 //...and export the benthos biomasses on node
                 for (unsigned int n=0; n<nodes.size(); n++)
                 {
+                    cout << "n is " << n << endl;
                     for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
                     {
+                        cout << "funcgroup is " << funcgroup << endl;
                                nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
                                if (outSqlite)
                                    outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup, 0);
                     }
                 }
+                cout << "hi there " << endl;
 
 
 

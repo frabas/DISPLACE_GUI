@@ -85,12 +85,12 @@ void FuncGroupsTable::insert(int tstep, Node *node, int funcgr, int isN)
 
     double benthosnumber = 0;
     double benthosbiomass = 0;
-    if (!isN && benthos_tot_meanweight.at(funcgr) != 0) {
+    if (!isN && !benthos_tot_biomass.empty() && !benthos_tot_meanweight.empty() && benthos_tot_meanweight.at(funcgr) != 0) {
         benthosnumber = benthos_tot_biomass.at(funcgr) / benthos_tot_meanweight.at(funcgr); // #1
         benthosbiomass = benthos_tot_biomass.at(funcgr); // #2
     }
 
-    if (isN && benthos_tot_meanweight.at(funcgr) != 0) {
+    if (isN && !benthos_tot_number.empty() && !benthos_tot_meanweight.empty() && benthos_tot_meanweight.at(funcgr) != 0) {
         benthosnumber = benthos_tot_number.at(funcgr); // #1
         benthosbiomass = benthos_tot_number.at(funcgr) * benthos_tot_meanweight.at(funcgr); // #2
     }

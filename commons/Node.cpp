@@ -1960,38 +1960,43 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 
 }
 
-void Node::add_benthos_tot_biomass_on_node(double tot_biomass_this_group)
-{
 
-	benthos_tot_biomass.push_back(tot_biomass_this_group);
+void Node::init_benthos_tot_biomass_on_node(int funcgrp)
+{
+    benthos_tot_biomass.clear();
+    for (int gr = 0; gr < funcgrp; ++gr) benthos_tot_biomass.push_back(0);
 
 }
 
-void Node::add_benthos_tot_number_on_node(double tot_number_this_group)
+void Node::init_benthos_tot_number_on_node(int funcgrp)
 {
 
-    benthos_tot_number.push_back(tot_number_this_group);
+    benthos_tot_number.clear();
+    for (int gr = 0; gr < funcgrp; ++gr) benthos_tot_number.push_back(0);
 
 }
 
-void Node::add_benthos_tot_meanweight_on_node(double meanweight_this_group)
+void Node::init_benthos_tot_meanweight_on_node(int funcgrp)
 {
 
-    benthos_tot_meanweight.push_back(meanweight_this_group);
+    benthos_tot_meanweight.clear();
+    for (int gr = 0; gr < funcgrp; ++gr) benthos_tot_meanweight.push_back(0);
 
 }
 
-void Node::add_benthos_tot_biomass_K_on_node(double tot_biomass_K_this_group)
+void Node::init_benthos_tot_biomass_K_on_node(int funcgrp)
 {
 
-    benthos_tot_biomass_K.push_back(tot_biomass_K_this_group);
+    benthos_tot_biomass_K.clear();
+    for (int gr = 0; gr < funcgrp; ++gr) benthos_tot_biomass_K.push_back(0);
 
 }
 
-void Node::add_benthos_tot_number_K_on_node(double tot_number_K_this_group)
+void Node::init_benthos_tot_number_K_on_node(int funcgrp)
 {
 
-    benthos_tot_number_K.push_back(tot_number_K_this_group);
+    benthos_tot_number_K.clear();
+    for (int gr = 0; gr < funcgrp; ++gr) benthos_tot_number_K.push_back(0);
 
 }
 

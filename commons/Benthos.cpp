@@ -28,6 +28,7 @@ using namespace std;
 
 Benthos::Benthos(int _id,
                  int _marine_landscape,
+                 int nbfuncgrp,
                     const vector<Node *> &_nodes,
                     const vector<double> &_prop_funcgr_biomass_per_node,
                     const vector<double> &_prop_funcgr_number_per_node,
@@ -63,9 +64,20 @@ Benthos::Benthos(int _id,
             dout(cout << _nodes[  n  ]->get_idx_node().toIndex() << " ");
 
             _nodes[n]->set_benthos_id(id);
-		}
+
+  
+        }
 	}
 
+   
+    for (unsigned int i = 0; i < p_spe_nodes.size(); i++)
+    {
+        p_spe_nodes[i]->init_benthos_tot_number_on_node(nbfuncgrp);
+        p_spe_nodes[i]->init_benthos_tot_biomass_on_node(nbfuncgrp);
+        p_spe_nodes[i]->init_benthos_tot_meanweight_on_node(nbfuncgrp);
+        p_spe_nodes[i]->init_benthos_tot_number_K_on_node(nbfuncgrp);
+        p_spe_nodes[i]->init_benthos_tot_biomass_K_on_node(nbfuncgrp);
+    }
 
     if(is_benthos_in_longevity_classes)
     {
@@ -91,16 +103,16 @@ Benthos::Benthos(int _id,
                init_longevity_classes_condition_per_node.push_back(pos->second);
            }
 
-           for(unsigned int funcgr=0; funcgr<init_longevity_classes_condition_per_node.size();funcgr++)
+           for(unsigned int funcgr=0; funcgr< nbfuncgrp;funcgr++)
               {
                //outc(cout << "funcgr is: " << funcgr << endl);
                //outc(cout << "init_longevity_classes_condition_per_node.at(funcgr) is: " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
               // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
-              p_spe_nodes[i]->add_benthos_tot_biomass_on_node(1.0 * init_longevity_classes_condition_per_node.at(funcgr) );
-              p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(1.0);
+              p_spe_nodes[i]->set_benthos_tot_biomass(funcgr, 1.0 * init_longevity_classes_condition_per_node.at(funcgr));
+              p_spe_nodes[i]->set_benthos_tot_meanweight(funcgr, 1.0);
               // add carryingcap K
-              p_spe_nodes[i]->add_benthos_tot_number_K_on_node(1.0);
-              p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(1.0);
+              p_spe_nodes[i]->set_benthos_tot_number_K(funcgr, 1.0);
+              p_spe_nodes[i]->set_benthos_tot_biomass_K(funcgr, 1.0);
               //dout (cout << "this longevity group "<< funcgr << "initial condition on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
               //       "this marine landscape " << marine_landscape << " is " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
               }
@@ -109,34 +121,34 @@ Benthos::Benthos(int _id,
           if(is_benthos_in_numbers)
             {
 
-            for(unsigned int funcgr=0; funcgr<prop_funcgr_number_per_node.size();funcgr++)
+            for(unsigned int funcgr=0; funcgr< nbfuncgrp;funcgr++)
                {
                // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
-               p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr) );
+               p_spe_nodes[i]->set_benthos_tot_number(funcgr, p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr));
                //...and deduce biomass from N*meanw
-               p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_number()*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr) );
+               p_spe_nodes[i]->set_benthos_tot_biomass(funcgr, p_spe_nodes[i]->get_init_benthos_number()*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr));
                // add meanweight
-               p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
+               p_spe_nodes[i]->set_benthos_tot_meanweight(funcgr, meanw_funcgr_per_node.at(funcgr));
                // add carryingcap K
-               p_spe_nodes[i]->add_benthos_tot_number_K_on_node(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr) );
-               p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr) );
+               p_spe_nodes[i]->set_benthos_tot_number_K(funcgr, benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr));
+               p_spe_nodes[i]->set_benthos_tot_biomass_K(funcgr, benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr));
                }
                dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
                       "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
             }
            else
            {
-            for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
+            for(unsigned int funcgr=0; funcgr< nbfuncgrp;funcgr++)
                {
                 // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
-               p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr) );
+               p_spe_nodes[i]->set_benthos_tot_biomass(funcgr, p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr));
                //...and deduce N from B/meanw
-               if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_biomass()/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr) );
+               if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->set_benthos_tot_number(funcgr, p_spe_nodes[i]->get_init_benthos_biomass()/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr));
                // add meanweight
-               p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
+               p_spe_nodes[i]->set_benthos_tot_meanweight(funcgr, meanw_funcgr_per_node.at(funcgr));
                // add carryingcap K
-               p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr) );
-               if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->add_benthos_tot_number_K_on_node(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr) );
+               p_spe_nodes[i]->set_benthos_tot_biomass_K(funcgr, benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr));
+               if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->set_benthos_tot_number_K(funcgr, benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr));
                }
 
            }

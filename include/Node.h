@@ -357,12 +357,13 @@ class  Node
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_nodes_envt(ofstream& nodes_event, int tstep);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
-        void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
-        void add_benthos_tot_number_on_node(double tot_number_this_group);
-        void add_benthos_tot_meanweight_on_node(double meanweight_this_group);
-        void add_benthos_tot_biomass_K_on_node(double tot_biomass_K_this_group);
-        void add_benthos_tot_number_K_on_node(double tot_number_K_this_group);
-
+        
+        void init_benthos_tot_biomass_on_node(int funcgrp);
+        void init_benthos_tot_number_on_node(int funcgrp);
+        void init_benthos_tot_meanweight_on_node(int funcgrp);
+        void init_benthos_tot_biomass_K_on_node(int funcgrp);
+        void init_benthos_tot_number_K_on_node(int funcgrp);
+        
         void setAreaType(int _area_type);
         int evaluateAreaType();
 

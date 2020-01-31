@@ -34,6 +34,7 @@ class  Benthos
 	public:
         Benthos(int id,
                 int marine_landscape,
+            const int nbfuncgr,
             const vector<Node* > &nodes,
             const vector<double> &prop_funcgr_biomass_per_node,
             const vector<double> &prop_funcgr_number_per_node,

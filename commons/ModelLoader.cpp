@@ -180,6 +180,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
         benthoss[landscape] = new Benthos(landscape,
                                           a_marine_landscape,
+                                          p->model->config().nbbenthospops,
                                           p->model->nodes(),
                                           init_prop_funcgr_biomass_per_node,
                                           init_prop_funcgr_number_per_node,

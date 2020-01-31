@@ -2041,7 +2041,6 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
           setprecision(3) << fixed << benthosbiomassoverK  << " " << benthosnumberoverK <<  " " <<
           setprecision(0) << fixed << benthos_tot_biomass_K.at(funcgr) << endl;
 
-    cout  << "export benthos on nodes for use in e.g. a GIS engine....ok" << endl;
 }
 
 void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes, int tstep, int funcgr)

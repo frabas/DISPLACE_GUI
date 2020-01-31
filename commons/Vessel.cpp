@@ -4763,7 +4763,6 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
     // get the shortest path between source and destination
     // with the list of intermediate nodes
-    cout << this->get_loc()->get_idx_node() << endl;
     //auto from = this->get_loc()->get_idx_node();
     types::NodeId from = this->get_loc()->get_idx_node();
     this->set_previous_harbour_idx(from);

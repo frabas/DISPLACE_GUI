@@ -456,7 +456,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                           << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)"
                           << endl);
                 outc(cout << "...then go for the port: " << model().scenario().a_port << " instead" << endl);
-                int er2 = read_prices_per_harbour_each_pop_per_cat(model().scenario().a_port, "quarter1",
+                int er2 = read_prices_per_harbour_each_pop_per_cat(model().scenario().a_port, "1",
                                                                    fishprices_each_species_per_cat,
                                                                    p->folder_name_parameterization,
                                                                    p->inputfolder);
@@ -623,8 +623,8 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         cout << "Loading the graph " << filename_graph << " ...ok" << endl;
         AStarShortestPathFinder aStarPathFinder;
         list<types::NodeId> path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), to.toIndex());
-        for (auto v : path) std::cout << v << "\n";
-        cout << "Check a shortest path  ...ok" << endl;
+        //for (auto v : path) std::cout << v << "\n";
+        //cout << "Check a shortest path  ...ok" << endl;
         model().setGeoGraph(std::move(geoGraph));
       
     } catch (std::exception &x) {

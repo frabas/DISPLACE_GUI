@@ -2262,9 +2262,9 @@ bool DisplaceModel::loadNodes()
                 cout << a_point
                      << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)"
                      << endl;
-                //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
+                //int er = read_prices_per_harbour(a_port, "1", prices, mName.toStdString()); // delete later on when final parameterisation
                 cout << "then go for the port: " << a_port << " instead" << endl;
-                read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat,
+                read_prices_per_harbour_each_pop_per_cat(a_port, "1", fishprices_each_species_per_cat,
                                                          mInputName.toStdString(), mBasePath.toStdString());
                 cout << "....OK" << endl;
 

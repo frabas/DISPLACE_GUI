@@ -59,6 +59,8 @@ SOURCES= \
     options.cpp \
     statics.cpp \
     simulation.cpp \
+    ConfigTables.cpp \
+    SimModel.cpp \
     dtree/decisiontree.cpp \
     dtree/variables.cpp \
     dtree/dtnode.cpp \
@@ -91,8 +93,10 @@ SOURCES= \
     storage/tables/nodestariffstattable.cpp \
     shortestpath/AStarShortestPathFinder.cpp \
     shortestpath/GeoGraph.cpp \
-    shortestpath/GeoGraphLoader.cpp
-
+    shortestpath/GeoGraphLoader.cpp \
+    ModelLoader.cpp TextfileModelLoader.cpp \
+    dataloaderbenthos.cpp dataloadercommercialships.cpp dataloaderfishfarms.cpp \
+    dataloadermetiers.cpp dataloaderpops.cpp dataloadervessels.cpp dataloaderwindmills.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -120,7 +124,9 @@ HEADERS= \
     ../include/vesselcalendar.h \
     ../include/idtypes.h \
     ../include/idtypeshelpers.h \
+    ../include/ConfigTable.h \
     simulation.h \
+    SimModel.h \
     dtree/decisiontree.h \
     dtree/variables.h \
     dtree/dtnode.h \
@@ -172,7 +178,12 @@ HEADERS= \
     storage/cacheddatastorage.h \
     shortestpath/AStarShortestPathFinder.h \
     shortestpath/GeoGraphLoader.h \
-    shortestpath/GeoGraph.h
+    shortestpath/GeoGraph.h \
+    ModelLoader.h  TextfileModelLoader.h \
+    dataloader.h dataloaderbenthos.h dataloadercommercialships.h \
+    dataloaderfishfarms.h dataloadermetiers.h dataloaderpops.h dataloadervessels.h dataloaderwindmills.h
+
+
 
 ### mSQLiteCpp dependency
 

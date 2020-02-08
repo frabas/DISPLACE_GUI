@@ -16,7 +16,7 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++14
 
-LIBS+= -L.. -ldisplacecommons -lformats
+LIBS+= -L.. -ldisplacecommons -lformats -lmsqlitecpp
 
 !win32: -lsqlite3
 
@@ -25,7 +25,7 @@ macx {
     CONFIG -= app_bundle
 }
 
-unix:LIBS += -lboost_program_options -lpthread
+unix:LIBS += -lboost_program_options -lboost_filesystem -lpthread
 
 win32 {
     # For GetProcessMemoryInfo()
@@ -65,7 +65,8 @@ SOURCES= main.cpp \
     outputexporter.cpp \
     getRSS.cpp \
     biomodule2.cpp \
-    fisheriesmanagmt.cpp
+    fisheriesmanagmt.cpp \
+    runtime_tests/NodeTester.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -86,6 +87,7 @@ HEADERS= \
     ../include/options.h \
     ../include/profiler.h \
     ../include/version.h \
+    runtime_tests/NodeTester.h \
     thread_vessels.h \
     values.h \
     messages/noipc.h \

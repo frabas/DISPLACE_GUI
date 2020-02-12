@@ -1,23 +1,23 @@
 cmake_minimum_required(VERSION 3.3)
 project(displace VERSION 1.0 LANGUAGES C CXX)
 
-include (cmake/options.cmake)
-include (cmake/compiler.cmake)
+include(cmake/options.cmake)
+include(cmake/compiler.cmake)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include (cmake/qt.cmake)
+include(cmake/qt.cmake)
 
 if (UNIX)
     include(cmake/platform-linux.cmake)
 endif ()
 
 if (WIN32)
-    include (cmake/platform_win.cmake)
-endif()
+    include(cmake/platform_win.cmake)
+endif ()
 
 if (APPLE)
-    include(cmake/platform_apple.cmake)
+    include(cmake/macos/platform-apple.cmake)
 endif (APPLE)
 
 include(cmake/installer.cmake)

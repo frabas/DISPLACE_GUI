@@ -10,6 +10,7 @@ target_include_directories(runLoaderTest
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/formats
         ${CMAKE_SOURCE_DIR}/commons
+        ${Sparsepp_INCLUDE_DIRS}
         )
 
 if (NOT APPLE AND NOT WIN32)

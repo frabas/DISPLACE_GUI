@@ -1,12 +1,12 @@
 from recipes.recipe import Recipe
 from recipes.helpers import helpers
-import os,zipfile,shutil,glob
+import os, zipfile, shutil, glob
+
 
 class SQLite(Recipe):
-
-    version=3210000
-    archive=("sqlite-amalgamation-%s.zip" % version)
-    url=("https://sqlite.org/2017/%s" % archive)
+    version = 3210000
+    archive = ("sqlite-amalgamation-%s.zip" % version)
+    url = ("https://sqlite.org/2017/%s" % archive)
 
     def __init__(self, env):
         super(SQLite, self).__init__(env)
@@ -33,7 +33,7 @@ class SQLite(Recipe):
         helpers.mkdir(build_type)
         os.chdir(build_type)
 
-        shutil.copy(os.path.join(self.env.getDataDir(), "sqlite","CMakeLists.txt"),
+        shutil.copy(os.path.join(self.env.getDataDir(), "sqlite", "installer-apple.cmake"),
                     "../../")
 
         cmdline = ["cmake", self.path,
@@ -69,9 +69,8 @@ class SQLite(Recipe):
 
         helpers.copy(glob.glob("*.h"), self.env.getInstallIncludeDir())
 
-        os.chdir(os.path.join(self.bldpath, "Release", "Release"))   # Yes, that's not an error.
+        os.chdir(os.path.join(self.bldpath, "Release", "Release"))  # Yes, that's not an error.
 
         helpers.copy(glob.glob("*.dll"), libdir)
         helpers.copy(glob.glob("*.lib"), libdir)
         return True
-

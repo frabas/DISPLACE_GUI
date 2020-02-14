@@ -40,23 +40,23 @@ EOF
 #	library: The library name
 #	appbundle: The application bundle path
 copy_lib()
-{	
+{
 	T=$1
 	LIB=$2
 	AB=$3
-	
+
 	#echo "checking $T against $LIB"
 	libpath=`otool -L $T | grep $LIB`
 	if [ $? -eq 0 ] ; then
-		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | awk '{ print \$1 }'`	
-		echo "$org_name" | egrep '@executable_path/' 
+		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | awk '{ print \$1 }'`
+		echo "$org_name" | egrep '@executable_path/'
 		RES=$?
 		#echo "result: $RES"
-		if [ $RES -ne 0 ] ; then	
+		if [ $RES -ne 0 ] ; then
 			lib_name=`basename $org_name`
 			dest_name=$AB/Contents/Frameworks/$lib_name
 			new_name=@executable_path/../Frameworks/$lib_name
-			
+
 			#
 			# Check if the library is accessible. It could not if the library doesn't exists but is manually
 			# installed by INSTALL_EXTRA_LIBS
@@ -65,12 +65,12 @@ copy_lib()
 				echo "$org_name not found, trying with /usr/local/lib"
 				org_name=/usr/local/lib/$org_name
 			fi
-			
+
 			if [ -r "$org_name" ] ; then
 				echo "COPYING: $org_name $dest_name"
 				cp -L $org_name $dest_name || exit 1
                                 chmod u+w $dest_name
-		
+
 				echo "Running: install_name_tool -id $new_name $dest_name"
 				install_name_tool -id $new_name $dest_name || echo "- ***Error Running: install_name_tool -id $new_name $dest_name"
 			else
@@ -79,7 +79,7 @@ copy_lib()
 		fi
 	#else
 		#echo "No $LIB found"
-	fi	
+	fi
 }
 
 #copy_framework_qt
@@ -94,16 +94,16 @@ copy_framework_qt()
 	T=$1
 	WF=$2
 	BUNDLE=$3
-	
+
 	src_file=`echo $WF | sed -e 's/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_file=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
-	dst_lib=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\/.*\)$/\1/g'` 
+	dst_lib=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\/.*\)$/\1/g'`
 	echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
-	
-	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
+
+	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
                 chmod -R u+w $BUNDLE/Contents/Frameworks/$dst_file
-	
+
 		#echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
 		install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib \
 			|| echo "- ***Error Running: install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib"
@@ -117,10 +117,10 @@ copy_framework()
 	dst_file=$2
 	dst_lib=$3
 	BUNDLE=$4
-	
+
 	echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
-	
-	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
+
+	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
                 chmod -R u+w $BUNDLE/Contents/Frameworks/$dst_file
 
@@ -132,14 +132,14 @@ copy_framework()
 
 
 #copy_plugins
-# copy the QT plugins list 
-# 
+# copy the QT plugins list
+#
 # usage:
 #	copy_plugins appbundle
 #
 #	appbundle: The application bundle
 #
-# 
+#
 copy_plugins()
 {
 	AB=$1
@@ -147,19 +147,19 @@ copy_plugins()
 
 	for lib in $QT_PLUGINS; do
 		srcs=`find $QT_INSTALL_PLUGINS -name \*$lib\*.dylib`
-		
-		for src in $srcs ; do 
+
+		for src in $srcs ; do
 			dst=`echo $src | sed -e "s*$QT_INSTALL_PLUGINS**g"`
 			dstdir=plugins/`dirname $dst`
-		
+
 			#echo "Installing plugin $lib: $src $dstdir"
-		
+
 			mkdir -p $APPBUNDLE/Contents/$dstdir
 			cp $src $APPBUNDLE/Contents/$dstdir
                         chmod -R u+w $APPBUNDLE/Contents/$dstdir
 
 			new_name=@executable_path/../plugins/$dst
-			
+
 			#echo "Running: install_name_tool -id $new_name $APPBUNDLE/Contents/$dst"
 			install_name_tool -id $new_name $APPBUNDLE/Contents/plugins/$dst \
 				|| echo "- ***Error Running: install_name_tool -id $new_name $APPBUNDLE/Contents/plugins/$dst"
@@ -168,7 +168,7 @@ copy_plugins()
 	done
 
 	find $AB/Contents/plugins -name \*_debug.dylib -exec rm \{\} \;
-	
+
 	cat > $QTCONF << __EOF__
 [Paths]
 Plugins=plugins
@@ -176,7 +176,7 @@ __EOF__
 }
 
 #update_links
-# updates the links to the dynamic libraries installed in the bundle, using the install_name_tool -change 
+# updates the links to the dynamic libraries installed in the bundle, using the install_name_tool -change
 # argument 4: Framework, if set, appends ".framework/name" to new_name
 #
 update_links()
@@ -188,19 +188,19 @@ update_links()
 
 	echo "++ Checking $LIB in $T"
 	libpath=`otool -L $T | grep $LIB`
-	if [ $? -eq 0 ] ; then		
-		echo "++ FOUND"	
+	if [ $? -eq 0 ] ; then
+		echo "++ FOUND"
 		#echo "Testing: otool -L $T | grep $LIB | awk '{ print \$1 }'"
-		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | head -1 | awk '{ print \$1 }'`			
+		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | head -1 | awk '{ print \$1 }'`
 		echo "$org_name" | egrep '@executable_path/' > /dev/null
 		if [ $? -ne 0 ] ; then
 			dest_name=$T
-			new_name=`echo $org_name | sed -e "s/^.*$LIB/@executable_path\/..\/Frameworks\/$LIB/"`		
-		
+			new_name=`echo $org_name | sed -e "s/^.*$LIB/@executable_path\/..\/Frameworks\/$LIB/"`
+
 			if [ "$FRAMEWORK" != "" ] ; then
 				new_name="$new_name.framework/$LIB"
 			fi
-		
+
 			#echo "Running: install_name_tool -change $org_name $new_name $dest_name"
 			install_name_tool -change $org_name $new_name $dest_name || echo "- ***Error Running: install_name_tool -change $org_name $new_name $dest_name"
 		fi
@@ -241,7 +241,7 @@ for app in $EXECUTABLES; do
 
         for qtlib in $EXTRA_QT_FRAMEWORKS; do
                 copy_framework $QT_INSTALL_LIBS/$qtlib.framework $qtlib.framework $qtlib.framework/Versions/Current/$qtlib $APPBUNDLE
-        done        
+        done
 
         for fmw in $EXTRA_FRAMEWORKS ; do
                 copy_framework $fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
@@ -304,7 +304,7 @@ done
 
 # Fix CGAL links
 for i in chrono date_time atomic ; do
-    install_name_tool -change /usr/local/opt/boost/lib/libboost_$i-mt.dylib @executable_path/../Frameworks/libboost_$i-mt.dylib $APPBUNDLE/Contents/Frameworks/libCGAL.13.dylib
+    install_name_tool -change /usr/local/opt/boost/lib/libboost_$i-mt.dylib @executable_path/../Frameworks/libboost_$i-mt.dylib $APPBUNDLE/Contents/Frameworks/libCGAL.11.dylib
 done
 
 # Fix program_options in displace
@@ -385,8 +385,8 @@ fi
 $QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
-QT_INSTALL_LIBS=~/Qt/5.12.2/clang_64/lib/
-QT_INSTALL_PLUGINS=~/Qt/5.12.2/clang_64/plugins/
+QT_INSTALL_LIBS=~/Qt/5.12.7/clang_64/lib/
+QT_INSTALL_PLUGINS=~/Qt/5.12.7/clang_64/plugins/
 TOPDIR=$PWD
 DESTDIR=$PWD/build/$T/bin
 INSTALL=$PWD/build
@@ -401,7 +401,7 @@ EXTRA_LIBS="libmsqlitecpp libsqlite3 libGeographic libCGAL libmpfr libgmp libboo
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 # These INSTALL_EXTRA_LIBS will be installed regardless of the links
-INSTALL_EXTRA_LIBS="/usr/local/lib/libmsqlitecpp.0.dylib /usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib /usr/local/opt/boost/lib/libboost_system-mt.dylib /usr/local/opt/boost/lib/libboost_program_options.dylib"
+INSTALL_EXTRA_LIBS="/usr/local/lib/libmsqlitecpp.1.dylib /usr/local/lib/libCGAL.11.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib /usr/local/opt/boost/lib/libboost_system-mt.dylib /usr/local/opt/boost/lib/libboost_program_options.dylib"
 
 
 TOOLDIR=`dirname $0`

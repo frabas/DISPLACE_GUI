@@ -8,6 +8,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include (cmake/qt.cmake)
 
+if (UNIX)
+    include(cmake/platform-linux.cmake)
+endif ()
+
 if (WIN32)
     include (cmake/platform_win.cmake)
 endif()

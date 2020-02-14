@@ -56,7 +56,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         vector<double> init_recovery_rates_per_funcgr;
         vector<double> init_h_betas_per_pop;
 
-        int a_marine_landscape = model().graph_point_code_landscape().at(landscape);
+        int a_marine_landscape = model().graph_point_code_landscape_unique().at(landscape);
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 

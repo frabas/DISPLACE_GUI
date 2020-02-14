@@ -65,7 +65,8 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     nbchoked=0;
     harbour=_harbour;
 	code_area=_code_area;
-	marine_landscape=_marine_landscape;
+    benthos_id=0;
+    marine_landscape=_marine_landscape;
     marine_landscape_norm=_marine_landscape_norm;
     marine_landscape_alpha=_marine_landscape_alpha;
     wind=_wind;
@@ -190,6 +191,7 @@ Node::Node()
       DissolvedCarbon(0),
       bathymetry(0),
       shippingdensity(0),
+      benthos_id(0),
       benthos_biomass(1),
       benthos_number(1),
       is_harbour(false),

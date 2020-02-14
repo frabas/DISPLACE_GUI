@@ -2444,6 +2444,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
     lock();
 
     dout(cout << "BEGIN do_catch()" << endl);
+    dout(cout << "vessel " << this->get_name() <<endl);
 
     // check the matrix of catches
     //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << endl);
@@ -2461,7 +2462,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
     vector<double> v_betas_per_pop  = this->get_vessel_betas_per_pop ();
     double v_kw                     = this->get_KW ();
     double v_vsize                  = this->get_length ();
-
+ 
     // METIER EFFECT
     vector< vector<double> > selectivity_per_stock = this->get_metier()->get_selectivity_per_stock_ogives();
     vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
@@ -2471,12 +2472,12 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
     double gear_width_a             = this->get_metier()->get_gear_width_a();
     double gear_width_b             = this->get_metier()->get_gear_width_b();
     string gear_width_model         = this->get_metier()->get_gear_width_model();
-
+ 
     // HABITAT EFFECT
     vector<double> h_betas_per_pop  = benthoshabs.at( this->get_loc()->get_benthos_id() )->get_h_betas_per_pop();
 
 
-
+  
     // SWEPT AREA
     double gear_width=0.0;
     double swept_area=0.0;

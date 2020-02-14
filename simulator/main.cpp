@@ -3001,6 +3001,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                              inputfolder, fleetsce);
                 populations.at(i)->set_oth_land(oth_land);
             }
+            cout << "re-read oth_land_nodes setting this month....OK" << endl;
 
 
         }
@@ -3011,7 +3012,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             //   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
         {
 
-            outc(cout << "a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl);
+            cout << "a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
 
             // RE-READ VESSEL DATA
             // fill in with new input files for fgrounds and harbours, etc.
@@ -3041,6 +3042,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             loadedDataVessels);
 
 
+           cout << "re-read loadedDataVessels setting this month....OK" << endl;
 
             // LOOP OVER VESSELS
             for (unsigned int v = 0; v < vessels.size(); v++) {
@@ -3303,11 +3305,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // message 1 means: "please, change of grounds as soon as possible"
                 vessels.at(v)->receive_message(1);
 
-                dout(cout << "re-read data for this vessel..." << vessels.at(v)->get_name() << "...OK" << endl);
+                cout << "re-read data for this vessel..." << vessels.at(v)->get_name() << "...OK" << endl;
             }                     // end a_vesselid
 
             // RE-read for metiers
-            dout(cout << "re-read metiers..." << endl);
+            cout << "re-read metiers..." << endl;
 
             paramsForLoad.sparam1 = std::to_string(simModel->month());
             paramsForLoad.sparam2 = std::to_string(simModel->quarter());
@@ -3338,7 +3340,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 metiers[m]->set_is_avoided_stocks(loadedDataMetiers.vovi1.at(m));
 
             }                     // end a_met
-            dout(cout << "re-read metiers...OK" << endl);
+            cout << "re-read metiers...OK" << endl;
 
 
         } // END RE-READ DATA FOR VESSEL AND METIER...

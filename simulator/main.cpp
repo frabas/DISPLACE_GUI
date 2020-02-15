@@ -698,6 +698,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     a_graph_name = a_graph_name + graphnum.str();
 
     // Create simulation scenario
+    // ****
+    // NOTE: This access a singleton and loads it with the time seriest and dtrees.
+    // it is then used in other parts of the simulation, in particular by TimeSeriesEvaluator.
+    // it should be advised to remove the singleon because it creates an hidden dependency through hidden
+    // global object (the singleton).
     displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
 
     if (scenario.use_dtrees) {

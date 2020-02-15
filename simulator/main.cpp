@@ -229,17 +229,9 @@ vector<Population *> populations;
 vector<Fishfarm *> fishfarms;
 vector<Windmill *> windmills;
 int tstep;
-int a_graph;
-types::NodeId a_port;
-int nrow_coord;
-int nrow_graph;
-vector<double> graph_res;
-bool check_all_stocks_before_going_fishing;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
-int freq_do_growth;
-int freq_redispatch_the_pop;
 vector<double> arbitary_breaks_for_tariff;
 int total_amount_credited;
 double tariff_annual_hcr_percent_change;
@@ -250,14 +242,9 @@ std::string outSqlitePath;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
-bool use_dtrees;
 vector<double> global_quotas_uptake;
 vector<int> explicit_pops;
-DynAllocOptions dyn_alloc_sce;
-PopSceOptions dyn_pop_sce;
 ClosureOptions closure_opts;
-string biolsce;
-string fleetsce;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
 vector<types::NodeId> relevant_nodes;
@@ -696,20 +683,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     auto const &scenario = simModel->scenario();
 
-    dyn_alloc_sce = scenario.dyn_alloc_sce;
-    dyn_pop_sce = scenario.dyn_pop_sce;
-    biolsce = scenario.biolsce;
-    fleetsce = scenario.fleetsce;
-    freq_do_growth = scenario.freq_do_growth;
-    freq_redispatch_the_pop = scenario.freq_redispatch_the_pop;
-    a_graph = scenario.a_graph;
-    nrow_coord = scenario.nrow_coord;
-    nrow_graph = scenario.nrow_graph;
-    a_port = scenario.a_port;
-    graph_res = scenario.graph_res;
-    check_all_stocks_before_going_fishing = scenario.check_all_stocks_before_going_fishing;
-    use_dtrees = scenario.use_dtrees;
-    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
         tariff_pop = scenario.tariff_pop;
         freq_update_tariff_code = scenario.freq_update_tariff_code;
         update_tariffs_based_on_lpue_or_dpue_code = scenario.update_tariffs_based_on_lpue_or_dpue_code;
@@ -720,13 +694,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     stringstream graphnum;
-    graphnum << a_graph;
+    graphnum << scenario.a_graph;
     a_graph_name = a_graph_name + graphnum.str();
 
     // Create simulation scenario
     displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
 
-    if (use_dtrees) {
+    if (scenario.use_dtrees) {
         if (!sim_scenario->loadTimeSeries(inputfolder + "/timeseries", "")) {
             std::cerr << "Cannot read time series. aborting." << std::endl;
             return -1;
@@ -758,22 +732,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
     outc(cout << endl);
 
-    outc(cout << dyn_alloc_sce.toString() << endl);
-    outc(cout << dyn_pop_sce.toString() << endl);
-    outc(cout << "biolsce " << biolsce << endl);
-    outc(cout << "fleetsce " << fleetsce << endl);
-    outc(cout << "freq_do_growth " << freq_do_growth << endl);
-    outc(cout << "freq_redispatch_the_pop " << freq_redispatch_the_pop << endl);
-    outc(cout << "a_graph " << a_graph << endl);
+    outc(cout << scenario.dyn_alloc_sce.toString() << endl);
+    outc(cout << scenario.dyn_pop_sce.toString() << endl);
+    outc(cout << "biolsce " << scenario.biolsce << endl);
+    outc(cout << "fleetsce " << scenario.fleetsce << endl);
+    outc(cout << "freq_do_growth " << scenario.freq_do_growth << endl);
+    outc(cout << "freq_redispatch_the_pop " << scenario.freq_redispatch_the_pop << endl);
+    outc(cout << "a_graph " << scenario.a_graph << endl);
     outc(cout << "a_graph_name " << a_graph_name << endl);
-    outc(cout << "nrow_coord " << nrow_coord << endl);
-    outc(cout << "nrow_graph " << nrow_graph << endl);
-    outc(cout << "a_port " << a_port << endl);
-    outc(cout << "graph res in km xy " << graph_res.at(0) << " " << graph_res.at(1) << endl);
+    outc(cout << "nrow_coord " << scenario.nrow_coord << endl);
+    outc(cout << "nrow_graph " << scenario.nrow_graph << endl);
+    outc(cout << "a_port " << scenario.a_port << endl);
+    outc(cout << "graph res in km xy " << scenario.graph_res.at(0) << " " << scenario.graph_res.at(1) << endl);
     outc(cout << "is_individual_vessel_quotas " << simModel->scenario().is_individual_vessel_quotas << endl);
-    outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
+    outc(cout << "check_all_stocks_before_going_fishing " << scenario.check_all_stocks_before_going_fishing << endl);
 
-    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
         outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
         outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
         outc(cout << "update_tariffs_based_on_lpue_or_dpue_code " << update_tariffs_based_on_lpue_or_dpue_code << endl);
@@ -811,7 +785,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // special case for random stochastic spatial pop distribution
-    if (dyn_pop_sce.option(Options::white_noise_on_avai_deprecated)) {
+    if (scenario.dyn_pop_sce.option(Options::white_noise_on_avai_deprecated)) {
         // pick up a file name randomly later on
         int rand_avai_file = (rand() % 50) + 1;
         char buffer[100];
@@ -1007,7 +981,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // ---------------------------------------------- //
 
-    auto a_graph_s = std::to_string(a_graph);
+    auto a_graph_s = std::to_string(scenario.a_graph);
 
     if (!modelLoader->loadNodesAndGraphs()) {
         throw std::runtime_error("Cannot load Nodes and Graphs");
@@ -1039,7 +1013,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    benthoss = modelLoader->loadBenthos(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
+    benthoss = modelLoader->loadBenthos(scenario.dyn_pop_sce, scenario.dyn_alloc_sce, scenario.biolsce,
+                                        scenario.fleetsce);
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -1061,10 +1036,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataFishfarms);
 
@@ -1175,10 +1150,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataWindmills);
 
@@ -1220,10 +1195,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataPops);
 
@@ -1449,7 +1424,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //tariffs.push_back(init_tariff0_on_localities);
     //tariffs.push_back(init_tariff1_on_localities);
 
-    if (dyn_alloc_sce.option(Options::fishing_credits)) {
+    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
         auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
                                                                       a_graph_name);
 
@@ -1522,7 +1497,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     int mat_cat = 0; //init - split juveniles vs. adult categories
     vector<int> mat_cats(simModel->config().nbpops, 0);
 
-    if (dyn_pop_sce.option(Options::sizeSpectra)) {
+    if (scenario.dyn_pop_sce.option(Options::sizeSpectra)) {
         cout << "sizeSpectra option is on..." << endl;
 
         // compute a predKernel and a searchVol
@@ -1530,9 +1505,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // read-in multimap on diet of stocks per stock
         multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(
-                folder_name_parameterization, inputfolder, biolsce);
+                folder_name_parameterization, inputfolder, scenario.biolsce);
         multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(
-                folder_name_parameterization, inputfolder, biolsce);
+                folder_name_parameterization, inputfolder, scenario.biolsce);
 
 
         cout << "compute Ws_at_szgroup..." << endl;
@@ -1765,10 +1740,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataMetiers);
 
@@ -1855,10 +1830,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataShips);
 
@@ -1925,10 +1900,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     indb,
                     folder_name_parameterization,
                     inputfolder,
-                    dyn_pop_sce,
-                    dyn_alloc_sce,
-                    biolsce,
-                    fleetsce,
+                    scenario.dyn_pop_sce,
+                    scenario.dyn_alloc_sce,
+                    scenario.biolsce,
+                    scenario.fleetsce,
                     paramsForLoad,
                     loadedDataVessels);
 
@@ -1972,8 +1947,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
          // dyn sce.
-        if (dyn_alloc_sce.option(Options::fishing_credits))
-        {
+        if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
             tout(cout << "Read in fishing credits for this vessel " << loadedDataVessels.vectsparam1.at(i) << endl);
             spe_fishing_credits = find_entries_s_d(loadedDataVessels.mmapsdparam6, loadedDataVessels.vectsparam1.at(i));
             for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
@@ -1982,36 +1956,34 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
             while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
-            cout << "Fishing credits 0 for this vessel " << loadedDataVessels.vectsparam1.at(i) << " is " << spe_fishing_credits.at(0) << endl;
+            cout << "Fishing credits 0 for this vessel " << loadedDataVessels.vectsparam1.at(i) << " is "
+                 << spe_fishing_credits.at(0) << endl;
 
         }
 
-        if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
-        {
+        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
             // a decrease of vessel speed by 20%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i)*0.8;
+            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.8;
             // corresponds to a decrease by 48.8% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i)* 0.512;
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.512;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
 
-        if (dyn_alloc_sce.option(Options::reduced_speed_30percent))
-        {
+        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
             // a decrease by 30%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i)*0.7;
+            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.7;
             // corresponds to a decrease by 65.7% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i)* 0.343;
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.343;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
 
-        if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
-        {
+        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
             // a decrease by 10%...
-             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i)*0.9;
+            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.9;
             // corresponds to a decrease by 30% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i)* 0.7;
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.7;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -2106,8 +2078,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
         }
 
-        if (dyn_alloc_sce.option(Options::fishing_credits))
-        {
+        if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
             vessels[i]->set_fishing_credits(spe_fishing_credits);
         }
 
@@ -2185,7 +2156,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
-    if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
+    if (scenario.dyn_alloc_sce.option(Options::area_monthly_closure)) {
 
         if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                           folder_name_parameterization,
@@ -2199,7 +2170,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
     }
-    if (dyn_alloc_sce.option(Options::area_closure)) {
+    if (scenario.dyn_alloc_sce.option(Options::area_closure)) {
 
         if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                             folder_name_parameterization,
@@ -2287,7 +2258,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<int> graph_idx_dep;
     vector<int> graph_idx_arr;
     vector<int> graph_dist_km;     // caution: use integer here to speed up c++
-    fill_from_graph(graph, graph_idx_dep, graph_idx_arr, graph_dist_km, nrow_graph);
+    fill_from_graph(graph, graph_idx_dep, graph_idx_arr, graph_dist_km, scenario.nrow_graph);
 
     /* fill in an adjacency map */
 
@@ -2719,7 +2690,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // initial export at t=0
-    // if(dyn_pop_sce.option(Options::include_forcing_layers))
+    // if(scenario.dyn_pop_sce.option(Options::include_forcing_layers))
     //{
 
     // Flush and updates all statistics for nodes envt
@@ -2858,15 +2829,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     selectivity_per_stock_ogives_for_oth_land,
                                     simModel->is_tacs(),
                                     export_vmslike,
-                                    freq_do_growth,
+                                    scenario.freq_do_growth,
                                     init_weight_per_szgroup,
                                     species_interactions_mortality_proportion_matrix,
                                     populations,
                                     simModel->nodes(),
                                     vessels,
                                     benthoss,
-                                    dyn_pop_sce,
-                                    dyn_alloc_sce,
+                                    scenario.dyn_pop_sce,
+                                    scenario.dyn_alloc_sce,
                                     Ws_at_szgroup,
                                     predKernel,
                                     searchVolMat,
@@ -2878,7 +2849,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
-        if (dyn_pop_sce.option(Options::diffusePopN) &&
+        if (scenario.dyn_pop_sce.option(Options::diffusePopN) &&
             binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
@@ -2912,7 +2883,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             a_year += 1;
 
 
-            if (dyn_alloc_sce.option(Options::TechCreeping3Per)) {
+            if (scenario.dyn_alloc_sce.option(Options::TechCreeping3Per)) {
                 tech_creeping_multiplier = pow(1.03, a_year); //  this is a rate per year...so multiply over years
             } else {
                 tech_creeping_multiplier = 1.0;
@@ -2962,7 +2933,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
             // this month, re-read for vessel-related data
-            if (dyn_alloc_sce.option(Options::area_monthly_closure)) {
+            if (scenario.dyn_alloc_sce.option(Options::area_monthly_closure)) {
                 cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter()
                      << ", simModel->semester():" << simModel->semester() << endl;
 
@@ -2998,7 +2969,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 auto oth_land = read_oth_land_nodes_with_pop(modelLoader->semesterString(),
                                                              modelLoader->monthString(), i,
                                                              folder_name_parameterization,
-                                                             inputfolder, fleetsce);
+                                                             inputfolder, scenario.fleetsce);
                 populations.at(i)->set_oth_land(oth_land);
             }
             cout << "re-read oth_land_nodes setting this month....OK" << endl;
@@ -3034,10 +3005,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             indb,
                             folder_name_parameterization,
                             inputfolder,
-                            dyn_pop_sce,
-                            dyn_alloc_sce,
-                            biolsce,
-                            fleetsce,
+                            scenario.dyn_pop_sce,
+                            scenario.dyn_alloc_sce,
+                            scenario.biolsce,
+                            scenario.fleetsce,
                             paramsForLoad,
                             loadedDataVessels);
 
@@ -3048,7 +3019,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int v = 0; v < vessels.size(); v++) {
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
 
-                if (dyn_alloc_sce.option(Options::ExitVessels10Per)) {
+                if (scenario.dyn_alloc_sce.option(Options::ExitVessels10Per)) {
                     double exit_vessels_per_year = 0.1; //  this is a rate of vessel leaving per year
                     if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
 
@@ -3101,7 +3072,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_resttime_par2(loadedDataVessels.vectdparam9.at(v));
                 vessels.at(v)->set_av_trip_duration(loadedDataVessels.vectdparam10.at(v));
 
-                if (dyn_alloc_sce.option(Options::area_closure)) {
+                if (scenario.dyn_alloc_sce.option(Options::area_closure)) {
                     if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                                         folder_name_parameterization,
                                                         inputfolder)) {
@@ -3323,10 +3294,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             indb,
                             folder_name_parameterization,
                             inputfolder,
-                            dyn_pop_sce,
-                            dyn_alloc_sce,
-                            biolsce,
-                            fleetsce,
+                            scenario.dyn_pop_sce,
+                            scenario.dyn_alloc_sce,
+                            scenario.biolsce,
+                            scenario.fleetsce,
                             paramsForLoad,
                             loadedDataMetiers);
 
@@ -3349,7 +3320,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         int redispatch_the_pop = 0;
-        switch (freq_redispatch_the_pop) {
+        switch (scenario.freq_redispatch_the_pop) {
             case 0:
                 if ((tstep % 24) == 7) { redispatch_the_pop = 1; }
                 // daily update
@@ -3394,10 +3365,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             indb,
                             folder_name_parameterization,
                             inputfolder,
-                            dyn_pop_sce,
-                            dyn_alloc_sce,
-                            biolsce,
-                            fleetsce,
+                            scenario.dyn_pop_sce,
+                            scenario.dyn_alloc_sce,
+                            scenario.biolsce,
+                            scenario.fleetsce,
                             paramsForLoad,
                             loadedDataPops);
 
@@ -3437,8 +3408,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cout << "aggregate_N over all pops....done" << endl;
 
 
-
-            if(dyn_pop_sce.option(Options::nbcpCoupling) ) {
+            if (scenario.dyn_pop_sce.option(Options::nbcpCoupling)) {
                 string a_command_for_R;
 
                 for (unsigned int p = 0; p < populations.size(); p++) {
@@ -3472,7 +3442,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
-            if (dyn_pop_sce.option(Options::avai_shuffler_on) || dyn_pop_sce.option(Options::avai_updater_on)) {
+            if (scenario.dyn_pop_sce.option(Options::avai_shuffler_on) ||
+                scenario.dyn_pop_sce.option(Options::avai_updater_on)) {
 
 
                 // alter the availability field, if required
@@ -3484,7 +3455,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         string a_pop = out.str();
 
                         stringstream out2;
-                        out2 << nrow_coord;
+                        out2 << scenario.nrow_coord;
                         string a_nrow_coord = out2.str();
 
                         string a_command;
@@ -3517,7 +3488,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            system(a_command.c_str());
                        }
 #else
-                        if (dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
+                        if (scenario.dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
                             type_of_avai_field_to_read.at(p) = "_updated";
                             // caution with HPC, annoying lower cases in file names and paths required!
                             a_command_for_R =
@@ -3531,7 +3502,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
                             system(a_command.c_str());
                         }
-                        if (dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                        if (scenario.dyn_pop_sce.option(Options::avai_shuffler_on)) {
                             a_command = inputfolder + "/avaifieldshufflertool -f " + namefolderinput + " -s " +
                                         modelLoader->semesterString() + " -p " + a_pop;
                             system(a_command.c_str());
@@ -3568,14 +3539,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                 // read a other landings per node for this species (DEPRECATED - DONE AT MONTH TSTEP INSTEAD)
-                //map<int, double> oth_land= read_oth_land_nodes_with_pop(simModel->semester(), simModel->month(), i, folder_name_parameterization, inputfolder, fleetsce);
+                //map<int, double> oth_land= read_oth_land_nodes_with_pop(simModel->semester(), simModel->month(), i, folder_name_parameterization, inputfolder, scenario.fleetsce);
                 //populations.at(i)->set_oth_land(oth_land);
 
                 multimap<int, double> overall_migration_fluxes = loadedDataPops.vectmmapidparam1.at(i);
                 populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                 // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
-                if (!dyn_pop_sce.option(Options::stop_mig_35065) || tstep < 35065) {
+                if (!scenario.dyn_pop_sce.option(Options::stop_mig_35065) || tstep < 35065) {
                     populations.at(i)->apply_overall_migration_fluxes(populations);
                 }
 
@@ -3822,7 +3793,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
-            if (dyn_alloc_sce.option(Options::shared_harbour_knowledge)) {
+            if (scenario.dyn_alloc_sce.option(Options::shared_harbour_knowledge)) {
 
                 for (unsigned int v = 0; v < vessels.size(); v++) {
 
@@ -4009,7 +3980,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // UPDATE THE TARIFF MAP & RE-READ FISHING_CREDITS PER VESSEL
-        if (dyn_alloc_sce.option(Options::fishing_credits)) {
+        if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
 
             // 1- annual tariff HCR (currently pooling all tariff pops together)
             if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
@@ -4355,7 +4326,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if (dyn_alloc_sce.option(Options::EffortMinControl)) {
+        if (scenario.dyn_alloc_sce.option(Options::EffortMinControl)) {
             if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
@@ -4372,7 +4343,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
         }
 
-        if (dyn_alloc_sce.option(Options::EffortMaxControl)) {
+        if (scenario.dyn_alloc_sce.option(Options::EffortMaxControl)) {
             if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
@@ -4423,7 +4394,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if (dyn_alloc_sce.option(Options::TACs)) {
+        if (scenario.dyn_alloc_sce.option(Options::TACs)) {
 
             for (unsigned int pop = 0; pop < populations.size(); pop++) {
 
@@ -4471,7 +4442,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///  THE DIFFUSIVE ENVT          ///
         ///------------------------------///
         ///------------------------------///
-        if (dyn_pop_sce.option(Options::diffuseNutrients)) {
+        if (scenario.dyn_pop_sce.option(Options::diffuseNutrients)) {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
             if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
 
@@ -4514,7 +4485,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///  THE DIFFUSIVE BENTHOS       ///
         ///------------------------------///
         ///------------------------------///
-        if (dyn_pop_sce.option(Options::diffuseBenthos)) {
+        if (scenario.dyn_pop_sce.option(Options::diffuseBenthos)) {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
             if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
 
@@ -4542,13 +4513,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if (dyn_pop_sce.option(Options::modelShippingOnBenthos)) {
+        if (scenario.dyn_pop_sce.option(Options::modelShippingOnBenthos)) {
             if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
                 double shippingdensity = 0;
                 double bathymetry = 0;
                 for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
                     shippingdensity = simModel->nodes().at(i)->get_shippingdensity();
-                    if (dyn_alloc_sce.option(Options::halfShippingDensity)) { shippingdensity = shippingdensity / 2; }
+                    if (scenario.dyn_alloc_sce.option(Options::halfShippingDensity)) {
+                        shippingdensity = shippingdensity / 2;
+                    }
                     if (shippingdensity > 0) {
                         bathymetry = simModel->nodes().at(i)->get_bathymetry();
                         for (unsigned int funcid = 0;
@@ -4563,7 +4536,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             // => just hypothetical for now...i.e. approx. 5% loss a month for max shippingdensity if 10 meter deep
                             double decrease_factor_on_benthos_funcgroup = 0;
 
-                            if (dyn_pop_sce.option(Options::modelBenthosInN)) {
+                            if (scenario.dyn_pop_sce.option(Options::modelBenthosInN)) {
                                 decrease_factor_on_benthos_funcgroup = 1 - exp(loss_after_1_month_shipping_here);
                                 double current_nb = simModel->nodes().at(i)->get_benthos_tot_number(funcid);
                                 double next_nb = current_nb * (1 + decrease_factor_on_benthos_funcgroup);
@@ -4591,7 +4564,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
         // van Denderen et al. 2019
-        if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
+        if (scenario.dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
 
             for (unsigned int b = 0; b < benthoss.size(); b++) {
                 benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(1);

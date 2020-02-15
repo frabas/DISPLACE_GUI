@@ -236,12 +236,16 @@ public:
     virtual int features(std::shared_ptr<sql::Storage> indb,
                          const string &folder_name_parameterization,
                          const string &inputfolder,
-                         PopSceOptions &dyn_pop_sce,
-                         DynAllocOptions &dyn_alloc_sce,
-                         string &biolsce,
-                          string &fleetsce,
-                          ParamsForLoad &paramsForLoad,
-                          LoadedData& loadedData){ cout << "Loading features" << endl; return(0);}
+                         PopSceOptions const &dyn_pop_sce,
+                         DynAllocOptions const &dyn_alloc_sce,
+                         string const &biolsce,
+                         string const &fleetsce,
+                         ParamsForLoad &paramsForLoad,
+                         LoadedData &loadedData)
+    {
+        cout << "Loading features" << endl;
+        return (0);
+    }
 };
 
 
@@ -251,12 +255,12 @@ public:
                       std::shared_ptr<sql::Storage> indb,
                       const string &folder_name_parameterization,
                       const string &inputfolder,
-                      PopSceOptions &dyn_pop_sce,
-                      DynAllocOptions &dyn_alloc_sce,
-                      string &biolsce,
-                      string &fleetsce,
+                      PopSceOptions const &dyn_pop_sce,
+                      DynAllocOptions const &dyn_alloc_sce,
+                      string const &biolsce,
+                      string const &fleetsce,
                       ParamsForLoad &paramsForLoad,
-                      LoadedData& loadedData)
+                      LoadedData &loadedData)
     {
        dl->features(indb,
                     folder_name_parameterization,

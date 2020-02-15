@@ -86,7 +86,6 @@ static OutputQueueManager mOutQueue;
 
 extern std::mutex glob_mutex;
 extern bool use_gui;
-extern bool use_dtrees;
 extern bool use_gnuplot;
 extern bool gui_move_vessels;
 extern int nb_displayed_moves_out_of_twenty;
@@ -101,8 +100,6 @@ extern int nbsteps;
 extern int nbpops;
 extern int export_vmslike;
 extern int export_hugefiles;
-extern vector<double> graph_res;
-extern bool check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
 extern int update_tariffs_based_on_lpue_or_dpue_code;
@@ -113,8 +110,6 @@ extern int total_amount_credited;
 extern double tariff_annual_hcr_percent_change;
 extern double tech_creeping_multiplier;
 extern vector <int> nbcp_coupling_pops;
-extern DynAllocOptions dyn_alloc_sce;
-extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
 extern string fleetsce;
 extern int use_static_paths;
@@ -220,7 +215,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 if (!inactive) {
                     outc(cout << "...just arrived!" << endl);
                     vessels[index_v]->updateTripsStatistics(populations, model->config().implicit_pops, tstep,
-                                                            dyn_alloc_sce);
+                                                            model->scenario().dyn_alloc_sce);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
                             new VesselLogbookOutputMessage(tstep, vessels[index_v], populations,
                                                            model->config().implicit_pops)));
@@ -263,11 +258,11 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // ***************make a dtree decision****************************
                     int go_fishing = vessels[index_v]->should_i_go_fishing(tstep,
                                                                            populations,
-                                                                           use_dtrees,
-                                                                           dyn_alloc_sce,
+                                                                           model->scenario().use_dtrees,
+                                                                           model->scenario().dyn_alloc_sce,
                                                                            model->config().implicit_pops,
                                                                            model->scenario().is_individual_vessel_quotas,
-                                                                           check_all_stocks_before_going_fishing);
+                                                                           model->scenario().check_all_stocks_before_going_fishing);
                     //}
                     // ***************implement a decision*****************************
                     bool do_nothing = 0;
@@ -277,8 +272,8 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout << "GO FISHING" << endl);
                         do_nothing = vessels[index_v]->choose_a_ground_and_go_fishing(
                                 *model,
-                                tstep, model->scenario(), use_dtrees,
-                                dyn_alloc_sce, use_static_paths, pathshops,
+                                tstep, model->scenario(), model->scenario().use_dtrees,
+                                model->scenario().dyn_alloc_sce, use_static_paths, pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
                                 model->nodes(),
                                 metiers,
@@ -311,9 +306,9 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
                         *model,
                         external_states_relevant_for_stopping_fishing,
-                        use_dtrees,
+                        model->scenario().use_dtrees,
                         tstep,
-                        dyn_alloc_sce, use_static_paths,
+                        model->scenario().dyn_alloc_sce, use_static_paths,
                         pathshops,
                         adjacency_map, relevant_nodes,
                         model->nodes(),
@@ -351,26 +346,27 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
                 // ***************implement a decision************************************
                 // go on fishing...
-                if(!stop_fishing)
-                {
-                    freshly_departed_from_port=0;
-                    outc(cout  << "OK, I´LL CONTINUE FISHING!" << endl);
+                if(!stop_fishing) {
+                    freshly_departed_from_port = 0;
+                    outc(cout << "OK, I´LL CONTINUE FISHING!" << endl);
                     //if((vessels[index_v]->get_name())=="POL023600922") cout  << vessels[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << endl;
 
                     // ***************make a decision************************************
-                    map<string,int> external_states_relevant_for_change_ground;
-                    external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
-                    int shall_I_change_to_another_ground=1;
-                    if(!force_another_ground) shall_I_change_to_another_ground= vessels[ index_v ]->should_i_change_ground(
+                    map<string, int> external_states_relevant_for_change_ground;
+                    external_states_relevant_for_change_ground.insert(make_pair(" none ", 0));
+                    int shall_I_change_to_another_ground = 1;
+                    if (!force_another_ground) {
+                        shall_I_change_to_another_ground = vessels[index_v]->should_i_change_ground(
                                 *model,
                                 external_states_relevant_for_change_ground,
-                                use_dtrees);
+                                model->scenario().use_dtrees);
+                    }
                     // note: this do not change of ground if nodes are too far from each other i.e. when code area coded "10"
                     // so current node is tested for the code_area to see if vessel is *allowed* to change grounds...
 
                     // ***************implement the decision************************************
                     // ...but not on this ground!
-                    int is_not_possible_to_change=0;
+                    int is_not_possible_to_change = 0;
                     if(shall_I_change_to_another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
@@ -378,7 +374,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
                                 *model,
                                 tstep,
-                                dyn_alloc_sce, use_static_paths,
+                                model->scenario().dyn_alloc_sce, use_static_paths,
                                 pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
                                 model->nodes(),
@@ -400,10 +396,10 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                              dout(cout << "please, check your mail! :" << vessels[index_v]->read_message() << endl);
                              vessels[index_v]->do_catch(export_individual_tacs, populations, model->nodes(), benthoss,
                                                         model->config().implicit_pops, model->config().grouped_tacs,
-                                                        tstep, graph_res,
+                                                        tstep, model->scenario().graph_res,
                                                         model->is_tacs(),
                                                         model->scenario().is_individual_vessel_quotas,
-                                                        check_all_stocks_before_going_fishing,
+                                                        model->scenario().check_all_stocks_before_going_fishing,
                                                         model->is_discard_ban(),
                                                         model->is_grouped_tacs(),
                                                         tech_creeping_multiplier,
@@ -468,7 +464,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     vessels[ index_v ]->choose_a_port_and_then_return(
                             *model,
                             tstep,
-                            dyn_alloc_sce,
+                            model->scenario().dyn_alloc_sce,
                             use_static_paths,
                             pathshops,
                             adjacency_map,

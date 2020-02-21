@@ -170,6 +170,7 @@ using namespace sqlite;
 #include <version.h>
 #include <mutex>
 #include <chrono>
+#include <thread>
 #include <runtime_tests/NodeTester.h>
 #include <TextfileModelLoader.h>
 
@@ -767,10 +768,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // using vessel and species-specific historic cpue data... (just like in paper Bastardie et al 2010)
 
     // make a random delay
-    int a_rand = rand() % 10000;
     // to avoid chosing the seed in the same second!
-    for (int waste = 0; waste < a_rand; waste++) {
-    }
+    auto randomDelayUs = rand() % 10000;
+    std::this_thread::sleep_for(std::chrono::microseconds{randomDelayUs});
 
     // set a fixed seed
     simModel->initRandom(namesimu);

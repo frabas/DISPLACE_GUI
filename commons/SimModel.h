@@ -25,6 +25,8 @@ class SimModel {
 public:
     SimModel();
 
+    void initRandom(std::string const &namesimu);
+
     void setConfig(std::unique_ptr<displace::commons::Config> config);
 
     displace::commons::Config const &config() const;

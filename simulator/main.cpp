@@ -766,27 +766,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // so the dynamic of these pops are not truly simulated but vessels can do some catches on them in any cases
     // using vessel and species-specific historic cpue data... (just like in paper Bastardie et al 2010)
 
-    // set a fixed seed
+    // make a random delay
     int a_rand = rand() % 10000;
     // to avoid chosing the seed in the same second!
     for (int waste = 0; waste < a_rand; waste++) {
     }
 
-    // detect a integer in the name of the simu
-    size_t iii = 0;
-    for (; iii < namesimu.length(); iii++) { if (isdigit(namesimu[iii])) { break; }}
-
-    // remove the first chars, which aren't digits
-    string str = namesimu.substr(iii, namesimu.length() - iii);
-
-    // convert the remaining text to an integer
-    int a_seed = atoi(str.c_str());
-
-    // print the result
-    std::cout << "The random seed is set to: " << a_seed << std::endl;
-
-    // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
-    srand(a_seed);
+    // set a fixed seed
+    simModel->initRandom(namesimu);
 
 
     // special case for random stochastic spatial pop distribution

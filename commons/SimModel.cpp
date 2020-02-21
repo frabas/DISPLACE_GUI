@@ -210,3 +210,23 @@ bool SimModel::is_resuspension_effect_on_benthos() const
 {
     return p->is_resuspension_effect_on_benthos;
 }
+
+void SimModel::initRandom(std::string const &namesimu)
+{
+
+    size_t iii = 0;
+    // detect a integer in the name of the simu
+    for (; iii < namesimu.length(); iii++) { if (isdigit(namesimu[iii])) { break; }}
+
+    // remove the first chars, which aren't digits
+    std::string str = namesimu.substr(iii, namesimu.length() - iii);
+
+    // convert the remaining text to an integer
+    int a_seed = atoi(str.c_str());
+
+    // print the result
+    std::cout << "The random seed is set to: " << a_seed << std::endl;
+
+    // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
+    srand(a_seed);
+}

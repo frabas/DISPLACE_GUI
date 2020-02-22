@@ -822,8 +822,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
 #endif
-    bgi::rtree<std::pair<point, int>, bgi::quadratic<16> > rtree;
-    createRTreeFromNodes(simModel->nodes(), rtree);
+    createRTreeFromNodes(simModel->nodes(), simModel->diffusionTree());
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -4281,7 +4280,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // gradient diffusion
                 // using the rtree
-                bool r = diffuse_Nitrogen_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
+                bool r = diffuse_Nitrogen_with_gradients(simModel->nodes(), adjacency_map,
+                                                         simModel->diffusionTree(), coeff_diffusion);
                 // bool r=  diffuse_Phosphorus_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
                 // bool r=  diffuse_Oxygen_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);
                 // bool r=  diffuse_Dissolvedcarbon_with_gradients(simModel->nodes(), adjacency_map, rtree, coeff_diffusion);

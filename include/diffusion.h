@@ -45,17 +45,19 @@ typedef bg::model::point<double, 2, bg::cs::cartesian> point;
 typedef bg::model::box<point> box;
 typedef std::pair<box, unsigned> value;
 
+using DiffusionTree = bgi::rtree<std::pair<point, int>, bgi::quadratic<16> >;
 
+bool diffuse_Nitrogen_in_every_directions(vector<Node *> &list_of_nodes,
+                                          adjacency_map_t &adjacency_map, double coeff);
 
-bool  diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes,
-                                                               adjacency_map_t& adjacency_map, double coeff);
-bool  diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes,
-                                                               adjacency_map_t& adjacency_map, double coeff);
-bool  diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
-                                                          adjacency_map_t& adjacency_map,
-                                                          bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree,
-                                                          double coeff);
+bool diffuse_Benthos_in_every_directions(vector<Node *> &list_of_nodes,
+                                         adjacency_map_t &adjacency_map, double coeff);
 
-void  createRTreeFromNodes(vector<Node*>& nodes,
-                                               bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree);
+bool diffuse_Nitrogen_with_gradients(vector<Node *> &list_of_nodes,
+                                     adjacency_map_t &adjacency_map,
+                                     DiffusionTree &rtree,
+                                     double coeff);
+
+void createRTreeFromNodes(vector<Node *> &nodes,
+                          DiffusionTree &rtree);
 

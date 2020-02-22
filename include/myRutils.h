@@ -18,6 +18,9 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+#ifndef COMMONS_MYRUTILS_H
+#define COMMONS_MYRUTILS_H
+
 #include <string>
 #include <m_constants.h>
 #include <vector>
@@ -180,21 +183,17 @@ inline int is_pt_lying_on_segment (double x1, double x2, double x3, double y1, d
 
     //test
     if( equ[0] * x3 + equ[1] > (y3 - 0.01) &&
-            equ[0] * x3 + equ[1] < (y3 + 0.01))
-    {
-        if( x3 > left && x3 < right &&
-                y3 > top && y3 < bottom )
-        {
-            return(1);
+            equ[0] * x3 + equ[1] < (y3 + 0.01)) {
+        if (x3 > left && x3 < right &&
+            y3 > top && y3 < bottom) {
+            return (1);
+        } else {
+            return (0);
         }
-        else
-        {
-            return(0);
-        }
-    }
-    else
-    {
-        return(0);
+    } else {
+        return (0);
     }
 
 }
+
+#endif // COMMONS_MYRUTILS_H

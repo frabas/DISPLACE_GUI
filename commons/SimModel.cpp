@@ -13,6 +13,7 @@ struct SimModel::Impl {
     std::unique_ptr<displace::commons::Scenario> scenario;
 
     GeoGraph geoGraph;
+    DiffusionTree diffusionTree;
     std::vector<Node *> nodes;
 
     std::vector<int> graph_point_code_landscape;
@@ -151,7 +152,8 @@ std::vector<int> const &SimModel::graph_point_code_landscape() const
 {
     return p->graph_point_code_landscape;
 }
-std::vector<int> const& SimModel::graph_point_code_landscape_unique() const
+
+std::vector<int> const &SimModel::graph_point_code_landscape_unique() const
 {
     return p->graph_point_code_landscape_unique;
 }
@@ -159,6 +161,11 @@ std::vector<int> const& SimModel::graph_point_code_landscape_unique() const
 std::vector<int> &SimModel::graph_point_code_landscape()
 {
     return p->graph_point_code_landscape;
+}
+
+DiffusionTree &SimModel::diffusionTree()
+{
+    return p->diffusionTree;
 }
 
 void SimModel::setGeoGraph(GeoGraph geoGraph)

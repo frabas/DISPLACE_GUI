@@ -24,7 +24,7 @@ set(SOURCES
         data/NodesLoader.h
         data/VesselsLoader.cpp
         data/VesselsLoader.h
-        )
+        runtime_tests/RuntimeTests.cpp runtime_tests/RuntimeTests.h)
 
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)

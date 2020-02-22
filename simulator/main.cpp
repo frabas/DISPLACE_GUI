@@ -721,48 +721,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
     }
 
-    // check if config reading OK
-    outc(cout << simModel->config().nbpops << endl);
-    for (unsigned int a_pop = 0; a_pop < simModel->config().implicit_pops.size(); a_pop++) {
-        outc(cout << " " << simModel->config().implicit_pops.at(a_pop));
-    }
-    outc(cout << endl);
-    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
-        outc(cout << " " << simModel->config().calib_oth_landings.at(a_pop));
-    }
-    outc(cout << endl);
-    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
-        outc(cout << " " << simModel->config().calib_weight_at_szgroup.at(a_pop));
-    }
-    outc(cout << endl);
-    for (int a_pop = 0; a_pop < simModel->config().nbpops; a_pop++) {
-        outc(cout << " " << simModel->config().calib_cpue_multiplier.at(a_pop));
-    }
-    outc(cout << endl);
-
-    outc(cout << scenario.dyn_alloc_sce.toString() << endl);
-    outc(cout << scenario.dyn_pop_sce.toString() << endl);
-    outc(cout << "biolsce " << scenario.biolsce << endl);
-    outc(cout << "fleetsce " << scenario.fleetsce << endl);
-    outc(cout << "freq_do_growth " << scenario.freq_do_growth << endl);
-    outc(cout << "freq_redispatch_the_pop " << scenario.freq_redispatch_the_pop << endl);
-    outc(cout << "a_graph " << scenario.a_graph << endl);
-    outc(cout << "a_graph_name " << a_graph_name << endl);
-    outc(cout << "nrow_coord " << scenario.nrow_coord << endl);
-    outc(cout << "nrow_graph " << scenario.nrow_graph << endl);
-    outc(cout << "a_port " << scenario.a_port << endl);
-    outc(cout << "graph res in km xy " << scenario.graph_res.at(0) << " " << scenario.graph_res.at(1) << endl);
-    outc(cout << "is_individual_vessel_quotas " << simModel->scenario().is_individual_vessel_quotas << endl);
-    outc(cout << "check_all_stocks_before_going_fishing " << scenario.check_all_stocks_before_going_fishing << endl);
-
-    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
-        outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
-        outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
-        outc(cout << "update_tariffs_based_on_lpue_or_dpue_code " << update_tariffs_based_on_lpue_or_dpue_code << endl);
-        outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
-        outc(cout << "total_amount_credited " << total_amount_credited << endl);
-        outc(cout << "tariff_annual_hcr_percent_change " << tariff_annual_hcr_percent_change << endl);
-    }
+    test::config(a_graph_name, *simModel);
 
     // implicit_pops is a vector of the index of pop (see pop_names.txt)
     // for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....

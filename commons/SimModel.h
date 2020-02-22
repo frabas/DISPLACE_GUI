@@ -19,6 +19,8 @@ struct Scenario;
 }
 class Node;
 
+class Fishfarm;
+
 class GeoGraph;
 
 class SimModel {
@@ -50,6 +52,12 @@ public:
     std::vector<int> const &graph_point_code_landscape_unique() const;
 
     std::vector<int> &graph_point_code_landscape();
+
+    void setFishFarms(vector<Fishfarm *> fishfarms);
+
+    std::vector<Fishfarm *> &fishfarms();
+
+    std::vector<Fishfarm *> const &fishfarms() const;
 
     DiffusionTree &diffusionTree();
 

@@ -43,6 +43,8 @@ public:
 
     bool loadScenario();
 
+    bool loadFishFarms();
+
     bool loadNodesAndGraphs();
 
     struct BenthosData {
@@ -84,6 +86,8 @@ protected:
     virtual bool loadScenarioImpl(displace::commons::Scenario &scenario) = 0;
 
     virtual bool loadNodesAndGraphsDataImpl() = 0;
+
+    virtual bool loadFishFarmsImpl() = 0;
 
     virtual BenthosData loadBenthosData(
             PopSceOptions const &dyn_pop_sce,

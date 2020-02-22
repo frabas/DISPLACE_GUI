@@ -16,6 +16,8 @@ struct SimModel::Impl {
     DiffusionTree diffusionTree;
     std::vector<Node *> nodes;
 
+    std::vector<Fishfarm *> fishfarms;
+
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
 
@@ -161,6 +163,21 @@ std::vector<int> const &SimModel::graph_point_code_landscape_unique() const
 std::vector<int> &SimModel::graph_point_code_landscape()
 {
     return p->graph_point_code_landscape;
+}
+
+void SimModel::setFishFarms(vector<Fishfarm *> fishfarms)
+{
+    p->fishfarms = std::move(fishfarms);
+}
+
+std::vector<Fishfarm *> &SimModel::fishfarms()
+{
+    return p->fishfarms;
+}
+
+std::vector<Fishfarm *> const &SimModel::fishfarms() const
+{
+    return p->fishfarms;
 }
 
 DiffusionTree &SimModel::diffusionTree()

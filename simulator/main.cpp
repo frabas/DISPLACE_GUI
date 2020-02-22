@@ -857,101 +857,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    LoadedData loadedDataFishfarms;
-
-    Dataloaderfishfarms ffl;
-    l->loadFeatures(&ffl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataFishfarms);
+    modelLoader->loadFishFarms();
 
 
-    cout << "create fishfarms..." << endl;
-
-    vector<Fishfarm *> fishfarms(loadedDataFishfarms.vectiparam1.size());
-    for (unsigned int i = 0; i < loadedDataFishfarms.vectiparam1.size(); i++) {
-
-     cout << "create fishfarm num: " << i << endl;
-
-        fishfarms[i] = new Fishfarm(
-                loadedDataFishfarms.vectiparam1.at(i),
-                loadedDataFishfarms.vectsparam1.at(i),
-                simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i)),
-                0,
-                loadedDataFishfarms.vectiparam3.at(i),
-                loadedDataFishfarms.vectdparam1.at(i),
-                loadedDataFishfarms.vectdparam2.at(i),
-                loadedDataFishfarms.vectdparam3.at(i),
-                loadedDataFishfarms.vectdparam4.at(i),
-                loadedDataFishfarms.vectdparam5.at(i),
-                loadedDataFishfarms.vectdparam6.at(i),
-                loadedDataFishfarms.vectdparam7.at(i),
-                loadedDataFishfarms.vectdparam8.at(i),
-                loadedDataFishfarms.vectdparam9.at(i),
-                loadedDataFishfarms.vectdparam10.at(i),
-                loadedDataFishfarms.vectdparam11.at(i),
-                loadedDataFishfarms.vectdparam12.at(i),
-                loadedDataFishfarms.vectdparam13.at(i),
-                loadedDataFishfarms.vectsparam2.at(i),
-                loadedDataFishfarms.vectiparam4.at(i),
-                loadedDataFishfarms.vectiparam5.at(i),
-                loadedDataFishfarms.vectiparam6.at(i),
-                loadedDataFishfarms.vectiparam7.at(i),
-                loadedDataFishfarms.vectiparam8.at(i),
-                loadedDataFishfarms.vectdparam14.at(i),
-                loadedDataFishfarms.vectdparam15.at(i),
-                loadedDataFishfarms.vectdparam16.at(i),
-                loadedDataFishfarms.vectiparam9.at(i),
-                loadedDataFishfarms.vectdparam17.at(i),
-                loadedDataFishfarms.vectdparam18.at(i),
-                loadedDataFishfarms.vectdparam19.at(i),
-                loadedDataFishfarms.vectdparam20.at(i),
-                loadedDataFishfarms.vectdparam21.at(i),
-                loadedDataFishfarms.vectdparam22.at(i),
-                loadedDataFishfarms.vectsparam3.at(i),
-                loadedDataFishfarms.vectdparam23.at(i),
-                loadedDataFishfarms.vectdparam24.at(i),
-                loadedDataFishfarms.vectdparam25.at(i),
-                loadedDataFishfarms.vectdparam26.at(i),
-                loadedDataFishfarms.vectdparam27.at(i),
-                loadedDataFishfarms.vectdparam28.at(i),
-                loadedDataFishfarms.vectsparam4.at(i),
-                loadedDataFishfarms.vectdparam29.at(i),
-                loadedDataFishfarms.vectdparam30.at(i),
-                loadedDataFishfarms.vectdparam31.at(i),
-                loadedDataFishfarms.vectdparam32.at(i),
-                loadedDataFishfarms.vectdparam33.at(i),
-                loadedDataFishfarms.vectdparam34.at(i),
-                loadedDataFishfarms.vectdparam35.at(i),
-                loadedDataFishfarms.vectdparam36.at(i),
-                loadedDataFishfarms.vectdparam37.at(i),
-                loadedDataFishfarms.vectdparam38.at(i),
-                loadedDataFishfarms.vectdparam39.at(i),
-                loadedDataFishfarms.vectdparam40.at(i),
-                loadedDataFishfarms.vectdparam41.at(i),
-                loadedDataFishfarms.vectdparam42.at(i),
-                loadedDataFishfarms.vectdparam43.at(i));
-
-
-        simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i))->set_ff_names_on_node(
-                loadedDataFishfarms.vectiparam1.at(i));
-
-        cout << fishfarms[i]->get_name() << endl;
-        cout << "on node " << loadedDataFishfarms.vectiparam2.at(i) << " put ffarm "
-             << simModel->nodes().at(loadedDataFishfarms.vectiparam2.at(i))->get_ff_names_on_node().at(0)
-             << endl;
-        cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << endl;
-        cout << "end for harvest at " << loadedDataFishfarms.vectiparam5.at(i) << " given " << fishfarms[i]->get_end_day_harvest()
-             << endl;
-
+    for (auto fishfarm: simModel->fishfarms()) {
         if (outSqlite) {
-            outSqlite->exportFishfarmDef(*fishfarms[i]);
+            outSqlite->exportFishfarmDef(*fishfarm);
         }
     }
 

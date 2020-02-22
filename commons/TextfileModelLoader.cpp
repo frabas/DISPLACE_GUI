@@ -3,6 +3,7 @@
 //
 
 #include "TextfileModelLoader.h"
+#include "TextImpl/Impl.h"
 #include "helpers.h"
 #include "dataloaderbenthos.h"
 #include "readdata.h"
@@ -14,12 +15,6 @@
 #include "shortestpath/GeoGraphLoader.h"
 #include "shortestpath/GeoGraph.h"
 #include "shortestpath/AStarShortestPathFinder.h"
-
-struct TextfileModelLoader::Impl {
-    std::string folder_name_parameterization;
-    std::string inputfolder;
-    std::string scenarioname;
-};
 
 TextfileModelLoader::TextfileModelLoader(std::shared_ptr<SimModel> model,
                                          std::string folder_name_parameterization,
@@ -626,7 +621,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         //for (auto v : path) std::cout << v << "\n";
         //cout << "Check a shortest path  ...ok" << endl;
         model().setGeoGraph(std::move(geoGraph));
-      
+
     } catch (std::exception &x) {
         std::cerr << "Cannot read Node graphs: " << x.what();
         return 2;

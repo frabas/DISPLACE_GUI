@@ -279,6 +279,11 @@ bool ModelLoader::loadScenario()
     return p->scenarioLoaded;
 }
 
+bool ModelLoader::loadFishFarms()
+{
+    return loadFishFarmsImpl();
+}
+
 bool ModelLoader::loadNodesAndGraphs()
 {
     if (!loadNodesAndGraphsDataImpl()) {

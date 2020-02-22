@@ -34,6 +34,8 @@ protected:
 
     bool loadNodesAndGraphsDataImpl() override;
 
+    bool loadFishFarmsImpl() override;
+
     BenthosData loadBenthosData(PopSceOptions const &dyn_pop_sce,
                                 DynAllocOptions const &dyn_alloc_sce,
                                 std::string const &biolsce,

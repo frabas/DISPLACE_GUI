@@ -4,6 +4,7 @@
 
 #include "SimModel.h"
 #include "comstructs.h"
+#include "Calendar.h"
 #include "shortestpath/GeoGraph.h"
 
 struct SimModel::Impl {
@@ -11,6 +12,7 @@ struct SimModel::Impl {
 
     std::unique_ptr<displace::commons::Config> config;
     std::unique_ptr<displace::commons::Scenario> scenario;
+    std::unique_ptr<Calendar> calendar;
 
     // TODO all those classes need to be transformed in special opaque classes
     GeoGraph geoGraph;
@@ -43,6 +45,16 @@ SimModel::SimModel()
 void SimModel::setConfig(std::unique_ptr<displace::commons::Config> config)
 {
     p->config = std::move(config);
+}
+
+void SimModel::setCalendar(std::unique_ptr<Calendar> calendar)
+{
+    p->calendar = std::move(calendar);
+}
+
+Calendar const &SimModel::calendar() const
+{
+    return *p->calendar;
 }
 
 displace::commons::Config const &SimModel::config() const

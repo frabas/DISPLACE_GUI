@@ -23,6 +23,7 @@
 #include <readdata.h>
 #include <storage/sqliteoutputstorage.h>
 #include <QDebug>
+#include <Calendar.h>
 
 const QString Calendar::days[] = {
     "mon", "tue", "wed", "thu",

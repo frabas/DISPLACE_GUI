@@ -25,6 +25,8 @@ class Windmill;
 
 class GeoGraph;
 
+class Calendar;
+
 class SimModel {
     struct Impl;
     spimpl::unique_impl_ptr<Impl> p;
@@ -34,6 +36,10 @@ public:
     void initRandom(std::string const &namesimu);
 
     void setConfig(std::unique_ptr<displace::commons::Config> config);
+
+    void setCalendar(std::unique_ptr<Calendar> calendar);
+
+    Calendar const &calendar() const;
 
     displace::commons::Config const &config() const;
 

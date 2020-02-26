@@ -109,6 +109,7 @@ using namespace sqlite;
 
 #endif
 
+#include "Calendar.h"
 #include <biomodule2.h>
 #include <fisheriesmanagmt.h>
 
@@ -2333,13 +2334,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     std::string shipslogs_filename = filename;
 
     // read list of tsteps with discrete events
-    vector<int> tsteps_quarters = read_tsteps_quarters(folder_name_parameterization, inputfolder);
-    vector<int> tsteps_semesters = read_tsteps_semesters(folder_name_parameterization, inputfolder);
-    vector<int> tsteps_years = read_tsteps_years(folder_name_parameterization, inputfolder);
-    vector<int> tsteps_months = read_tsteps_months(folder_name_parameterization, inputfolder);
+    modelLoader->loadCalendar();
 
     if (enable_sqlite_out) {
-        outSqlite->exportCalendar(tsteps_months, tsteps_quarters, tsteps_semesters, tsteps_years);
+        outSqlite->exportCalendar(simModel->calendar().months(), simModel->calendar().quarters(),
+                                  simModel->calendar().semesters(), simModel->calendar().years());
     }
 
     int count_quarters = 1;
@@ -2535,10 +2534,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     popnodes_tariffs_filename,
                                     popnodes_benthos_biomass_filename,
                                     popnodes_benthos_number_filename,
-                                    tsteps_quarters,
-                                    tsteps_semesters,
-                                    tsteps_years,
-                                    tsteps_months,
+                                    simModel->calendar().quarters(),
+                                    simModel->calendar().semesters(),
+                                    simModel->calendar().years(),
+                                    simModel->calendar().months(),
                                     simModel->config().implicit_pops,
                                     simModel->config().calib_oth_landings,
                                     selectivity_per_stock_ogives_for_oth_land,
@@ -2565,7 +2564,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         if (scenario.dyn_pop_sce.option(Options::diffusePopN) &&
-            binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            simModel->calendar().isFirstDayOfMonth(tstep)) {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
             // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
@@ -2594,7 +2593,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-        if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+        if (simModel->calendar().isFirstDayOfYear(tstep)) {
             a_year += 1;
 
 
@@ -2618,10 +2617,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout << "RE-READ DATA----------" << endl);
-        multimap <string, double> reloaded_fcredits;
+        multimap<string, double> reloaded_fcredits;
 
         // RE-READ DATA FOR EVENT => change of month
-        if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+        // TODO use a wall clock object instead
+        if (simModel->calendar().isFirstDayOfMonth(tstep)) {
             CurrentMonth += 1;
 
             {
@@ -2694,7 +2694,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // RE-READ DATA FOR EVENT => change of quarter
-        if (tstep > 2000 && binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
+        if (tstep > 2000 && simModel->calendar().isFirstDayOfQuarter(tstep))
             //   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
         {
 
@@ -2736,7 +2736,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 if (scenario.dyn_alloc_sce.option(Options::ExitVessels10Per)) {
                     double exit_vessels_per_year = 0.1; //  this is a rate of vessel leaving per year
-                    if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+                    if (simModel->calendar().isFirstDayOfYear(tstep)) {
 
                         if ((rand() % 2) < exit_vessels_per_year) { vessels.at(v)->set_vessel_exited(1); }
 
@@ -3045,15 +3045,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // weekly update
                 break;
             case 2:
-                if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfMonth(tstep)) { redispatch_the_pop = 1; }
                 // monthly update
                 break;
             case 3:
-                if (binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfQuarter(tstep)) { redispatch_the_pop = 1; }
                 // quartely update
                 break;
             case 4:
-                if (binary_search(tsteps_semesters.begin(), tsteps_semesters.end(), tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfYear(tstep)) { redispatch_the_pop = 1; }
                 // semester update
                 break;
         }
@@ -3394,7 +3394,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-        if (tstep == 0 || binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) {
+        if (tstep == 0 || simModel->calendar().isFirstDayOfQuarter(tstep)) {
 
             // fill in the usual_fgrounds on harbours
             for (unsigned int i = 0; i < simModel->nodes().size(); ++i) {
@@ -3708,7 +3708,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
 
             // 1- annual tariff HCR (currently pooling all tariff pops together)
-            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(tstep)) {
                 cout << "Annual tariff HCR... " << endl;
                 double fbar_py_allpopav = 0.0;
                 double ftarget_allpopav = 0.0;
@@ -3773,7 +3773,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // weekly update
                     break;
                 case 2:
-                    if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) { do_update = 1; }
+                    if (simModel->calendar().isFirstDayOfMonth(tstep)) { do_update = 1; }
                     // monthly update
                     break;
             }
@@ -3926,7 +3926,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for fsihfarms
         if (use_gui) {
 
-            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
                 windmillslogs.flush();
                 guiSendUpdateCommand(windmillslogs_filename, tstep);
             }
@@ -3951,7 +3951,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for ships
         if (use_gui) {
 
-            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
                 shipslogs.flush();
                 guiSendUpdateCommand(shipslogs_filename, tstep);
             }
@@ -3993,7 +3993,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
                         //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
-                        if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+                        if (simModel->calendar().isFirstDayOfMonth(tstep)) {
 
                             if (enable_sqlite_out) {
                                 outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
@@ -4013,7 +4013,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for fishfarms
         if (use_gui) {
 
-            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
                 fishfarmslogs.flush();
                 guiSendUpdateCommand(fishfarmslogs_filename, tstep);
             }
@@ -4053,7 +4053,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
 
         if (scenario.dyn_alloc_sce.option(Options::EffortMinControl)) {
-            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(tstep)) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
                                              1;
@@ -4070,7 +4070,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         if (scenario.dyn_alloc_sce.option(Options::EffortMaxControl)) {
-            if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(tstep)) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
                                              1;
@@ -4198,7 +4198,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // Flush and updates all statistics for simModel->nodes() envt
         if (use_gui) {
-            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
                 nodes_envt.flush();
                 for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
                     simModel->nodes().at(n)->export_nodes_envt(nodes_envt, tstep);
@@ -4241,7 +4241,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
 
         if (scenario.dyn_pop_sce.option(Options::modelShippingOnBenthos)) {
-            if (binary_search(tsteps_months.begin(), tsteps_months.end(), tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
                 double shippingdensity = 0;
                 double bathymetry = 0;
                 for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
@@ -4305,7 +4305,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if (binary_search(tsteps_years.begin(), tsteps_years.end(), tstep)) {
+        if (simModel->calendar().isFirstDayOfYear(tstep)) {
             for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
                 simModel->nodes().at(i)->set_nbchoked(0);
             }

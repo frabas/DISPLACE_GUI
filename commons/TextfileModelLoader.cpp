@@ -10,6 +10,7 @@
 #include "comstructs.h"
 #include "Node.h"
 #include "Harbour.h"
+#include "Calendar.h"
 #include "../simulator/values.h"
 #include "shortestpath/GeoGraphLoader.h"
 #include "shortestpath/GeoGraph.h"
@@ -628,4 +629,20 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     }
 
     return true;
+}
+
+void TextfileModelLoader::loadCalendar()
+{
+    vector<int> tsteps_quarters = read_tsteps_quarters(p->folder_name_parameterization, p->inputfolder);
+    vector<int> tsteps_semesters = read_tsteps_semesters(p->folder_name_parameterization, p->inputfolder);
+    vector<int> tsteps_years = read_tsteps_years(p->folder_name_parameterization, p->inputfolder);
+    vector<int> tsteps_months = read_tsteps_months(p->folder_name_parameterization, p->inputfolder);
+
+    auto calendar = std::make_unique<Calendar>();
+    calendar->setCalendar(std::move(tsteps_months),
+                          std::move(tsteps_quarters),
+                          std::move(tsteps_semesters),
+                          std::move(tsteps_years));
+
+    model().setCalendar(std::move(calendar));
 }

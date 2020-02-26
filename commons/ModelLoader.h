@@ -43,6 +43,8 @@ public:
 
     bool loadScenario();
 
+    virtual void loadCalendar() = 0;
+
     bool loadFishFarms();
 
     bool loadWindmills();

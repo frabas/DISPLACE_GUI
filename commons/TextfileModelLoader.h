@@ -38,6 +38,10 @@ protected:
 
     bool loadWindmillsImpl() override;
 
+public:
+    void loadCalendar() override;
+
+protected:
     BenthosData loadBenthosData(PopSceOptions const &dyn_pop_sce,
                                 DynAllocOptions const &dyn_alloc_sce,
                                 std::string const &biolsce,

@@ -298,6 +298,11 @@ bool ModelLoader::loadNodesAndGraphs()
     return true;
 }
 
+bool ModelLoader::loadWindmills()
+{
+    return loadWindmillsImpl();
+}
+
 SimModel &ModelLoader::model()
 {
     return *p->model;

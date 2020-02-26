@@ -45,6 +45,8 @@ public:
 
     bool loadFishFarms();
 
+    bool loadWindmills();
+
     bool loadNodesAndGraphs();
 
     struct BenthosData {
@@ -88,6 +90,8 @@ protected:
     virtual bool loadNodesAndGraphsDataImpl() = 0;
 
     virtual bool loadFishFarmsImpl() = 0;
+
+    virtual bool loadWindmillsImpl() = 0;
 
     virtual BenthosData loadBenthosData(
             PopSceOptions const &dyn_pop_sce,

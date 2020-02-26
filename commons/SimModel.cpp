@@ -12,11 +12,12 @@ struct SimModel::Impl {
     std::unique_ptr<displace::commons::Config> config;
     std::unique_ptr<displace::commons::Scenario> scenario;
 
+    // TODO all those classes need to be transformed in special opaque classes
     GeoGraph geoGraph;
     DiffusionTree diffusionTree;
     std::vector<Node *> nodes;
-
     std::vector<Fishfarm *> fishfarms;
+    vector<Windmill *> windmills;
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
@@ -163,6 +164,21 @@ std::vector<int> const &SimModel::graph_point_code_landscape_unique() const
 std::vector<int> &SimModel::graph_point_code_landscape()
 {
     return p->graph_point_code_landscape;
+}
+
+void SimModel::setWindmills(vector<Windmill *> windmills)
+{
+    p->windmills = std::move(windmills);
+}
+
+vector<Windmill *> &SimModel::windmills()
+{
+    return p->windmills;
+}
+
+vector<Windmill *> const &SimModel::windmills() const
+{
+    return p->windmills;
 }
 
 void SimModel::setFishFarms(vector<Fishfarm *> fishfarms)

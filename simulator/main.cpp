@@ -159,7 +159,6 @@ using namespace sqlite;
 #include "dataloaderbenthos.h"
 #include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
-#include "dataloaderwindmills.h"
 #include "dataloadercommercialships.h"
 #include "dataloaderpops.h"
 #include "dataloadermetiers.h"
@@ -230,7 +229,6 @@ vector<Ship *> ships;
 vector<Benthos *> benthoss;
 vector<Population *> populations;
 vector<Fishfarm *> fishfarms;
-vector<Windmill *> windmills;
 int tstep;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
@@ -857,6 +855,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
+    // TODO do not ignore return values?
     modelLoader->loadFishFarms();
 
 
@@ -882,30 +881,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    LoadedData loadedDataWindmills;
-
-    Dataloaderwindmills wml;
-    l->loadFeatures(&wml,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataWindmills);
-
-    //TODO: extend variables in read_size_per_windmill() e.g. read kWh from files etc.
-
-
-    for (map<int, double>::iterator iter = loadedDataWindmills.mmapidparam1.begin();
-         iter != loadedDataWindmills.mmapidparam1.end(); iter = loadedDataWindmills.mmapidparam1.upper_bound(iter->first)) {
-        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name",
-                                    simModel->nodes().at(iter->first), iter->second, 1, 500,
-                                    1); // Caution: type is 1, kW is 500, is_active at 1
-        windmills.push_back(wm);
-    }
+    // TODO do not ignore return values, or remove them
+    modelLoader->loadWindmills();
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -3930,17 +3907,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout << "THE WINDFARM LOOP----------" << endl);
-        for (unsigned int i = 0; i < windmills.size(); i++) {
+        for (unsigned int i = 0; i < simModel->windmills().size(); i++) {
 
-            if (windmills.at(i)->get_is_active() == 1) {
-                windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
+            if (simModel->windmills().at(i)->get_is_active() == 1) {
+                simModel->windmills().at(i)->compute_kWproduction_in_farm(); // discrete event
                 //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
                 if (export_hugefiles) {
-                    windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+                    simModel->windmills().at(i)->export_windmills_indicators(windmillslogs,
+                                                                             tstep); // export event to file...
                 }
 
                 if (enable_sqlite_out) {
-                    outSqlite->exportWindmillsLog(windmills.at(i), tstep);
+                    outSqlite->exportWindmillsLog(simModel->windmills().at(i), tstep);
                 }
             }
 

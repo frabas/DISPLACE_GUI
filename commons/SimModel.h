@@ -21,6 +21,8 @@ class Node;
 
 class Fishfarm;
 
+class Windmill;
+
 class GeoGraph;
 
 class SimModel {
@@ -52,6 +54,12 @@ public:
     std::vector<int> const &graph_point_code_landscape_unique() const;
 
     std::vector<int> &graph_point_code_landscape();
+
+    void setWindmills(vector<Windmill *> windmills);
+
+    vector<Windmill *> &windmills();
+
+    vector<Windmill *> const &windmills() const;
 
     void setFishFarms(vector<Fishfarm *> fishfarms);
 

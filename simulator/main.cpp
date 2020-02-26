@@ -228,7 +228,6 @@ vector<Vessel *> vessels;
 vector<Ship *> ships;
 vector<Benthos *> benthoss;
 vector<Population *> populations;
-vector<Fishfarm *> fishfarms;
 int tstep;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
@@ -2606,8 +2605,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             // fishfarms for new year
-            for (unsigned int i = 0; i < fishfarms.size(); ++i) {
-                fishfarms.at(i)->set_is_running(1);
+            for (auto fishfarm : simModel->fishfarms()) {
+                fishfarm->set_is_running(1);
             }
 
 
@@ -3959,49 +3958,49 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout << "THE FISHFARM LOOP----------" << endl);
-        for (unsigned int i = 0; i < fishfarms.size(); i++) {
+        for (auto fishfarm : simModel->fishfarms()) {
 
-            if (fishfarms.at(i)->get_is_active() == 1) {
-                int start = fishfarms.at(i)->get_start_day_growing();
-                int end = fishfarms.at(i)->get_end_day_harvest();
+            if (fishfarm->get_is_active() == 1) {
+                int start = fishfarm->get_start_day_growing();
+                int end = fishfarm->get_end_day_harvest();
                 if ((int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) == end &&
-                    fishfarms.at(i)->get_is_running() == 1) {
-                    fishfarms.at(i)->compute_profit_in_farm(); // discrete event
+                    fishfarm->get_is_running() == 1) {
+                    fishfarm->compute_profit_in_farm(); // discrete event
                     //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
-                    fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+                    fishfarm->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
 
                     if (enable_sqlite_out) {
-                        outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+                        outSqlite->exportFishfarmLog(fishfarm, tstep);
                     }
 
                     //...and reset
-                    fishfarms.at(i)->set_is_running(0);
-                    fishfarms.at(i)->set_sim_individual_mean_kg(0.0);
-                    fishfarms.at(i)->set_sim_kg_harvested(0.0);
-                    fishfarms.at(i)->set_sim_kg_eggs_harvested(0.0);
-                    fishfarms.at(i)->set_sim_net_discharge_N(0.0);
-                    fishfarms.at(i)->set_sim_net_discharge_P(0.0);
-                    fishfarms.at(i)->set_sim_annual_profit(0.0);
+                    fishfarm->set_is_running(0);
+                    fishfarm->set_sim_individual_mean_kg(0.0);
+                    fishfarm->set_sim_kg_harvested(0.0);
+                    fishfarm->set_sim_kg_eggs_harvested(0.0);
+                    fishfarm->set_sim_net_discharge_N(0.0);
+                    fishfarm->set_sim_net_discharge_P(0.0);
+                    fishfarm->set_sim_annual_profit(0.0);
                 } else {
-                    if (fishfarms.at(i)->get_is_running() == 1 &&
+                    if (fishfarm->get_is_running() == 1 &&
                         (int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) > start) {
                         // fish growth...
-                        fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
+                        fishfarm->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
 
                         //...environmental impact
-                        fishfarms.at(i)->compute_discharge_on_farm(tstep);
+                        fishfarm->compute_discharge_on_farm(tstep);
                         //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
                         //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
                         if (simModel->calendar().isFirstDayOfMonth(tstep)) {
 
                             if (enable_sqlite_out) {
-                                outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+                                outSqlite->exportFishfarmLog(fishfarm, tstep);
                             }
 
                             if (export_hugefiles) {
-                                fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs,
-                                                                             tstep); // export event to file
+                                fishfarm->export_fishfarms_indicators(fishfarmslogs,
+                                                                      tstep); // export event to file
                             }
                         }
                     }

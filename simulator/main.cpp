@@ -156,7 +156,6 @@ using namespace sqlite;
 #include <memoryinfo.h>
 
 #include "dataloader.h"
-#include "dataloaderbenthos.h"
 #include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
 #include "dataloadercommercialships.h"

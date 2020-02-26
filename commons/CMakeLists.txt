@@ -17,13 +17,11 @@ include_directories(
 set(SOURCES
         commons_global.h
         dataloader.h
-        dataloaderbenthos.h
         dataloadervessels.h
         dataloaderpops.h
         dataloadermetiers.h
         dataloaderfishfarms.h
         dataloadercommercialships.h
-        dataloaderbenthos.cpp
         dataloadervessels.cpp
         dataloaderpops.cpp
         dataloadermetiers.cpp
@@ -153,7 +151,7 @@ set(SOURCES
         ../include/utils/safe_strerror.h
         ModelLoader.h ModelLoader.cpp
         TextfileModelLoader.cpp TextfileModelLoader.h
-        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp)
+        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

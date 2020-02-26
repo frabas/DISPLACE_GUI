@@ -5,7 +5,6 @@
 #include "TextfileModelLoader.h"
 #include "TextImpl/Impl.h"
 #include "helpers.h"
-#include "dataloaderbenthos.h"
 #include "readdata.h"
 #include "SimModel.h"
 #include "comstructs.h"
@@ -28,6 +27,7 @@ TextfileModelLoader::TextfileModelLoader(std::shared_ptr<SimModel> model,
     p->scenarioname = scenarioname;
 }
 
+/*
 ModelLoader::BenthosData TextfileModelLoader::loadBenthosData(
         PopSceOptions const &dyn_pop_sce,
         DynAllocOptions const &dyn_alloc_sce,
@@ -44,7 +44,7 @@ ModelLoader::BenthosData TextfileModelLoader::loadBenthosData(
                 fleetsce);
 
     return bl.loadedData();
-}
+}*/
 
 bool TextfileModelLoader::loadConfigImpl(int &nbpops,
                                          int &nbbenthospops,

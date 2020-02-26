@@ -48,14 +48,14 @@ map<int, double> read_size_per_windmill(string folder_name_parameterization, str
 
 
 int Dataloaderwindmills::features(std::shared_ptr<sql::Storage> indb,
-                                 const string& folder_name_parameterization,
-                                 const string& inputfolder,
-                                 PopSceOptions &dyn_pop_sce,
-                                 DynAllocOptions &dyn_alloc_sce,
-                                 string &biolsce,
-                                 string &fleetsce,
-                                 ParamsForLoad &paramsForLoad,
-                                 LoadedData& loadedData)
+                                  const string &folder_name_parameterization,
+                                  const string &inputfolder,
+                                  PopSceOptions const &dyn_pop_sce,
+                                  DynAllocOptions const &dyn_alloc_sce,
+                                  string const &biolsce,
+                                  string const &fleetsce,
+                                  ParamsForLoad &paramsForLoad,
+                                  LoadedData &loadedData)
  {
 
 

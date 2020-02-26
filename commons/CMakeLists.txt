@@ -21,12 +21,10 @@ set(SOURCES
         dataloaderpops.h
         dataloadermetiers.h
         dataloaderfishfarms.h
-        dataloadercommercialships.h
         dataloadervessels.cpp
         dataloaderpops.cpp
         dataloadermetiers.cpp
         dataloaderfishfarms.cpp
-        dataloadercommercialships.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp
@@ -151,7 +149,7 @@ set(SOURCES
         ../include/utils/safe_strerror.h
         ModelLoader.h ModelLoader.cpp
         TextfileModelLoader.cpp TextfileModelLoader.h
-        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp Calendar.cpp Calendar.h)
+        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp Calendar.cpp Calendar.h TextImpl/LoadShipsImpl.cpp)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

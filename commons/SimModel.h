@@ -21,6 +21,8 @@ class Node;
 
 class Fishfarm;
 
+class Ship;
+
 class Windmill;
 
 class GeoGraph;
@@ -52,6 +54,12 @@ public:
     std::vector<Node *> const &nodes() const;
 
     std::vector<Node *> &nodes();
+
+    void setShips(std::vector<Ship *> ships);
+
+    std::vector<Ship *> &ships();
+
+    std::vector<Ship *> const &ships() const;
 
     void set_graph_point_code_landscape(std::vector<int> v);
 

@@ -92,7 +92,6 @@ extern int nb_displayed_moves_out_of_twenty;
 
 extern vector<int> ve;
 extern vector <Vessel*> vessels;
-extern vector <Ship*> ships;
 extern vector <Population* > populations;
 extern vector <Benthos* > benthoss;
 extern int tstep;
@@ -155,19 +154,21 @@ extern void guiSendVesselLogbook(const std::string &line);
 
 
 
-static void manage_ship(int idx_v)
+static void manage_ship(SimModel &model, int idx_v)
 {
-    dout(cout << "idx_v is " << idx_v << " " << ships.size() << endl);
-    ships.at(idx_v - 5000)->lock();
+    dout(cout << "idx_v is " << idx_v << " " << model.ships().size() << endl);
+    model.ships().at(idx_v - 5000)->lock();
 
     std::unique_lock<std::mutex> locker(glob_mutex);
-    dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
-    ships.at(idx_v - 5000)->move();
-    dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
-    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
+    dout(cout << "before at (" << model.ships().at(idx_v - 5000)->get_x()
+              << "," << model.ships().at(idx_v - 5000)->get_y() << ") " << endl);
+    model.ships().at(idx_v - 5000)->move();
+    dout(cout << "after at (" << model.ships().at(idx_v - 5000)->get_x() << ","
+              << model.ships().at(idx_v - 5000)->get_y() << ") " << endl);
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, model.ships().at(idx_v - 5000))));
     locker.unlock();
 
-    ships.at(idx_v - 5000)->unlock();
+    model.ships().at(idx_v - 5000)->unlock();
 }
 
 
@@ -586,7 +587,7 @@ static void *thread_manage_func(std::shared_ptr<SimModel> model)
         }
         else
         {
-            manage_ship(nextidx);
+            manage_ship(*model, nextidx);
         }
 
         locker.lock();

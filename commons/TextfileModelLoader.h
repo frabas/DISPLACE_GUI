@@ -34,6 +34,8 @@ protected:
 
     bool loadNodesAndGraphsDataImpl() override;
 
+    void loadShips() override;
+
     bool loadFishFarmsImpl() override;
 
     bool loadWindmillsImpl() override;

@@ -20,6 +20,8 @@ struct SimModel::Impl {
     std::vector<Node *> nodes;
     std::vector<Fishfarm *> fishfarms;
     vector<Windmill *> windmills;
+    vector<Ship *> ships;
+
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
@@ -121,6 +123,21 @@ std::vector<Node *> const &SimModel::nodes() const
 std::vector<Node *> &SimModel::nodes()
 {
     return p->nodes;
+}
+
+void SimModel::setShips(std::vector<Ship *> ships)
+{
+    p->ships = std::move(ships);
+}
+
+std::vector<Ship *> &SimModel::ships()
+{
+    return p->ships;
+}
+
+std::vector<Ship *> const &SimModel::ships() const
+{
+    return p->ships;
 }
 
 void SimModel::setQuarter(int quarter)

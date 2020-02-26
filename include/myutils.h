@@ -476,7 +476,7 @@ vector<double>  scale_a_vector_to_1(vector<double> a_vector);
 
 bool  fill_map_from_specifications_i_i(istream& in, map<int, int>& infos, string namefolderinput);
 bool  fill_map_from_specifications_i_s(istream& in, map<int, string>& infos, string namefolderinput);
-bool  fill_map_from_specifications_i_d(istream& in, map<int, double>& infos, string namefolderinput);
+bool fill_map_from_specifications_i_d(istream &in, map<int, double> &infos, string namefolderinput);
 
 // generator
 //int my_rand(int a, int b)
@@ -484,6 +484,32 @@ bool  fill_map_from_specifications_i_d(istream& in, map<int, double>& infos, str
 //    return a+ rand() % (b-a+1);
 //}
 
-double  decode_the_tree(string& tree, vector<string>& direction,
-                       map<string, int>& external_states, map<string, int>& internal_states);
+double decode_the_tree(string &tree, vector<string> &direction,
+                       map<string, int> &external_states, map<string, int> &internal_states);
+
+bool read_ships_features(vector<string> &shipids,
+                         vector<double> &imos,
+                         vector<double> &yearbuilds, vector<string> &flags,
+                         vector<string> &types, vector<double> &typecodes,
+                         vector<double> &loas,
+                         vector<double> &KWs,
+                         vector<double> &breadths,
+                         vector<double> &grosstonnages, vector<double> &nbunits,
+                         vector<double> &fueluses,
+                         vector<double> &NOxEmission_gperKWhs,
+                         vector<double> &SOxEmission_percentpertotalfuelmasss,
+                         vector<double> &GHGEmissions,
+                         vector<double> &PMEmissions,
+                         vector<double> &vmaxs,
+                         vector<double> &vcruises,
+                         vector<double> &lane_ids,
+                         string folder_name_parameterization,
+                         string inputfolder
+);
+
+multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
+
+multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
+
+
 #endif

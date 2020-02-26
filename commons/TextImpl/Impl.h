@@ -2,8 +2,10 @@
 // Created by happycactus on 2/22/20.
 //
 
-#ifndef DISPLACE_IMPL_H
-#define DISPLACE_IMPL_H
+#ifndef DISPLACE_TextfileModelLoader_IMPL_H
+#define DISPLACE_TextfileModelLoader_IMPL_H
+
+#include "TextfileModelLoader.h"
 
 #include <string>
 

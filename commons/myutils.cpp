@@ -2215,11 +2215,100 @@ double decode_the_tree(string& tree, vector<string>& direction,
         //print(a_split_string);
         //   system("PAUSE");
         // keep only one branch (0 left or 1 right) and loop...
-        if(a_split_string.size()>1) tree = a_split_string[a_state];
+        if (a_split_string.size() > 1) { tree = a_split_string[a_state]; }
 
         //cout << "the tree is now reduced to " << tree << endl;
     }
     //cout << "the found value is: " << tree << endl;
 
-    return(atof(tree.c_str()));
+    return (atof(tree.c_str()));
+}
+
+bool read_ships_features(vector<string> &shipids,
+                         vector<double> &imos,
+                         vector<double> &yearbuilds, vector<string> &flags,
+                         vector<string> &types, vector<double> &typecodes,
+                         vector<double> &loas,
+                         vector<double> &KWs,
+                         vector<double> &breadths,
+                         vector<double> &grosstonnages, vector<double> &nbunits,
+                         vector<double> &fueluses,
+                         vector<double> &NOxEmission_gperKWhs,
+                         vector<double> &SOxEmission_percentpertotalfuelmasss,
+                         vector<double> &GHGEmissions,
+                         vector<double> &PMEmissions,
+                         vector<double> &vmaxs,
+                         vector<double> &vcruises,
+                         vector<double> &lane_ids,
+                         string folder_name_parameterization,
+                         string inputfolder
+)
+{
+
+    string filename = inputfolder + "/shipsspe_" + folder_name_parameterization + "/shipsspe_features.dat";
+
+    ifstream ships_features;
+    ships_features.open(filename.c_str());
+    if (ships_features.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+
+    bool r = fill_from_ships_specifications(ships_features, shipids, imos,
+                                            yearbuilds, flags, types, typecodes,
+                                            loas, KWs, breadths, grosstonnages, nbunits,
+                                            fueluses, NOxEmission_gperKWhs,
+                                            SOxEmission_percentpertotalfuelmasss,
+                                            GHGEmissions, PMEmissions,
+                                            vmaxs, vcruises, lane_ids);
+    ships_features.close();
+
+    return r;
+}
+
+multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/shipsspe_" + folder_name_parameterization + "/shipsspe_lanes_lat.dat";
+
+    ifstream file_shipsspe_lanes_lat;
+    file_shipsspe_lanes_lat.open(filename.c_str());
+    if (file_shipsspe_lanes_lat.fail()) {
+        cout << "Unfortunately the /shipsspe_lanes_lat.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> shipsspe_lanes_lat;
+    fill_multimap_from_specifications_i_d(file_shipsspe_lanes_lat, shipsspe_lanes_lat);
+    file_shipsspe_lanes_lat.close();
+
+    return (shipsspe_lanes_lat);
+}
+
+
+multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/shipsspe_" + folder_name_parameterization + "/shipsspe_lanes_lon.dat";
+
+    ifstream file_shipsspe_lanes_lon;
+    file_shipsspe_lanes_lon.open(filename.c_str());
+    if (file_shipsspe_lanes_lon.fail()) {
+        cout << "Unfortunately the /shipsspe_lanes_lon.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> shipsspe_lanes_lon;
+    fill_multimap_from_specifications_i_d(file_shipsspe_lanes_lon, shipsspe_lanes_lon);
+    file_shipsspe_lanes_lon.close();
+
+    return (shipsspe_lanes_lon);
 }

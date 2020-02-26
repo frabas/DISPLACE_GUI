@@ -159,7 +159,6 @@ using namespace sqlite;
 #include "dataloader.h"
 #include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
-#include "dataloadercommercialships.h"
 #include "dataloaderpops.h"
 #include "dataloadermetiers.h"
 
@@ -225,7 +224,6 @@ MemoryInfo memInfo;
 std::mutex glob_mutex;
 vector<int> ve;
 vector<Vessel *> vessels;
-vector<Ship *> ships;
 vector<Benthos *> benthoss;
 vector<Population *> populations;
 int tstep;
@@ -1538,57 +1536,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    LoadedData loadedDataShips;
-
-    Dataloaderships csl;
-    l->loadFeatures(&csl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataShips);
-
-
-
-    ships = vector<Ship *>(loadedDataShips.vectsparam1.size());
-    for (unsigned int i = 0; i < loadedDataShips.vectsparam1.size(); i++) {
-        cout << "create ship " << loadedDataShips.vectsparam1.at(i) << endl;
-
-        vector <double> longs = find_entries_i_d(loadedDataShips.mmapidparam1, loadedDataShips.vectdparam16.at(i));
-        vector <double> lats = find_entries_i_d(loadedDataShips.mmapidparam2, loadedDataShips.vectdparam16.at(i));
-        ships[i] = new Ship(i,
-                            loadedDataShips.vectsparam1.at(i),
-                            1,
-                            loadedDataShips.vectdparam1.at(i),
-                            loadedDataShips.vectdparam2.at(i),
-                            loadedDataShips.vectsparam2.at(i),
-                            loadedDataShips.vectsparam3.at(i),
-                            loadedDataShips.vectdparam3.at(i),
-                            loadedDataShips.vectdparam5.at(i),
-                            loadedDataShips.vectdparam4.at(i),
-                            loadedDataShips.vectdparam6.at(i),
-                            loadedDataShips.vectdparam7.at(i),
-                            loadedDataShips.vectdparam8.at(i),
-                            loadedDataShips.vectdparam9.at(i),
-                            loadedDataShips.vectdparam10.at(i),
-                            loadedDataShips.vectdparam11.at(i),
-                            loadedDataShips.vectdparam12.at(i),
-                            loadedDataShips.vectdparam13.at(i),
-                            loadedDataShips.vectdparam14.at(i),
-                            loadedDataShips.vectdparam15.at(i),
-                            longs,
-                            lats);
-        ships[i]->set_idx_ship(i);
-
-        cout << "at (" << ships[i]->get_x() << "," << ships[i]->get_y() << ") " << endl;
-
-    }
-    cout << "Number of ships created: " << ships.size() << endl;
-
+    modelLoader->loadShips();
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -3933,15 +3881,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout << "THE SHIP LOOP----------" << endl);
-        for (unsigned int i = 0; i < ships.size(); i++) {
-            if (ships.at(i)->get_is_active() == 1) {
-                ships.at(i)->compute_emissions_in_ship(); // discrete event
+        for (auto ship : simModel->ships()) {
+            if (ship->get_is_active() == 1) {
+                ship->compute_emissions_in_ship(); // discrete event
                 //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
                 if (export_hugefiles) {
-                    ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
+                    ship->export_ships_indicators(shipslogs, tstep); // export event to file...
                 }
                 if (enable_sqlite_out) {
-                    outSqlite->exportShip(tstep, ships.at(i));
+                    outSqlite->exportShip(tstep, ship);
                 }
             }
 
@@ -4102,7 +4050,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             thread_vessel_insert_job(index_v);
         }
 
-        for (unsigned int s = 0; s < ships.size(); s++) {
+        for (unsigned int s = 0; s < simModel->ships().size(); s++) {
             thread_vessel_insert_job(5000 + s);
         }
 
@@ -4378,21 +4326,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //}
 
 #ifdef _WIN32
-                                                                                                                                if(use_gnuplot)
-        {
-            // export ships current coordinates for plotting purpose
-            for(int s=0; s<ships.size(); s++)
-            {
-                vmslike3   << ships[ s ]->get_x() << " "
-                           << ships[ s ]->get_y() <<  endl;
+        if (use_gnuplot) {
+            for (auto ship : simModel->ships()) {
+                vmslike3 << ship->get_x() << " "
+                         << ship->get_y() << endl;
             }
             vmslike3.close();
 
             vmslike2.close();
-            fflush( pipe2 );
+            fflush(pipe2);
             fprintf(pipe2, "set terminal windows 0 size 400,400 position 100,100\n");
 
-            Sleep( 50 );		 // used when sometimes the simulation is too quick to be captured by gnuplot
+            Sleep(50);         // used when sometimes the simulation is too quick to be captured by gnuplot
             // note that possible warning messages from gnuplot are harmless...these messages are just
             // related to the fact that gnuplot actually try to open the vmslike2.dat while this is too late...
             string command1 = "plot 'map.dat' with lines lt 3 , '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat' using 1:2,  '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat' using 1:2 with points pt 1\n";

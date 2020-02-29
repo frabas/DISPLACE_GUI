@@ -2312,3 +2312,24 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
 
     return (shipsspe_lanes_lon);
 }
+
+map<int, double> read_size_per_windmill(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/windmillsspe_" + folder_name_parameterization + "/size_per_windmill.dat";
+
+    ifstream file_size_per_windmill;
+    file_size_per_windmill.open(filename.c_str());
+    if (file_size_per_windmill.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, double> size_per_windmill;
+    fill_map_from_specifications(file_size_per_windmill, size_per_windmill);
+    file_size_per_windmill.close();
+
+    return (size_per_windmill);
+}
+

@@ -511,5 +511,6 @@ multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, st
 
 multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
 
+map<int, double> read_size_per_windmill(string folder_name_parameterization, string inputfolder);
 
 #endif

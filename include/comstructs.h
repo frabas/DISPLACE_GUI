@@ -32,6 +32,7 @@ namespace displace {
 namespace commons {
 
 struct Config {
+    const size_t nbszgroups = 14;
     int nbpops;
     int nbbenthospops;
     std::vector<int> implicit_pops;
@@ -53,6 +54,7 @@ struct Scenario {
     int freq_do_growth;
     int freq_redispatch_the_pop;
     int a_graph;
+    std::string a_graph_name;
     int nrow_coord;
     int nrow_graph;
     types::NodeId a_port;

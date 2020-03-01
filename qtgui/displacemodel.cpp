@@ -20,6 +20,7 @@
 
 #include "displacemodel.h"
 #include "utils/safe_strerror.h"
+#include "readvesseldata.h"
 
 #include <exceptions.h>
 #include <dbhelper.h>
@@ -35,7 +36,6 @@
 #include <GeographicLib/Geodesic.hpp>
 
 #include <readdata.h>
-#include <dataloadervessels.h>
 #include <dataloaderfishfarms.h>
 
 #include <qdebug.h>

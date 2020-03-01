@@ -157,7 +157,6 @@ using namespace sqlite;
 #include <memoryinfo.h>
 
 #include "dataloader.h"
-#include "dataloadervessels.h"
 #include "dataloaderfishfarms.h"
 #include "dataloaderpops.h"
 #include "dataloadermetiers.h"
@@ -223,10 +222,8 @@ MemoryInfo memInfo;
 
 std::mutex glob_mutex;
 vector<int> ve;
-vector<Vessel *> vessels;
 vector<Benthos *> benthoss;
-vector<Population *> populations;
-int tstep;
+extern vector<Population *> populations;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
@@ -251,15 +248,6 @@ multimap<types::NodeId, int> possible_metiers;
 multimap<types::NodeId, double> freq_possible_metiers;
 multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
 multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
-vector<types::NodeId> spe_fgrounds;
-vector<types::NodeId> spe_fgrounds_init;
-vector<types::NodeId> spe_harbours;
-vector<double> spe_freq_fgrounds;
-vector<double> spe_freq_fgrounds_init;
-vector<double> spe_freq_harbours;
-vector<double> spe_vessel_betas_per_pop;
-vector<double> spe_percent_tac_per_pop;
-vector<double> spe_fishing_credits;
 multimap<types::NodeId, string> harbour_names;
 vector<int> name_metiers;
 ofstream freq_cpue;
@@ -268,7 +256,7 @@ ofstream freq_distance;
 ofstream vmslike2;
 ofstream vmslike3;
 vector<Metier *> metiers;
-ofstream export_individual_tacs;
+extern ofstream export_individual_tacs;
 vector<PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
@@ -1556,217 +1544,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    LoadedData loadedDataVessels;
-
-    Dataloadervessels vl;
-    l->loadFeatures(&vl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataVessels);
-
-
-
-    // LOOP OVER VESSELIDS:
-    int nbvessels= loadedDataVessels.vectsparam1.size();
-    vessels = vector<Vessel *>(nbvessels);
-    multimap<types::NodeId, int> possible_metiers;
-    multimap<types::NodeId, double> freq_possible_metiers;
-    multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
-    multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
-    for (unsigned int i = 0; i < nbvessels; i++)
-    {
-        string vname= loadedDataVessels.vectsparam1.at(i);
-        // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
-        // for creating the vessel object, search into the multimaps
-        possible_metiers             = loadedDataVessels.vectmmapniparam1.at(i);
-        freq_possible_metiers        = loadedDataVessels.vectmmapndparam1.at(i);
-        gshape_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam2.at(i);
-        gscale_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam3.at(i);
-        spe_fgrounds                 = find_entries(loadedDataVessels.mmapsnparam2, vname);
-        spe_fgrounds_init            = find_entries(loadedDataVessels.mmapsnparam3, vname);
-        spe_freq_fgrounds            = find_entries_s_d(loadedDataVessels.mmapsdparam2, vname);
-        spe_freq_fgrounds_init       = find_entries_s_d(loadedDataVessels.mmapsdparam3, vname);
-        spe_harbours                 = find_entries(loadedDataVessels.mmapsnparam1, vname);
-        spe_freq_harbours            = find_entries_s_d(loadedDataVessels.mmapsdparam1, vname);
-        spe_vessel_betas_per_pop     = find_entries_s_d(loadedDataVessels.mmapsdparam4, vname);
-        spe_percent_tac_per_pop      = find_entries_s_d(loadedDataVessels.mmapsdparam5, vname);
-
-        if (spe_vessel_betas_per_pop.size() != simModel->config().nbpops) {
-            std::stringstream er;
-            er << "Error while reading: vessel_betas_per_pop: check the dimension i.e. simModel->config().nbpops is" <<
-               simModel->config().nbpops << " while spe_vessel_betas_per_pop.size() is " <<
-               spe_vessel_betas_per_pop.size() << " for vessel " << vname;
-            throw std::runtime_error(er.str());
-
-            //possibly, fix dim in R for the oldest dataset:
-            //ves <- do.call ("rbind.data.frame", lapply(split(ves, f=ves$VE_REF), function(x) x[1:simModel->config().nbpops,]))
-
-        }
-
-         // dyn sce.
-        if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
-            tout(cout << "Read in fishing credits for this vessel " << loadedDataVessels.vectsparam1.at(i) << endl);
-            spe_fishing_credits = find_entries_s_d(loadedDataVessels.mmapsdparam6, loadedDataVessels.vectsparam1.at(i));
-            for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
-                spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
-            }
-
-            // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-            while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
-            cout << "Fishing credits 0 for this vessel " << loadedDataVessels.vectsparam1.at(i) << " is "
-                 << spe_fishing_credits.at(0) << endl;
-
-        }
-
-        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
-            // a decrease of vessel speed by 20%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.8;
-            // corresponds to a decrease by 48.8% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.512;
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
-            // a decrease by 30%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.7;
-            // corresponds to a decrease by 65.7% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.343;
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-        if (scenario.dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
-            // a decrease by 10%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.9;
-            // corresponds to a decrease by 30% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.7;
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-
-
-        // choose a departure (node) harbour for this vessel according to the observed frequency in data
-        types::NodeId start_harbour;
-        if (!spe_harbours.empty()) {
-            // need to convert in array, see myRutils.cpp
-            auto one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
-            start_harbour = one_harbour[0];
-        } else {
-            // if missing info for a given vessel for this quarter
-            outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
-            // CAUTION: LIKE A MAGIC NUMBER HERE!!!
-            start_harbour = find_entries(loadedDataVessels.mmapsnparam1, loadedDataVessels.vectsparam1.at(0))[0];
-            spe_harbours.push_back(start_harbour);
-            spe_freq_harbours.push_back(1);
-            outc(cout << "then take node: " << start_harbour << endl);
-        }
-
-         vessels[i] = new Vessel(simModel->nodes().at(start_harbour.toIndex()),
-                                i,
-                                loadedDataVessels.vectsparam1.at(i),
-                                simModel->config().nbpops,
-                                NBSZGROUP,
-                                spe_harbours,
-                                spe_fgrounds,
-                                spe_fgrounds_init,
-                                spe_freq_harbours,
-                                spe_freq_fgrounds,
-                                spe_freq_fgrounds_init,
-                                spe_vessel_betas_per_pop,
-                                spe_percent_tac_per_pop,
-                                possible_metiers,
-                                freq_possible_metiers,
-                                gshape_cpue_per_stk_on_nodes,
-                                gscale_cpue_per_stk_on_nodes,
-                                loadedDataVessels.vectiparam1.at(i),
-                                loadedDataVessels.vectiparam2.at(i),
-                                loadedDataVessels.vectdparam1.at(i),
-                                loadedDataVessels.vectdparam2.at(i),
-                                loadedDataVessels.vectdparam3.at(i),
-                                loadedDataVessels.vectdparam4.at(i),
-                                loadedDataVessels.vectdparam5.at(i),
-                                loadedDataVessels.vectdparam6.at(i),
-                                loadedDataVessels.vectdparam7.at(i),
-                                loadedDataVessels.vectdparam8.at(i),
-                                loadedDataVessels.vectdparam9.at(i),
-                                loadedDataVessels.vectdparam10.at(i),
-                                loadedDataVessels.vectdparam11.at(i),
-                                loadedDataVessels.vectdparam12.at(i),
-                                loadedDataVessels.vectdparam13.at(i),
-                                loadedDataVessels.vectdparam14.at(i),
-                                loadedDataVessels.vectiparam3.at(i),
-                                loadedDataVessels.vectcalendar1.at(i),
-                                i < loadedDataVessels.vectdparam16.size() ? loadedDataVessels.vectdparam16.at(i) : 0,
-                                i < loadedDataVessels.vectdparam17.size() ? loadedDataVessels.vectdparam17.at(i) : 0,
-                                i < loadedDataVessels.vectdparam18.size() ? loadedDataVessels.vectdparam18.at(i) : 0,
-                                i < loadedDataVessels.vectdparam19.size() ? loadedDataVessels.vectdparam19.at(i) : 0,
-                                i < loadedDataVessels.vectdparam20.size() ? loadedDataVessels.vectdparam20.at(i) : 0,
-                                i < loadedDataVessels.vectdparam21.size() ? loadedDataVessels.vectdparam21.at(i) : 0,
-                                i < loadedDataVessels.vectdparam22.size() ? loadedDataVessels.vectdparam22.at(i) : 0,
-                                i < loadedDataVessels.vectdparam23.size() ? loadedDataVessels.vectdparam23.at(i) : 0,
-                                i < loadedDataVessels.vectdparam24.size() ? loadedDataVessels.vectdparam24.at(i) : 0,
-                                i < loadedDataVessels.vectdparam25.size() ? loadedDataVessels.vectdparam25.at(i) : 0,
-                                i < loadedDataVessels.vectdparam26.size() ? loadedDataVessels.vectdparam26.at(i) : 0,
-                                i < loadedDataVessels.vectdparam27.size() ? loadedDataVessels.vectdparam27.at(i) : 0,
-                                i < loadedDataVessels.vectdparam28.size() ? loadedDataVessels.vectdparam28.at(i) : 0
-        );
-
-
-#if 0
-         if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {
-           cout << "debug here" << endl;
-           cout << "i is " << i << endl;
-           cout << "other_variable_costs_per_unit_efforts[i] is " << other_variable_costs_per_unit_efforts[i];
-           cout << "other_variable_costs_per_unit_efforts.size() is " << other_variable_costs_per_unit_efforts.size();
-
-            int aa; cin >> aa;
-        }
-
-#endif
-
-        // Give super power to each vessel (so that he can consult the common tariff map for example)
-        vessels[i]->set_map_of_nodes(simModel->nodes());
-
-
-        if(namefolderinput=="BalticSea")
-        {
-            vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity()*3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
-        }
-
-        if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
-            vessels[i]->set_fishing_credits(spe_fishing_credits);
-        }
-
-
-        // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-        if (simModel->is_tacs()) {
-            for (unsigned int sp = 0; sp < populations.size(); sp++) {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
-                                                           simModel->config().implicit_pops, sp, 1,
-                                                           0.0);
-            }
-        }
-
-
-        // check
-        outc(cout << "create vessel " << vessels[i]->get_idx() << " " << vessels[i]->get_name() << " "
-                  << vessels[i]->get_nationality() << " on "
-                  << vessels[i]->get_loc()->get_idx_node() << " with coordinates "
-                  << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
-
+    modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
+    for (auto vessel: simModel->vessels()) {
         if (enable_sqlite_out) {
-            outSqlite->getVesselDefTable()->feedVesselsDefTable(vessels[i]);
+            outSqlite->getVesselDefTable()->feedVesselsDefTable(vessel);
         }
     }
-
 
 #if 0
     //check vessel specifications
@@ -1876,8 +1659,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // select from a vector of objects
         std::remove_copy_if(
-                vessels.begin(),
-                vessels.end(),
+                simModel->vessels().begin(),
+                simModel->vessels().end(),
                 std::back_inserter(vessels_of_the_firm),
                 boost::bind(test_not_belong_to_firm, _1, all_firm_ids[i]));
 
@@ -2294,7 +2077,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // get a vector v filled in with 1 to n
     glob_mutex.lock();
-    ve = vector<int>(nbvessels);
+    ve = vector<int>(simModel->vessels().size());
     for (unsigned int idx = 0; idx < ve.size(); idx++) {
         ve[idx] = idx;
     }
@@ -2358,14 +2141,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     if (use_gui) {
         nodes_envt.flush();
         for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
-            simModel->nodes().at(n)->export_nodes_envt(nodes_envt, tstep);
+            simModel->nodes().at(n)->export_nodes_envt(nodes_envt, simModel->timestep());
         }
-        guiSendUpdateCommand(nodes_envt_filename, tstep);
+        guiSendUpdateCommand(nodes_envt_filename, simModel->timestep());
     }
 
     if (enable_sqlite_out) {
         for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
-            outSqlite->exportEnvtNodes(tstep, simModel->nodes().at(n));
+            outSqlite->exportEnvtNodes(simModel->timestep(), simModel->nodes().at(n));
         }
     }
     //}
@@ -2385,9 +2168,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
 
-    for (tstep = 0; tstep < nbsteps; ++tstep) {
-        if (enable_sqlite_out && (tstep % numStepTransactions) == 0) {
-            std::cout << "Start Transaction " << tstep << "\n";
+    simModel->initTimestep();
+    while (simModel->timestep() < nbsteps) {
+        if (enable_sqlite_out && (simModel->timestep() % numStepTransactions) == 0) {
+            std::cout << "Start Transaction " << simModel->timestep() << "\n";
             outSqlite->startDayLoop();
         }
 
@@ -2399,13 +2183,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         dout(cout << endl);
         dout(cout << "---------------" << endl);
 
-        guiSendCurrentStep(tstep);
+        guiSendCurrentStep(simModel->timestep());
 
         if (!use_gui) {
-            cout << "tstep: " << tstep << endl;
+            cout << "tstep: " << simModel->timestep() << endl;
         }
         ostringstream os;
-        os << "tstep " << tstep << endl;
+        os << "tstep " << simModel->timestep() << endl;
         guiSendTerminalMessage(os.str());
 
         dout(cout << "---------------" << endl);
@@ -2433,7 +2217,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        if (!applyBiologicalModule2(tstep,
+        if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
                                     namesimu,
                                     namefolderinput,
@@ -2495,7 +2279,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     species_interactions_mortality_proportion_matrix,
                                     populations,
                                     simModel->nodes(),
-                                    vessels,
+                                    simModel->vessels(),
                                     benthoss,
                                     scenario.dyn_pop_sce,
                                     scenario.dyn_alloc_sce,
@@ -2511,7 +2295,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         if (scenario.dyn_pop_sce.option(Options::diffusePopN) &&
-            simModel->calendar().isFirstDayOfMonth(tstep)) {
+            simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
             // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
@@ -2540,7 +2324,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-        if (simModel->calendar().isFirstDayOfYear(tstep)) {
+        if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
             a_year += 1;
 
 
@@ -2568,7 +2352,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // RE-READ DATA FOR EVENT => change of month
         // TODO use a wall clock object instead
-        if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+        if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
             CurrentMonth += 1;
 
             {
@@ -2599,8 +2383,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter()
                      << ", simModel->semester():" << simModel->semester() << endl;
 
-                for (unsigned int v = 0; v < vessels.size(); v++) {
-                    vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
+                for (auto vessel: simModel->vessels()) {
+                    vessel->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
                 // update the monthly closures
                 if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
@@ -2625,7 +2409,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             // this month, re-read for population-related data
-            // CAUTION: THE ONLY POP READING DONE ON MONTH TSTEP...THE OTHERS ARE DONE ON QUARTER BASIS
+            // CAUTION: THE ONLY POP READING DONE ON MONTH simModel->timestep()...THE OTHERS ARE DONE ON QUARTER BASIS
             for (unsigned int i = 0; i < populations.size(); i++) {
                 // read a other landings per node for this species
                 auto oth_land = read_oth_land_nodes_with_pop(modelLoader->semesterString(),
@@ -2641,8 +2425,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // RE-READ DATA FOR EVENT => change of quarter
-        if (tstep > 2000 && simModel->calendar().isFirstDayOfQuarter(tstep))
-            //   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
+        if (simModel->timestep() > 2000 && simModel->calendar().isFirstDayOfQuarter(simModel->timestep()))
+            //   if(simModel->timestep()==3 || simModel->timestep()==4) // use this to start from another quarter if test...
         {
 
             cout << "a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
@@ -2662,284 +2446,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             paramsForLoad.iparam2 = NBAGE;
             paramsForLoad.iparam3 = NBSZGROUP;
 
-            Dataloadervessels vrl;
-            l->loadFeatures(&vrl,
-                            indb,
-                            folder_name_parameterization,
-                            inputfolder,
-                            scenario.dyn_pop_sce,
-                            scenario.dyn_alloc_sce,
-                            scenario.biolsce,
-                            scenario.fleetsce,
-                            paramsForLoad,
-                            loadedDataVessels);
-
-
-           cout << "re-read loadedDataVessels setting this month....OK" << endl;
-
-            // LOOP OVER VESSELS
-            for (unsigned int v = 0; v < vessels.size(); v++) {
-                dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
-
-                if (scenario.dyn_alloc_sce.option(Options::ExitVessels10Per)) {
-                    double exit_vessels_per_year = 0.1; //  this is a rate of vessel leaving per year
-                    if (simModel->calendar().isFirstDayOfYear(tstep)) {
-
-                        if ((rand() % 2) < exit_vessels_per_year) { vessels.at(v)->set_vessel_exited(1); }
-
-                    }
-                }
-
-                if (simModel->quarter() == 1) {
-                    double new_vessel_value =
-                            vessels.at(v)->get_vessel_value() * (100 - vessels.at(v)->get_annual_depreciation_rate()) /
-                            100;
-                    vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
-
-                    for (unsigned int pop = 0; pop < simModel->config().nbpops; ++pop)
-                        vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
-                }
-
-                possible_metiers = loadedDataVessels.vectmmapniparam1.at(v);
-                freq_possible_metiers = loadedDataVessels.vectmmapndparam1.at(v);
-                gshape_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam2.at(v);
-                gscale_cpue_per_stk_on_nodes = loadedDataVessels.vectmmapndparam3.at(v);
-                vector<string> vesselids = loadedDataVessels.vectsparam1;
-                spe_fgrounds = find_entries(loadedDataVessels.mmapsnparam2, vesselids.at(v));
-                spe_fgrounds_init = find_entries(loadedDataVessels.mmapsnparam3, vesselids.at(v));
-                spe_harbours = find_entries(loadedDataVessels.mmapsnparam1, vesselids.at(v));
-                spe_freq_fgrounds = find_entries_s_d(loadedDataVessels.mmapsdparam2, vesselids.at(v));
-                spe_freq_fgrounds_init = find_entries_s_d(loadedDataVessels.mmapsdparam3, vesselids.at(v));
-                spe_freq_harbours = find_entries_s_d(loadedDataVessels.mmapsdparam1, vesselids.at(v));
-                spe_vessel_betas_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam4, vesselids.at(v));
-                if (simModel->is_tacs()) {
-                    spe_percent_tac_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam5, vesselids.at(v));
-                }
-                reloaded_fcredits = loadedDataVessels.mmapsdparam6;
-
-                // correct if missing harbour for this quarter
-                if (spe_harbours.empty()) {
-                    // if missing info for a given vessel for this quarter
-                    outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
-                    // CAUTION: TAKEN FROM THE PREVIOUS QUARTER!
-                    auto start_harbour = vessels.at(v)->get_harbours()[0];
-                    spe_harbours.push_back(start_harbour);
-                    spe_freq_harbours.push_back(1);
-                    outc(cout << "then take node: " << start_harbour << endl);
-                }
-
-                // RE-SET VESSELS..
-                dout(cout << "re-set vessels step1..." << endl);
-                vessels.at(v)->set_resttime_par1(loadedDataVessels.vectdparam8.at(v));
-                vessels.at(v)->set_resttime_par2(loadedDataVessels.vectdparam9.at(v));
-                vessels.at(v)->set_av_trip_duration(loadedDataVessels.vectdparam10.at(v));
-
-                if (scenario.dyn_alloc_sce.option(Options::area_closure)) {
-                    if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
-                                                        folder_name_parameterization,
-                                                        inputfolder)) {
-                        exit(1);
-                    }
-                }
-
-
-                vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-                vessels.at(v)->set_spe_fgrounds_init(spe_fgrounds_init);
-                vessels.at(v)->set_spe_harbours(spe_harbours);
-                vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
-                vessels.at(v)->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
-                vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
-                vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
-                for (unsigned int i = 0; i < init_for_fgrounds.size(); i++) {
-                    init_for_fgrounds[i] = 0;
-                }
-                vessels.at(v)->set_spe_cumcatch_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_cumdiscard_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_cumeffort_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_experiencedcpue_fgrounds(init_for_fgrounds);
-                vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
-
-                // uncomment for use if TACs are semester-based....otherwise don´t refresh the annual TAC!
-                //if (semester) vessels.at(v)->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
-
-                vessels.at(v)->set_spe_possible_metiers(possible_metiers);
-                vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
-                vessels.at(v)->updateCalendar(loadedDataVessels.vectcalendar1.at(v));
-
-
-                // ...also for the particular cpue_nodes_species element
-                dout(cout << "re-set vessels step2..." << endl);
-                vector<types::NodeId> gshape_name_nodes_with_cpue;
-                for (auto iter = gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
-                     iter = gshape_cpue_per_stk_on_nodes.upper_bound(iter->first)) {
-                    gshape_name_nodes_with_cpue.push_back(iter->first);
-                }
-                // sort and unique
-                sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-                auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-                gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
-
-                // init cpue_nodes_species for this vessel
-                int nbnodes = gshape_name_nodes_with_cpue.size();
-                // init the vector of vector with Os
-                vessels.at(v)->init_gshape_cpue_nodes_species(nbnodes, simModel->config().nbpops);
-                // init the vector of vector with Os
-                vessels.at(v)->init_gscale_cpue_nodes_species(nbnodes, simModel->config().nbpops);
-                for (unsigned int n = 0; n < gshape_name_nodes_with_cpue.size(); n++) {
-                    // look into the multimap...
-                    auto gshape_cpue_species = find_entries(gshape_cpue_per_stk_on_nodes,
-                                                            gshape_name_nodes_with_cpue[n]);
-                    // look into the multimap...
-                    auto gscale_cpue_species = find_entries(gscale_cpue_per_stk_on_nodes,
-                                                            gshape_name_nodes_with_cpue[n]);
-                    if (!gshape_cpue_species.empty()) {
-                        // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                        vessels.at(v)->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
-                        // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                        vessels.at(v)->set_gscale_cpue_nodes_species(n, gscale_cpue_species);
-                    }
-                }
-
-                // need to compute expected cpue (averaged over node but cumulated over species)
-                // for this particular vessel, in order to scale the prior guess (see below)
-                dout(cout << "re-set vessels step3..." << endl);
-                double expected_cpue = 0;
-                vector<vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
-                vector<vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
-                const auto &fgrounds = vessels.at(v)->get_fgrounds();
-                vector<double> expected_cpue_this_pop(simModel->config().nbpops);
-                for (int pop = 0; pop < simModel->config().nbpops; pop++) {
-                    vector<double> cpue_per_fground(fgrounds.size());
-                    // init
-                    expected_cpue_this_pop.at(pop) = 0;
-
-                    // compute cpue on nodes
-                    for (unsigned int g = 0; g < fgrounds.size(); g++) {
-                        // look into the vector of vector....
-                        double a_shape = gshape_cpue_nodes_species.at(g).at(pop);
-                        // look into the vector of vector....
-                        double a_scale = gscale_cpue_nodes_species.at(g).at(pop);
-
-
-                        // a dangerous fix:
-                        if (a_shape < 0 || a_scale < 0) {
-
-                            cout << "Something weird with the Gamma parameters: some negative values loaded...."
-                                 << endl;
-                            //for(size_t f = 0; f < fgrounds.size(); ++f)
-                            //{
-                            //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-                            //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
-                            //}
-                            a_shape = 1;
-                            a_scale = 0;
-                        }
-
-                        cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
-                        dout(cout << "cpue_per_fground.at(g)" << cpue_per_fground.at(g) << endl);
-                        //if(vessels.at(v)->get_name()=="DNK000041435") cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
-                    }
-
-                    dout(cout << "re-set vessels step3.1..." << endl);
-
-                    // compute the average cpue for this pop across all nodes
-                    for (unsigned int g = 0; g < fgrounds.size(); g++) {
-                        expected_cpue_this_pop.at(pop) += cpue_per_fground.at(g);
-                    }
-                    // do the mean
-                    expected_cpue_this_pop.at(pop) = expected_cpue_this_pop.at(pop) / fgrounds.size();
-
-                    // sum over pop
-                    expected_cpue += expected_cpue_this_pop.at(pop);
-                }
-
-                dout(cout << "expected_cpue for this vessel is " << expected_cpue << endl);
-
-                // init at 0 cumcatch and cumeffort per trip,
-                // init at best guest the experiencedcpue_fgrounds
-                dout(cout << "re-set vessels step4..." << endl);
-                dout(cout << "init dynamic object related to fgrounds" << endl);
-                const vector<double> &a_freq_fgrounds = vessels.at(v)->get_freq_fgrounds();
-                vector<double> a_init_for_fgrounds(fgrounds.size());
-                vector<double> a_cumeffort_fgrounds = a_init_for_fgrounds;
-                vector<double> a_cumcatch_fgrounds = a_init_for_fgrounds;
-                vector<double> a_cumdiscard_fgrounds = a_init_for_fgrounds;
-                vector<double> a_experienced_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
-                vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
-                vector<double> a_experiencedcpue_fgrounds = a_init_for_fgrounds;
-                vector<double> a_freq_experiencedcpue_fgrounds = a_init_for_fgrounds;
-                vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(),
-                                                                    vector<double>(simModel->config().nbpops));
-                vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(),
-                                                                      vector<double>(simModel->config().nbpops));
-                vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
-                                                                           vector<double>(simModel->config().nbpops));
-                vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
-                                                                                vector<double>(
-                                                                                        simModel->config().nbpops));
-
-                for (unsigned int g = 0; g < fgrounds.size(); g++) {
-                    a_cumcatch_fgrounds[g] = 0;
-                    a_cumdiscard_fgrounds[g] = 0;
-                    a_experienced_bycatch_prop_on_fgrounds[g] = 0;
-                    a_experienced_avoided_stks_bycatch_prop_on_fgrounds[g] = 0;
-                    a_cumeffort_fgrounds[g] = 0;
-                    a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
-                    // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
-                    // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
-                    // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
-                    // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-                    dout(cout << "a_experiencedcpue_fgrounds" << a_experiencedcpue_fgrounds[g] << endl);
-                    // init the ones per pop
-                    for (int pop = 0; pop < simModel->config().nbpops; pop++) {
-                        // init
-                        a_cumcatch_fgrounds_per_pop[g][pop] = 0;
-                        //a_cumdiscard_fgrounds_per_pop[g][pop] = 0;
-                        a_experiencedcpue_fgrounds_per_pop[g][pop] =
-                                a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop);
-                    }
-                }
-                // per total...
-                dout(cout << "re-set vessels step5..." << endl);
-                vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
-                vessels.at(v)->set_cumdiscard_fgrounds(a_cumdiscard_fgrounds);
-                vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
-                vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
-                        a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
-                vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
-                vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
-                vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
-                // compute for the first time, to get freq_experiencedcpue_fgrounds...
-                vessels.at(v)->compute_experiencedcpue_fgrounds();
-                // ...or per pop
-                vessels.at(v)->set_cumcatch_fgrounds_per_pop(a_cumcatch_fgrounds_per_pop);
-                vessels.at(v)->set_cumdiscard_fgrounds_per_pop(a_cumdiscard_fgrounds_per_pop);
-                vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(a_experiencedcpue_fgrounds_per_pop);
-                vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(a_freq_experiencedcpue_fgrounds_per_pop);
-                // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
-                vessels.at(v)->compute_experiencedcpue_fgrounds_per_pop();
-
-                // note that, at the start of the simu, freq of visit will be equivalent to a_freq_fgrounds
-                // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...
-                // the expected_cpue is to scale to the encountered cpue i.e. freq of visit will decrease if experienced cpue < expected cpue
-                // and vice versa...
-
-                //
-                // to force re-computation of the fuel saving scenario
-
-                // TODO check: nodeId=0 is a valid value. Perhaps it should be changed to InvalidNodeId ?
-                vessels.at(v)->set_previous_harbour_idx(types::NodeId(0));
-
-                // send a message to the vessel to force it for a change in fishing grounds (for the vessels that are fishing now or on their way to fish)
-                // because we have just changed the list of fishing grounds! so maybe some vessels are fishing on some nodes
-                // that are no longer in the list...
-                // message 1 means: "please, change of grounds as soon as possible"
-                vessels.at(v)->receive_message(1);
-
-                cout << "re-read data for this vessel..." << vessels.at(v)->get_name() << "...OK" << endl;
-            }                     // end a_vesselid
+            modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
 
             // RE-read for metiers
             cout << "re-read metiers..." << endl;
@@ -2984,23 +2491,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         int redispatch_the_pop = 0;
         switch (scenario.freq_redispatch_the_pop) {
             case 0:
-                if ((tstep % 24) == 7) { redispatch_the_pop = 1; }
+                if ((simModel->timestep() % 24) == 7) { redispatch_the_pop = 1; }
                 // daily update
                 break;
             case 1:
-                if ((tstep % 168) == 7) { redispatch_the_pop = 1; }
+                if ((simModel->timestep() % 168) == 7) { redispatch_the_pop = 1; }
                 // weekly update
                 break;
             case 2:
-                if (simModel->calendar().isFirstDayOfMonth(tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) { redispatch_the_pop = 1; }
                 // monthly update
                 break;
             case 3:
-                if (simModel->calendar().isFirstDayOfQuarter(tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfQuarter(simModel->timestep())) { redispatch_the_pop = 1; }
                 // quartely update
                 break;
             case 4:
-                if (simModel->calendar().isFirstDayOfYear(tstep)) { redispatch_the_pop = 1; }
+                if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) { redispatch_the_pop = 1; }
                 // semester update
                 break;
         }
@@ -3083,7 +2590,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         string a_pop = out.str();
 
                         stringstream outtstep;
-                        outtstep << tstep;
+                        outtstep << simModel->timestep();
                         string atstep = outtstep.str();
 
 #if defined(_WIN32)
@@ -3123,12 +2630,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         string a_command;
                         string a_command_for_R;
                         stringstream outtstep;
-                        outtstep << tstep;
+                        outtstep << simModel->timestep();
                         string atstep = outtstep.str();
 
                         // the system command line
 #if defined(_WIN32)
-                        if (scenario.dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
+                        if (scenario.dyn_pop_sce.option(Options::avai_updater_on) && simModel->timestep() > 744) {
                             // note that nothing is done before end of 1st month (745) to get enough catch data for an update
                             type_of_avai_field_to_read.at(p) = "_updated";
                             //system("dir");
@@ -3160,7 +2667,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                             system(a_command.c_str());
                         }
 #else
-                        if (scenario.dyn_pop_sce.option(Options::avai_updater_on) && tstep > 744) {
+                        if (scenario.dyn_pop_sce.option(Options::avai_updater_on) && simModel->timestep() > 744) {
                             type_of_avai_field_to_read.at(p) = "_updated";
                             // caution with HPC, annoying lower cases in file names and paths required!
                             a_command_for_R =
@@ -3218,7 +2725,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                 // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
-                if (!scenario.dyn_pop_sce.option(Options::stop_mig_35065) || tstep < 35065) {
+                if (!scenario.dyn_pop_sce.option(Options::stop_mig_35065) || simModel->timestep() < 35065) {
                     populations.at(i)->apply_overall_migration_fluxes(populations);
                 }
 
@@ -3318,8 +2825,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // get total N from summing up N over nodes
                     populations.at(sp)->aggregate_N();
                     popdyn_test << setprecision(0) << fixed;
-                    // tstep / pop / tot N at szgroup
-                    popdyn_test << tstep << " " << sp << " ";
+                    // simModel->timestep() / pop / tot N at szgroup
+                    popdyn_test << simModel->timestep() << " " << sp << " ";
                     vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
                     for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
                     {
@@ -3341,7 +2848,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //----------------------------------------//
         //----------------------------------------//
 
-        if (tstep == 0 || simModel->calendar().isFirstDayOfQuarter(tstep)) {
+        if (simModel->timestep() == 0 || simModel->calendar().isFirstDayOfQuarter(simModel->timestep())) {
 
             // fill in the usual_fgrounds on harbours
             for (unsigned int i = 0; i < simModel->nodes().size(); ++i) {
@@ -3357,10 +2864,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     if (vids_on_harbours.size() > 0) {
                         dout(cout << "there are some vids on " << simModel->nodes().at(i)->get_name() << endl);
                         for (unsigned int vi = 0; vi < vids_on_harbours.size(); ++vi) {
-                            auto some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
-                            auto some_cpues = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
+                            auto some_grounds = simModel->vessels().at(vids_on_harbours.at(vi))->get_fgrounds();
+                            auto some_cpues = simModel->vessels().at(
+                                    vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
 
-                            const auto &poss_met = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
+                            const auto &poss_met = simModel->vessels().at(
+                                    vids_on_harbours.at(vi))->get_possible_metiers();
                             for (unsigned int gr = 0; gr < some_grounds.size(); ++gr) {
 
                                 // cpues
@@ -3467,47 +2976,46 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             if (scenario.dyn_alloc_sce.option(Options::shared_harbour_knowledge)) {
 
-                for (unsigned int v = 0; v < vessels.size(); v++) {
-
+                for (auto vessel : simModel->vessels()) {
                     //1. draw a ground
-                    auto grds = vessels.at(v)->get_fgrounds();
-                    auto freq_grds = vessels.at(v)->get_freq_fgrounds();
+                    auto grds = vessel->get_fgrounds();
+                    auto freq_grds = vessel->get_freq_fgrounds();
                     // need to convert in array, see myRutils.cpp
                     if (!grds.empty()) {
                         int idx_max = max_element(freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
                         auto ground = grds.at(idx_max);
-                        cout << vessels.at(v)->get_name() << ": ground is " << ground << endl;
+                        cout << vessel->get_name() << ": ground is " << ground << endl;
 
 
                         //2. get possible metiers on this ground
-                        const auto &poss_met = vessels.at(v)->get_possible_metiers();
-                        const auto &freq_poss_met = vessels.at(v)->get_freq_possible_metiers();
+                        const auto &poss_met = vessel->get_possible_metiers();
+                        const auto &freq_poss_met = vessel->get_freq_possible_metiers();
                         auto metiers_on_grd = find_entries(poss_met, ground);
                         auto freq_metiers_on_grd = find_entries(freq_poss_met, ground);
                         // need to convert in array, see myRutils.cpp
                         auto a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
 
                         if (metiers_on_grd.size() != 0) {
-                            vessels.at(v)->set_metier(metiers[a_met.at(0)]);
+                            vessel->set_metier(metiers[a_met.at(0)]);
                         } else {
-                            vessels.at(v)->set_metier(metiers[0]);   // dangerous fix
+                            vessel->set_metier(metiers[0]);   // dangerous fix
                         }
 
-                        auto harbs = vessels.at(v)->get_harbours();
-                        auto freq_harbs = vessels.at(v)->get_freq_harbours();
+                        auto harbs = vessel->get_harbours();
+                        auto freq_harbs = vessel->get_freq_harbours();
                         if (freq_harbs.empty()) {
                             cout << "check why..." << endl;
                         }
 
                         int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
                         auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
-                        cout << vessels.at(v)->get_name() << ": "
+                        cout << vessel->get_name() << ": "
                              << simModel->nodes().at(a_node.toIndex())->get_idx_node()
                              << " is in harb?`" <<
                              simModel->nodes().at(a_node.toIndex())->get_is_harbour()
                              << " ...cause the decision is taken in harbour..." << endl;
-                        int current_metier = vessels.at(v)->get_metier()->get_name();
-                        cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
+                        int current_metier = vessel->get_metier()->get_name();
+                        cout << vessel->get_name() << ": current_metier is " << current_metier << endl;
                         int nbpops = simModel->nodes().at(a_node.toIndex())->get_nbpops();
                         // TO DO:
                         auto grounds_from_harbours = simModel->nodes().at(
@@ -3520,8 +3028,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         //vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
                         if (grounds_from_harbours.size() ==
                             1) {   // few cases for which the harbour has been badly informed...
-                            grounds_from_harbours = vessels.at(v)->get_fgrounds();
-                            freq_grounds_from_harbours = vessels.at(v)->get_freq_fgrounds();
+                            grounds_from_harbours = vessel->get_fgrounds();
+                            freq_grounds_from_harbours = vessel->get_freq_fgrounds();
                         }
                         vector<vector<double> > experiencedcpue_fgrounds_per_pop(grounds_from_harbours.size(),
                                                                                  vector<double>(
@@ -3541,7 +3049,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     std::make_pair(grounds_from_harbours.at(gr), 1.0));
                         }
 
-                        cout << vessels.at(v)->get_name() << ": grounds_from_harbours is " << endl;
+                        cout << vessel->get_name() << ": grounds_from_harbours is " << endl;
                         for (unsigned int a_gr = 0; a_gr < grounds_from_harbours.size(); ++a_gr) {
                             cout << grounds_from_harbours.at(a_gr) << " ";
                         }
@@ -3595,39 +3103,39 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                         // 5- then apply the changes to the vessel
-                        vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
-                        vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
-                        vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(
+                        vessel->set_spe_fgrounds(grounds_from_harbours); // CHANGED
+                        vessel->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
+                        vessel->set_experienced_bycatch_prop_on_fgrounds(
                                 freq_grounds_from_harbours);// re-dimensioned
-                        vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
+                        vessel->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
                                 freq_grounds_from_harbours);// re-dimensioned
-                        vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
-                        vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                        vessels.at(v)->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
-                        //vessels.at(v)->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                        vessels.at(v)->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-                        vessels.at(v)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
-                        vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(
+                        vessel->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
+                        vessel->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                        vessel->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
+                        //vessel->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                        vessel->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                        vessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
+                        vessel->set_experiencedcpue_fgrounds_per_pop(
                                 experiencedcpue_fgrounds_per_pop); // re-dimensioned
-                        vessels.at(v)->set_freq_experiencedcpue_fgrounds(
+                        vessel->set_freq_experiencedcpue_fgrounds(
                                 freq_experiencedcpue_fgrounds); // re-dimensioned
-                        vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(
+                        vessel->set_freq_experiencedcpue_fgrounds_per_pop(
                                 freq_experiencedcpue_fgrounds_per_pop); // re-dimensioned
-                        vessels.at(v)->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
-                        vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+                        vessel->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+                        vessel->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
 
                         // inform grounds in closed areas
-                        auto new_grds = vessels.at(v)->get_fgrounds();
+                        auto new_grds = vessel->get_fgrounds();
                         vector<types::NodeId> fgrounds_in_closed_areas;
                         for (unsigned int i = 0; i < new_grds.size(); ++i) {
                             if (simModel->nodes().at(new_grds.at(i).toIndex())->evaluateAreaType() == 1) {
                                 fgrounds_in_closed_areas.push_back(new_grds.at(i));
                             }
                         }
-                        vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+                        vessel->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
                     } else {
                         // otherwise, no activity this vessel this quarter
-                        cout << " --> no activity for " << vessels.at(v)->get_name() << endl;
+                        cout << " --> no activity for " << vessel->get_name() << endl;
 
 
                     }
@@ -3655,7 +3163,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
 
             // 1- annual tariff HCR (currently pooling all tariff pops together)
-            if (simModel->calendar().isFirstDayOfYear(tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
                 cout << "Annual tariff HCR... " << endl;
                 double fbar_py_allpopav = 0.0;
                 double ftarget_allpopav = 0.0;
@@ -3692,9 +3200,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // 2 - Re-init vessel total credits
                 tout(cout << "Re-init vessel total credits..." << endl);
-                for (unsigned int v = 0; v < vessels.size(); v++) {
-                    dout(cout << "RE-READ in fishing credits for this vessel " << vessels.at(v)->get_name() << endl);
-                    vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessels.at(v)->get_name());
+                for (auto vessel : simModel->vessels()) {
+                    dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
+                    vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
                     for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
                         spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
                     }
@@ -3702,7 +3210,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
                     while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
 
-                    vessels.at(v)->set_fishing_credits(spe_fishing_credits);
+                    vessel->set_fishing_credits(spe_fishing_credits);
                 }
             }
 
@@ -3712,21 +3220,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             int do_update = 0;
             switch (freq_update_tariff_code) {
                 case 0:
-                    if ((tstep % 24) == 7) { do_update = 1; }
+                    if ((simModel->timestep() % 24) == 7) { do_update = 1; }
                     // daily update
                     break;
                 case 1:
-                    if ((tstep % 168) == 7) { do_update = 1; }
+                    if ((simModel->timestep() % 168) == 7) { do_update = 1; }
                     // weekly update
                     break;
                 case 2:
-                    if (simModel->calendar().isFirstDayOfMonth(tstep)) { do_update = 1; }
+                    if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) { do_update = 1; }
                     // monthly update
                     break;
             }
 
             if (do_update) {
-                cout << " Update the tariff map....at " << tstep << endl;
+                cout << " Update the tariff map....at " << simModel->timestep() << endl;
 
                 // obtain the list of idx relevant nodes for these tariff pops
                 vector<types::NodeId> list_nodes_idx;
@@ -3860,11 +3368,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
                 if (export_hugefiles) {
                     simModel->windmills().at(i)->export_windmills_indicators(windmillslogs,
-                                                                             tstep); // export event to file...
+                                                                             simModel->timestep()); // export event to file...
                 }
 
                 if (enable_sqlite_out) {
-                    outSqlite->exportWindmillsLog(simModel->windmills().at(i), tstep);
+                    outSqlite->exportWindmillsLog(simModel->windmills().at(i), simModel->timestep());
                 }
             }
 
@@ -3873,9 +3381,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for fsihfarms
         if (use_gui) {
 
-            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
                 windmillslogs.flush();
-                guiSendUpdateCommand(windmillslogs_filename, tstep);
+                guiSendUpdateCommand(windmillslogs_filename, simModel->timestep());
             }
         }
 
@@ -3886,10 +3394,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 ship->compute_emissions_in_ship(); // discrete event
                 //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
                 if (export_hugefiles) {
-                    ship->export_ships_indicators(shipslogs, tstep); // export event to file...
+                    ship->export_ships_indicators(shipslogs, simModel->timestep()); // export event to file...
                 }
                 if (enable_sqlite_out) {
-                    outSqlite->exportShip(tstep, ship);
+                    outSqlite->exportShip(simModel->timestep(), ship);
                 }
             }
 
@@ -3898,9 +3406,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for ships
         if (use_gui) {
 
-            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
                 shipslogs.flush();
-                guiSendUpdateCommand(shipslogs_filename, tstep);
+                guiSendUpdateCommand(shipslogs_filename, simModel->timestep());
             }
         }
 
@@ -3911,14 +3419,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             if (fishfarm->get_is_active() == 1) {
                 int start = fishfarm->get_start_day_growing();
                 int end = fishfarm->get_end_day_harvest();
-                if ((int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) == end &&
+                if ((int) ((simModel->timestep() + 1) / 24 - (8762.0 / 24 * (a_year - 1))) == end &&
                     fishfarm->get_is_running() == 1) {
                     fishfarm->compute_profit_in_farm(); // discrete event
                     //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
-                    fishfarm->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+                    fishfarm->export_fishfarms_indicators(fishfarmslogs,
+                                                          simModel->timestep()); // export event to file...
 
                     if (enable_sqlite_out) {
-                        outSqlite->exportFishfarmLog(fishfarm, tstep);
+                        outSqlite->exportFishfarmLog(fishfarm, simModel->timestep());
                     }
 
                     //...and reset
@@ -3931,24 +3440,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     fishfarm->set_sim_annual_profit(0.0);
                 } else {
                     if (fishfarm->get_is_running() == 1 &&
-                        (int) ((tstep + 1) / 24 - (8762.0 / 24 * (a_year - 1))) > start) {
+                        (int) ((simModel->timestep() + 1) / 24 - (8762.0 / 24 * (a_year - 1))) > start) {
                         // fish growth...
-                        fishfarm->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
+                        fishfarm->compute_current_sim_individual_mean_kg_in_farm(simModel->timestep(), a_year);
 
                         //...environmental impact
-                        fishfarm->compute_discharge_on_farm(tstep);
+                        fishfarm->compute_discharge_on_farm(simModel->timestep());
                         //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
                         //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
-                        if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+                        if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
 
                             if (enable_sqlite_out) {
-                                outSqlite->exportFishfarmLog(fishfarm, tstep);
+                                outSqlite->exportFishfarmLog(fishfarm, simModel->timestep());
                             }
 
                             if (export_hugefiles) {
                                 fishfarm->export_fishfarms_indicators(fishfarmslogs,
-                                                                      tstep); // export event to file
+                                                                      simModel->timestep()); // export event to file
                             }
                         }
                     }
@@ -3960,9 +3469,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // Flush and updates all statistics for fishfarms
         if (use_gui) {
 
-            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
                 fishfarmslogs.flush();
-                guiSendUpdateCommand(fishfarmslogs_filename, tstep);
+                guiSendUpdateCommand(fishfarmslogs_filename, simModel->timestep());
             }
         }
 
@@ -3977,15 +3486,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // check that departure is done from harbours that are
         // informed as such in graph_coord_harbour...if not then check spe_harbour
-        if (tstep == 0) {
+        if (simModel->timestep() == 0) {
             for (unsigned int i = 0; i < ve.size(); i++) {
-                bool is_harbour = vessels[i]->get_loc()->get_is_harbour();
-                cout << vessels[i]->get_name() << " departure from an harbour? " << is_harbour
-                     << " idx node: " << vessels[i]->get_loc()->get_idx_node() << endl;
+                bool is_harbour = simModel->vessels()[i]->get_loc()->get_is_harbour();
+                cout << simModel->vessels()[i]->get_name() << " departure from an harbour? " << is_harbour
+                     << " idx node: " << simModel->vessels()[i]->get_loc()->get_idx_node() << endl;
 
 
-                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
-                OutputExporter::instance().exportVmsLike(tstep, vessels[i]); // at tstep=0
+                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                OutputExporter::instance().exportVmsLike(simModel->timestep(),
+                                                         simModel->vessels()[i]); // at simModel->timestep()=0
 
 
             }
@@ -4000,7 +3510,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
 
         if (scenario.dyn_alloc_sce.option(Options::EffortMinControl)) {
-            if (simModel->calendar().isFirstDayOfYear(tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
                                              1;
@@ -4008,7 +3518,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // will alter GoFishing dtree final leaf proba
                 if (!computeEffortMultiplier(populations,
-                                             vessels,
+                                             simModel->vessels(),
                                              nb_y_left_to_tgrt_year,
                                              1)) {
                                                  throw std::runtime_error("Error while executing: computeEffortMultiplier");
@@ -4017,7 +3527,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         if (scenario.dyn_alloc_sce.option(Options::EffortMaxControl)) {
-            if (simModel->calendar().isFirstDayOfYear(tstep)) {
+            if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
                 if (nb_y_left_to_tgrt_year > 1) {
                     nb_y_left_to_tgrt_year = nb_y_left_to_tgrt_year -
                                              1;
@@ -4025,7 +3535,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // will alter GoFishing dtree final leaf proba
                 if (!computeEffortMultiplier(populations,
-                                             vessels,
+                                             simModel->vessels(),
                                              nb_y_left_to_tgrt_year,
                                              2)) {
                                                  throw std::runtime_error("Error while executing: computeEffortMultiplier");
@@ -4083,14 +3593,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
 
                     if (enable_sqlite_out) {
-                        outSqlite->exportPopQuotas(populations.at(pop), pop, tstep);
+                        outSqlite->exportPopQuotas(populations.at(pop), pop, simModel->timestep());
                     }
 
                     //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
 
                     // export in file
                     quotasuptake << setprecision(6) << fixed;
-                    quotasuptake << tstep << " " << pop << " " <<
+                    quotasuptake << simModel->timestep() << " " << pop << " " <<
                                  global_quotas_uptake.at(pop) << " " <<
                                  populations.at(pop)->get_tac()->get_current_tac() << endl;
 
@@ -4098,11 +3608,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                     // if more than x% of vessels choked then declare this stock as choking fisheries
                     int nbchoked = 0;
-                    for (unsigned int v = 0; v < vessels.size(); v++) {
-                        nbchoked += vessels.at(v)->get_is_choked().at(pop);
+                    for (auto vessel : simModel->vessels()) {
+                        nbchoked += vessel->get_is_choked().at(pop);
                     }
                     // HARDCODED threshold...
-                    if (nbchoked >= ceil(0.3 * vessels.size())) { populations.at(pop)->set_is_choking_fisheries(1); }
+                    if (nbchoked >= ceil(0.3 * simModel->vessels().size())) {
+                        populations.at(pop)->set_is_choking_fisheries(1);
+                    }
 
                 }
             }
@@ -4117,7 +3629,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         if (scenario.dyn_pop_sce.option(Options::diffuseNutrients)) {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
-            if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
+            if ((simModel->timestep() % numStepDiffusions) == (numStepDiffusions - 1)) {
 
                 // naive diffusion
                 double coeff_diffusion = 0.4;
@@ -4135,7 +3647,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 if (enable_sqlite_out) {
                     for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
-                        outSqlite->exportEnvtNodes(tstep, simModel->nodes().at(n));
+                        outSqlite->exportEnvtNodes(simModel->timestep(), simModel->nodes().at(n));
                     }
                 }
 
@@ -4145,12 +3657,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // Flush and updates all statistics for simModel->nodes() envt
         if (use_gui) {
-            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
                 nodes_envt.flush();
                 for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
-                    simModel->nodes().at(n)->export_nodes_envt(nodes_envt, tstep);
+                    simModel->nodes().at(n)->export_nodes_envt(nodes_envt, simModel->timestep());
                 }
-                guiSendUpdateCommand(nodes_envt_filename, tstep);
+                guiSendUpdateCommand(nodes_envt_filename, simModel->timestep());
             }
         }
 
@@ -4161,7 +3673,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         if (scenario.dyn_pop_sce.option(Options::diffuseBenthos)) {
             int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
-            if ((tstep % numStepDiffusions) == (numStepDiffusions - 1)) {
+            if ((simModel->timestep() % numStepDiffusions) == (numStepDiffusions - 1)) {
 
                 // naive diffusion
                 double coeff_diffusion = 0.01;
@@ -4188,7 +3700,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
 
         if (scenario.dyn_pop_sce.option(Options::modelShippingOnBenthos)) {
-            if (simModel->calendar().isFirstDayOfMonth(tstep)) {
+            if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
                 double shippingdensity = 0;
                 double bathymetry = 0;
                 for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
@@ -4252,7 +3764,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         ///------------------------------///
         ///------------------------------///
 
-        if (simModel->calendar().isFirstDayOfYear(tstep)) {
+        if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
             for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
                 simModel->nodes().at(i)->set_nbchoked(0);
             }
@@ -4269,9 +3781,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             std::unique_lock<std::mutex> m(listVesselMutex);
             if (export_hugefiles) {
                 for (unsigned int idx = 0; idx < listVesselIdForVmsLikeToExport.size(); idx++) {
-                    //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+                    //cout << "simModel->timestep(): "<< simModel->timestep() << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
 
-                    OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+                    OutputExporter::instance().exportVmsLike(simModel->timestep(),
+                                                             simModel->vessels()[listVesselIdForVmsLikeToExport.at(
+                                                                     idx)]);
                 }
             }
             listVesselIdForVmsLikeToExport.clear();
@@ -4284,26 +3798,28 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     LastMonth = CurrentMonth;
                 }
 
-                OutputExporter::instance().exportVmsLikeFPingsOnly(tstep,
-                                                                   vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(
+                OutputExporter::instance().exportVmsLikeFPingsOnly(simModel->timestep(),
+                                                                   simModel->vessels()[listVesselIdForVmsLikeFPingsOnlyToExport.at(
                                                                            idx)], populations,
                                                                    simModel->config().implicit_pops);
-                vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)]->clear_ping_catch_pop_at_szgroup();
+                simModel->vessels()[listVesselIdForVmsLikeFPingsOnlyToExport.at(
+                        idx)]->clear_ping_catch_pop_at_szgroup();
             }
             listVesselIdForVmsLikeFPingsOnlyToExport.clear();
 
 
             for (unsigned int idx = 0; idx < listVesselIdForLogLikeToExport.size(); idx++) {
-                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
-                OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)],
+                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                OutputExporter::instance().exportLogLike(simModel->timestep(),
+                                                         simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
                                                          populations, simModel->config().implicit_pops);
-                vessels[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
+                simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();
 
             for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
-                OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep,
-                                                                        vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(
+                OutputExporter::instance().exportTripCatchPopPerSzgroup(simModel->timestep(),
+                                                                        simModel->vessels()[listVesselIdForTripCatchPopPerSzgroupExport.at(
                                                                                 idx)], populations,
                                                                         simModel->config().implicit_pops);
             }
@@ -4316,7 +3832,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         /*
         if (use_gui) {
             loglike.flush();
-            guiSendUpdateCommand(loglike_filename, tstep);
+            guiSendUpdateCommand(loglike_filename, simModel->timestep());
         }*/
 
         // move the ships along the ship lanes
@@ -4354,34 +3870,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
         if (metadata) {
-            metadata->setLastTStep(tstep);
+            metadata->setLastTStep(simModel->timestep());
         }
 
-        if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions - 1)) {
-            std::cout << "End Transaction " << tstep << "\n";
+        if (enable_sqlite_out && (simModel->timestep() % numStepTransactions) == (numStepTransactions - 1)) {
+            std::cout << "End Transaction " << simModel->timestep() << "\n";
             outSqlite->endDayLoop();
         }
-#ifdef PROFILE
-                                                                                                                                mLoopProfile.elapsed_ms();
 
-        if ((mLoopProfile.runs() % 50) == 0) {
-            memInfo.update();
-            guiSendMemoryInfo(memInfo);
-        }
-
-        if ((mLoopProfile.runs() % 500) == 0) {
-            lock();
-            cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
-            unlock();
-        }
-#endif
+        simModel->nextTimestep();
     }                             // end FOR LOOP OVER TIME
 
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;
 
     if (enable_sqlite_out) {
-        std::cout << "End Transaction " << tstep << "\n";
+        std::cout << "End Transaction " << simModel->timestep() << "\n";
         outSqlite->endDayLoop();
     }
 

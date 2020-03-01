@@ -206,6 +206,7 @@ bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
         scenario.freq_do_growth = reader.template getAs<int>("freq_do_growth");
         scenario.freq_redispatch_the_pop = reader.template getAs<int>("freq_redispatch_the_pop");
         scenario.a_graph = reader.template getAs<int>("a_graph");
+        scenario.a_graph_name = "a_graph" + std::to_string(scenario.a_graph);
         scenario.nrow_coord = reader.template getAs<int>("nrow_coord");
         scenario.nrow_graph = reader.template getAs<int>("nrow_graph");
         scenario.a_port = types::NodeId(reader.template getAs<int>("a_port"));

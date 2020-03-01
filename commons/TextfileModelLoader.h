@@ -36,6 +36,8 @@ protected:
 
     void loadShips() override;
 
+    void loadVessels(int month, int quarter, int semester) override;
+
     bool loadFishFarmsImpl() override;
 
     bool loadWindmillsImpl() override;

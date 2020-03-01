@@ -10,6 +10,7 @@
 #include "diffusion.h"
 
 #include <vector>
+#include <StrongType.h>
 
 namespace displace {
 namespace commons {
@@ -17,9 +18,19 @@ struct Config;
 struct Scenario;
 }
 }
+
+// TODO make TimeStep strong typed. It's too an hassle for now.
+//struct TimeStepTag {
+//};
+//using TimeStep = utils::StrongType<size_t, TimeStepTag>;
+
+using TimeStep = size_t;
+
 class Node;
 
 class Fishfarm;
+
+class Vessel;
 
 class Ship;
 
@@ -43,6 +54,12 @@ public:
 
     Calendar const &calendar() const;
 
+    void initTimestep();
+
+    TimeStep timestep() const;
+
+    void nextTimestep();
+
     displace::commons::Config const &config() const;
 
     void setScenario(std::unique_ptr<displace::commons::Scenario> config);
@@ -54,6 +71,12 @@ public:
     std::vector<Node *> const &nodes() const;
 
     std::vector<Node *> &nodes();
+
+    void setVessels(std::vector<Vessel *> vessels);
+
+    std::vector<Vessel *> &vessels();
+
+    std::vector<Vessel *> const &vessels() const;
 
     void setShips(std::vector<Ship *> ships);
 

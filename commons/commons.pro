@@ -181,7 +181,7 @@ HEADERS= \
     shortestpath/GeoGraph.h \
     ModelLoader.h  TextfileModelLoader.h \
     dataloader.h dataloaderbenthos.h dataloadercommercialships.h \
-    dataloaderfishfarms.h dataloadermetiers.h dataloaderpops.h dataloadervessels.h dataloaderwindmills.h
+    dataloaderfishfarms.h dataloadermetiers.h dataloaderpops.h dataloaderwindmills.h
 
 
 

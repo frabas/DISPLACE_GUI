@@ -8,6 +8,7 @@
 #include "shortestpath/GeoGraph.h"
 
 struct SimModel::Impl {
+    TimeStep tstep;
     int month = 0, quarter = 0, semester = 0;
 
     std::unique_ptr<displace::commons::Config> config;
@@ -20,8 +21,8 @@ struct SimModel::Impl {
     std::vector<Node *> nodes;
     std::vector<Fishfarm *> fishfarms;
     vector<Windmill *> windmills;
+    vector<Vessel *> vessels;
     vector<Ship *> ships;
-
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
@@ -57,6 +58,22 @@ void SimModel::setCalendar(std::unique_ptr<Calendar> calendar)
 Calendar const &SimModel::calendar() const
 {
     return *p->calendar;
+}
+
+void SimModel::initTimestep()
+{
+    p->tstep = TimeStep{0};
+}
+
+TimeStep SimModel::timestep() const
+{
+    return p->tstep;
+}
+
+void SimModel::nextTimestep()
+{
+    ++p->tstep;
+//    p->tstep = TimeStep{p->tstep.value() + 1};
 }
 
 displace::commons::Config const &SimModel::config() const
@@ -123,6 +140,21 @@ std::vector<Node *> const &SimModel::nodes() const
 std::vector<Node *> &SimModel::nodes()
 {
     return p->nodes;
+}
+
+void SimModel::setVessels(std::vector<Vessel *> vessels)
+{
+    p->vessels = std::move(vessels);
+}
+
+std::vector<Vessel *> &SimModel::vessels()
+{
+    return p->vessels;
+}
+
+std::vector<Vessel *> const &SimModel::vessels() const
+{
+    return p->vessels;
 }
 
 void SimModel::setShips(std::vector<Ship *> ships)

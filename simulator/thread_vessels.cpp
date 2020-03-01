@@ -91,10 +91,8 @@ extern bool gui_move_vessels;
 extern int nb_displayed_moves_out_of_twenty;
 
 extern vector<int> ve;
-extern vector <Vessel*> vessels;
 extern vector <Population* > populations;
 extern vector <Benthos* > benthoss;
-extern int tstep;
 extern int nbsteps;
 extern int nbpops;
 extern int export_vmslike;
@@ -128,7 +126,6 @@ extern vector<double> spe_freq_fgrounds;
 extern vector<double> spe_freq_fgrounds_init;
 extern vector<double> spe_freq_harbours;
 extern vector<double> spe_vessel_betas_per_pop;
-extern vector<double> spe_percent_tac_per_pop;
 extern multimap<int, string> harbour_names;
 extern vector<int> name_metiers;
 extern ofstream freq_cpue;
@@ -165,7 +162,8 @@ static void manage_ship(SimModel &model, int idx_v)
     model.ships().at(idx_v - 5000)->move();
     dout(cout << "after at (" << model.ships().at(idx_v - 5000)->get_x() << ","
               << model.ships().at(idx_v - 5000)->get_y() << ") " << endl);
-    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, model.ships().at(idx_v - 5000))));
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
+            new MoveShipOutputMessage(model.timestep(), model.ships().at(idx_v - 5000))));
     locker.unlock();
 
     model.ships().at(idx_v - 5000)->unlock();
@@ -184,114 +182,117 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
     glob_mutex.lock();
     int index_v = ve[idx_v];
-    outc(cout << ve[idx_v] << " idx of the vessel " << vessels[ve[idx_v]]->get_name() << " " << endl);
+    outc(cout << ve[idx_v] << " idx of the vessel " << model->vessels()[ve[idx_v]]->get_name() << " " << endl);
     glob_mutex.unlock();
 
     // check roadmap
-    vessels[index_v]->lock();
-    bool roadmap_empty = vessels[index_v]->get_roadmap().empty();
-    int possible_metiers_size = vessels[index_v]->get_possible_metiers().size();
-    bool inharbour = vessels[ index_v ]->get_inharbour();
-    bool inactive = vessels[ index_v ]-> get_inactive();
-    int is_exited   = vessels[ index_v ]-> get_is_vessel_exited();
-    bool freshly_departed_from_port=0;
-    vessels[index_v]->unlock();
+    model->vessels()[index_v]->lock();
+    bool roadmap_empty = model->vessels()[index_v]->get_roadmap().empty();
+    int possible_metiers_size = model->vessels()[index_v]->get_possible_metiers().size();
+    bool inharbour = model->vessels()[index_v]->get_inharbour();
+    bool inactive = model->vessels()[index_v]->get_inactive();
+    int is_exited = model->vessels()[index_v]->get_is_vessel_exited();
+    bool freshly_departed_from_port = 0;
+    model->vessels()[index_v]->unlock();
 
-    if(!is_exited)
-    {
+    if (!is_exited) {
 
-      if(roadmap_empty)
-      {
-        // check if the vessel is actually active this quarter
-        // (when at least one possible metier within this quarter)
-        if(possible_metiers_size > 1)
-        {
-            outc(cout  << "ROADMAP EMPTY" << endl);
-            if(inharbour) {
-                outc(cout << "IN HARB" << endl);
+        if (roadmap_empty) {
+            // check if the vessel is actually active this quarter
+            // (when at least one possible metier within this quarter)
+            if (possible_metiers_size > 1) {
+                outc(cout << "ROADMAP EMPTY" << endl);
+                if (inharbour) {
+                    outc(cout << "IN HARB" << endl);
 
-                // LAND the catches when arriving in port and DECLARE IN LOGBOOK
-                // i.e. write this trip down in the logbook output file
-                // i.e. just arrived!
-                if (!inactive) {
-                    outc(cout << "...just arrived!" << endl);
-                    vessels[index_v]->updateTripsStatistics(populations, model->config().implicit_pops, tstep,
-                                                            model->scenario().dyn_alloc_sce);
-                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
-                            new VesselLogbookOutputMessage(tstep, vessels[index_v], populations,
-                                                           model->config().implicit_pops)));
+                    // LAND the catches when arriving in port and DECLARE IN LOGBOOK
+                    // i.e. write this trip down in the logbook output file
+                    // i.e. just arrived!
+                    if (!inactive) {
+                        outc(cout << "...just arrived!" << endl);
+                        model->vessels()[index_v]->updateTripsStatistics(populations, model->config().implicit_pops,
+                                                                         model->timestep(),
+                                                                         model->scenario().dyn_alloc_sce);
+                        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
+                                new VesselLogbookOutputMessage(model->timestep(), model->vessels()[index_v],
+                                                               populations,
+                                                               model->config().implicit_pops)));
 
-                    std::unique_lock<std::mutex> m(listVesselMutex);
-                    listVesselIdForLogLikeToExport.push_back(index_v);
-                    //OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
+                        std::unique_lock<std::mutex> m(listVesselMutex);
+                        listVesselIdForLogLikeToExport.push_back(index_v);
+                        //OutputExporter::instance().exportLogLike(model->timestep(), model->vessels()[index_v], populations, implicit_pops);
 
-                    if (vessels[index_v]->get_vid_is_part_of_ref_fleet()) {
-                        listVesselIdForTripCatchPopPerSzgroupExport.push_back(index_v);
-                        //OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[index_v], populations, implicit_pops);
-                    }
+                        if (model->vessels()[index_v]->get_vid_is_part_of_ref_fleet()) {
+                            listVesselIdForTripCatchPopPerSzgroupExport.push_back(index_v);
+                            //OutputExporter::instance().exportTripCatchPopPerSzgroup(model->timestep(), model->vessels()[index_v], populations, implicit_pops);
+                        }
 
 #if 0
-                    std::ostringstream ss;
-                    vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
-                    loglike << ss.str();
+                        std::ostringstream ss;
+                        model->vessels()[ index_v ]->export_loglike (ss, populations, model->timestep(), nbpops);
+                        loglike << ss.str();
 
-                    guiSendVesselLogbook(ss.str());
+                        guiSendVesselLogbook(ss.str());
 #endif
-                    //vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
+                        //model->vessels()[ index_v ]->export_loglike_prop_met (loglike_prop_met, model->timestep(), nbpops);
 
-                    //vessels[index_v]->lock();
-                    //vessels[ index_v ]->reinit_after_a_trip();
-                    //vessels[index_v]->unlock();
+                        //model->vessels()[index_v]->lock();
+                        //model->vessels()[ index_v ]->reinit_after_a_trip();
+                        //model->vessels()[index_v]->unlock();
 
-                    // the vessel do not take any further move decision here
-                    // because the vessel will spend step to declare the landings...
-                }
+                        // the vessel do not take any further move decision here
+                        // because the vessel will spend step to declare the landings...
+                    }
                 else {
-                    // ***************make a probable decision*************************
-                    dout(cout << vessels[index_v]->get_name() << " which_metier_should_i_go_for? " << endl);
-                    vessels[index_v]->which_metier_should_i_go_for(metiers);
-                    dout(cout << vessels[index_v]->get_name() << " should go for metier "
-                              << vessels[index_v]->get_metier()->get_name() << endl);
+                        // ***************make a probable decision*************************
+                        dout(cout << model->vessels()[index_v]->get_name() << " which_metier_should_i_go_for? "
+                                  << endl);
+                        model->vessels()[index_v]->which_metier_should_i_go_for(metiers);
+                        dout(cout << model->vessels()[index_v]->get_name() << " should go for metier "
+                                  << model->vessels()[index_v]->get_metier()->get_name() << endl);
 
-                    // the metier should help informing to which fish price time series the vessel will be look at
-                    // if a decision on the fish price is used in the GoFishing dtree...
-                    // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
-                    // ***************make a dtree decision****************************
-                    int go_fishing = vessels[index_v]->should_i_go_fishing(tstep,
-                                                                           populations,
-                                                                           model->scenario().use_dtrees,
-                                                                           model->scenario().dyn_alloc_sce,
-                                                                           model->config().implicit_pops,
-                                                                           model->scenario().is_individual_vessel_quotas,
-                                                                           model->scenario().check_all_stocks_before_going_fishing);
-                    //}
-                    // ***************implement a decision*****************************
-                    bool do_nothing = 0;
-                    if (go_fishing) {
+                        // the metier should help informing to which fish price time series the vessel will be look at
+                        // if a decision on the fish price is used in the GoFishing dtree...
+                        // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
+                        // ***************make a dtree decision****************************
+                        int go_fishing = model->vessels()[index_v]->should_i_go_fishing(model->timestep(),
+                                                                                        populations,
+                                                                                        model->scenario().use_dtrees,
+                                                                                        model->scenario().dyn_alloc_sce,
+                                                                                        model->config().implicit_pops,
+                                                                                        model->scenario().is_individual_vessel_quotas,
+                                                                                        model->scenario().check_all_stocks_before_going_fishing);
+                        //}
+                        // ***************implement a decision*****************************
+                        bool do_nothing = 0;
+                        if (go_fishing) {
 
-                        //go fishing
-                        outc(cout << "GO FISHING" << endl);
-                        do_nothing = vessels[index_v]->choose_a_ground_and_go_fishing(
-                                *model,
-                                tstep, model->scenario(), model->scenario().use_dtrees,
-                                model->scenario().dyn_alloc_sce, use_static_paths, pathshops,
-                                adjacency_map, relevant_nodes, nodes_in_polygons,
-                                model->nodes(),
-                                metiers,
-                                freq_cpue, freq_profit, freq_distance
-                        );
-                    freshly_departed_from_port=1;
+                            //go fishing
+                            outc(cout << "GO FISHING" << endl);
+                            do_nothing = model->vessels()[index_v]->choose_a_ground_and_go_fishing(
+                                    *model,
+                                    model->timestep(), model->scenario(), model->scenario().use_dtrees,
+                                    model->scenario().dyn_alloc_sce, use_static_paths, pathshops,
+                                    adjacency_map, relevant_nodes, nodes_in_polygons,
+                                    model->nodes(),
+                                    metiers,
+                                    freq_cpue, freq_profit, freq_distance
+                            );
+                            freshly_departed_from_port = 1;
 
-                }
+                        }
                 if(!go_fishing || do_nothing) // if not going and forced to do nothing because every locations is closed for this vessel, then:
                 {
                     //have some rest in the harbour
-                    //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  "STAY IN HARBOUR" << endl;
-                    outc(cout  << "STAY IN HARBOUR" << endl);
+                    //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  "STAY IN HARBOUR" << endl;
+                    outc(cout << "STAY IN HARBOUR" << endl);
                     // and decrease the rest time...
-                    vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
-                    vessels[ index_v ]-> set_next_xy( vessels[index_v ]->get_x(), vessels[ index_v ]->get_y() );
-                    dout(cout  << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl);
+                    model->vessels()[index_v]->set_timeforrest(
+                            model->vessels()[index_v]->get_timeforrest() - PING_RATE);
+                    model->vessels()[index_v]->set_next_xy(model->vessels()[index_v]->get_x(),
+                                                           model->vessels()[index_v]->get_y());
+                    dout(cout << "...for the next " << model->vessels()[index_v]->get_timeforrest() << " steps"
+                              << endl);
 
                 }
              } // end else{} that is taking a decision because not arriving in harb
@@ -300,15 +301,15 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             {
 
                 outc(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
-                //if((vessels[index_v]->get_name())=="POL023600922") cout  << vessels[index_v]->get_name() << "NOT IN HARB...SO ON A FISHING GROUND!" << endl;
+                //if((model->vessels()[index_v]->get_name())=="POL023600922") cout  << model->vessels()[index_v]->get_name() << "NOT IN HARB...SO ON A FISHING GROUND!" << endl;
                 // ***************make a decision************************************
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
-                int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
+                int stop_fishing = model->vessels()[index_v]->should_i_stop_fishing(
                         *model,
                         external_states_relevant_for_stopping_fishing,
                         model->scenario().use_dtrees,
-                        tstep,
+                        model->timestep(),
                         model->scenario().dyn_alloc_sce, use_static_paths,
                         pathshops,
                         adjacency_map, relevant_nodes,
@@ -318,46 +319,46 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         dist_to_ports);
 
                 //....unless we got a message (e.g. at the end of a year-quarter)
-                dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
-                bool force_another_ground=false;
+                dout(cout << "message: " << model->vessels()[index_v]->read_message() << endl);
+                bool force_another_ground = false;
                 // check my mailbox: Am I forced to change of ground?...
-                if(vessels[ index_v ]->read_message()==1)
-                {
-                    if(vessels[ index_v ]->get_fgrounds().size()<3)
-                    {
+                if (model->vessels()[index_v]->read_message() == 1) {
+                    if (model->vessels()[index_v]->get_fgrounds().size() < 3) {
                         //in this case, forced to go back to port instead!
-                        stop_fishing=true;
+                        stop_fishing = true;
                     }
                     //in this case, forced to change!
-                    force_another_ground=true;
+                    force_another_ground = true;
                     // reset my mail box
-                    vessels[ index_v ]->reset_message();
+                    model->vessels()[index_v]->reset_message();
                 }
 
-                if(freshly_departed_from_port && stop_fishing) outc(cout  << "OH! SOMETHING WRONG WITH MY CHOICE! CHECK MY -STOP FISHING- TRIGGERS" << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
+                if (freshly_departed_from_port && stop_fishing) outc(
+                        cout << "OH! SOMETHING WRONG WITH MY CHOICE! CHECK MY -STOP FISHING- TRIGGERS"
+                             << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
 
-                /*if((vessels[index_v]->get_name())=="POL023600922"){
-                    cout  << vessels[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;
-                    cout << "given cum fuel cons is: " << vessels[index_v]->get_cumfuelcons() << endl;
-                    cout << "given total tank capacity is: " << vessels[index_v]->get_tankcapacity() << endl;
-                    cout << "given cumcatches is: " << vessels[index_v]->get_cumcatches() << endl;
-                    cout << "given vessel carrying cap is: " << vessels[index_v]->get_carrycapacity() << endl;
+                /*if((model->vessels()[index_v]->get_name())=="POL023600922"){
+                    cout  << model->vessels()[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;
+                    cout << "given cum fuel cons is: " << model->vessels()[index_v]->get_cumfuelcons() << endl;
+                    cout << "given total tank capacity is: " << model->vessels()[index_v]->get_tankcapacity() << endl;
+                    cout << "given cumcatches is: " << model->vessels()[index_v]->get_cumcatches() << endl;
+                    cout << "given vessel carrying cap is: " << model->vessels()[index_v]->get_carrycapacity() << endl;
                 }
                 */
 
                 // ***************implement a decision************************************
                 // go on fishing...
-                if(!stop_fishing) {
+                if (!stop_fishing) {
                     freshly_departed_from_port = 0;
                     outc(cout << "OK, I´LL CONTINUE FISHING!" << endl);
-                    //if((vessels[index_v]->get_name())=="POL023600922") cout  << vessels[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << endl;
+                    //if((model->vessels()[index_v]->get_name())=="POL023600922") cout  << model->vessels()[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << endl;
 
                     // ***************make a decision************************************
                     map<string, int> external_states_relevant_for_change_ground;
                     external_states_relevant_for_change_ground.insert(make_pair(" none ", 0));
                     int shall_I_change_to_another_ground = 1;
                     if (!force_another_ground) {
-                        shall_I_change_to_another_ground = vessels[index_v]->should_i_change_ground(
+                        shall_I_change_to_another_ground = model->vessels()[index_v]->should_i_change_ground(
                                 *model,
                                 external_states_relevant_for_change_ground,
                                 model->scenario().use_dtrees);
@@ -368,13 +369,12 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // ***************implement the decision************************************
                     // ...but not on this ground!
                     int is_not_possible_to_change = 0;
-                    if(shall_I_change_to_another_ground || force_another_ground )
-                    {
-                        outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
-                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
-                        is_not_possible_to_change = vessels[ index_v ]->choose_another_ground_and_go_fishing(
+                    if (shall_I_change_to_another_ground || force_another_ground) {
+                        outc(cout << "CHANGE OF GROUND, FISHERS! " << endl);
+                        //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
+                        is_not_possible_to_change = model->vessels()[index_v]->choose_another_ground_and_go_fishing(
                                 *model,
-                                tstep,
+                                model->timestep(),
                                 model->scenario().dyn_alloc_sce, use_static_paths,
                                 pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
@@ -382,89 +382,96 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                 metiers,
                                 freq_cpue, freq_distance
                         );
-                        outc(cout  << "GOOD JOB, FISHERS! "  << endl);
-                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << endl;
+                        outc(cout << "GOOD JOB, FISHERS! " << endl);
+                        //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << endl;
 
                     }
                     // ***************implement a decision************************************
-                    if(! (shall_I_change_to_another_ground || force_another_ground) || is_not_possible_to_change  )
-                     // keep go on catching on this ground...
-                     {
-                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
-                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " DO CATCH, FISHERS! " << endl;
+                    if (!(shall_I_change_to_another_ground || force_another_ground) || is_not_possible_to_change)
+                        // keep go on catching on this ground...
+                    {
+                        outc(cout << "hey, I am fishing on "
+                                  << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << endl);
+                        //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " DO CATCH, FISHERS! " << endl;
                         //#pragma omp critical(docatch)
-                         {
-                             dout(cout << "please, check your mail! :" << vessels[index_v]->read_message() << endl);
-                             vessels[index_v]->do_catch(export_individual_tacs, populations, model->nodes(), benthoss,
-                                                        model->config().implicit_pops, model->config().grouped_tacs,
-                                                        tstep, model->scenario().graph_res,
-                                                        model->is_tacs(),
-                                                        model->scenario().is_individual_vessel_quotas,
-                                                        model->scenario().check_all_stocks_before_going_fishing,
-                                                        model->is_discard_ban(),
-                                                        model->is_grouped_tacs(),
-                                                        tech_creeping_multiplier,
-                                                        model->is_fishing_credits(),
-                                                        model->is_direct_killing_on_benthos(),
-                                                        model->is_resuspension_effect_on_benthos(),
-                                                        model->is_benthos_in_numbers());
+                        {
+                            dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
+                                      << endl);
+                            model->vessels()[index_v]->do_catch(export_individual_tacs, populations, model->nodes(),
+                                                                benthoss,
+                                                                model->config().implicit_pops,
+                                                                model->config().grouped_tacs,
+                                                                model->timestep(), model->scenario().graph_res,
+                                                                model->is_tacs(),
+                                                                model->scenario().is_individual_vessel_quotas,
+                                                                model->scenario().check_all_stocks_before_going_fishing,
+                                                                model->is_discard_ban(),
+                                                                model->is_grouped_tacs(),
+                                                                tech_creeping_multiplier,
+                                                                model->is_fishing_credits(),
+                                                                model->is_direct_killing_on_benthos(),
+                                                                model->is_resuspension_effect_on_benthos(),
+                                                                model->is_benthos_in_numbers());
 
-                             // check
-                             //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)
-                             //{
-                             //    vector <double> N_at_szgroup= vessels[ index_v ]->get_loc()->get_Ns_pops_at_szgroup(3);
-                             //
-                             //    for(int sz=0; sz<N_at_szgroup.size(); sz++)
-                             //    {
-                             //        cout << "HERE RIGHT AFTER do_catch sz " <<  N_at_szgroup.at(sz) << endl;
-                             //    }
+                            // check
+                            //if(model->vessels()[ index_v ]->get_loc()->get_idx_node().toIndex()==430)
+                            //{
+                            //    vector <double> N_at_szgroup= model->vessels()[ index_v ]->get_loc()->get_Ns_pops_at_szgroup(3);
+                            //
+                            //    for(int sz=0; sz<N_at_szgroup.size(); sz++)
+                            //    {
+                            //        cout << "HERE RIGHT AFTER do_catch sz " <<  N_at_szgroup.at(sz) << endl;
+                            //    }
                             //}
 
                         }
                         // update
-                        vessels[index_v]->lock();
-                        vessels[ index_v ]->set_timeatsea(vessels[ index_v ]->get_timeatsea()+ PING_RATE);
+                        model->vessels()[index_v]->lock();
+                        model->vessels()[index_v]->set_timeatsea(
+                                model->vessels()[index_v]->get_timeatsea() + PING_RATE);
                         // note: no traveled_dist_this_trip cumulated here...might be changed.
-                        vessels[ index_v ]-> set_state(1);
+                        model->vessels()[index_v]->set_state(1);
                         double cumfuelcons;
-                        if(vessels[ index_v ]->get_metier()->get_metier_type()==1)
-                        {
+                        if (model->vessels()[index_v]->get_metier()->get_metier_type() == 1) {
                             //trawling (type 1)
-                            cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
-                            outc(cout  << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
-                        }
-                        else
-                        {
+                            cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
+                                          model->vessels()[index_v]->get_fuelcons() * PING_RATE *
+                                          model->vessels()[index_v]->get_mult_fuelcons_when_fishing();
+                            outc(cout << "fuel cons for trawlers (metier "
+                                      << model->vessels()[index_v]->get_metier()->get_name() << ")" << endl);
+                        } else {
                             // gillnetting, seining (type 2)
-                            cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
-                            outc(cout  << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
+                            cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
+                                          model->vessels()[index_v]->get_fuelcons() * PING_RATE *
+                                          model->vessels()[index_v]->get_mult_fuelcons_when_inactive();
+                            outc(cout << "fuel cons for gillnetters or seiners (metier "
+                                      << model->vessels()[index_v]->get_metier()->get_name() << ")" << endl);
                         }
-                        vessels[ index_v ]->set_cumfuelcons(cumfuelcons);
+                        model->vessels()[index_v]->set_cumfuelcons(cumfuelcons);
 
                         // add for cum. effort on this node
-                        vessels[ index_v ]->get_loc()->add_to_cumftime(PING_RATE);
-                        vessels[index_v]->unlock();
+                        model->vessels()[index_v]->get_loc()->add_to_cumftime(PING_RATE);
+                        model->vessels()[index_v]->unlock();
 
-                        outc(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
-                        outc(cout  << "my consumed fuel so far is " << cumfuelcons << endl);
-                        outc(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
-
+                        outc(cout << "my catches so far is " << model->vessels()[index_v]->get_cumcatches() << endl);
+                        outc(cout << "my consumed fuel so far is " << cumfuelcons << endl);
+                        outc(cout << "my time at sea so far is " << model->vessels()[index_v]->get_timeatsea() << endl);
 
 
                     } else{
                         outc(cout  << "go elsewhere... "  << endl);
-                        //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
+                        //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
                     }
                 }
                 // ***************implement a decision************************************
                 else
                 {
                     outc(cout  << "RETURN TO PORT, NOW! "  << endl);
-                    //if((vessels[index_v]->get_name())=="FIN000020014") cout  << vessels[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
+                    //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                     glob_mutex.lock();
-                    vessels[ index_v ]->choose_a_port_and_then_return(
+                    model->vessels()[index_v]->choose_a_port_and_then_return(
                             *model,
-                            tstep,
+                            model->timestep(),
                             model->scenario().dyn_alloc_sce,
                             use_static_paths,
                             pathshops,
@@ -498,64 +505,64 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
         //dout(cout  << endl);
 
         // find.next.pt.on.the.graph()
-        vessels[index_v]->find_next_point_on_the_graph(model->nodes());
+        model->vessels()[index_v]->find_next_point_on_the_graph(model->nodes());
 
-        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
+        outc(cout << "CURRENT LAST POS " << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << endl);
 
         //dout(cout  << "roadmap (out): ");
-        //lst = vessels[ index_v ]->get_roadmap();
+        //lst = model->vessels()[ index_v ]->get_roadmap();
         //for(pos=lst.begin(); pos!=lst.end(); pos++)
         //{
         //    dout(cout  << *pos << " ");
         //}
 
     }
-    outc(cout  << endl);
+        outc(cout << endl);
 
-    // write this movement in the output  file (hourly data if PING=1)
-    // (setprecision is 6 in c++ by default)
-    // for VMS, export the first year only because the file is growing too big otherwise....
-    vessels[index_v]->lock();
+        // write this movement in the output  file (hourly data if PING=1)
+        // (setprecision is 6 in c++ by default)
+        // for VMS, export the first year only because the file is growing too big otherwise....
+        model->vessels()[index_v]->lock();
 
 
+        if (model->vessels()[index_v]->get_state() != 3) {
+            // Keep the export for the last year only to avoid too large db output:
+            //bool alogic = (ceil((double)model->timestep()/(double)8761) == ceil((double)nbsteps/(double)8761));
+            // DOES NOT WORK UNDER UNIX, so USE:
+            bool alogic = (model->timestep() <= 8762);
 
-    if( vessels[ index_v ]->get_state()!=3) {
-        // Keep the export for the last year only to avoid too large db output:
-        //bool alogic = (ceil((double)tstep/(double)8761) == ceil((double)nbsteps/(double)8761));
-        // DOES NOT WORK UNDER UNIX, so USE:
-        bool alogic = (tstep <= 8762);
-
-       if(export_vmslike && alogic) { //  && tstep<8641) {
-           std::unique_lock<std::mutex> m(listVesselMutex);
-           listVesselIdForVmsLikeToExport.push_back(index_v);
-           //OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
+            if (export_vmslike && alogic) { //  && model->timestep()<8641) {
+                std::unique_lock<std::mutex> m(listVesselMutex);
+                listVesselIdForVmsLikeToExport.push_back(index_v);
+                //OutputExporter::instance().exportVmsLike(model->timestep(), model->vessels()[index_v]);
+            }
+            if (model->vessels()[index_v]->get_state() == 1 &&
+                model->vessels()[index_v]->get_vid_is_part_of_ref_fleet() &&
+                alogic) { // fishing state
+                std::unique_lock<std::mutex> m(listVesselMutex);
+                listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
+                // OutputExporter::instance().exportVmsLikeFPingsOnly(model->timestep(), model->vessels()[index_v],  populations, implicit_pops);
+            }
         }
-       if( vessels[ index_v ]->get_state()==1 &&
-                vessels[ index_v ]->get_vid_is_part_of_ref_fleet() &&
-                  alogic) { // fishing state
-           std::unique_lock<std::mutex> m(listVesselMutex);
-           listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
-           // OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);
+
+        // roundabout to solve the hang out or low responsivness of the gui from
+        // the differential speed between the gui and the simulator, this latter being faster...TODO: we could imagine doing better at some point
+        int a_number_between_1_and_twenty = (rand() % 20 + 1);
+        if (use_gui && gui_move_vessels &&
+            (a_number_between_1_and_twenty < nb_displayed_moves_out_of_twenty + 1)) {
+            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
+                    new MoveVesselOutputMessage(model->timestep(), model->vessels()[index_v])));
         }
-    }
 
-    // roundabout to solve the hang out or low responsivness of the gui from
-    // the differential speed between the gui and the simulator, this latter being faster...TODO: we could imagine doing better at some point
-    int a_number_between_1_and_twenty= (rand() % 20 +1);
-    if (use_gui && gui_move_vessels  && (a_number_between_1_and_twenty<nb_displayed_moves_out_of_twenty+1)) {
-        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
-    }
-
-    // realtime gnuplot
-    if(use_gnuplot)
-    {
-        ::mutex.lock();
-        vmslike2   << vessels[ index_v ]->get_x() << " "
-                   << vessels[ index_v ]->get_y() <<  endl;
-        ::mutex.unlock();
-    }
-    vessels[index_v]->unlock();
- } // end is_exited
+        // realtime gnuplot
+        if (use_gnuplot) {
+            ::mutex.lock();
+            vmslike2 << model->vessels()[index_v]->get_x() << " "
+                     << model->vessels()[index_v]->get_y() << endl;
+            ::mutex.unlock();
+        }
+        model->vessels()[index_v]->unlock();
+    } // end is_exited
 }
 
 

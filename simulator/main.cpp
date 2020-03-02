@@ -1633,6 +1633,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
+    // TODO: remove this hard-coded value!!!
+//#ifdef BALTICSEA
+    if (folder_name_parameterization == "BalticSea") {
+        for (auto vessel : simModel->vessels()) {
+            vessel->set_tankcapacity(vessel->get_tankcapacity() *
+                3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
+
+        }
+    }
+//#endif
+
+
+
+
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);

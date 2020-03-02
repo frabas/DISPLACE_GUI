@@ -588,11 +588,9 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         vessels[i]->set_map_of_nodes(model.nodes());
 
 
-        // TODO: remove this hard-coded value!!!
-#ifdef BALTICSEA
-        if (namefolderinput == "BalticSea") {
-            vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity() *
-                                         3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
+        // fishing credits
+        if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
+            vessels[i]->set_fishing_credits(spe_fishing_credits);
         }
 #endif
 
@@ -610,6 +608,9 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             }
         }
 
+    
+        
+    
 
         // check
         outc(cout << "create vessel " << vessels[i]->get_idx() << " " << vessels[i]->get_name() << " "

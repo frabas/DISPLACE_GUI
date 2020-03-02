@@ -2715,6 +2715,8 @@ bool DisplaceModel::loadVessels()
             cout << "then take node: " << start_harbour << endl;
         }
 
+      
+
         std::shared_ptr<Vessel> v(new Vessel(mNodes.at(start_harbour.toIndex())->mNode.get(),
                                              i,
                                              vesselids[i],

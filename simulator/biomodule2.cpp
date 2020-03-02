@@ -97,7 +97,6 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           ofstream &popnodes_cumdiscardsratio,
                           ofstream &popnodes_nbchoked,
                           ofstream &popnodes_tariffs,
-                          ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
                           ofstream &benthosbiomassnodes,
                           ofstream &benthosnumbernodes,
@@ -1105,7 +1104,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                    // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
                                    for (unsigned int vsl =0; vsl < vessels.size(); vsl ++)
                                       {
-                                       vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, sp, 1, 0.0);
+                                       vessels.at(vsl)->set_individual_tac_this_pop(tstep, populations, implicit_pops, sp, 1, 0.0);
                                       }
                                    outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
                                    // to do next time oth_land will be applied: oth_land * TACy+1 / TACy
@@ -1188,7 +1187,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                           for (unsigned int vsl =0; vsl < vessels.size(); vsl ++)
                              {
-                             vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, sp, 1, 0.0);
+                             vessels.at(vsl)->set_individual_tac_this_pop(tstep, populations, implicit_pops, sp, 1, 0.0);
                              }
 
                           }

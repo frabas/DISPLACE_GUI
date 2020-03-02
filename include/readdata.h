@@ -71,7 +71,7 @@ bool read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
                                string namefolderoutput,
                                displace::commons::Scenario &scenario);
 
-bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario, std::string & namefolderoutput);
 
 
 multimap<types::NodeId, double>

@@ -134,7 +134,6 @@ extern ofstream freq_distance;
 extern ofstream vmslike2;
 extern ofstream vmslike3;
 extern vector <Metier*> metiers;
-extern ofstream export_individual_tacs;
 extern vector<PathShop> pathshops;
 extern ofstream fishfarmslogs;
 extern ofstream windfarmslogs;
@@ -397,7 +396,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         {
                             dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
                                       << endl);
-                            model->vessels()[index_v]->do_catch(export_individual_tacs, populations, model->nodes(),
+                            model->vessels()[index_v]->do_catch(populations, model->nodes(),
                                                                 benthoss,
                                                                 model->config().implicit_pops,
                                                                 model->config().grouped_tacs,

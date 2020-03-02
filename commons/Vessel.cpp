@@ -121,7 +121,6 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
     nbfpingspertrip=3;
     message=0;
     effort_multiplier=1;
-
     init();
 }
 
@@ -173,7 +172,8 @@ Vessel::Vessel(Node* p_location,
                double _vessel_value,
                double _annual_depreciation_rate,
                double _opportunity_interest_rate,
-               double _annual_discount_rate)
+               double _annual_discount_rate
+               )
     : calendar(cd)
 {
     is_vessel_exited=0;
@@ -1784,7 +1784,8 @@ void Vessel::set_nbfpingspertrip(int _nbfpingpertrip)
 }
 
 
-void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int tstep,
+
+void Vessel::set_individual_tac_this_pop(int tstep,
                                          vector<Population *> const &populations, vector<int> implicit_pops, int pop,
                                          int init, double a_tac)
 {
@@ -1819,14 +1820,18 @@ void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int t
                 !binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  )  // check explicit pops...
                 ) this->set_targeting_non_tac_pop_only (0);
 
+    
+    
+        
+        //TODO move the export to outside the Vessel context 
         // export: caution, here export the individual quota
         int discard_all =0;
-        export_individual_tacs << setprecision(0) << fixed;
-        export_individual_tacs << tstep << " " <<
-                                  this->get_name() << " " <<
-                                  pop << " " <<
-                                  individual_tac_per_pop.at(pop) << " " <<
-                                  discard_all << endl;
+        //export_individual_tacs_file << setprecision(0) << fixed;
+        //export_individual_tacs_file << tstep << " " <<
+        //                          this->get_name() << " " <<
+        //                          pop << " " <<
+        //                          individual_tac_per_pop.at(pop) << " " <<
+        //                          discard_all << endl;
 
     }
     else
@@ -1840,14 +1845,15 @@ void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int t
         else
         {
 
+            //TODO move the export to outside the Vessel context 
             // export: caution, here export discards
             int discard_all =1;
-            export_individual_tacs << setprecision(0) << fixed;
-            export_individual_tacs << tstep << " " <<
-                                      this->get_name() << " " <<
-                                      pop << " " <<
-                                      a_tac << " " << // tac at 0
-                                      discard_all << endl;
+            //export_individual_tacs_file << setprecision(0) << fixed;
+            //export_individual_tacs_file << tstep << " " <<
+            //                         this->get_name() << " " <<
+            //                          pop << " " <<
+            //                          a_tac << " " << // tac at 0
+            //                          discard_all << endl;
 
             // e.g. if discard for this vessel this pop then force a 0:
             individual_tac_per_pop.at(pop) = 0;
@@ -2422,8 +2428,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::do_catch(std::ofstream &export_individual_tacs,
-                      std::vector<Population *> const &populations,
+void Vessel::do_catch(std::vector<Population *> const &populations,
                       std::vector<Node *> const &nodes,
                       vector<Benthos *> const &benthoshabs,
                       std::vector<int> const &implicit_pops,
@@ -3217,7 +3222,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
                                 // force a zero quota on this pop. (and export discards)
                                 a_cumul_weight_this_pop_this_vessel=0.0; // discard all!
-                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0, 0.0);
+                                this->set_individual_tac_this_pop(tstep, populations, implicit_pops, pop, 0, 0.0);
                                 // => if all quotas at 0 then the vessel will stay on quayside in should_i_go_fishing()...
                                 // what a waste !!...
 
@@ -3234,7 +3239,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                             else
                             {
                                 dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
-                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
+                                this->set_individual_tac_this_pop(tstep, populations, implicit_pops, pop, 0,
                                                                   remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
 
                             }
@@ -3530,7 +3535,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << endl);
                     a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
-                    this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
+                    this->set_individual_tac_this_pop(tstep, populations, implicit_pops, pop, 0,
                                                       remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << endl);

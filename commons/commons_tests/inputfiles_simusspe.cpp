@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                            "# banned metiers\n"
                            "10 11 12");
 
-    bool r = read_scenario_config_file(is, res);
+    bool r = read_scenario_config_file(is, res, "scebaseline");
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex, res);
 
@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                   "x\n";
     is.str(test);
     is.clear();
-    r = read_scenario_config_file(is,res);
+    r = read_scenario_config_file(is,res,"scebaseline");
     BOOST_CHECK(!r);
 }
 

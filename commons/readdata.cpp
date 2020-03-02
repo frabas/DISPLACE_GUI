@@ -172,16 +172,18 @@ bool read_config_file(std::istream &stream,
 }
 
 template<typename Reader>
-bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
+bool importScenario(Reader &reader, displace::commons::Scenario &scenario, string& namesce)
 {
     try {
+        //scenario.namesce=namesce;
+
         auto dasf = reader.get("dyn_alloc_sce");
         std::vector<std::string> das;
         boost::split(das, dasf, boost::is_any_of(" "));
         for (auto d : das) {
             scenario.dyn_alloc_sce.setOption(d, true);
         }
-
+        
         auto dpsf = reader.get("dyn_pop_sce");
         std::vector<std::string> dps;
         boost::split(dps, dpsf, boost::is_any_of(" "));
@@ -272,17 +274,17 @@ bool read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
         displace::in::ScenarioConfigTable table;
         table.query(*db);
 
-        return importScenario(table, scenario);
+        return importScenario(table, scenario, namefolderoutput);
     } else {
         string filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput + ".dat";
         std::cout << "Reading Scenario file from " << filename << std::endl;
 
         std::ifstream f(filename.c_str(), std::ios_base::in);
-        return read_scenario_config_file(f, scenario);
+        return read_scenario_config_file(f, scenario, namefolderoutput);
     }
 }
 
-bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario, std::string &namefolderoutput)
 {
     helpers::LineNumberReader reader;
 
@@ -301,7 +303,7 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
     if (!reader.importFromStream(stream, specs))
         return false;
 
-    return importScenario(reader, scenario);
+    return importScenario(reader, scenario, namefolderoutput);
 }
 
 vector <int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder)

@@ -17,7 +17,6 @@
 using namespace std;
 
 vector<Population *> populations;
-ofstream export_individual_tacs;
 
 namespace {
 struct VesselsData {
@@ -519,6 +518,13 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             outc(cout << "then take node: " << start_harbour << endl);
         }
 
+        if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
+            vessels[i]->set_fishing_credits(spe_fishing_credits);
+        }
+
+      
+     
+
         vessels[i] = new Vessel(model.nodes().at(start_harbour.toIndex()),
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
@@ -588,26 +594,18 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 
         // TODO: remove this hard-coded value!!!
 #ifdef BALTICSEA
-        if (namefolderinput == "BalticSea") {
+        if (fname == "BalticSea") {
             vessels[i]->set_tankcapacity(vessels[i]->get_tankcapacity() *
                                          3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
         }
 #endif
 
-        if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
-            vessels[i]->set_fishing_credits(spe_fishing_credits);
-        }
+      
+        
 
-
-        // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-        if (model.is_tacs()) {
-            for (unsigned int sp = 0; sp < populations.size(); sp++) {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
-                                                           model.config().implicit_pops, sp, 1,
-                                                           0.0);
-            }
-        }
-
+    
+        
+    
 
         // check
         outc(cout << "create vessel " << vessels[i]->get_idx() << " " << vessels[i]->get_name() << " "

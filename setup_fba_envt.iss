@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "1.0.3"
+#define MyAppVersion "1.0.4"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -57,16 +57,31 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 ;Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;;QtCreator
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;MSV2019
+Source: "build\x64-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 

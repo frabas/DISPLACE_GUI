@@ -223,7 +223,7 @@ MemoryInfo memInfo;
 std::mutex glob_mutex;
 vector<int> ve;
 vector<Benthos *> benthoss;
-vector<Population *> populations;
+extern vector<Population *> Q_DECL_IMPORT populations;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
@@ -256,6 +256,7 @@ ofstream freq_distance;
 ofstream vmslike2;
 ofstream vmslike3;
 vector<Metier *> metiers;
+extern ofstream Q_DECL_IMPORT export_individual_tacs;
 vector<PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
@@ -768,7 +769,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         metadata->setNbSizes(NBSZGROUP);
     }
 
-   
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/export_individual_tac_" +
+               namesimu + ".dat";
+    export_individual_tacs.open(filename.c_str());
+
 
     // NOTE: do this test if the proper command line argument is passed...
     {
@@ -1621,32 +1625,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
     }
 
-    // init individual tacs
-    if (simModel->is_tacs()) {
-        for (unsigned int sp = 0; sp < populations.size(); sp++) {
-            for (auto vessel : simModel->vessels()) {
-                vessel->set_individual_tac_this_pop(0, populations,
-                    simModel->config().implicit_pops, sp, 1,
-                    0.0);
-            }
-        }
-    }
-
-
-    // TODO: remove this hard-coded value!!!
-//#ifdef BALTICSEA
-    if (folder_name_parameterization == "BalticSea") {
-        for (auto vessel : simModel->vessels()) {
-            vessel->set_tankcapacity(vessel->get_tankcapacity() *
-                3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
-
-        }
-    }
-//#endif
-
-
-
-
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -2262,6 +2240,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     popnodes_cumdiscardsratio,
                                     popnodes_nbchoked,
                                     popnodes_tariffs,
+                                    export_individual_tacs,
                                     popnodes_end,
                                     benthosbiomassnodes,
                                     benthosnumbernodes,
@@ -2407,7 +2386,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 for (auto vessel: simModel->vessels()) {
                     vessel->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
-                // update the monthly closures on nodes
+                // update the monthly closures
                 if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                   folder_name_parameterization,
                                                   inputfolder)) {

@@ -2,6 +2,8 @@
 // Created by fuga on 29/02/2020.
 //
 
+#include "commons_global.h"
+
 #include "TextfileModelLoader.h"
 #include "Impl.h"
 #include "Vessel.h"
@@ -16,8 +18,8 @@
 
 using namespace std;
 
-vector<Population *> populations;
-ofstream export_individual_tacs;
+vector<Population *> Q_DECL_EXPORT populations;
+ofstream  Q_DECL_EXPORT export_individual_tacs;
 
 namespace {
 struct VesselsData {

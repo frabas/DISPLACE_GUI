@@ -180,7 +180,6 @@ private:
 
         double effort_multiplier;  //for EffortControl HCR
 
-   
         std::mutex mutex;
 
 protected:
@@ -457,7 +456,8 @@ public:
 
     void find_next_point_on_the_graph(std::vector<Node *> &nodes);
 
-    void do_catch(std::vector<Population *> const &populations,
+    void do_catch(std::ofstream &export_individual_tacs,
+                  std::vector<Population *> const &populations,
                   std::vector<Node *> const &nodes,
                   vector<Benthos *> const &benthoshabs,
                   std::vector<int> const &implicit_pops,
@@ -601,13 +601,10 @@ public:
                                  std::map<std::string, int> &external_states,
                                  bool use_the_tree);
 
-    
-    
-    void set_individual_tac_this_pop(int tstep,
+    void set_individual_tac_this_pop(std::ofstream &export_individual_tacs, int tstep,
                                      std::vector<Population *> const &populations, std::vector<int> implicit_pops,
                                      int pop,
                                      int init, double a_tac);
-
 
     void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 

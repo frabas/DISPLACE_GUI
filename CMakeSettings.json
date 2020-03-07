@@ -22,7 +22,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.0\\msvc2017_64",
+          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
           "type": "STRING"
         }
       ]
@@ -45,7 +45,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.0\\msvc2017_64",
+          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
           "type": "STRING"
         }
       ]

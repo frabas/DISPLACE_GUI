@@ -1629,9 +1629,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     if (simModel->is_tacs()) {
         for (unsigned int sp = 0; sp < populations.size(); sp++) {
             for (auto vessel : simModel->vessels()) {
-                vessel->set_individual_tac_this_pop(0, populations,
-                    simModel->config().implicit_pops, sp, 1,
-                    0.0);
+                vessel->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
+                                                    simModel->config().implicit_pops, sp, 1,
+                                                    0.0);
             }
         }
     }
@@ -2266,6 +2266,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     popnodes_cumdiscardsratio,
                                     popnodes_nbchoked,
                                     popnodes_tariffs,
+                                    export_individual_tacs,
                                     popnodes_end,
                                     benthosbiomassnodes,
                                     benthosnumbernodes,

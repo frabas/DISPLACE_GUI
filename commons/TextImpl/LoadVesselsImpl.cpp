@@ -587,13 +587,6 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         // Give super power to each vessel (so that he can consult the common tariff map for example)
         vessels[i]->set_map_of_nodes(model.nodes());
 
-
-        // fishing credits
-        if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
-            vessels[i]->set_fishing_credits(spe_fishing_credits);
-        }
-#endif
-
         if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
             vessels[i]->set_fishing_credits(spe_fishing_credits);
         }

@@ -20,6 +20,11 @@
 #endif
 #else
 
+#if !defined(Q_DECL_IMPORT)
+#define Q_DECL_EXPORT
+#define Q_DECL_IMPORT
+#endif
+
 #define COMMONSSHARED_EXPORT
 #endif
 

@@ -517,7 +517,8 @@ int app_main(int argc, char const *argv[])
     } else {
         home = getenv("HOME");
     }
-    outdir = home + "/ibm_vessels";
+    //outdir = home + "/ibm_vessels";
+    outdir = home;
 #endif
 
     // example for setting up options for the command line
@@ -602,7 +603,7 @@ int app_main(int argc, char const *argv[])
     string namefolder;
 
 #ifdef _WIN32
-                                                                                                                            an_output_folder= outdir+"/DISPLACE_outputs";
+    an_output_folder= outdir+"/DISPLACE_outputs";
     mkdir(an_output_folder.c_str());
 
 

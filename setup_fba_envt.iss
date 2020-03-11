@@ -59,28 +59,28 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 ;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ;;QtCreator
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ;MSV2019
-Source: "build\x64-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
@@ -181,3 +181,5 @@ Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
+
+

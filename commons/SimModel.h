@@ -28,6 +28,8 @@ using TimeStep = size_t;
 
 class Node;
 
+class Population;
+
 class Fishfarm;
 
 class Vessel;
@@ -73,6 +75,30 @@ public:
     std::vector<Node *> &nodes();
 
     void setVessels(std::vector<Vessel *> vessels);
+
+    std::vector<Population *> const &populations() const;
+
+    std::vector<Population *> &populations();
+
+    void setPopulations(std::vector<Population *> population);
+
+    vector<double> const &globalQuotasUptake() const;
+
+    vector<double> &globalQuotasUptake();
+
+    void setGlobalQuotasUptake(vector<double>);
+
+    multimap<int, double> const &initWeightPerSzgroup() const;
+
+    multimap<int, double> &initWeightPerSzgroup();
+
+    void setInitWeightPerSzgroup(multimap<int, double>);
+
+    vector<vector<double> > const &species_interactions_mortality_proportion_matrix() const;
+
+    vector<vector<double> > &species_interactions_mortality_proportion_matrix();
+
+    void set_species_interactions_mortality_proportion_matrix(vector<vector<double> >);
 
     std::vector<Vessel *> &vessels();
 

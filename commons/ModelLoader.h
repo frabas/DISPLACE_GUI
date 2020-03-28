@@ -55,6 +55,8 @@ public:
 
     bool loadNodesAndGraphs();
 
+    virtual bool loadPopulations() = 0;
+
     struct BenthosData {
         int int1;
         int int2;

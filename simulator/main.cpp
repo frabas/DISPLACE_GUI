@@ -223,7 +223,6 @@ MemoryInfo memInfo;
 std::mutex glob_mutex;
 vector<int> ve;
 vector<Benthos *> benthoss;
-extern vector<Population *> Q_DECL_IMPORT populations;
 vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
@@ -237,7 +236,6 @@ std::string outSqlitePath;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
-vector<double> global_quotas_uptake;
 vector<int> explicit_pops;
 ClosureOptions closure_opts;
 adjacency_map_t adjacency_map;
@@ -880,155 +878,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
-    paramsForLoad.iparam4 = SEL_NBSZGROUP;
-    paramsForLoad.vdparam1 = simModel->config().calib_cpue_multiplier;
-    paramsForLoad.vdparam2 = simModel->config().calib_weight_at_szgroup;
 
-    LoadedData loadedDataPops;
-
-    Dataloaderpops ppl;
-    l->loadFeatures(&ppl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataPops);
-
-    multimap<int, double> init_weight_per_szgroup = loadedDataPops.mmapidparam_init_weight_per_szgroup;
-    vector<vector<double> > species_interactions_mortality_proportion_matrix = loadedDataPops.vovd_species_interactions_mortality_proportion_matrix;
-    type_of_avai_field_to_read = loadedDataPops.vectsparam2;
-
-    for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
-        simModel->nodes().at(i)->init_Ns_pops_at_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam3);
-        simModel->nodes().at(i)->init_avai_pops_at_selected_szgroup(paramsForLoad.iparam1, paramsForLoad.iparam4);
-    }
-
-
-
+    modelLoader->loadPopulations();
 
     // FOR-LOOP OVER POP
-    // creation of a vector of populations
-    populations = vector<Population *>(simModel->config().nbpops);
-
-    for (unsigned int sp = 0; sp < populations.size(); sp++) {
-        dout(cout << endl);
-
-
-        cout << " create pop... " << endl;
-        populations[sp] = new Population(sp,
-                                         loadedDataPops.vectsparam1.at(sp),
-                                         loadedDataPops.vectdparam1.at(sp),
-                                         loadedDataPops.vectdparam2.at(sp),
-                                         loadedDataPops.vectdparam3.at(sp),
-                                         loadedDataPops.vectdparam4.at(sp),
-                                         loadedDataPops.vectdparam5.at(sp),
-                                         loadedDataPops.vovi1.at(sp),
-                                         loadedDataPops.vovd1.at(sp),
-                                         loadedDataPops.vovd2.at(sp),
-                                         loadedDataPops.vovd3.at(sp),
-                                         loadedDataPops.vovd4.at(sp),
-                                         loadedDataPops.vovi2.at(sp),
-                                         loadedDataPops.vovd5.at(sp),
-                                         loadedDataPops.vovd6.at(sp),
-                                         loadedDataPops.vovd7.at(sp),
-                                         loadedDataPops.vovd8.at(sp),
-                                         loadedDataPops.vectmmapndparam1.at(sp),
-                                         loadedDataPops.vectmmapndparam2.at(sp),
-                                         loadedDataPops.vectmapndparam1.at(sp),
-                                         loadedDataPops.vectmmapidparam1.at(sp),
-                                         loadedDataPops.vectmapsdparam1.at(sp),
-                                         loadedDataPops.vovovd2.at(sp),
-                                         loadedDataPops.vovovd3.at(sp),
-                                         loadedDataPops.vovovd1.at(sp),
-                                         simModel->nodes(),
-                                         loadedDataPops.vovd9.at(sp),
-                                         loadedDataPops.vovd10.at(sp),
-                                         loadedDataPops.mapiiparam1.at(sp),
-                                         loadedDataPops.mapidparam1.at(sp),
-                                         loadedDataPops.vectdparam6.at(sp),
-                                         loadedDataPops.vectdparam7.at(sp)
-        );
-
-
-
-
-        cout << " Population creator()...done " << endl;
-
-        global_quotas_uptake.push_back(0.0);
-
-
-        if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(), sp)) {
-            outc(cout << "inform avai on nodes " << endl);
-
-            outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
-            // init avai on each node (we know the presence...) for this pop for selected szgroup
-            vector <types::NodeId> nodes_with_presence = loadedDataPops.vovn1.at(sp);
-            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedDataPops.vectmmapndparam1.at(sp);
-
-            for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
-                dout(cout << ".");
-                auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
-                                                                 nodes_with_presence.at(n));
-
-                vector<double> spat_avai_per_selected_szgroup;
-                vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
-                for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
-                    auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
-                    if (it != selected_szgroups.end()) {
-                        spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
-                    }
-                }
-                if (!spat_avai_per_selected_szgroup.empty()) {
-                    simModel->nodes().at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
-                                                                                                                 spat_avai_per_selected_szgroup);
-                } else {
-                    // inconsistence between lst_idx_nodes and avai files if this happen...
-                    outc(cout << nodes_with_presence.at(n));
-                }
-
-            }
-
-            // check
-            /*
-           outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl); // used in do_catch != the one used in distributeN()
-            vector<double> avai_pops_at_selected_szgroup = nodes[792]->get_avai_pops_at_selected_szgroup(sp);
-            vector<double>::iterator szgroup = avai_pops_at_selected_szgroup.begin();
-            for( ; szgroup != avai_pops_at_selected_szgroup.end(); szgroup++)
-            {
-               outc(cout << *szgroup << " " );
-            }
-           outc(cout << endl);
-
-            // check
-           outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl);
-            vector<double> tot_N_at_szgroup = populations[sp]->get_tot_N_at_szgroup();
-            vector<double>::iterator szgroup2 = tot_N_at_szgroup.begin();
-            for( ; szgroup2 != tot_N_at_szgroup.end(); szgroup2++)
-            {
-               outc(cout << *szgroup << " " );
-            }
-           outc(cout << endl);
-            */
-
-            outc(cout
-                         << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
-                         << endl);
-        }                         // end implicit pop
-    }                             // end pop
-
-
-
-
+    // creation of a vector of simModel->populations()
 
 #ifdef PROFILE
     mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
@@ -1047,8 +901,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    outc(cout << endl);
 
     // check the function for aggregation from nodes
-    populations[0]->aggregate_N();
-    vector<double> a_Ns_at_szgroup_pop0 = populations[0]->get_tot_N_at_szgroup();
+    simModel->populations()[0]->aggregate_N();
+    vector<double> a_Ns_at_szgroup_pop0 = simModel->populations()[0]->get_tot_N_at_szgroup();
    outc(cout << "check aggregate_N() " << endl);
     for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0.size();  i++)
     {
@@ -1057,7 +911,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    outc(cout << endl);
 
     // restore back and check on node side
-    populations[0]->distribute_N();
+    simModel->populations()[0]->distribute_N();
     vector<double> a_Ns_at_szgroup_pop0_again = nodes[2579]->get_Ns_pops_at_szgroup(0);
    outc(cout << "check on the node side for the node 2579 " << endl);
     for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0_again.size();  i++)
@@ -1085,13 +939,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    outc(cout << endl);
 
     // check the tacs
-    for (unsigned int i=0; i<populations.size(); i++)
+    for (unsigned int i=0; i<simModel->populations().size(); i++)
     {
         cout << " the tac for this pop is " <<
-             populations.at(i)->get_tac()->get_current_tac() << " " << endl;
+             simModel->populations().at(i)->get_tac()->get_current_tac() << " " << endl;
 
         cout << " the tac percent_for_simulated_vessels for this pop is " <<
-             populations.at(i)->get_tac()->get_percent_for_simulated_vessels() << endl;;
+             simModel->populations().at(i)->get_tac()->get_percent_for_simulated_vessels() << endl;;
     }
 
     // check the removals (should be at 0!)
@@ -1214,7 +1068,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "compute Ws_at_szgroup..." << endl;
         for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
-            vector<double> W_this_pop = populations.at(j)->get_weight_at_szgroup();
+            vector<double> W_this_pop = simModel->populations().at(j)->get_weight_at_szgroup();
             for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                 Ws_at_szgroup.at(j).at(k) = W_this_pop.at(k);
                 //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
@@ -1411,8 +1265,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 juveniles_diet_preference.at(j).at(prey) = juv_diet_pref.at(prey);
 
                 // useless because getters not used
-                //populations.at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
-                //populations.at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
+                //simModel->populations().at(prey)->set_adults_diet_preference_per_stock(adults_diet_preference.at(j));
+                //simModel->populations().at(prey)->set_juveniles_diet_preference_per_stock(juveniles_diet_preference.at(j));
             }
         }
 
@@ -1628,9 +1482,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // init individual tacs
     if (simModel->is_tacs()) {
-        for (unsigned int sp = 0; sp < populations.size(); sp++) {
+        for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
             for (auto vessel : simModel->vessels()) {
-                vessel->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
+                vessel->set_individual_tac_this_pop(export_individual_tacs, 0, simModel->populations(),
                                                     simModel->config().implicit_pops, sp, 1,
                                                     0.0);
             }
@@ -2116,15 +1970,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<vector<double> > a_discards_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
 
     // write down initial pop number in popdyn
-    for (unsigned int sp = 0; sp < populations.size(); sp++) {
+    for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
 
         dout(cout << "write down the popdyn...");
         // get total N from summing up N over nodes
-        populations.at(sp)->aggregate_N();
+        simModel->populations().at(sp)->aggregate_N();
         popdyn_N << setprecision(0) << fixed;
         // tstep / pop / tot N at szgroup
         popdyn_N << 0 << " " << sp << " ";
-        vector<double> tot_N_at_szgroup = populations.at(sp)->get_tot_N_at_szgroup();
+        vector<double> tot_N_at_szgroup = simModel->populations().at(sp)->get_tot_N_at_szgroup();
         for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++) {
             // output in thousands of individuals
             popdyn_N << tot_N_at_szgroup.at(sz) / 1000 << " ";
@@ -2144,10 +1998,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     for (unsigned int n = 0; n < simModel->nodes().size(); n++) {
-        simModel->nodes()[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+        simModel->nodes()[n]->export_popnodes(popnodes_start, simModel->initWeightPerSzgroup(), 0);
         if (enable_sqlite_out) {
             outSqlite->getNodesDefTable()->insert(simModel->nodes()[n]);
-            bool r = outSqlite->getPopTable()->insert(0, simModel->nodes()[n], init_weight_per_szgroup);
+            bool r = outSqlite->getPopTable()->insert(0, simModel->nodes()[n], simModel->initWeightPerSzgroup());
         }
     }
 
@@ -2302,9 +2156,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     simModel->is_tacs(),
                                     export_vmslike,
                                     scenario.freq_do_growth,
-                                    init_weight_per_szgroup,
-                                    species_interactions_mortality_proportion_matrix,
-                                    populations,
+                                    simModel->initWeightPerSzgroup(),
+                                    simModel->species_interactions_mortality_proportion_matrix(),
+                                    simModel->populations(),
                                     simModel->nodes(),
                                     simModel->vessels(),
                                     benthoss,
@@ -2328,12 +2182,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
             // so a relevant proxy could actually be (the inverse of) full_avai_szgroup_nodes_with_pop
             // converted in a point porportion field....
-            for (unsigned int sp = 0; sp < populations.size(); sp++) {
+            for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
                 outc(cout << "...pop " << sp << endl;)
                 if (!binary_search(simModel->config().implicit_pops.begin(),
                                    simModel->config().implicit_pops.end(), sp)) {
                     outc(cout << "......pop " << sp << endl;)
-                    populations.at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
+                    simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
                 }
             }
         }
@@ -2401,7 +2255,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
 
 
-            // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+            // vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(1)->get_tot_N_at_szgroup();
             // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
             //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
@@ -2437,13 +2291,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // this month, re-read for population-related data
             // CAUTION: THE ONLY POP READING DONE ON MONTH simModel->timestep()...THE OTHERS ARE DONE ON QUARTER BASIS
-            for (unsigned int i = 0; i < populations.size(); i++) {
+            for (unsigned int i = 0; i < simModel->populations().size(); i++) {
                 // read a other landings per node for this species
                 auto oth_land = read_oth_land_nodes_with_pop(modelLoader->semesterString(),
                                                              modelLoader->monthString(), i,
                                                              folder_name_parameterization,
                                                              inputfolder, scenario.fleetsce);
-                populations.at(i)->set_oth_land(oth_land);
+                simModel->populations().at(i)->set_oth_land(oth_land);
             }
             cout << "re-read oth_land_nodes setting this month....OK" << endl;
 
@@ -2576,24 +2430,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cout << "redispatch the population over its spatial extent...." << endl;
 
             // aggregate from nodes to set the tot_N_at_szgroup per pop
-            for (unsigned int sp = 0; sp < populations.size(); sp++) {
+            for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
                 // aggregate from nodes (caution: do it before changing of list_nodes)
                 if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
                                    sp)) {
 
                     /*
                     if(sp==1){
-                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
                         for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                          cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
                     }
                     */
                     // get total N from summing up N over nodes
-                    populations.at(sp)->aggregate_N();
+                    simModel->populations().at(sp)->aggregate_N();
 
                     /*
                     if(sp==1){
-                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
                         for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                          cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
                     }
@@ -2607,7 +2461,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             if (scenario.dyn_pop_sce.option(Options::nbcpCoupling)) {
                 string a_command_for_R;
 
-                for (unsigned int p = 0; p < populations.size(); p++) {
+                for (unsigned int p = 0; p < simModel->populations().size(); p++) {
                     if (binary_search(simModel->config().nbcp_coupling_pops.begin(),
                                       simModel->config().nbcp_coupling_pops.end(), p)) {
                         type_of_avai_field_to_read.at(p) = "_updated";
@@ -2643,7 +2497,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                 // alter the availability field, if required
-                for (unsigned int p = 0; p < populations.size(); p++) {
+                for (unsigned int p = 0; p < simModel->populations().size(); p++) {
                     if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
                                        p)) {
                         stringstream out;
@@ -2731,29 +2585,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
             cout << "clear pops on nodes...done" << endl;
 
-            // RE-read for populations
-            for (unsigned int i = 0; i < populations.size(); i++) {
+            // RE-read for simModel->populations()
+            for (unsigned int i = 0; i < simModel->populations().size(); i++) {
                 stringstream out;
                 out << i;
 
-                cout << "RE-read for population " << populations.at(i)->get_name() << " from " <<
+                cout << "RE-read for population " << simModel->populations().at(i)->get_name() << " from " <<
                      folder_name_parameterization << " " << inputfolder << " " << type_of_avai_field_to_read.at(i)
                      << endl;
 
                 auto full_avai_szgroup_nodes_with_pop = loadedDataPops.vectmmapndparam1.at(i);
-                populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
+                simModel->populations().at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 
                 // read a other landings per node for this species (DEPRECATED - DONE AT MONTH TSTEP INSTEAD)
                 //map<int, double> oth_land= read_oth_land_nodes_with_pop(simModel->semester(), simModel->month(), i, folder_name_parameterization, inputfolder, scenario.fleetsce);
-                //populations.at(i)->set_oth_land(oth_land);
+                //simModel->populations().at(i)->set_oth_land(oth_land);
 
                 multimap<int, double> overall_migration_fluxes = loadedDataPops.vectmmapidparam1.at(i);
-                populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
+                simModel->populations().at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                 // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
                 if (!scenario.dyn_pop_sce.option(Options::stop_mig_35065) || simModel->timestep() < 35065) {
-                    populations.at(i)->apply_overall_migration_fluxes(populations);
+                    simModel->populations().at(i)->apply_overall_migration_fluxes(simModel->populations());
                 }
 
                 //then, re-set the list_nodes and the pop_names_on_node
@@ -2770,13 +2624,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
                     //   cout << endl;
                 }
-                    populations.at(i)->set_list_nodes(list_nodes);
+                simModel->populations().at(i)->set_list_nodes(list_nodes);
 
                 // add the current Ns to the vectors of vectors of the concerned nodes
-                vector<double> tot_N_at_szgroup = populations.at(i)->get_tot_N_at_szgroup();
+                vector<double> tot_N_at_szgroup = simModel->populations().at(i)->get_tot_N_at_szgroup();
 
-                /*if( populations.at(i)->get_name()==1){
-                    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                /*if( simModel->populations().at(i)->get_name()==1){
+                    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
                     for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                        cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
                 */
@@ -2793,10 +2647,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // divide on nodes according to avai
                 if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
                                    i)) {
-                    populations.at(i)->distribute_N();
+                    simModel->populations().at(i)->distribute_N();
 
-                    //if(populations.at(i)->get_name()==1){
-                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                    //if(simModel->populations().at(i)->get_name()==1){
+                    //    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
                     //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                     //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
                     //}
@@ -2817,24 +2671,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
                                                                      nodes_with_presence.at(n));
 
-                        vector<double> spat_avai_per_selected_szgroup;
-                        vector<int> selected_szgroups = populations.at(i)->get_selected_szgroups();
-                        for (int sz=0; sz<spat_avai_this_pop_this_node.size(); ++sz)
-                        {
-                            auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
-                             if (it != selected_szgroups.end())
-                                 spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                    vector<double> spat_avai_per_selected_szgroup;
+                    vector<int> selected_szgroups = simModel->populations().at(i)->get_selected_szgroups();
+                    for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
+                        auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
+                        if (it != selected_szgroups.end()) {
+                            spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
                         }
-                        if (!spat_avai_per_selected_szgroup.empty()) {
-                            simModel->nodes().at(
-                                    nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
-                                                                                                            spat_avai_per_selected_szgroup);
-                        } else {
-                            // inconsistence between lst_idx_nodes and avai files if this happen...
-                            outc(cout << nodes_with_presence.at(n));
-                        }
-
                     }
+                    if (!spat_avai_per_selected_szgroup.empty()) {
+                        simModel->nodes().at(
+                                nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
+                                                                                                        spat_avai_per_selected_szgroup);
+                    } else {
+                        // inconsistence between lst_idx_nodes and avai files if this happen...
+                        outc(cout << nodes_with_presence.at(n));
+                    }
+
+                }
 
 
             }
@@ -2843,18 +2697,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // CHECK...CHECK...CHECK...
             // write done  pop number in popdyn_test
-            /*for (unsigned int sp=0; sp<populations.size(); sp++)
+            /*for (unsigned int sp=0; sp<simModel->populations().size(); sp++)
             {
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
 
                     dout(cout  << "write down AFTER re-read pop in the popdyn_test file for checking...");
                     // get total N from summing up N over nodes
-                    populations.at(sp)->aggregate_N();
+                    simModel->populations().at(sp)->aggregate_N();
                     popdyn_test << setprecision(0) << fixed;
                     // simModel->timestep() / pop / tot N at szgroup
                     popdyn_test << simModel->timestep() << " " << sp << " ";
-                    vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
+                    vector <double>tot_N_at_szgroup=simModel->populations().at(sp)->get_tot_N_at_szgroup();
                     for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
                     {
                         // output in thousands of individuals
@@ -3197,13 +3051,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 double change_per_year = tariff_annual_hcr_percent_change / 100;
                 cout << "...change_per_year is " << change_per_year << endl;
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                    vector<double> fbar_ages_min_max = populations.at(tariff_pop.at(ipop))->get_fbar_ages_min_max();
+                    vector<double> fbar_ages_min_max = simModel->populations().at(
+                            tariff_pop.at(ipop))->get_fbar_ages_min_max();
                     double ftarget = fbar_ages_min_max.at(2);
                     cout << "...the ftarget at y-1 for this pop is " << ftarget << endl;
                     ftarget_allpopav += ftarget; // cumul...
                     cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop)
                          << endl;
-                    double fbar_py = populations.at(tariff_pop.at(ipop))->get_fbar();
+                    double fbar_py = simModel->populations().at(tariff_pop.at(ipop))->get_fbar();
                     fbar_py_allpopav += fbar_py; // cumul...
                     cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
                 }
@@ -3267,8 +3122,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<types::NodeId> list_nodes_idx;
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                     dout(cout << "Get the list of nodes for the tariff pop "
-                              << populations.at(tariff_pop.at(ipop))->get_name() << endl);
-                    vector<Node *> a_list_nodes = populations.at(tariff_pop.at(ipop))->get_list_nodes();
+                              << simModel->populations().at(tariff_pop.at(ipop))->get_name() << endl);
+                    vector<Node *> a_list_nodes = simModel->populations().at(tariff_pop.at(ipop))->get_list_nodes();
                     for (unsigned int inode = 0; inode < a_list_nodes.size(); ++inode) {
                         list_nodes_idx.push_back(a_list_nodes.at(inode)->get_idx_node());
                     }
@@ -3544,11 +3399,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 } // target year for reaching the FMSY. HARDCODED FOR NOW
 
                 // will alter GoFishing dtree final leaf proba
-                if (!computeEffortMultiplier(populations,
+                if (!computeEffortMultiplier(simModel->populations(),
                                              simModel->vessels(),
                                              nb_y_left_to_tgrt_year,
                                              1)) {
-                                                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                    throw std::runtime_error("Error while executing: computeEffortMultiplier");
                 }
             }
         }
@@ -3561,11 +3416,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 } // target year for reaching the FMSY. HARDCODED FOR NOW
 
                 // will alter GoFishing dtree final leaf proba
-                if (!computeEffortMultiplier(populations,
+                if (!computeEffortMultiplier(simModel->populations(),
                                              simModel->vessels(),
                                              nb_y_left_to_tgrt_year,
                                              2)) {
-                                                 throw std::runtime_error("Error while executing: computeEffortMultiplier");
+                    throw std::runtime_error("Error while executing: computeEffortMultiplier");
                 }
             }
         }
@@ -3606,30 +3461,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if (scenario.dyn_alloc_sce.option(Options::TACs)) {
 
-            for (unsigned int pop = 0; pop < populations.size(); pop++) {
+            for (unsigned int pop = 0; pop < simModel->populations().size(); pop++) {
 
                 outc(cout << "...pop " << pop << endl;)
                 if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
                                    pop)) {
 
-                    double so_far = populations.at(pop)->get_landings_so_far();
-                    global_quotas_uptake.at(pop) =
-                            (so_far / 1000) / (populations.at(pop)->get_tac()->get_current_tac());
+                    double so_far = simModel->populations().at(pop)->get_landings_so_far();
+                    simModel->globalQuotasUptake().at(pop) =
+                            (so_far / 1000) / (simModel->populations().at(pop)->get_tac()->get_current_tac());
 
-                    populations.at(pop)->set_quota_uptake(global_quotas_uptake.at(pop));
-                    populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
+                    simModel->populations().at(pop)->set_quota_uptake(simModel->globalQuotasUptake().at(pop));
+                    simModel->populations().at(pop)->set_quota(
+                            simModel->populations().at(pop)->get_tac()->get_current_tac());
 
                     if (enable_sqlite_out) {
-                        outSqlite->exportPopQuotas(populations.at(pop), pop, simModel->timestep());
+                        outSqlite->exportPopQuotas(simModel->populations().at(pop), pop, simModel->timestep());
                     }
 
-                    //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+                    //cout <<"pop "<< pop << ": simModel->globalQuotasUptake() is " << simModel->globalQuotasUptake().at(pop) << endl;
 
                     // export in file
                     quotasuptake << setprecision(6) << fixed;
                     quotasuptake << simModel->timestep() << " " << pop << " " <<
-                                 global_quotas_uptake.at(pop) << " " <<
-                                 populations.at(pop)->get_tac()->get_current_tac() << endl;
+                                 simModel->globalQuotasUptake().at(pop) << " " <<
+                                 simModel->populations().at(pop)->get_tac()->get_current_tac() << endl;
 
 
 
@@ -3640,7 +3496,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     }
                     // HARDCODED threshold...
                     if (nbchoked >= ceil(0.3 * simModel->vessels().size())) {
-                        populations.at(pop)->set_is_choking_fisheries(1);
+                        simModel->populations().at(pop)->set_is_choking_fisheries(1);
                     }
 
                 }
@@ -3827,7 +3683,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 OutputExporter::instance().exportVmsLikeFPingsOnly(simModel->timestep(),
                                                                    simModel->vessels()[listVesselIdForVmsLikeFPingsOnlyToExport.at(
-                                                                           idx)], populations,
+                                                                           idx)], simModel->populations(),
                                                                    simModel->config().implicit_pops);
                 simModel->vessels()[listVesselIdForVmsLikeFPingsOnlyToExport.at(
                         idx)]->clear_ping_catch_pop_at_szgroup();
@@ -3839,7 +3695,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                 OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
-                                                         populations, simModel->config().implicit_pops);
+                                                         simModel->populations(), simModel->config().implicit_pops);
                 simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();
@@ -3847,7 +3703,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
                 OutputExporter::instance().exportTripCatchPopPerSzgroup(simModel->timestep(),
                                                                         simModel->vessels()[listVesselIdForTripCatchPopPerSzgroupExport.at(
-                                                                                idx)], populations,
+                                                                                idx)], simModel->populations(),
                                                                         simModel->config().implicit_pops);
             }
             listVesselIdForTripCatchPopPerSzgroupExport.clear();

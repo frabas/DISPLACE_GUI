@@ -42,6 +42,8 @@ protected:
 
     bool loadWindmillsImpl() override;
 
+    bool loadPopulations() override;
+
 public:
     void loadCalendar() override;
 

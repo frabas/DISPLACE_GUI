@@ -91,7 +91,6 @@ extern bool gui_move_vessels;
 extern int nb_displayed_moves_out_of_twenty;
 
 extern vector<int> ve;
-extern vector<Population *> Q_DECL_IMPORT populations;
 extern vector<Benthos *> benthoss;
 extern int nbsteps;
 extern int nbpops;
@@ -210,12 +209,13 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // i.e. just arrived!
                     if (!inactive) {
                         outc(cout << "...just arrived!" << endl);
-                        model->vessels()[index_v]->updateTripsStatistics(populations, model->config().implicit_pops,
+                        model->vessels()[index_v]->updateTripsStatistics(model->populations(),
+                                                                         model->config().implicit_pops,
                                                                          model->timestep(),
                                                                          model->scenario().dyn_alloc_sce);
                         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
                                 new VesselLogbookOutputMessage(model->timestep(), model->vessels()[index_v],
-                                                               populations,
+                                                               model->populations(),
                                                                model->config().implicit_pops)));
 
                         std::unique_lock<std::mutex> m(listVesselMutex);
@@ -256,7 +256,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
                         // ***************make a dtree decision****************************
                         int go_fishing = model->vessels()[index_v]->should_i_go_fishing(model->timestep(),
-                                                                                        populations,
+                                                                                        model->populations(),
                                                                                         model->scenario().use_dtrees,
                                                                                         model->scenario().dyn_alloc_sce,
                                                                                         model->config().implicit_pops,
@@ -397,7 +397,8 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         {
                             dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
                                       << endl);
-                            model->vessels()[index_v]->do_catch(export_individual_tacs, populations, model->nodes(),
+                            model->vessels()[index_v]->do_catch(export_individual_tacs, model->populations(),
+                                                                model->nodes(),
                                                                 benthoss,
                                                                 model->config().implicit_pops,
                                                                 model->config().grouped_tacs,
@@ -541,7 +542,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 alogic) { // fishing state
                 std::unique_lock<std::mutex> m(listVesselMutex);
                 listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
-                // OutputExporter::instance().exportVmsLikeFPingsOnly(model->timestep(), model->vessels()[index_v],  populations, implicit_pops);
+                // OutputExporter::instance().exportVmsLikeFPingsOnly(model->timestep(), model->vessels()[index_v],  model->populations(), implicit_pops);
             }
         }
 

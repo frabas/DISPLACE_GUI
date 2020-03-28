@@ -18,7 +18,6 @@
 
 using namespace std;
 
-vector<Population *> Q_DECL_EXPORT populations;
 ofstream  Q_DECL_EXPORT export_individual_tacs;
 
 namespace {
@@ -594,8 +593,8 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
         if (model.is_tacs()) {
-            for (unsigned int sp = 0; sp < populations.size(); sp++) {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations,
+            for (unsigned int sp = 0; sp < model.populations().size(); sp++) {
+                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, model.populations(),
                                                            model.config().implicit_pops, sp, 1,
                                                            0.0);
             }

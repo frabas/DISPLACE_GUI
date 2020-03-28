@@ -19,6 +19,7 @@ struct SimModel::Impl {
     GeoGraph geoGraph;
     DiffusionTree diffusionTree;
     std::vector<Node *> nodes;
+    vector<Population *> populations;
     std::vector<Fishfarm *> fishfarms;
     vector<Windmill *> windmills;
     vector<Vessel *> vessels;
@@ -26,7 +27,9 @@ struct SimModel::Impl {
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
-
+    vector<double> global_quotas_uptake;
+    multimap<int, double> init_weight_per_szgroup;
+    vector<vector<double> > species_interactions_mortality_proportion_matrix;
     // cached
 
     bool is_tacs;
@@ -140,6 +143,66 @@ std::vector<Node *> const &SimModel::nodes() const
 std::vector<Node *> &SimModel::nodes()
 {
     return p->nodes;
+}
+
+std::vector<Population *> const &SimModel::populations() const
+{
+    return p->populations;
+}
+
+std::vector<Population *> &SimModel::populations()
+{
+    return p->populations;
+}
+
+void SimModel::setPopulations(std::vector<Population *> population)
+{
+    p->populations = std::move(population);
+}
+
+vector<double> const &SimModel::globalQuotasUptake() const
+{
+    return p->global_quotas_uptake;
+}
+
+vector<double> &SimModel::globalQuotasUptake()
+{
+    return p->global_quotas_uptake;
+}
+
+void SimModel::setGlobalQuotasUptake(vector<double> v)
+{
+    p->global_quotas_uptake = std::move(v);
+}
+
+multimap<int, double> const &SimModel::initWeightPerSzgroup() const
+{
+    return p->init_weight_per_szgroup;
+}
+
+multimap<int, double> &SimModel::initWeightPerSzgroup()
+{
+    return p->init_weight_per_szgroup;
+}
+
+void SimModel::setInitWeightPerSzgroup(multimap<int, double> m)
+{
+    p->init_weight_per_szgroup = std::move(m);
+}
+
+vector<vector<double> > const &SimModel::species_interactions_mortality_proportion_matrix() const
+{
+    return p->species_interactions_mortality_proportion_matrix;
+}
+
+vector<vector<double> > &SimModel::species_interactions_mortality_proportion_matrix()
+{
+    return p->species_interactions_mortality_proportion_matrix;
+}
+
+void SimModel::set_species_interactions_mortality_proportion_matrix(vector<vector<double> > v)
+{
+    p->species_interactions_mortality_proportion_matrix = std::move(v);
 }
 
 void SimModel::setVessels(std::vector<Vessel *> vessels)

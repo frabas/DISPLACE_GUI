@@ -17,12 +17,8 @@ include_directories(
 set(SOURCES
         commons_global.h
         dataloader.h
-        dataloaderpops.h
         dataloadermetiers.h
-        dataloaderfishfarms.h
-        dataloaderpops.cpp
         dataloadermetiers.cpp
-        dataloaderfishfarms.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp

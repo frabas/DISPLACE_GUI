@@ -36,7 +36,6 @@
 #include <GeographicLib/Geodesic.hpp>
 
 #include <readdata.h>
-#include <dataloaderfishfarms.h>
 
 #include <qdebug.h>
 #include <QtAlgorithms>

@@ -1398,6 +1398,7 @@ read_fbar_ages_min_max_and_ftarget(int a_pop, string folder_name_parameterizatio
 bool TextfileModelLoader::loadPopulations()
 {
 
+    string namesimu = "simu1"; // TODO: include it to model()
 
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, p->folder_name_parameterization, p->inputfolder);
@@ -1410,9 +1411,9 @@ bool TextfileModelLoader::loadPopulations()
     string str_rand_avai_file = "baseline"; // deprecated?
     // by default, will use the initial avai input
 
-    auto sparam1 = std::to_string(model().month());
-    auto sparam2 = std::to_string(model().quarter());
-    auto sparam3 = std::to_string(model().semester());
+    auto month = std::to_string(model().month());
+    auto quarter = std::to_string(model().quarter());
+    auto semester = std::to_string(model().semester());
     auto iparam1 = model().config().nbpops;
     auto iparam2 = NBAGE;
     auto iparam3 = NBSZGROUP;
@@ -1422,15 +1423,15 @@ bool TextfileModelLoader::loadPopulations()
 
     // read the pop-specific betas related to the availability
     // szgroup0
-    multimap<int, double> avai0_betas = read_avai_betas(sparam3, "0", p->folder_name_parameterization, p->inputfolder);
+    multimap<int, double> avai0_betas = read_avai_betas(semester, "0", p->folder_name_parameterization, p->inputfolder);
     // szgroup2
-    multimap<int, double> avai2_betas = read_avai_betas(sparam3, "2", p->folder_name_parameterization, p->inputfolder);
+    multimap<int, double> avai2_betas = read_avai_betas(semester, "2", p->folder_name_parameterization, p->inputfolder);
     // szgroup3
-    multimap<int, double> avai3_betas = read_avai_betas(sparam3, "3", p->folder_name_parameterization, p->inputfolder);
+    multimap<int, double> avai3_betas = read_avai_betas(semester, "3", p->folder_name_parameterization, p->inputfolder);
     // szgroup5
-    multimap<int, double> avai5_betas = read_avai_betas(sparam3, "5", p->folder_name_parameterization, p->inputfolder);
+    multimap<int, double> avai5_betas = read_avai_betas(semester, "5", p->folder_name_parameterization, p->inputfolder);
     // szgroup7
-    multimap<int, double> avai7_betas = read_avai_betas(sparam3, "7", p->folder_name_parameterization, p->inputfolder);
+    multimap<int, double> avai7_betas = read_avai_betas(semester, "7", p->folder_name_parameterization, p->inputfolder);
 
     // read other stuffs...
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
@@ -1464,7 +1465,7 @@ bool TextfileModelLoader::loadPopulations()
                                                                                        p->inputfolder,
                                                                                        model().scenario().biolsce);
     //cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
-    multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(sparam3,
+    multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(semester,
                                                                                     p->folder_name_parameterization,
                                                                                     p->inputfolder, str_rand_avai_file);
 
@@ -1654,7 +1655,7 @@ bool TextfileModelLoader::loadPopulations()
         //                                                                                               str_rand_avai_file,
         //                                                                                               type_of_avai_field_to_read);
         vect_of_full_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_full_avai_szgroup_nodes_with_pop(
-                sparam3, sp,
+                semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder, str_rand_avai_file,
                 type_of_avai_field_to_read);
@@ -1672,18 +1673,18 @@ bool TextfileModelLoader::loadPopulations()
         // input data
         if (model().scenario().dyn_pop_sce.option(Options::diffusePopN)) {
             cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
-            vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp) = read_field_of_coeff_diffusion_this_pop(sparam3, sp,
+            vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp) = read_field_of_coeff_diffusion_this_pop(semester, sp,
                                                                                                            p->folder_name_parameterization,
                                                                                                            p->inputfolder,
                                                                                                            model().scenario().biolsce);
         }
 
         // input data, read a other landings per node for this species
-        vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(sparam3, sparam1, sp,
+        vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
                                                                    p->folder_name_parameterization, p->inputfolder,
                                                                    model().scenario().fleetsce);
 
-        vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(sparam3, sp,
+        vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
                                                                                  p->folder_name_parameterization,
                                                                                  p->inputfolder);
 
@@ -1730,7 +1731,7 @@ bool TextfileModelLoader::loadPopulations()
 
         // input data, read migration fluxes in proportion per size group (if any)
         dout(cout << "read overall migration..." << endl);
-        vect_of_overall_migration_fluxes_mmap.at(sp) = read_overall_migration_fluxes(sparam3, sp,
+        vect_of_overall_migration_fluxes_mmap.at(sp) = read_overall_migration_fluxes(semester, sp,
                                                                                      p->folder_name_parameterization,
                                                                                      p->inputfolder,
                                                                                      model().scenario().biolsce);
@@ -1789,75 +1790,384 @@ bool TextfileModelLoader::loadPopulations()
     loadedData.vectsparam2 = type_of_avai_field_to_read;
 
 
-    for (unsigned int i = 0; i < model().nodes().size(); i++) {
-        model().nodes().at(i)->init_Ns_pops_at_szgroup(iparam1, iparam3);
-        model().nodes().at(i)->init_avai_pops_at_selected_szgroup(iparam1, iparam4);
+    if (model().month()==1) {
+
+
+        for (unsigned int i = 0; i < model().nodes().size(); i++) {
+            model().nodes().at(i)->init_Ns_pops_at_szgroup(iparam1, iparam3);
+            model().nodes().at(i)->init_avai_pops_at_selected_szgroup(iparam1, iparam4);
+        }
+
+
+
+        auto populations = vector<Population*>(model().config().nbpops);
+        vector<double> global_quotas_uptake;
+
+        for (unsigned int sp = 0; sp < populations.size(); sp++) {
+            dout(cout << endl);
+
+
+            cout << " create pop... " << endl;
+            populations[sp] = new Population(sp,
+                loadedData.vectsparam1.at(sp),
+                loadedData.vectdparam1.at(sp),
+                loadedData.vectdparam2.at(sp),
+                loadedData.vectdparam3.at(sp),
+                loadedData.vectdparam4.at(sp),
+                loadedData.vectdparam5.at(sp),
+                loadedData.vovi1.at(sp),
+                loadedData.vovd1.at(sp),
+                loadedData.vovd2.at(sp),
+                loadedData.vovd3.at(sp),
+                loadedData.vovd4.at(sp),
+                loadedData.vovi2.at(sp),
+                loadedData.vovd5.at(sp),
+                loadedData.vovd6.at(sp),
+                loadedData.vovd7.at(sp),
+                loadedData.vovd8.at(sp),
+                loadedData.vectmmapndparam1.at(sp),
+                loadedData.vectmmapndparam2.at(sp),
+                loadedData.vectmapndparam1.at(sp),
+                loadedData.vectmmapidparam1.at(sp),
+                loadedData.vectmapsdparam1.at(sp),
+                loadedData.vovovd2.at(sp),
+                loadedData.vovovd3.at(sp),
+                loadedData.vovovd1.at(sp),
+                model().nodes(),
+                loadedData.vovd9.at(sp),
+                loadedData.vovd10.at(sp),
+                loadedData.mapiiparam1.at(sp),
+                loadedData.mapidparam1.at(sp),
+                loadedData.vectdparam6.at(sp),
+                loadedData.vectdparam7.at(sp)
+            );
+
+
+            cout << " Population creator()...done " << endl;
+
+            global_quotas_uptake.push_back(0.0);
+
+
+            if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), sp)) {
+                outc(cout << "inform avai on nodes " << endl);
+
+                outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
+                // init avai on each node (we know the presence...) for this pop for selected szgroup
+                vector<types::NodeId> nodes_with_presence = loadedData.vovn1.at(sp);
+                multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(sp);
+
+                for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                    dout(cout << ".");
+                    auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
+                        nodes_with_presence.at(n));
+
+                    vector<double> spat_avai_per_selected_szgroup;
+                    vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
+                    for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
+                        auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
+                        if (it != selected_szgroups.end()) {
+                            spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                        }
+                    }
+                    if (!spat_avai_per_selected_szgroup.empty()) {
+                        model().nodes().at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
+                            spat_avai_per_selected_szgroup);
+                    }
+                    else {
+                        // inconsistence between lst_idx_nodes and avai files if this happen...
+                        outc(cout << nodes_with_presence.at(n));
+                    }
+
+                }
+
+                // check
+                /*
+               outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl); // used in do_catch != the one used in distributeN()
+                vector<double> avai_pops_at_selected_szgroup = nodes[792]->get_avai_pops_at_selected_szgroup(sp);
+                vector<double>::iterator szgroup = avai_pops_at_selected_szgroup.begin();
+                for( ; szgroup != avai_pops_at_selected_szgroup.end(); szgroup++)
+                {
+                   outc(cout << *szgroup << " " );
+                }
+               outc(cout << endl);
+
+                // check
+               outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl);
+                vector<double> tot_N_at_szgroup = populations[sp]->get_tot_N_at_szgroup();
+                vector<double>::iterator szgroup2 = tot_N_at_szgroup.begin();
+                for( ; szgroup2 != tot_N_at_szgroup.end(); szgroup2++)
+                {
+                   outc(cout << *szgroup << " " );
+                }
+               outc(cout << endl);
+                */
+
+                outc(cout
+                    << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
+                    << endl);
+            }                         // end implicit pop
+        }                             // end pop
+
+
+        model().setPopulations(std::move(populations));
+        model().setGlobalQuotasUptake(std::move(global_quotas_uptake));
+        model().setInitWeightPerSzgroup(std::move(init_weight_per_szgroup));
+        model().set_species_interactions_mortality_proportion_matrix(species_interactions_mortality_proportion_matrix);
+
+
+
     }
+    else
+    {
 
 
-    auto populations = vector<Population *>(model().config().nbpops);
-    vector<double> global_quotas_uptake;
+        cout << "redispatch the population over its spatial extent...." << endl;
 
-    for (unsigned int sp = 0; sp < populations.size(); sp++) {
-        dout(cout << endl);
+        // aggregate from nodes to set the tot_N_at_szgroup per pop
+        for (unsigned int sp = 0; sp < model().populations().size(); sp++) {
+            // aggregate from nodes (caution: do it before changing of list_nodes)
+            if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(),
+                sp)) {
+
+                /*
+                if(sp==1){
+                    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
+                    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                     cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                }
+                */
+                // get total N from summing up N over nodes
+                model().populations().at(sp)->aggregate_N();
+
+                /*
+                if(sp==1){
+                    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
+                    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                     cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                }
+                */
+
+            }
+        }
+        cout << "aggregate_N over all pops....done" << endl;
+
+        for (unsigned int ip = 0; ip < model().populations().size(); ip++) {
+            type_of_avai_field_to_read.push_back("");
+        }
+
+        if (model().scenario().dyn_pop_sce.option(Options::nbcpCoupling)) {
+            string a_command_for_R;
+
+            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
+                if (binary_search(model().config().nbcp_coupling_pops.begin(),
+                    model().config().nbcp_coupling_pops.end(), pp)) {
+                    type_of_avai_field_to_read.at(pp) = "_updated";
+
+                    stringstream out;
+                    out << pp;
+                    string a_pop = out.str();
+
+                    stringstream outtstep;
+                    outtstep << model().timestep();
+                    string atstep = outtstep.str();
+ #if defined(_WIN32)
+                    cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+                    a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
+                    cout << "executing " << a_command_for_R << endl;
+                    system(a_command_for_R.c_str());
+#else
+                    cout << "nbcp_coupling...done" << endl;
+                    // caution with HPC, annoying lower cases in file names and paths required!
+                    a_command_for_R =
+                        "Rscript " + inputfolder + "/interactiverscripts/nbcp_displace_coupling_part02.r " +
+                        a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
+                    system(a_command_for_R.c_str());
+#endif
+                }  // end nbcp coupling pops
+            }  // end pop
+        }
 
 
-        cout << " create pop... " << endl;
-        populations[sp] = new Population(sp,
-                                         loadedData.vectsparam1.at(sp),
-                                         loadedData.vectdparam1.at(sp),
-                                         loadedData.vectdparam2.at(sp),
-                                         loadedData.vectdparam3.at(sp),
-                                         loadedData.vectdparam4.at(sp),
-                                         loadedData.vectdparam5.at(sp),
-                                         loadedData.vovi1.at(sp),
-                                         loadedData.vovd1.at(sp),
-                                         loadedData.vovd2.at(sp),
-                                         loadedData.vovd3.at(sp),
-                                         loadedData.vovd4.at(sp),
-                                         loadedData.vovi2.at(sp),
-                                         loadedData.vovd5.at(sp),
-                                         loadedData.vovd6.at(sp),
-                                         loadedData.vovd7.at(sp),
-                                         loadedData.vovd8.at(sp),
-                                         loadedData.vectmmapndparam1.at(sp),
-                                         loadedData.vectmmapndparam2.at(sp),
-                                         loadedData.vectmapndparam1.at(sp),
-                                         loadedData.vectmmapidparam1.at(sp),
-                                         loadedData.vectmapsdparam1.at(sp),
-                                         loadedData.vovovd2.at(sp),
-                                         loadedData.vovovd3.at(sp),
-                                         loadedData.vovovd1.at(sp),
-                                         model().nodes(),
-                                         loadedData.vovd9.at(sp),
-                                         loadedData.vovd10.at(sp),
-                                         loadedData.mapiiparam1.at(sp),
-                                         loadedData.mapidparam1.at(sp),
-                                         loadedData.vectdparam6.at(sp),
-                                         loadedData.vectdparam7.at(sp)
-        );
+        if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on) ||
+            model().scenario().dyn_pop_sce.option(Options::avai_updater_on)) {
 
 
-        cout << " Population creator()...done " << endl;
+            // alter the availability field, if required
+            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
+                if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(),
+                    pp)) {
+                    stringstream out;
+                    out << pp;
+                    string a_pop = out.str();
 
-        global_quotas_uptake.push_back(0.0);
+                    stringstream out2;
+                    out2 << model().scenario().nrow_coord;
+                    string a_nrow_coord = out2.str();
+
+                    string a_command;
+                    string a_command_for_R;
+                    stringstream outtstep;
+                    outtstep << model().timestep();
+                    string atstep = outtstep.str();
+                    // the system command line
+#if defined(_WIN32)
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
+                        // note that nothing is done before end of 1st month (745) to get enough catch data for an update
+                        type_of_avai_field_to_read.at(pp) = "_updated";
+                        //system("dir");
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        cout
+                            << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?"
+                            << endl;
+                        a_command_for_R =
+                            "Rscript .\\interactiverscripts\\input2avaiupdater.r " + a_pop + " " + atstep +
+                            " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
+                        //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
+                        cout << "look after " << a_command_for_R << endl;
+                        cout << "This supposes StockId " << a_pop
+                            << " is informed in displace_input_for_data_merger.csv input file" << endl;
+                        system(a_command_for_R.c_str());
+                        a_command = "avaifieldupdater.exe -tstep " + atstep + " -f " + p->folder_name_parameterization + " -a " +
+                            p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
+                            model().scenario().a_graph_name + " -nr " + a_nrow_coord + " -dist 15 -shepard_p 0.5";
+                        cout << "look after " << a_command
+                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                        system(a_command.c_str());
+                    }
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                        type_of_avai_field_to_read.at(pp) = "_shuffled";
+                        a_command = "avaifieldshuffler.exe -f " + p->folder_name_parameterization + " -s " +
+                            std::to_string(model().semester()) + " -p " + a_pop;
+                        cout << "look after " << a_command
+                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                        system(a_command.c_str());
+                    }
+#else
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
+                        type_of_avai_field_to_read.at(p) = "_updated";
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        a_command_for_R =
+                            "Rscript " + inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
+                            " " + atstep + " " + namefolderoutput + " " + namesimu + " " + model().scenario().a_graph_name;
+                        system(a_command_for_R.c_str());
+                        a_command =
+                            inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + p->folder_name_parameterization +
+                            " -a " + inputfolder + " -s " + modelLoader->semesterString() + " -graph " +
+                            model().scenario().a_graph_name +
+                            " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
+                        system(a_command.c_str());
+                    }
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                        a_command = inputfolder + "/avaifieldshufflertool -f " + p->folder_name_parameterization + " -s " +
+                            modelLoader->semesterString() + " -p " + a_pop;
+                        system(a_command.c_str());
+                    }
+                    cout << "avaifieldshuffler...done" << endl;
+#endif
+
+                }
+            }
+        }
 
 
-        if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), sp)) {
-            outc(cout << "inform avai on nodes " << endl);
+        // then, clean up all nodes before changing of spatial avai
+        // (necessary to remove any fish in now wrong locations)
+        cout << "clear pops on nodes" << endl;
+        for (unsigned int i = 0; i < model().nodes().size(); i++) {
+            model().nodes().at(i)->clear_pop_names_on_node();
+            model().nodes().at(i)->clear_Ns_pops_at_szgroup();
+            model().nodes().at(i)->clear_avai_pops_at_selected_szgroup();
+        }
+        cout << "clear pops on nodes...done" << endl;
 
-            outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
-            // init avai on each node (we know the presence...) for this pop for selected szgroup
-            vector<types::NodeId> nodes_with_presence = loadedData.vovn1.at(sp);
-            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(sp);
+        // RE-read for simModel->populations()
+        for (unsigned int i = 0; i < model().populations().size(); i++) {
+            stringstream out;
+            out << i;
+
+            cout << "RE-read for population " << model().populations().at(i)->get_name() << " from " <<
+                p->folder_name_parameterization << " " << p->inputfolder << " " << type_of_avai_field_to_read.at(i)
+                << endl;
+
+            auto full_avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(i);
+            model().populations().at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
+
+
+            // read a other landings per node for this species (DEPRECATED - DONE AT MONTH TSTEP INSTEAD)
+            //map<int, double> oth_land= read_oth_land_nodes_with_pop(simModel->semester(), simModel->month(), i, folder_name_parameterization, inputfolder, scenario.fleetsce);
+            //simModel->populations().at(i)->set_oth_land(oth_land);
+
+            multimap<int, double> overall_migration_fluxes = loadedData.vectmmapidparam1.at(i);
+            model().populations().at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
+
+            // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
+            if (!model().scenario().dyn_pop_sce.option(Options::stop_mig_35065) || model().timestep() < 35065) {
+                model().populations().at(i)->apply_overall_migration_fluxes(model().populations());
+            }
+
+            //then, re-set the list_nodes and the pop_names_on_node
+            // from the new area distribution given by this new spatial avai
+            vector<Node*> list_nodes;
+            for (auto iter = full_avai_szgroup_nodes_with_pop.begin();
+                iter != full_avai_szgroup_nodes_with_pop.end();
+                iter = full_avai_szgroup_nodes_with_pop.upper_bound(iter->first)) {
+                list_nodes.push_back(model().nodes()[iter->first.toIndex()]);
+                model().nodes()[iter->first.toIndex()]->set_pop_names_on_node(i);
+                //   check per node
+                //   vector <int> pop_names = nodes[ iter->first ]->get_pop_names_on_node();
+                //   cout << "Node " << iter->first << endl;
+                //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
+                //   cout << endl;
+            }
+            model().populations().at(i)->set_list_nodes(list_nodes);
+
+            // add the current Ns to the vectors of vectors of the concerned nodes
+            vector<double> tot_N_at_szgroup = model().populations().at(i)->get_tot_N_at_szgroup();
+
+            /*if( simModel->populations().at(i)->get_name()==1){
+                vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
+                for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                   cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+            */
+
+
+            for (unsigned int n = 0; n < list_nodes.size(); n++) {
+                list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
+                dout(cout << list_nodes[n]->get_idx_node().toIndex() << " ");
+            }
+            dout(cout << endl);
+
+            // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
+            // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
+            // divide on nodes according to avai
+            if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(),
+                i)) {
+                model().populations().at(i)->distribute_N();
+
+                //if(simModel->populations().at(i)->get_name()==1){
+                //    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
+                //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                //}
+
+                //...and compute the Ns on nodes at the start of this month!
+                for (unsigned int n = 0; n < model().nodes().size(); n++) {
+                    model().nodes().at(n)->set_Ns_pops_at_szgroup_at_month_start(i, model().nodes().at(
+                        n)->get_Ns_pops_at_szgroup(i));
+                }
+            }
+
+
+            vector<types::NodeId> nodes_with_presence = loadedData.vovn1.at(i);
+            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(i);
 
             for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
                 dout(cout << ".");
                 auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
-                                                                 nodes_with_presence.at(n));
+                    nodes_with_presence.at(n));
 
                 vector<double> spat_avai_per_selected_szgroup;
-                vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
+                vector<int> selected_szgroups = model().populations().at(i)->get_selected_szgroups();
                 for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
                     auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
                     if (it != selected_szgroups.end()) {
@@ -1865,48 +2175,34 @@ bool TextfileModelLoader::loadPopulations()
                     }
                 }
                 if (!spat_avai_per_selected_szgroup.empty()) {
-                    model().nodes().at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
-                                                                                                               spat_avai_per_selected_szgroup);
-                } else {
+                    model().nodes().at(
+                        nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i,
+                            spat_avai_per_selected_szgroup);
+                }
+                else {
                     // inconsistence between lst_idx_nodes and avai files if this happen...
                     outc(cout << nodes_with_presence.at(n));
                 }
 
             }
 
-            // check
-            /*
-           outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl); // used in do_catch != the one used in distributeN()
-            vector<double> avai_pops_at_selected_szgroup = nodes[792]->get_avai_pops_at_selected_szgroup(sp);
-            vector<double>::iterator szgroup = avai_pops_at_selected_szgroup.begin();
-            for( ; szgroup != avai_pops_at_selected_szgroup.end(); szgroup++)
-            {
-               outc(cout << *szgroup << " " );
-            }
-           outc(cout << endl);
 
-            // check
-           outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl);
-            vector<double> tot_N_at_szgroup = populations[sp]->get_tot_N_at_szgroup();
-            vector<double>::iterator szgroup2 = tot_N_at_szgroup.begin();
-            for( ; szgroup2 != tot_N_at_szgroup.end(); szgroup2++)
-            {
-               outc(cout << *szgroup << " " );
-            }
-           outc(cout << endl);
-            */
+        }
 
-            outc(cout
-                         << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
-                         << endl);
-        }                         // end implicit pop
-    }                             // end pop
+        dout(cout << "re-read data for this period...OK" << endl);
 
 
-    model().setPopulations(std::move(populations));
-    model().setGlobalQuotasUptake(std::move(global_quotas_uptake));
-    model().setInitWeightPerSzgroup(std::move(init_weight_per_szgroup));
-    model().set_species_interactions_mortality_proportion_matrix(species_interactions_mortality_proportion_matrix);
+
+
+
+    }
+
+
+
+
+
+
+
 
     return true;
 }

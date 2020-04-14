@@ -1979,7 +1979,7 @@ bool TextfileModelLoader::loadPopulations()
                     cout << "nbcp_coupling...done" << endl;
                     // caution with HPC, annoying lower cases in file names and paths required!
                     a_command_for_R =
-                        "Rscript " + inputfolder + "/interactiverscripts/nbcp_displace_coupling_part02.r " +
+                        "Rscript " + p->inputfolder + "/interactiverscripts/nbcp_displace_coupling_part02.r " +
                         a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
                     system(a_command_for_R.c_str());
 #endif
@@ -2047,19 +2047,19 @@ bool TextfileModelLoader::loadPopulations()
                         type_of_avai_field_to_read.at(p) = "_updated";
                         // caution with HPC, annoying lower cases in file names and paths required!
                         a_command_for_R =
-                            "Rscript " + inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
-                            " " + atstep + " " + namefolderoutput + " " + namesimu + " " + model().scenario().a_graph_name;
+                            "Rscript " + p->inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
+                            " " + atstep + " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
                         system(a_command_for_R.c_str());
                         a_command =
-                            inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + p->folder_name_parameterization +
-                            " -a " + inputfolder + " -s " + modelLoader->semesterString() + " -graph " +
+                            p->inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " + p->folder_name_parameterization +
+                            " -a " + p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
                             model().scenario().a_graph_name +
                             " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
                         system(a_command.c_str());
                     }
                     if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
-                        a_command = inputfolder + "/avaifieldshufflertool -f " + p->folder_name_parameterization + " -s " +
-                            modelLoader->semesterString() + " -p " + a_pop;
+                        a_command = p->inputfolder + "/avaifieldshufflertool -f " + p->folder_name_parameterization + " -s " +
+                            std::to_string(model().semester()) + " -p " + a_pop;
                         system(a_command.c_str());
                     }
                     cout << "avaifieldshuffler...done" << endl;

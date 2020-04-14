@@ -2044,7 +2044,7 @@ bool TextfileModelLoader::loadPopulations()
                     }
 #else
                     if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
-                        type_of_avai_field_to_read.at(p) = "_updated";
+                        type_of_avai_field_to_read.at(pp) = "_updated";
                         // caution with HPC, annoying lower cases in file names and paths required!
                         a_command_for_R =
                             "Rscript " + p->inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +

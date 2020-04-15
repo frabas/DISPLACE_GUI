@@ -16,9 +16,6 @@ include_directories(
 
 set(SOURCES
         commons_global.h
-        dataloader.h
-        dataloadermetiers.h
-        dataloadermetiers.cpp
         diffusion.cpp
         readdata.cpp
         myutils.cpp

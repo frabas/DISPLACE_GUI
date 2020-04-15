@@ -156,10 +156,6 @@ using namespace sqlite;
 #include "myutils.h"
 #include <memoryinfo.h>
 
-#include "dataloader.h"
-#include "dataloadermetiers.h"
-
-
 #ifdef PROFILE
 #include <profiler.h>
 #endif
@@ -266,8 +262,6 @@ vector<int> listVesselIdForLogLikeToExport;
 vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
 
 std::shared_ptr<sql::Storage> indb;
-
-ParamsForLoad paramsForLoad;
 
 #ifdef NO_IPC
 #include <messages/noipc.h>
@@ -810,17 +804,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    Loader *l = new Loader;
-
-    //LoadedData loadedDataBenthos;
-
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
-
     benthoss = modelLoader->loadBenthos(scenario.dyn_pop_sce, scenario.dyn_alloc_sce, scenario.biolsce,
                                         scenario.fleetsce);
 
@@ -830,16 +813,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
-
     // TODO do not ignore return values?
     modelLoader->loadFishFarms();
-
 
     for (auto fishfarm: simModel->fishfarms()) {
         if (outSqlite) {
@@ -855,13 +830,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << " WINDMILLS-RELATED STUFFS " << endl);
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
-
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
 
     // TODO do not ignore return values, or remove them
     modelLoader->loadWindmills();
@@ -1278,14 +1246,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
-
     modelLoader->loadMetiers();
 
     dout(cout << "---------------------------" << endl);
@@ -1293,14 +1253,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << " SHIP-RELATED STUFFS       " << endl);
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
-
-
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
 
     modelLoader->loadShips();
 
@@ -1313,14 +1265,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #ifdef PROFILE
     mLoadProfile.start();
 #endif
-
-
-    paramsForLoad.sparam1 = std::to_string(simModel->month());
-    paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-    paramsForLoad.sparam3 = std::to_string(simModel->semester());
-    paramsForLoad.iparam1 = simModel->config().nbpops;
-    paramsForLoad.iparam2 = NBAGE;
-    paramsForLoad.iparam3 = NBSZGROUP;
 
     modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
     for (auto vessel: simModel->vessels()) {
@@ -2243,13 +2187,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-            paramsForLoad.sparam1 = std::to_string(simModel->month());
-            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-            paramsForLoad.sparam3 = std::to_string(simModel->semester());
-            paramsForLoad.iparam1 = simModel->config().nbpops;
-            paramsForLoad.iparam2 = NBAGE;
-            paramsForLoad.iparam3 = NBSZGROUP;
-
             modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
 
             // RE-read for metiers
@@ -2289,30 +2226,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (redispatch_the_pop)     // EVENT => re-read pop data
         {
 
-            paramsForLoad.sparam1 = std::to_string(simModel->month());
-            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-            paramsForLoad.sparam3 = std::to_string(simModel->semester());
-            paramsForLoad.iparam1 = simModel->config().nbpops;
-            paramsForLoad.iparam2 = NBAGE;
-            paramsForLoad.iparam3 = NBSZGROUP;
-            paramsForLoad.iparam4 = SEL_NBSZGROUP;
-            paramsForLoad.vdparam1 = simModel->config().calib_cpue_multiplier;
-            paramsForLoad.vdparam2 = simModel->config().calib_weight_at_szgroup;
-
-            LoadedData loadedDataPops;
-
             cout << "Reload population data" << endl;
-           // Dataloaderpops pprl;
-           // l->loadFeatures(&pprl,
-           //                 indb,
-           //                 folder_name_parameterization,
-           //                 inputfolder,
-           //                 scenario.dyn_pop_sce,
-           //                 scenario.dyn_alloc_sce,
-           //                 scenario.biolsce,
-           //                 scenario.fleetsce,
-           //                 paramsForLoad,
-           //                 loadedDataPops);
+
             modelLoader->loadPopulations();
 
 

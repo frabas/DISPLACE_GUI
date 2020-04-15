@@ -536,7 +536,7 @@ int app_main(int argc, char const *argv[])
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
 
-    auto simModel = std::make_shared<SimModel>();
+    auto simModel = std::make_shared<SimModel>(namesimu);
 
     memInfo.update();
     guiSendMemoryInfo(memInfo);

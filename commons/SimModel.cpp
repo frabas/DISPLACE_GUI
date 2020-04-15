@@ -8,6 +8,8 @@
 #include "shortestpath/GeoGraph.h"
 
 struct SimModel::Impl {
+    std::string namesimu;
+
     TimeStep tstep;
     int month = 0, quarter = 0, semester = 0;
 
@@ -42,10 +44,15 @@ struct SimModel::Impl {
     bool is_resuspension_effect_on_benthos;
 };
 
-SimModel::SimModel()
+SimModel::SimModel(std::string n)
         : p(spimpl::make_unique_impl<Impl>())
 {
+    p->namesimu = std::move(n);
+}
 
+std::string const &SimModel::nameSimu() const
+{
+    return p->namesimu;
 }
 
 void SimModel::setConfig(std::unique_ptr<displace::commons::Config> config)
@@ -394,3 +401,4 @@ void SimModel::initRandom(std::string const &namesimu)
     // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
     srand(a_seed);
 }
+

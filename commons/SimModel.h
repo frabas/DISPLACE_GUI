@@ -46,7 +46,9 @@ class SimModel {
     struct Impl;
     spimpl::unique_impl_ptr<Impl> p;
 public:
-    SimModel();
+    explicit SimModel(std::string namesimu);
+
+    std::string const &nameSimu() const;
 
     void initRandom(std::string const &namesimu);
 

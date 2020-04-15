@@ -1379,10 +1379,413 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
 }
 
 
-
-
-
 string getLastErrorMessage()
 {
     return error_msg;
 }
+
+
+multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/met_target_names.dat";
+
+    ifstream file_metier_target_stocks;
+    file_metier_target_stocks.open(filename.c_str());
+    if (file_metier_target_stocks.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, int> metier_target_stocks;
+    fill_multimap_from_specifications_i_i(file_metier_target_stocks, metier_target_stocks);
+    file_metier_target_stocks.close();
+
+    return (metier_target_stocks);
+}
+
+multimap<int, int>
+read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_suitable_seabottomtypes.dat";
+
+    ifstream file_metier_suitable_seabottomtypes;
+    file_metier_suitable_seabottomtypes.open(filename.c_str());
+    if (file_metier_suitable_seabottomtypes.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, int> metier_suitable_seabottomtypes;
+    fill_multimap_from_specifications_i_i(file_metier_suitable_seabottomtypes, metier_suitable_seabottomtypes);
+    file_metier_suitable_seabottomtypes.close();
+
+    return (metier_suitable_seabottomtypes);
+}
+
+
+// FOR METIER
+map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/combined_met_types.dat";
+
+    ifstream metier_types;
+    metier_types.open(filename.c_str());
+    if (metier_types.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, int> met_types;
+    fill_map_from_specifications_i_i(metier_types, met_types, folder_name_parameterization);
+    metier_types.close();
+
+    return (met_types);
+}
+
+
+// FOR METIER
+map<int, double> read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/percent_revenue_completenesses.dat";
+
+    ifstream metier_percent_revenue_completenesses;
+    metier_percent_revenue_completenesses.open(filename.c_str());
+    if (metier_percent_revenue_completenesses.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, double> percent_revenue_completenesses;
+    fill_map_from_specifications_i_d(metier_percent_revenue_completenesses, percent_revenue_completenesses,
+                                     folder_name_parameterization);
+    metier_percent_revenue_completenesses.close();
+
+    return (percent_revenue_completenesses);
+}
+
+
+// FOR METIER
+map<int, double> read_metiers_fspeed(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_fspeed.dat";
+
+    ifstream metier_fspeed;
+    metier_fspeed.open(filename.c_str());
+    if (metier_fspeed.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, double> fspeed;
+    fill_map_from_specifications_i_d(metier_fspeed, fspeed, folder_name_parameterization);
+    metier_fspeed.close();
+
+    return (fspeed);
+}
+
+
+// FOR METIER
+map<int, double> read_gear_widths_param_a(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_gear_widths_param_a.dat";
+
+    ifstream metier_gear_widths_param_a;
+    metier_gear_widths_param_a.open(filename.c_str());
+    if (metier_gear_widths_param_a.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+
+    //cout << "here:" << filename << endl;
+
+    map<int, double> gear_widths_param_a;
+    fill_map_from_specifications_i_d(metier_gear_widths_param_a, gear_widths_param_a, folder_name_parameterization);
+    metier_gear_widths_param_a.close();
+
+    //cout << "here:" << gear_widths_param_a[0] << endl;
+    //cout << "here:" << gear_widths_param_a[1] << endl;
+    //=> do not forget the heading in input files given first line is skipped
+
+
+
+    return (gear_widths_param_a);
+}
+
+
+// FOR METIER
+map<int, double> read_gear_widths_param_b(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_gear_widths_param_b.dat";
+
+    ifstream metier_gear_widths_param_b;
+    metier_gear_widths_param_b.open(filename.c_str());
+    if (metier_gear_widths_param_b.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, double> gear_widths_param_b;
+    fill_map_from_specifications_i_d(metier_gear_widths_param_b, gear_widths_param_b, folder_name_parameterization);
+    metier_gear_widths_param_b.close();
+
+    return (gear_widths_param_b);
+}
+
+
+// FOR METIER
+map<int, string> read_gear_widths_model_type(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_gear_widths_model_type.dat";
+
+    ifstream metier_gear_widths_model_type;
+    metier_gear_widths_model_type.open(filename.c_str());
+    if (metier_gear_widths_model_type.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, string> gear_widths_model_type;
+    fill_map_from_specifications_i_s(metier_gear_widths_model_type, gear_widths_model_type,
+                                     folder_name_parameterization);
+    metier_gear_widths_model_type.close();
+
+    return (gear_widths_model_type);
+}
+
+
+// FOR METIER
+multimap<int, double> read_dis_ogives(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_discards_ogives.dat";
+
+    ifstream metier_discards_ogives;
+    metier_discards_ogives.open(filename.c_str());
+    if (metier_discards_ogives.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> dis_ogives;
+    fill_multimap_from_specifications_i_d(metier_discards_ogives, dis_ogives);
+    metier_discards_ogives.close();
+
+    return (dis_ogives);
+}
+
+
+multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metierspe_betas_semester" + a_semester +
+            ".dat";
+
+    ifstream metierspe_betas_file;
+    metierspe_betas_file.open(filename.c_str());
+    if (metierspe_betas_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> metiers_betas;
+    fill_multimap_from_specifications_i_d(metierspe_betas_file, metiers_betas);
+    metierspe_betas_file.close();
+
+    return (metiers_betas);
+}
+
+multimap<int, double>
+read_discardratio_limits(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metierspe_discardratio_limits_semester" +
+            a_semester + ".dat";
+
+    ifstream discardratio_limits_file;
+    discardratio_limits_file.open(filename.c_str());
+    if (discardratio_limits_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> discardratio_limits;
+    fill_multimap_from_specifications_i_d(discardratio_limits_file, discardratio_limits);
+    discardratio_limits_file.close();
+
+    return (discardratio_limits);
+}
+
+
+multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metierspe_is_avoided_stocks_semester" +
+            a_semester + ".dat";
+
+    ifstream is_avoided_stocks_file;
+    is_avoided_stocks_file.open(filename.c_str());
+    if (is_avoided_stocks_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, int> is_avoided_stocks;
+    fill_multimap_from_specifications_i_i(is_avoided_stocks_file, is_avoided_stocks);
+    is_avoided_stocks_file.close();
+
+    return (is_avoided_stocks);
+}
+
+
+multimap<int, double>
+read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization,
+                                                       string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/" + a_met_s +
+                      "loss_after_one_passage_per_landscape_per_func_group.dat";
+
+    ifstream metiers_loss_after_one_passage_per_landscape_per_func_group;
+    metiers_loss_after_one_passage_per_landscape_per_func_group.open(filename.c_str());
+    if (metiers_loss_after_one_passage_per_landscape_per_func_group.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, double> metiers_loss_after_one_passage;
+    fill_multimap_from_specifications_i_d(metiers_loss_after_one_passage_per_landscape_per_func_group,
+                                          metiers_loss_after_one_passage);
+    metiers_loss_after_one_passage_per_landscape_per_func_group.close();
+
+    return (metiers_loss_after_one_passage);
+}
+
+
+multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename =
+            inputfolder + "/metiersspe_" + folder_name_parameterization + "/metierspe_mls_cat_semester" + a_semester +
+            ".dat";
+
+    ifstream metierspe_mls_cat_file;
+    metierspe_mls_cat_file.open(filename.c_str());
+    if (metierspe_mls_cat_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    multimap<int, int> metierspe_mls_cat;
+    fill_multimap_from_specifications_i_i(metierspe_mls_cat_file, metierspe_mls_cat);
+    metierspe_mls_cat_file.close();
+
+    return (metierspe_mls_cat);
+}
+
+
+vector<vector<double> > read_selectivity_per_stock_ogives(int a_met,
+                                                          int nbpops,
+                                                          int nbszgroup,
+                                                          string folder_name_parameterization,
+                                                          string inputfolder,
+                                                          string fleetsce)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization + "/" + a_met_s +
+                      "metier_selectivity_per_stock_ogives_fleetsce" + fleetsce + ".dat";
+
+    ifstream file_selectivity_per_stock_ogives;
+    file_selectivity_per_stock_ogives.open(filename.c_str());
+    if (file_selectivity_per_stock_ogives.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    vector<vector<double> > selectivity_per_stock_ogives(nbpops, vector<double>(nbszgroup));
+    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives, selectivity_per_stock_ogives)) {
+        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+    }
+
+    file_selectivity_per_stock_ogives.close();
+
+    return (selectivity_per_stock_ogives);
+}
+
+
+vector<vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpops,
+                                                                       int nbszgroup,
+                                                                       string folder_name_parameterization,
+                                                                       string inputfolder,
+                                                                       string fleetsce)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization +
+                      "/metier_selectivity_per_stock_ogives_fleetsce" + fleetsce + "_for_oth_land.dat";
+
+    ifstream file_selectivity_per_stock_ogives_for_oth_land;
+    file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
+    if (file_selectivity_per_stock_ogives_for_oth_land.fail()) {
+        vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
+        return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
+    }
+    vector<vector<double> > selectivity_per_stock_ogives_for_oth_land(nbpops, vector<double>(nbszgroup));
+    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives_for_oth_land,
+                                       selectivity_per_stock_ogives_for_oth_land)) {
+        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+    }
+
+    file_selectivity_per_stock_ogives_for_oth_land.close();
+
+    return (selectivity_per_stock_ogives_for_oth_land);
+}
+

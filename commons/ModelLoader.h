@@ -53,6 +53,8 @@ public:
 
     bool loadWindmills();
 
+    virtual void loadMetiers() = 0;
+
     bool loadNodesAndGraphs();
 
     virtual bool loadPopulations() = 0;

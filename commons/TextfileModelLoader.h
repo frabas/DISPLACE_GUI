@@ -45,6 +45,8 @@ protected:
     bool loadPopulations() override;
 
 public:
+    void loadMetiers() override;
+
     void loadCalendar() override;
 
 protected:

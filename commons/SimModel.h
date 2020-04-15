@@ -38,6 +38,8 @@ class Ship;
 
 class Windmill;
 
+class Metier;
+
 class GeoGraph;
 
 class Calendar;
@@ -111,6 +113,12 @@ public:
     std::vector<Ship *> &ships();
 
     std::vector<Ship *> const &ships() const;
+
+    void setMetiers(std::vector<Metier *> metiers);
+
+    std::vector<Metier *> &metiers();
+
+    std::vector<Metier *> const &metiers() const;
 
     void set_graph_point_code_landscape(std::vector<int> v);
 

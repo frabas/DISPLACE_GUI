@@ -26,6 +26,7 @@ struct SimModel::Impl {
     vector<Windmill *> windmills;
     vector<Vessel *> vessels;
     vector<Ship *> ships;
+    vector<Metier *> metiers;
 
     std::vector<int> graph_point_code_landscape;
     std::vector<int> graph_point_code_landscape_unique;
@@ -240,6 +241,21 @@ std::vector<Ship *> &SimModel::ships()
 std::vector<Ship *> const &SimModel::ships() const
 {
     return p->ships;
+}
+
+void SimModel::setMetiers(std::vector<Metier *> metiers)
+{
+    p->metiers = metiers;
+}
+
+std::vector<Metier *> &SimModel::metiers()
+{
+    return p->metiers;
+}
+
+std::vector<Metier *> const &SimModel::metiers() const
+{
+    return p->metiers;
 }
 
 void SimModel::setQuarter(int quarter)

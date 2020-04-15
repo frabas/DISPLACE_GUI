@@ -1270,7 +1270,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         cout << "Initial objects for sizeSpectra option...ok" << endl;
-
     }
 
     dout(cout << "---------------------------" << endl);
@@ -1287,81 +1286,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     paramsForLoad.iparam2 = NBAGE;
     paramsForLoad.iparam3 = NBSZGROUP;
 
-    LoadedData loadedDataMetiers;
-
-    Dataloadermetiers mtl;
-    l->loadFeatures(&mtl,
-                    indb,
-                    folder_name_parameterization,
-                    inputfolder,
-                    scenario.dyn_pop_sce,
-                    scenario.dyn_alloc_sce,
-                    scenario.biolsce,
-                    scenario.fleetsce,
-                    paramsForLoad,
-                    loadedDataMetiers);
-
-
-    // creation of a vector of metier from input data...
-   vector<int> name_metiers=loadedDataMetiers.vectiparam1;
-    metiers = vector<Metier *>(name_metiers.size());
-
-    for (unsigned int i = 0; i < name_metiers.size(); i++) {
-
-        cout << "Create metier " << i << endl;
-
-
-        metiers[i] = new Metier(loadedDataMetiers.vectiparam1.at(i),
-                                 loadedDataMetiers.vectiparam2.at(i),
-                                 loadedDataMetiers.vectdparam1.at(i),
-                                 loadedDataMetiers.vovovd1.at(i),
-                                 loadedDataMetiers.vovd1.at(i),
-                                 loadedDataMetiers.vovd2.at(i),
-                                 loadedDataMetiers.vovi1.at(i),
-                                 loadedDataMetiers.vovi2.at(i),
-                                 loadedDataMetiers.vectdparam2.at(i),
-                                 loadedDataMetiers.vectdparam3.at(i),
-                                 loadedDataMetiers.vectdparam4.at(i),
-                                 loadedDataMetiers.vectsparam1.at(i),
-                                 loadedDataMetiers.vectmmapidparam1.at(i),
-                                 loadedDataMetiers.vovi3.at(i),
-                                 loadedDataMetiers.vovi4.at(i));
-
-        cout << "Create metier " << i << "...done" << endl;
-
-        selectivity_per_stock_ogives_for_oth_land=loadedDataMetiers.vovd5;
-
-
-
-  }
-
-
-    // check selectivity per metier per stock
-    vector<vector<double> > selectivity_per_stock = metiers[0]->get_selectivity_per_stock_ogives();
-    for (unsigned int i = 0; i < selectivity_per_stock.size(); i++) {
-        for (unsigned int j = 0; j < selectivity_per_stock[i].size(); j++) {
-
-            cout << "pop is " << i << endl;
-            cout << "szgroup is " << j << endl;
-            cout << "selectivity_per_stock[i,j] is " << selectivity_per_stock[i][j] << endl;
-        }
-    }
-
-
-    // check metier betas
-    vector<double> met_betas = metiers[0]->get_betas_per_pop();
-    cout << "met_betas of the metier 0" << endl;
-    for (int i = 0; i < met_betas.size(); i++) {
-        cout << " " << met_betas[i] << " ";
-    }
-    cout << endl;
-
-    // check gear_width_a
-    double gear_width_a = metiers[0]->get_gear_width_a();
-    cout << "gear_width_a of the metier 0" << endl;
-    cout << " " << gear_width_a << " ";
-    cout << endl;
-
+    modelLoader->loadMetiers();
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -2329,39 +2254,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // RE-read for metiers
             cout << "re-read metiers..." << endl;
-
-            paramsForLoad.sparam1 = std::to_string(simModel->month());
-            paramsForLoad.sparam2 = std::to_string(simModel->quarter());
-            paramsForLoad.sparam3 = std::to_string(simModel->semester());
-            paramsForLoad.iparam1 = simModel->config().nbpops;
-            paramsForLoad.iparam2 = NBAGE;
-            paramsForLoad.iparam3 = NBSZGROUP;
-
-            Dataloadermetiers mrl;
-            l->loadFeatures(&mrl,
-                            indb,
-                            folder_name_parameterization,
-                            inputfolder,
-                            scenario.dyn_pop_sce,
-                            scenario.dyn_alloc_sce,
-                            scenario.biolsce,
-                            scenario.fleetsce,
-                            paramsForLoad,
-                            loadedDataMetiers);
-
-            for (unsigned int m = 0; m < metiers.size(); m++) {
-                // casting m into a string
-                //stringstream out;
-                //out << m;
-                //string a_met = "met" + out.str();
-                metiers[m]->set_betas_per_pop(loadedDataMetiers.vovd1.at(m));
-                metiers[m]->set_discardratio_limits(loadedDataMetiers.vovd2.at(m));
-                metiers[m]->set_is_avoided_stocks(loadedDataMetiers.vovi1.at(m));
-
-            }                     // end a_met
+            modelLoader->loadMetiers();
             cout << "re-read metiers...OK" << endl;
-
-
         } // END RE-READ DATA FOR VESSEL AND METIER...
 
 

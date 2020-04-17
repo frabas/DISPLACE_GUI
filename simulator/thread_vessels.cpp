@@ -132,7 +132,6 @@ extern ofstream freq_profit;
 extern ofstream freq_distance;
 extern ofstream vmslike2;
 extern ofstream vmslike3;
-extern vector<Metier *> metiers;
 extern ofstream Q_DECL_IMPORT export_individual_tacs;
 extern vector<PathShop> pathshops;
 extern ofstream fishfarmslogs;
@@ -247,7 +246,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         // ***************make a probable decision*************************
                         dout(cout << model->vessels()[index_v]->get_name() << " which_metier_should_i_go_for? "
                                   << endl);
-                        model->vessels()[index_v]->which_metier_should_i_go_for(metiers);
+                        model->vessels()[index_v]->which_metier_should_i_go_for(model->metiers());
                         dout(cout << model->vessels()[index_v]->get_name() << " should go for metier "
                                   << model->vessels()[index_v]->get_metier()->get_name() << endl);
 
@@ -275,7 +274,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                     model->scenario().dyn_alloc_sce, use_static_paths, pathshops,
                                     adjacency_map, relevant_nodes, nodes_in_polygons,
                                     model->nodes(),
-                                    metiers,
+                                    model->metiers(),
                                     freq_cpue, freq_profit, freq_distance
                             );
                             freshly_departed_from_port = 1;
@@ -314,7 +313,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         pathshops,
                         adjacency_map, relevant_nodes,
                         model->nodes(),
-                        metiers,
+                        model->metiers(),
                         freq_cpue, freq_distance,
                         dist_to_ports);
 
@@ -379,7 +378,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                 pathshops,
                                 adjacency_map, relevant_nodes, nodes_in_polygons,
                                 model->nodes(),
-                                metiers,
+                                model->metiers(),
                                 freq_cpue, freq_distance
                         );
                         outc(cout << "GOOD JOB, FISHERS! " << endl);
@@ -397,7 +396,8 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         {
                             dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
                                       << endl);
-                            model->vessels()[index_v]->do_catch(export_individual_tacs, model->populations(),
+                            model->vessels()[index_v]->do_catch(export_individual_tacs, 
+                                                                model->populations(),
                                                                 model->nodes(),
                                                                 benthoss,
                                                                 model->config().implicit_pops,
@@ -479,7 +479,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             adjacency_map,
                             relevant_nodes,
                             model->nodes(),
-                            metiers,
+                            model->metiers(),
                             freq_cpue,
                             freq_distance,
                             dist_to_ports

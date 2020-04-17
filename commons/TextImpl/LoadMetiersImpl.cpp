@@ -7,7 +7,7 @@
 #include "Metier.h"
 #include "SimModel.h"
 #include "Calendar.h"
-#include "values.h"
+#include "../simulator/values.h"
 #include "readdata.h"
 
 #include <vector>
@@ -325,7 +325,7 @@ void TextfileModelLoader::loadMetiers()
             selectivity_per_stock_ogives_for_oth_land = loadedData.vovd5;
         }
 
-        model().setMetiers(metiers);
+        model().setMetiers(std::move(metiers));
     } else {
         auto &metiers = model().metiers();
         for (unsigned int m = 0; m < metiers.size(); m++) {

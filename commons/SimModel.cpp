@@ -245,7 +245,8 @@ std::vector<Ship *> const &SimModel::ships() const
 
 void SimModel::setMetiers(std::vector<Metier *> metiers)
 {
-    p->metiers = metiers;
+    p->metiers = std::move(metiers);
+    ////p->metiers = metiers;
 }
 
 std::vector<Metier *> &SimModel::metiers()

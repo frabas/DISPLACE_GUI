@@ -1969,7 +1969,7 @@ bool TextfileModelLoader::loadPopulations()
                     string atstep = outtstep.str();
  #if defined(_WIN32)
                     cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                    a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
+                    a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
                     cout << "executing " << a_command_for_R << endl;
                     system(a_command_for_R.c_str());
 #else
@@ -2019,7 +2019,7 @@ bool TextfileModelLoader::loadPopulations()
                             << endl;
                         a_command_for_R =
                             "Rscript .\\interactiverscripts\\input2avaiupdater.r " + a_pop + " " + atstep +
-                            " " + p->folder_name_parameterization + " " + namesimu + " " + model().scenario().a_graph_name;
+                            " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
                         //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
                         cout << "look after " << a_command_for_R << endl;
                         cout << "This supposes StockId " << a_pop

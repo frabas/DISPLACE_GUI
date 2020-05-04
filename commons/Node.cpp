@@ -1338,7 +1338,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
                         dwpred.at(0) = (Wpred[0]-0)/2;
                         for (unsigned int sz=1; sz<Wpred.size(); sz++) dwpred[sz] = (Wpred[sz] + Wpred[sz-1])/2;
-                        for (unsigned int sz=Wpred.size(); sz>1; sz--) dwpred[sz] = dwpred[sz] - dwpred[sz-1];
+                        for (unsigned int sz=(Wpred.size()-1); sz>1; sz--) dwpred[sz] = dwpred[sz] - dwpred[sz-1];
 
 
                         //check
@@ -1354,8 +1354,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         {
 
 
-                                if(juveniles_diet_preference.at(j).at(kprey)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
-                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(j).at(kprey) *
+                                if(juveniles_diet_preference.at(j).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(j).at(name_pop) *
                                                        (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
                                 //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
@@ -1364,8 +1364,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         // adults
                         for (unsigned int k=mat_cats.at(j); k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
-                                if(adults_diet_preference.at(j).at(kprey)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
-                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(kprey) *
+                                if(adults_diet_preference.at(j).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(name_pop) *
                                                        (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
                                 //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;

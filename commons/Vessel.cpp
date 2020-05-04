@@ -5768,6 +5768,38 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
         }
         this->set_fgrounds_in_closed_areas(grds_in_closure);
+    
+    
+        // Nevertheless, if all nodes for this vessel are in the closed areas,
+        // then give a chance for shared_harbour knowledge to find a ground outside, 
+        // otherwise the vessel will not comply with the closure...
+        cout << this->get_name() << endl;
+        //cout << ": " << grds.size() << " : " << grds_in_closure.size() << endl;
+        if (grds.size() == grds_in_closure.size())
+        {
+            cout << "all the " << this->get_name() << " nodes are within the closed area...look at the harbour knowledge to find alternatives" << endl;
+            auto harbs = this->get_harbours();
+            auto freq_harbs = this->get_freq_harbours();
+            int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
+            auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
+            int current_metier = this->get_metier()->get_name();
+            grds = simModel.nodes().at(a_node.toIndex())->get_usual_fgrounds_this_met(current_metier);
+            freq_grds = simModel.nodes().at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(current_metier);
+            this->set_spe_fgrounds(grds); // change for later
+            this->set_spe_freq_fgrounds(freq_grds); // change for later
+            for (int i = 0; i < grds.size(); ++i)
+            {
+                if (nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                    nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class())
+                    )
+                {
+                    freq_grds_in_closure.push_back(freq_grds.at(i));
+                    grds_in_closure.push_back(grds.at(i));
+                }
+            }
+            this->set_fgrounds_in_closed_areas(grds_in_closure);
+        }
+   
     }
 
 
@@ -6253,33 +6285,44 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
-    //cout << "grds.size() is" << grds.size() << endl;
-    //cout << "freq_grds.size() is" << freq_grds.size() << endl;
-    grds_in_closure = this->get_fgrounds_in_closed_areas();
-    for(unsigned int n=0; n<grds.size(); n++)
+    
+    //cout << this->get_name() << endl;
+    for (unsigned int n = 0; n < grds.size(); n++)
     {
-        if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
-        {
-           // cout << " allo " << endl;
-            freq_grds.at(n)=1e-8; // to avoid removing if nb of grounds outside is 0
-            // but potential non-compliance if all grounds are in the closed areas....
-            // therefore put 0.0 in the last leaf if this is not the wished behaviour...
-        }
-        cumul += freq_grds.at(n);
+            if (nodes.at(grds.at(n).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                    nodes.at(grds.at(n).toIndex())->isVsizeBanned(this->get_length_class())
+                    )
+            { 
+                    freq_grds.at(n) = 1e-8; // to avoid removing if nb of grounds outside is 0
+                // but potential non-compliance if all grounds are in the closed areas....
+                // therefore put 0.0 in the last leaf if this is not the wished behaviour...
+            }
+            cumul += freq_grds.at(n);
     }
-
+    
     // then re-scale to 1
     for(unsigned int n=0; n<grds.size(); n++)
     {
         freq_grds.at(n)= freq_grds.at(n)/cumul;
     }
-
+   
     // then sample...
     dout(cout << "Possible crash here if grounds.size() " << grds.size() << " is different from freq_grds.size() " << freq_grds.size() << endl);
     auto grounds = do_sample(1, grds.size(), grds, freq_grds); // caution: will return empty vector if something wrong in input....then make a crash
     ground= types::NodeId(grounds[0]);
 
     //cout << "ground is " << ground.toIndex() << endl;
+
+    
+    /* CHECK
+    if (nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+        nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class())
+        )
+    {
+        cout << "this node " << ground.toIndex() << " is inside the closed area!" << endl;
+    }
+    */
+
 
     unlock();
     // cout << "END3 should_i_choose_this_ground for ..." << this->get_name() << endl;

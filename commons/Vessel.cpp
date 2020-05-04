@@ -3954,6 +3954,8 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
     vector <double> scost_per_fgrounds(freq_grds.size());
     vector <double> profit_per_fgrounds(freq_grds.size());
 
+    double time_to_be_full_of_catches_if_infinite_fuel_tank;
+
     // distance to all grounds (through the graph...)
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
@@ -4052,8 +4054,8 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
  //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
         //3. compute the expected cost when fishing
-        double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
-        double cpue_this_node = this->experiencedcpue_fgrounds.at(gr);
+        time_to_be_full_of_catches_if_infinite_fuel_tank=0;
+        double cpue_this_node = this->get_experiencedcpue_fgrounds().at(gr);  // experiencedcpue_fgrounds.at(gr);
         if(cpue_this_node!=0)
         {
             time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
@@ -5770,10 +5772,11 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         this->set_fgrounds_in_closed_areas(grds_in_closure);
     
     
+        //--------------EDGE CASE---------------
         // Nevertheless, if all nodes for this vessel are in the closed areas,
-        // then give a chance for shared_harbour knowledge to find a ground outside, 
-        // otherwise the vessel will not comply with the closure...
-        cout << this->get_name() << endl;
+        // then give a chance for using shared_harbour knowledge to find a ground outside, 
+        // otherwise the vessel would not comply with the closure...
+        //cout << this->get_name() << endl;
         //cout << ": " << grds.size() << " : " << grds_in_closure.size() << endl;
         if (grds.size() == grds_in_closure.size())
         {
@@ -5787,6 +5790,8 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
             freq_grds = simModel.nodes().at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(current_metier);
             this->set_spe_fgrounds(grds); // change for later
             this->set_spe_freq_fgrounds(freq_grds); // change for later
+            freq_grds_in_closure.clear();
+            grds_in_closure.clear();
             for (int i = 0; i < grds.size(); ++i)
             {
                 if (nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
@@ -5798,8 +5803,39 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                 }
             }
             this->set_fgrounds_in_closed_areas(grds_in_closure);
+        
+            // ...then apply the changes to the vessel
+                vector<vector<double> > experiencedcpue_fgrounds_per_pop(freq_grds.size(), vector<double>(simModel.config().nbpops));
+                for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++) {
+                   for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++) {
+                    experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = 1.0;
+                   }
+                }
+                multimap<types::NodeId, int> possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+                multimap<types::NodeId, double> freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+                for (unsigned int gr = 0; gr <
+                        grds.size(); ++gr) { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+                    possible_metiers_from_harbours.insert(
+                        std::make_pair(grds.at(gr), current_metier));
+                    freq_possible_metiers_from_harbours.insert(
+                        std::make_pair(grds.at(gr), 1.0));
+                }
+               this->set_experienced_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
+               this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
+               this->set_cumcatch_fgrounds(vector <double> (grds.size(), 1.0));// re-dimensioned
+               this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+               this->set_cumdiscard_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
+               this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+               this->set_cumeffort_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
+               this->set_experiencedcpue_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned
+               this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+               this->set_freq_experiencedcpue_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned
+               this->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+               this->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+               this->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
         }
-   
+        //-------------END EDGE CASE--------------------
     }
 
 
@@ -5843,10 +5879,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
         // a check
 
-        // (c++14)
-        //if ( all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
-        //   {
-
+      
         bool positive_found = false;
         for(unsigned int i=0; i<expected_profit_per_ground.size();++i)
         {

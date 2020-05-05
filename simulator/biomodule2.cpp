@@ -691,7 +691,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     if (dyn_pop_sce.option(Options::sizeSpectra))
                      {
                       try {
-                          a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp,
+                          a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, 
+                                                                                                           tstep,
                                                                                                            Ws_at_szgroup,
                                                                                                            predKernel,
                                                                                                            searchVolMat,

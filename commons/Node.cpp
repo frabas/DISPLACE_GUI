@@ -1090,7 +1090,10 @@ void Node::set_cumdiscards_per_pop(int name_pop, double newval)
 
 void Node::set_pop_names_on_node(int name_pop)
 {
-	pop_names_on_node.push_back(name_pop);
+    if (std::find(pop_names_on_node.begin(), pop_names_on_node.end(), name_pop) == pop_names_on_node.end()) {
+        pop_names_on_node.push_back(name_pop);
+
+    }
 }
 
 void Node::set_ff_names_on_node(int name_ff)
@@ -1288,6 +1291,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 
 
 void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,
+                                                                      int tstep,
                                                                       const vector<vector<double> > & Ws_at_szgroup,
                                                                       const vector<vector<vector<vector<double> > > > & predKernel,
                                                                       const vector<vector<double> > & searchVolMat,
@@ -1327,19 +1331,25 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
+    //if (tstep > 9500)     cout << "on node " << this->get_idx_node().toIndex() << endl;
 
     for (unsigned int j=0; j<spp_on_this_node.size(); j++) // loop over predator
         {
             vector <double> Npred = get_Ns_pops_at_szgroup(spp_on_this_node.at(j));
             vector <double> Wpred = Ws_at_szgroup.at(spp_on_this_node.at(j));
 
+           //      if (tstep > 9500)     cout << "loop over predator pop" << spp_on_this_node.at(j) << ",  j is " << j  << endl;
             for (unsigned int kprey=0; kprey<NBSZGROUP; kprey++)  // loop over prey sizes
             {
 
-                        dwpred.at(0) = (Wpred[0]-0)/2;
-                        for (unsigned int sz=1; sz<Wpred.size(); sz++) dwpred[sz] = (Wpred[sz] + Wpred[sz-1])/2;
-                        for (unsigned int sz=(Wpred.size()-1); sz>1; sz--) dwpred[sz] = dwpred[sz] - dwpred[sz-1];
+                //if (tstep > 9500)     cout << "for prey pop" << name_pop << ", loop over prey size kprey is " << kprey << "and dwpred.size is " << 
+                //                                   dwpred.size()  << " and Wpred.size is " << Wpred.size()  <<  endl;
 
+                dwpred.at(0) = (Wpred[0]-0)/2;
+                        for (unsigned int sz=1; sz<Wpred.size(); sz++) dwpred.at(sz) = (Wpred.at(sz) + Wpred.at(sz-1))/2;
+                        for (unsigned int sz=(Wpred.size()-1); sz>1; sz--) dwpred.at(sz) = dwpred.at(sz) - dwpred.at(sz-1);
+
+                        //if (tstep > 9500)     cout << "for prey pop" << name_pop << ", loop over prey size kprey is " << kprey << "....OK!" << endl;
 
                         //check
                         //for (unsigned int sz=0; sz<Wpred.size(); sz++){
@@ -1347,34 +1357,40 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         //}
 
 
-                        //cout << "mat_cat is " << mat_cats.at(j) << endl;
+                        //if (tstep > 9500)  cout << "mat_cat.size() is " << mat_cats.size() << "while j is " << j <<  endl;
 
                         // juveniles
                         for (unsigned int k=0; k<mat_cats.at(j); k++)  // loop over PREDATOR sizes
                         {
+                            //if (tstep > 9500)   cout << "loop over predator JUV size is " << k << endl;
 
 
-                                if(juveniles_diet_preference.at(j).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
-                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(j).at(name_pop) *
-                                                       (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
+                                if(juveniles_diet_preference.at(spp_on_this_node.at(j)).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                                   predKernel.at(spp_on_this_node.at(j)).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(spp_on_this_node.at(j)).at(name_pop) *
+                                                       (1- 0.6)* searchVolMat.at(spp_on_this_node.at(j)).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
                                 //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
+                                //if (tstep > 9500)       cout << "loop over predator JUV size is ok" << endl;
                         }
 
                         // adults
                         for (unsigned int k=mat_cats.at(j); k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
-                                if(adults_diet_preference.at(j).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
-                                                   predKernel.at(j).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(name_pop) *
-                                                       (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
+                            //if (tstep > 9500)         cout << "loop over predator ADULT size is " << k << endl;
+                            
+                            if(adults_diet_preference.at(spp_on_this_node.at(j)).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                                   predKernel.at(spp_on_this_node.at(j)).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(name_pop) *
+                                                       (1- 0.6)* searchVolMat.at(spp_on_this_node.at(j)).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
                                 //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
 
                            // assuming feeding level at 0.6
                            // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
 
+                            //if (tstep > 9500)     cout << "loop over predator ADULT size is ok " << endl;
                         }
 
+                        //if (tstep > 9500)   cout << "loop over prey size kprey is ok" << endl;
 
             }
 
@@ -1385,11 +1401,12 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
             //    for (int i=0; i<spp_on_this_node.size();++i) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop <<", predRate.at("<<j<<").at("<<i<<")  is "<< predRate.at(j).at(i)  << endl;
             //    cout  << endl;
             //}
+            //if (tstep > 9500)      cout << "loop over predator j is ok " << endl;
 
       }
 
 
-        // so...getting the M2 mortality per size group
+    // so...getting the M2 mortality per size group
         for (unsigned int kprey=0; kprey<NBSZGROUP; kprey++)  // loop over prey sizes
         {
            for (unsigned int j=0; j<spp_on_this_node.size(); j++) // loop over predator
@@ -1399,7 +1416,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
         }
 
 
-
+  
         for(unsigned int sz=0; sz<Np.size(); sz++)
         {
            // divide according to tstep (month in this case)
@@ -1413,7 +1430,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            // (the pblm with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
         }
 
-
+   
      set_Ns_pops_at_szgroup(name_pop, Np);
 
     //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);

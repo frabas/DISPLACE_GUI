@@ -1921,7 +1921,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
               amount_fish_per_y= populations.at(pop)->get_landings_at_end_of_years();
               a_unit=1; // because landings in kilo
            }
-           cout << "amount_fish_per_y.size() is " << amount_fish_per_y.size() << endl;
+           //cout << "amount_fish_per_y.size() is " << amount_fish_per_y.size() << endl;
            double amount_to= amount_fish_per_y.at(0)*a_unit;
            double numerator=0.0;
            double denominator=0.0;

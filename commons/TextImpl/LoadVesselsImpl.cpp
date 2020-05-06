@@ -263,8 +263,10 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     vector<double> opportunity_interest_rates;
     vector<double> annual_discount_rates;
 
-    cout << "read_vessels_economic_features() in loadVesselsImpl()" << endl;
-    if (!read_vessels_economics_features(
+    if (quarter == 1)
+    { // annual data
+        cout << "read_vessels_economic_features() in loadVesselsImpl()" << endl;
+        if (!read_vessels_economics_features(
             vesselids,
             this_vessel_nb_crews,
             annual_other_incomes,
@@ -280,11 +282,12 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
             opportunity_interest_rates,
             annual_discount_rates,
             fname, folder
-    )) {
-        std::cerr << "Cannot read vessel economic features.\n";
-        throw std::runtime_error("Cannot read vessel economic features");
-    }
+        )) {
+            std::cerr << "Cannot read vessel economic features.\n";
+            throw std::runtime_error("Cannot read vessel economic features");
+        }
 
+    }
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -621,7 +624,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
     auto quarterString = std::to_string(quarter);
     auto semesterString = std::to_string(semester);
 
-    cout << "reloadVessels()....OK" << endl;
+    cout << "reloadVessels()...." << endl;
     auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder);
 
     // LOOP OVER VESSELS

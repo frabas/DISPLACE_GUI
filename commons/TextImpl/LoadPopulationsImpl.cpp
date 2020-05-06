@@ -1587,20 +1587,26 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_avai7_beta_v.at(sp) = pos->second;
 
         // initial selected szgroups
-        multimap<int, int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
-        multimap<int, int>::iterator upper_init_selsz = selected_szgroups.upper_bound(sp);
-        for (multimap<int, int>::iterator pos = lower_init_selsz; pos != upper_init_selsz; pos++)
-            // convert in thousands
-            vect_of_init_selected_szgroups_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
+            multimap<int, int>::iterator upper_init_selsz = selected_szgroups.upper_bound(sp);
+            for (multimap<int, int>::iterator pos = lower_init_selsz; pos != upper_init_selsz; pos++)
+                // convert in thousands
+                vect_of_init_selected_szgroups_vov.at(sp).push_back(pos->second);
+        }
 
         // initial N for this particular pop
-        multimap<int, double>::iterator lower_init = init_pops_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init; pos != upper_init; pos++)
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init = init_pops_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init; pos != upper_init; pos++)
+                // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
+                vect_of_init_tot_N_per_szgroup_vov.at(sp).push_back(pos->second * 1000);
             // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
-            vect_of_init_tot_N_per_szgroup_vov.at(sp).push_back(pos->second * 1000);
-        // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
-        cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
+            cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
+        }
 
         // initial prop_migrants for this particular pop
         multimap<int, double>::iterator lower_init_migrants = init_prop_migrants_pops_per_szgroup.lower_bound(sp);
@@ -1610,47 +1616,60 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_init_prop_migrants_in_N_per_szgroup_vov.at(sp).push_back(pos->second);
 
         // initial fecundity for this particular pop
-        multimap<int, double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init_fec; pos != upper_init_fec; pos++)
-            vect_of_init_fecundity_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init_fec; pos != upper_init_fec; pos++)
+                vect_of_init_fecundity_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
         // initial maturity for particular this pop
-        multimap<int, double>::iterator lower_init_ma = init_maturity_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init_ma = init_maturity_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init_ma; pos != upper_init_ma; pos++)
-            vect_of_init_maturity_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init_ma = init_maturity_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init_ma = init_maturity_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init_ma; pos != upper_init_ma; pos++)
+                vect_of_init_maturity_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
         // initial weight for this particular pop
-        multimap<int, double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init_we; pos != upper_init_we; pos++)
-            vect_of_init_weight_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init_we; pos != upper_init_we; pos++)
+                vect_of_init_weight_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
         // initial comcat for this particular pop
-        multimap<int, int>::iterator lower_init_cc = init_comcat_per_szgroup.lower_bound(sp);
-        multimap<int, int>::iterator upper_init_cc = init_comcat_per_szgroup.upper_bound(sp);
-        for (multimap<int, int>::iterator pos = lower_init_cc; pos != upper_init_cc; pos++)
-            vect_of_init_comcat_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, int>::iterator lower_init_cc = init_comcat_per_szgroup.lower_bound(sp);
+            multimap<int, int>::iterator upper_init_cc = init_comcat_per_szgroup.upper_bound(sp);
+            for (multimap<int, int>::iterator pos = lower_init_cc; pos != upper_init_cc; pos++)
+                vect_of_init_comcat_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
         // initial M for this particular pop
-        multimap<int, double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init_M; pos != upper_init_M; pos++)
-            vect_of_init_M_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init_M; pos != upper_init_M; pos++)
+                vect_of_init_M_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
         // initial proprecru for this particular pop
-        multimap<int, double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(sp);
-        multimap<int, double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(sp);
-        for (multimap<int, double>::iterator pos = lower_init_proprecru; pos != upper_init_proprecru; pos++)
-            vect_of_init_proprecru_per_szgroup_vov.at(sp).push_back(pos->second);
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_init_proprecru; pos != upper_init_proprecru; pos++)
+                vect_of_init_proprecru_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
 
-        // input data, avai per szgroup on nodes and presence of the pop
-        //vect_of_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_avai_szgroup_nodes_with_pop(a_semester, sp,
-        //                                                                                               p->folder_name_parameterization,
-        //                                                                                               p->inputfolder,
-        //                                                                                               str_rand_avai_file,
-        //                                                                                               type_of_avai_field_to_read);
+      
         vect_of_full_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_full_avai_szgroup_nodes_with_pop(
                 semester, sp,
                 p->folder_name_parameterization,
@@ -1668,61 +1687,90 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
 
         // input data
-        if (model().scenario().dyn_pop_sce.option(Options::diffusePopN)) {
-            cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
-            vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp) = read_field_of_coeff_diffusion_this_pop(semester, sp,
-                                                                                                           p->folder_name_parameterization,
-                                                                                                           p->inputfolder,
-                                                                                                           model().scenario().biolsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            if (model().scenario().dyn_pop_sce.option(Options::diffusePopN)) {
+                cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
+                vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp) = read_field_of_coeff_diffusion_this_pop(semester, sp,
+                    p->folder_name_parameterization,
+                    p->inputfolder,
+                    model().scenario().biolsce);
+            }
         }
 
         // input data, read a other landings per node for this species
-        vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
-                                                                   p->folder_name_parameterization, p->inputfolder,
-                                                                   model().scenario().fleetsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
+                p->folder_name_parameterization, p->inputfolder,
+                model().scenario().fleetsce);
+        }
 
-        vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
-                                                                                 p->folder_name_parameterization,
-                                                                                 p->inputfolder);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
+                p->folder_name_parameterization,
+                p->inputfolder);
+        }
 
         // input data, growth transition, percent_szgroup_per_age_matrix
-        vect_of_growth_transition_matrix_vov.at(sp) = read_growth_transition_matrix(sp, iparam3,
-                                                                                    p->folder_name_parameterization,
-                                                                                    p->inputfolder,
-                                                                                    model().scenario().biolsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_growth_transition_matrix_vov.at(sp) = read_growth_transition_matrix(sp, iparam3,
+                p->folder_name_parameterization,
+                p->inputfolder,
+                model().scenario().biolsce);
+        }
+        
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_percent_szgroup_per_age_matrix_vov.at(sp) = read_percent_szgroup_per_age_matrix(sp, iparam3,
+                iparam2,
+                p->folder_name_parameterization,
+                p->inputfolder,
+                model().scenario().biolsce);
+        }
 
-        vect_of_percent_szgroup_per_age_matrix_vov.at(sp) = read_percent_szgroup_per_age_matrix(sp, iparam3,
-                                                                                                iparam2,
-                                                                                                p->folder_name_parameterization,
-                                                                                                p->inputfolder,
-                                                                                                model().scenario().biolsce);
-
-        vect_of_percent_age_per_szgroup_matrix_vov.at(sp) = read_percent_age_per_szgroup_matrix(sp, iparam3,
-                                                                                                iparam2,
-                                                                                                p->folder_name_parameterization,
-                                                                                                p->inputfolder,
-                                                                                                model().scenario().biolsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_percent_age_per_szgroup_matrix_vov.at(sp) = read_percent_age_per_szgroup_matrix(sp, iparam3,
+                iparam2,
+                p->folder_name_parameterization,
+                p->inputfolder,
+                model().scenario().biolsce);
+        }
 
         // input data, parameter for stock-recruitment relationship
-        vect_of_param_sr_v.at(sp) = read_param_sr(sp, p->folder_name_parameterization, p->inputfolder,
-                                                  model().scenario().biolsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_param_sr_v.at(sp) = read_param_sr(sp, p->folder_name_parameterization, p->inputfolder,
+                model().scenario().biolsce);
+        }
 
         // input data, fbar ages
-        vect_of_fbar_ages_min_max_and_ftarget_this_pop_v.at(sp) = read_fbar_ages_min_max_and_ftarget(sp,
-                                                                                                     p->folder_name_parameterization,
-                                                                                                     p->inputfolder,
-                                                                                                     model().scenario().biolsce);
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_fbar_ages_min_max_and_ftarget_this_pop_v.at(sp) = read_fbar_ages_min_max_and_ftarget(sp,
+                p->folder_name_parameterization,
+                p->inputfolder,
+                model().scenario().biolsce);
+        }
 
         // input data, initial tac
-        vect_of_tac_this_pop.at(sp) = read_initial_tac(sp, p->folder_name_parameterization, p->inputfolder);
-        cout << "initial tac has been read correctly" << endl;
+        if (a_year == 1 && model().month() == 1)
+        {
+            vect_of_tac_this_pop.at(sp) = read_initial_tac(sp, p->folder_name_parameterization, p->inputfolder);
+            cout << "initial tac has been read correctly" << endl;
+        }
 
-
-        if (model().scenario().dyn_alloc_sce.option(Options::TACs) && vect_of_tac_this_pop.at(sp).at(0) == 0) {
-            cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp
-                 << "and potentially other pops..." << endl;
-            cout << "a fake, non binding value is filled in for now" << endl;
-            vect_of_tac_this_pop.at(sp).at(0) = 100000; // tons
+        if (a_year == 1 && model().month() == 1)
+        {
+            if (model().scenario().dyn_alloc_sce.option(Options::TACs) && vect_of_tac_this_pop.at(sp).at(0) == 0) {
+                cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp
+                    << "and potentially other pops..." << endl;
+                cout << "a fake, non binding value is filled in for now" << endl;
+                vect_of_tac_this_pop.at(sp).at(0) = 100000; // tons
+            }
         }
 
 
@@ -1735,8 +1783,10 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         dout(cout << "overall migration has been read correctly" << endl);
 
 
-        landings_so_far.push_back(1.0);
-
+        if (a_year == 1 && model().month() == 1)
+        {
+            landings_so_far.push_back(1.0);
+        }
 
     }
 

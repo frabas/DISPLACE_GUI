@@ -1266,7 +1266,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     mLoadProfile.start();
 #endif
 
-    modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
+    modelLoader->loadVessels(1, simModel->month(), simModel->quarter(), simModel->semester());
     for (auto vessel: simModel->vessels()) {
         if (enable_sqlite_out) {
             outSqlite->getVesselDefTable()->feedVesselsDefTable(vessel);
@@ -2177,7 +2177,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             //   if(simModel->timestep()==3 || simModel->timestep()==4) // use this to start from another quarter if test...
         {
 
-            cout << "a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
+            cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
 
             // RE-READ VESSEL DATA
             // fill in with new input files for fgrounds and harbours, etc.
@@ -2187,7 +2187,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-            modelLoader->loadVessels(simModel->month(), simModel->quarter(), simModel->semester());
+            modelLoader->loadVessels(a_year, simModel->month(), simModel->quarter(), simModel->semester());
 
             // RE-read for metiers
             cout << "re-read metiers..." << endl;
@@ -2619,19 +2619,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
 
                 // 2 - Re-init vessel total credits
-                tout(cout << "Re-init vessel total credits..." << endl);
-                for (auto vessel : simModel->vessels()) {
-                    dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
-                    vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
-                    for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
-                        spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
-                    }
+               // tout(cout << "Re-init vessel total credits..." << endl);
+               // for (auto vessel : simModel->vessels()) {
+               //     dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
+               //     vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
+               //     for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
+               //         spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
+               //     }
 
                     // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-                    while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
+               //     while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
 
-                    vessel->set_fishing_credits(spe_fishing_credits);
-                }
+               //     vessel->set_fishing_credits(spe_fishing_credits);
+               // }
             }
 
 

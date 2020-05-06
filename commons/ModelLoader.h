@@ -47,7 +47,7 @@ public:
 
     virtual void loadShips() = 0;
 
-    virtual void loadVessels(int month, int quarter, int semester) = 0;
+    virtual void loadVessels(int year, int month, int quarter, int semester) = 0;
 
     bool loadFishFarms();
 

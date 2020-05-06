@@ -263,7 +263,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     vector<double> opportunity_interest_rates;
     vector<double> annual_discount_rates;
 
-    cout << "read_vessels_economic_features() in loadVessels()" << endl;
+    cout << "read_vessels_economic_features() in loadVesselsImpl()" << endl;
     if (!read_vessels_economics_features(
             vesselids,
             this_vessel_nb_crews,
@@ -621,7 +621,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
     auto quarterString = std::to_string(quarter);
     auto semesterString = std::to_string(semester);
 
-    cout << "re-read loadedDataVessels setting this month....OK" << endl;
+    cout << "reloadVessels()....OK" << endl;
     auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder);
 
     // LOOP OVER VESSELS
@@ -665,7 +665,27 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         if (model.is_tacs()) {
             spe_percent_tac_per_pop = find_entries_s_d(loadedDataVessels.mmapsdparam5, vesselids.at(v));
         }
-        auto reloaded_fcredits = loadedDataVessels.mmapsdparam6;
+       
+        if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits))
+        {
+            if (model.calendar().isFirstDayOfYear(model.timestep())) {
+                cout << "Re-read fishing credits for this vessel " << loadedDataVessels.vectsparam1.at(v) << endl;
+                auto spe_fishing_credits = find_entries_s_d(loadedDataVessels.mmapsdparam6, loadedDataVessels.vectsparam1.at(v));
+                for (int icr = 0; icr < spe_fishing_credits.size(); ++icr)
+                {
+                    spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * model.scenario().total_amount_credited;
+
+
+                }
+                // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
+                while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
+                cout << "Fishing credits 0 for this vessel " << loadedDataVessels.vectsparam1.at(v) << " is "
+                    << spe_fishing_credits.at(0) << endl;
+
+                vessel->set_fishing_credits(spe_fishing_credits);
+            }
+        }
+
 
         // correct if missing harbour for this quarter
         if (spe_harbours.empty()) {
@@ -896,9 +916,9 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
 
 }
 
-void TextfileModelLoader::loadVessels(int month, int quarter, int semester)
+void TextfileModelLoader::loadVessels(int year, int month, int quarter, int semester)
 {
-    if (month == 1) {
+    if (year==1 && month == 1) {
         ::loadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester);
     } else {
         ::reloadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester);

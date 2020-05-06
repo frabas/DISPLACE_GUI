@@ -57,7 +57,7 @@ public:
 
     bool loadNodesAndGraphs();
 
-    virtual bool loadPopulations() = 0;
+    virtual bool loadPopulations(int year) = 0;
 
     struct BenthosData {
         int int1;

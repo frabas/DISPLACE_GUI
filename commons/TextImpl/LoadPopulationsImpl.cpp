@@ -1395,7 +1395,7 @@ read_fbar_ages_min_max_and_ftarget(int a_pop, string folder_name_parameterizatio
     return (fbar_ages_min_max);
 }
 
-bool TextfileModelLoader::loadPopulations()
+bool TextfileModelLoader::loadPopulations(int a_year)
 {
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, p->folder_name_parameterization, p->inputfolder);
@@ -1787,7 +1787,8 @@ bool TextfileModelLoader::loadPopulations()
     loadedData.vectsparam2 = type_of_avai_field_to_read;
 
 
-    if (model().month()==1) {
+    // create Populations only once, i.e. at y1 m1
+    if (a_year==1 && model().month()==1) {
 
 
         for (unsigned int i = 0; i < model().nodes().size(); i++) {

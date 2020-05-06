@@ -392,8 +392,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setFreqUpdateTariffCode(scenario.freq_update_tariff_code);
     s.setUpdateTariffsBasedOnLpueOrDpueCode (scenario.update_tariffs_based_on_lpue_or_dpue_code);
     s.setArbitraryBreaksForTariff(breaks_for_tariffs);
-
-
+  
 
     return s;
 }

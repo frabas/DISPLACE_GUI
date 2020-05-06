@@ -42,7 +42,7 @@ protected:
 
     bool loadWindmillsImpl() override;
 
-    bool loadPopulations() override;
+    bool loadPopulations(int year) override;
 
 public:
     void loadMetiers() override;

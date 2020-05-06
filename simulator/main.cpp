@@ -845,7 +845,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
-    modelLoader->loadPopulations();
+    modelLoader->loadPopulations(1);
 
     // FOR-LOOP OVER POP
     // creation of a vector of simModel->populations()
@@ -2228,7 +2228,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             cout << "Reload population data" << endl;
 
-            modelLoader->loadPopulations();
+            modelLoader->loadPopulations(a_year);
 
 
 
@@ -2614,9 +2614,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
                      " given the target F " << ftarget_allpopav << "  and the assessed F averaged over tariff pops "
                      << fbar_py_allpopav << endl;
-                for (unsigned int icl = 0; icl < arbitary_breaks_for_tariff.size(); ++icl) {
+                cout << "arbitary_breaks_for_tariff.size() is " << arbitary_breaks_for_tariff.size() << endl;
+                for (unsigned int icl = 0; icl < arbitary_breaks_for_tariff.size(); icl++) {
                     arbitary_breaks_for_tariff.at(icl) * fmultiplier;
                 }
+                cout << "The fmultiplier has been applied ok" << endl;
 
                 // 2 - Re-init vessel total credits
                // tout(cout << "Re-init vessel total credits..." << endl);
@@ -2638,6 +2640,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // timing (update at 7 a.m.)
             int do_update = 0;
+            //cout << "freq_update_tariff_code is " << freq_update_tariff_code  << endl;
             switch (freq_update_tariff_code) {
                 case 0:
                     if ((simModel->timestep() % 24) == 7) { do_update = 1; }

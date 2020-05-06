@@ -1898,7 +1898,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
 
-        vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
+        vector<int> comcat_at_szgroup =   populations.at(pop)->get_comcat_at_szgroup();
 
         outc(cout  << "...for pop " << pop << endl);
 
@@ -1913,14 +1913,15 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
            int a_unit=1;
            if(dyn_alloc_sce.option(Options::TACs))
            {
-              amount_fish_per_y = populations[pop]->get_tac()->get_ts_tac();
+              amount_fish_per_y = populations.at(pop)->get_tac()->get_ts_tac();
               a_unit=1000; // because tac in tons
            }
            else
            {
-              amount_fish_per_y= populations[pop]->get_landings_at_end_of_years();
+              amount_fish_per_y= populations.at(pop)->get_landings_at_end_of_years();
               a_unit=1; // because landings in kilo
            }
+           cout << "amount_fish_per_y.size() is " << amount_fish_per_y.size() << endl;
            double amount_to= amount_fish_per_y.at(0)*a_unit;
            double numerator=0.0;
            double denominator=0.0;

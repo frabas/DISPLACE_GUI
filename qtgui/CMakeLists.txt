@@ -106,6 +106,8 @@ target_include_directories(displacegui
         ${GDAL_INCLUDE_DIRS}
         )
 
+add_dependencies(displacegui displace)
+
 # Set target directory
 install(TARGETS displacegui
         BUNDLE DESTINATION . COMPONENT gui

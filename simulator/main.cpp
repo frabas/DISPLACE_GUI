@@ -166,6 +166,7 @@ using namespace sqlite;
 #include <thread>
 #include <runtime_tests/NodeTester.h>
 #include <TextfileModelLoader.h>
+#include <DatabaseModelLoader.h>
 
 #include "boost/bind.hpp"
 #include "boost/program_options.hpp"
@@ -579,8 +580,7 @@ int app_main(int argc, char const *argv[])
         indb = std::make_shared<sql::Storage>(inpath.string(), sql::Storage::OpenMode::DelayedOpen);
         indb->open();
 
-        // TODO instantiate here the model loader
-        throw std::logic_error("Db Model Loader not implemented!");
+        modelLoader = std::make_unique<DatabaseModelLoader>(simModel, indb);
     } else {
         modelLoader = std::make_unique<TextfileModelLoader>(simModel,
                                                             folder_name_parameterization, inputfolder,

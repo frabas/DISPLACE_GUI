@@ -86,7 +86,7 @@ Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
-Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "install\vcredist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 

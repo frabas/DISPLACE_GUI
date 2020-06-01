@@ -443,7 +443,7 @@ void parseCommandLine(int argc, char const *argv[])
             ("huge", po::value(&export_hugefiles), "Export huge files data")
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
-            ("indb", po::value(&inputdb), "Read input data from sqlite db")
+            ("indb", po::value(&inputdb), "Read input data from sqlite db, relative to Input Folder")
             ("commit-rate", po::value(&numStepTransactions),
              "Modify the number of loops before committing to sqlite db")
             ("use-gui", "Enable IPC channel to talk to the GUI")
@@ -573,7 +573,7 @@ int app_main(int argc, char const *argv[])
         std::cout << "Loading input db: " << inpath.string() << "\n";
 
         if (!boost::filesystem::exists(inpath)) {
-            std::cerr << "Input file " << inputdb << " doesn't exist.\n";
+            std::cerr << "Input file " << inpath << " doesn't exist.\n";
             return 2;
         }
 

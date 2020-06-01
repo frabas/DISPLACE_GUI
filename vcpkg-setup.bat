@@ -1,3 +1,6 @@
+# vcpkg-setup script
+# Version: 2020.06.01
+
 #echo off
 
 set MODULES=GeographicLib cgal gdal msqlitecpp boost-program-options boost-interprocess boost-geometry sparsepp boost-log boost-filesystem

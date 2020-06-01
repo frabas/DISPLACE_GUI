@@ -37,3 +37,8 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
     model().setVessels(vesselsToAdd);
 }
 
+void DatabaseModelLoader::loadShips()
+{
+
+}
+

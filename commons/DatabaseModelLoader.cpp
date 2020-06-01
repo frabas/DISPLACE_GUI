@@ -22,11 +22,6 @@ void DatabaseModelLoader::loadCalendar()
 
 }
 
-void DatabaseModelLoader::loadShips()
-{
-
-}
-
 void DatabaseModelLoader::loadMetiers()
 {
 

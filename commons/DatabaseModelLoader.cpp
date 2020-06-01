@@ -4,17 +4,25 @@
 
 #include "DatabaseModelLoader.h"
 
+#include "db/ConfigTable.h"
+#include "db/ScenarioConfigTable.h"
+#include "readdata.h"
+
 #include <msqlitecpp/v2/storage.h>
 
 namespace sql = msqlitecpp::v2;
 
 struct DatabaseModelLoader::Impl {
+    std::shared_ptr<sql::Storage> db;
 
+    Impl(std::shared_ptr<sql::Storage> d)
+            : db(d)
+    {}
 };
 
 DatabaseModelLoader::DatabaseModelLoader(std::shared_ptr<SimModel> model, std::shared_ptr<sql::Storage> db)
         : ModelLoader(model),
-          p(spimpl::make_unique_impl<Impl>())
+          p(spimpl::make_unique_impl<Impl>(db))
 {
 
 }
@@ -50,12 +58,29 @@ bool DatabaseModelLoader::loadConfigImpl(int &nbpops, int &nbbenthospops, std::v
                                          std::vector<double> &calib_w, std::vector<double> &calib_cpue,
                                          std::vector<types::NodeId> &interesting_harbours)
 {
-    return false;
+    displace::in::ConfigTable config;
+
+    config.query(*p->db);
+
+    nbpops = config.getNbPops();
+    nbbenthospops = config.getNbBenthosPops();
+    implicit_pops = config.getImplicitStocks();
+    implicit_pops_level2 = config.getImplicitPopLevels2();
+    grouped_tacs = config.getGroupedTacs();
+    nbcp_coupling_pops = config.getNbCouplingPops();
+    calib_oth_landings = config.getCalibLandingsStock();
+    calib_w = config.getCalibW();
+    calib_cpue = config.getCalibCpue();
+    interesting_harbours = config.getInterestingArbours();
+
+    return true;
 }
 
-bool DatabaseModelLoader::loadScenarioImpl(displace::commons::Scenario &scenario)
+bool DatabaseModelLoader::loadScenarioImpl(displace::commons::Scenario &s)
 {
-    return false;
+    return read_scenario_config_file(p->db,
+                                     "", "", "",
+                                     s);
 }
 
 bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()

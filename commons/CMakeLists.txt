@@ -140,7 +140,7 @@ set(SOURCES
         ../include/utils/safe_strerror.h
         ModelLoader.h ModelLoader.cpp
         TextfileModelLoader.cpp TextfileModelLoader.h
-        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp Calendar.cpp Calendar.h TextImpl/LoadShipsImpl.cpp TextImpl/LoadVesselsImpl.cpp readvesseldata.h readvesseldata.cpp TextImpl/LoadPopulationsImpl.cpp TextImpl/LoadMetiersImpl.cpp DatabaseModelLoader.cpp DatabaseModelLoader.h DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp DatabaseInputImpl/Impl.h DatabaseInputImpl/LoadShipsAndVesselsImpl.cpp)
+        SimModel.cpp SimModel.h TextImpl/LoadFishFarmsImpl.cpp TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp Calendar.cpp Calendar.h TextImpl/LoadShipsImpl.cpp TextImpl/LoadVesselsImpl.cpp readvesseldata.h readvesseldata.cpp TextImpl/LoadPopulationsImpl.cpp TextImpl/LoadMetiersImpl.cpp DatabaseModelLoader.cpp DatabaseModelLoader.h DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp DatabaseInputImpl/Impl.h DatabaseInputImpl/LoadShipsAndVesselsImpl.cpp DatabaseInputImpl/LoadPopulationImpl.cpp)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

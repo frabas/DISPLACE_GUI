@@ -36,52 +36,69 @@ class  Population
 	public:
         Population(int name,
                    string pop_name,
-            double _avai0_beta,
-            double _avai2_beta,
-            double _avai3_beta,
-            double _avai5_beta,
-            double _avai7_beta,
-            const vector<int> &selected_szgroups,
-            const vector<double> &init_tot_N_at_szgroup,
-            const vector<double> &init_prop_migrants_in_tot_N_at_szgroup,
-            const vector<double> &init_fecundity_at_szgroup,
-            vector<double> init_weight_at_szgroup,
-            const vector<int> &init_comcat_at_szgroup,
-            const vector<double> &init_maturity_at_szgroup,
-            vector<double> init_M_at_szgroup,
-            const vector<double> &init_proprecru_at_szgroup,
-            const vector<double> &param_sr,
-            const multimap<types::NodeId,double> &full_spatial_availability,
-            const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
-            const map<types::NodeId,double> &oth_land,
-            const multimap<int, double> &overall_migration_fluxes,
-            const map<string,double> &relative_stability_key,
-            const vector< vector<double> > &percent_szgroup_per_age_matrix,
-            const vector< vector<double> > &percent_age_perszgroup_matrix,
-            const vector< vector<double> > &growth_transition_matrix,
-            const vector<Node* > &nodes,
-            const vector<double> &fbar_ages_min_max,
-            const vector<double> &init_tac,
-            double tac_percent_simulated,
-            double hyperstability_param,
-            double a_calib_cpue_multiplier,
-            double a_calib_weight_at_szgroup);
+                   double _avai0_beta,
+                   double _avai2_beta,
+                   double _avai3_beta,
+                   double _avai5_beta,
+                   double _avai7_beta,
+                   const vector<int> &selected_szgroups,
+                   const vector<double> &init_tot_N_at_szgroup,
+                   const vector<double> &init_prop_migrants_in_tot_N_at_szgroup,
+                   const vector<double> &init_fecundity_at_szgroup,
+                   vector<double> init_weight_at_szgroup,
+                   const vector<int> &init_comcat_at_szgroup,
+                   const vector<double> &init_maturity_at_szgroup,
+                   vector<double> init_M_at_szgroup,
+                   const vector<double> &init_proprecru_at_szgroup,
+                   const vector<double> &param_sr,
+                   const multimap<types::NodeId,double> &full_spatial_availability,
+                   const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
+                   const map<types::NodeId,double> &oth_land,
+                   const multimap<int, double> &overall_migration_fluxes,
+                   const map<string,double> &relative_stability_key,
+                   const vector< vector<double> > &percent_szgroup_per_age_matrix,
+                   const vector< vector<double> > &percent_age_perszgroup_matrix,
+                   const vector< vector<double> > &growth_transition_matrix,
+                   const vector<Node* > &nodes,
+                   const vector<double> &fbar_ages_min_max,
+                   const vector<double> &init_tac,
+                   double tac_percent_simulated,
+                   double hyperstability_param,
+                   double a_calib_cpue_multiplier,
+                   double a_calib_weight_at_szgroup);
 
-		Population();
-		virtual ~Population();
-								 // Copy constructor
-		int get_name() const;
-        string get_pop_name() const;
-        int get_nb_szgroups() const;
-        int get_nb_ages() const;
-        const vector<Node *> &get_list_nodes() const;
-        const vector<int> &get_selected_szgroups() const;
-		double get_avai0_beta() const;
-		double get_avai2_beta() const;
-		double get_avai3_beta() const;
-		double get_avai5_beta() const;
-		double get_avai7_beta() const;
-		double get_cpue_multiplier() const;
+    Population();
+
+    virtual ~Population();
+
+    // Copy constructor
+    int get_name() const;
+
+    string get_pop_name() const;
+
+    void set_name(int nm);
+
+    void set_pop_name(std::string nm);
+
+    int get_nb_szgroups() const;
+
+    int get_nb_ages() const;
+
+    const vector<Node *> &get_list_nodes() const;
+
+    const vector<int> &get_selected_szgroups() const;
+
+    double get_avai0_beta() const;
+
+    double get_avai2_beta() const;
+
+    double get_avai3_beta() const;
+
+    double get_avai5_beta() const;
+
+    double get_avai7_beta() const;
+
+    double get_cpue_multiplier() const;
         const vector<double>& get_tot_N_at_szgroup() const;
         const vector<double>& get_tot_C_at_szgroup() const;
         const vector<double>& get_tot_D_at_szgroup() const;

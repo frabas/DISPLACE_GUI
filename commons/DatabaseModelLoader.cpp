@@ -27,11 +27,6 @@ void DatabaseModelLoader::loadMetiers()
 
 }
 
-bool DatabaseModelLoader::loadPopulations(int year)
-{
-    return false;
-}
-
 bool DatabaseModelLoader::loadConfigImpl(int &nbpops, int &nbbenthospops, std::vector<int> &implicit_pops,
                                          std::vector<int> &implicit_pops_level2, std::vector<int> &grouped_tacs,
                                          std::vector<int> &nbcp_coupling_pops, std::vector<double> &calib_oth_landings,

@@ -335,22 +335,32 @@ Population::~Population()
 
 int Population::get_name() const
 {
-    return(name);
+    return (name);
 }
 
 string Population::get_pop_name() const
 {
-    return(pop_name);
+    return (pop_name);
+}
+
+void Population::set_name(int nm)
+{
+    name = nm;
+}
+
+void Population::set_pop_name(std::string nm)
+{
+    pop_name = std::move(nm);
 }
 
 int Population::get_nb_szgroups() const
 {
-    return(nb_szgroups);
+    return (nb_szgroups);
 }
 
 int Population::get_nb_ages() const
 {
-    return(nb_ages);
+    return (nb_ages);
 }
 
 

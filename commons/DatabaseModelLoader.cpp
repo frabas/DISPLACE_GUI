@@ -27,11 +27,6 @@ void DatabaseModelLoader::loadShips()
 
 }
 
-void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int semester)
-{
-
-}
-
 void DatabaseModelLoader::loadMetiers()
 {
 

@@ -8,17 +8,7 @@
 #include "db/ScenarioConfigTable.h"
 #include "readdata.h"
 
-#include <msqlitecpp/v2/storage.h>
-
-namespace sql = msqlitecpp::v2;
-
-struct DatabaseModelLoader::Impl {
-    std::shared_ptr<sql::Storage> db;
-
-    Impl(std::shared_ptr<sql::Storage> d)
-            : db(d)
-    {}
-};
+#include "DatabaseInputImpl/Impl.h"
 
 DatabaseModelLoader::DatabaseModelLoader(std::shared_ptr<SimModel> model, std::shared_ptr<sql::Storage> db)
         : ModelLoader(model),
@@ -81,11 +71,6 @@ bool DatabaseModelLoader::loadScenarioImpl(displace::commons::Scenario &s)
     return read_scenario_config_file(p->db,
                                      "", "", "",
                                      s);
-}
-
-bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
-{
-    return false;
 }
 
 bool DatabaseModelLoader::loadFishFarmsImpl()

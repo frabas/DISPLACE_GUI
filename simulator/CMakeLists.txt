@@ -22,8 +22,6 @@ set(SOURCES
         runtime_tests/NodeTester.h
         data/NodesLoader.cpp
         data/NodesLoader.h
-        ../commons/DatabaseInputImpl/VesselsLoader.cpp
-        ../commons/DatabaseInputImpl/VesselsLoader.h
         runtime_tests/RuntimeTests.cpp runtime_tests/RuntimeTests.h)
 
 if (WIN32)

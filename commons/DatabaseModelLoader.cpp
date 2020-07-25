@@ -4,9 +4,11 @@
 
 #include "DatabaseModelLoader.h"
 
+#include "Calendar.h"
 #include "db/ConfigTable.h"
 #include "db/ScenarioConfigTable.h"
 #include "readdata.h"
+#include "SimModel.h"
 
 #include "DatabaseInputImpl/DatabaseCalendarLoader.h"
 #include "DatabaseInputImpl/Impl.h"
@@ -20,7 +22,8 @@ DatabaseModelLoader::DatabaseModelLoader(std::shared_ptr<SimModel> model, std::s
 
 void DatabaseModelLoader::loadCalendar()
 {
-
+    DatabaseCalendarLoader loader(p->db);
+    model().setCalendar(loader.loadCalendar());
 }
 
 void DatabaseModelLoader::loadMetiers()

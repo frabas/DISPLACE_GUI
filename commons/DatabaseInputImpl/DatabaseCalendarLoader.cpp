@@ -41,6 +41,11 @@ std::unique_ptr<Calendar> DatabaseCalendarLoader::loadCalendar()
     auto semesters = p->load("semesters_2009_2015");
     auto years = p->load("years_2009_2015");
 
+    std::cout << "Months: " << months.size() << " steps\n";
+    std::cout << "Quarters: " << quarters.size() << " steps\n";
+    std::cout << "Semesters: " << semesters.size() << " steps\n";
+    std::cout << "Years: " << years.size() << " steps\n";
+
     calendar->setCalendar(std::move(months), std::move(quarters), std::move(semesters), std::move(years));
 
     return calendar;

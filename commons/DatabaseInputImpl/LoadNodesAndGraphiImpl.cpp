@@ -72,13 +72,13 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
             // is an harbour: sets harbours variables here
             auto harbour = new Harbour();
 
-            node->set_is_harbour(hidx);
+            harbour->set_is_harbour(hidx);
 
             node = harbour;
         } else {
             // is a standard Node
 
-            auto node = new Node();
+            node = new Node();
             node->set_is_harbour(0);
 
             node->setMarineLandscape(marineLandscape);

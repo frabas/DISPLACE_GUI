@@ -55,10 +55,10 @@ class ConfigTable {
     }
 
     template<typename T>
-    std::vector<T> getVector(std::string v) const
+    std::vector<T> getVector(std::string v, const char *separator = " ") const
     {
         try {
-            return displace::formats::utils::stringToVector<T>(mParams.at(v));
+            return displace::formats::utils::stringToVector<T>(mParams.at(v), separator);
         } catch (std::out_of_range &) {
             std::ostringstream ss;
             ss << "Field not found: " << v;
@@ -138,6 +138,11 @@ public:
     auto getNbCouplingPops() const
     {
         return getVectorOptional<int>("nbcp_coupling_pops");
+    }
+
+    auto getSteps(std::string key)
+    {
+        return getVector<int>(key, ";");
     }
 };
 

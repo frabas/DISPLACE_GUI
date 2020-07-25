@@ -147,7 +147,7 @@ set(SOURCES
         DatabaseModelLoader.cpp DatabaseModelLoader.h DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp
         DatabaseInputImpl/Impl.h DatabaseInputImpl/LoadShipsAndVesselsImpl.cpp DatabaseInputImpl/LoadPopulationImpl.cpp
         DatabaseInputImpl/VesselsLoader.cpp DatabaseInputImpl/VesselsLoader.h
-        )
+        DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

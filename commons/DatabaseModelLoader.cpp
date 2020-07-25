@@ -8,13 +8,14 @@
 #include "db/ScenarioConfigTable.h"
 #include "readdata.h"
 
+#include "DatabaseInputImpl/DatabaseCalendarLoader.h"
 #include "DatabaseInputImpl/Impl.h"
 
 DatabaseModelLoader::DatabaseModelLoader(std::shared_ptr<SimModel> model, std::shared_ptr<sql::Storage> db)
         : ModelLoader(model),
           p(spimpl::make_unique_impl<Impl>(db))
 {
-
+    db->open();
 }
 
 void DatabaseModelLoader::loadCalendar()

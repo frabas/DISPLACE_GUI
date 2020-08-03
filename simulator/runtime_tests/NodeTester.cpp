@@ -22,7 +22,7 @@ NodeTester::NodeTester(int nbPops, int nbBenthosPops)
 void NodeTester::test()
 {
     // check the class Node
-    Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0, p->mNbPops, p->mNbBenthosPops, 5);
     dout(cout << "is the node at 1,1? "
               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);

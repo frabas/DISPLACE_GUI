@@ -401,6 +401,7 @@ public:
     void collectBathymetry(int step, int node_idx, double bathymetry);
     void collectShippingdensity(int step, int node_idx, double shippingdensity);
     void collectSiltfraction(int step, int node_idx, double siltfraction);
+    void collectIcesrectanglecode(int step, int node_idx, double icesrectanglecode);
 
 
 

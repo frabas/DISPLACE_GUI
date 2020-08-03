@@ -107,6 +107,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     string filename_shippingdensity_graph =
             p->inputfolder + "/graphsspe/coord" + a_graph_s + "_with_shippingdensity.dat";
     string filename_siltfraction_graph = p->inputfolder + "/graphsspe/coord" + a_graph_s + "_with_siltfraction.dat";
+    string filename_icesrectanglecode_graph = p->inputfolder + "/graphsspe/coord" + a_graph_s + "_with_icesrectanglecode.dat";
     string filename_code_benthos_biomass_graph =
             p->inputfolder + "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph =
@@ -278,6 +279,18 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         std::cerr << "Cannot parse " << filename_siltfraction_graph << " Bad format\n";
         return 1;
     }
+   
+    
+    ifstream icesrectanglecode_graph;
+    icesrectanglecode_graph.open(filename_icesrectanglecode_graph.c_str());
+    if (icesrectanglecode_graph.fail()) {
+       // open_file_error(filename_icesrectanglecode_graph.c_str());
+       // return 1;
+    }
+    vector<double> graph_point_icesrectanglecode(graph_coord_x.size(), 0);
+    if (!fill_from_icesrectanglecode(icesrectanglecode_graph, graph_point_icesrectanglecode, nrow_coord)) {
+        std::cout << "Caution: cannot parse " << filename_icesrectanglecode_graph << " File does not exist, or bad format\n";
+    }
 
     vector<double> graph_point_landscape_norm(graph_coord_x.size(), 0);
     vector<double> graph_point_landscape_alpha(graph_coord_x.size(), 0);
@@ -355,7 +368,8 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
         //"bathymetry" 29
         //"shippingdensity" 30
-        //"siltfraction" 31
+        //"siltfraction" 31 
+        //"icesrect" 32
 
         cout << "environment_on_coord.size() " << environment_on_coord.size() << endl;
         for (unsigned int n = 0; n < environment_on_coord.size(); n++) {
@@ -390,6 +404,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             graph_point_bathymetry.at(n) = environment_on_coord.at(n).bathymetry; // 29
             graph_point_shippingdensity.at(n) = environment_on_coord.at(n).shippingdensity; // 30
             graph_point_siltfraction.at(n) = environment_on_coord.at(n).siltfraction; // 31
+            graph_point_icesrectanglecode.at(n) = environment_on_coord.at(n).icesrectanglecode; // 32
         }
 
         //check
@@ -521,6 +536,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                     graph_point_bathymetry[i],
                                     graph_point_shippingdensity[i],
                                     graph_point_siltfraction[i],
+                                    graph_point_icesrectanglecode[i],
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....
@@ -572,6 +588,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                  graph_point_bathymetry[i],
                                  graph_point_shippingdensity[i],
                                  graph_point_siltfraction[i],
+                                 graph_point_icesrectanglecode[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0, // meanweight not set from a GIS layer....

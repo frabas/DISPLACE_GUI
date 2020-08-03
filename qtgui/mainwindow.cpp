@@ -1355,6 +1355,10 @@ void MainWindow::on_actionSiltFraction_triggered()
     showPaletteDialog(SiltfractionRole);
 }
 
+void MainWindow::on_actionIcesRectangleCode_triggered()
+{
+    showPaletteDialog(SiltfractionRole);
+}
 
 void MainWindow::on_actionSalinity_triggered()
 {
@@ -1815,6 +1819,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString bathymetrypath = savedlg.getBathymetryFilename();
         QString shippingdensitypath = savedlg.getShippingdensityFilename();
         QString siltfractionpath = savedlg.getSiltfractionFilename();
+        QString icesrectanglecodepath = savedlg.getIcesrectanglecodeFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1826,7 +1831,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath, shippingdensitypath, siltfractionpath,
+                                 bathymetrypath, shippingdensitypath, siltfractionpath, icesrectanglecodepath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
@@ -2871,6 +2876,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString bathymetrypath = dlg.getBathymetryFilename();
         QString shippingdensitypath = dlg.getShippingdensityFilename();
         QString siltfractionpath = dlg.getSiltfractionFilename();
+        QString icesrectanglecodepath = dlg.getIcesrectanglecodeFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2882,7 +2888,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
-                                 bathymetrypath, shippingdensitypath, siltfractionpath,
+                                 bathymetrypath, shippingdensitypath, siltfractionpath, icesrectanglecodepath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {

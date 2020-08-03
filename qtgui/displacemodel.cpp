@@ -659,6 +659,13 @@ void DisplaceModel::collectSiltfraction(int step, int node_idx, double siltfract
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectIcesrectanglecode(int step, int node_idx, double icesrectanglecode)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setIcesrectanglecode(icesrectanglecode);
+    mNodesStatsDirty = true;
+}
+
 
 void DisplaceModel::collectWind(int step, int node_idx, double wind)
 {
@@ -1115,7 +1122,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 } else {
                     nd = std::shared_ptr<Node>(
                             new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                      0, 0));
                 }
 
@@ -1982,6 +1989,9 @@ bool DisplaceModel::loadNodes()
     string filename_siltfraction_graph = mBasePath.toStdString() +
                                          "/graphsspe/coord" + a_graph_s + "_with_siltfraction.dat";
 
+    string filename_icesrectanglecode_graph = mBasePath.toStdString() +
+                                         "/graphsspe/coord" + a_graph_s + "_with_icesrectanglecode.dat";
+
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
                                                  "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
 
@@ -2171,6 +2181,20 @@ bool DisplaceModel::loadNodes()
                                         .arg(filename_siltfraction_graph.c_str()));
     }
 
+    ifstream icesrectanglecode_graph;
+    icesrectanglecode_graph.open(filename_icesrectanglecode_graph.c_str());
+    if (icesrectanglecode_graph.fail()) {
+      //  throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+      //      .arg(filename_icesrectanglecode_graph.c_str())
+      //      .arg(QString::fromStdString(safe_strerror(errno))));
+    }
+    vector<double> graph_point_icesrectanglecode(graph_coord_x.size(), 0);
+    if (!fill_from_icesrectanglecode(icesrectanglecode_graph, graph_point_icesrectanglecode, nrow_coord)) {
+        std::cout << "Cannot parse " << filename_icesrectanglecode_graph << " Bad format\n";
+        //throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+        //    .arg(filename_icesrectanglecode_graph.c_str()));
+    }
+
     vector<double> graph_point_landscape_norm(nrow_coord, 0);
     vector<double> graph_point_landscape_alpha(nrow_coord, 0);
     vector<double> graph_point_wind_norm(nrow_coord, 0);
@@ -2331,6 +2355,7 @@ bool DisplaceModel::loadNodes()
                                                    graph_point_bathymetry[i],
                                                    graph_point_shippingdensity[i],
                                                    graph_point_siltfraction[i],
+                                                   graph_point_icesrectanglecode[i],
                                                    graph_point_benthos_biomass[i],
                                                    graph_point_benthos_number[i],
                                                    0, // because benthos mean weight is not informed by GIS layer
@@ -2386,6 +2411,7 @@ bool DisplaceModel::loadNodes()
                                               graph_point_bathymetry[i],
                                               graph_point_shippingdensity[i],
                                               graph_point_siltfraction[i],
+                                              graph_point_icesrectanglecode[i],
                                               graph_point_benthos_biomass[i],
                                               graph_point_benthos_number[i],
                                               0,// because benthos mean weight is not informed by GIS layer

@@ -52,6 +52,7 @@ class  Harbour : public Node
             double _bathymetry,
             double _shippingdensity,
             double _siltfraction,
+            double _icesrectanglecode,
             double _benthos_biomass,
             double _benthos_number,
             double _benthos_meanweight,

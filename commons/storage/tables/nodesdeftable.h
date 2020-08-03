@@ -34,6 +34,7 @@ private:
     const FieldDef<FieldType::Real> bathymetry = makeFieldDef("bathymetry", FieldType::Real()).notNull();
     const FieldDef<FieldType::Real> shippingdensity = makeFieldDef("shippingdensity", FieldType::Real()).notNull();
     const FieldDef<FieldType::Real> siltfraction = makeFieldDef("siltfraction", FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> icesrectanglecode = makeFieldDef("icesrectanglecode", FieldType::Real()).notNull();
 public:
     NodesDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
 

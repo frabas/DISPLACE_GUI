@@ -43,6 +43,7 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
     ui->optBathymetry->setChecked(true);
     ui->optShippingdensity->setChecked(true);
     ui->optSiltfraction->setChecked(true);
+    //ui->optIcesrectanglecode->setChecked(true);
     ui->optBenthosBio->setChecked(true);
     ui->optBenthosNb->setChecked(true);
     ui->optClosed->setChecked(true);
@@ -150,6 +151,13 @@ QString SaveGraphDialog::getSiltfractionFilename() const
 {
     if (ui->optSiltfraction->isChecked())
         return ui->outputFolder->text() + "/" + ui->siltfractionFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getIcesrectanglecodeFilename() const
+{
+   // if (ui->optIcesrectanglecode->isChecked())
+   //     return ui->outputFolder->text() + "/" + ui->icesrectanglecodeFileName->text();
     return QString();
 }
 

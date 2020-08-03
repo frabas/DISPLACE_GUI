@@ -395,3 +395,16 @@ void NodeWithSiltfractionGraphics::drawShape(QPainter &painter, const qmapcontro
     painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
+
+void NodeWithIcesrectanglecodeGraphics::drawShape(QPainter& painter, const qmapcontrol::RectWorldPx& rect)
+{
+    Q_UNUSED(rect);
+
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->icesrectanglecode : 0);
+    //painter.setBrush(mController->getPalette(mModelIndex,SiltfractionRole).color((float)mNode->get_siltfraction()));
+    painter.setBrush(mController->getPalette(mModelIndex, SiltfractionRole).color(ca));
+    painter.drawRect(-piew() / 2, -pieh() / 2, piew(), pieh());
+}
+
+

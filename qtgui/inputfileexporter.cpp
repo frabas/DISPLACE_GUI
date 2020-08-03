@@ -31,7 +31,7 @@ InputFileExporter::InputFileExporter()
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
-                                    QString bathymetrypath, QString shippingdensitypath,  QString siltfractionpath,
+                                    QString bathymetrypath, QString shippingdensitypath,  QString siltfractionpath, QString icesrectanglecodepath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -185,6 +185,17 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         siltfractionstream.setDevice(&siltfractionfile);
     }
 
+    QFile icesrectanglecodefile(icesrectanglecodepath);
+    QTextStream icesrectanglecodestream;
+    if (!icesrectanglecodepath.isEmpty()) {
+        if (!icesrectanglecodefile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open icesrectanglecode file %1: %2"))
+                .arg(icesrectanglecodepath).arg(icesrectanglecodefile.errorString());
+            return false;
+        }
+        icesrectanglecodestream.setDevice(&icesrectanglecodefile);
+    }
 
     QFile bfile(benthospath);
     QTextStream bstream;
@@ -270,6 +281,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 shippingdensitystream << nd->get_shippingdensity() << endl;
             if (siltfractionfile.isOpen())
                 siltfractionstream << nd->get_siltfraction() << endl;
+            if (icesrectanglecodefile.isOpen())
+                icesrectanglecodestream << nd->get_icesrectanglecode() << endl;
 
 
         }

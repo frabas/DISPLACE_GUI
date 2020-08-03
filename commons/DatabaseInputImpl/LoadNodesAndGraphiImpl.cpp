@@ -33,6 +33,7 @@ db::Column<db::ColumnTypes::Real> fieldCarbon{"carbon"};
 db::Column<db::ColumnTypes::Real> fieldBathymetry{"bathymetry"};
 db::Column<db::ColumnTypes::Real> fieldShipping{"shipping"};
 db::Column<db::ColumnTypes::Real> fieldSilt{"silt"};
+db::Column<db::ColumnTypes::Real> fieldIcesRectangleCode{ "icesrectanglecode" };
 db::Column<db::ColumnTypes::Real> fieldBenthosBio{"benthosbio"};
 db::Column<db::ColumnTypes::Real> fieldBenthosNum{"benthosnum"};
 
@@ -58,14 +59,14 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
                                          fieldNitrogen, fieldPhosphorus, fieldOxygen,
                                          fieldCarbon,
                                          fieldBathymetry,
-                                         fieldShipping, fieldSilt, fieldBenthosBio, fieldBenthosNum
+                                         fieldShipping, fieldSilt, fieldIcesRectangleCode, fieldBenthosBio, fieldBenthosNum
     );
     query.where(fieldGraphSce == "agraph");
 
     query.bind(model().scenario().a_graph);
     query.execute([&nodes, &graph](int id, double x, double y, int hidx, int codeArea, int marineLandscape,
                                    double wind, double salinity, double sst, double ni, double ph, double ox, double ca,
-                                   double bath, double ship, double silt, double bb, double bn
+                                   double bath, double ship, double silt, double icesrectanglecode, double bb, double bn
     ) {
         Node *node;
         if (hidx != 0) {
@@ -94,6 +95,7 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
             node->setBathymetry(bath);
             node->setShippingdensity(ship);
             node->setSiltfraction(silt);
+            node->setIcesrectanglecode(icesrectanglecode);
             node->setBenthosBiomass(bb);
             node->setBenthosNumber(bn);
         }

@@ -13,7 +13,7 @@ struct NodesDefTable::Impl {
 
     PreparedInsert <FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
     FieldDef<FieldType::Text>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
-    FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
+    FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
 };
 
 NodesDefTable::NodesDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -36,7 +36,8 @@ void NodesDefTable::dropAndCreate()
                            marineLandscape,
                            bathymetry,
                            shippingdensity,
-                           siltfraction
+                           siltfraction,
+                           icesrectanglecode
     ));
 }
 
@@ -48,7 +49,7 @@ void NodesDefTable::insert(Node *node)
         p->statement = prepareInsert(std::make_tuple(fldNodeId, fldHarbourId,
                                                      fldNodeName,
                                                      fldLong, fldLat, marineLandscape,
-                                                     bathymetry, shippingdensity, siltfraction));
+                                                     bathymetry, shippingdensity, siltfraction, icesrectanglecode));
     }
 
     SQLiteTable::insert(p->statement, std::make_tuple((int) node->get_idx_node().toIndex(),
@@ -59,7 +60,8 @@ void NodesDefTable::insert(Node *node)
                                                       node->get_marine_landscape(),
                                                       node->get_bathymetry(),
                                                       node->get_shippingdensity(),
-                                                      node->get_siltfraction()
+                                                      node->get_siltfraction(),
+                                                      node->get_icesrectanglecode()
                         )
     );
 }
@@ -67,7 +69,7 @@ void NodesDefTable::insert(Node *node)
 void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std::shared_ptr<Harbour>)> operation)
 {
     sqlite::statements::Select s(name(), fldNodeId, fldHarbourId, fldNodeName, fldLong, fldLat, marineLandscape,
-                                 bathymetry, shippingdensity, siltfraction);
+                                 bathymetry, shippingdensity, siltfraction, icesrectanglecode);
     sqlite::SQLiteStatement stmt(db(), s);
 
     stmt.execute([&operation, &stmt]() {
@@ -89,6 +91,7 @@ void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std:
         n->setBathymetry(stmt.getDoubleValue(6));
         n->setShippingdensity(stmt.getDoubleValue(7));
         n->setSiltfraction(stmt.getDoubleValue(8));
+        n->setIcesrectanglecode(stmt.getDoubleValue(9));
 
         operation(n, h);
         return true;

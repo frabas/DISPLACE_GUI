@@ -180,6 +180,7 @@ struct EnvironmentDataRecord {
     double bathymetry;
     double shippingdensity;
     double siltfraction;
+    double icesrectanglecode;
 };
 
 bool read_environment_on_coord(istream &stream, const std::string &separator,

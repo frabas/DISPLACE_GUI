@@ -1152,6 +1152,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
             a_tuple.bathymetry=boost::lexical_cast<double>(sr[29]);
             a_tuple.shippingdensity=boost::lexical_cast<double>(sr[30]);
             a_tuple.siltfraction=boost::lexical_cast<double>(sr[31]);
+            a_tuple.icesrectanglecode = boost::lexical_cast<double>(sr[32]);
 
             // check
             //cout << "reading  environment_on_coord: " << endl;

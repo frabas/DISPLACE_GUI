@@ -185,6 +185,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithSiltfractionGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithIcesrectanglecode:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+            new NodeWithIcesrectanglecodeGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -346,6 +351,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithSiltfraction:
         text += QString("<br/><b>Silt fraction:</b> %1<br/>")
                 .arg(mNode->get_siltfraction());
+        break;
+
+    case GraphNodeWithIcesrectanglecode:
+        text += QString("<br/><b>ICES Rectangle coding:</b> %1<br/>")
+            .arg(mNode->get_icesrectanglecode());
         break;
 
     case GraphNodeWithCumFTimeRole:

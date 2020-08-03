@@ -171,7 +171,8 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
                                         node->get_DissolvedCarbon(),
                                         node->get_bathymetry(),
                                         node->get_shippingdensity(),
-                                        node->get_siltfraction())
+                                        node->get_siltfraction(),
+                                        node->get_icesrectanglecode())
     );
     return 0;
 }

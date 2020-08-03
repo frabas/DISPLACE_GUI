@@ -26,6 +26,7 @@ struct EnvironmentData {
     double bathymetry;
     double shippingdensity;
     double siltfraction;
+    double icesrectanglecode;
 };
 
 struct NodesPopData {

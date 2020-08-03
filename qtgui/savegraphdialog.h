@@ -50,6 +50,7 @@ public:
     QString getBathymetryFilename() const;
     QString getShippingdensityFilename() const;
     QString getSiltfractionFilename() const;
+    QString getIcesrectanglecodeFilename() const;
     QString getBenthosFilename() const;
     QString getBenthosNbFilename() const;
     QString getAreacodesFilename() const;

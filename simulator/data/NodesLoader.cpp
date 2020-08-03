@@ -39,6 +39,7 @@ db::Column<db::ColumnTypes::Real> fieldCarbon{"carbon"};
 db::Column<db::ColumnTypes::Real> fieldBathymetry{"bathymetry"};
 db::Column<db::ColumnTypes::Real> fieldShipping{"shipping"};
 db::Column<db::ColumnTypes::Real> fieldSilt{"silt"};
+db::Column<db::ColumnTypes::Real> fieldIcesrect{ "icesrect" };
 db::Column<db::ColumnTypes::Real> fieldBenthosBio{"benthosbio"};
 db::Column<db::ColumnTypes::Real> fieldBenthosNum{"benthosnum"};
 }
@@ -65,14 +66,14 @@ std::vector<Node *> NodesLoader::load(int agraph)
                                          fieldNitrogen, fieldPhosphorus, fieldOxygen,
                                          fieldCarbon,
                                          fieldBathymetry,
-                                         fieldShipping, fieldSilt, fieldBenthosBio, fieldBenthosNum
+                                         fieldShipping, fieldSilt, fieldIcesrect, fieldBenthosBio, fieldBenthosNum
     );
     query.where(fieldGraphSce == "agraph");
 
     query.bind(agraph);
     query.execute([&nodes](int id, double x, double y, int hidx, int codeArea, int marineLandscape,
                            double wind, double salinity, double sst, double ni, double ph, double ox, double ca,
-                           double bath, double ship, double silt, double bb, double bn
+                           double bath, double ship, double silt, double icesrect, double bb, double bn
     ) {
         auto node = new Node();
         node->set_idx_node(types::NodeId{static_cast<uint16_t>(id)});
@@ -92,6 +93,7 @@ std::vector<Node *> NodesLoader::load(int agraph)
         node->setBathymetry(bath);
         node->setShippingdensity(ship);
         node->setSiltfraction(silt);
+        node->setIcesrectanglecode(icesrect);
         node->setBenthosBiomass(bb);
         node->setBenthosNumber(bn);
 

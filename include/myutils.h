@@ -273,6 +273,8 @@ bool  fill_from_shippingdensity (istream& in, vector<double>& graph_point_shippi
 
 bool  fill_from_siltfraction (istream& in, vector<double>& graph_point_siltfraction,
                                       int nrow);
+bool  fill_from_icesrectanglecode(istream& in, vector<double>& graph_point_icesrectanglecode,
+    int nrow);
 
 bool  fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);

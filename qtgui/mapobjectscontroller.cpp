@@ -193,6 +193,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerSiltfraction[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Siltfraction")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerSiltfraction, mStatsLayerSiltfraction[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerIcesrectanglecode[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Icesrectanglecode")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerIcesrectanglecode, mStatsLayerIcesrectanglecode[model_n], type != DisplaceModel::LiveModelType ? false : false);
+    
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all (NodesTariffStat TariffAll)")).arg(model_n).toStdString()));
     addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
@@ -523,6 +526,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerBathymetry[model_n]->clearGeometries();
     mStatsLayerShippingdensity[model_n]->clearGeometries();
     mStatsLayerSiltfraction[model_n]->clearGeometries();
+    mStatsLayerIcesrectanglecode[model_n]->clearGeometries(); 
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
 
@@ -689,6 +693,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerSiltfraction[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
+    obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeWithIcesrectanglecode, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerIcesrectanglecode[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+    
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }

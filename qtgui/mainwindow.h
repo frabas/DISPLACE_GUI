@@ -159,6 +159,7 @@ private slots:
     void on_actionBathymetry_triggered();
     void on_actionShippingDensity_triggered();
     void on_actionSiltFraction_triggered();
+    void on_actionIcesRectangleCode_triggered();
     void on_actionSalinity_triggered();
     void on_actionSST_triggered();
     void on_actionWind_triggered();

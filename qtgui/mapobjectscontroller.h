@@ -241,6 +241,7 @@ public:
         EnvLayerBathymetry,
         EnvLayerShippingdensity,
         EnvLayerSiltfraction,
+        EnvLayerIcesrectanglecode,
 
      EnvLayerMax
     };
@@ -414,6 +415,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBathymetry[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerShippingdensity[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSiltfraction[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerIcesrectanglecode[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 

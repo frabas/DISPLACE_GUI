@@ -29,11 +29,13 @@ struct NodesEnvtTable::Impl {
     FieldDef<FieldType::Real> bathymetry = makeFieldDef("bathymetry", FieldType::Real()).notNull();
     FieldDef<FieldType::Real> shippingdensity = makeFieldDef("shippingdensity", FieldType::Real()).notNull();
     FieldDef<FieldType::Real> siltfraction = makeFieldDef("siltfraction", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> icesrectanglecode = makeFieldDef("icesrectanglecode", FieldType::Real()).notNull();
 
 
     PreparedInsert <FieldDef<FieldType::Integer>,
     FieldDef<FieldType::Integer>,
     FieldDef<FieldType::Integer>,
+    FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>,
@@ -60,6 +62,7 @@ struct NodesEnvtTable::Impl {
             FieldDef<FieldType::Real>,
             FieldDef<FieldType::Real>,
             FieldDef<FieldType::Real>,
+            FieldDef<FieldType::Real>,
             FieldDef<FieldType::Real>
     > nodeQueryStatement;
     sqlite::Where<FieldType::Integer, FieldType::Integer> nodeQueryWhere;
@@ -67,7 +70,7 @@ struct NodesEnvtTable::Impl {
     Impl()
             : nodeQueryStatement(op::max(fldTStep), fldNodeId, marineLandscape, salinity, sst, wind, nitrogen,
                                  phosphorus,
-                                 oxygen, dissolvedcarbon, bathymetry, shippingdensity, siltfraction)
+                                 oxygen, dissolvedcarbon, bathymetry, shippingdensity, siltfraction, icesrectanglecode)
     {
 
     }
@@ -99,7 +102,8 @@ void NodesEnvtTable::dropAndCreate()
                            p->dissolvedcarbon,
                            p->bathymetry,
                            p->shippingdensity,
-                           p->siltfraction
+                           p->siltfraction,
+                           p->icesrectanglecode
     ));
 }
 
@@ -120,7 +124,8 @@ void NodesEnvtTable::init()
                                                            p->dissolvedcarbon,
                                                            p->bathymetry,
                                                            p->shippingdensity,
-                                                           p->siltfraction
+                                                           p->siltfraction,
+                                                           p->icesrectanglecode
         ));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
@@ -136,6 +141,7 @@ void NodesEnvtTable::init()
                                                       p->bathymetry,
                                                       p->shippingdensity,
                                                       p->siltfraction,
+                                                      p->icesrectanglecode,
                                                       sqlite::op::max(p->fldTStep)
         )
                 .where(sqlite::op::le(p->fldTStep))
@@ -199,6 +205,7 @@ void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<boo
         s.bathymetry = st.getDoubleValue(9);
         s.shippingdensity = st.getDoubleValue(10);
         s.siltfraction = st.getDoubleValue(11);
+        s.icesrectanglecode = st.getDoubleValue(12);
         if (op) {
             return op(s);
         }
@@ -216,7 +223,7 @@ void NodesEnvtTable::queryNodeAtStep(types::NodeId nodeId, types::tstep_t tstep,
     p->nodeQueryStatement.exec([this, &op](
             int nodeid, int tstep, int marinelandscape,
             double salinity, double sst, double wind,
-            double no, double p, double o2, double co2, double deep, double sd, double sf
+            double no, double p, double o2, double co2, double deep, double sd, double sf, double irc
     ) {
         NodeEnvt s;
         s.nodeId = types::NodeId(nodeid);
@@ -232,6 +239,7 @@ void NodesEnvtTable::queryNodeAtStep(types::NodeId nodeId, types::tstep_t tstep,
         s.bathymetry = deep;
         s.shippingdensity = sd;
         s.siltfraction = sf;
+        s.icesrectanglecode = irc;
         if (op) {
             return op(s);
         }

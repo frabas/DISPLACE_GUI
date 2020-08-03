@@ -2652,6 +2652,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // weekly update
                     break;
                 case 2:
+                    if ((simModel->timestep() % 336) == 7) { do_update = 1; }
+                    // bi-weekly update
+                    break;
+                case 3:
                     if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) { do_update = 1; }
                     // monthly update
                     break;

@@ -86,6 +86,8 @@ PopSceOptions::PopSceOptions()
     O(mMap,sizeSpectra);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
+    O(mMap,OtherLandAsMultiplierOnSp);
+    
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

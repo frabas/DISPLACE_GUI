@@ -138,6 +138,7 @@ enum Pop_Sce {
     sizeSpectra,
     diffuseNutrients,
     noHyperstability,
+    OtherLandAsMultiplierOnSp,
 
     Pop_Sce_last
 };

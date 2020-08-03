@@ -2021,6 +2021,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     simModel->config().calib_oth_landings,
                                     selectivity_per_stock_ogives_for_oth_land,
                                     simModel->is_tacs(),
+                                    simModel->is_other_land_as_multiplier_on_sp(),
                                     export_vmslike,
                                     scenario.freq_do_growth,
                                     simModel->initWeightPerSzgroup(),

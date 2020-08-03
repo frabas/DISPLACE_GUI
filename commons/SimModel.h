@@ -163,6 +163,8 @@ public:
 
     bool is_tacs() const;
 
+    bool is_other_land_as_multiplier_on_sp() const;
+
     bool is_fishing_credits() const;
 
     bool is_discard_ban() const;

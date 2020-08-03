@@ -71,6 +71,7 @@ static const char *dyn_pop_options[] = {
     "nbcpCoupling",
     "diffuseNutrients",
     "noHyperstability",
+    "OtherLandAsMultiplierOnSp",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

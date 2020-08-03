@@ -43,6 +43,7 @@ struct SimModel::Impl {
     bool is_benthos_in_longevity_classes;
     bool is_direct_killing_on_benthos;
     bool is_resuspension_effect_on_benthos;
+    bool is_other_land_as_multiplier_on_sp;
 };
 
 SimModel::SimModel(std::string n)
@@ -131,6 +132,15 @@ void SimModel::setScenario(std::unique_ptr<displace::commons::Scenario> scenario
     } else {
         p->is_benthos_in_longevity_classes = 0;
     }
+
+    if (p->scenario->dyn_pop_sce.option(Options::OtherLandAsMultiplierOnSp)) {
+        p->is_other_land_as_multiplier_on_sp = 1;
+    }
+    else {
+        p->is_other_land_as_multiplier_on_sp = 0;
+    }
+
+
 }
 
 displace::commons::Scenario const &SimModel::scenario() const
@@ -398,6 +408,12 @@ bool SimModel::is_resuspension_effect_on_benthos() const
 {
     return p->is_resuspension_effect_on_benthos;
 }
+
+bool SimModel::is_other_land_as_multiplier_on_sp() const
+{
+    return p->is_other_land_as_multiplier_on_sp;
+}
+
 
 void SimModel::initRandom(std::string const &namesimu)
 {

@@ -128,6 +128,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           const vector<double> & calib_oth_landings,
                           vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
+                          bool is_other_land_as_multiplier_on_sp,
                           int export_vmslike,
                           int freq_do_growth,
                           const multimap<int, double> &init_weight_per_szgroup,
@@ -328,7 +329,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             */
 
             auto map_oth           = populations.at(sp)->get_oth_land();
-
+          
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
 
@@ -344,12 +345,22 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
-                // apply "other" landings
+                // apply "other" landings (by default, it is removing a kilo per node for this sp)
                 // (also accounting for a potential multiplier (default at 1.0))
+                if (is_other_land_as_multiplier_on_sp) {
+                    // if a proportion of sp biomass is given in the oth_land layer instead of an absolute kg on node:
+                    //cout << "on node " << n << " map_oth[a_list_nodes.at(n)->get_idx_node()] is " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
+                    vector<double> Ns_on_node = a_list_nodes.at(n)->get_Ns_pops_at_szgroup().at(sp);
+                    vector<double> Wts_this_sp = populations.at(sp)->get_weight_at_szgroup();
+                    double biomass_on_node = 0;
+                    for (unsigned int i = 0; i < Wts_this_sp.size(); i++)  biomass_on_node += (Ns_on_node.at(i) * Wts_this_sp.at(i));
+                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * biomass_on_node;
+                    //cout << "on node " << n << " biomass_on_node is " << biomass_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
+                }
                 double oth_land_this_pop_this_node=
                   map_oth[a_list_nodes.at(n)->get_idx_node()]*
                    populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
-
+              
                 // magic number for a the below scenario: add a stochastic variation
                 // area-based sce
                 if (dyn_pop_sce.option(Options::with_stochast_oth_land))

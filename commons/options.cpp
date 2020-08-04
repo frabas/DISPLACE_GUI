@@ -55,6 +55,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,DEBUG_TAC);
     O(mMap,EffortMinControl);
     O(mMap,EffortMaxControl);
+    O(mMap, averageTariffsPerRectangle);
 
 
 

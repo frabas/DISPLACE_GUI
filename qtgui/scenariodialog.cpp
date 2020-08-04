@@ -55,6 +55,7 @@ static const char *dyn_alloc_options[] = {
     "halfShippingDensity",
     "EffortMinControl",
     "EffortMaxControl",
+    "averageTariffsPerRectangle",
 };
 
 static const char *dyn_pop_options[] = {

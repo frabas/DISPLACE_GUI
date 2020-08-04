@@ -2718,7 +2718,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                     // loop over to scale the tariff (on each node) up or down (caution: by one category)
                     double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
-                    for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode) {
+                    for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                    {
                         tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
                         effort_on_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
@@ -2780,6 +2781,48 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
                         //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
 
+                    }
+                    
+                    if (scenario.dyn_alloc_sce.option(Options::averageTariffsPerRectangle)) {
+                            // average the tariff per rectangle
+                        double tariff_this_node, rect_this_node;
+
+                        multimap<double, double> mymultimap;
+                        map<double, double> mymap;
+                        map<double, double> mymap_lookup;
+                        map<double, double>::iterator it2;
+                        multimap<double, double>::iterator it;
+                        pair<multimap<double, double>::iterator, multimap<double, double>::iterator> ret;
+
+
+                        for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                            {
+                                tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
+                                rect_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
+                                mymultimap.insert(pair<double, double>(rect_this_node, tariff_this_node));
+                                mymap.insert(pair<double, double>(rect_this_node, tariff_this_node));
+                            }
+                       
+                        for (it2 = mymap.begin(); it2 != mymap.end(); ++it2)
+                        {
+                                int cnt = mymultimap.count((*it2).first);
+                                ret = mymultimap.equal_range((*it2).first);
+                                double sum = 0;
+                                for (it = ret.first; it != ret.second; ++it)
+                                    sum += (*it).second;
+                                //cout << "average tariff for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
+                                mymap_lookup.insert(pair<double, double>(it2->first, sum / cnt));
+                        }
+
+                        // then use the look up...
+                        double updated_tariff;
+                        for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                            {
+                            rect_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
+                            updated_tariff = mymap_lookup[rect_this_node];
+                            simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
+                            //cout << "updated_tariff for this node is: " << updated_tariff << endl;
+                           }
                     }
 
                 }

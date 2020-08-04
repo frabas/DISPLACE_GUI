@@ -113,6 +113,7 @@ enum Dyn_Alloc {
     DEBUG_TAC,
     EffortMinControl,
     EffortMaxControl,
+    averageTariffsPerRectangle,
 
     Dyn_Alloc_last
 };

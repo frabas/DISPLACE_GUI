@@ -274,6 +274,7 @@ class  Node
         const vector<double>& get_totWs_per_pop ();
         const vector<double>& get_impact_per_pop ();
         const vector<double>& get_cumcatches_per_pop ();
+        const vector<double>& get_cumcatches_per_pop_this_month ();
         const vector<double>& get_cumdiscards_per_pop ();
         int get_cumftime() const;
         double get_cumsweptarea() const;
@@ -297,6 +298,7 @@ class  Node
         void set_totWs_per_pop(int name_pop, double val);
         void set_impact_per_pop(int name_pop, double val);
         void set_cumcatches_per_pop(int name_pop, double val);
+        void set_cumcatches_per_pop_this_month(int name_pop, double val);
         void set_cumdiscards_per_pop(int name_pop, double val);
         void set_vid(int val);
         void set_cumftime(int tot);
@@ -313,6 +315,7 @@ class  Node
         void add_to_sweptarea(int sweptarea);
         void add_to_cumcatches(double catches);
         void add_to_cumcatches_per_pop(double catches, int pop);
+        void add_to_cumcatches_per_pop_this_month(double catches, int pop);
         void add_to_cumdiscards(double discards);
         void add_to_cumdiscards_per_pop(double discards, int pop);
         void set_pop_names_on_node(int name_pop);
@@ -337,6 +340,7 @@ class  Node
         void clear_totWs_per_pop();
         void clear_impact_per_pop();
         void clear_cumcatches_per_pop();
+        void clear_cumcatches_per_pop_this_month();
         void clear_cumdiscards_per_pop();
         void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
         void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, int testep,
@@ -466,6 +470,7 @@ private:
         vector<double> totWs_per_pop;
         vector<double> impact_per_pop;
         vector<double> cumcatches_per_pop;
+        vector<double> cumcatches_per_pop_this_month;
         vector<double> cumdiscards_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;

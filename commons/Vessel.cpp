@@ -3338,6 +3338,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     // CUMUL FOR THE TRIP (all species confounded)
                     this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
                     this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
+                    this->get_loc()->add_to_cumcatches_per_pop_this_month(a_cumul_weight_this_pop_this_vessel, pop);
                     // catches
                     cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
@@ -3578,6 +3579,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
                 // contribute to accumulated catches on this node
                 this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
+                this->get_loc()->add_to_cumcatches_per_pop_this_month(catch_pop_at_szgroup[pop][0], pop);
                 this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
             }
             else

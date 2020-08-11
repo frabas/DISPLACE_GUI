@@ -349,12 +349,20 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // (also accounting for a potential multiplier (default at 1.0))
                 if (is_other_land_as_multiplier_on_sp) {
                     // if a proportion of sp biomass is given in the oth_land layer instead of an absolute kg on node:
-                    //cout << "on node " << n << " map_oth[a_list_nodes.at(n)->get_idx_node()] is " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
-                    vector<double> Ns_on_node = a_list_nodes.at(n)->get_Ns_pops_at_szgroup().at(sp);
-                    vector<double> Wts_this_sp = populations.at(sp)->get_weight_at_szgroup();
-                    double biomass_on_node = 0;
-                    for (unsigned int i = 0; i < Wts_this_sp.size(); i++)  biomass_on_node += (Ns_on_node.at(i) * Wts_this_sp.at(i));
-                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * biomass_on_node;
+                    cout << "on node " << n << " map_oth[a_list_nodes.at(n)->get_idx_node()] is " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
+                    
+                    // other land as a proportion of last month catch by explicit vessels.
+                    double Cs_on_node = a_list_nodes.at(n)->get_cumcatches_per_pop_this_month().at(sp);
+                    a_list_nodes.at(n)->set_cumcatches_per_pop_this_month(sp, 0); // reinit
+                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_on_node;
+                    cout << "on node " << n << " Cs_on_node is " << Cs_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
+
+                    // other land as a proportion of biomass present on node.
+                    //vector<double> Ns_on_node = a_list_nodes.at(n)->get_Ns_pops_at_szgroup().at(sp);
+                    //vector<double> Wts_this_sp = populations.at(sp)->get_weight_at_szgroup();
+                    //double biomass_on_node = 0;
+                    //for (unsigned int i = 0; i < Wts_this_sp.size(); i++)  biomass_on_node += (Ns_on_node.at(i) * Wts_this_sp.at(i));
+                    //map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * biomass_on_node;
                     //cout << "on node " << n << " biomass_on_node is " << biomass_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
                 }
                 double oth_land_this_pop_this_node=

@@ -216,6 +216,7 @@ Node::Node()
       totWs_per_pop(),
       impact_per_pop(),
       cumcatches_per_pop(),
+      cumcatches_per_pop_this_month(),
       cumdiscards_per_pop(),
       vid(),
       pop_names_on_node(),
@@ -828,6 +829,11 @@ const vector<double>& Node::get_cumcatches_per_pop ()
     return(cumcatches_per_pop);
 }
 
+const vector<double>& Node::get_cumcatches_per_pop_this_month()
+{
+    return(cumcatches_per_pop_this_month);
+}
+
 const vector<double>& Node::get_cumdiscards_per_pop ()
 {
     return(cumdiscards_per_pop);
@@ -932,6 +938,13 @@ void Node::add_to_cumcatches_per_pop(double catches, int pop)
     unlock();
 }
 
+void Node::add_to_cumcatches_per_pop_this_month(double catches, int pop)
+{
+    lock();
+    cumcatches_per_pop_this_month.at(pop) += catches;
+    unlock();
+}
+
 void Node::add_to_cumdiscards_per_pop(double discards, int pop)
 {
     lock();
@@ -968,6 +981,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (totWs_per_pop, nbpops);
     reinit (impact_per_pop, nbpops);
     reinit (cumcatches_per_pop, nbpops);
+    reinit (cumcatches_per_pop_this_month, nbpops);
     reinit (cumdiscards_per_pop, nbpops);
 
 }
@@ -1086,6 +1100,13 @@ void Node::set_cumcatches_per_pop(int name_pop, double newval)
 {
 
     cumcatches_per_pop.at(name_pop)=newval;
+
+}
+
+void Node::set_cumcatches_per_pop_this_month(int name_pop, double newval)
+{
+
+    cumcatches_per_pop_this_month.at(name_pop) = newval;
 
 }
 
@@ -1244,6 +1265,15 @@ void Node::clear_cumcatches_per_pop()
     for(unsigned int i=0; i<cumcatches_per_pop.size(); i++)
     {
         cumcatches_per_pop.at(i)=0;
+    }
+
+}
+
+void Node::clear_cumcatches_per_pop_this_month()
+{
+    for (unsigned int i = 0; i < cumcatches_per_pop_this_month.size(); i++)
+    {
+        cumcatches_per_pop_this_month.at(i) = 0;
     }
 
 }

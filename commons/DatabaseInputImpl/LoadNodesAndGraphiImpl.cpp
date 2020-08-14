@@ -110,7 +110,7 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
     });
 
     // edges
-    auto query2 = db::makeSelectStatement(*p->db, NodesTableName,
+    auto query2 = db::makeSelectStatement(*p->db, EdgesTableName,
                                           fieldFromNode, fieldToNode, fieldWeight);
     query2.where(fieldGraphSce == "agraph");
     query2.bind(model().scenario().a_graph);

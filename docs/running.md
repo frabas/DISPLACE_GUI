@@ -36,8 +36,6 @@ Number of steps
 
 disable the output to sqlite
 
---without-gnuplot 
-
 -V 1 
 
 Verbosity level

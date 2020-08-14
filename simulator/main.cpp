@@ -420,7 +420,6 @@ int use_static_paths = 0;//used to speed-up the simus by using reduced (to minim
 int selected_vessels_only = 0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
 bool use_gui = false;
 bool gui_move_vessels = true;
-bool use_gnuplot = false;
 int num_threads = 4;
 int nb_displayed_moves_out_of_twenty = 1;
 int export_vmslike = 1;
@@ -1941,21 +1940,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         guiSendTerminalMessage(os.str());
 
         dout(cout << "---------------" << endl);
-
-        if (use_gnuplot) {
-            filename =
-                    outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/vmslike2_" + namesimu +
-                    ".dat";
-            vmslike2.open(filename.c_str());
-
-            filename =
-                    outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/vmslike3_" + namesimu +
-                    ".dat";
-            vmslike3.open(filename.c_str());
-        }
-
-
-
 
         //----------------------------------------//
         //----------------------------------------//

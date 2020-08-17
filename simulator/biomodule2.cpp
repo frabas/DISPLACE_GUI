@@ -339,6 +339,19 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             // TO DO:
             // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe to refined.
+            
+            double Cs = 0.0;
+            if (is_other_land_as_multiplier_on_sp)
+            {
+                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                {
+                    Cs += a_list_nodes.at(n)->get_cumcatches_per_pop_this_month().at(sp);
+                    a_list_nodes.at(n)->set_cumcatches_per_pop_this_month(sp, 0); // reinit after use
+                }
+               // cout << "Cs last month this pop " << sp << " is " << Cs << endl;
+            }
+            
+
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
@@ -352,9 +365,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     //cout << "on node " << n << " map_oth[a_list_nodes.at(n)->get_idx_node()] is " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
                     
                     // other land as a proportion of last month catch by explicit vessels.
-                    double Cs_on_node = a_list_nodes.at(n)->get_cumcatches_per_pop_this_month().at(sp);
-                    a_list_nodes.at(n)->set_cumcatches_per_pop_this_month(sp, 0); // reinit
-                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_on_node;
+                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs;
                     //cout << "on node " << n << " Cs_on_node is " << Cs_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
 
                     // other land as a proportion of biomass present on node.

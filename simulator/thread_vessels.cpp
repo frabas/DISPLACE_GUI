@@ -86,7 +86,6 @@ static OutputQueueManager mOutQueue;
 
 extern std::mutex glob_mutex;
 extern bool use_gui;
-extern bool use_gnuplot;
 extern bool gui_move_vessels;
 extern int nb_displayed_moves_out_of_twenty;
 
@@ -555,13 +554,6 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     new MoveVesselOutputMessage(model->timestep(), model->vessels()[index_v])));
         }
 
-        // realtime gnuplot
-        if (use_gnuplot) {
-            ::mutex.lock();
-            vmslike2 << model->vessels()[index_v]->get_x() << " "
-                     << model->vessels()[index_v]->get_y() << endl;
-            ::mutex.unlock();
-        }
         model->vessels()[index_v]->unlock();
     } // end is_exited
 }

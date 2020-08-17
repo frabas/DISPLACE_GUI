@@ -87,7 +87,7 @@ bool DatabaseModelLoader::loadPopulations(int year)
 
     auto selectPopPar = db::makeSelectStatement(*p->db, PopParamTableName,
                                                 fieldPopParId, fieldPopParValue);
-    selectPopPar.where(fieldPopParParam == "?");
+    selectPopPar.where(fieldPopParParam == "param");
 
     selectPopPar.bind("hyperstability_param");
     selectPopPar.execute([&populations](int id, std::string val) {

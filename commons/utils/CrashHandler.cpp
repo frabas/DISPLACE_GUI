@@ -197,10 +197,11 @@ void CrashHandler::DoBacktrace(char **messages, size_t size, std::ostream &ss)
 
 void CrashHandler::DoSaveCrashdump(const std::string &msg)
 {
-    auto logfilename = boost::str(boost::format{"crashdump-%l.log"} % time(0));
-    auto logpath1 = logfilename;
+    std::ostringstream ss;
+    ss << "crashdump-" << time(0) << ".log";
+    auto logpath1 = ss.str();
 
-    std::ofstream fs (logpath1, std::ios::out | std::ios::app);
+    std::ofstream fs(logpath1, std::ios::out | std::ios::app);
     fs << msg << std::endl;
     fs.close();
 }

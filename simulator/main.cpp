@@ -1547,64 +1547,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " SETTING UP GNUPLOT        " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-
-    // short note on the R code to get a map.dat file
-    // for coastline map:
-    // library(mapdata)
-    // ss<-map('worldHires', c('Denmark','Sweden','Norway','Germany','UK','Netherlands','Belgium','France','poland'))
-    // write.table(round(cbind(ss$x,ss$y),4),file="map.dat",row.names=FALSE,sep=" ")
-    // then replace the NA by nothing
-
-#ifdef _WIN32
-                                                                                                                            // realtime gnuplot
-    if(use_gnuplot)
-    {
-        pipe2 = _popen(path, "w");
-        //pipe2 = popen("gnuplot", "w"); // for gnuplot installed for MinGW_with_gcc_4.5.2, a previous version
-        //pipe3 = popen("gnuplot", "w"); //this opens gnuplot
-        //this opens gnuplot
-        pipe3 = _popen(path, "w");
-        //this opens gnuplot
-        pipe4 = _popen(path, "w");
-        if (pipe2==NULL || pipe3==NULL)
-        {
-            printf("Error opening pipe to GNU plot. Check if you have it! \n");
-            exit(0);
-        }
-        else
-        {
-            dout(cout  << "gnuplot opened...." << endl);
-        }
-        fprintf(pipe2, "set terminal windows 0 size 400,400 position 100,100\n");
-        // i.e. canadian
-        if(namefolderinput=="final" || namefolderinput=="fake")
-        {
-            //telling gnuplot the range for axes
-            fprintf(pipe2, "set xrange [-9:22]\n");
-            fprintf(pipe2, "set yrange [48:65]\n");
-        }
-        //
-        if(namefolderinput=="balticonly")
-        {
-            //telling gnuplot the range for axes
-            fprintf(pipe2, "set xrange [5:20]\n");
-            fprintf(pipe2, "set yrange [54:59]\n");
-        }
-        fprintf(pipe3, "set terminal windows 1 size 400,400 position 100,500\n");
-        //telling gnuplot the range for axes
-        fprintf(pipe3, "set xrange [0:10000]\n");
-        fprintf(pipe3, "set yrange [0:200000]\n");
-        fprintf(pipe4, "set terminal windows 2 size 400,400 position 100,1000\n");
-        //telling gnuplot the range for axes
-        fprintf(pipe4, "set xrange [0:10000]\n");
-        fprintf(pipe4, "set yrange [0:200000]\n");
-    }
-#endif
+    
 
     dout(cout << "---------------------------------" << endl);
     dout(cout << "---------------------------------" << endl);
@@ -3297,33 +3240,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //      ships[ s ]->move();
         //}
 
-#ifdef _WIN32
-        if (use_gnuplot) {
-            for (auto ship : simModel->ships()) {
-                vmslike3 << ship->get_x() << " "
-                         << ship->get_y() << endl;
-            }
-            vmslike3.close();
-
-            vmslike2.close();
-            fflush(pipe2);
-            fprintf(pipe2, "set terminal windows 0 size 400,400 position 100,100\n");
-
-            Sleep(50);         // used when sometimes the simulation is too quick to be captured by gnuplot
-            // note that possible warning messages from gnuplot are harmless...these messages are just
-            // related to the fact that gnuplot actually try to open the vmslike2.dat while this is too late...
-            string command1 = "plot 'map.dat' with lines lt 3 , '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat' using 1:2,  '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat' using 1:2 with points pt 1\n";
-            // polygons
-            string command2 = "set object 1 polygon from 1,55 to 2,54 to 5,56 to 1,55";
-            string command3 = "set object 1 fc rgb 'cyan' border lt 1";
-
-            //plotting the .dat file
-            fprintf(pipe2, command1.c_str());
-            //fprintf(pipe2, command2.c_str()); //plotting the .dat file
-            //fprintf(pipe2, command3.c_str()); //plotting the .dat file
-
-        }
-#endif
 
         if (metadata) {
             metadata->setLastTStep(simModel->timestep());

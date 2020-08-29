@@ -119,16 +119,44 @@ map<int, double> VesselsLoader::Impl::getInitFuelPrices()
     return prices;
 }
 
+namespace {
+class VesselsLoaderDataDispatcher {
+    using func = std::function<void(VesselsLoader::VesselData &data, int, double)>;
+    std::map<std::string, func> dispatcher;
+    std::shared_ptr<VesselsLoader::VesselData> vessel;
+public:
+    explicit VesselsLoaderDataDispatcher(std::shared_ptr<VesselsLoader::VesselData> v) : vessel(v)
+    {
+        if (dispatcher.empty()) {
+            dispatcher.insert(std::make_pair("fgroundFreq", [](VesselsLoader::VesselData &data, int opt, double val) {
+                data.fground.push_back(types::NodeId{uint16_t(opt)});
+                data.fgroundFreq.insert(std::make_pair(opt, val));
+            }));
+        }
+    }
+
+    void load(std::string parameter, int opt, double val)
+    {
+        auto function = dispatcher.find(parameter);
+        if (function != dispatcher.end()) {
+            dispatcher[parameter](*vessel, opt, val);
+        } else {
+            std::cout << "** Warning, Can't load Parameter " << parameter << " not implemented.\n";
+        }
+    }
+};
+
+}
+
 shared_ptr<VesselsLoader::VesselData> VesselsLoader::Impl::getVesselData(std::string vesselname, int period)
 {
     auto data = std::make_shared<VesselsLoader::VesselData>();
 
+    VesselsLoaderDataDispatcher dispatcher(data);
+
     selectParamOpt1ValueFromNamePeriod.bind(vesselname, period);
-    selectParamOpt1ValueFromNamePeriod.execute([&data](std::string param, int opt1, double value) {
-        if (param == "fgroundFreq") {
-            data->fground.push_back(opt1);
-            data->fgroundFreq.insert(std::make_pair(opt1, value));
-        }
+    selectParamOpt1ValueFromNamePeriod.execute([&data, &dispatcher](std::string param, int opt1, double value) {
+        dispatcher.load(param, opt1, value);
         return true;
     });
 

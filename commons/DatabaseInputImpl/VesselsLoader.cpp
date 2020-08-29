@@ -122,16 +122,29 @@ map<int, double> VesselsLoader::Impl::getInitFuelPrices()
 namespace {
 class VesselsLoaderDataDispatcher {
     using func = std::function<void(VesselsLoader::VesselData &data, int, double)>;
-    std::map<std::string, func> dispatcher;
+    using map = std::map<std::string, func>;
+    using iterator = map::iterator;
+    map dispatcher;
+
+    std::pair<std::string, func> m(std::string p, func f)
+    {
+        return std::make_pair(p, f);
+    }
+
     std::shared_ptr<VesselsLoader::VesselData> vessel;
+
+    static void loadFGroundFreq(VesselsLoader::VesselData &data, int opt, double val)
+    {
+        data.fground.emplace_back(uint16_t(opt));
+        data.fgroundFreq.insert(std::make_pair(opt, val));
+    }
+
+
 public:
     explicit VesselsLoaderDataDispatcher(std::shared_ptr<VesselsLoader::VesselData> v) : vessel(v)
     {
         if (dispatcher.empty()) {
-            dispatcher.insert(std::make_pair("fgroundFreq", [](VesselsLoader::VesselData &data, int opt, double val) {
-                data.fground.push_back(types::NodeId{uint16_t(opt)});
-                data.fgroundFreq.insert(std::make_pair(opt, val));
-            }));
+            dispatcher.insert(m("fgroundFreq", &VesselsLoaderDataDispatcher::loadFGroundFreq));
         }
     }
 

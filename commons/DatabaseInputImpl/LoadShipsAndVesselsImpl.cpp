@@ -25,10 +25,34 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
     for (auto &vessel: allVessels) {
         // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
         auto vesselData = loader.getVesselData(vessel, month);
+        auto &spe_harbours = vesselData->harbours;
+        auto &spe_freq_harbours = vesselData->freq_harbours;
 
         // TODO: There's no a_location in the db. FIXME.
+        types::NodeId start_harbour{0};
+        if (!spe_harbours.empty()) {
+            // need to convert in array, see myRutils.cpp
+            auto one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
+            start_harbour = one_harbour[0];
+        } else {
+            // if missing info for a given vessel for this quarter
+            outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
+            // CAUTION: LIKE A MAGIC NUMBER HERE!!!
+            // TODO I don't know what this does.
+//            start_harbour = find_entries(loadedDataVessels.mmapsnparam1, loadedDataVessels.vectsparam1.at(0))[0];
+//            spe_harbours.push_back(start_harbour);
+//            spe_freq_harbours.push_back(1);
+            outc(cout << "then take node: " << start_harbour << endl);
+            std::ostringstream ss;
+            ss << "This part was not implemented, please fix it: " << __FILE__ << " line " << __LINE__;
+            throw std::logic_error(ss.str());
+        }
+
+
+        auto a_location = model().nodes().at(start_harbour.toIndex());
+
         auto v = new Vessel(
-                nullptr,        // a_location. What is it?
+                a_location,        // a_location. What is it?
                 0,              // idx_vessel, where to find it?
                 vessel,         // name
                 0, 0,           // nb pops, nbszgrous,

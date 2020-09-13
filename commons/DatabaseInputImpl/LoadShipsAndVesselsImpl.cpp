@@ -22,6 +22,8 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
     auto allVessels = loader.getListOfAllVessels();
 
     std::vector<Vessel *> vesselsToAdd;
+    double idx_vessel = -1;
+
     for (auto &vessel: allVessels) {
         // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
         auto vesselData = loader.getVesselData(vessel, month);
@@ -50,16 +52,22 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
 
 
         auto a_location = model().nodes().at(start_harbour.toIndex());
+        
+        auto& vessel_beta = vesselData->vessel_betas_per_pop;
+        idx_vessel += idx_vessel;
+        double nbpops = vessel_beta.size();
+        double nbszgroups = 14; // caution: magic number
+
 
         auto v = new Vessel(
-                a_location,        // a_location. What is it?
-                0,              // idx_vessel, where to find it?
+                a_location,        // a_location i.e start harbour node
+                idx_vessel,
                 vessel,         // name
-                0, 0,           // nb pops, nbszgrous,
+                nbpops,
+                nbszgroups,           
                 vesselData->harbours,
                 vesselData->fground,
-                std::vector<types::NodeId>(),   // FIXME ?
-                //vesselData->fgroundFreq,
+                vesselData->fground_init,
                 vesselData->freq_harbours,
                 vesselData->freq_fgrounds,
                 vesselData->freq_fgrounds_init,

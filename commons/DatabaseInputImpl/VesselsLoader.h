@@ -24,6 +24,7 @@ public:
     struct VesselData {
         std::vector<types::NodeId> harbours;
         std::vector<types::NodeId> fground;
+        std::vector<types::NodeId> fground_init;
         std::map<int, double> fgroundFreq;
         std::vector<double> freq_harbours;
         std::vector<double> freq_fgrounds;

@@ -41,8 +41,8 @@ struct VesselsLoader::Impl {
     > selectOpt1ValueFromNameParameter;
 
     db::SelectStatement<
-            decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldValue)>
-            selectParamOpt1ValueFromNamePeriod;
+            decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
+            selectParamOpt1Opt2ValueFromNamePeriod;
 
     Impl(msqlitecpp::v2::Storage &thedb);
 
@@ -86,10 +86,10 @@ std::vector<double> VesselsLoader::getEconomicFeature(std::string vesselname)
 VesselsLoader::Impl::Impl(msqlitecpp::v2::Storage &thedb)
         : db(thedb),
           selectOpt1ValueFromNameParameter(db, VesselTableName, fieldOpt1, fieldValue),
-          selectParamOpt1ValueFromNamePeriod(db, VesselTableName, fieldParameter, fieldOpt1, fieldValue)
+          selectParamOpt1Opt2ValueFromNamePeriod(db, VesselTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue)
 {
     selectOpt1ValueFromNameParameter.where(fieldVesselname == "name" && fieldParameter == "parameter");
-    selectParamOpt1ValueFromNamePeriod.where(fieldVesselname == "name" && fieldPeriod == "period");
+    selectParamOpt1Opt2ValueFromNamePeriod.where(fieldVesselname == "name" && fieldPeriod == "period");
 }
 
 std::vector<std::string> VesselsLoader::Impl::getListOfAllVessels()
@@ -121,7 +121,7 @@ map<int, double> VesselsLoader::Impl::getInitFuelPrices()
 
 namespace {
 class VesselsLoaderDataDispatcher {
-    using func = std::function<void(VesselsLoader::VesselData &data, int, double)>;
+    using func = std::function<void(VesselsLoader::VesselData &data, int, int, double)>;
     using map = std::map<std::string, func>;
     using iterator = map::iterator;
     map dispatcher;
@@ -133,7 +133,7 @@ class VesselsLoaderDataDispatcher {
 
     std::shared_ptr<VesselsLoader::VesselData> vessel;
 
-    static void loadFGroundNodelistAndFreq(VesselsLoader::VesselData &data, int opt, double val)
+    static void loadFGroundNodelistAndFreq(VesselsLoader::VesselData &data, int opt, int opt2, double val)
     {
         data.fground.emplace_back(uint16_t(opt));
         data.freq_fgrounds.emplace_back(uint16_t(val));
@@ -141,185 +141,185 @@ class VesselsLoaderDataDispatcher {
         // data.fgroundFreq.insert(std::make_pair(opt, val));
     }
 
-    static void loadHarbourNodeListAndFreq(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadHarbourNodeListAndFreq(VesselsLoader::VesselData &data, int opt, int opt2, double val)
     {
         data.harbours.emplace_back(uint16_t(opt));
         data.freq_harbours.emplace_back(uint16_t(val));
     }
 
-    static void loadvesselBeta(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadvesselBeta(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.vessel_betas_per_pop.emplace_back(uint16_t(val)); // should be a vector of double along pops
     }
 
-    static void loadpercentTac(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadpercentTac(VesselsLoader::VesselData &data, int opt, int opt2, double val)
     {
         data.percent_tac_per_pop.emplace_back(uint16_t(val)); // should be a vector of double along pops
     }
 
-    static void loadMetierlistOnNodeAndFreq(VesselsLoader::VesselData& data, int opt1, int opt2, double val)
+    static void loadMetierlistOnNodeAndFreq(VesselsLoader::VesselData &data, int opt1, int opt2, double val)
     {
         data.possible_metiers.insert(std::make_pair(opt1, opt2)); // should be a multimap!!
         data.freq_possible_metiers.insert(std::make_pair(opt1, val)); // should be a multimap!!
     }
-  
-    static void loadGShapeLPUE(VesselsLoader::VesselData& data, int opt1, double val)
+
+    static void loadGShapeLPUE(VesselsLoader::VesselData &data, int opt1, int opt2, double val)
     {
         data.gshape_cpue_per_stk_on_nodes.insert(std::make_pair(opt1, val)); // should be a multimap!!
     }
 
-    static void loadGScaleLPUE(VesselsLoader::VesselData& data, int opt1, double val)
+    static void loadGScaleLPUE(VesselsLoader::VesselData &data, int opt1, int opt2, double val)
     {
         data.gscale_cpue_per_stk_on_nodes.insert(std::make_pair(opt1, val)); // should be a multimap!!
     }
 
- 
-  static void loadIsVesActive(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadIsVesActive(VesselsLoader::VesselData &data, int, int, double val)
     {
-        data.vid_is_active=uint16_t(val); // should be a single int
+        data.vid_is_active = uint16_t(val); // should be a single int
     }
 
-    static void loadIsVesRefFleet(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadIsVesRefFleet(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.vid_is_part_of_ref_fleet = uint16_t(val); // should be a single int
     }
 
-    static void loadVesSpeed(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesSpeed(VesselsLoader::VesselData &data, int, int, double val)
     {
-        data.speed=val; // should be a single double
+        data.speed = val; // should be a single double
     }
 
-    static void loadFuelLitrePerH(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadFuelLitrePerH(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.fuelcons = val; // should be a single double
     }
 
-    static void loadVesLength(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesLength(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.length = val; // should be a single double
     }
 
-    static void loadVesKW(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesKW(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.KW = val; // should be a single double
     }
 
-    static void loadVesStorageKg(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesStorageKg(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.carrycapacity = val; // should be a single double
     }
 
-    static void loadVesFuelTankLitre(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesFuelTankLitre(VesselsLoader::VesselData &data, int, int opt2, double val)
     {
         data.tankcapacity = val; // should be a single double
     }
 
-    static void loadNbPingsPerTrip(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadNbPingsPerTrip(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.nbfpingspertrip = val; // should be a single double
     }
 
-    static void loadRestTimeParam1(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadRestTimeParam1(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.resttime_par1 = val; // should be a single double
     }
-   
-    static void loadRestTimeParam2(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadRestTimeParam2(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.resttime_par2 = val; // should be a single double
     }
 
-    static void loadTripDuration(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadTripDuration(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.av_trip_duration = val; // should be a single double
     }
 
-    static void loadFuelMultiSteamg(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadFuelMultiSteamg(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.mult_fuelcons_when_steaming = val; // should be a single double
     }
 
-    static void loadFuelMultiFishg(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadFuelMultiFishg(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.mult_fuelcons_when_fishing = val; // should be a single double
     }
-    
-    static void loadFuelMultiReturg(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadFuelMultiReturg(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.mult_fuelcons_when_returning = val; // should be a single double
     }
-  
-    static void loadFuelMultiInactiv(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadFuelMultiInactiv(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.mult_fuelcons_when_inactive = val; // should be a single double
     }
 
-    static void loadFirmID(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadFirmID(VesselsLoader::VesselData &data, int, int, double val)
     {
         data._firm_id = uint16_t(val); // should be a single int
     }
-  
-    static void loadNbCrew(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadNbCrew(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.this_vessel_nb_crew = val; // should be a single double
     }
 
-    static void loadAnnlOthIncome(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadAnnlOthIncome(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.annual_other_income = val; // should be a single double
     }
-    
-    static void loadLandCostsPercent(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadLandCostsPercent(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.landing_costs_percent = val; // should be a single double
     }
-    
-    static void loadCrewsharePercent(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadCrewsharePercent(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.crewshare_and_unpaid_labour_costs_percent = val; // should be a single double
     }
 
-    static void loadVarOthCostsPerEff(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVarOthCostsPerEff(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.other_variable_costs_per_unit_effort = val; // should be a single double
     }
 
-    static void loadAnnlInsurCostsPerCrew(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadAnnlInsurCostsPerCrew(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.annual_insurance_costs_per_crew = val; // should be a single double
     }
 
-    static void loadLabourOpportyCosts(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadLabourOpportyCosts(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.standard_labour_hour_opportunity_costs = val; // should be a single double
     }
 
-    static void loadAnnlFTEhours(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadAnnlFTEhours(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.standard_annual_full_time_employement_hours = val; // should be a single double
     }
-   
-    static void loadAnnlOthFixedCosts(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadAnnlOthFixedCosts(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.other_annual_fixed_costs = val; // should be a single double
     }
 
-    static void loadVesValue(VesselsLoader::VesselData& data, int opt, double val)
+    static void loadVesValue(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.vessel_value = val; // should be a single double
     }
-   
-    static void loadAnnlDeprecRate(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadAnnlDeprecRate(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.annual_depreciation_rate = val; // should be a single double
     }
-   
-    static void loadOpportyInterestRate(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadOpportyInterestRate(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.opportunity_interest_rate = val; // should be a single double
     }
-  
-    static void loadAnnlDiscountRate(VesselsLoader::VesselData& data, int opt, double val)
+
+    static void loadAnnlDiscountRate(VesselsLoader::VesselData &data, int, int, double val)
     {
         data.annual_discount_rate = val; // should be a single double
     }
@@ -329,12 +329,12 @@ public:
     explicit VesselsLoaderDataDispatcher(std::shared_ptr<VesselsLoader::VesselData> v) : vessel(v)
     {
         if (dispatcher.empty()) {
-          
+
             dispatcher.insert(m("fground", &VesselsLoaderDataDispatcher::loadFGroundNodelistAndFreq));
             dispatcher.insert(m("harbours", &VesselsLoaderDataDispatcher::loadHarbourNodeListAndFreq));
             dispatcher.insert(m("vessel_betas_per_pop", &VesselsLoaderDataDispatcher::loadvesselBeta));
             dispatcher.insert(m("percent_tac_per_pop", &VesselsLoaderDataDispatcher::loadpercentTac));
-            //dispatcher.insert(m("possible_metiers", &VesselsLoaderDataDispatcher::loadMetierlistOnNodeAndFreq));
+            dispatcher.insert(m("possible_metiers", &VesselsLoaderDataDispatcher::loadMetierlistOnNodeAndFreq));
             dispatcher.insert(m("gshape_cpue_per_stk_on_nodes", &VesselsLoaderDataDispatcher::loadGShapeLPUE));
             dispatcher.insert(m("gscale_cpue_per_stk_on_nodes", &VesselsLoaderDataDispatcher::loadGScaleLPUE));
             dispatcher.insert(m("vid_is_active", &VesselsLoaderDataDispatcher::loadIsVesActive));
@@ -354,7 +354,7 @@ public:
             dispatcher.insert(m("mult_fuelcons_when_returning", &VesselsLoaderDataDispatcher::loadFuelMultiReturg));
             dispatcher.insert(m("mult_fuelcons_when_inactive", &VesselsLoaderDataDispatcher::loadFuelMultiInactiv));
             dispatcher.insert(m("_firm_id", &VesselsLoaderDataDispatcher::loadFirmID));
-            //dispatcher.insert(m("cd", &VesselsLoaderDataDispatcher::loadFGroundFreq)); // TODO: obtain from weekEndStartDay WeekEndEndDay WorkHoursStart WorkHoursEnd
+//            dispatcher.insert(m("cd", &VesselsLoaderDataDispatcher::loadFGroundFreq)); // TODO: obtain from weekEndStartDay WeekEndEndDay WorkHoursStart WorkHoursEnd
             dispatcher.insert(m("this_vessel_nb_crew", &VesselsLoaderDataDispatcher::loadNbCrew));
             dispatcher.insert(m("annual_other_income", &VesselsLoaderDataDispatcher::loadAnnlOthIncome));
             dispatcher.insert(m("landing_costs_percent", &VesselsLoaderDataDispatcher::loadLandCostsPercent));
@@ -374,11 +374,11 @@ public:
         }
     }
 
-    void load(std::string parameter, int opt, double val)
+    void load(std::string parameter, int opt1, int opt2, double val)
     {
         auto function = dispatcher.find(parameter);
         if (function != dispatcher.end()) {
-            dispatcher[parameter](*vessel, opt, val);
+            dispatcher[parameter](*vessel, opt1, opt2, val);
         } else {
             std::cout << "** Warning, Can't load Parameter " << parameter << " not implemented.\n";
         }
@@ -393,11 +393,12 @@ shared_ptr<VesselsLoader::VesselData> VesselsLoader::Impl::getVesselData(std::st
 
     VesselsLoaderDataDispatcher dispatcher(data);
 
-    selectParamOpt1ValueFromNamePeriod.bind(vesselname, period);
-    selectParamOpt1ValueFromNamePeriod.execute([&data, &dispatcher](std::string param, int opt1, double value) {
-        dispatcher.load(param, opt1, value);
-        return true;
-    });
+    selectParamOpt1Opt2ValueFromNamePeriod.bind(vesselname, period);
+    selectParamOpt1Opt2ValueFromNamePeriod.execute(
+            [&data, &dispatcher](std::string param, int opt1, int opt2, double value) {
+                dispatcher.load(param, opt1, opt2, value);
+                return true;
+            });
 
     return data;
 }

@@ -54,7 +54,7 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
         auto a_location = model().nodes().at(start_harbour.toIndex());
         
         auto& vessel_beta = vesselData->vessel_betas_per_pop;
-        idx_vessel += idx_vessel;
+        idx_vessel += 1;
         double nbpops = vessel_beta.size();
         double nbszgroups = 14; // caution: magic number
 

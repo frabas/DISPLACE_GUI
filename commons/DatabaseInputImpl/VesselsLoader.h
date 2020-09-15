@@ -66,6 +66,7 @@ public:
         double annual_depreciation_rate;
         double opportunity_interest_rate;
         double annual_discount_rate;
+        VesselCalendar calendar;
     };
 
     std::shared_ptr<VesselData> getVesselData(std::string vesselname, int period);

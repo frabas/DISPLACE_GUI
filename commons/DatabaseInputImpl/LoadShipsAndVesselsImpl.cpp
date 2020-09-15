@@ -109,6 +109,7 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
                 vesselData->opportunity_interest_rate,
                 vesselData->annual_discount_rate);
 
+        v->updateCalendar(vesselData->calendar);
         vesselsToAdd.push_back(v);
     }
 

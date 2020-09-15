@@ -324,6 +324,25 @@ class VesselsLoaderDataDispatcher {
         data.annual_discount_rate = val; // should be a single double
     }
 
+    static void loadWorkHoursStart(VesselsLoader::VesselData &data, int, int, double val)
+    {
+        data.calendar.workStartHour = static_cast<int>(val);
+    }
+
+    static void loadWorkHoursEnd(VesselsLoader::VesselData &data, int, int, double val)
+    {
+        data.calendar.workEndHour = static_cast<int>(val);
+    }
+
+    static void loadWeekEndStartDay(VesselsLoader::VesselData &data, int, int, double val)
+    {
+        data.calendar.weekEndStartDay = static_cast<int>(val);
+    }
+
+    static void loadWeekEndEndDay(VesselsLoader::VesselData &data, int, int, double val)
+    {
+        data.calendar.weekEndEndDay = static_cast<int>(val);
+    }
 
 public:
     explicit VesselsLoaderDataDispatcher(std::shared_ptr<VesselsLoader::VesselData> v) : vessel(v)
@@ -354,7 +373,14 @@ public:
             dispatcher.insert(m("FuelMultiReturg", &VesselsLoaderDataDispatcher::loadFuelMultiReturg));
             dispatcher.insert(m("FuelMultiInactiv", &VesselsLoaderDataDispatcher::loadFuelMultiInactiv));
             dispatcher.insert(m("FirmID", &VesselsLoaderDataDispatcher::loadFirmID));
-//            dispatcher.insert(m("cd", &VesselsLoaderDataDispatcher::loadFGroundFreq)); // TODO: obtain from weekEndStartDay WeekEndEndDay WorkHoursStart WorkHoursEnd
+            dispatcher.insert(m("WorkHoursStart", &VesselsLoaderDataDispatcher::loadWorkHoursStart));
+            dispatcher.insert(m("WorkHoursEnd", &VesselsLoaderDataDispatcher::loadWorkHoursEnd));
+            dispatcher.insert(m("WeekEndStartDay", &VesselsLoaderDataDispatcher::loadWeekEndStartDay));
+
+            // TODO remove this, for legacy purpose.
+            dispatcher.insert(m("weekEndStartDay", &VesselsLoaderDataDispatcher::loadWeekEndStartDay));
+
+            dispatcher.insert(m("WeekEndEndDay", &VesselsLoaderDataDispatcher::loadWeekEndEndDay));
             dispatcher.insert(m("NbCrew", &VesselsLoaderDataDispatcher::loadNbCrew));
             dispatcher.insert(m("AnnlOthIncome", &VesselsLoaderDataDispatcher::loadAnnlOthIncome));
             dispatcher.insert(m("LandCostsPercent", &VesselsLoaderDataDispatcher::loadLandCostsPercent));

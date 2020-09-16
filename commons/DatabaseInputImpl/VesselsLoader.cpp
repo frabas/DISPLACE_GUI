@@ -159,8 +159,8 @@ class VesselsLoaderDataDispatcher {
 
     static void loadMetierlistOnNodeAndFreq(VesselsLoader::VesselData &data, int opt1, int opt2, double val)
     {
-        data.possible_metiers.insert(std::make_pair(opt1, opt2)); // should be a multimap!!
-        data.freq_possible_metiers.insert(std::make_pair(opt1, val)); // should be a multimap!!
+        data.possible_metiers.insert(std::make_pair(opt2, opt1)); // should be a multimap!!
+        data.freq_possible_metiers.insert(std::make_pair(opt2, val)); // should be a multimap!!
     }
 
     static void loadGShapeLPUE(VesselsLoader::VesselData &data, int opt1, int opt2, double val)

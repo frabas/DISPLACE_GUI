@@ -172,7 +172,7 @@ namespace {
 
         static void loadRevCompleteness(MetiersLoader::MetierData& data, int, int, double val)
         {
-            data.RevCompleteness = val; // should be a single double
+            data.percent_revenue_completeness = val; // should be a single double
         }
        
         static void loadSpeedAtFishing(MetiersLoader::MetierData& data, int, int, double val)

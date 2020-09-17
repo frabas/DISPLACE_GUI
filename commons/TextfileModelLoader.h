@@ -38,6 +38,8 @@ protected:
 
     void loadVessels(int year, int month, int quarter, int semester) override;
 
+    void loadMetiers(int year, int month, int quarter, int semester) override;
+    
     bool loadFishFarmsImpl() override;
 
     bool loadWindmillsImpl() override;
@@ -45,8 +47,7 @@ protected:
     bool loadPopulations(int year) override;
 
 public:
-    void loadMetiers() override;
-
+   
     void loadCalendar() override;
 
 protected:

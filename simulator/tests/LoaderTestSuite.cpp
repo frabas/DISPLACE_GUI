@@ -9,6 +9,7 @@
 #include "NodesLoader.h"
 #include "EdgesLoader.h"
 #include "VesselsLoader.h"
+#include "MetiersLoader.h"
 #include "Node.h"
 #include "ClosuresLoader.h"
 #include "readdata.h"
@@ -109,6 +110,31 @@ void LoaderTestSuite::loadVessels()
 
     BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << ecount << " Economic Features and " << count << " Records";
 }
+
+
+void LoaderTestSuite::loadMetiers()
+{
+    MetierssLoader loader(p->db);
+    auto allmetiers = loader.getListOfAllMetiers();
+
+    BOOST_LOG_TRIVIAL(info) << "Metiers: loaded " << allmetiers.size() << " Metiers name";
+
+  
+    std::vector<std::shared_ptr<MetiersLoader::MetierData>> v;
+    size_t count = 0, ecount = 0;
+    for (auto& metier : allmetiers) {
+        for (int quarter = 1; quarter <= 4; ++quarter) {
+            auto data = loader.getMetierData(metier, quarter);
+            ++count;
+            v.push_back(data);
+        }
+
+        ecount += ecfeat.size();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Vessels: loaded " << ecount;
+}
+
 
 void LoaderTestSuite::loadMetierClosures()
 {

@@ -107,7 +107,7 @@ struct [[deprecated]] ParamsForLoad {
 };
 
 
-void TextfileModelLoader::loadMetiers()
+void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int semester)
 {
     ParamsForLoad paramsForLoad;
 

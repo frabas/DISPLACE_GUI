@@ -26,10 +26,7 @@ void DatabaseModelLoader::loadCalendar()
     model().setCalendar(loader.loadCalendar());
 }
 
-//void DatabaseModelLoader::loadMetiers()
-//{
 
-//}
 
 bool DatabaseModelLoader::loadConfigImpl(int &nbpops, int &nbbenthospops, std::vector<int> &implicit_pops,
                                          std::vector<int> &implicit_pops_level2, std::vector<int> &grouped_tacs,

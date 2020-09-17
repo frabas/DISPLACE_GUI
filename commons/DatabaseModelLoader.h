@@ -27,7 +27,7 @@ public:
 
     void loadVessels(int year, int month, int quarter, int semester) override;
 
-    void loadMetiers() override;
+    void loadMetiers(int year, int month, int quarter, int semester) override;
 
     bool loadPopulations(int year) override;
 

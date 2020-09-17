@@ -53,7 +53,7 @@ public:
 
     bool loadWindmills();
 
-    virtual void loadMetiers() = 0;
+    virtual void loadMetiers(int year, int month, int quarter, int semester) = 0;
 
     bool loadNodesAndGraphs();
 

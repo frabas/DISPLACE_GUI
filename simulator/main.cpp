@@ -1245,7 +1245,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
 
-    modelLoader->loadMetiers();
+    modelLoader->loadMetiers(1, simModel->month(), simModel->quarter(), simModel->semester());
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -2119,7 +2119,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // RE-read for metiers
             cout << "re-read metiers..." << endl;
-            modelLoader->loadMetiers();
+            modelLoader->loadMetiers(a_year, simModel->month(), simModel->quarter(), simModel->semester());
             cout << "re-read metiers...OK" << endl;
         } // END RE-READ DATA FOR VESSEL AND METIER...
 

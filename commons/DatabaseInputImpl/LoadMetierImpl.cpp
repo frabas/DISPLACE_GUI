@@ -26,11 +26,6 @@ void DatabaseModelLoader::loadMetiers(int year, int month, int quarter, int seme
         // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
         auto metierData = loader.getMetierData(metier, month);
 
-        auto& vessel_beta = vesselData->vessel_betas_per_pop;
-        idx_vessel += 1;
-        double nbpops = vessel_beta.size();
-        double nbszgroups = 14; // caution: magic number
-
 
         auto m = new Metier(
            metier,

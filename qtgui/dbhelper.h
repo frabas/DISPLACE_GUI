@@ -54,6 +54,7 @@ class DisplaceModel;
 class NodeData;
 class HarbourData;
 class VesselData;
+class MetierData;
 class VesselStats;
 class PopulationData;
 class NationStats;
@@ -85,6 +86,8 @@ public:
     bool loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model);
     bool loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels);
     bool loadFishFarms (const QList<std::shared_ptr<NodeData> > &nodes,QList<std::shared_ptr<FishfarmData>> &fishfarms);
+
+    bool loadMetiers(QList<std::shared_ptr<MetierData> >& metiers);
 
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);

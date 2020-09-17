@@ -16,8 +16,6 @@ public:
 
     std::vector<std::string> getListOfAllMetiers();
 
-    //map<int, double> getInitFuelPrices();
-
     struct MetierData {
         int type;
         double percent_revenue_completeness;

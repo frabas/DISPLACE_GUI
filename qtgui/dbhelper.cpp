@@ -234,6 +234,11 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
     return true;
 }
 
+bool DbHelper::loadMetiers(QList<std::shared_ptr<VesselData> >& metiers)
+{
+    return false;
+}
+
 bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels)
 {
     auto vtab = p->db->getVesselDefTable();

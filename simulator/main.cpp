@@ -2549,19 +2549,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 cout << "The fmultiplier has been applied ok" << endl;
 
                 // 2 - Re-init vessel total credits
-               // tout(cout << "Re-init vessel total credits..." << endl);
-               // for (auto vessel : simModel->vessels()) {
-               //     dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
-               //     vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
-               //     for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
-               //         spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
-               //     }
+                tout(cout << "Re-init vessel total credits..." << endl);
+                for (auto vessel : simModel->vessels()) {
+                    dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
+                    vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
+                    for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
+                        spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
+                    }
 
                     // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-               //     while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
+                    while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
 
-               //     vessel->set_fishing_credits(spe_fishing_credits);
-               // }
+                    vessel->set_fishing_credits(spe_fishing_credits);
+                }
             }
 
 
@@ -2585,6 +2585,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 case 3:
                     if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) { do_update = 1; }
                     // monthly update
+                    break;
+                default:
+                    do_update = 0;
                     break;
             }
 

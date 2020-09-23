@@ -144,10 +144,17 @@ set(SOURCES
         TextImpl/Impl.h TextImpl/LoadWindmillsImpl.cpp TextImpl/LoadBenthosImpl.cpp Calendar.cpp Calendar.h
         TextImpl/LoadShipsImpl.cpp TextImpl/LoadVesselsImpl.cpp readvesseldata.h readvesseldata.cpp
         TextImpl/LoadPopulationsImpl.cpp TextImpl/LoadMetiersImpl.cpp
-        DatabaseModelLoader.cpp DatabaseModelLoader.h DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp
-        DatabaseInputImpl/Impl.h DatabaseInputImpl/LoadShipsAndVesselsImpl.cpp DatabaseInputImpl/LoadPopulationImpl.cpp
+
+        DatabaseModelLoader.cpp DatabaseModelLoader.h
+        DatabaseInputImpl/Impl.h
+        DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp
+        DatabaseInputImpl/LoadShipsAndVesselsImpl.cpp
+        DatabaseInputImpl/LoadPopulationImpl.cpp
+        DatabaseInputImpl/LoadMetierImpl.cpp
+        DatabaseInputImpl/MetiersLoader.h DatabaseInputImpl/MetiersLoader.cpp
         DatabaseInputImpl/VesselsLoader.cpp DatabaseInputImpl/VesselsLoader.h
-        DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h)
+        DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h
+        )
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

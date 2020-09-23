@@ -132,7 +132,7 @@ namespace {
 
         static void loadMetierType(MetiersLoader::MetierData& data, int opt, int opt2, double val)
         {
-            data.type.emplace_back(uint16_t(val));
+            data.type = val;
         }
 
         static void loadMetierBetaPop(MetiersLoader::MetierData& data, int opt, int opt2, double val)
@@ -196,7 +196,7 @@ namespace {
         }
 
     public:
-        explicit MetiersLoaderDataDispatcher(std::shared_ptr<VesselsLoader::VesselData> v) : vessel(v)
+        explicit MetiersLoaderDataDispatcher(std::shared_ptr<MetiersLoader::MetierData> met) : metier(met)
         {
             if (dispatcher.empty()) {
 

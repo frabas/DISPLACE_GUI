@@ -129,7 +129,7 @@ namespace {
 
         std::shared_ptr<MetiersLoader::MetierData> metier;
 
-
+     
         static void loadMetierType(MetiersLoader::MetierData& data, int opt, int opt2, double val)
         {
             data.type = val;

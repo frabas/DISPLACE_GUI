@@ -26,11 +26,12 @@ void DatabaseModelLoader::loadMetiers(int year, int month, int quarter, int seme
         // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
         auto metierData = loader.getMetierData(metier, month);
 
-        // TODO this is not correct.
-        int metier_name = 0;
+       // TODO: selectivity_per_stock and loss_after_1_passage, bothcurrently not at the right format
+       
+        idx_metier += 1;
 
         auto m = new Metier(
-                metier_name,
+                idx_metier,
                 metierData->type,
                 metierData->percent_revenue_completeness,
                 metierData->selectivity_per_stock,

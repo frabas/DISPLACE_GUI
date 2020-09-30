@@ -8,17 +8,19 @@
 namespace db = msqlitecpp::v2;
 
 namespace {
-    static const char* MetierListTableName = "MetiersSpe";
-    static const char* MetierTableName = "MetiersParameters";
-    static const char* MetierTableNameScape = "MetiersParametersWithLandscape";
-    static const char* MetierTableNameSpSz = "MetiersParametersWithSpeciesAndSzGroup";
+static const char *MetierListTableName = "MetiersSpe";
+static const char *MetierTableName = "MetiersParameters";
+static const char *MetierTableNameScape = "MetiersParametersWithLandscape";
+static const char *MetierTableNameSpSz = "MetiersParametersWithSpeciesAndSzGroup";
 
-    db::Column<db::ColumnTypes::Text> fieldMetiername{ "MetierName" };
-    db::Column<db::ColumnTypes::Text> fieldParameter{ "Parameter" };
-    db::Column<db::ColumnTypes::Integer> fieldOpt1{ "Opt1" };
-    db::Column<db::ColumnTypes::Integer> fieldOpt2{ "Opt2" };
-    db::Column<db::ColumnTypes::Integer> fieldPeriod{ "Period" };
-    db::Column<db::ColumnTypes::Real> fieldValue{ "Value" };
+db::Column<db::ColumnTypes::Text> fieldMetiername{"MetierName"};
+db::Column<db::ColumnTypes::Text> fieldParameter{"Parameter"};
+db::Column<db::ColumnTypes::Integer> fieldOpt1{"Opt1"};
+db::Column<db::ColumnTypes::Integer> fieldOpt2{"Opt2"};
+db::Column<db::ColumnTypes::Integer> fieldSpecies{"species"};
+db::Column<db::ColumnTypes::Integer> fieldSzGroup{"szgroup"};
+db::Column<db::ColumnTypes::Integer> fieldPeriod{"Period"};
+db::Column<db::ColumnTypes::Real> fieldValue{"Value"};
 
 }
 
@@ -36,14 +38,18 @@ struct MetiersLoader::Impl {
     */
 
     db::SelectStatement<
-        decltype(fieldOpt1), decltype(fieldValue)
+            decltype(fieldOpt1), decltype(fieldValue)
     > selectOpt1ValueFromNameParameter;
 
     db::SelectStatement<
-        decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
-        selectParamOpt1Opt2ValueFromNamePeriod;
+            decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
+            selectParamOpt1Opt2ValueFromNamePeriod;
 
-    Impl(msqlitecpp::v2::Storage& thedb);
+    db::SelectStatement<
+            decltype(fieldParameter), decltype(fieldSpecies), decltype(fieldSzGroup), decltype(fieldValue)>
+            selectParamSpeciesSzGroup;
+
+    Impl(msqlitecpp::v2::Storage &thedb);
 
     std::vector<std::string> getListOfAllMetiers();
 
@@ -79,11 +85,14 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::getMetierData(std::string m
 
 MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
     : db(thedb),
-    selectOpt1ValueFromNameParameter(db, MetierTableName, fieldOpt1, fieldValue),
-    selectParamOpt1Opt2ValueFromNamePeriod(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue)
+      selectOpt1ValueFromNameParameter(db, MetierTableName, fieldOpt1, fieldValue),
+      selectParamOpt1Opt2ValueFromNamePeriod(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
+      selectParamSpeciesSzGroup(db, MetierTableNameSpSz, fieldParameter, fieldSpecies, fieldSzGroup, fieldValue)
 {
     selectOpt1ValueFromNameParameter.where(fieldMetiername == "name" && fieldParameter == "parameter");
     selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "name" && fieldPeriod == "period");
+    selectParamSpeciesSzGroup.where(
+            fieldMetiername == "name" && fieldSpecies == "species" && fieldSzGroup == "szgroup");
 }
 
 std::vector<std::string> MetiersLoader::Impl::getListOfAllMetiers()
@@ -199,10 +208,8 @@ namespace {
         explicit MetiersLoaderDataDispatcher(std::shared_ptr<MetiersLoader::MetierData> met) : metier(met)
         {
             if (dispatcher.empty()) {
-
                 dispatcher.insert(m("MetierType", &MetiersLoaderDataDispatcher::loadMetierType));
                 dispatcher.insert(m("RevCompleteness", &MetiersLoaderDataDispatcher::loadRevCompleteness));
-                //std::vector< vector <double> > selectivity_per_stock; // to find in MetiersParametersWithSpeciesAndSzGroup
                 dispatcher.insert(m("MetierBetaPop", &MetiersLoaderDataDispatcher::loadMetierBetaPop));
                 dispatcher.insert(m("DiscardPopRatio", &MetiersLoaderDataDispatcher::loadDiscardPopRatio));
                 dispatcher.insert(m("StockIsAvoided", &MetiersLoaderDataDispatcher::loadStockIsAvoided));
@@ -214,7 +221,6 @@ namespace {
                 dispatcher.insert(m("DepletionOnHab", &MetiersLoaderDataDispatcher::loadDepletionOnHab)); // to find in MetiersParametersWithLandscape
                 dispatcher.insert(m("TargetStock", &MetiersLoaderDataDispatcher::loadTargetStock)); 
                 dispatcher.insert(m("BottomType", &MetiersLoaderDataDispatcher::loadBottomType));
-       
             }
         }
 
@@ -223,12 +229,46 @@ namespace {
             auto function = dispatcher.find(parameter);
             if (function != dispatcher.end()) {
                 dispatcher[parameter](*metier, opt1, opt2, val);
-            }
-            else {
+            } else {
                 std::cout << "** Warning, Can't load Parameter " << parameter << " not implemented.\n";
             }
         }
     };
+
+
+class MetiersSpeciesSzGroupDispatcher {
+    using func = std::function<void(MetiersLoader::MetierData &data, int, int, double)>;
+    using map = std::map<std::string, func>;
+    using iterator = map::iterator;
+    static map dispatcher;
+    std::shared_ptr<MetiersLoader::MetierData> metier;
+
+    static void loadSelectivityPerStock(MetiersLoader::MetierData &data, int species, int szgroup, double val)
+    {
+        // TODO: fill data.selectivity_per_stock with val with index for species and szgroup
+    }
+
+public:
+    explicit MetiersSpeciesSzGroupDispatcher(std::shared_ptr<MetiersLoader::MetierData> met) : metier(met)
+    {
+        if (dispatcher.empty()) {
+            dispatcher.insert(
+                    std::make_pair("SelectivityPerStok", &MetiersSpeciesSzGroupDispatcher::loadSelectivityPerStock));
+        }
+    }
+
+    void load(std::string parameter, int species, int szgroup, double val)
+    {
+        auto function = dispatcher.find(parameter);
+        if (function != dispatcher.end()) {
+            dispatcher[parameter](*metier, species, szgroup, val);
+        } else {
+            std::cout << "** Warning, Can't load Parameter " << parameter << " not implemented.\n";
+        }
+    }
+};
+
+MetiersSpeciesSzGroupDispatcher::map MetiersSpeciesSzGroupDispatcher::dispatcher;
 
 }
 
@@ -240,10 +280,18 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
 
     selectParamOpt1Opt2ValueFromNamePeriod.bind(metiername, period);
     selectParamOpt1Opt2ValueFromNamePeriod.execute(
-        [&data, &dispatcher](std::string param, int opt1, int opt2, double value) {
-            dispatcher.load(param, opt1, opt2, value);
-            return true;
-        });
+            [&data, &dispatcher](std::string param, int opt1, int opt2, double value) {
+                dispatcher.load(param, opt1, opt2, value);
+                return true;
+            });
+
+    MetiersSpeciesSzGroupDispatcher szGroupDispatcher(data);
+    selectParamSpeciesSzGroup.bind(metiername);
+    selectParamSpeciesSzGroup.execute(
+            [&data, &szGroupDispatcher](std::string param, int species, int group, double value) {
+                szGroupDispatcher.load(param, species, group, value);
+                return true;
+            });
 
     return data;
 }

@@ -20,6 +20,7 @@ public:
         int type;
         double percent_revenue_completeness;
         std::vector< vector <double> > selectivity_per_stock;
+        std::vector< vector <double> > selectivity_per_stock_ogives_for_oth_land;
         std::vector<double> betas_per_pop;
         std::vector<double> discardratio_limits;
         std::vector<int>    is_avoided_stocks;

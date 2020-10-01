@@ -19,6 +19,8 @@ db::Column<db::ColumnTypes::Integer> fieldOpt1{"Opt1"};
 db::Column<db::ColumnTypes::Integer> fieldOpt2{"Opt2"};
 db::Column<db::ColumnTypes::Integer> fieldSpecies{"species"};
 db::Column<db::ColumnTypes::Integer> fieldSzGroup{"szgroup"};
+db::Column<db::ColumnTypes::Integer> fieldFuncGroup{"funcgroup"};
+db::Column<db::ColumnTypes::Integer> fieldLandscape{"landscape"};
 db::Column<db::ColumnTypes::Integer> fieldPeriod{"Period"};
 db::Column<db::ColumnTypes::Real> fieldValue{"Value"};
 
@@ -245,7 +247,12 @@ class MetiersSpeciesSzGroupDispatcher {
 
     static void loadSelectivityPerStock(MetiersLoader::MetierData &data, int species, int szgroup, double val)
     {
-        // TODO: fill data.selectivity_per_stock with val with index for species and szgroup
+        data.selectivity_per_stock.at(species).at(szgroup) = val;    
+    }
+
+    static void loadSelectivityOthPerStock(MetiersLoader::MetierData& data, int species, int szgroup, double val)
+    {
+        data.selectivity_per_stock_ogives_for_oth_land.at(species).at(szgroup) = val;
     }
 
 public:
@@ -253,7 +260,9 @@ public:
     {
         if (dispatcher.empty()) {
             dispatcher.insert(
-                    std::make_pair("SelectivityPerStok", &MetiersSpeciesSzGroupDispatcher::loadSelectivityPerStock));
+                    std::make_pair("SelOgive", &MetiersSpeciesSzGroupDispatcher::loadSelectivityPerStock));
+            dispatcher.insert(
+                    std::make_pair("SelOgiveOth", &MetiersSpeciesSzGroupDispatcher::loadSelectivityOthPerStock)); // TODO: add to metier creator()
         }
     }
 
@@ -270,7 +279,51 @@ public:
 
 MetiersSpeciesSzGroupDispatcher::map MetiersSpeciesSzGroupDispatcher::dispatcher;
 
+
+
+
+
+//for retrieving loss_after_1_passage:
+class MetiersFuncGroupLandscapeDispatcher {
+    using func = std::function<void(MetiersLoader::MetierData & data, int, int, double)>;
+    using map = std::map<std::string, func>;
+    using iterator = map::iterator;
+    static map dispatcher;
+    std::shared_ptr<MetiersLoader::MetierData> metier;
+
+    static void loadDepletionOnHab(MetiersLoader::MetierData& data, int funcgroup, int landscape, double val)
+    {
+        data.loss_after_1_passage.insert(std::make_pair(landscape, val));
+    }
+
+ 
+
+public:
+    explicit MetiersFuncGroupLandscapeDispatcher(std::shared_ptr<MetiersLoader::MetierData> met) : metier(met)
+    {
+        if (dispatcher.empty()) {
+            dispatcher.insert(
+                std::make_pair("DepletionOnHab", &MetiersFuncGroupLandscapeDispatcher::loadDepletionOnHab));
+        }
+    }
+
+    void load(std::string parameter, int funcgroup, int landscape, double val)
+    {
+        auto function = dispatcher.find(parameter);
+        if (function != dispatcher.end()) {
+            dispatcher[parameter](*metier, funcgroup, landscape, val);
+        }
+        else {
+            std::cout << "** Warning, Can't load Parameter " << parameter << " not implemented.\n";
+        }
+    }
+};
+
+MetiersFuncGroupLandscapeDispatcher::map MetiersFuncGroupLandscapeDispatcher::dispatcher;
+
 }
+
+
 
 shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::string metiername, int period)
 {

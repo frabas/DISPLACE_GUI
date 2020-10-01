@@ -322,7 +322,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
 
             cout << "Create metier " << i << "...done" << endl;
 
-            selectivity_per_stock_ogives_for_oth_land = loadedData.vovd5;
+            selectivity_per_stock_ogives_for_oth_land = loadedData.vovd5; // TODO: move to the right place
         }
 
         model().setMetiers(std::move(metiers));

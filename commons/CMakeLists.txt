@@ -154,6 +154,7 @@ set(SOURCES
         DatabaseInputImpl/MetiersLoader.h DatabaseInputImpl/MetiersLoader.cpp
         DatabaseInputImpl/VesselsLoader.cpp DatabaseInputImpl/VesselsLoader.h
         DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h
+        DatabaseInputImpl/PopulationsLoader.cpp DatabaseInputImpl/PopulationsLoader.h
         )
 
 if (WIN32 OR APPLE)

@@ -13,13 +13,12 @@ class PopulationsLoader {
     struct Impl;
     spimpl::unique_impl_ptr<Impl> p;
 public:
-    explicit PopulationsLoader(msqlitecpp::v2::Storage& db);
+    explicit PopulationsLoader(msqlitecpp::v2::Storage &db);
 
-    std::vector<std::string> getListOfAllPopulations();
+    std::vector<std::string> getListOfAllPopulationsName();
 
-   
     struct PopulationData {
-    
+
         int a_name;
         string a_pop_name;
         double avai0_beta;
@@ -45,7 +44,7 @@ public:
         std::vector<std::vector<double> > percent_szgroup_per_age_matrix;
         std::vector<std::vector<double> > percent_age_per_szgroup_matrix;
         std::vector<std::vector<double> > growth_transition_matrix;
-        std::vector<Node*> nodes;
+        std::vector<Node *> nodes;
         std::vector<double> fbar_ages_min_max;
         std::vector<double> init_tac;
         double tac_percent_simulated;
@@ -53,6 +52,8 @@ public:
         double a_calib_cpue_multiplier;
         double a_calib_weight_at_szgroup;
     };
+
+    std::vector<PopulationData> loadPopulationBaseData();
 
     std::shared_ptr<PopulationData> getPopulationData(std::string populationname, int period);
 

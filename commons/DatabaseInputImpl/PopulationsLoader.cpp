@@ -123,14 +123,31 @@ struct PopulationsLoader::Impl {
 };
 
 
-PopulationsLoader::PopulationsLoader(msqlitecpp::v2::Storage& db)
-    : p(spimpl::make_unique_impl<Impl>(db))
+PopulationsLoader::PopulationsLoader(msqlitecpp::v2::Storage &db)
+        : p(spimpl::make_unique_impl<Impl>(db))
 {
 }
 
-std::vector<std::string> PopulationsLoader::getListOfAllPopulations()
+std::vector<std::string> PopulationsLoader::getListOfAllPopulationsName()
 {
     return p->getListOfAllPopulations();
+}
+
+vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseData()
+{
+    vector<PopulationsLoader::PopulationData> data;
+
+    PopulationAllQuery q(p->db);
+    auto l = q.execute();
+
+    std::transform(l.begin(), l.end(), std::back_inserter(data), [](std::pair<int, std::string> popdata) {
+        PopulationsLoader::PopulationData d;
+        d.a_name = std::get<0>(popdata);
+        d.a_pop_name = std::get<1>(popdata);
+        return d;
+    });
+
+    return data;
 }
 
 shared_ptr<PopulationsLoader::PopulationData> PopulationsLoader::getPopulationData(std::string popname, int period)

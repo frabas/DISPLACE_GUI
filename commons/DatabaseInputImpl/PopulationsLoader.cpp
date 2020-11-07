@@ -110,6 +110,8 @@ public:
     }
 };
 
+PopulationParametersQuery::map PopulationParametersQuery::dispatcher;
+
 struct PopulationsLoader::Impl {
     msqlitecpp::v2::Storage &db;
 

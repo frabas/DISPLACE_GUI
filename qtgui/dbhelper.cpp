@@ -234,7 +234,7 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
     return true;
 }
 
-bool DbHelper::loadMetiers(QList<std::shared_ptr<VesselData> >& metiers)
+bool DbHelper::loadMetiers(QList<std::shared_ptr<MetierData> > &metiers)
 {
     return false;
 }

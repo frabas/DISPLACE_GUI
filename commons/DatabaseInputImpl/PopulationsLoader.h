@@ -45,6 +45,9 @@ public:
         std::vector<std::vector<double> > percent_age_per_szgroup_matrix;
         std::vector<std::vector<double> > growth_transition_matrix;
         std::vector<Node *> nodes;
+
+        // F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger,
+        // F-MSY value, F-MSY-low, F-MSY-up
         std::vector<double> fbar_ages_min_max;
         std::vector<double> init_tac;
         double tac_percent_simulated;

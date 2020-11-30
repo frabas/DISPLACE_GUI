@@ -155,7 +155,7 @@ set(SOURCES
         DatabaseInputImpl/VesselsLoader.cpp DatabaseInputImpl/VesselsLoader.h
         DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h
         DatabaseInputImpl/PopulationsLoader.cpp DatabaseInputImpl/PopulationsLoader.h
-        )
+        DatabaseInputImpl/dispatchers/PopParametersDispatchers.cpp DatabaseInputImpl/dispatchers/PopParametersDispatchers.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

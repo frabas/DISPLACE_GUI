@@ -1,6 +1,7 @@
 
 #include "PopulationsLoader.h"
 #include "Population.h"
+#include "dispatchers/PopParametersDispatchers.h"
 
 #include "msqlitecpp/v2/storage.h"
 #include "msqlitecpp/v2/selectstatement.h"
@@ -59,10 +60,12 @@ class PopulationParametersQuery {
     static map dispatcher;
 
     db::SelectStatement<
+            decltype(fieldSpecies),
             decltype(fieldParameter), decltype(fieldCountry), decltype(fieldPeriod), decltype(fieldLandscape), decltype(fieldValue)
     > selectQuery;
 
-    void dispatch(PopulationsLoader::PopulationData &population, std::string parameter, std::string country, int period,
+    void dispatch(PopulationsLoader::PopulationData &population,
+                  std::string parameter, std::string country, int period,
                   int landscape,
                   double value)
     {
@@ -77,21 +80,37 @@ class PopulationParametersQuery {
 public:
     explicit PopulationParametersQuery(msqlitecpp::v2::Storage &_db)
             : db(_db),
-              selectQuery(db, PopulationTableName, fieldParameter, fieldCountry, fieldPeriod, fieldLandscape,
+              selectQuery(db, PopulationTableName, fieldSpecies, fieldParameter, fieldCountry, fieldPeriod,
+                          fieldLandscape,
                           fieldValue)
     {
         if (dispatcher.empty()) {
-            // TODO fill here with the proper insert
+            dispatcher["fbar_min"] = &fill_fbar_min;
+            dispatcher["fbar_max"] = &fill_fbar_max;
+            dispatcher["ftarget"] = &fill_ftarget;
+            dispatcher["fpercent"] = &fill_fpercent;
+            dispatcher["TACpercent"] = &fill_tacpercent;
+            dispatcher["Btrigger"] = &fill_btrigger;
+            dispatcher["FMSY"] = &fill_fmsy;
+
+            dispatcher["TACinitial"] = &fill_tac_initial;
+            dispatcher["SSB_R_1"] = &fill_ssb1;
+            dispatcher["SSB_R_2"] = &fill_ssb2;
+
+            dispatcher["hyperstability_param"] = &fill_hypers;
+            dispatcher["ctrysspe_relative_stability"] = &fill_crty;
+            dispatcher["DeltaHab"] = &fill_dhab;
         }
     }
 
-    void execute(PopulationsLoader::PopulationData &population)
+    void execute(std::vector<PopulationsLoader::PopulationData> &population)
     {
-        selectQuery.execute([this, &population](std::string parameter, std::string country, int period, int landscape,
-                                                double value) {
-            dispatch(population, parameter, country, period, landscape, value);
-            return true;
-        });
+        selectQuery.execute(
+                [this, &population](int id, std::string parameter, std::string country, int period, int landscape,
+                                    double value) {
+                    dispatch(population[id], parameter, country, period, landscape, value);
+                    return true;
+                });
     }
 
     PopulationsLoader::PopulationData executeForNamePeriod(std::string popname, int period)
@@ -100,7 +119,7 @@ public:
 
         selectQuery.where(fieldPopName == "popname" && fieldPeriod == "period");
         selectQuery.bind(popname, period);
-        selectQuery.execute([this, &p](std::string parameter, std::string country, int period, int landscape,
+        selectQuery.execute([this, &p](int id, std::string parameter, std::string country, int period, int landscape,
                                        double value) {
             dispatch(p, parameter, country, period, landscape, value);
             return true;
@@ -146,6 +165,9 @@ vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseD
         d.a_pop_name = std::get<1>(popdata);
         return d;
     });
+
+    PopulationParametersQuery parametersQuery(p->db);
+    parametersQuery.execute(data);
 
     return data;
 }

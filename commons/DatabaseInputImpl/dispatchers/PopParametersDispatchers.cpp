@@ -45,6 +45,14 @@ void fill_btrigger(PopulationsLoader::PopulationData &population, int period, in
 void fill_fmsy(PopulationsLoader::PopulationData &population, int period, int landscape, double value)
 {
     assign_array(population.fbar_ages_min_max, 6, value);
+
+    // add default values for F-MSY-low and F-MSY-up
+    if (population.fbar_ages_min_max.size() < 8) {
+        assign_array(population.fbar_ages_min_max, 7, value);
+    }
+    if (population.fbar_ages_min_max.size() < 9) {
+        assign_array(population.fbar_ages_min_max, 8, value);
+    }
 }
 
 void fill_tac_initial(PopulationsLoader::PopulationData &population, int period, int landscape, double value)

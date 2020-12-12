@@ -2,4 +2,4 @@
 
 option(DISABLE_IPC "Disable the IPC support (gui/simulator channel)" OFF)
 option(WITHOUT_GUI "Compile only the command line programs" OFF)
-option(WITH_TESTS "Disable the tests" OFF)
+option(WITH_TESTS "Enable the tests" OFF)

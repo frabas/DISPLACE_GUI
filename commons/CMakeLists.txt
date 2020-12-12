@@ -145,6 +145,8 @@ set(SOURCES
         TextImpl/LoadShipsImpl.cpp TextImpl/LoadVesselsImpl.cpp readvesseldata.h readvesseldata.cpp
         TextImpl/LoadPopulationsImpl.cpp TextImpl/LoadMetiersImpl.cpp
 
+        containers/Matrix.h containers/Vector.h
+
         DatabaseModelLoader.cpp DatabaseModelLoader.h
         DatabaseInputImpl/Impl.h
         DatabaseInputImpl/LoadNodesAndGraphiImpl.cpp
@@ -155,7 +157,13 @@ set(SOURCES
         DatabaseInputImpl/VesselsLoader.cpp DatabaseInputImpl/VesselsLoader.h
         DatabaseInputImpl/DatabaseCalendarLoader.cpp DatabaseInputImpl/DatabaseCalendarLoader.h
         DatabaseInputImpl/PopulationsLoader.cpp DatabaseInputImpl/PopulationsLoader.h
-        DatabaseInputImpl/dispatchers/PopParametersDispatchers.cpp DatabaseInputImpl/dispatchers/PopParametersDispatchers.h DatabaseInputImpl/queries/PopulationParametersQuery.cpp DatabaseInputImpl/queries/PopulationParametersQuery.h DatabaseInputImpl/queries/PopulationQuery.h DatabaseInputImpl/queries/PopulationTableDefs.h DatabaseInputImpl/queries/PopulationTableDefs.cpp DatabaseInputImpl/queries/PopulationGroupsQuery.cpp DatabaseInputImpl/queries/PopulationGroupsQuery.h DatabaseInputImpl/dispatchers/PopGroupsFunctions.cpp DatabaseInputImpl/dispatchers/PopGroupsFunctions.h)
+        DatabaseInputImpl/dispatchers/PopParametersDispatchers.cpp DatabaseInputImpl/dispatchers/PopParametersDispatchers.h
+        DatabaseInputImpl/queries/PopulationParametersQuery.cpp DatabaseInputImpl/queries/PopulationParametersQuery.h
+        DatabaseInputImpl/queries/PopulationQuery.h DatabaseInputImpl/queries/PopulationTableDefs.h
+        DatabaseInputImpl/queries/PopulationTableDefs.cpp DatabaseInputImpl/queries/PopulationGroupsQuery.cpp
+        DatabaseInputImpl/queries/PopulationGroupsQuery.h DatabaseInputImpl/dispatchers/PopGroupsFunctions.cpp
+        DatabaseInputImpl/dispatchers/PopGroupsFunctions.h
+        )
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

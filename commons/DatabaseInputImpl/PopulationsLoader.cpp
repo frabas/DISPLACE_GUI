@@ -3,6 +3,7 @@
 #include "Population.h"
 #include "queries/PopulationQuery.h"
 #include "queries/PopulationParametersQuery.h"
+#include "queries/PopulationGroupsQuery.h"
 
 struct PopulationsLoader::Impl {
     msqlitecpp::v2::Storage &db;
@@ -41,6 +42,9 @@ vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseD
 
     PopulationParametersQuery parametersQuery(p->db);
     parametersQuery.execute(data);
+
+    PopulationGroupsQuery groupsQuery(p->db);
+    groupsQuery.execute(data);
 
     return data;
 }

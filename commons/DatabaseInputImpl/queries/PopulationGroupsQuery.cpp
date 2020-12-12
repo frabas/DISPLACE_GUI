@@ -4,6 +4,8 @@
 
 #include "PopulationGroupsQuery.h"
 
+#include "DatabaseInputImpl/dispatchers/PopGroupsFunctions.h"
+
 using namespace displace::db::defs;
 
 PopulationGroupsQuery::map PopulationGroupsQuery::dispatcher;
@@ -21,6 +23,18 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db)
                       fieldValue)
 {
     if (dispatcher.empty()) {
+        // beta
+        dispatcher["comcat"] = &fillInitComcat;
+        dispatcher["init_M"] = &fillInitM;
+        dispatcher["init_fec"] = &fillInitFec;
+        dispatcher["init_mat"] = &fillInitMaturity;
+        dispatcher["init_popN"] = &fillInitPopN;
+        dispatcher["init_weight"] = &fillInitWeight;
+        dispatcher["percent_age_per_szgroup"] = &fillPercentAgePerSzGroup;
+        dispatcher["percent_szgroup_per_age"] = &fillPercentSzGroupPerAge;
+        dispatcher["propmigrants"] = &fillPropMigrants;
+        dispatcher["proprecru"] = &fillInitPropRecru;
+        //static_avai
     }
 }
 

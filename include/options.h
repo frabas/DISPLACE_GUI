@@ -114,6 +114,7 @@ enum Dyn_Alloc {
     EffortMinControl,
     EffortMaxControl,
     averageTariffsPerRectangle,
+    othLandPerMetPerPop,
 
     Dyn_Alloc_last
 };

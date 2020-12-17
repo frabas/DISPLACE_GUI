@@ -56,6 +56,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,EffortMinControl);
     O(mMap,EffortMaxControl);
     O(mMap, averageTariffsPerRectangle);
+    O(mMap, othLandPerMetPerPop);
 
 
 

@@ -56,6 +56,7 @@ static const char *dyn_alloc_options[] = {
     "EffortMinControl",
     "EffortMaxControl",
     "averageTariffsPerRectangle",
+    "othLandPerMetPerPop",
 };
 
 static const char *dyn_pop_options[] = {

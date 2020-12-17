@@ -872,6 +872,52 @@ read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, strin
 }
 
 
+
+int read_oth_land_nodes_with_met_and_pop(map<types::NodeId, double>& oth_land, string a_semester, string a_month, int a_pop, int a_met, string folder_name_parameterization,
+    string inputfolder, string fleetsce)
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+    stringstream out2;
+    out2 << a_met;
+    string a_met_s = out2.str();
+
+    string filename;
+    filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/other_landings_on_node_per_met_pop/" + a_pop_s +
+            "spe_oth_land_met" + a_met_s + "_month" + a_month + "_fleetsce" + fleetsce + ".dat";
+    cout << "looking for ..." << filename << endl;
+
+    ifstream file_oth_land;
+    file_oth_land.open(filename.c_str());
+    if (file_oth_land.fail()) {
+        return(-1);
+    }
+   
+    fill_from_oth_land(file_oth_land, oth_land);
+    file_oth_land.close();
+
+    cout << "closing ..." << filename << endl;
+
+#ifdef VERBOSE
+    // check input
+    map<int, double>::iterator pos;
+    dout(cout << " oth_land " << endl);
+    for (pos = oth_land.begin(); pos != oth_land.end(); pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return (0);
+}
+
+
+
+
+
 multimap<int, double>
 read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder,
                               string biolsce)
@@ -1535,6 +1581,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     vector<multimap<types::NodeId, double> > vect_of_full_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
     vector<multimap<types::NodeId, double> > vect_of_field_of_coeff_diffusion_this_pop_mmap(name_pops.size());
     vector<map<types::NodeId, double> > vect_of_oth_land_map(name_pops.size());
+    vector<vector<map<types::NodeId, double> > > vect_of_vect_of_oth_land_map(name_pops.size());
     vector<map<string, double> > vect_of_relative_stability_key_map(name_pops.size());
     vector<vector<vector<double> > > vect_of_growth_transition_matrix_vov(name_pops.size());
     vector<vector<vector<double> > > vect_of_percent_szgroup_per_age_matrix_vov(name_pops.size());
@@ -1704,6 +1751,22 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
                 p->folder_name_parameterization, p->inputfolder,
                 model().scenario().fleetsce);
+        
+            if (model().scenario().dyn_alloc_sce.option(Options::othLandPerMetPerPop)) {
+                     
+                int met = -1, er= 0;
+                do{
+                    met += 1;
+                    map<types::NodeId, double> a_map;
+                    er = read_oth_land_nodes_with_met_and_pop(a_map, semester, month, sp, met,
+                        p->folder_name_parameterization, p->inputfolder,
+                        model().scenario().fleetsce);
+                       
+                    vect_of_vect_of_oth_land_map.at(sp).push_back(a_map);
+                } while(er!=-1);
+                
+            }
+        
         }
 
         if (a_year == 1 && model().month() == 1)

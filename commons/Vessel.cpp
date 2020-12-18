@@ -3580,6 +3580,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                 // contribute to accumulated catches on this node
                 this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
                 this->get_loc()->add_to_cumcatches_per_pop_this_month(catch_pop_at_szgroup[pop][0], pop);
+                this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(catch_pop_at_szgroup[pop][0], pop, this->get_metier()->get_name());
                 this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
             }
             else

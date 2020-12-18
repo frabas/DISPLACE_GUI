@@ -338,7 +338,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             int a_source_node_idx=0;
 
             // TO DO:
-            // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe to refined.
+            // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe too refined.
             
             double Cs = 0.0;
             if (is_other_land_as_multiplier_on_sp)
@@ -355,8 +355,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
-
-
 
                 // apply "other" landings (by default, it is removing a kilo per node for this sp)
                 // (also accounting for a potential multiplier (default at 1.0))

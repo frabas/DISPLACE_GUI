@@ -888,7 +888,7 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
     string filename;
     filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/other_landings_on_node_per_met_pop/" + a_pop_s +
             "spe_oth_land_met" + a_met_s + "_month" + a_month + "_fleetsce" + fleetsce + ".dat";
-    cout << "looking for ..." << filename << endl;
+    //cout << "looking for ..." << filename << endl;
 
     ifstream file_oth_land;
     file_oth_land.open(filename.c_str());
@@ -899,7 +899,7 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
     fill_from_oth_land(file_oth_land, oth_land);
     file_oth_land.close();
 
-    cout << "closing ..." << filename << endl;
+    //cout << "closing ..." << filename << endl;
 
 #ifdef VERBOSE
     // check input
@@ -1756,6 +1756,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         
             // ...or oth_land on node per pop per met
             if (model().scenario().dyn_alloc_sce.option(Options::otherLandPerMetPerPop)) {                   
+                cout << "Looking for oth_land on node per pop per met dat files" << endl;
                 int met = -1, er= 0;
                 do{
                     met += 1;

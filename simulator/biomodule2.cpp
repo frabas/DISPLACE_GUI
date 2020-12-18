@@ -353,7 +353,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     Cs += a_list_nodes.at(n)->get_cumcatches_per_pop_this_month().at(sp);
                     a_list_nodes.at(n)->set_cumcatches_per_pop_this_month(sp, 0); // reinit after use
                 }
-               // cout << "Cs last month this pop " << sp << " is " << Cs << endl;
+                //cout << "Cs last month this pop " << sp << " is " << Cs << endl;
             }
         
             // per metier
@@ -367,7 +367,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         Cs_per_met.at(met) += a_list_nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(met);
                         a_list_nodes.at(n)->set_cumcatches_per_pop_per_met_this_month(sp, met, 0); // reinit after use
                     }
-               // cout << "Cs per met last month this pop " << sp << " this met Cs_per_met.at(met) " << met << is " << Cs_per_met.at(met) << endl;
+                //cout << "Cs per met last month this pop " << sp << " this met Cs_per_met.at(met) " << met << " is " << Cs_per_met.at(met) << endl;
                 }
             }
 
@@ -379,7 +379,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             if (is_oth_land_per_metier && is_other_land_as_multiplier_on_sp) // per met, and with a multiplier on total catch (per met) instead of absolute value
             {
                 dout(cout << "other landings per met, and with a multiplier on total catch (per met) instead of absolute values " << endl);
-                cout << "other landings per met, and with a multiplier on total catch (per met) instead of absolute values " << endl;
                 vect_map_oth = populations.at(sp)->get_oth_land_map_per_met();
                 for (unsigned int n = 0; n < a_list_nodes.size(); n++)
                 {
@@ -388,7 +387,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     for (int met = 0; met < vect_map_oth.size(); ++met)
                     {
                         map_oth = vect_map_oth.at(met);
-                        cout << "Cs_per_met.at(met) is " << Cs_per_met.at(met) << endl;
+                        cout << "Cs_per_met.at(met) this sp is " << Cs_per_met.at(met) << endl;
                         oth_land_this_pop_this_node.at(n) +=
                             map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_per_met.at(met) *
                             populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);                    

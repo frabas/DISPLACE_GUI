@@ -3339,6 +3339,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
                     this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
                     this->get_loc()->add_to_cumcatches_per_pop_this_month(a_cumul_weight_this_pop_this_vessel, pop);
+                    this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(a_cumul_weight_this_pop_this_vessel, pop, this->get_metier()->get_name());
                     // catches
                     cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop

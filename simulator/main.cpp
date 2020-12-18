@@ -2085,7 +2085,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             // this month, re-read for population-related data
-            // CAUTION: THE ONLY POP READING DONE ON MONTH simModel->timestep()...THE OTHERS ARE DONE ON QUARTER BASIS
+            // CAUTION: THE ONLY POP READING DONE ON MONTH simModel->timestep()...THE OTHERS ARE DONE ON QUARTER BASIS in reLoad of LoadPopulations
             for (unsigned int i = 0; i < simModel->populations().size(); i++) {
                 // read a other landings per node for this species
                 auto oth_land = read_oth_land_nodes_with_pop(modelLoader->semesterString(),
@@ -2094,6 +2094,27 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                                              inputfolder, scenario.fleetsce);
                 simModel->populations().at(i)->set_oth_land(oth_land);
             }
+
+            if (scenario.dyn_alloc_sce.option(Options::othLandPerMetPerPop))
+            {
+                for (unsigned int i = 0; i < simModel->populations().size(); i++) {
+                    int met = -1, er = 0;
+                    vector<map<types::NodeId, double> > oth_land_map_per_met;
+                    do {
+                        met += 1;
+                        map<types::NodeId, double> a_map;
+                        er = read_oth_land_nodes_with_met_and_pop(a_map,
+                                                                  modelLoader->semesterString(),
+                                                                  modelLoader->monthString(), i, met,
+                                                                  folder_name_parameterization,
+                                                                  inputfolder, scenario.fleetsce);
+                        oth_land_map_per_met.push_back(a_map);
+                    } while (er != -1);
+                    simModel->populations().at(i)->set_oth_land_map_per_met(oth_land_map_per_met);
+                }
+            }
+
+
             cout << "re-read oth_land_nodes setting this month....OK" << endl;
 
 

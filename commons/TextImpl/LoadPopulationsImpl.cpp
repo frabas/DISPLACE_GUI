@@ -119,6 +119,7 @@ struct LoadedData {
     std::multimap<types::NodeId, double> mmapndparam1;
     std::multimap<types::NodeId, double> mmapndparam2;
     std::vector<map<string, double> > vectmapsdparam1;
+    std::vector<vector<map<types::NodeId, double> > > vovomapndparam1; 
     std::map<int, int> mapiiparam1;
     std::map<int, int> mapiiparam2;
     std::map<int, double> mapidparam1;
@@ -1748,12 +1749,14 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         // input data, read a other landings per node for this species
         if (a_year == 1 && model().month() == 1)
         {
+            // oth_land on node per pop
             vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
                 p->folder_name_parameterization, p->inputfolder,
                 model().scenario().fleetsce);
         
-            if (model().scenario().dyn_alloc_sce.option(Options::othLandPerMetPerPop)) {
-                     
+            // ...or oth_land on node per pop per met
+            vector<map<types::NodeId, double> > vect_of_vect_of_oth_land_map;
+            if (model().scenario().dyn_alloc_sce.option(Options::othLandPerMetPerPop)) {                   
                 int met = -1, er= 0;
                 do{
                     met += 1;
@@ -1762,7 +1765,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                         p->folder_name_parameterization, p->inputfolder,
                         model().scenario().fleetsce);
                        
-                    vect_of_vect_of_oth_land_map.at(sp).push_back(a_map);
+                    vect_of_vect_of_oth_land_map.push_back(a_map);
                 } while(er!=-1);
                 
             }
@@ -1876,6 +1879,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     loadedData.vectmmapndparam1 = vect_of_full_avai_szgroup_nodes_with_pop_mmap;
     loadedData.vectmmapndparam2 = vect_of_field_of_coeff_diffusion_this_pop_mmap;
     loadedData.vectmapndparam1 = vect_of_oth_land_map;
+    loadedData.vovomapndparam1 = vect_of_vect_of_oth_land_map;  
     loadedData.vectmmapidparam1 = vect_of_overall_migration_fluxes_mmap;
     loadedData.vectmapsdparam1 = vect_of_relative_stability_key_map;
     loadedData.vovovd2 = vect_of_percent_szgroup_per_age_matrix_vov;
@@ -1939,6 +1943,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 loadedData.vectmmapndparam1.at(sp),
                 loadedData.vectmmapndparam2.at(sp),
                 loadedData.vectmapndparam1.at(sp),
+                loadedData.vovomapndparam1.at(sp), 
                 loadedData.vectmmapidparam1.at(sp),
                 loadedData.vectmapsdparam1.at(sp),
                 loadedData.vovovd2.at(sp),

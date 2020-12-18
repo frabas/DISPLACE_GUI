@@ -45,6 +45,7 @@ Population::Population(int a_name,
                        const multimap<types::NodeId, double> &_full_spatial_availability,
                        const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
                        const map<types::NodeId, double> &_oth_land,
+                       const vector<map<types::NodeId, double> >& oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
@@ -639,6 +640,11 @@ map<types::NodeId,double>  Population::get_oth_land() const
 	return(oth_land);
 }
 
+vector<map<types::NodeId, double> >   Population::get_oth_land_map_per_met() const
+{
+    return(oth_land_map_per_met);
+}
+
 
 double  Population::get_oth_land_multiplier() const
 {
@@ -1011,6 +1017,12 @@ void Population::set_overall_migration_fluxes(multimap<int,double> _overall_migr
 void Population::set_oth_land(map<types::NodeId,double> _oth_land)
 {
 	oth_land= _oth_land;
+}
+
+
+void Population::set_oth_land_map_per_met(vector<map<types::NodeId, double> > _oth_land_map_per_met)
+{
+    oth_land_map_per_met = _oth_land_map_per_met;
 }
 
 

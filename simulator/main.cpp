@@ -1246,6 +1246,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
     modelLoader->loadMetiers(1, simModel->month(), simModel->quarter(), simModel->semester());
+    
+    int nb_mets = simModel->metiers().size();
+
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -1920,6 +1923,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     benthosbiomassnodes,
                                     benthosnumbernodes,
                                     simModel->config().nbbenthospops,
+                                    nb_mets,
                                     use_gui,
                                     popstats_filename,
                                     popdyn_N_filename,
@@ -1949,6 +1953,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     selectivity_per_stock_ogives_for_oth_land,
                                     simModel->is_tacs(),
                                     simModel->is_other_land_as_multiplier_on_sp(),
+                                    simModel->is_oth_land_per_metier(),
                                     export_vmslike,
                                     scenario.freq_do_growth,
                                     simModel->initWeightPerSzgroup(),
@@ -2095,7 +2100,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 simModel->populations().at(i)->set_oth_land(oth_land);
             }
 
-            if (scenario.dyn_alloc_sce.option(Options::othLandPerMetPerPop))
+            if (scenario.dyn_alloc_sce.option(Options::otherLandPerMetPerPop))
             {
                 for (unsigned int i = 0; i < simModel->populations().size(); i++) {
                     int met = -1, er = 0;
@@ -2103,14 +2108,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     do {
                         met += 1;
                         map<types::NodeId, double> a_map;
-                        er = read_oth_land_nodes_with_met_and_pop(a_map,
+                        er = read_oth_land_map_per_met_on_nodes(a_map,
                                                                   modelLoader->semesterString(),
                                                                   modelLoader->monthString(), i, met,
                                                                   folder_name_parameterization,
                                                                   inputfolder, scenario.fleetsce);
-                        oth_land_map_per_met.push_back(a_map);
+                        if (er == 0) oth_land_map_per_met.push_back(a_map);
                     } while (er != -1);
-                    simModel->populations().at(i)->set_oth_land_map_per_met(oth_land_map_per_met);
+                    simModel->populations().at(i)->set_oth_land_map_per_met(oth_land_map_per_met); 
                 }
             }
 

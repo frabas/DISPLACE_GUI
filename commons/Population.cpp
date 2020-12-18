@@ -45,7 +45,7 @@ Population::Population(int a_name,
                        const multimap<types::NodeId, double> &_full_spatial_availability,
                        const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
                        const map<types::NodeId, double> &_oth_land,
-                       const vector<map<types::NodeId, double> >& oth_land_map_per_met,
+                       const vector<map<types::NodeId, double> >& _oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
@@ -70,6 +70,7 @@ Population::Population(int a_name,
 	full_spatial_availability= _full_spatial_availability;
 
 	oth_land= _oth_land;
+    oth_land_map_per_met=_oth_land_map_per_met;
 
 	growth_transition_matrix=_growth_transition_matrix;
 	percent_szgroup_per_age_matrix=_percent_szgroup_per_age_matrix;

@@ -165,6 +165,8 @@ public:
 
     bool is_other_land_as_multiplier_on_sp() const;
 
+    bool is_oth_land_per_metier() const;
+
     bool is_fishing_credits() const;
 
     bool is_discard_ban() const;

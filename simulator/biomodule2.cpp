@@ -102,6 +102,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           ofstream &benthosbiomassnodes,
                           ofstream &benthosnumbernodes,
                           int nbbenthospops,
+                          int nb_mets,
                           bool use_gui,
                           const string & popstats_filename,
                           const string & popdyn_N_filename,
@@ -129,6 +130,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
                           vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
                           bool is_other_land_as_multiplier_on_sp,
+                          bool is_oth_land_per_metier,
                           int export_vmslike,
                           int freq_do_growth,
                           const multimap<int, double> &init_weight_per_szgroup,
@@ -328,7 +330,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
             */
 
-            auto map_oth           = populations.at(sp)->get_oth_land();
           
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
@@ -337,9 +338,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             double cumul_oth_land_to_be_displaced=0.0;
             int a_source_node_idx=0;
 
-            // TO DO:
-            // maybe a random shuffling on a_list_nodes, otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot....but maybe too refined.
+            // TODO:
+            // maybe a random shuffling on a_list_nodes, 
+            // otherwise the correction on the depletion when TAC close to be exhausted will always occur on the same spot
+            // ....but maybe too refined, so keep for later.
             
+            //-------------
+            // retrieve some catch info that may be necessary depending on the Options in applying oth_land
             double Cs = 0.0;
             if (is_other_land_as_multiplier_on_sp)
             {
@@ -350,20 +355,105 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 }
                // cout << "Cs last month this pop " << sp << " is " << Cs << endl;
             }
-            
+        
+            // per metier
+            vector<double> Cs_per_met(nb_mets);
+            if (is_other_land_as_multiplier_on_sp && is_oth_land_per_metier)
+            {
+                for (unsigned int met = 0; met < nb_mets; met++)
+                {
+                    for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                    {
+                        Cs_per_met.at(met) += a_list_nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(met);
+                        a_list_nodes.at(n)->set_cumcatches_per_pop_per_met_this_month(sp, met, 0); // reinit after use
+                    }
+               // cout << "Cs per met last month this pop " << sp << " this met Cs_per_met.at(met) " << met << is " << Cs_per_met.at(met) << endl;
+                }
+            }
 
+            //-------------
+            // Then, handle the various options on input data resolution for oth_land
+            map<types::NodeId, double> map_oth;
+            vector<map<types::NodeId, double> > vect_map_oth;
+            vector <double> oth_land_this_pop_this_node (a_list_nodes.size(), 0);
+            if (is_oth_land_per_metier && is_other_land_as_multiplier_on_sp) // per met, and with a multiplier on total catch (per met) instead of absolute value
+            {
+                dout(cout << "other landings per met, and with a multiplier on total catch (per met) instead of absolute values " << endl);
+                cout << "other landings per met, and with a multiplier on total catch (per met) instead of absolute values " << endl;
+                vect_map_oth = populations.at(sp)->get_oth_land_map_per_met();
+                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                {
+                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
+                    cout << "vect_map_oth.size() is " << vect_map_oth.size() << " and nb mets is " << nb_mets  << endl;
+                    for (int met = 0; met < vect_map_oth.size(); ++met)
+                    {
+                        map_oth = vect_map_oth.at(met);
+                        cout << "Cs_per_met.at(met) is " << Cs_per_met.at(met) << endl;
+                        oth_land_this_pop_this_node.at(n) +=
+                            map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_per_met.at(met) *
+                            populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);                    
+                    }
+
+                }
+            }
+            if (!is_oth_land_per_metier && is_other_land_as_multiplier_on_sp) // not per met, and with a multiplier on total catch instead of absolute values
+            {
+                map_oth = populations.at(sp)->get_oth_land();
+                dout(cout << "other landings not per met, and with a multiplier on total catch instead of absolute values " << endl);
+                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                {
+                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
+                    oth_land_this_pop_this_node.at(n) +=
+                        map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs *
+                        populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+                }
+            }
+            if (is_oth_land_per_metier && !is_other_land_as_multiplier_on_sp) //  per met, and with absolute values for removals on node
+            {
+                vect_map_oth = populations.at(sp)->get_oth_land_map_per_met();
+                dout(cout << "other landings per met, and with absolute values for removals on node " << endl);
+                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                {
+                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
+                    for (int met = 0; met < vect_map_oth.size(); ++met)
+                    {
+                        map_oth = vect_map_oth.at(met);
+                        oth_land_this_pop_this_node.at(n) +=
+                            map_oth[a_list_nodes.at(n)->get_idx_node()] * 
+                            populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+                    }
+
+                }
+            }
+            if (!is_oth_land_per_metier && !is_other_land_as_multiplier_on_sp)//  not per met, and with absolute values for removals on node (historical default)
+            {
+                dout(cout << "other landings not per met, and with absolute values for removals on node (historical default) " << endl);
+                map_oth = populations.at(sp)->get_oth_land();
+                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
+                {
+                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
+                    oth_land_this_pop_this_node.at(n) +=
+                        map_oth[a_list_nodes.at(n)->get_idx_node()] *
+                        populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+
+                }
+            }
+
+
+
+            // loop over nodes of this pop and apply oth_land for this node on it
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
 
                 // apply "other" landings (by default, it is removing a kilo per node for this sp)
                 // (also accounting for a potential multiplier (default at 1.0))
-                if (is_other_land_as_multiplier_on_sp) {
+          //      if (is_other_land_as_multiplier_on_sp) {
                     // if a proportion of sp biomass is given in the oth_land layer instead of an absolute kg on node:
                     //cout << "on node " << n << " map_oth[a_list_nodes.at(n)->get_idx_node()] is " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
                     
                     // other land as a proportion of last month catch by explicit vessels.
-                    map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs;
+          //          map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs;
                     //cout << "on node " << n << " Cs_on_node is " << Cs_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
 
                     // other land as a proportion of biomass present on node.
@@ -373,24 +463,33 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     //for (unsigned int i = 0; i < Wts_this_sp.size(); i++)  biomass_on_node += (Ns_on_node.at(i) * Wts_this_sp.at(i));
                     //map_oth[a_list_nodes.at(n)->get_idx_node()] = map_oth[a_list_nodes.at(n)->get_idx_node()] * biomass_on_node;
                     //cout << "on node " << n << " biomass_on_node is " << biomass_on_node << "and therefore " << " map_oth[a_list_nodes.at(n)->get_idx_node()] is now " << map_oth[a_list_nodes.at(n)->get_idx_node()] << endl;
-                }
-                double oth_land_this_pop_this_node=
-                  map_oth[a_list_nodes.at(n)->get_idx_node()]*
-                   populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+          //      }
+
+
+
+
+
+          //      double oth_land_this_pop_this_node=
+          //        map_oth[a_list_nodes.at(n)->get_idx_node()]*
+          //         populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
               
-                // magic number for a the below scenario: add a stochastic variation
+
+                cout << "oth_land_this_pop_this_node.at(n) is " << oth_land_this_pop_this_node.at(n) << endl;
+
+
+                // caution: magic number for a the below scenario: add a stochastic variation
                 // area-based sce
                 if (dyn_pop_sce.option(Options::with_stochast_oth_land))
                 {
                     // lognormal error
                     double a_rnorm = rlnorm(0,0.25);
                     dout(cout  << "a_rnorm " << a_rnorm << endl);
-                    oth_land_this_pop_this_node= oth_land_this_pop_this_node*a_rnorm;
+                    oth_land_this_pop_this_node.at(n)= oth_land_this_pop_this_node.at(n) *a_rnorm;
                 }
 
                 dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node().toIndex()
-                    << ": " << oth_land_this_pop_this_node << endl);
-                if(oth_land_this_pop_this_node!=0)
+                    << ": " << oth_land_this_pop_this_node.at(n) << endl);
+                if(oth_land_this_pop_this_node.at(n) !=0)
                 {
                     // apply oth_land UNLESS this is a closed node!
                     // caution: quick and dirty solution because we dont know on which node
@@ -407,7 +506,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         if (nodes.at(grd.toIndex())->evaluateAreaType()==1 )
                         {
                             // then, this is a closed node!
-                            cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;
+                            cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node.at(n);
                             dout(cout  << " this is a polygon node ! " << a_list_nodes.at(n)->get_idx_node().toIndex() << endl);
                             dout(cout  << " the cumul to be displaced for this pop is " << cumul_oth_land_to_be_displaced << endl);
                          // the relative node idx with oth_land to be displaced....
@@ -425,7 +524,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                          // MAGIC NUMBER 200 km
                             if(dist_to_this_node<200)
                             {
-                                oth_land_this_pop_this_node+= cumul_oth_land_to_be_displaced;
+                                oth_land_this_pop_this_node.at(n) += cumul_oth_land_to_be_displaced;
                                 dout(cout  <<  cumul_oth_land_to_be_displaced << " oth_land displaced on " << a_list_nodes.at(n)->get_idx_node().toIndex()  << endl);
 
                          // reinit
@@ -451,11 +550,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 if(dyn_alloc_sce.option(Options::TACs))
                                 {
                                      if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                                        oth_land_this_pop_this_node.at(n)) > populations.at(name_pop)->get_quota())
                                      {
                                             if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                                             {  // STOP!
-                                               oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                               oth_land_this_pop_this_node.at(n) =populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
                                             }
                                             else
                                             {
@@ -467,8 +566,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                             // apply_oth_land()
                                 try {
-                                    if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
-                                                                                                     oth_land_this_pop_this_node,
+                                    if(oth_land_this_pop_this_node.at(n)>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                     oth_land_this_pop_this_node.at(n),
                                                                                                      weight_at_szgroup,
                                                                                                      totN,
                                                                                                      will_I_discard_all,
@@ -504,11 +603,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         if(dyn_alloc_sce.option(Options::TACs))
                         {
                              if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota())
+                                oth_land_this_pop_this_node.at(n)) > populations.at(name_pop)->get_quota())
                              {
                                     if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                                     {  // STOP!
-                                       oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                       oth_land_this_pop_this_node.at(n) =populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
                                     }
                                     else
                                     {
@@ -522,8 +621,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
                         // apply_oth_land()
                             try {
-                                if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
-                                                                                                 oth_land_this_pop_this_node,
+                                if(oth_land_this_pop_this_node.at(n) >0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                 oth_land_this_pop_this_node.at(n),
                                                                                                  weight_at_szgroup,
                                                                                                  totN,
                                                                                                  will_I_discard_all,
@@ -532,7 +631,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 cout << "Fail in apply_oth_land 2" << endl;
                                 return false;
                             }
-                        dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
+                        dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node.at(n) << endl);
 
 
                         // then, collect and accumulate tot_C_at_szgroup
@@ -555,7 +654,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 if(will_I_discard_all==0)
                 {
                    double so_far = (populations.at(name_pop)->get_landings_so_far()) +
-                                      oth_land_this_pop_this_node;
+                                      oth_land_this_pop_this_node.at(n);
                    populations.at(name_pop)->set_landings_so_far(so_far);
                 }
 

@@ -56,7 +56,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,EffortMinControl);
     O(mMap,EffortMaxControl);
     O(mMap, averageTariffsPerRectangle);
-    O(mMap, othLandPerMetPerPop);
+    O(mMap, otherLandPerMetPerPop);
+    O(mMap, otherLandAsMultiplierOnSp);
 
 
 
@@ -88,7 +89,6 @@ PopSceOptions::PopSceOptions()
     O(mMap,sizeSpectra);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
-    O(mMap,OtherLandAsMultiplierOnSp);
     
 
     for (int i = 0; i < n(); ++i)

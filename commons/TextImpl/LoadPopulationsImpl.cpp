@@ -874,7 +874,7 @@ read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, strin
 
 
 
-int read_oth_land_nodes_with_met_and_pop(map<types::NodeId, double>& oth_land, string a_semester, string a_month, int a_pop, int a_met, string folder_name_parameterization,
+int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, string a_semester, string a_month, int a_pop, int a_met, string folder_name_parameterization,
     string inputfolder, string fleetsce)
 {
     // casting a_pop into a string
@@ -1755,17 +1755,16 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 model().scenario().fleetsce);
         
             // ...or oth_land on node per pop per met
-            vector<map<types::NodeId, double> > vect_of_vect_of_oth_land_map;
-            if (model().scenario().dyn_alloc_sce.option(Options::othLandPerMetPerPop)) {                   
+            if (model().scenario().dyn_alloc_sce.option(Options::otherLandPerMetPerPop)) {                   
                 int met = -1, er= 0;
                 do{
                     met += 1;
                     map<types::NodeId, double> a_map;
-                    er = read_oth_land_nodes_with_met_and_pop(a_map, semester, month, sp, met,
+                    er = read_oth_land_map_per_met_on_nodes(a_map, semester, month, sp, met,
                         p->folder_name_parameterization, p->inputfolder,
                         model().scenario().fleetsce);
                        
-                    vect_of_vect_of_oth_land_map.push_back(a_map);
+                    if(er==0) vect_of_vect_of_oth_land_map.at(sp).push_back(a_map);
                 } while(er!=-1);
                 
             }
@@ -1963,6 +1962,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
             global_quotas_uptake.push_back(0.0);
 
+        
 
             if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), sp)) {
                 outc(cout << "inform avai on nodes " << endl);

@@ -44,6 +44,7 @@ struct SimModel::Impl {
     bool is_direct_killing_on_benthos;
     bool is_resuspension_effect_on_benthos;
     bool is_other_land_as_multiplier_on_sp;
+    bool is_oth_land_per_metier;
 };
 
 SimModel::SimModel(std::string n)
@@ -133,13 +134,21 @@ void SimModel::setScenario(std::unique_ptr<displace::commons::Scenario> scenario
         p->is_benthos_in_longevity_classes = 0;
     }
 
-    if (p->scenario->dyn_pop_sce.option(Options::OtherLandAsMultiplierOnSp)) {
+    if (p->scenario->dyn_alloc_sce.option(Options::otherLandAsMultiplierOnSp)) {
         p->is_other_land_as_multiplier_on_sp = 1;
     }
     else {
         p->is_other_land_as_multiplier_on_sp = 0;
     }
 
+    if (p->scenario->dyn_alloc_sce.option(Options::otherLandPerMetPerPop)) {
+        p->is_oth_land_per_metier = 1;
+    }
+    else {
+        p->is_oth_land_per_metier = 0;
+    }
+
+    
 
 }
 
@@ -412,6 +421,11 @@ bool SimModel::is_resuspension_effect_on_benthos() const
 bool SimModel::is_other_land_as_multiplier_on_sp() const
 {
     return p->is_other_land_as_multiplier_on_sp;
+}
+
+bool SimModel::is_oth_land_per_metier() const
+{
+    return p->is_oth_land_per_metier;
 }
 
 

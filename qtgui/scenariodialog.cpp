@@ -56,7 +56,8 @@ static const char *dyn_alloc_options[] = {
     "EffortMinControl",
     "EffortMaxControl",
     "averageTariffsPerRectangle",
-    "othLandPerMetPerPop",
+    "otherLandPerMetPerPop",
+    "otherLandAsMultiplierOnSp",
 };
 
 static const char *dyn_pop_options[] = {
@@ -73,7 +74,6 @@ static const char *dyn_pop_options[] = {
     "nbcpCoupling",
     "diffuseNutrients",
     "noHyperstability",
-    "OtherLandAsMultiplierOnSp",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

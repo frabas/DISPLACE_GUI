@@ -495,16 +495,17 @@ void parseCommandLine(int argc, char const *argv[])
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
-int app_main(int argc, char const *argv[])
+int app_main(int argc, char const* argv[])
 {
 #ifdef _WIN32
-    string outdir="C:";
+    string outdir = "C:";
 #else
     bool DTU_HPC_SCRATCH = false;
     string home;
     if (DTU_HPC_SCRATCH) {
         home = "/SCRATCH/fbas"; // => DTU SCRATCH for HPC
-    } else {
+    }
+    else {
         home = getenv("HOME");
     }
     //outdir = home + "/ibm_vessels";
@@ -549,7 +550,7 @@ int app_main(int argc, char const *argv[])
 
     lock();
     cout << " nbsteps " << nbsteps
-         << " namefolderinput " << namefolderinput << " " << use_static_paths << endl;
+        << " namefolderinput " << namefolderinput << " " << use_static_paths << endl;
     unlock();
 
     simModel->setQuarter(1);
@@ -567,7 +568,7 @@ int app_main(int argc, char const *argv[])
     std::unique_ptr<ModelLoader> modelLoader;
 
     if (!inputdb.empty()) {
-        boost::filesystem::path inpath = boost::filesystem::path{inputfolder} / inputdb;
+        boost::filesystem::path inpath = boost::filesystem::path{ inputfolder } / inputdb;
         inpath = boost::filesystem::absolute(inpath);
         std::cout << "Loading input db: " << inpath.string() << "\n";
 
@@ -580,10 +581,11 @@ int app_main(int argc, char const *argv[])
         indb->open();
 
         modelLoader = std::make_unique<DatabaseModelLoader>(simModel, indb);
-    } else {
+    }
+    else {
         modelLoader = std::make_unique<TextfileModelLoader>(simModel,
-                                                            folder_name_parameterization, inputfolder,
-                                                            namefolderoutput);
+            folder_name_parameterization, inputfolder,
+            namefolderoutput);
     }
 
     // create a specific output directory for the ibm outcomes
@@ -592,14 +594,14 @@ int app_main(int argc, char const *argv[])
     string namefolder;
 
 #ifdef _WIN32
-    an_output_folder= outdir+"/DISPLACE_outputs";
+    an_output_folder = outdir + "/DISPLACE_outputs";
     mkdir(an_output_folder.c_str());
 
 
-    a_basic_output_folder= outdir+"/DISPLACE_outputs/"+namefolderinput;
+    a_basic_output_folder = outdir + "/DISPLACE_outputs/" + namefolderinput;
     mkdir(a_basic_output_folder.c_str());
     // create a specific output directory for this simu
-    namefolder= outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
+    namefolder = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput;
     mkdir(namefolder.c_str());
 #else
 
@@ -632,10 +634,10 @@ int app_main(int argc, char const *argv[])
 
 
 #ifdef _WIN32
-                                                                                                                            // for gnuplot installed for at least MinGW_with_gcc_4.6.2
-const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
+    // for gnuplot installed for at least MinGW_with_gcc_4.6.2
+    const char* const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #else
-    char *path = 0;
+    char* path = 0;
 #endif
 
 
@@ -657,7 +659,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 2;
     }
 
-    auto const &scenario = simModel->scenario();
+    auto const& scenario = simModel->scenario();
 
     if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
         tariff_pop = scenario.tariff_pop;
@@ -679,7 +681,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // it is then used in other parts of the simulation, in particular by TimeSeriesEvaluator.
     // it should be advised to remove the singleon because it creates an hidden dependency through hidden
     // global object (the singleton).
-    displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
+    displace::simulation::Simulation* sim_scenario = displace::simulation::Simulation::instance();
 
     if (scenario.use_dtrees) {
         if (!sim_scenario->loadTimeSeries(inputfolder + "/timeseries", "")) {
@@ -704,7 +706,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // make a random delay
     // to avoid chosing the seed in the same second!
     auto randomDelayUs = rand() % 10000;
-    std::this_thread::sleep_for(std::chrono::microseconds{randomDelayUs});
+    std::this_thread::sleep_for(std::chrono::microseconds{ randomDelayUs });
 
     // set a fixed seed
     simModel->initRandom(namesimu);
@@ -718,13 +720,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         sprintf(buffer, "%03d", rand_avai_file);
         str_rand_avai_file = buffer;
         outc(cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << endl);
-    } else {
+    }
+    else {
         // no stochastic variation
         str_rand_avai_file = "baseline";
     }
 
     if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
-                                     namesimu)) {
+        namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
         exit(1);
     }
@@ -748,7 +751,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             metadata = std::make_shared<ModelMetadataAccessor>(outSqlite->metadata());
         }
-    } catch (SQLiteException &x) {
+    }
+    catch (SQLiteException& x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
         exit(1);
     }
@@ -760,7 +764,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/export_individual_tac_" +
-               namesimu + ".dat";
+        namesimu + ".dat";
     export_individual_tacs.open(filename.c_str());
 
 
@@ -790,7 +794,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 #ifdef PROFILE
-                                                                                                                            memInfo.update();
+    memInfo.update();
     guiSendMemoryInfo(memInfo);
 
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
@@ -804,7 +808,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout << "---------------------------" << endl);
 
     benthoss = modelLoader->loadBenthos(scenario.dyn_pop_sce, scenario.dyn_alloc_sce, scenario.biolsce,
-                                        scenario.fleetsce);
+        scenario.fleetsce);
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -815,7 +819,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // TODO do not ignore return values?
     modelLoader->loadFishFarms();
 
-    for (auto fishfarm: simModel->fishfarms()) {
+    for (auto fishfarm : simModel->fishfarms()) {
         if (outSqlite) {
             outSqlite->exportFishfarmDef(*fishfarm);
         }
@@ -947,7 +951,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
         auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
-                                                                      a_graph_name);
+            a_graph_name);
 
 
         // init
@@ -978,12 +982,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // check
         for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
-                      " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << endl);
+                " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << endl);
 
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
-                      " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << endl);
+                " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << endl);
         }
-    } else {
+    }
+    else {
         // need to inform with a vector of three zeros at least
         vector<double> init_tariffs(3, 0);
         for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
@@ -1001,20 +1006,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "initiate size-spectra-related objects..." << endl;
     vector<vector<double> > Ws_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
     vector<vector<vector<vector<double> > > > predKernel(simModel->config().nbpops,
-                                                         vector<vector<vector<double>>>(NBSZGROUP,
-                                                                                        vector<vector<double> >(
-                                                                                                NBSZGROUP,
-                                                                                                vector<double>(
-                                                                                                        simModel->config().nbpops,
-                                                                                                        0.0)
-                                                                                        )
-                                                         )
+        vector<vector<vector<double>>>(NBSZGROUP,
+            vector<vector<double> >(
+                NBSZGROUP,
+                vector<double>(
+                    simModel->config().nbpops,
+                    0.0)
+                )
+            )
     );
     vector<vector<double> > searchVolMat(simModel->config().nbpops, vector<double>(NBSZGROUP));
     vector<vector<double> > juveniles_diet_preference(simModel->config().nbpops,
-                                                      vector<double>(simModel->config().nbpops));
+        vector<double>(simModel->config().nbpops));
     vector<vector<double> > adults_diet_preference(simModel->config().nbpops,
-                                                   vector<double>(simModel->config().nbpops));
+        vector<double>(simModel->config().nbpops));
     int mat_cat = 0; //init - split juveniles vs. adult categories
     vector<int> mat_cats(simModel->config().nbpops, 0);
 
@@ -1026,9 +1031,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // read-in multimap on diet of stocks per stock
         multimap<int, double> adults_diet_preference_per_stock_allstks = read_adults_diet_preference_per_stock_allstks(
-                folder_name_parameterization, inputfolder, scenario.biolsce);
+            folder_name_parameterization, inputfolder, scenario.biolsce);
         multimap<int, double> juveniles_diet_preference_per_stock_allstks = read_juveniles_diet_preference_per_stock_allstks(
-                folder_name_parameterization, inputfolder, scenario.biolsce);
+            folder_name_parameterization, inputfolder, scenario.biolsce);
 
 
         cout << "compute Ws_at_szgroup..." << endl;
@@ -1070,12 +1075,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "compute PredKernel..." << endl;
         vector<double> sigma(simModel->config().nbpops,
-                             1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-        //vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
-        // replace with logistic per 14 weight class
-        // beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
-        vector<double> beta{100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150,
-                            111.1882, 118.4140, 130.5108, 150.4701, 180.9963};
+            1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
+//vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+// replace with logistic per 14 weight class
+// beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
+        vector<double> beta{ 100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150,
+                            111.1882, 118.4140, 130.5108, 150.4701, 180.9963 };
 
         for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
@@ -1083,10 +1088,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
                         if (Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey)) {
                             predKernel.at(j).at(kprey).at(k).at(prey) =
-                                    exp(-pow(log((beta.at(kprey) * Ws_at_szgroup.at(prey).at(kprey)) /
-                                                 Ws_at_szgroup.at(j).at(kprey)), 2) / (pow(2 * sigma.at(prey), 2)));;
+                                exp(-pow(log((beta.at(kprey) * Ws_at_szgroup.at(prey).at(kprey)) /
+                                    Ws_at_szgroup.at(j).at(kprey)), 2) / (pow(2 * sigma.at(prey), 2)));;
                             //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
-                        } else {
+                        }
+                        else {
                             predKernel.at(j).at(kprey).at(k).at(prey) = 0.0;
                             //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                         }
@@ -1115,7 +1121,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         const string separator = ";";
 
         string filename = inputfolder + "/popsspe_" + folder_name_parameterization +
-                          "/Stock_biological_traits.csv"; // file location is an issue....
+            "/Stock_biological_traits.csv"; // file location is an issue....
 
         ifstream is;
         is.open(filename.c_str());
@@ -1127,14 +1133,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         cout << "import a few parameters ..." << endl;
         std::vector<std::tuple<string, double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, double, double, double,
-                double, string> > biological_traits_params;
+            double, double, double, double,
+            double, double, double, double,
+            double, double, double, double,
+            double, double, double, double,
+            double, double, double, double,
+            double, double, double, double,
+            double, double, double, double,
+            double, string> > biological_traits_params;
         bool r = read_biological_traits_params(is, separator, biological_traits_params);
 
         //colnames:
@@ -1159,7 +1165,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             double q = get<31>(biological_traits_params.at(prey));     // Scaling of search volume
             double n = get<32>(biological_traits_params.at(prey));
             double f0est = get<33>(
-                    biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
+                biological_traits_params.at(prey));     // equilibrium feeding level, for which h-bar was estimated
             mat_cat = get<28>(biological_traits_params.at(prey));
             mat_cats.at(prey) = mat_cat;
 
@@ -1174,7 +1180,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {
                     double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta.at(k), (lambda - 2)) *
-                                    exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
+                        exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
 
                     //cout << " this prey " << prey << " alphae is " << alphae << endl;
                     //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(k) is " << beta.at(k) << " lambda is " << lambda << endl;
@@ -1249,6 +1255,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     
     int nb_mets = simModel->metiers().size();
 
+    // ...then init the experiencedcpue (on all the nodes....TODO: maybe refine to keep list of nodes for this metier?)
+    vector<vector<double> > experiencedcpue_fgrounds_per_pop(simModel->nodes().size(), vector<double>(simModel->config().nbpops));
+    for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++) {
+        for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++) {
+            experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = 1.0;
+        }
+    }
+    for (auto metier : simModel->metiers()) 
+    {
+            metier->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // init
+            metier->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // init
+    }
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
@@ -3244,6 +3262,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();
+
+
+            for (unsigned int idx_met = 0; idx_met < simModel->metiers().size(); idx_met++) {
+                simModel->metiers()[idx_met]->reinit_or_update_after_a_trip();
+            }
+
 
             for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
                 OutputExporter::instance().exportTripCatchPopPerSzgroup(simModel->timestep(),

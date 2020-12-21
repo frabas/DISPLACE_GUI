@@ -49,6 +49,11 @@ class  Metier
 		multimap<int, double> loss_after_1_passage;
         vector<int> metier_target_stocks;
         vector<int> metier_suitable_seabottomtypes;
+        std::vector<std::vector<double> > experiencedcpue_fgrounds_per_pop;
+        // skipper effect, target factor, at metier level
+        std::vector<std::vector<double> > freq_experiencedcpue_fgrounds_per_pop;
+        // scaled to 1 from experiencedcpue_fgrounds, at metier level
+
 
 	public:
 		Metier();
@@ -88,10 +93,16 @@ class  Metier
         vector<int> get_is_avoided_stocks();
         int get_is_avoided_stocks(int stk);
         vector<int> get_mls_cat_per_pop();
+        const std::vector<std::vector<double> >& get_experiencedcpue_fgrounds_per_pop() const;
+        const std::vector<std::vector<double> >& get_freq_experiencedcpue_fgrounds_per_pop() const;
+        void set_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> >& newval);
+        void set_freq_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> >& newval);
         void set_betas_per_pop(vector<double> metier_betas_per_pop);
         void set_discardratio_limits(vector<double> metier_discardratio_limits);
         void set_is_avoided_stocks(vector<int> metier_is_avoided_stocks);
         void set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop);
+        void reinit_or_update_after_a_trip();
+        void compute_experiencedcpue_fgrounds_per_pop();
 
 };
 #endif							 // METIER_H

@@ -839,6 +839,16 @@ const vector<vector<double> >& Node::get_cumcatches_per_pop_per_met_this_month()
     return(cumcatches_per_pop_per_met_this_month);
 }
 
+const vector<vector<double> >& Node::get_cumeffort_per_pop_per_met_this_month()
+{
+    return(cumeffort_per_pop_per_met_this_month);
+}
+
+const vector<vector<double> >& Node::get_cpue_per_pop_per_met_this_month()
+{
+    return(cpue_per_pop_per_met_this_month);
+}
+
 const vector<double>& Node::get_cumdiscards_per_pop ()
 {
     return(cumdiscards_per_pop);
@@ -957,6 +967,22 @@ void Node::add_to_cumcatches_per_pop_per_met_this_month(double catches, int pop,
     unlock();
 }
 
+void Node::add_to_cumeffort_per_pop_per_met_this_month(double effort, int pop, int met)
+{
+    lock();
+    cumeffort_per_pop_per_met_this_month.at(pop).at(met) += effort;
+    unlock();
+}
+
+void Node::compute_cpue_per_pop_per_met_this_month(int pop, int met)
+{
+    lock();
+    // running average
+    cpue_per_pop_per_met_this_month.at(pop).at(met) = 
+             cumcatches_per_pop_per_met_this_month.at(pop).at(met) / cumeffort_per_pop_per_met_this_month.at(pop).at(met);
+    unlock();
+}
+
 void Node::add_to_cumdiscards_per_pop(double discards, int pop)
 {
     lock();
@@ -995,6 +1021,8 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups, int nbmets)
     reinit (cumcatches_per_pop, nbpops);
     reinit (cumcatches_per_pop_this_month, nbpops);
     reinit(cumcatches_per_pop_per_met_this_month, nbpops, nbmets);
+    reinit(cumeffort_per_pop_per_met_this_month, nbpops, nbmets);
+    reinit(cpue_per_pop_per_met_this_month, nbpops, nbmets);
     reinit (cumdiscards_per_pop, nbpops);
 
 }
@@ -1127,6 +1155,20 @@ void Node::set_cumcatches_per_pop_per_met_this_month(int name_pop, int name_met,
 {
 
     cumcatches_per_pop_per_met_this_month.at(name_pop).at(name_met) = newval;
+
+}
+
+void Node::set_cumeffort_per_pop_per_met_this_month(int name_pop, int name_met, double newval)
+{
+
+    cumeffort_per_pop_per_met_this_month.at(name_pop).at(name_met) = newval;
+
+}
+
+void Node::set_cpue_per_pop_per_met_this_month(int name_pop, int name_met, double newval)
+{
+
+    cpue_per_pop_per_met_this_month.at(name_pop).at(name_met) = newval;
 
 }
 
@@ -1305,6 +1347,30 @@ void Node::clear_cumcatches_per_pop_per_met_this_month()
         for (unsigned int j = 0; j < cumcatches_per_pop_per_met_this_month.size(); j++)
         {
             cumcatches_per_pop_per_met_this_month.at(i).at(j) = 0;
+        }
+    }
+
+}
+
+void Node::clear_cumeffort_per_pop_per_met_this_month()
+{
+    for (unsigned int i = 0; i < cumeffort_per_pop_per_met_this_month.size(); i++)
+    {
+        for (unsigned int j = 0; j < cumeffort_per_pop_per_met_this_month.size(); j++)
+        {
+            cumeffort_per_pop_per_met_this_month.at(i).at(j) = 0;
+        }
+    }
+
+}
+
+void Node::clear_cpue_per_pop_per_met_this_month()
+{
+    for (unsigned int i = 0; i < cpue_per_pop_per_met_this_month.size(); i++)
+    {
+        for (unsigned int j = 0; j < cpue_per_pop_per_met_this_month.size(); j++)
+        {
+            cpue_per_pop_per_met_this_month.at(i).at(j) = 0;
         }
     }
 

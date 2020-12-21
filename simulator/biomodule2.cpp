@@ -351,7 +351,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 for (unsigned int n = 0; n < a_list_nodes.size(); n++)
                 {
                     Cs += a_list_nodes.at(n)->get_cumcatches_per_pop_this_month().at(sp);
-                    a_list_nodes.at(n)->set_cumcatches_per_pop_this_month(sp, 0); // reinit after use
                 }
                 //cout << "Cs last month this pop " << sp << " is " << Cs << endl;
             }
@@ -365,7 +364,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     for (unsigned int n = 0; n < a_list_nodes.size(); n++)
                     {
                         Cs_per_met.at(met) += a_list_nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(met);
-                        a_list_nodes.at(n)->set_cumcatches_per_pop_per_met_this_month(sp, met, 0); // reinit after use
                     }
                 //cout << "Cs per met last month this pop " << sp << " this met Cs_per_met.at(met) " << met << " is " << Cs_per_met.at(met) << endl;
                 }
@@ -383,11 +381,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 for (unsigned int n = 0; n < a_list_nodes.size(); n++)
                 {
                     //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
-                    cout << "vect_map_oth.size() is " << vect_map_oth.size() << " and nb mets is " << nb_mets  << endl;
+                    //cout << "vect_map_oth.size() is " << vect_map_oth.size() << " and nb mets is " << nb_mets  << endl;
                     for (int met = 0; met < vect_map_oth.size(); ++met)
                     {
                         map_oth = vect_map_oth.at(met);
-                        cout << "Cs_per_met.at(met) this sp is " << Cs_per_met.at(met) << endl;
+                        //cout << "Cs_per_met.at(met) this sp is " << Cs_per_met.at(met) << endl;
                         oth_land_this_pop_this_node.at(n) +=
                             map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_per_met.at(met) *
                             populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);                    
@@ -906,7 +904,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
              } // end !=implcit
            } // end sp
-        } // end month detection
+    } // end month detection
 
 
 
@@ -914,7 +912,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
   int do_growth=0;
 
   for (unsigned int sp=0; sp<populations.size(); sp++)
-    {
+  {
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) ) // not an implicit species
         {
 
@@ -989,7 +987,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
             }
-        }
+  }
 
 
 
@@ -1074,6 +1072,24 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             for (unsigned int n=0; n<nodes.size(); n++)
             {
                 nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(name_pop, nodes.at(n)->get_Ns_pops_at_szgroup(sp));
+            }
+
+            //...and update some indicators (i.e. cpue) and reinit monthly pop indicators on nodes after use
+            int is_start_quarter = binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep);
+            for (unsigned int n = 0; n < nodes.size(); n++)
+            {
+                // the cpue_per_pop_per_met is computed on the fly as a running average each time there are some do_catch() 
+                // the cpue_per_pop_per_met is cleared each quarter.
+                // but at the end of each month, cumcatch and cumeffort are reset because are being used in some other context (e.g. to compute oth_land per month)
+                //cout << "cumcatch per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " << 
+                //    nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(1) << endl;
+                nodes.at(n)->clear_cumcatches_per_pop_per_met_this_month(); // reinit after use
+                //cout << "cumeffort per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
+                //    nodes.at(n)->get_cumeffort_per_pop_per_met_this_month().at(sp).at(1) << endl;
+                nodes.at(n)->clear_cumeffort_per_pop_per_met_this_month(); // reinit after use
+                //cout << "cpue per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
+                //    nodes.at(n)->get_cpue_per_pop_per_met_this_month().at(sp).at(1) << endl;
+                if (is_start_quarter) nodes.at(n)->clear_cpue_per_pop_per_met_this_month(); // reinit after use
             }
 
 
@@ -1286,14 +1302,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                 populations.at(sp)->clear_tot_C_at_szgroup();
                                 populations.at(sp)->clear_tot_D_at_szgroup();
 
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
 
 
 
 
-                             } // end else
+                        } // end else
 
 
 

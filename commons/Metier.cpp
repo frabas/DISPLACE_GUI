@@ -204,18 +204,6 @@ vector<int> Metier::get_metier_suitable_seabottomtypes()
     return(metier_suitable_seabottomtypes);
 }
 
-const vector<vector<double> >& Metier::get_experiencedcpue_fgrounds_per_pop()const
-{
-    return(experiencedcpue_fgrounds_per_pop);
-}
-
-
-
-const vector<vector<double> >& Metier::get_freq_experiencedcpue_fgrounds_per_pop()const
-{
-    return(freq_experiencedcpue_fgrounds_per_pop);
-}
-
 
 void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 {
@@ -242,76 +230,4 @@ void Metier::set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop)
 }
 
 
-
-
-void Metier::set_experiencedcpue_fgrounds_per_pop(const vector<vector<double> >& _experiencedcpue_fgrounds_per_pop)
-{
-    experiencedcpue_fgrounds_per_pop = _experiencedcpue_fgrounds_per_pop;
-}
-
-
-void Metier::set_freq_experiencedcpue_fgrounds_per_pop(const vector<vector<double> >& _freq_experiencedcpue_fgrounds_per_pop)
-{
-    freq_experiencedcpue_fgrounds_per_pop = _freq_experiencedcpue_fgrounds_per_pop;
-}
-
-
-
-void Metier::compute_experiencedcpue_fgrounds_per_pop()
-{
-    vector<double> cum_cpue_over_pop;
-
-    // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
-    // but there are qualified guesses: actually cpue from the frequency given by the input data...
-
-
-/*
-        outc(cout << "compute experienced cpue on grounds per pop and clear cum effort and catch..." << endl);
-    for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
-    {
-       // vector<vector<double> > cumcatches = nodes[a_node]->get_cumcatches_per_pop_per_met_this_month();
-
-        cum_cpue_over_pop.push_back(0);
-
-        for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
-        {
-            // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
-            if (cumeffort_fgrounds.at(a_node) != 0)
-            {
-                //dout(cout  << "on the grounds of this metier cumcatch is " << cumcatch_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                //dout(cout  << "on the grounds of this metier cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
-                experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = cumcatch_fgrounds_per_pop.at(a_node).at(pop) / cumeffort_fgrounds.at(a_node);
-                //dout(cout  << "on this ground, this metier experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
-            }
-            // cumul to scale to 1 (just below)
-            cum_cpue_over_pop.at(a_node) += experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
-
-            //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
-            if (cum_cpue_over_pop.at(a_node) != 0)
-            {
-                for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
-                {
-                    freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
-                    //dout(cout  << "scaled experienced cpue this pop is then " << freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                }
-            }
-
-        }
-
-    }
-    outc(cout << "experienced cpue on grounds per pop for this metier...OK" << endl);
-    */
-}
-
-
-
-void Metier::reinit_or_update_after_a_trip()
-{
-    outc(cout << "reinit/update after a trip..." << endl);
-    
-    // update for this metier
-    this->compute_experiencedcpue_fgrounds_per_pop();
-   
-    outc(cout << "reinit after a trip...OK" << endl);
-}
 

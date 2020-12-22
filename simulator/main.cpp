@@ -1255,19 +1255,7 @@ int app_main(int argc, char const* argv[])
     
     int nb_mets = simModel->metiers().size();
 
-    // ...then init the experiencedcpue (on all the nodes....TODO: maybe refine to keep list of nodes for this metier?)
-    vector<vector<double> > experiencedcpue_fgrounds_per_pop(simModel->nodes().size(), vector<double>(simModel->config().nbpops));
-    for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++) {
-        for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++) {
-            experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = 1.0;
-        }
-    }
-    for (auto metier : simModel->metiers()) 
-    {
-            metier->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // init
-            metier->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // init
-    }
-
+  
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
     dout(cout << " SHIP-RELATED STUFFS       " << endl);
@@ -3264,10 +3252,7 @@ int app_main(int argc, char const* argv[])
             listVesselIdForLogLikeToExport.clear();
 
 
-            for (unsigned int idx_met = 0; idx_met < simModel->metiers().size(); idx_met++) {
-                simModel->metiers()[idx_met]->reinit_or_update_after_a_trip();
-            }
-
+           
 
             for (unsigned int idx = 0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++) {
                 OutputExporter::instance().exportTripCatchPopPerSzgroup(simModel->timestep(),

@@ -8,8 +8,8 @@
 #include "db/ScenarioConfigTable.h"
 #include "NodesLoader.h"
 #include "EdgesLoader.h"
-#include "VesselsLoader.h"
-#include "MetiersLoader.h"
+#include "DatabaseInputImpl/VesselsLoader.h"
+#include "DatabaseInputImpl/MetiersLoader.h"
 #include "Node.h"
 #include "ClosuresLoader.h"
 #include "readdata.h"
@@ -114,7 +114,7 @@ void LoaderTestSuite::loadVessels()
 
 void LoaderTestSuite::loadMetiers()
 {
-    MetierssLoader loader(p->db);
+    MetiersLoader loader(p->db);
     auto allmetiers = loader.getListOfAllMetiers();
 
     BOOST_LOG_TRIVIAL(info) << "Metiers: loaded " << allmetiers.size() << " Metiers name";

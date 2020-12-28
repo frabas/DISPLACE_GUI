@@ -39,6 +39,7 @@ public:
         std::multimap<types::NodeId, double> full_spatial_availability;
         std::multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
         std::map<types::NodeId, double> oth_land;
+        vector<map<types::NodeId, double> > oth_land_map_per_met;
         std::multimap<int, double> overall_migration_fluxes;
         std::map<string, double> relative_stability_key;
         std::vector<std::vector<double> > percent_szgroup_per_age_matrix;

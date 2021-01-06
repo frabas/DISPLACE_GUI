@@ -120,19 +120,17 @@ bool DatabaseModelLoader::loadPopulations(int year)
            {
                outc(cout << "inform avai on nodes " << endl);
 
-               // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
-               outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-               auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp); // TODO: extract lst_idx_nodes this pop from nodeid in pop->get_full_spatial_availability() instead!!!
-               auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
-               for (multimap<int, types::NodeId>::iterator a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
-                   vect_of_lst_idx_nodes_per_pop_vov.at(sp).push_back(a_pos->second);
+               // get the vector of nodes of presence for this pop 
+               vector<types::NodeId> nodes_with_presence;
+               multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = pop->get_full_spatial_availability();
+               for (multimap<types::NodeId, double>::iterator it = avai_szgroup_nodes_with_pop.begin(), end = avai_szgroup_nodes_with_pop.end(); it != end;
+                      it = avai_szgroup_nodes_with_pop.upper_bound(it->first)) //  upper_bound part should print every key only once
+               {
+                   nodes_with_presence.push_back(it->first);
                }
 
-               outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
-               // init avai on each node (we know the presence...) for this pop for selected szgroup
-               vector<types::NodeId> nodes_with_presence = vect_of_lst_idx_nodes_per_pop_vov.at(sp);
-               multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = pop->get_full_spatial_availability();
-             
+
+               // and init avai on each node (we know the presence...) for this pop for selected szgroup
                for (unsigned int n = 0; n < nodes_with_presence.size(); n++)
                {
                    dout(cout << ".");

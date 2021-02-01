@@ -414,49 +414,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 }
             }
                        
-            
-
-            //cout << "map_oth for " << sp << " has now been calculated" << endl;
-
-            //-------------
-            // Then, handle the various options on input data resolution for oth_land
-            /*map<types::NodeId, double> map_oth;
-            vector<map<types::NodeId, double> > vect_map_oth;
-            vector <double> oth_land_this_pop_this_node (a_list_nodes.size(), 0);
-            if (is_oth_land_per_metier && is_other_land_as_multiplier_on_sp) // per met, and with a multiplier on total catch (per met) instead of absolute value
-            {
-                dout(cout << "other landings per met, and with a multiplier on total catch (per met) instead of absolute values " << endl);
-                vect_map_oth = populations.at(sp)->get_oth_land_map_per_met();
-                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
-                {
-                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
-                    //cout << "vect_map_oth.size() is " << vect_map_oth.size() << " and nb mets is " << nb_mets  << endl;
-                    for (int met = 0; met < vect_map_oth.size(); ++met)
-                    {
-                        map_oth = vect_map_oth.at(met);
-                        //cout << "Cs_per_met.at(met) this sp is " << Cs_per_met.at(met) << endl;
-                        oth_land_this_pop_this_node.at(n) +=
-                            map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs_per_met.at(met) *
-                            populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);                    
-                    }
-
-                }
-            }
-            */
-
-           /* if (!is_oth_land_per_metier && is_other_land_as_multiplier_on_sp) // not per met, and with a multiplier on total catch instead of absolute values
-            {
-                map_oth = populations.at(sp)->get_oth_land();
-                dout(cout << "other landings not per met, and with a multiplier on total catch instead of absolute values " << endl);
-                for (unsigned int n = 0; n < a_list_nodes.size(); n++)
-                {
-                    //dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
-                    oth_land_this_pop_this_node.at(n) +=
-                        map_oth[a_list_nodes.at(n)->get_idx_node()] * Cs *
-                        populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
-                }
-            }
-            */
+      
           
             if (!is_oth_land_per_metier && !is_other_land_as_multiplier_on_sp)//  not per met, and with absolute values for removals on node (historical default)
             {

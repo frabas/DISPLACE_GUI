@@ -10,7 +10,7 @@ using namespace displace::db::defs;
 
 PopulationGroupsQuery::map PopulationGroupsQuery::dispatcher;
 
-PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db)
+PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db, int period)
         : db(_db),
           selectQuery(db,
                       PopulationTableNameSzAg,
@@ -22,6 +22,11 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db)
                       fieldPeriod,
                       fieldValue)
 {
+    if (period != 0) {
+        selectQuery.where(fieldPeriod == 0);
+        selectQuery.bind(period);
+    }
+
     if (dispatcher.empty()) {
         // beta
         dispatcher["comcat"] = &fillInitComcat;

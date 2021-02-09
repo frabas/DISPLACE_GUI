@@ -34,7 +34,7 @@ class PopulationParametersQuery {
                   double value);
 
 public:
-    explicit PopulationParametersQuery(msqlitecpp::v2::Storage &_db);
+    PopulationParametersQuery(msqlitecpp::v2::Storage &_db, int period = 0);
 
     void execute(std::vector<PopulationsLoader::PopulationData> &population);
     PopulationsLoader::PopulationData executeForNamePeriod(std::string popname, int period);

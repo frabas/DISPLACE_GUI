@@ -10,7 +10,7 @@ using namespace displace::db::defs;
 
 PopulationParametersQuery::map PopulationParametersQuery::dispatcher;
 
-PopulationParametersQuery::PopulationParametersQuery(msqlitecpp::v2::Storage &_db)
+PopulationParametersQuery::PopulationParametersQuery(msqlitecpp::v2::Storage &_db, int period)
         : db(_db),
           selectQuery(db,
                       PopulationTableName,
@@ -21,6 +21,11 @@ PopulationParametersQuery::PopulationParametersQuery(msqlitecpp::v2::Storage &_d
                       fieldLandscape,
                       fieldValue)
 {
+    if (period != 0) {
+        selectQuery.where(fieldPeriod == 0);
+        selectQuery.bind(period);
+    }
+
     if (dispatcher.empty()) {
         dispatcher["fbar_min"] = &fill_fbar_min;
         dispatcher["fbar_max"] = &fill_fbar_max;

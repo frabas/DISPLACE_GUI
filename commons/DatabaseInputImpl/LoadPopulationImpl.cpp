@@ -14,10 +14,22 @@
 
 #include <iostream>
 
-bool DatabaseModelLoader::loadPopulations(int year)
+#define NBSZGROUP 14
+#define NBAGE 11                 // nb age classes max
+#define SEL_NBSZGROUP 5             // DEPRECATED - according to the R glm on cpue (see R code)
+
+bool DatabaseModelLoader::loadPopulations(int period)
 {
+    if (period == 1) {
+        int nbmets = 100; // CAUTION: for now we don't care as a large value will be resized. but best to ultimately include it to config()
+        for (unsigned int i = 0; i < model().nodes().size(); i++) {
+            model().nodes().at(i)->init_Ns_pops_at_szgroup(model().config().nbpops, NBSZGROUP, nbmets);
+            model().nodes().at(i)->init_avai_pops_at_selected_szgroup(model().config().nbpops, SEL_NBSZGROUP);
+        }
+    }
+
     PopulationsLoader loader(*p->db);
-    auto pops = loader.loadPopulationBaseData();
+    auto pops = loader.loadPopulationBaseData(period);
 
     auto populations = vector<Population *>();
     std::transform(pops.begin(), pops.end(), std::back_inserter(populations),

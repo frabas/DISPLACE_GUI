@@ -57,7 +57,7 @@ public:
         double a_calib_weight_at_szgroup;
     };
 
-    std::vector<PopulationData> loadPopulationBaseData();
+    std::vector<PopulationData> loadPopulationBaseData(int period);
 
     std::shared_ptr<PopulationData> getPopulationData(std::string populationname, int period);
 

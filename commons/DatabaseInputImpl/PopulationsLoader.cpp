@@ -26,7 +26,7 @@ std::vector<std::string> PopulationsLoader::getListOfAllPopulationsName()
     return p->getListOfAllPopulations();
 }
 
-vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseData()
+vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseData(int period)
 {
     vector<PopulationsLoader::PopulationData> data;
 
@@ -40,10 +40,10 @@ vector<PopulationsLoader::PopulationData> PopulationsLoader::loadPopulationBaseD
         return d;
     });
 
-    PopulationParametersQuery parametersQuery(p->db);
+    PopulationParametersQuery parametersQuery(p->db, period);
     parametersQuery.execute(data);
 
-    PopulationGroupsQuery groupsQuery(p->db);
+    PopulationGroupsQuery groupsQuery(p->db, period);
     groupsQuery.execute(data);
 
     return data;

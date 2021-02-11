@@ -1575,7 +1575,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 
 
-void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
+void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN,
                           int will_I_discard_all,  vector<vector<double> >& selectivity_per_stock_ogives_for_oth_land)
 {
@@ -1612,7 +1612,6 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 
     vector<double> sel_ogive;
-    int    MLS_cat = 3; // HARDCODED for now
     if(selectivity_per_stock_ogives_for_oth_land.empty())
     {
         double gadoid_sel_ogive [ ] =
@@ -1690,12 +1689,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
         }
 
-        double discardfactor = left_to_MLS/right_to_MLS; // (dis/lan)
+        double discardfactor;
+        discardfactor = left_to_MLS / right_to_MLS; // (dis/lan)
 
 
         //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
         //discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
-        discardfactor = min( 0.5 , discardfactor); // HARDCODED THRESHOLD
+        discardfactor = min( 0.5, discardfactor); // HARDCODED THRESHOLD
         // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic discards will be produced when no adult left on zones
         double tot_landings_this_pop=oth_land_this_pop_this_node;
         double tot_discards_this_pop=oth_land_this_pop_this_node*discardfactor ;

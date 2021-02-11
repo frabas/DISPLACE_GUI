@@ -23,6 +23,7 @@
 #include <Population.h>
 #include <Node.h>
 #include <Vessel.h>
+#include <Metier.h>
 #include <Benthos.h>
 #include <options.h>
 #include <readdata.h>
@@ -305,6 +306,8 @@ dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
 if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
     int will_I_discard_all=0; // init
+    vector<int> a_mls_cat = vessels.at(0)->get_metier()->get_mls_cat_per_pop();
+
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
         outc(cout << "...pop " << sp << endl;)
@@ -437,6 +440,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
 
+                vector <double> a_oth_catch_per_szgroup; // actually, landings only...
+                vector <double> a_oth_disc_per_szgroup;
+                double tot_oth_land_this_node=0;
+
+                
                 // apply "other" landings (by default, it is removing a kilo per node for this sp)
                 // (also accounting for a potential multiplier (default at 1.0))
           //      if (is_other_land_as_multiplier_on_sp) {
@@ -558,6 +566,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             // apply_oth_land()
                                 try {
                                     if(oth_land_this_pop_this_node.at(n)>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                     a_mls_cat.at(name_pop),
                                                                                                      oth_land_this_pop_this_node.at(n),
                                                                                                      weight_at_szgroup,
                                                                                                      totN,
@@ -570,12 +579,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                             // then, collect and accumulate tot_C_at_szgroup
-                            vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
-                            vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
+                            a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                            a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
                             vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
                             vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
+                            tot_oth_land_this_node = 0;
                             for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
                             {
+                               tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
                                newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
                                newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
                             }
@@ -613,6 +624,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         // apply_oth_land()
                             try {
                                 if(oth_land_this_pop_this_node.at(n) >0) a_list_nodes.at(n)->apply_oth_land(name_pop,
+                                                                                                 a_mls_cat.at(name_pop),
                                                                                                  oth_land_this_pop_this_node.at(n),
                                                                                                  weight_at_szgroup,
                                                                                                  totN,
@@ -626,12 +638,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                         // then, collect and accumulate tot_C_at_szgroup
-                        vector <double> a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
-                        vector <double> a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
+                        a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
+                        a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
                         vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
                         vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
+                        tot_oth_land_this_node = 0;
                         for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
                         {
+                           tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
                            newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
                            newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
                         }
@@ -641,15 +655,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     }
                 }
 
+             
                 // update landings in pop from oth landings
                 if(will_I_discard_all==0)
                 {
-                   double so_far = (populations.at(name_pop)->get_landings_so_far()) +
-                                      oth_land_this_pop_this_node.at(n);
+                    double so_far = (populations.at(name_pop)->get_landings_so_far()) + tot_oth_land_this_node;
+                                      ////oth_land_this_pop_this_node.at(n);
                    populations.at(name_pop)->set_landings_so_far(so_far);
                 }
 
-
+               
 
             }
 
@@ -738,7 +753,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             outc(cout << "landings so far for this pop " << sp << ", after applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
-
+            
+      
             dout(cout  << endl);
 
             // At the aggregated population scale,

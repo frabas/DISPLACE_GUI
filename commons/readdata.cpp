@@ -1119,7 +1119,8 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
             boost::split(sr, line, boost::is_any_of(separator));
 
             EnvironmentDataRecord a_tuple;
-
+            
+            if (sr.size() != 33) cout << "Some missing field(s) in the input data environment_on_coord.txt" << endl;
             a_tuple.x=boost::lexical_cast<double>(sr[0]);
             a_tuple.y=boost::lexical_cast<double>(sr[1]);
             a_tuple.harb=boost::lexical_cast<int>(sr[2]);

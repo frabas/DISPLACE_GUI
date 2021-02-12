@@ -309,14 +309,18 @@ vector <int> read_tsteps_quarters(string folder_name_parameterization, string in
 
     vector<int> tsteps_quarters;
 
-    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_quarters_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_quarters.dat";
     ifstream in;
     in.open(filename.c_str());
-    if(in.fail())
+    if (in.fail())
     {
-        open_file_error(filename.c_str());
+        filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/tstep_quarters_2009_2015.dat";
+        in.open(filename.c_str());
+        if (in.fail())
+        {
+            open_file_error(filename.c_str());
+        }
     }
-
     bool dd =true;
     int val;
     while(dd)
@@ -350,13 +354,19 @@ vector <int> read_tsteps_semesters(string folder_name_parameterization, string i
 
     vector<int> tsteps_semesters;
 
-    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_semesters_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_semesters.dat";
     ifstream in;
     in.open(filename.c_str());
-    if(in.fail())
+    if (in.fail())
     {
-        open_file_error(filename.c_str());
+        filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/tstep_semesters_2009_2015.dat";
+        in.open(filename.c_str());
+        if (in.fail())
+        {
+            open_file_error(filename.c_str());
+        }
     }
+
 
     bool dd =true;
     int val;
@@ -390,13 +400,19 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 
     vector<int> tsteps_months;
 
-    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_months_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_months.dat";
     ifstream in;
     in.open(filename.c_str());
-    if(in.fail())
+    if (in.fail())
     {
-        open_file_error(filename.c_str());
+        filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/tstep_months_2009_2015.dat";
+        in.open(filename.c_str());
+        if (in.fail())
+        {
+            open_file_error(filename.c_str());
+        }
     }
+
 
     bool dd =true;
     int val;
@@ -430,12 +446,17 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
     vector<int> tsteps_years;
 
-    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_years_2009_2015.dat";
+    string filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/tstep_years.dat";
     ifstream in;
     in.open(filename.c_str());
-    if(in.fail())
+    if (in.fail())
     {
+       filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_years_2009_2015.dat";
+       in.open(filename.c_str());
+       if(in.fail())
+       {
         open_file_error(filename.c_str());
+       }
     }
 
     bool dd =true;

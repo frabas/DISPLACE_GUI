@@ -72,6 +72,7 @@ static const char *dyn_pop_options[] = {
     "diffusePopN",
     "sizeSpectra",
     "nbcpCoupling",
+    "biolsceOnStaticAvai",
     "diffuseNutrients",
     "noHyperstability",
 };

@@ -74,6 +74,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
     O(mMap,nbcpCoupling);
+    O(mMap,biolsceOnStaticAvai);
     O(mMap,diffusePopN);
     O(mMap,avai_shuffler_on);
     O(mMap,avai_updater_on);

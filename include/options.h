@@ -125,6 +125,7 @@ enum Pop_Sce {
     use_SMS,
     use_SMS_single,
     nbcpCoupling,
+    biolsceOnStaticAvai,
     diffusePopN,
     avai_shuffler_on,
     avai_updater_on,

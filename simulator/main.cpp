@@ -1369,7 +1369,7 @@ int app_main(int argc, char const* argv[])
 
     // TODO: remove this hard-coded value!!!
 //#ifdef BALTICSEA
-    if (folder_name_parameterization == "BalticSea") {
+    if (folder_name_parameterization == "BalticSea" || folder_name_parameterization == "Baltic21") {
         for (auto vessel : simModel->vessels()) {
             vessel->set_tankcapacity(vessel->get_tankcapacity() *
                 3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.

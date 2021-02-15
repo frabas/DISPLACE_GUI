@@ -2068,10 +2068,19 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
         cout << "aggregate_N over all pops....done" << endl;
 
+        // default
         for (unsigned int ip = 0; ip < model().populations().size(); ip++) {
             type_of_avai_field_to_read.push_back("");
+        } 
+
+        // ...or if a biolsce informed on staticAvai
+        if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) {
+            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
+                type_of_avai_field_to_read.at(pp) = "_biolsce" + model().scenario().biolsce;
+            }
         }
 
+        // ...or if a dynamic coupling done with LGNB
         if (model().scenario().dyn_pop_sce.option(Options::nbcpCoupling)) {
             string a_command_for_R;
 

@@ -1100,12 +1100,23 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     ifstream file_avai_szgroup_nodes_with_pop;
     file_avai_szgroup_nodes_with_pop.open(filename.c_str());
     if (file_avai_szgroup_nodes_with_pop.fail()) {
-        string error_msg = "error opening file " + filename;
-        cout << error_msg << "\n";
+    
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" +
+            a_pop_s + "spe_full_avai_szgroup_nodes_semester" + a_semester +
+            ".dat"; // default naming
+        file_avai_szgroup_nodes_with_pop.open(filename.c_str());
 
-        exit(-1);
+        if (file_avai_szgroup_nodes_with_pop.fail()) {
+            string error_msg = "error opening file " + filename;
+            cout << error_msg << "\n";
+
+            exit(-1);
+        }
+    
     }
+
     dout(cout << "filename for pop  " << a_pop << " is " << filename << endl;)
+    cout << "filename for pop " << a_pop << " avai is " << filename << endl;
 
     multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop(file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop)) {
@@ -1452,6 +1463,16 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     for (int st = 0; st < model().config().nbpops; st++) {
         type_of_avai_field_to_read.at(st) = "";
     }
+
+
+    // ...or if a biolsce informed on staticAvai
+    if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) {
+        for (int st = 0; st < model().config().nbpops; st++) {
+            type_of_avai_field_to_read.at(st) = "_biolsce" + model().scenario().biolsce;
+        }
+    }
+
+
     string str_rand_avai_file = "baseline"; // deprecated?
     // by default, will use the initial avai input
 

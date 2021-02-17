@@ -545,15 +545,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             */
 
                                 // prevent TAC overshoot from other_landings
+                                // caution: TACs given in tons and landings in kg
                                 will_I_discard_all=0;
                                 if(dyn_alloc_sce.option(Options::TACs))
                                 {
-                                     if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                        oth_land_this_pop_this_node.at(n)) > populations.at(name_pop)->get_quota())
+                                     if(((populations.at(name_pop)->get_landings_so_far()) +
+                                        oth_land_this_pop_this_node.at(n)) >= populations.at(name_pop)->get_quota()*1000)
                                      {
                                             if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                                             {  // STOP!
-                                               oth_land_this_pop_this_node.at(n) =populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                                oth_land_this_pop_this_node.at(n) = 0;
+                                                //(populations.at(name_pop)->get_quota() * 1000) - (populations.at(name_pop)->get_landings_so_far());
                                             }
                                             else
                                             {
@@ -584,15 +586,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
                             vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
                             tot_oth_land_this_node = 0;
-                            for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                            if (oth_land_this_pop_this_node.at(n) > 0)
                             {
-                               tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
-                               newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
-                               newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
+                                for (unsigned int szgroup = 0; szgroup < a_oth_catch_per_szgroup.size(); ++szgroup)
+                                {
+                                    tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
+                                    newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                                    newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
+                                }
+                                populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                                populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
                             }
-                            populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
-                            populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
-
 
                         }
 
@@ -601,15 +605,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     {
 
                         // prevent TAC overshoot from other_landings
+                        // caution: TACs given is tons while landings in kg
                         will_I_discard_all=0;
                         if(dyn_alloc_sce.option(Options::TACs))
                         {
-                             if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                oth_land_this_pop_this_node.at(n)) > populations.at(name_pop)->get_quota())
+                             if(((populations.at(name_pop)->get_landings_so_far()) +
+                                oth_land_this_pop_this_node.at(n)) >= populations.at(name_pop)->get_quota()*1000)
                              {
                                     if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                                     {  // STOP!
-                                       oth_land_this_pop_this_node.at(n) =populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                        oth_land_this_pop_this_node.at(n) = 0;
                                     }
                                     else
                                     {
@@ -643,15 +648,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         vector <double> newTotC= populations.at(name_pop)->get_tot_C_at_szgroup();
                         vector <double> newTotD= populations.at(name_pop)->get_tot_D_at_szgroup();
                         tot_oth_land_this_node = 0;
-                        for(unsigned int szgroup=0; szgroup < a_oth_catch_per_szgroup.size();++szgroup)
+                        if (oth_land_this_pop_this_node.at(n) > 0) 
                         {
-                           tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
-                           newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
-                           newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
+                            for (unsigned int szgroup = 0; szgroup < a_oth_catch_per_szgroup.size(); ++szgroup)
+                            {
+                                tot_oth_land_this_node += a_oth_catch_per_szgroup.at(szgroup);
+                                newTotC.at(szgroup) = newTotC.at(szgroup) + a_oth_catch_per_szgroup.at(szgroup);
+                                newTotD.at(szgroup) = newTotD.at(szgroup) + a_oth_disc_per_szgroup.at(szgroup);
+                            }
+                            populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
+                            populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
                         }
-                        populations.at(name_pop)->set_tot_C_at_szgroup(newTotC);
-                        populations.at(name_pop)->set_tot_D_at_szgroup(newTotD);
-
                     }
                 }
 

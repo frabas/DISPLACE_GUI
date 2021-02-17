@@ -5619,9 +5619,31 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
          still_some_quotas=1;
         if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
          {
-             for (int pop=0; pop < populations.size(); pop++)
+            // find the most used fground for this vessel and check if the pop for which the tac is exhausted has been caught
+            // (i.e. > to a threshold in cpue e.g. 5kg on the most know ground specific to this vessel)
+            vector <double> freq_grounds = this->get_freq_fgrounds();
+            vector <types::NodeId> grds=this->get_fgrounds();
+            int idx = distance(freq_grounds.begin(),
+                max_element(freq_grounds.begin(), freq_grounds.end()));
+            types::NodeId knowledgeOfThisGround = grds.at(idx); // the most known ground
+            int idx_node_r = find(grds.begin(), grds.end(), knowledgeOfThisGround) - grds.begin(); // relative node index to this vessel
+
+            for (int pop=0; pop < populations.size(); pop++)
              {
-              if (populations.at(pop)->get_tac()->get_is_tac_exhausted())  still_some_quotas=0;
+                 vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
+                 for (unsigned int tg = 0; tg < trgts.size(); ++tg)
+                 {
+                    
+                     if (pop == trgts.at(tg) &&
+                         populations.at(pop)->get_tac()->get_is_tac_exhausted() &&
+                         this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(pop) > 5) 
+                     {
+                         still_some_quotas = 0;
+                         // => will stay on quayside because exhausted tac on at least one targeted stock
+                         dout(cout << this->get_name() << " will stay on quayside because choked by pop " << pop << "!" << endl);
+                         this->set_is_choked(pop, 1);
+                     }
+                 }
              }
          }
          else

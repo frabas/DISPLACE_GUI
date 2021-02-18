@@ -749,9 +749,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     // update, export and clear for the next time...
                     //if(export_vmslike  && impact_on_pop!=0)
                     //{
-                        // tstep == 34321 is 1st december 4th year
-                        if(tstep == 34321) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
-                        if(tstep == 34321) a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
+                        // initially it was tstep == 34321 is 1st december 4th year. Now it is year 5
+                        if((a_year_i == 3 || a_year_i == 8) && a_month_i==12) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
+                        if((a_year_i == 3 || a_year_i == 8) && a_month_i==12) a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
                     //}
                          // RE-INIT if no cumul is wished
                 //a_list_nodes.at(n)->clear_removals_pops_at_szgroup(name_pop);
@@ -1443,7 +1443,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         nodes.at(n)->export_popnodes_nbchoked(popnodes_nbchoked, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(tstep == 34321) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output
+        // initially it was tstep == 34321 is 1st december 4th year. Now it is year 5
+        if ((a_year_i == 3 || a_year_i == 8) && a_month_i == 12) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output
 
      }
 

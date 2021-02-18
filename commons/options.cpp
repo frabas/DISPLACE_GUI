@@ -58,6 +58,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, averageTariffsPerRectangle);
     O(mMap, otherLandPerMetPerPop);
     O(mMap, otherLandAsMultiplierOnSp);
+    O(mMap, doNotExportDiscardsInLogbooks);
 
 
 

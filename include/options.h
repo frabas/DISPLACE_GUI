@@ -116,6 +116,7 @@ enum Dyn_Alloc {
     averageTariffsPerRectangle,
     otherLandPerMetPerPop,
     otherLandAsMultiplierOnSp,
+    doNotExportDiscardsInLogbooks,
 
     Dyn_Alloc_last
 };

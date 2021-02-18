@@ -167,7 +167,7 @@ void SQLiteOutputStorage::exportPopQuotas(Population *pop, int popid, int tstep)
     p->mPopQuotasTable->insert(tstep, popid, pop);
 }
 
-void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
+void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul, const std::vector<double> &discards, unsigned int tstep, unsigned int export_discards_in_logbooks)
 {
     auto length_class =v->get_length_class();
 

@@ -58,6 +58,8 @@ static const char *dyn_alloc_options[] = {
     "averageTariffsPerRectangle",
     "otherLandPerMetPerPop",
     "otherLandAsMultiplierOnSp",
+    "doNotExportDiscardsInLogbooks",
+
 };
 
 static const char *dyn_pop_options[] = {

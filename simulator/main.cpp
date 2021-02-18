@@ -1329,6 +1329,11 @@ int app_main(int argc, char const* argv[])
 
 #endif
 
+    unsigned int export_discards_in_logbooks = 1;
+    if (scenario.dyn_alloc_sce.option(Options::doNotExportDiscardsInLogbooks)) 
+    {
+        export_discards_in_logbooks = 0;
+    }
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
@@ -3248,7 +3253,8 @@ int app_main(int argc, char const* argv[])
                 //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                 OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
-                                                         simModel->populations(), simModel->config().implicit_pops);
+                                                         simModel->populations(), simModel->config().implicit_pops, 
+                                                         export_discards_in_logbooks);
                 simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();

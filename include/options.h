@@ -140,6 +140,7 @@ enum Pop_Sce {
     modelResuspensionEffectOnBenthos,
     modelShippingOnBenthos,
     sizeSpectra,
+    massiveMortalityEvent20perY5,
     diffuseNutrients,
     noHyperstability,
   

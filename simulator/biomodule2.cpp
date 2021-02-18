@@ -79,7 +79,7 @@ static void unlock()
 }
 
 
-bool applyBiologicalModule2(int tstep, int a_month_i, const string & namesimu,
+bool applyBiologicalModule2(int tstep, int a_month_i, int a_year_i, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,
@@ -822,8 +822,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 //populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
                outc(cout << "apply M on each node of the pop..." << endl);
                vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
-                vector <int> species_on_node;
-                for (unsigned int n=0; n<a_list_nodes.size(); n++)
+               vector <int> species_on_node;
+               
+               double multiplier_on_M_background=1.0;
+               if (a_year_i==4 && dyn_pop_sce.option(Options::massiveMortalityEvent20perY5))
+               {
+                   multiplier_on_M_background = 1.2; //20 percent more in Year 5
+               }
+
+               for (unsigned int n=0; n<a_list_nodes.size(); n++)
                 {
                     // keep track of the N before applying M
                     populations.at(sp)->set_a_tot_N_at_szgroup_before_applying_M(populations.at(sp)->get_tot_N_at_szgroup());
@@ -839,7 +846,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                                                                                            searchVolMat,
                                                                                                            juveniles_diet_preference,
                                                                                                            adults_diet_preference,
-                                                                                                           mat_cats);
+                                                                                                           mat_cats,
+                                                                                                           multiplier_on_M_background);
                       } catch (runtime_error &) {
                             cout << "Fail in apply_natural_mortality_at_node_from_size_spectra_approach" << endl;
                             return false;

@@ -1434,7 +1434,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                                       const vector<vector<double> > & searchVolMat,
                                                                       const vector<vector<double> > & juveniles_diet_preference,
                                                                       const vector<vector<double> > & adults_diet_preference,
-                                                                      const vector<int> & mat_cats)
+                                                                      const vector<int> & mat_cats,
+                                                                      double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1465,6 +1466,13 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
     };
     vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
 
+    if (multiplier_on_M_background!=1) 
+    {
+        for (int i = 0; i < M_background.size(); i++) 
+        {
+            M_background.at(i) = M_background.at(i) * multiplier_on_M_background;
+        }
+    }
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
@@ -1560,6 +1568,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
             double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
+            //cout << " M2_on_node.at(sz) for sz "<< sz << " this node this pop "<< name_pop << " is " << M2_on_node.at(sz)* a_scaling << endl;
             Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(sz))/12);
 
             //this is assuming that the M is uniformly applied to the pop

@@ -1903,6 +1903,7 @@ int app_main(int argc, char const* argv[])
 
         if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
+                                    simModel->year(),
                                     namesimu,
                                     namefolderinput,
                                     namefolderoutput,
@@ -2058,6 +2059,7 @@ int app_main(int argc, char const* argv[])
                 simModel->setMonth(a_month_i);
                 simModel->setQuarter(a_quarter_i);
                 simModel->setSemester(a_semester_i);
+                simModel->setYear(a_year);
             }
 
 

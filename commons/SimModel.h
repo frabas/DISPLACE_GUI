@@ -161,6 +161,10 @@ public:
 
     int semester() const;
 
+    void setYear(int year);
+
+    int year() const;
+    
     bool is_tacs() const;
 
     bool is_other_land_as_multiplier_on_sp() const;

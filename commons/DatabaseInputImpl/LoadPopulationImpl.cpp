@@ -75,6 +75,44 @@ bool DatabaseModelLoader::loadPopulations(int period)
                        return pop;
                    });
 
+    // the code here is ported from commons/TextImpl/LoadPopulationsImpl.cpp Lines 1968-2025
+    for (auto const &p : populations) {
+        if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), p->idx_pop)) {
+            outc(cout << "inform avai on nodes " << endl);
+
+            outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
+            // init avai on each node (we know the presence...) for this pop for selected szgroup
+            vector<types::NodeId> nodes_with_presence = loadedData.vovn1.at(sp);
+            multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(sp);
+
+            for (unsigned int n = 0; n < nodes_with_presence.size(); n++) {
+                dout(cout << ".");
+                auto spat_avai_this_pop_this_node = find_entries(avai_szgroup_nodes_with_pop,
+                                                                 nodes_with_presence.at(n));
+
+                vector<double> spat_avai_per_selected_szgroup;
+                vector<int> selected_szgroups = populations.at(sp)->get_selected_szgroups();
+                for (int sz = 0; sz < spat_avai_this_pop_this_node.size(); ++sz) {
+                    auto it = find(selected_szgroups.begin(), selected_szgroups.end(), sz);
+                    if (it != selected_szgroups.end()) {
+                        spat_avai_per_selected_szgroup.push_back(spat_avai_this_pop_this_node.at(sz));
+                    }
+                }
+                if (!spat_avai_per_selected_szgroup.empty()) {
+                    model().nodes().at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp,
+                                                                                                               spat_avai_per_selected_szgroup);
+                } else {
+                    // inconsistence between lst_idx_nodes and avai files if this happen...
+                    outc(cout << nodes_with_presence.at(n));
+                }
+
+            }
+            outc(cout
+                         << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
+                         << endl);
+        }                         // end implicit pop
+    }
+
     model().setPopulations(std::move(populations));
 
     std::cout << "Nodes: " << model().nodes().size() << "\n";

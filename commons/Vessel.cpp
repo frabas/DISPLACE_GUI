@@ -3276,7 +3276,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         {
                             // 4. compare in tons (AT THE GLOBAL SCALE, OR PER NATION GIVEN THE QUOTA SHARE AMONG NATIONS)
                             if( ((so_far/1000) > (global_quotas.at(pop)))  ||
-                                  (so_far_this_nation > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation)) )
+                                  (so_far_this_nation/1000 > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation)) )
                             {
                                 if (((so_far / 1000) > (global_quotas.at(pop)))) populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
 
@@ -5588,7 +5588,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
     dout(cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl);
     dout(cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl);
-
+    //if (this->get_name() == "EST010126047") cout << "COUCOU!" << endl;
     int still_some_quotas;
     if(is_individual_vessel_quotas)
     {
@@ -5631,7 +5631,6 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             still_some_quotas=1;
 
         dout(cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl);
-
     }
     else
     {
@@ -5650,14 +5649,17 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             string a_nation=this->get_nationality();
             vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
             // cout << "a_nation this vessel is " << a_nation << endl;
-            //cout << " here: land so far this pop and nation is  " << populations.at(pop)->get_landings_so_far_per_nation().find(a_nation)->second << endl;
             
             for (unsigned int tg = 0; tg < trgts.size(); ++tg)
             {
                      int a_pop = trgts.at(tg);
-                     if  ((populations.at(a_pop)->get_tac()->get_is_tac_exhausted() ||  // check global tac
-                             populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) > populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation)) && // check quota this nation
-                         this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(a_pop) > 5) // check relevance this pop for this vessel (threshold in kg)
+                     double tac_this_species_this_nation= populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation);
+                     //if (this->get_name() == "EST010126047") cout << " here: land so far in tons this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) / 1000 << endl;
+                     //if (this->get_name() == "EST010126047") cout << " here: tacs this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation) << endl;
+                     if  (tac_this_species_this_nation>0 // first, check if this stock is really a target for this vessel/nation
+                           && ((populations.at(a_pop)->get_tac()->get_is_tac_exhausted() ||  // then, check global tac
+                             populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation)/1000 > tac_this_species_this_nation) && // ...or check quota this nation
+                             this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(a_pop) > 5)) // finally, check relevance of this pop for this vessel (threshold in kg)
                      {
                          still_some_quotas = 0;
                          // => will stay on quayside because exhausted tac on at least one targeted stock
@@ -5682,6 +5684,8 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
    }
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
+
+    //if (this->get_name() == "EST010126047") cout << "COUCOU2! still_some_quotas is " << still_some_quotas << " at tstep " << tstep << endl;
 
 
     if( still_some_quotas)
@@ -5710,9 +5714,13 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
                 if(unif_rand()<the_value) {
                     unlock();     // GO!
+                    //if (this->get_name() == "EST010126047") cout << "GO!" << endl;
                     return(1);
                 } else {
                     unlock();
+                    //if (this->get_name() == "EST010126047") cout << "DON´T GO!"  << endl;
+
+
                     return(0);	  // DON'T GO!
                 }
 
@@ -5720,6 +5728,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             else
             {
                 unlock();
+                //if (this->get_name() == "EST010126047") cout << "DON´T DECIDE NOW!" << endl;
                 return(0);		  // DON'T DECIDE NOW!
             }
 
@@ -5745,6 +5754,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
     else
     {
         dout(cout  << "no quota or credit left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
+        //if (this->get_name() == "EST010126047") cout << "no quota or credit left for this vessel " << endl;
         unlock();
         return(0);
     }

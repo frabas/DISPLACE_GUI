@@ -147,6 +147,7 @@ class  Population
         double get_quota_uptake() const;
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
+        map<string,double> get_landings_so_far_per_nation();
         double get_tot_N_at_age0() const;
         const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
@@ -194,6 +195,8 @@ class  Population
         void set_proportion_mature_fish(double _proportion_mature_fish);
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
+        void set_landings_so_far_this_nation(string _nation, double _landings_so_far_per_nation);
+        void reset_landings_so_far_per_nation();
         void add_to_landings_at_end_of_years(double value);
         void set_param_sr(const vector<double>& _param_sr);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
@@ -317,6 +320,7 @@ class  Population
         double quota;
         double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
+        map <string, double> landings_so_far_per_nation;
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
         double tot_N_at_age0;

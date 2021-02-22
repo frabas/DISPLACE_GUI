@@ -293,6 +293,27 @@ Population::Population(int a_name,
     fbar=0.0;
     oth_land_multiplier=1.0;
 
+    for (auto it = relative_stability_key.begin(); it != relative_stability_key.end(); it++)
+    {
+        landings_so_far_per_nation.insert(std::make_pair(it->first, 0));
+    }
+    
+    // check
+    //cout << "check relative_stability_key " << endl;
+    //for (auto elem : relative_stability_key)
+    //{
+    //    std::cout << elem.first << " " << elem.second << "\n";
+    //}
+
+    // check
+    //cout << "check landings_so_far_per_nation " << endl;
+    //for (auto elem : landings_so_far_per_nation)
+    //{
+    //    std::cout << elem.first << " " << elem.second << "\n";
+    //}
+
+
+
     quota =init_tac[0];
     quota_uptake=0.0;
     is_choking_fisheries=0;
@@ -581,6 +602,12 @@ double Population::get_landings_so_far() const
 {
 	return(landings_so_far);
 }
+
+map<string,double> Population::get_landings_so_far_per_nation() 
+{
+    return(landings_so_far_per_nation);
+}
+
 
 double Population::get_tot_N_at_age0() const
 {
@@ -980,6 +1007,19 @@ void Population::set_landings_so_far(double _landings_so_far)
 {
 	landings_so_far=_landings_so_far;
 }
+
+void Population::set_landings_so_far_this_nation(string nation, double _landings_so_far)
+{
+    landings_so_far_per_nation[nation] = _landings_so_far;
+}
+
+void Population::reset_landings_so_far_per_nation()
+{
+    for (auto& p : landings_so_far_per_nation) p.second = 0;
+    cout << "reset_landings_so_far_per_nation this pop " << this->get_name() << endl;
+
+}
+
 
 void Population::add_to_landings_at_end_of_years(double value)
 {

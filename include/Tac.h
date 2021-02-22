@@ -43,12 +43,17 @@ class  Tac
         int get_is_tac_exhausted() const;
         void add_tac_to_ts(double a_tac, int current_is);
         void set_is_tac_exhausted(int val);
+		double get_tac_per_nation(string nation);
+		void reset_tac_per_nation();
+
 
 	protected:
 	private:
 		double percent_for_simulated_vessels;
 								 // nrow is nb of countries
 		map<string,double>  relative_stability_key;
+		map<string, double>  tac_per_nation;
+
 		vector<double> ts_tac;	 // time series per year
 		double current_tac;
         int is_tac_exhausted;

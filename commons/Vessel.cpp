@@ -3248,6 +3248,12 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                                 a_cumul_weight_this_pop_this_vessel;
                         // "real-time" update, accounting for this last bit of catches
                         populations.at(pop)->set_landings_so_far(so_far);
+                      
+                        string a_nation = this->get_nationality();
+                        double so_far_this_nation = 0.0;
+                        so_far_this_nation= populations.at(pop)->get_landings_so_far_per_nation().at(a_nation) +
+                                a_cumul_weight_this_pop_this_vessel;
+                        populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
 
 
@@ -3268,10 +3274,11 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         // because the first year is the calibration year:
                         //if(tstep>8761  && !is_individual_vessel_quotas)
                         {
-                            // 4. compare in tons (AT THE GLOBAL SCALE)
-                            if( (so_far/1000) > (global_quotas.at(pop)))
+                            // 4. compare in tons (AT THE GLOBAL SCALE, OR PER NATION GIVEN THE QUOTA SHARE AMONG NATIONS)
+                            if( ((so_far/1000) > (global_quotas.at(pop)))  ||
+                                  (so_far_this_nation > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation)) )
                             {
-                                populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
+                                if (((so_far / 1000) > (global_quotas.at(pop)))) populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
 
                                 prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
 
@@ -3543,6 +3550,8 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                 }
             }
 
+           
+
 
             //if((this->get_name())=="FIN000020014") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
             //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
@@ -3564,6 +3573,16 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         cpue*PING_RATE;
                 // "real-time" update, accounting for this last bit of catches
                 populations.at(pop)->set_landings_so_far(so_far);
+
+                if (tstep > 1 && is_tacs && !is_individual_vessel_quotas)
+                {
+                    string a_nation = this->get_nationality();
+                    double so_far_this_nation = 0.0;
+                    so_far_this_nation = populations.at(pop)->get_landings_so_far_per_nation().at(a_nation) +
+                        cpue * PING_RATE;
+                    populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+
+                }
 
                 // CUMUL ON VESSEL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
@@ -5628,23 +5647,25 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             types::NodeId knowledgeOfThisGround = grds.at(idx); // the most known ground
             int idx_node_r = find(grds.begin(), grds.end(), knowledgeOfThisGround) - grds.begin(); // relative node index to this vessel
 
-            for (int pop=0; pop < populations.size(); pop++)
-             {
-                 vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
-                 for (unsigned int tg = 0; tg < trgts.size(); ++tg)
-                 {
-                    
-                     if (pop == trgts.at(tg) &&
-                         populations.at(pop)->get_tac()->get_is_tac_exhausted() &&
-                         this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(pop) > 5) 
+            string a_nation=this->get_nationality();
+            vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
+            // cout << "a_nation this vessel is " << a_nation << endl;
+            //cout << " here: land so far this pop and nation is  " << populations.at(pop)->get_landings_so_far_per_nation().find(a_nation)->second << endl;
+            
+            for (unsigned int tg = 0; tg < trgts.size(); ++tg)
+            {
+                     int a_pop = trgts.at(tg);
+                     if  ((populations.at(a_pop)->get_tac()->get_is_tac_exhausted() ||  // check global tac
+                             populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) > populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation)) && // check quota this nation
+                         this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(a_pop) > 5) // check relevance this pop for this vessel (threshold in kg)
                      {
                          still_some_quotas = 0;
                          // => will stay on quayside because exhausted tac on at least one targeted stock
-                         dout(cout << this->get_name() << " will stay on quayside because choked by pop " << pop << "!" << endl);
-                         this->set_is_choked(pop, 1);
+                         dout(cout << this->get_name() << " will stay on quayside because choked by target pop " << a_pop << "!" << endl);
+                         this->set_is_choked(a_pop, 1);
                      }
-                 }
-             }
+            }
+            
          }
          else
          {

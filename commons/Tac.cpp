@@ -36,6 +36,12 @@ Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,doub
 	ts_tac.push_back(init_tac);
 	current_tac=init_tac;
 
+	map<string, double>::iterator it;
+	for (it = _relative_stability_key.begin(); it != _relative_stability_key.end(); it++)
+	{
+		tac_per_nation.insert(std::make_pair(it->first, it->second / 100 * init_tac));
+	}
+		
     is_tac_exhausted=0;
 }
 
@@ -82,6 +88,22 @@ double Tac:: get_current_tac() const
 	return(current_tac);
 }
 
+double Tac::get_tac_per_nation(string nation) 
+{
+	return(tac_per_nation[nation]);
+}
+
+
+void Tac::reset_tac_per_nation()
+{
+	map<string, double>::iterator it;
+	for (it = relative_stability_key.begin(); it != relative_stability_key.end(); it++)
+	{
+		tac_per_nation[it->first] = (it->second) / 100 * this->get_current_tac();
+	}
+	
+}
+
 int Tac::get_is_tac_exhausted() const
 {
     return(is_tac_exhausted);
@@ -99,6 +121,8 @@ void Tac:: add_tac_to_ts(double a_tac, int current_is)
     if(current_is==1) current_tac=a_tac;
     if(current_is==-1) current_tac=ts_tac.at(ts_tac.size()-2);
     cout << "current tac is " << current_tac << endl;
+
+	this->reset_tac_per_nation();
 
 }
 

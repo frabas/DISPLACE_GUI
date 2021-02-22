@@ -1798,6 +1798,14 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder);
+       
+            //cout << "check relative_stability_key when loading: " << endl;
+            //for (auto elem : vect_of_relative_stability_key_map.at(sp))
+            //{
+            //    std::cout << elem.first << " " << elem.second << "\n";
+            //}
+
+        
         }
 
         // input data, growth transition, percent_szgroup_per_age_matrix

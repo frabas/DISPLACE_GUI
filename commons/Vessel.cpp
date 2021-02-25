@@ -2809,7 +2809,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
                 }
 
-                //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+                //if(this->get_name()=="POL022500003" && pop==31){
                 //    cout  << "tot biomass available on this node " << tot << endl;
                 //}
 
@@ -2880,12 +2880,14 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
                     dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl);
 
-                    /*
-                     * if(this->get_name()=="FIN000020014"){
+                    
+                      /*if(this->get_name()=="POL022500003"){
                        cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
                        cout  << "explicit: given  that avai biomass is " << tot << endl;
-                    }
-                    */
+                       cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << endl;
+                       cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << endl;
+                      }
+                      */
 
                     // REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
                     // BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)

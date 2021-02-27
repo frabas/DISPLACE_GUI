@@ -407,10 +407,10 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<ESRIShapefile> file (new ESRIShapefile(src.get(), layername.toStdString()));
 
-    file->setPenPolygon(QPen(Qt::red));
+    file->setPen(QPen(Qt::red));
     QColor col (Qt::yellow);
     col.setAlpha(64);
-    file->setBrushPolygon(QBrush(col));
+    file->setBrush(QBrush(col));
 
     QFileInfo info(path);
     QString label = QString("Shapefile %1").arg(info.fileName());

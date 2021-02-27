@@ -47,12 +47,6 @@ private:
      */
     void setupLayout();
 
-    /**
-     * Handles QWidget resizing.
-     * @param resize_event The QResizeEvent that occured.
-     */
-    void resizeEvent(QResizeEvent* event);
-
 private slots:
     /*!
      * Toggle whether to add points

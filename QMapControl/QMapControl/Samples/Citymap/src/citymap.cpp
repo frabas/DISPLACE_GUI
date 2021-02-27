@@ -1,19 +1,22 @@
+
+#define _USE_MATH_DEFINES
+
 #include "citymap.h"
 
 // Qt includes.
 #include <QtWidgets/QMenuBar>
-
-// STL includes.
-#include <cmath>
 
 // QMapControl includes.
 #include <QMapControl/GeometryPointImage.h>
 #include <QMapControl/GeometryPointImageScaled.h>
 #include <QMapControl/GeometryWidget.h>
 #include <QMapControl/LayerMapAdapter.h>
+#include <QMapControl/MapAdapterGoogle.h>
 #include <QMapControl/MapAdapterOSM.h>
 #include <QMapControl/MapAdapterYahoo.h>
-#include <QMapControl/MapAdapterGoogle.h>
+
+// STL includes.
+#include <cmath>
 
 /*!
  * This demo application shows more features of the QMapControl.

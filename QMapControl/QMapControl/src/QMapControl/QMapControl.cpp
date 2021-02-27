@@ -43,19 +43,23 @@
 
 #include <QDebug>
 
-namespace qmapcontrol
-{
-    QMapControl::QMapControl(QWidget* parent, Qt::WindowFlags window_flags)
-        : QMapControl(parent->size(), parent, window_flags)
-    {
-        // Nothing else to do.
-    }
+namespace qmapcontrol {
 
-    QMapControl::QMapControl(const QSizeF& size_px, QWidget* parent, Qt::WindowFlags window_flags)
+const std::chrono::minutes QMapControl::PersistentCacheNoExpiration = std::chrono::minutes{0};
+const QDir QMapControl::PersistentCacheDefaultPath = QDir::homePath() + QDir::separator() + "QMapControl.cache";
+
+QMapControl::QMapControl(QWidget *parent, Qt::WindowFlags window_flags)
+        : QMapControl(parent->size(), parent, window_flags)
+{
+    // Nothing else to do.
+}
+
+QMapControl::QMapControl(const QSizeF &size_px, QWidget *parent, Qt::WindowFlags window_flags)
         : QWidget(parent, window_flags),
           m_scalebar_enabled(false),
           m_crosshairs_enabled(true),
           m_layer_mouse_events_enabled(true),
+          mBackbufferSize(2 * size_px.toSize()),
           m_viewport_size_px(size_px),
           m_viewport_center_px(size_px.width() / 2.0, size_px.height() / 2.0),
           m_limited_viewport_rect_coord(PointWorldCoord(0.0, 0.0), PointWorldCoord(0.0, 0.0)),
@@ -123,60 +127,85 @@ namespace qmapcontrol
         setViewportSize(size_px);
     }
 
-    QMapControl::~QMapControl()
-    {
-        mAborted= true;
-        ImageManager::get().abortLoading();
-        QThread::currentThread()->sleep(1);
+QMapControl::~QMapControl()
+{
+    mAborted = true;
+    ImageManager::get().abortLoading();
+    QThread::currentThread()->sleep(1);
 
-        // Destroy the image manager instance.
-        ImageManager::destory();
-    }
+    // Destroy the image manager instance.
+    ImageManager::destory();
+}
 
-    /// Public...
-    // Settings.
-    void QMapControl::setProjection(const projection::EPSG& epsg)
-    {
-        // Set the projection.
-        projection::set(epsg);
-    }
+void QMapControl::setMapRotation(qreal rotation)
+{
+    mMapRotation = rotation;
+    mMapTransformation.reset();
+    mMapTransformation.rotate(rotation);
 
-    void QMapControl::setTileSizePx(const int& tile_size_px)
-    {
-        // Set the tile size used by the Image Manager.
-        ImageManager::get().setTileSizePx(tile_size_px);
-    }
+    emit mapCourseChanged(rotation);
 
-    void QMapControl::setBackgroundColour(const QColor& colour)
-    {
-        // Update the QWidget background colour.
-        QWidget::setObjectName("QMapControl");
-        QWidget::setStyleSheet("QWidget#QMapControl { background-color: " + colour.name() + " }");
-    }
+    requestRedraw();
+}
 
-    void QMapControl::enablePersistentCache(const std::chrono::minutes& expiry, const QDir& path)
-    {
-        // Set the Image Manager's persistent cache settings.
-        ImageManager::get().enablePersistentCache(expiry, path);
-    }
+qreal QMapControl::mapRotation() const
+{
+    return mMapRotation;
+}
 
-    void QMapControl::setProxy(const QNetworkProxy& proxy)
-    {
-        // Set the Image Manager's network proxy.
-        ImageManager::get().setProxy(proxy);
-    }
+/// Public...
+// Settings.
+void QMapControl::setProjection(const projection::EPSG &epsg)
+{
+    // Set the projection.
+    projection::set(epsg);
+}
 
-    void QMapControl::setProxy(const std::string& host, const int& port)
-    {
-        // Set the Image Manager's network proxy.
-        ImageManager::get().setProxy(QNetworkProxy(QNetworkProxy::HttpProxy, host.c_str(), port));
-    }
+void QMapControl::setTileSizePx(const int &tile_size_px)
+{
+    // Set the tile size used by the Image Manager.
+    ImageManager::get().setTileSizePx(tile_size_px);
+}
 
-    void QMapControl::enableScaledBackground(const bool& visible)
-    {
-        // Set whether the scaled primary screen should be visible as a background image.
-        m_primary_screen_scaled_enabled = visible;
-    }
+void QMapControl::setBackgroundColour(const QColor &colour)
+{
+    mBackgroundColor = colour;
+    requestRedraw();
+}
+
+void QMapControl::enablePersistentCache(const std::chrono::minutes &expiry, const QDir &path)
+{
+    // Set the Image Manager's persistent cache settings.
+    ImageManager::get().enablePersistentCache(expiry, path);
+}
+
+void QMapControl::startPersistentCacheHousekeeping()
+{
+    ImageManager::get().startPersistentCacheHousekeeping();
+}
+
+void QMapControl::clearPersistentCache()
+{
+    ImageManager::get().clearPersistentCache();
+}
+
+void QMapControl::setProxy(const QNetworkProxy &proxy)
+{
+    // Set the Image Manager's network proxy.
+    ImageManager::get().setProxy(proxy);
+}
+
+void QMapControl::setProxy(const std::string &host, const int &port)
+{
+    // Set the Image Manager's network proxy.
+    ImageManager::get().setProxy(QNetworkProxy(QNetworkProxy::HttpProxy, host.c_str(), port));
+}
+
+void QMapControl::enableScaledBackground(const bool &visible)
+{
+    // Set whether the scaled primary screen should be visible as a background image.
+    m_primary_screen_scaled_enabled = visible;
+}
 
     void QMapControl::enableScalebar(const bool& visible)
     {
@@ -359,10 +388,13 @@ namespace qmapcontrol
         // Calculate the middle point of the viewport (visible-part of the layer) in pixels.
         m_viewport_center_px = PointViewportPx(m_viewport_size_px.width() / 2.0, m_viewport_size_px.height() / 2.0);
 
+        auto sz = std::max(size_px.width(), size_px.height());
+        mBackbufferSize = QSize(2 * sz, 2 * sz);
+
         // Create new pixmaps with the new size required (2 x viewport size to allow for panning backbuffer).
-        m_primary_screen = QPixmap(m_viewport_size_px.toSize() * 2);
+        m_primary_screen = QPixmap(mBackbufferSize);
         m_primary_screen.fill(Qt::transparent);
-        m_primary_screen_scaled = QPixmap(m_viewport_size_px.toSize() * 2);
+        m_primary_screen_scaled = QPixmap(mBackbufferSize);
         m_primary_screen_scaled.fill(Qt::transparent);
         m_primary_screen_scaled_offset = PointPx(0.0, 0.0);
 
@@ -487,26 +519,38 @@ namespace qmapcontrol
 
     void QMapControl::scrollViewLeft(const double& delta_px)
     {
+        auto tr = QTransform().rotate(-mMapRotation);
         // Scroll the view left by required pixels.
-        scrollView(PointPx(-delta_px, 0.0));
+        auto delta = tr.map(QPointF(-delta_px, 0.0));
+        qDebug() << "Left " << delta;
+        scrollView(PointPx(delta.x(), delta.y()));
     }
 
     void QMapControl::scrollViewRight(const double& delta_px)
     {
+        auto tr = QTransform().rotate(-mMapRotation);
         // Scroll the view right by required pixels.
-        scrollView(PointPx(delta_px, 0.0));
+        auto delta = tr.map(QPointF(delta_px, 0.0));
+        qDebug() << "Right " << delta;
+        scrollView(PointPx(delta.x(), delta.y()));
     }
 
     void QMapControl::scrollViewUp(const double& delta_px)
     {
+        auto tr = QTransform().rotate(-mMapRotation);
         // Scroll the view up by required pixels.
-        scrollView(PointPx(0.0, -delta_px));
+        auto delta = tr.map(QPointF(0.0, -delta_px));
+        qDebug() << "Up " << delta;
+        scrollView(PointPx(delta.x(), delta.y()));
     }
 
     void QMapControl::scrollViewDown(const double& delta_px)
     {
+        auto tr = QTransform().rotate(-mMapRotation);
         // Scroll the view down by required pixels.
-        scrollView(PointPx(0.0, delta_px));
+        auto delta = tr.map(QPointF(0.0, delta_px));
+        qDebug() << "Down " << delta;
+        scrollView(PointPx(delta.x(), delta.y()));
     }
 
     // Zoom management.
@@ -564,25 +608,40 @@ namespace qmapcontrol
         updateControls();
     }
 
-    // Mouse management.
-    void QMapControl::enableLayerMouseEvents(const bool& enable)
-    {
-        // Set whether to enable mouse events for layers.
-        m_layer_mouse_events_enabled = enable;
-    }
+void QMapControl::setCenterPixmap(QPixmap pixmap)
+{
+    mCenterPixmap = pixmap;
+}
 
-    QMapControl::MouseButtonMode QMapControl::getMouseButtonLeftMode()
-    {
-        // Return the left mouse button mode.
-        return m_mouse_left_mode;
-    }
+void QMapControl::clearCenterPixmap()
+{
+    mCenterPixmap = QPixmap();
+}
 
-    void QMapControl::setMouseButtonLeft(const MouseButtonMode& mode, const bool& origin_center)
-    {
-        // Set the left mouse button settings.
-        m_mouse_left_mode = mode;
-        m_mouse_left_origin_center = origin_center;
-    }
+QPixmap QMapControl::centerPixmap()
+{
+    return mCenterPixmap;
+}
+
+// Mouse management.
+void QMapControl::enableLayerMouseEvents(const bool &enable)
+{
+    // Set whether to enable mouse events for layers.
+    m_layer_mouse_events_enabled = enable;
+}
+
+QMapControl::MouseButtonMode QMapControl::getMouseButtonLeftMode()
+{
+    // Return the left mouse button mode.
+    return m_mouse_left_mode;
+}
+
+void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &origin_center)
+{
+    // Set the left mouse button settings.
+    m_mouse_left_mode = mode;
+    m_mouse_left_origin_center = origin_center;
+}
 
     QMapControl::MouseButtonMode QMapControl::getMouseButtonRightMode()
     {
@@ -599,19 +658,20 @@ namespace qmapcontrol
 
     void QMapControl::mousePressEvent(QMouseEvent* mouse_event)
     {
+        auto local = localToRotatedPoint(mouse_event->localPos());
         // Store the mouse location of the current/starting mouse click.
-        m_mouse_position_current_px = PointViewportPx(mouse_event->localPos().x(), mouse_event->localPos().y());
+        m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
         m_mouse_position_pressed_px = m_mouse_position_current_px;
 
         // Are mouse events enabled for all layers?
-        if(m_layer_mouse_events_enabled)
-        {
+        if (m_layer_mouse_events_enabled) {
             // Loop through each layer and pass the mouse event on.
             std::vector<std::shared_ptr<Layer> >::const_reverse_iterator rit = getLayers().rbegin();
             while (rit != getLayers().rend()) {
                 bool handled;
                 // Send the mouse press event to the layer.
-                handled = (*rit)->mousePressEvent(mouse_event, toPointWorldCoord(m_mouse_position_current_px), m_current_zoom);
+                handled = (*rit)->mousePressEvent(mouse_event, toPointWorldCoord(m_mouse_position_current_px),
+                                                  m_current_zoom);
 
                 if (handled) {
                     break;
@@ -639,8 +699,9 @@ namespace qmapcontrol
 
     void QMapControl::mouseReleaseEvent(QMouseEvent* mouse_event)
     {
+        auto local = localToRotatedPoint(mouse_event->localPos());
         // Store the mouse location of the current mouse click.
-        m_mouse_position_current_px = PointViewportPx(mouse_event->localPos().x(), mouse_event->localPos().y());
+        m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
         // Default mouse mode.
         QMapControl::MouseButtonMode mouse_mode = QMapControl::MouseButtonMode::None;
@@ -796,8 +857,9 @@ namespace qmapcontrol
 
     void QMapControl::mouseDoubleClickEvent(QMouseEvent* mouse_event)
     {
+        auto local = localToRotatedPoint(mouse_event->localPos());
         // Store the mouse location of the current mouse click.
-        m_mouse_position_current_px = PointViewportPx(mouse_event->localPos().x(), mouse_event->localPos().y());
+        m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
         // Emit the double click mouse event with the press and current mouse coordinate.
         emit mouseEventDoubleClickCoordinate(mouse_event, toPointWorldCoord(m_mouse_position_pressed_px), toPointWorldCoord(m_mouse_position_current_px));
@@ -805,8 +867,9 @@ namespace qmapcontrol
 
     void QMapControl::mouseMoveEvent(QMouseEvent* mouse_event)
     {
+        auto local = localToRotatedPoint(mouse_event->localPos());
         // Update the current mouse position.
-        m_mouse_position_current_px = PointViewportPx(mouse_event->localPos().x(), mouse_event->localPos().y());
+        m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
         // Default mouse mode.
         QMapControl::MouseButtonMode mouse_mode = QMapControl::MouseButtonMode::None;
@@ -843,17 +906,13 @@ namespace qmapcontrol
 
     void QMapControl::wheelEvent(QWheelEvent* wheel_event)
     {
-        // Is the vertical angle delta positive?
-        if(wheel_event->angleDelta().y() > 0)
-        {
-            // Check the current zoom is less than maximum zoom (as we change the location of the map focus point before we zoom in).
-            if(m_current_zoom < m_zoom_maximum)
-            {
-                // Capture the current wheel point at the current zoom level.
-                const PointViewportPx wheel_px(wheel_event->posF().x(), wheel_event->posF().y());
-                const PointWorldCoord wheel_coord(toPointWorldCoord(wheel_px));
-                const PointPx wheel_delta(mapFocusPointWorldPx() - toPointWorldPx(wheel_px));
+        auto local = localToRotatedPoint(wheel_event->posF());
+        const PointPx wheel_delta(mapFocusPointWorldPx() - local);
 
+        // Is the vertical angle delta positive?
+        if (wheel_event->angleDelta().y() > 0) {
+            // Check the current zoom is less than maximum zoom (as we change the location of the map focus point before we zoom in).
+            if (m_current_zoom < m_zoom_maximum) {
                 // Update the scaled offset with the current wheel_delta.
                 /// @TODO should this add to the offset?
                 m_primary_screen_scaled_offset = wheel_delta;
@@ -861,8 +920,9 @@ namespace qmapcontrol
                 // Zoom in.
                 zoomIn();
 
+                // TODO fix google-style zoom, currently disabled
                 // Google-style zoom...
-                setMapFocusPoint(projection::get().toPointWorldCoord(projection::get().toPointWorldPx(wheel_coord, m_current_zoom) + wheel_delta, m_current_zoom));
+//                setMapFocusPoint(toPointWorldCoord(PointViewportPx(local.x(), local.y())));
 
                 // Tell parents we have accepted this events.
                 wheel_event->accept();
@@ -876,13 +936,7 @@ namespace qmapcontrol
         else if(wheel_event->angleDelta().y() < 0)
         {
             // Check the current zoom is greater than minimum zoom (as we change the location of the map focus point before we zoom in).
-            if(m_current_zoom > m_zoom_minimum)
-            {
-                // Capture the current wheel point at the current zoom level.
-                const PointViewportPx wheel_px(wheel_event->posF().x(), wheel_event->posF().y());
-                const PointWorldCoord wheel_coord(toPointWorldCoord(wheel_px));
-                const PointPx wheel_delta(mapFocusPointWorldPx() - toPointWorldPx(wheel_px));
-
+            if (m_current_zoom > m_zoom_minimum) {
                 // Update the scaled offset with the current wheel_delta.
                 /// @TODO should this add to the offset?
                 /// @TODO not sure if this is correct delta to apply on zoom out!
@@ -891,8 +945,9 @@ namespace qmapcontrol
                 // Zoom out.
                 zoomOut();
 
+                // TODO fix google-style zoom, currently disabled
                 // Google-style zoom...
-                setMapFocusPoint(projection::get().toPointWorldCoord(projection::get().toPointWorldPx(wheel_coord, m_current_zoom) + wheel_delta, m_current_zoom));
+//                setMapFocusPoint(toPointWorldCoord(PointViewportPx(local.x(), local.y())));
 
                 // Tell parents we have accepted this events.
                 wheel_event->accept();
@@ -1090,45 +1145,35 @@ namespace qmapcontrol
 
     PointWorldPx QMapControl::toPointWorldPx(const PointViewportPx& click_point_px, const PointWorldPx& map_focus_point_px) const
     {
-        // Convert the mouse pixel position into the coordinate system required.
-        /*
-         * Notes:
-         * click_point_px.x() and y() are the mouse pixel points in relation to the viewport (visible-part of the layer).
-         * mapFocusPointPx()->x() and y() are the current focus pixel points in relation to the map control (whole layer).
-         *
-         * Explanation:
-         *   0 1 2 3 4 5 6
-         * 0 |-----------|  Outside box is Map Control (whole layer) and goes from 0,0 to 6,6
-         * 1 | |---------|  Inside box is Viewport (visible-part of the layer) and goes from 0,0 to 4,4 (Center is 2,2)
-         * 2 | |         |  Map Focus is 3,3 (ie: Viewport center on Map Control).
-         * 3 | | X       |  X is at Viewport position 1,2
-         * 4 | |         |
-         * 5 | |         |  X at Map Control position = X is at Viewport position - Viewport Center + Map Focus
-         * 6 |-|---------|  X at Map Control position = 1,2 - 2,2 + 3,3
-         *                  X at Map Control position = 2,3
-         */
-
-        // Calculate the actual position on the map (click - viewport center = delta from map focus point).
-        return map_focus_point_px + (click_point_px - m_viewport_center_px);
+        return map_focus_point_px + click_point_px;
     }
 
-    PointWorldCoord QMapControl::toPointWorldCoord(const PointViewportPx& click_point_px) const
-    {
-        // Return the point converted into the coordinates system (uses the current map focus point).
-        return projection::get().toPointWorldCoord(toPointWorldPx(click_point_px, mapFocusPointWorldPx()), m_current_zoom);
-    }
+QPointF QMapControl::localToRotatedPoint(QPointF point)
+{
+    auto p = (PointViewportPx{point.x(), point.y()} - m_viewport_center_px);
+    auto tr = getMapTransform().inverted();
+    auto pt = tr.map(p.rawPoint());
+    return pt;
+}
 
-    PointWorldCoord QMapControl::toPointWorldCoord(const PointViewportPx& click_point_px, const PointWorldPx& map_focus_point_px) const
-    {
-        // Return the point converted into the coordinates system.
-        return projection::get().toPointWorldCoord(toPointWorldPx(click_point_px, map_focus_point_px), m_current_zoom);
-    }
+PointWorldCoord QMapControl::toPointWorldCoord(const PointViewportPx &click_point_px) const
+{
+    // Return the point converted into the coordinates system (uses the current map focus point).
+    return projection::get().toPointWorldCoord(toPointWorldPx(click_point_px, mapFocusPointWorldPx()), m_current_zoom);
+}
 
-    PointWorldPx QMapControl::mapFocusPointWorldPx() const
-    {
-        // Return the current map focus point in pixels.
-        return projection::get().toPointWorldPx(m_map_focus_coord, m_current_zoom);
-    }
+PointWorldCoord
+QMapControl::toPointWorldCoord(const PointViewportPx &click_point_px, const PointWorldPx &map_focus_point_px) const
+{
+    // Return the point converted into the coordinates system.
+    return projection::get().toPointWorldCoord(toPointWorldPx(click_point_px, map_focus_point_px), m_current_zoom);
+}
+
+PointWorldPx QMapControl::mapFocusPointWorldPx() const
+{
+    // Return the current map focus point in pixels.
+    return projection::get().toPointWorldPx(m_map_focus_coord, m_current_zoom);
+}
 
     PointWorldCoord QMapControl::calculateMapFocusPoint(const std::vector<PointWorldCoord>& points_coord)
     {
@@ -1231,16 +1276,14 @@ namespace qmapcontrol
         // Ensure antialiasing is enabled (primitives and pixmaps).
         painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
 
-        // Apply style sheet options to painter.
-        QStyleOption style_options;
-        style_options.initFrom(this);
-        QWidget::style()->drawPrimitive(QStyle::PE_Widget, &style_options, &painter, this);
+        auto vport = RectViewportPx(PointViewportPx(0.0, 0.0), PointViewportPx(m_viewport_size_px.width(), m_viewport_size_px.height())).rawRect();
+        painter.fillRect(vport, mBackgroundColor);
 
         // Draw the current primary screen to the widget.
         drawPrimaryScreen(&painter);
 
         // Draw a box around the edge of the viewport (useful for debugging).
-        painter.drawRect(RectViewportPx(PointViewportPx(0.0, 0.0), PointViewportPx(m_viewport_size_px.width(), m_viewport_size_px.height())).rawRect());
+        painter.drawRect(vport);
 
         // Should we draw the scalebar?
         if(m_scalebar_enabled)
@@ -1300,8 +1343,7 @@ namespace qmapcontrol
         }
 
         // Should we draw the crosshairs?
-        if(m_crosshairs_enabled)
-        {
+        if (m_crosshairs_enabled) {
             // Draw the crosshair at the viewport center.
             // |
             painter.drawLine(m_viewport_center_px.x(), m_viewport_center_px.y() - 10.0,
@@ -1311,16 +1353,20 @@ namespace qmapcontrol
                              m_viewport_center_px.x() + 10.0, m_viewport_center_px.y());
         }
 
+        if (!mCenterPixmap.isNull()) {
+            auto centerRect = mCenterPixmap.rect();
+            centerRect.moveCenter(QPoint{(int) m_viewport_center_px.x(), (int) m_viewport_center_px.y()});
+            painter.drawPixmap(centerRect, mCenterPixmap);
+        }
+
         // Is the mouse pressed?
-        if(m_mouse_left_pressed || m_mouse_right_pressed)
-        {
+        if (m_mouse_left_pressed || m_mouse_right_pressed) {
             // Default to the left mouse button options.
             MouseButtonMode mouse_mode = m_mouse_left_mode;
             bool mouse_origin_center = m_mouse_left_origin_center;
 
             // Has the right mouse button been pressed?
-            if(m_mouse_right_pressed)
-            {
+            if (m_mouse_right_pressed) {
                 // Set to the right mouse button options.
                 mouse_mode = m_mouse_right_mode;
                 mouse_origin_center = m_mouse_right_origin_center;
@@ -1389,33 +1435,63 @@ namespace qmapcontrol
 
     void QMapControl::drawPrimaryScreen(QPainter* painter) const
     {
+        painter->save();
+
+        auto px = (m_viewport_center_px.x()
+                   - mapFocusPointWorldPx().x() + m_primary_screen_map_focus_point_px.x()
+                   - mBackbufferSize.width() / 2);
+        auto py = (m_viewport_center_px.y()
+                   - mapFocusPointWorldPx().y() + m_primary_screen_map_focus_point_px.y()
+                   - mBackbufferSize.height() / 2);
+
         // Is the primary screen scaled enabled?
-        if(m_primary_screen_scaled_enabled)
-        {
+        if (m_primary_screen_scaled_enabled) {
             // Draw the current scaled primary screem image to the pixmap with wheel event offset.
-            // Note: m_viewport_center_px is the same as (m_viewport_size_px / 2)
-            painter->drawPixmap(-(m_viewport_center_px + mapFocusPointWorldPx() - m_primary_screen_map_focus_point_px - m_primary_screen_scaled_offset).rawPoint(), m_primary_screen_scaled);
+            painter->drawPixmap(px, py, m_primary_screen_scaled);
         }
+
+        QTransform backbufferRotationMatrix = getMapTransform();
+        painter->setTransform(backbufferRotationMatrix);
 
         // Draws the primary screen image to the pixmap.
-        // Note: m_viewport_center_px is the same as (m_viewport_size_px / 2)
-        painter->drawPixmap(-(m_viewport_center_px + mapFocusPointWorldPx() - m_primary_screen_map_focus_point_px).rawPoint(), m_primary_screen);
+
+        painter->drawPixmap(px, py, m_primary_screen);
+
+/*
+        painter->setPen(Qt::red);
+        painter->drawEllipse(QRectF(-50, -50, 100, 100));
+*/
+
+        painter->restore();
     }
 
-    bool QMapControl::checkBackbuffer() const
-    {
-        // Default return success.
-        bool return_redraw_required(false);
+QTransform QMapControl::getMapTransform() const
+{
+    auto centerPoint = QPointF(m_viewport_size_px.width() / 2, m_viewport_size_px.height() / 2);
 
-        // Calculate required viewport rect.
-        const RectWorldPx required_viewport_rect_px(toPointWorldPx(PointViewportPx(0.0, 0.0)), toPointWorldPx(PointViewportPx(m_viewport_size_px.width(), m_viewport_size_px.height())));
+    QTransform backbufferRotationMatrix;
+    backbufferRotationMatrix.translate(centerPoint.x(),
+                                       centerPoint.y());
+    backbufferRotationMatrix.rotate(mMapRotation);
+    backbufferRotationMatrix.translate(-centerPoint.x(),
+                                       -centerPoint.y());
+    return backbufferRotationMatrix;
+}
 
-        // Does the primary screen's backbuffer rect contain the requried viewport rect?
-        if(m_primary_screen_backbuffer_rect_px.rawRect().contains(required_viewport_rect_px.rawRect()) == false)
-        {
-            // Backbuffer rect does not contain the required viewport rect, therefore we need to redraw the backbuffer.
-            return_redraw_required = true;
-        }
+bool QMapControl::checkBackbuffer() const
+{
+    // Default return success.
+    bool return_redraw_required(false);
+
+    // Calculate required viewport rect.
+    const RectWorldPx required_viewport_rect_px(toPointWorldPx(PointViewportPx(0.0, 0.0)), toPointWorldPx(
+            PointViewportPx(m_viewport_size_px.width(), m_viewport_size_px.height())));
+
+    // Does the primary screen's backbuffer rect contain the requried viewport rect?
+    if (m_primary_screen_backbuffer_rect_px.rawRect().contains(required_viewport_rect_px.rawRect()) == false) {
+        // Backbuffer rect does not contain the required viewport rect, therefore we need to redraw the backbuffer.
+        return_redraw_required = true;
+    }
 
         // Return success.
         return return_redraw_required;
@@ -1460,7 +1536,7 @@ namespace qmapcontrol
             QTimer::singleShot(0, &m_progress_indicator, SLOT(startAnimation()));
 
             // Generate a new backbuffer (2 x viewport size to allow for panning backbuffer).
-            QImage image_backbuffer(m_viewport_size_px.toSize() * 2, QImage::Format_ARGB32);
+            QImage image_backbuffer(mBackbufferSize, QImage::Format_ARGB32);
 
             // Clear the backbuffer.
             image_backbuffer.fill(Qt::transparent);
@@ -1472,10 +1548,12 @@ namespace qmapcontrol
             PointWorldPx backbuffer_map_focus_px(mapFocusPointWorldPx());
 
             // Calculate the new backbuffer rect (based on the saved backbuffer map focus point).
-            // Note: m_viewport_center_px is the same as (m_viewport_size_px / 2)
-            const PointPx viewport_offset_px(m_viewport_size_px.width() / 2.0, m_viewport_size_px.height() / 2.0);
-            const RectWorldPx backbuffer_rect_px(toPointWorldPx(PointViewportPx(0, 0) - viewport_offset_px, backbuffer_map_focus_px), toPointWorldPx(PointViewportPx(m_viewport_size_px.width(), m_viewport_size_px.height()) + viewport_offset_px, backbuffer_map_focus_px));
+            QRectF backbufferRect;
+            backbufferRect.setSize(mBackbufferSize);
+            backbufferRect.moveCenter(backbuffer_map_focus_px.rawPoint());
+            backbuffer_rect_px = RectWorldPx(backbufferRect);
 
+            painter_back_buffer.save();
             // Translate to the backbuffer top/left point.
             painter_back_buffer.translate(-backbuffer_rect_px.topLeftPx().rawPoint());
 
@@ -1483,18 +1561,17 @@ namespace qmapcontrol
             QReadLocker read_locker(&m_layers_mutex);
 
             // Loop through each layer and draw it to the backbuffer.
-            for(std::shared_ptr<Layer> layer : m_layers)
-            {
-                if (mAborted)
+            for (std::shared_ptr<Layer> layer : m_layers) {
+                if (mAborted) {
                     return;
+                }
                 // Draw the layer to the backbuffer.
                 layer->draw(painter_back_buffer, backbuffer_rect_px, m_current_zoom);
             }
 
             read_locker.unlock();
 
-            // Undo the backbuffer top/left point translation.
-            painter_back_buffer.translate(backbuffer_rect_px.topLeftPx().rawPoint());
+            painter_back_buffer.restore();
 
             // Inform the main thread that we have a new backbuffer.
             emit updatedBackBuffer(QPixmap::fromImage(image_backbuffer), backbuffer_rect_px, backbuffer_map_focus_px);

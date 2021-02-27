@@ -59,10 +59,9 @@
 
 using namespace sqlite;
 
-#include "msqlitecpp/v2/storage.h"
+#include <msqlitecpp/v2/storage.h>
 
-#include <helpers.h>
-#include <assert.h>
+#include "helpers.h"
 
 #include <utils/CrashHandler.h>
 #include <getrss.h>
@@ -3416,8 +3415,13 @@ int app_main(int argc, char const* argv[])
 int main(int argc, char const *argv[])
 {
     int return_code = 0;
+
+#if !defined(DEBUG)
     try {
-        return app_main(argc, argv);
+#endif
+    return app_main(argc, argv);
+
+#if !defined(DEBUG)
     } catch (std::exception &x) {
         std::cerr << "Unhandled exception : " << x.what() << "\n\n";
 
@@ -3428,4 +3432,5 @@ int main(int argc, char const *argv[])
     }
 
     return return_code;
+#endif
 }

@@ -1458,13 +1458,14 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
     // Background mortality from Andersen et al.
     // from surv<-round(exp(-(0.12*27*(l+(size_bin_cm/2))^(-1))),4)  # length dependent mortality vector using the lower bound length (+1 to ignore 0) to get survival
     // mort<-round((1-surv),4)
-    double values_M_background [ ] =
-    {
-       0.7264, 0.3508, 0.2283, 0.1690, 0.1341, 0.1111, 0.0949, 0.0828, 0.0734, 0.0659, 0.0598, 0.0548, 0.0505, 0.0469
+
+    // I changed the values (mu_0 Winf ^ (n-1)), one value per pop NOT per bin. Hard-coded though...
+    vector<double> values_M_background {
+       0.697,0.168,0.455,0.424,0.261,0.378,0.499,0.177,0.351,0.154,0.751,0.592,0.592,0.589,0.589,0.697,0.308,0.555,0.175,0.222,0.256,0.408,0.284,0.447,0.398,0.691,0.643
        //  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
-    vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
-
+    //vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
+    vector<double> M_background(values_M_background.begin(), values_M_background.end());
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
@@ -1560,7 +1561,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
             double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
-            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(sz))/12);
+            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(name_pop))/12);
 
             //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)

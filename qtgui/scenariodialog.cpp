@@ -58,6 +58,8 @@ static const char *dyn_alloc_options[] = {
     "averageTariffsPerRectangle",
     "otherLandPerMetPerPop",
     "otherLandAsMultiplierOnSp",
+    "doNotExportDiscardsInLogbooks",
+
 };
 
 static const char *dyn_pop_options[] = {
@@ -71,7 +73,9 @@ static const char *dyn_pop_options[] = {
     "modelShippingOnBenthos",
     "diffusePopN",
     "sizeSpectra",
+    "massiveMortalityEvent20perY5",
     "nbcpCoupling",
+    "biolsceOnStaticAvai",
     "diffuseNutrients",
     "noHyperstability",
 };

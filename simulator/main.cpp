@@ -437,10 +437,10 @@ void parseCommandLine(int argc, char const *argv[])
             (",s", po::value(&namesimu), "name of the simulation")
             (",i", po::value(&nbsteps), "lenght of the simulation in number of steps (hours)")
             (",V", po::value(&verbosity), "verbosity level")
-            (",p", po::value(&use_static_paths)->implicit_value(1), "Use static paths")
+            (",p", po::value(&use_static_paths)->implicit_value(0), "Use static paths")
             (",e", po::value(&export_vmslike)->implicit_value(1), "Export VMSLike data")
-            ("huge", po::value(&export_hugefiles)->implicit_value(1), "Export huge files data")
-            (",v", po::value(&selected_vessels_only)->implicit_value(1), "Selected vessels only")
+            ("huge", po::value(&export_hugefiles)->implicit_value(0), "Export huge files data")
+            (",v", po::value(&selected_vessels_only)->implicit_value(0), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
             ("indb", po::value(&inputdb), "Read input data from sqlite db, relative to Input Folder")
             ("commit-rate", po::value(&numStepTransactions),
@@ -1339,6 +1339,11 @@ int app_main(int argc, char const* argv[])
 
 #endif
 
+    unsigned int export_discards_in_logbooks = 1;
+    if (scenario.dyn_alloc_sce.option(Options::doNotExportDiscardsInLogbooks)) 
+    {
+        export_discards_in_logbooks = 0;
+    }
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
@@ -1379,7 +1384,7 @@ int app_main(int argc, char const* argv[])
 
     // TODO: remove this hard-coded value!!!
 //#ifdef BALTICSEA
-    if (folder_name_parameterization == "BalticSea") {
+    if (folder_name_parameterization == "BalticSea" || folder_name_parameterization == "Baltic21") {
         for (auto vessel : simModel->vessels()) {
             vessel->set_tankcapacity(vessel->get_tankcapacity() *
                 3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
@@ -1913,6 +1918,7 @@ int app_main(int argc, char const* argv[])
 
         if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
+                                    simModel->year(),
                                     namesimu,
                                     namefolderinput,
                                     namefolderoutput,
@@ -2068,6 +2074,7 @@ int app_main(int argc, char const* argv[])
                 simModel->setMonth(a_month_i);
                 simModel->setQuarter(a_quarter_i);
                 simModel->setSemester(a_semester_i);
+                simModel->setYear(a_year);
             }
 
 
@@ -3256,7 +3263,8 @@ int app_main(int argc, char const* argv[])
                 //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                 OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
-                                                         simModel->populations(), simModel->config().implicit_pops);
+                                                         simModel->populations(), simModel->config().implicit_pops, 
+                                                         export_discards_in_logbooks);
                 simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();

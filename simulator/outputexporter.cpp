@@ -173,18 +173,18 @@ void OutputExporter::exportVmsLikeFPingsOnlySQLite(unsigned int tstep, Vessel *v
 
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
-                                   vector<int> const &implicit_pops)
+                                   vector<int> const &implicit_pops, unsigned int export_discards_in_logbooks)
 {
     if (useSql) {
-        exportLogLikeSQLite(tstep, v, populations, implicit_pops);
+        exportLogLikeSQLite(tstep, v, populations, implicit_pops,  1);
     }
     if (usePlainText) {
-        exportLogLikePlaintext(tstep, v, populations, implicit_pops);
+        exportLogLikePlaintext(tstep, v, populations, implicit_pops, export_discards_in_logbooks);
     }
 }
 
 void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
-                                         vector<int> const &implicit_pops)
+                                         vector<int> const &implicit_pops, unsigned int export_discards_in_logbooks)
 {
     std::vector<double> cumul, cumul_discards;
 
@@ -208,11 +208,11 @@ void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const st
         count+=1;
     }
 
-    mSqlDb->exportLogLike(v, cumul, cumul_discards, tstep);
+    mSqlDb->exportLogLike(v, cumul, cumul_discards, tstep, 1);
 }
 
 void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
-                                            vector<int> const &implicit_pops)
+                                            vector<int> const &implicit_pops, unsigned int export_discards_in_logbooks)
 {
     std::string name, freq_metiers = "M";
     int length_class;
@@ -303,23 +303,25 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
 
 
 
-
-    vector< vector<double> > a_discards_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
-    a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();
-    int count =0;
-    for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
+    if (export_discards_in_logbooks == 1)
     {
-
-        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+        vector< vector<double> > a_discards_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
+        a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();
+        int count = 0;
+        for (int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
         {
-            cumul_discards.push_back(0);
-            for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
-            {
-                if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
-            }
-            count+=1;
-        }
 
+            if (!binary_search(implicit_pops.begin(), implicit_pops.end(), pop))
+            {
+                cumul_discards.push_back(0);
+                for (int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
+                {
+                    if (isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) += a_discards_pop_at_szgroup[pop][sz];
+                }
+                count += 1;
+            }
+
+        }
     }
 
 
@@ -376,7 +378,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     ss  << setprecision(0) << logbook.gav2 << " " ;
     ss  << setprecision(0) << logbook.sweptarea << " " ;
     ss  << setprecision(2) << logbook.revenuepersweptarea << " " ;
-    for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
+    if (export_discards_in_logbooks == 1) for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
         ss  << setprecision(1) << *it2 << " " ;
     ss << setprecision(0) << logbook.GVA << " " ;
     ss << setprecision(3) << logbook.GVAPerRevenue << " " ;

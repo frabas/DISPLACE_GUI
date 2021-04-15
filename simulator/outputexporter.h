@@ -31,7 +31,7 @@ public:
                                  std::vector<int> const &implicit_pops);
 
     void exportLogLike(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
-                       std::vector<int> const &implicit_pops);
+                       std::vector<int> const &implicit_pops, unsigned int doNotExportDiscardsInLogbooks);
 
     void exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations,
                                       std::vector<int> const &implicit_pops);
@@ -55,10 +55,10 @@ public:
 
 private:
     void exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
-                                std::vector<int> const &implicit_pops);
+                                std::vector<int> const &implicit_pops, unsigned int export_discards_in_logbooks);
 
     void exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations,
-                             std::vector<int> const &implicit_pops);
+                             std::vector<int> const &implicit_pops, unsigned int export_discards_in_logbooks);
 
     void exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel);
 

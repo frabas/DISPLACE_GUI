@@ -1434,7 +1434,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                                       const vector<vector<double> > & searchVolMat,
                                                                       const vector<vector<double> > & juveniles_diet_preference,
                                                                       const vector<vector<double> > & adults_diet_preference,
-                                                                      const vector<int> & mat_cats)
+                                                                      const vector<int> & mat_cats,
+                                                                      double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1464,8 +1465,10 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
        0.697,0.168,0.455,0.424,0.261,0.378,0.499,0.177,0.351,0.154,0.751,0.592,0.592,0.589,0.589,0.697,0.308,0.555,0.175,0.222,0.256,0.408,0.284,0.447,0.398,0.691,0.643
        //  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
+
     //vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
     vector<double> M_background(values_M_background.begin(), values_M_background.end());
+
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
@@ -1561,7 +1564,9 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
             double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
+
             Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(name_pop))/12);
+
 
             //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)

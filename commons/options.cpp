@@ -58,6 +58,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, averageTariffsPerRectangle);
     O(mMap, otherLandPerMetPerPop);
     O(mMap, otherLandAsMultiplierOnSp);
+    O(mMap, doNotExportDiscardsInLogbooks);
 
 
 
@@ -74,6 +75,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
     O(mMap,nbcpCoupling);
+    O(mMap,biolsceOnStaticAvai);
     O(mMap,diffusePopN);
     O(mMap,avai_shuffler_on);
     O(mMap,avai_updater_on);
@@ -87,6 +89,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,modelShippingOnBenthos);
     O(mMap,modelResuspensionEffectOnBenthos);
     O(mMap,sizeSpectra);
+    O(mMap,massiveMortalityEvent20perY5);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
     

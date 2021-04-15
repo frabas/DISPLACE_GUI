@@ -1100,12 +1100,23 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     ifstream file_avai_szgroup_nodes_with_pop;
     file_avai_szgroup_nodes_with_pop.open(filename.c_str());
     if (file_avai_szgroup_nodes_with_pop.fail()) {
-        string error_msg = "error opening file " + filename;
-        cout << error_msg << "\n";
+    
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" +
+            a_pop_s + "spe_full_avai_szgroup_nodes_semester" + a_semester +
+            ".dat"; // default naming
+        file_avai_szgroup_nodes_with_pop.open(filename.c_str());
 
-        exit(-1);
+        if (file_avai_szgroup_nodes_with_pop.fail()) {
+            string error_msg = "error opening file " + filename;
+            cout << error_msg << "\n";
+
+            exit(-1);
+        }
+    
     }
+
     dout(cout << "filename for pop  " << a_pop << " is " << filename << endl;)
+    cout << "filename for pop " << a_pop << " avai is " << filename << endl;
 
     multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop(file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop)) {
@@ -1452,6 +1463,16 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     for (int st = 0; st < model().config().nbpops; st++) {
         type_of_avai_field_to_read.at(st) = "";
     }
+
+
+    // ...or if a biolsce informed on staticAvai
+    if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) {
+        for (int st = 0; st < model().config().nbpops; st++) {
+            type_of_avai_field_to_read.at(st) = "_biolsce" + model().scenario().biolsce;
+        }
+    }
+
+
     string str_rand_avai_file = "baseline"; // deprecated?
     // by default, will use the initial avai input
 
@@ -1777,6 +1798,14 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder);
+       
+            //cout << "check relative_stability_key when loading: " << endl;
+            //for (auto elem : vect_of_relative_stability_key_map.at(sp))
+            //{
+            //    std::cout << elem.first << " " << elem.second << "\n";
+            //}
+
+        
         }
 
         // input data, growth transition, percent_szgroup_per_age_matrix
@@ -2068,10 +2097,19 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
         cout << "aggregate_N over all pops....done" << endl;
 
+        // default
         for (unsigned int ip = 0; ip < model().populations().size(); ip++) {
             type_of_avai_field_to_read.push_back("");
+        } 
+
+        // ...or if a biolsce informed on staticAvai
+        if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) {
+            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
+                type_of_avai_field_to_read.at(pp) = "_biolsce" + model().scenario().biolsce;
+            }
         }
 
+        // ...or if a dynamic coupling done with LGNB
         if (model().scenario().dyn_pop_sce.option(Options::nbcpCoupling)) {
             string a_command_for_R;
 

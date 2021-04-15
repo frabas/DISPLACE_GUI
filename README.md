@@ -1,3 +1,12 @@
+
+This branch is a copy of master commit b37cac9, created on 08/04/2021. I will implement the following changes, all realted to SSM assumptions:
+
+- beta formula in main.cpp around l1082 (change the forcing DONE AND CORRECTED WEIRD INDEXING< TO BE PROOFREAD)
+- background mortality in Node.cpp around l1461 (change the forcing DONE)
+- predkernel formula main.cpp around l1085 (update DONE)
+
+
+
 Find your way with DISPLACE
 ======
 

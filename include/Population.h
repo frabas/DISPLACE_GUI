@@ -125,6 +125,8 @@ class  Population
         const vector<double>& get_weight_at_szgroup() const;
 		vector<int> get_comcat_at_szgroup() const;
         const vector<double>& get_M_at_szgroup() const;
+        const vector<double>& get_beta_ssm_at_szgroup() const;
+        const vector<double>& get_background_mortality_at_szgroup() const;
         const vector<double>& get_proprecru_at_szgroup() const;
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;

@@ -113,7 +113,9 @@ Population::Population(int a_name,
 		comcat_at_szgroup.push_back(0);
 		maturity_at_szgroup.push_back(0);
 		M_at_szgroup.push_back(0);
-		proprecru_at_szgroup.push_back(0);
+        beta_ssm_at_szgroup.push_back(0);
+        background_mortality_at_szgroup.push_back(0);
+        proprecru_at_szgroup.push_back(0);
         SSB_at_szgroup.push_back(0);
 
 	}
@@ -214,12 +216,7 @@ Population::Population(int a_name,
 
 	// ...then fill in with start pop
     dout(cout << "for natural mortality..." << name << endl);
-    for(unsigned int i=0; i < init_M_at_szgroup.size(); i++)
-	{
-		init_M_at_szgroup.at(i)=init_M_at_szgroup.at(i);
-	}
-
-	this->set_M_at_szgroup(init_M_at_szgroup);
+  	this->set_M_at_szgroup(init_M_at_szgroup);
 
 	// ...then fill in with start pop
     dout(cout << "for prop recru..." << name << endl);
@@ -567,6 +564,15 @@ const vector<double>& Population::get_M_at_szgroup() const
 	return(M_at_szgroup);
 }
 
+const vector<double>& Population::get_beta_ssm_at_szgroup() const
+{
+    return(beta_ssm_at_szgroup);
+}
+
+const vector<double>& Population::get_background_mortality_at_szgroup() const
+{
+    return(background_mortality_at_szgroup);
+}
 
 const vector<double>& Population::get_proprecru_at_szgroup() const
 {

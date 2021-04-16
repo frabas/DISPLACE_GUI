@@ -146,6 +146,8 @@ struct LoadedData {
     std::vector<vector<double> > vovd8;
     std::vector<vector<double> > vovd9;
     std::vector<vector<double> > vovd10;
+    std::vector<vector<double> > vovd11;
+    std::vector<vector<double> > vovd12;
     std::vector<vector<types::NodeId> > vovn1;
     std::vector<vector<int> > vovi1;
     std::vector<vector<int> > vovi2;
@@ -2022,8 +2024,8 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     loadedData.vovd6 = vect_of_init_M_per_szgroup_vov;
     loadedData.vovd7 = vect_of_init_proprecru_per_szgroup_vov;
     loadedData.vovd8 = vect_of_param_sr_v;
-    loadedData.vovd9 = vect_of_beta_ssm_per_szgroup_vov;
-    loadedData.vovd10 = vect_of_background_mortality_per_szgroup_vov;
+    loadedData.vovd11 = vect_of_beta_ssm_per_szgroup_vov;
+    loadedData.vovd12 = vect_of_background_mortality_per_szgroup_vov;
     loadedData.vectmmapndparam1 = vect_of_full_avai_szgroup_nodes_with_pop_mmap;
     loadedData.vectmmapndparam2 = vect_of_field_of_coeff_diffusion_this_pop_mmap;
     loadedData.vectmapndparam1 = vect_of_oth_land_map;
@@ -2113,9 +2115,16 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
             if (model().scenario().dyn_pop_sce.option(Options::sizeSpectra)) {
 
-               // TODO: pop setters for 
-                populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd9.at(sp)); // beta_ssm
-                populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd10.at(sp));   // background_M
+                if (loadedData.vovd11.at(sp).size() != NBSZGROUP)
+                {
+                    cout << "check beta_ssm for pop" << sp << ": some missing szgroups...." << endl; 
+                }
+                if (loadedData.vovd12.at(sp).size() != NBSZGROUP)
+                {
+                    cout << "check background_mortality for pop" << sp << ": some missing szgroups...." << endl;
+                }
+                populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd11.at(sp)); // beta_ssm
+                populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd12.at(sp));   // background_M
 
             }
 

@@ -186,6 +186,8 @@ class  Population
         void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
 		void set_comcat_at_szgroup(vector <int> _comcat_at_szgroup);
         void set_M_at_szgroup(const vector<double>& _M_at_szgroup);
+        void set_beta_ssm_at_szgroup(const vector<double>& _beta_ssm_at_szgroup);
+        void set_background_mortality_at_szgroup(const vector<double>& _background_mortality_at_szgroup);
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
@@ -296,7 +298,11 @@ class  Population
 								 //
 		vector<double> M_at_szgroup;
 								 //
-		vector<double> proprecru_at_szgroup;
+        vector<double> beta_ssm_at_szgroup;
+        
+        vector<double> background_mortality_at_szgroup;
+        
+        vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
         double SSB ,fbar;				 //
         vector<double>  FFmsy;				 //

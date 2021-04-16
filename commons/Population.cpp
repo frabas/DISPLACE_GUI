@@ -959,6 +959,26 @@ void Population::set_M_at_szgroup(const vector<double>& _M_at_szgroup)
 }
 
 
+void Population::set_beta_ssm_at_szgroup(const vector<double>& _beta_ssm_at_szgroup)
+{
+    for (unsigned int sz = 0; sz < _beta_ssm_at_szgroup.size(); sz++)
+    {
+        beta_ssm_at_szgroup[sz] = _beta_ssm_at_szgroup[sz];
+    }
+
+}
+
+void Population::set_background_mortality_at_szgroup(const vector<double>& _background_mortality_at_szgroup)
+{
+    for (unsigned int sz = 0; sz < _background_mortality_at_szgroup.size(); sz++)
+    {
+        background_mortality_at_szgroup[sz] = _background_mortality_at_szgroup[sz];
+    }
+
+}
+
+
+
 void Population::set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_proprecru_at_szgroup.size(); sz++)

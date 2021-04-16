@@ -638,6 +638,94 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
 
 
 multimap<int, double>
+read_beta_ssm_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
+{
+
+    string filename =
+        inputfolder + "/popsspe_" + folder_name_parameterization + "/beta_ssm_biolsce" + biolsce + ".dat";
+
+    //input data, pop characteristics: beta_ssm
+    ifstream file_beta_ssm_per_szgroup;
+    file_beta_ssm_per_szgroup.open(filename.c_str());
+    if (file_beta_ssm_per_szgroup.fail()) {
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/beta_ssm_biolsce1.dat";
+        file_beta_ssm_per_szgroup.open(filename.c_str());
+    }
+    if (file_beta_ssm_per_szgroup.fail()) {
+        cout << "Unfortunately the beta_ssm_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << endl;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        //exit(-1);
+        multimap<int, double> empty;
+        return empty;
+    }
+    multimap<int, double> beta_ssm_per_szgroup;
+    fill_multimap_from_specifications_i_d(file_beta_ssm_per_szgroup, beta_ssm_per_szgroup);
+    file_beta_ssm_per_szgroup.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<int, double>::iterator lower_beta_ssm = beta_ssm_per_szgroup.lower_bound(0);
+    multimap<int, double>::iterator upper_beta_ssm = beta_ssm_per_szgroup.upper_bound(0);
+    dout(cout << "beta_ssm at szgroup for pop 0: ");
+    for (multimap<int, double>::iterator pos = lower_beta_ssm; pos != upper_beta_ssm; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return (beta_ssm_per_szgroup);
+}
+
+
+multimap<int, double>
+read_background_mortality_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
+{
+
+    string filename =
+        inputfolder + "/popsspe_" + folder_name_parameterization + "/background_mortality_biolsce" + biolsce + ".dat";
+
+    //input data, pop characteristics: background_mortality
+    ifstream file_background_mortality_per_szgroup;
+    file_background_mortality_per_szgroup.open(filename.c_str());
+    if (file_background_mortality_per_szgroup.fail()) {
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "background_mortality_biolsce1.dat";
+        file_background_mortality_per_szgroup.open(filename.c_str());
+    }
+    if (file_background_mortality_per_szgroup.fail()) {
+        cout << "Unfortunately the background_mortality_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << endl;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        // exit(-1);
+        multimap<int, double> empty;
+        return empty;
+    }
+    multimap<int, double> background_mortality_per_szgroup;
+    fill_multimap_from_specifications_i_d(file_background_mortality_per_szgroup, background_mortality_per_szgroup);
+    file_background_mortality_per_szgroup.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<int, double>::iterator lower_background_mortality = background_mortality_per_szgroup.lower_bound(0);
+    multimap<int, double>::iterator upper_background_mortality = background_mortality_per_szgroup.upper_bound(0);
+    dout(cout << "beta_ssm at szgroup for pop 0: ");
+    for (multimap<int, double>::iterator pos = lower_background_mortality; pos != upper_background_mortality; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return (background_mortality_per_szgroup);
+}
+
+
+multimap<int, double>
 read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
@@ -1534,6 +1622,15 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                                                                                     p->folder_name_parameterization,
                                                                                     p->inputfolder, str_rand_avai_file);
 
+   //cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
+   // additional params for the size spectra modelling
+    multimap<int, double> init_beta_ssm_per_szgroup = read_beta_ssm_szgroup(p->folder_name_parameterization, p->inputfolder,
+        model().scenario().biolsce);
+
+    multimap<int, double> init_background_mortality_per_szgroup = read_background_mortality_szgroup(p->folder_name_parameterization, p->inputfolder,
+        model().scenario().biolsce);
+
+    
     cout << "Do the pop files selected_szgroups need a check?" << endl;
     multimap<int, int> selected_szgroups = read_selected_szgroups_per_pop(p->folder_name_parameterization,
                                                                           p->inputfolder);
@@ -1597,6 +1694,8 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     vector<vector<double> > vect_of_init_weight_per_szgroup_vov(name_pops.size());
     vector<vector<int> > vect_of_init_comcat_per_szgroup_vov(name_pops.size());
     vector<vector<double> > vect_of_init_M_per_szgroup_vov(name_pops.size());
+    vector<vector<double> > vect_of_beta_ssm_per_szgroup_vov(name_pops.size());
+    vector<vector<double> > vect_of_background_mortality_per_szgroup_vov(name_pops.size()); 
     vector<vector<double> > vect_of_init_proprecru_per_szgroup_vov(name_pops.size());
 
     //vector <multimap<types::NodeId, double> > vect_of_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
@@ -1729,6 +1828,24 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 vect_of_init_M_per_szgroup_vov.at(sp).push_back(pos->second);
         }
 
+        // initial beta_ssm for this particular pop
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_beta_ssm = init_beta_ssm_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_beta_ssm = init_beta_ssm_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_beta_ssm; pos != upper_beta_ssm; pos++)
+                vect_of_beta_ssm_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
+        
+        // initial background_mortality for this particular pop
+        if (a_year == 1 && model().month() == 1)
+        {
+            multimap<int, double>::iterator lower_background_mortality = init_background_mortality_per_szgroup.lower_bound(sp);
+            multimap<int, double>::iterator upper_background_mortality = init_background_mortality_per_szgroup.upper_bound(sp);
+            for (multimap<int, double>::iterator pos = lower_background_mortality; pos != upper_background_mortality; pos++)
+                vect_of_background_mortality_per_szgroup_vov.at(sp).push_back(pos->second);
+        }
+        
         // initial proprecru for this particular pop
         if (a_year == 1 && model().month() == 1)
         {
@@ -1905,6 +2022,8 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     loadedData.vovd6 = vect_of_init_M_per_szgroup_vov;
     loadedData.vovd7 = vect_of_init_proprecru_per_szgroup_vov;
     loadedData.vovd8 = vect_of_param_sr_v;
+    loadedData.vovd9 = vect_of_beta_ssm_per_szgroup_vov;
+    loadedData.vovd10 = vect_of_background_mortality_per_szgroup_vov;
     loadedData.vectmmapndparam1 = vect_of_full_avai_szgroup_nodes_with_pop_mmap;
     loadedData.vectmmapndparam2 = vect_of_field_of_coeff_diffusion_this_pop_mmap;
     loadedData.vectmapndparam1 = vect_of_oth_land_map;
@@ -1992,7 +2111,14 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
             global_quotas_uptake.push_back(0.0);
 
-        
+            if (model().scenario().dyn_pop_sce.option(Options::sizeSpectra)) {
+
+               // TODO: pop setters for 
+                populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd9.at(sp)); // beta_ssm
+                populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd10.at(sp));   // background_M
+
+            }
+
 
             if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), sp)) {
                 outc(cout << "inform avai on nodes " << endl);

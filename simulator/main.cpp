@@ -862,6 +862,26 @@ int app_main(int argc, char const* argv[])
     }
     simModel->setInitWeightPerSzgroup(weight_per_szgroup);
 
+    
+    // a check
+    vector<double> some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();
+    for (unsigned int i = 0; i < some_Ns_at_szgroup.size(); i++)
+    {
+        cout << some_Ns_at_szgroup[i] << " ";
+    }
+    cout << endl;
+
+
+
+    // a check
+    // nb of nodes for this pop this quarter:
+    int nb_of_nodes_this_pop0_this_quarter = simModel->populations().at(0)->get_list_nodes().size();
+    cout << "nb_of_nodes_this_pop0_this_quarter " << nb_of_nodes_this_pop0_this_quarter << endl;
+    cout << endl;
+    if (nb_of_nodes_this_pop0_this_quarter == 0) {
+        cout << "something wrong: check the code for this message" << endl; return -1;
+    }
+
 
 #ifdef PROFILE
     mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
@@ -1582,8 +1602,6 @@ int app_main(int argc, char const* argv[])
     }
 
 
-    
-
     dout(cout << "---------------------------------" << endl);
     dout(cout << "---------------------------------" << endl);
     dout(cout << " THE FOR-LOOP OVER TIME STEPS    " << endl);
@@ -1813,6 +1831,22 @@ int app_main(int argc, char const* argv[])
     vector<vector<double> > a_ping_catch_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
     vector<vector<double> > a_discards_pop_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
 
+
+    // a check
+    vector<double> here_some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();
+    cout << "check here" << endl;
+    for (unsigned int i = 0; i < here_some_Ns_at_szgroup.size(); i++)
+    {
+        cout << here_some_Ns_at_szgroup[i] << " ";
+    }
+    cout << endl;
+
+    // a check
+    // nb of nodes for this pop this quarter:
+    int nb_of_nodes_this_pop_this_quarter = simModel->populations().at(0)->get_list_nodes().size();
+    cout << "nb_of_nodes_this_pop_this_quarter " << nb_of_nodes_this_pop_this_quarter << endl;
+
+
     // write down initial pop number in popdyn
     for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
 
@@ -1832,6 +1866,17 @@ int app_main(int argc, char const* argv[])
 
     popdyn_N.flush();
     guiSendUpdateCommand(popdyn_N_filename, 0);
+
+
+    // a check
+    vector<double> there_some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();
+    cout << "... and there" << endl;
+    for (unsigned int i = 0; i < there_some_Ns_at_szgroup.size(); i++)
+    {
+        cout << there_some_Ns_at_szgroup[i] << " ";
+    }
+    cout << endl;
+
 
 
 

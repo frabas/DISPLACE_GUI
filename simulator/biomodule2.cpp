@@ -154,6 +154,10 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_year_i, const string
 
 int will_stop=0; // see Options::DEBUG_TAC
 
+
+
+
+
 //----------------------------------------//
 //----------------------------------------//
 // POP DYNAMICS --------------------------//
@@ -857,7 +861,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                      }
                      else
                      {
-                        vector <double> prop_M_from_species_interactions = species_interactions_mortality_proportion_matrix.at(sp);
+                        //vector <double> prop_M_from_species_interactions = species_interactions_mortality_proportion_matrix.at(sp);
+                        vector <double> prop_M_from_species_interactions(populations.size(), 0);
+                        prop_M_from_species_interactions.at(sp) = 1; // 1 on diag
+
                         species_on_node = a_list_nodes.at(n)-> get_pop_names_on_node();
                         vector <double> a_prop_M(prop_M_from_species_interactions.size());
                         for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)

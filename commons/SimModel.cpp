@@ -11,7 +11,7 @@ struct SimModel::Impl {
     std::string namesimu;
 
     TimeStep tstep;
-    int month = 0, quarter = 0, semester = 0;
+    int month = 0, quarter = 0, semester = 0, year=0;
 
     std::unique_ptr<displace::commons::Config> config;
     std::unique_ptr<displace::commons::Scenario> scenario;
@@ -306,6 +306,16 @@ void SimModel::setSemester(int semester)
 int SimModel::semester() const
 {
     return p->semester;
+}
+
+void SimModel::setYear(int year)
+{
+    p->year = year;
+}
+
+int SimModel::year() const
+{
+    return p->year;
 }
 
 void SimModel::set_graph_point_code_landscape(std::vector<int> v)

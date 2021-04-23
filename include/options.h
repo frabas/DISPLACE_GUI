@@ -116,6 +116,7 @@ enum Dyn_Alloc {
     averageTariffsPerRectangle,
     otherLandPerMetPerPop,
     otherLandAsMultiplierOnSp,
+    doNotExportDiscardsInLogbooks,
 
     Dyn_Alloc_last
 };
@@ -125,6 +126,7 @@ enum Pop_Sce {
     use_SMS,
     use_SMS_single,
     nbcpCoupling,
+    biolsceOnStaticAvai,
     diffusePopN,
     avai_shuffler_on,
     avai_updater_on,
@@ -139,6 +141,7 @@ enum Pop_Sce {
     modelResuspensionEffectOnBenthos,
     modelShippingOnBenthos,
     sizeSpectra,
+    massiveMortalityEvent20perY5,
     diffuseNutrients,
     noHyperstability,
   

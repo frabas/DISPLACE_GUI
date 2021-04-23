@@ -222,6 +222,13 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
 multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
 
 multimap<int, double>
+read_beta_ssm_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
+
+multimap<int, double>
+read_background_mortality_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
+
+
+multimap<int, double>
 read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
 
 multimap<int, types::NodeId>

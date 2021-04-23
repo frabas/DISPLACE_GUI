@@ -1434,7 +1434,9 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                                       const vector<vector<double> > & searchVolMat,
                                                                       const vector<vector<double> > & juveniles_diet_preference,
                                                                       const vector<vector<double> > & adults_diet_preference,
-                                                                      const vector<int> & mat_cats)
+                                                                      const vector<int> & mat_cats,
+                                                                      const vector<double> & M_background_this_pop,
+                                                                      double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1455,15 +1457,12 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
     vector<double> M2_on_node(Np.size(), 0.0);
     vector<double> dwpred(Np.size(), 0.0);
 
+    
+    
     // Background mortality from Andersen et al.
     // from surv<-round(exp(-(0.12*27*(l+(size_bin_cm/2))^(-1))),4)  # length dependent mortality vector using the lower bound length (+1 to ignore 0) to get survival
     // mort<-round((1-surv),4)
-    double values_M_background [ ] =
-    {
-       0.7264, 0.3508, 0.2283, 0.1690, 0.1341, 0.1111, 0.0949, 0.0828, 0.0734, 0.0659, 0.0598, 0.0548, 0.0505, 0.0469
-       //  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-    vector<double> M_background (values_M_background, values_M_background + sizeof(values_M_background) / sizeof(double) );
+    //or Audric:  values corresponds to (mu_0 Winf ^ (n-1))
 
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
@@ -1553,14 +1552,17 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
         }
 
 
-  
+       
+
         for(unsigned int sz=0; sz<Np.size(); sz++)
         {
            // divide according to tstep (month in this case)
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
             double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
-            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background.at(sz))/12);
+
+            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
+
 
             //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
@@ -1575,7 +1577,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 
 
-void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
+void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN,
                           int will_I_discard_all,  vector<vector<double> >& selectivity_per_stock_ogives_for_oth_land)
 {
@@ -1612,7 +1614,6 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 
     vector<double> sel_ogive;
-    int    MLS_cat = 3; // HARDCODED for now
     if(selectivity_per_stock_ogives_for_oth_land.empty())
     {
         double gadoid_sel_ogive [ ] =
@@ -1690,12 +1691,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
         }
 
-        double discardfactor = left_to_MLS/right_to_MLS; // (dis/lan)
+        double discardfactor;
+        discardfactor = left_to_MLS / right_to_MLS; // (dis/lan)
 
 
         //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
         //discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
-        discardfactor = min( 0.5 , discardfactor); // HARDCODED THRESHOLD
+        discardfactor = min( 0.5, discardfactor); // HARDCODED THRESHOLD
         // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic discards will be produced when no adult left on zones
         double tot_landings_this_pop=oth_land_this_pop_this_node;
         double tot_discards_this_pop=oth_land_this_pop_this_node*discardfactor ;

@@ -437,10 +437,10 @@ void parseCommandLine(int argc, char const *argv[])
             (",s", po::value(&namesimu), "name of the simulation")
             (",i", po::value(&nbsteps), "lenght of the simulation in number of steps (hours)")
             (",V", po::value(&verbosity), "verbosity level")
-            (",p", po::value(&use_static_paths)->implicit_value(1), "Use static paths")
+            (",p", po::value(&use_static_paths)->implicit_value(0), "Use static paths")
             (",e", po::value(&export_vmslike)->implicit_value(1), "Export VMSLike data")
-            ("huge", po::value(&export_hugefiles)->implicit_value(1), "Export huge files data")
-            (",v", po::value(&selected_vessels_only)->implicit_value(1), "Selected vessels only")
+            ("huge", po::value(&export_hugefiles)->implicit_value(0), "Export huge files data")
+            (",v", po::value(&selected_vessels_only)->implicit_value(0), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
             ("indb", po::value(&inputdb), "Read input data from sqlite db, relative to Input Folder")
             ("commit-rate", po::value(&numStepTransactions),
@@ -1076,24 +1076,34 @@ int app_main(int argc, char const* argv[])
         cout << "compute PredKernel..." << endl;
         vector<double> sigma(simModel->config().nbpops,
             1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
-//vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
-// replace with logistic per 14 weight class
-// beta_end + (beta_begin - beta_end) *(1+ exp(1*(w0 -wend)))/(1+ exp(1*(w -wend)))  with beta_begin=100 and beta_end=300 so that larger fish eats on much smaller fish
-        vector<double> beta{ 100.0001, 100.0215, 100.1079, 100.3115, 100.6974, 101.3550, 102.4202, 104.1142, 106.8150,
-                            111.1882, 118.4140, 130.5108, 150.4701, 180.9963 };
+        //vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+       // replace with logistic per 14 weight class
+        // beta_end + (beta_begin - beta_end) *(1+ exp(0.0005*(w0 -w(85))))/(1+ exp(0.0005*(w  -w(85))))  with beta_begin=100 and beta_end=500 so that larger fish eats on much smaller fish
+        // Get weight per length bin matrix, apply the formula to it.
+        //vector<vector<double> > beta (simModel->config().nbpops, vector<double>(NBSZGROUP));
+        //for (unsigned int pop = 0; pop < simModel->config().nbpops; ++pop) {  // loop over pops
+        //    for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over sizes
+        //        beta.at(pop).at(k) = 500 + (100 - 500) * (1 + exp(0.0005 * (0.001 - 3383.912))) / (1 + exp(0.0005 * (Ws_at_szgroup.at(pop).at(k) - 3383.912))); // Sorry for hardcoding some values...
+        //    }
+        //}
+
+       
 
         for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
+                vector<double> beta_this_pop = simModel->populations().at(j)->get_beta_ssm_at_szgroup();
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                     for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
-                        if (Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey)) {
+                        if (Ws_at_szgroup.at(j).at(k) < (beta_this_pop.at(k) * Ws_at_szgroup.at(prey).at(kprey))) {
                             predKernel.at(j).at(kprey).at(k).at(prey) =
-                                exp(-pow(log((beta.at(kprey) * Ws_at_szgroup.at(prey).at(kprey)) /
-                                    Ws_at_szgroup.at(j).at(kprey)), 2) / (pow(2 * sigma.at(prey), 2)));;
+                                exp(-pow(log((beta_this_pop.at(k) * Ws_at_szgroup.at(prey).at(kprey)) /
+                                    Ws_at_szgroup.at(j).at(k)), 2) / (2 * pow(sigma.at(prey), 2)));
                             //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                         }
                         else {
-                            predKernel.at(j).at(kprey).at(k).at(prey) = 0.0;
+                            predKernel.at(j).at(kprey).at(k).at(prey) =
+                                exp(-pow(log((beta_this_pop.at(k) * Ws_at_szgroup.at(prey).at(kprey)) /
+                                    Ws_at_szgroup.at(j).at(k)), 2) / (2 * pow(4*sigma.at(prey), 2)));
                             //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                         }
                     }
@@ -1178,12 +1188,13 @@ int app_main(int argc, char const* argv[])
 
 
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
+                vector<double> beta_this_pop = simModel->populations().at(j)->get_beta_ssm_at_szgroup();
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {
-                    double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta.at(k), (lambda - 2)) *
+                    double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta_this_pop.at(k), (lambda - 2)) *
                         exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
 
                     //cout << " this prey " << prey << " alphae is " << alphae << endl;
-                    //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(k) is " << beta.at(k) << " lambda is " << lambda << endl;
+                    //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta_this_pop.at(k) is " << beta_this_pop.at(k) << " lambda is " << lambda << endl;
 
                     // loop over predator sizes
                     double Wk = get<2>(biological_traits_params.at(j));
@@ -1329,6 +1340,11 @@ int app_main(int argc, char const* argv[])
 
 #endif
 
+    unsigned int export_discards_in_logbooks = 1;
+    if (scenario.dyn_alloc_sce.option(Options::doNotExportDiscardsInLogbooks)) 
+    {
+        export_discards_in_logbooks = 0;
+    }
 
     // read nodes in closed area this month for area-based management,
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
@@ -1369,7 +1385,7 @@ int app_main(int argc, char const* argv[])
 
     // TODO: remove this hard-coded value!!!
 //#ifdef BALTICSEA
-    if (folder_name_parameterization == "BalticSea") {
+    if (folder_name_parameterization == "BalticSea" || folder_name_parameterization == "Baltic21") {
         for (auto vessel : simModel->vessels()) {
             vessel->set_tankcapacity(vessel->get_tankcapacity() *
                 3); // ACCOUNT FOR MISREPORTING in KW engine THAT CAN INTERFERE WITH STOPFISHING DTREE IN A BAD WAY i.e. limiting factor making 0 catch when triggered to return to port immediately.
@@ -1903,6 +1919,7 @@ int app_main(int argc, char const* argv[])
 
         if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
+                                    simModel->year(),
                                     namesimu,
                                     namefolderinput,
                                     namefolderoutput,
@@ -2058,6 +2075,7 @@ int app_main(int argc, char const* argv[])
                 simModel->setMonth(a_month_i);
                 simModel->setQuarter(a_quarter_i);
                 simModel->setSemester(a_semester_i);
+                simModel->setYear(a_year);
             }
 
 
@@ -3246,7 +3264,8 @@ int app_main(int argc, char const* argv[])
                 //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                 OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
-                                                         simModel->populations(), simModel->config().implicit_pops);
+                                                         simModel->populations(), simModel->config().implicit_pops, 
+                                                         export_discards_in_logbooks);
                 simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
             }
             listVesselIdForLogLikeToExport.clear();

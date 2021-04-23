@@ -2809,7 +2809,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
                 }
 
-                //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+                //if(this->get_name()=="POL022500003" && pop==31){
                 //    cout  << "tot biomass available on this node " << tot << endl;
                 //}
 
@@ -2880,12 +2880,14 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
                     dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl);
 
-                    /*
-                     * if(this->get_name()=="FIN000020014"){
+                    
+                      /*if(this->get_name()=="POL022500003"){
                        cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
                        cout  << "explicit: given  that avai biomass is " << tot << endl;
-                    }
-                    */
+                       cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << endl;
+                       cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << endl;
+                      }
+                      */
 
                     // REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
                     // BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)
@@ -3248,6 +3250,13 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                                 a_cumul_weight_this_pop_this_vessel;
                         // "real-time" update, accounting for this last bit of catches
                         populations.at(pop)->set_landings_so_far(so_far);
+                      
+                        string a_nation = this->get_nationality();
+                        map<string, double> landings_so_far_per_nation = populations.at(pop)->get_landings_so_far_per_nation();
+                        if (landings_so_far_per_nation.count(a_nation)==0) cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability " << endl;
+                        double so_far_this_nation= landings_so_far_per_nation.at(a_nation) +
+                                a_cumul_weight_this_pop_this_vessel;
+                        populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
 
 
@@ -3268,10 +3277,11 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         // because the first year is the calibration year:
                         //if(tstep>8761  && !is_individual_vessel_quotas)
                         {
-                            // 4. compare in tons (AT THE GLOBAL SCALE)
-                            if( (so_far/1000) > (global_quotas.at(pop)))
+                            // 4. compare in tons (AT THE GLOBAL SCALE, OR PER NATION GIVEN THE QUOTA SHARE AMONG NATIONS)
+                            if( ((so_far/1000) > (global_quotas.at(pop)))  ||
+                                  (so_far_this_nation/1000 > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation)) )
                             {
-                                populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
+                                if (((so_far / 1000) > (global_quotas.at(pop)))) populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
 
                                 prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
 
@@ -3543,6 +3553,8 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                 }
             }
 
+           
+
 
             //if((this->get_name())=="FIN000020014") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
             //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
@@ -3564,6 +3576,16 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         cpue*PING_RATE;
                 // "real-time" update, accounting for this last bit of catches
                 populations.at(pop)->set_landings_so_far(so_far);
+
+                if (tstep > 1 && is_tacs && !is_individual_vessel_quotas)
+                {
+                    string a_nation = this->get_nationality();
+                    double so_far_this_nation = 0.0;
+                    so_far_this_nation = populations.at(pop)->get_landings_so_far_per_nation().at(a_nation) +
+                        cpue * PING_RATE;
+                    populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+
+                }
 
                 // CUMUL ON VESSEL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
@@ -5569,7 +5591,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
     dout(cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl);
     dout(cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl);
-
+    //if (this->get_name() == "EST010126047") cout << "COUCOU!" << endl;
     int still_some_quotas;
     if(is_individual_vessel_quotas)
     {
@@ -5612,17 +5634,43 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             still_some_quotas=1;
 
         dout(cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl);
-
     }
     else
     {
          still_some_quotas=1;
         if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
          {
-             for (int pop=0; pop < populations.size(); pop++)
-             {
-              if (populations.at(pop)->get_tac()->get_is_tac_exhausted())  still_some_quotas=0;
-             }
+            // find the most used fground for this vessel and check if the pop for which the tac is exhausted has been caught
+            // (i.e. > to a threshold in cpue e.g. 5kg on the most know ground specific to this vessel)
+            vector <double> freq_grounds = this->get_freq_fgrounds();
+            vector <types::NodeId> grds=this->get_fgrounds();
+            int idx = distance(freq_grounds.begin(),
+                max_element(freq_grounds.begin(), freq_grounds.end()));
+            types::NodeId knowledgeOfThisGround = grds.at(idx); // the most known ground
+            int idx_node_r = find(grds.begin(), grds.end(), knowledgeOfThisGround) - grds.begin(); // relative node index to this vessel
+
+            string a_nation=this->get_nationality();
+            vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
+            // cout << "a_nation this vessel is " << a_nation << endl;
+            
+            for (unsigned int tg = 0; tg < trgts.size(); ++tg)
+            {
+                     int a_pop = trgts.at(tg);
+                     double tac_this_species_this_nation= populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation);
+                     //if (this->get_name() == "EST010126047") cout << " here: land so far in tons this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) / 1000 << endl;
+                     //if (this->get_name() == "EST010126047") cout << " here: tacs this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation) << endl;
+                     if  (tac_this_species_this_nation>0 // first, check if this stock is really a target for this vessel/nation
+                           && ((populations.at(a_pop)->get_tac()->get_is_tac_exhausted() ||  // then, check global tac
+                             populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation)/1000 > tac_this_species_this_nation) && // ...or check quota this nation
+                             this->get_experiencedcpue_fgrounds_per_pop().at(idx_node_r).at(a_pop) > 5)) // finally, check relevance of this pop for this vessel (threshold in kg)
+                     {
+                         still_some_quotas = 0;
+                         // => will stay on quayside because exhausted tac on at least one targeted stock
+                         dout(cout << this->get_name() << " will stay on quayside because choked by target pop " << a_pop << "!" << endl);
+                         this->set_is_choked(a_pop, 1);
+                     }
+            }
+            
          }
          else
          {
@@ -5639,6 +5687,8 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
    }
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
+
+    //if (this->get_name() == "EST010126047") cout << "COUCOU2! still_some_quotas is " << still_some_quotas << " at tstep " << tstep << endl;
 
 
     if( still_some_quotas)
@@ -5667,9 +5717,13 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
                 if(unif_rand()<the_value) {
                     unlock();     // GO!
+                    //if (this->get_name() == "EST010126047") cout << "GO!" << endl;
                     return(1);
                 } else {
                     unlock();
+                    //if (this->get_name() == "EST010126047") cout << "DON´T GO!"  << endl;
+
+
                     return(0);	  // DON'T GO!
                 }
 
@@ -5677,6 +5731,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             else
             {
                 unlock();
+                //if (this->get_name() == "EST010126047") cout << "DON´T DECIDE NOW!" << endl;
                 return(0);		  // DON'T DECIDE NOW!
             }
 
@@ -5702,6 +5757,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
     else
     {
         dout(cout  << "no quota or credit left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
+        //if (this->get_name() == "EST010126047") cout << "no quota or credit left for this vessel " << endl;
         unlock();
         return(0);
     }

@@ -113,7 +113,9 @@ Population::Population(int a_name,
 		comcat_at_szgroup.push_back(0);
 		maturity_at_szgroup.push_back(0);
 		M_at_szgroup.push_back(0);
-		proprecru_at_szgroup.push_back(0);
+        beta_ssm_at_szgroup.push_back(0);
+        background_mortality_at_szgroup.push_back(0);
+        proprecru_at_szgroup.push_back(0);
         SSB_at_szgroup.push_back(0);
 
 	}
@@ -214,12 +216,7 @@ Population::Population(int a_name,
 
 	// ...then fill in with start pop
     dout(cout << "for natural mortality..." << name << endl);
-    for(unsigned int i=0; i < init_M_at_szgroup.size(); i++)
-	{
-		init_M_at_szgroup.at(i)=init_M_at_szgroup.at(i);
-	}
-
-	this->set_M_at_szgroup(init_M_at_szgroup);
+  	this->set_M_at_szgroup(init_M_at_szgroup);
 
 	// ...then fill in with start pop
     dout(cout << "for prop recru..." << name << endl);
@@ -292,6 +289,27 @@ Population::Population(int a_name,
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
     fbar=0.0;
     oth_land_multiplier=1.0;
+
+    for (auto it = relative_stability_key.begin(); it != relative_stability_key.end(); it++)
+    {
+        landings_so_far_per_nation.insert(std::make_pair(it->first, 0));
+    }
+    
+    // check
+    //cout << "check relative_stability_key " << endl;
+    //for (auto elem : relative_stability_key)
+    //{
+    //    std::cout << elem.first << " " << elem.second << "\n";
+    //}
+
+    // check
+    //cout << "check landings_so_far_per_nation " << endl;
+    //for (auto elem : landings_so_far_per_nation)
+    //{
+    //    std::cout << elem.first << " " << elem.second << "\n";
+    //}
+
+
 
     quota =init_tac[0];
     quota_uptake=0.0;
@@ -546,6 +564,15 @@ const vector<double>& Population::get_M_at_szgroup() const
 	return(M_at_szgroup);
 }
 
+const vector<double>& Population::get_beta_ssm_at_szgroup() const
+{
+    return(beta_ssm_at_szgroup);
+}
+
+const vector<double>& Population::get_background_mortality_at_szgroup() const
+{
+    return(background_mortality_at_szgroup);
+}
 
 const vector<double>& Population::get_proprecru_at_szgroup() const
 {
@@ -581,6 +608,12 @@ double Population::get_landings_so_far() const
 {
 	return(landings_so_far);
 }
+
+map<string,double> Population::get_landings_so_far_per_nation() 
+{
+    return(landings_so_far_per_nation);
+}
+
 
 double Population::get_tot_N_at_age0() const
 {
@@ -932,6 +965,26 @@ void Population::set_M_at_szgroup(const vector<double>& _M_at_szgroup)
 }
 
 
+void Population::set_beta_ssm_at_szgroup(const vector<double>& _beta_ssm_at_szgroup)
+{
+    for (unsigned int sz = 0; sz < _beta_ssm_at_szgroup.size(); sz++)
+    {
+        beta_ssm_at_szgroup[sz] = _beta_ssm_at_szgroup[sz];
+    }
+
+}
+
+void Population::set_background_mortality_at_szgroup(const vector<double>& _background_mortality_at_szgroup)
+{
+    for (unsigned int sz = 0; sz < _background_mortality_at_szgroup.size(); sz++)
+    {
+        background_mortality_at_szgroup[sz] = _background_mortality_at_szgroup[sz];
+    }
+
+}
+
+
+
 void Population::set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_proprecru_at_szgroup.size(); sz++)
@@ -980,6 +1033,19 @@ void Population::set_landings_so_far(double _landings_so_far)
 {
 	landings_so_far=_landings_so_far;
 }
+
+void Population::set_landings_so_far_this_nation(string nation, double _landings_so_far)
+{
+    landings_so_far_per_nation[nation] = _landings_so_far;
+}
+
+void Population::reset_landings_so_far_per_nation()
+{
+    for (auto& p : landings_so_far_per_nation) p.second = 0;
+    cout << "reset_landings_so_far_per_nation this pop " << this->get_name() << endl;
+
+}
+
 
 void Population::add_to_landings_at_end_of_years(double value)
 {

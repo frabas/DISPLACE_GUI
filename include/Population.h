@@ -125,6 +125,8 @@ class  Population
         const vector<double>& get_weight_at_szgroup() const;
 		vector<int> get_comcat_at_szgroup() const;
         const vector<double>& get_M_at_szgroup() const;
+        const vector<double>& get_beta_ssm_at_szgroup() const;
+        const vector<double>& get_background_mortality_at_szgroup() const;
         const vector<double>& get_proprecru_at_szgroup() const;
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;
@@ -147,6 +149,7 @@ class  Population
         double get_quota_uptake() const;
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
+        map<string,double> get_landings_so_far_per_nation();
         double get_tot_N_at_age0() const;
         const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
@@ -185,6 +188,8 @@ class  Population
         void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
 		void set_comcat_at_szgroup(vector <int> _comcat_at_szgroup);
         void set_M_at_szgroup(const vector<double>& _M_at_szgroup);
+        void set_beta_ssm_at_szgroup(const vector<double>& _beta_ssm_at_szgroup);
+        void set_background_mortality_at_szgroup(const vector<double>& _background_mortality_at_szgroup);
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
@@ -194,6 +199,8 @@ class  Population
         void set_proportion_mature_fish(double _proportion_mature_fish);
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
+        void set_landings_so_far_this_nation(string _nation, double _landings_so_far_per_nation);
+        void reset_landings_so_far_per_nation();
         void add_to_landings_at_end_of_years(double value);
         void set_param_sr(const vector<double>& _param_sr);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
@@ -293,7 +300,11 @@ class  Population
 								 //
 		vector<double> M_at_szgroup;
 								 //
-		vector<double> proprecru_at_szgroup;
+        vector<double> beta_ssm_at_szgroup;
+        
+        vector<double> background_mortality_at_szgroup;
+        
+        vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
         double SSB ,fbar;				 //
         vector<double>  FFmsy;				 //
@@ -317,6 +328,7 @@ class  Population
         double quota;
         double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
+        map <string, double> landings_so_far_per_nation;
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
         double tot_N_at_age0;

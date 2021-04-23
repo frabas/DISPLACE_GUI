@@ -847,10 +847,21 @@ int app_main(int argc, char const* argv[])
 #endif
 
 
+    // creation of a vector of simModel->populations()
     modelLoader->loadPopulations(1);
 
-    // FOR-LOOP OVER POP
-    // creation of a vector of simModel->populations()
+    
+    //(re-)create a multimap for later use
+    multimap<int, double> weight_per_szgroup;
+    for (unsigned int ipop = 0; ipop < simModel->populations().size(); ++ipop) {
+        vector<double> weight = simModel->populations().at(ipop)->get_weight_at_szgroup();
+        for (unsigned int iw = 0; iw < weight.size(); ++iw) {
+            weight_per_szgroup.insert(std::pair<int, double>(ipop, weight.at(iw)));
+
+        }
+    }
+    simModel->setInitWeightPerSzgroup(weight_per_szgroup);
+
 
 #ifdef PROFILE
     mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();

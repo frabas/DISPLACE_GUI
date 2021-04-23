@@ -76,7 +76,7 @@ bool DatabaseModelLoader::loadPopulations(int period)
                    });
 
     model().setPopulations(std::move(populations));
-
+  
     std::cout << "Nodes: " << model().nodes().size() << "\n";
     return true;
 }

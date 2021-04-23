@@ -6,6 +6,8 @@
 
 #include "DatabaseInputImpl/dispatchers/PopGroupsFunctions.h"
 
+#include <iostream>
+
 using namespace displace::db::defs;
 
 PopulationGroupsQuery::map PopulationGroupsQuery::dispatcher;
@@ -23,7 +25,9 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db, int p
                       fieldValue)
 {
     if (period != 0) {
-        selectQuery.where(fieldPeriod == 0);
+        msqlitecpp::v2::WhereStatement ws(
+                (fieldPeriod == "0"), "OR", (msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null")));
+        selectQuery.where(ws);
         selectQuery.bind(period);
     }
 

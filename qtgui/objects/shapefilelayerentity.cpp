@@ -63,14 +63,15 @@ QMenu *ShapefileLayerEntity::contextMenu() const
 
 void ShapefileLayerEntity::onActionShapeColor()
 {
-    std::shared_ptr<qmapcontrol::ESRIShapefile> file = model->getMapControl()->getShapefile(model->getModelIdx(), layerEntityIndex());
-    QBrush brh = file->getBrushPolygon();
+    std::shared_ptr<qmapcontrol::ESRIShapefile> file = model->getMapControl()->getShapefile(model->getModelIdx(),
+                                                                                            layerEntityIndex());
+    QBrush brh = file->getBrush();
 
     QColor color = QColorDialog::getColor(brh.color(), 0, tr("Select shapefile color"), QColorDialog::ShowAlphaChannel);
 
     if (color.isValid()) {
         brh.setColor(color);
-        file->setBrushPolygon(brh);
+        file->setBrush(brh);
         model->getMapControl()->redraw();
     }
 }

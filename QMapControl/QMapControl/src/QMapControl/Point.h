@@ -69,7 +69,7 @@ namespace qmapcontrol
         inline PointWorldCoord bottomRightCoord() const { return PointWorldCoord(m_raw_rect.right(), m_raw_rect.bottom()); }
         inline PointWorldCoord bottomLeftCoord() const { return PointWorldCoord(m_raw_rect.left(), m_raw_rect.bottom()); }
 
-        inline std::vector<PointWorldCoord> toStdVector()
+        inline std::vector<PointWorldCoord> toStdVector() const
         {
             // Create a vector to return the points.
             std::vector<PointWorldCoord> return_points;
@@ -93,19 +93,39 @@ namespace qmapcontrol
     };
 
 
-    class QMAPCONTROL_EXPORT PointPx
-    {
+    class QMAPCONTROL_EXPORT PointPx {
     public:
-        PointPx() : m_raw_point() { }
-        PointPx(const qreal& x, const qreal& y) : m_raw_point(x, y) { } /// = default; @todo re-add once MSVC supports default/delete syntax.
-        inline QPointF rawPoint() const { return m_raw_point; }
-        inline qreal x() const { return m_raw_point.x(); }
-        inline qreal y() const { return m_raw_point.y(); }
-        inline void setX(const qreal& x) { m_raw_point.setX(x); }
-        inline void setY(const qreal& y) { m_raw_point.setY(y); }
+        PointPx() : m_raw_point()
+        {}
+
+        PointPx(const QPoint &pt) : m_raw_point(pt.x(), pt.y())
+        {}
+
+        PointPx(const QPointF &pt) : m_raw_point(pt.x(), pt.y())
+        {}
+
+        PointPx(const qreal &x, const qreal &y) : m_raw_point(x, y)
+        {} /// = default; @todo re-add once MSVC supports default/delete syntax.
+        inline QPointF rawPoint() const
+        { return m_raw_point; }
+
+        inline qreal x() const
+        { return m_raw_point.x(); }
+
+        inline qreal y() const
+        { return m_raw_point.y(); }
+
+        inline void setX(const qreal &x)
+        { m_raw_point.setX(x); }
+
+        inline void setY(const qreal &y)
+        { m_raw_point.setY(y); }
+
         //inline PointPx operator+(const PointPx &p) const { return PointPx(m_raw_point.x() + p.rawPoint().x(), m_raw_point.y() + p.rawPoint().y()); }
         //inline PointPx operator-(const PointPx &p) const { return PointPx(m_raw_point.x() - p.rawPoint().x(), m_raw_point.y() - p.rawPoint().y()); }
-        inline PointPx operator/(qreal c) const { return PointPx(m_raw_point.x() / c, m_raw_point.y() / c); }
+        inline PointPx operator/(qreal c) const
+        { return PointPx(m_raw_point.x() / c, m_raw_point.y() / c); }
+
     protected:
         QPointF m_raw_point;
     };
@@ -153,13 +173,20 @@ namespace qmapcontrol
         QRectF m_raw_rect;
     };
 
-    class QMAPCONTROL_EXPORT RectWorldPx : public RectPx
-    {
-    public:
-        RectWorldPx() : RectPx() { }
-        RectWorldPx(const PointWorldPx& top_left, const PointWorldPx& bottom_right) : RectPx(top_left, bottom_right) { } /// = default; @todo re-add once MSVC supports default/delete syntax.
-        RectWorldPx(const PointWorldPx& top_left, const QSizeF& size) : RectPx(top_left, size) { } /// = default; @todo re-add once MSVC supports default/delete syntax.
-    };
+class QMAPCONTROL_EXPORT RectWorldPx : public RectPx {
+public:
+    RectWorldPx() : RectPx()
+    {}
+
+    RectWorldPx(QRectF const &r)
+            : RectPx(r.topLeft(), r.bottomRight())
+    {}
+
+    RectWorldPx(const PointWorldPx &top_left, const PointWorldPx &bottom_right) : RectPx(top_left, bottom_right)
+    {} /// = default; @todo re-add once MSVC supports default/delete syntax.
+    RectWorldPx(const PointWorldPx &top_left, const QSizeF &size) : RectPx(top_left, size)
+    {} /// = default; @todo re-add once MSVC supports default/delete syntax.
+};
 
     class QMAPCONTROL_EXPORT RectViewportPx : public RectPx
     {

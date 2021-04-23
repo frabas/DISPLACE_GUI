@@ -27,5 +27,5 @@ Mapviewer::Mapviewer(QWidget* parent)
 void Mapviewer::resizeEvent(QResizeEvent * resize_event)
 {
     // Set the new viewport size.
-    m_map_control->setViewportSize(resize_event->size());
+//    m_map_control->setViewportSize(resize_event->size());
 }

@@ -102,12 +102,17 @@ namespace qmapcontrol
          * @param backbuffer_rect_px Only draw map tiles/geometries that are contained in the backbuffer rect (pixels).
          * @param controller_zoom The current controller zoom.
          */
-        void draw(QPainter& painter, const RectWorldPx& backbuffer_rect_px, const int& controller_zoom) const final;
+        void draw(QPainter &painter, const RectWorldPx &backbuffer_rect_px, const int &controller_zoom) const final;
 
 
         auto getShapefileCount() const
         { return m_esri_shapefiles.size(); }
+
         std::shared_ptr<ESRIShapefile> getShapefile(int idx) const;
+
+    signals:
+
+        void featuresClicked(std::vector<OGRFeature *>) const;
 
     private:
         /// List of ESRI Shapefiles draw by this layer.
@@ -115,5 +120,7 @@ namespace qmapcontrol
 
         /// Mutex to protect ESRI Shapefiles.
         mutable QReadWriteLock m_esri_shapefiles_mutex;
+
+        qreal mFuzzyFactorPx = 5.0;
     };
 }

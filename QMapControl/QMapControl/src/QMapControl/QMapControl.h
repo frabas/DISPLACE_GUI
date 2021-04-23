@@ -103,7 +103,7 @@ namespace qmapcontrol
          * @param parent QObject parent ownership.
          * @param window_flags QWidget window flags.
          */
-        QMapControl(QWidget* parent = 0, Qt::WindowFlags window_flags = 0);
+        QMapControl(QWidget* parent = nullptr, Qt::WindowFlags window_flags = Qt::WindowFlags());
 
         //! QMapControl constructor.
         /*!
@@ -112,7 +112,7 @@ namespace qmapcontrol
          * @param parent QObject parent ownership.
          * @param window_flags QWidget window flags.
          */
-        QMapControl(const QSizeF& size_px, QWidget* parent = 0, Qt::WindowFlags window_flags = 0);
+        QMapControl(const QSizeF& size_px, QWidget* parent = nullptr, Qt::WindowFlags window_flags = Qt::WindowFlags());
 
         //! Disable copy constructor.
         ///QMapControl(const QMapControl&) = delete; @todo re-add once MSVC supports default/delete syntax.
@@ -123,24 +123,39 @@ namespace qmapcontrol
         //! Destructor.
         ~QMapControl();
 
+        /**
+         * @brief Apply a rotation to the graphics representation of the map.
+         * @param rotation the rotation in degrees
+         */
+        void setMapRotation(qreal rotation);
+
+        /**
+         * @brief Gets the actual map rotation
+         * @return map rotation in degrees
+         */
+        qreal mapRotation() const;
+
         // Settings.
         /*!
          * Set the displayed projection.
          * @param epsg The projection required.
          */
-        void setProjection(const projection::EPSG& epsg = projection::EPSG::SphericalMercator);
+        void setProjection(const projection::EPSG &epsg = projection::EPSG::SphericalMercator);
 
         /*!
          * Set the tile size used in pxiels.
          * @param tile_size_px The tile size in pixels required.
          */
-        void setTileSizePx(const int& tile_size_px = 256);
+        void setTileSizePx(const int &tile_size_px = 256);
 
         /*!
          * Set the background colour of the map control.
          * @param colour The background colour to set.
          */
-        void setBackgroundColour(const QColor& colour = Qt::transparent);
+        void setBackgroundColour(const QColor &colour = Qt::transparent);
+
+        static const std::chrono::minutes PersistentCacheNoExpiration;
+        static const QDir PersistentCacheDefaultPath;
 
         /*!
          * Enable persistent caching of map tiles.
@@ -149,13 +164,28 @@ namespace qmapcontrol
          * @param path The path where the images should be stored.
          * @param expiry The max age (in minutes) of an image before its removed and a new one is requested (0 to keep forever).
          */
-        void enablePersistentCache(const std::chrono::minutes& expiry = std::chrono::minutes(0), const QDir& path = QDir::homePath() + QDir::separator() + "QMapControl.cache");
+        void enablePersistentCache(const std::chrono::minutes &expiry = PersistentCacheNoExpiration,
+                                   const QDir &path = PersistentCacheDefaultPath);
+
+        /**
+         * @brief Starts the Persistent cache housekeeping. Scan the current cache for expired enties, and remove them.
+         * This function should be called just after the enablePersistentCache(), preferably in a separate thread using
+         * QtConcurrent for example.
+         * Indeed the ImageManager::persistentCacheFind only removes the files that are searched for, this means that
+         * even if a file has expired, it will remain in cache forever if never accessed.
+         */
+        void startPersistentCacheHousekeeping();
+
+        /**
+         * @brief Remove all the files in the persistent cache, regardless of the expiration.
+         */
+        void clearPersistentCache();
 
         /*!
          * Sets the proxy for HTTP connections.
          * @param proxy The proxy details.
          */
-        void setProxy(const QNetworkProxy& proxy);
+        void setProxy(const QNetworkProxy &proxy);
 
         /*!
          * Sets the proxy for HTTP connections.
@@ -335,14 +365,20 @@ namespace qmapcontrol
          * @param enable Whether the zoom control should be displayed.
          * @param align_left Whether to align the zoom controls to left or right of the widget.
          */
-        void enableZoomControls(const bool& enable, const bool& align_left = true);
+        void enableZoomControls(const bool &enable, const bool &align_left = true);
+
+        void setCenterPixmap(QPixmap);
+
+        void clearCenterPixmap();
+
+        QPixmap centerPixmap();
 
         // Mouse management.
         /*!
          * Set whether the layers should handle mouse events.
          * @param enable Whether the layers should handle mouse events.
          */
-        void enableLayerMouseEvents(const bool& enable);
+        void enableLayerMouseEvents(const bool &enable);
 
         /*!
          * Fetches the left mouse button mode.
@@ -453,14 +489,17 @@ namespace qmapcontrol
          * @param map_focus_point_px The map focus point in pixels to use.
          * @return the map point in pixels.
          */
-        PointWorldPx toPointWorldPx(const PointViewportPx& click_point_px, const PointWorldPx& map_focus_point_px) const;
+        PointWorldPx
+        toPointWorldPx(const PointViewportPx &click_point_px, const PointWorldPx &map_focus_point_px) const;
 
         /*!
          * Converts a mouse click point in pixels to map point in coordinates (uses the current map focus point).
          * @param click_point_px The mouse click point in pixels to convert.
          * @return the map point in coordinates.
          */
-        PointWorldCoord toPointWorldCoord(const PointViewportPx& click_point_px) const;
+        PointWorldCoord toPointWorldCoord(const PointViewportPx &click_point_px) const;
+
+        QPointF localToRotatedPoint(QPointF point);
 
         /*!
          * Converts a mouse click point in pixels to map point in coordinates.
@@ -468,7 +507,8 @@ namespace qmapcontrol
          * @param map_focus_point_px The map focus point in pixels to use.
          * @return the map point in coordinates.
          */
-        PointWorldCoord toPointWorldCoord(const PointViewportPx& click_point_px, const PointWorldPx& map_focus_point_px) const;
+        PointWorldCoord
+        toPointWorldCoord(const PointViewportPx &click_point_px, const PointWorldPx &map_focus_point_px) const;
 
         /*!
          * Fetches the map focus point in pixels (location on map in relation to the center of the screen).
@@ -611,24 +651,40 @@ namespace qmapcontrol
          * @param backbuffer_rect_px The updated backbuffer rect in pixels.
          * @param backbuffer_map_focus_px The updated backbuffer map foucs point in pixels.
          */
-        void updatedBackBuffer(QPixmap backbuffer_pixmap, RectWorldPx backbuffer_rect_px, PointWorldPx backbuffer_map_focus_px);
+        void updatedBackBuffer(QPixmap backbuffer_pixmap, RectWorldPx backbuffer_rect_px,
+                               PointWorldPx backbuffer_map_focus_px);
 
         /**
          * Signal emitted when the map foucus has changed
          * */
         void mapFocusPointChanged(PointWorldCoord);
+
+        void mapCourseChanged(qreal courseDegrees);
     private:
         //! Disable copy constructor.
-        QMapControl(const QMapControl&); /// @todo remove once MSVC supports default/delete syntax.
+        QMapControl(const QMapControl &); /// @todo remove once MSVC supports default/delete syntax.
 
         //! Disable copy assignment.
-        QMapControl& operator=(const QMapControl&); /// @todo remove once MSVC supports default/delete syntax.
+        QMapControl &operator=(const QMapControl &); /// @todo remove once MSVC supports default/delete syntax.
+
+        /**
+         * @brief The actual map rotation as applied through mMapTransformation. Used as cached value.
+         */
+        qreal mMapRotation = 0.0;
+        /**
+         * @brief The map transformation.
+         */
+        QTransform mMapTransformation;
+
+        QColor mBackgroundColor = Qt::white;
 
         /// Whether the scale should be visible.
         bool m_scalebar_enabled;
 
         /// Whether the crossharis should be visible.
         bool m_crosshairs_enabled;
+
+        QPixmap mCenterPixmap;
 
         /// List of layers (use getLayers() to access this for thread-safe read-only functionality).
         std::vector<std::shared_ptr<Layer>> m_layers;
@@ -642,6 +698,8 @@ namespace qmapcontrol
         /// The current following geometry signal/slot connection.
         QMetaObject::Connection m_following_geometry;
 
+        RectWorldPx backbuffer_rect_px;
+        QSize mBackbufferSize;
         /// The viewport (visible-part of each layer) size in pixels.
         QSizeF m_viewport_size_px;
 
@@ -750,5 +808,6 @@ namespace qmapcontrol
     protected:
         void resizeEvent(QResizeEvent *event) override;
 
+        QTransform getMapTransform() const;
     };
 }

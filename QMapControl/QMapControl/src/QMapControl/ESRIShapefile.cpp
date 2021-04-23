@@ -24,196 +24,206 @@
 */
 
 #include "ESRIShapefile.h"
-
-// Local includes.
 #include "Projection.h"
-#include <cmath>
+
 #include <QDebug>
+#include <QPainterPath>
+
+#include <cmath>
 
 namespace qmapcontrol
 {
-    ESRIShapefile::ESRIShapefile(const std::string& file_path, const std::string& layer_name, const int& zoom_minimum, const int& zoom_maximum)
+ESRIShapefile::ESRIShapefile(const std::string &file_path, const std::string &layer_name, const int &zoom_minimum,
+                             const int &zoom_maximum)
         : m_layer_name(layer_name), m_zoom_minimum(zoom_minimum), m_zoom_maximum(zoom_maximum)
-    {
-        // Register OGR drivers.
-        OGRRegisterAll();
+{
+    // Register OGR drivers.
+    OGRRegisterAll();
 
-        // Open the file.
-        m_ogr_data_set = reinterpret_cast<GDALDataset*>(OGROpen(file_path.c_str(), 0, nullptr));
+    // Open the file.
+    m_ogr_data_set = reinterpret_cast<GDALDataset *>(OGROpen(file_path.c_str(), 0, nullptr));
+}
+
+ESRIShapefile::ESRIShapefile(GDALDataset *datasource, const std::string &layer_name, const int &zoom_minimum,
+                             const int &zoom_maximum)
+        : m_ogr_data_set(datasource), m_layer_name(layer_name), m_zoom_minimum(zoom_minimum),
+          m_zoom_maximum(zoom_maximum)
+{
+}
+
+void ESRIShapefile::createProjections(OGRSpatialReference *spatialReference) const
+{
+    OGRSpatialReference destinationWCS;
+    // TODO check the correct destination WCS.
+    if (destinationWCS.importFromEPSG(4326) != OGRERR_NONE) {
+        throw std::runtime_error("Can't import EPSG");
+    }
+#if GDAL_VERSION_MAJOR >= 3
+    destinationWCS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
+
+    if (spatialReference == nullptr) {
+        spatialReference = &destinationWCS;
     }
 
-    ESRIShapefile::ESRIShapefile(GDALDataset *datasource, const std::string &layer_name, const int &zoom_minimum, const int &zoom_maximum)
-        : m_ogr_data_set(datasource), m_layer_name(layer_name), m_zoom_minimum(zoom_minimum), m_zoom_maximum(zoom_maximum)
-    {
+    mTransformation = OGRCreateCoordinateTransformation(spatialReference, &destinationWCS);
+    mInvTransformation = OGRCreateCoordinateTransformation(&destinationWCS, spatialReference);
+}
+
+ESRIShapefile::~ESRIShapefile()
+{
+    if (m_ogr_data_set != nullptr && hasDatasetOwnership) {
+        GDALClose(m_ogr_data_set);
     }
+}
 
-    ESRIShapefile::~ESRIShapefile()
-    {
-        // Do we have a dataset open?
-        if(m_ogr_data_set != nullptr)
-        {
-            // Close the data set.
-            //OGRDataSource::DestroyDataSource(m_ogr_data_set);
-            GDALClose(m_ogr_data_set);
-        }
-    }
+const QPen &ESRIShapefile::getPen() const
+{
+    return mPen;
+}
 
-    const QPen& ESRIShapefile::getPenPolygon() const
-    {
-        // Do we have a pen?
-        if(m_pen_polygon == nullptr)
-        {
-            // Create a default pen.
-            m_pen_polygon = std::make_shared<QPen>();
-        }
+void ESRIShapefile::setPen(QPen pen)
+{
+    // Set the pen to draw with.
+    mPen = std::move(pen);
 
-        // Get the pen to draw with.
-        return *(m_pen_polygon.get());
-    }
+    // Emit that we need to redraw to display this change.
+    emit requestRedraw();
+}
 
-    void ESRIShapefile::setPenPolygon(const std::shared_ptr<QPen>& pen)
-    {
-        // Set the pen to draw with.
-        m_pen_polygon = pen;
+const QBrush &ESRIShapefile::getBrush() const
+{
+    return mBrush;
+}
 
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
+void ESRIShapefile::setBrush(QBrush brush)
+{
+    // Set the brush to draw with.
+    mBrush = std::move(brush);
 
-    void ESRIShapefile::setPenPolygon(const QPen& pen)
-    {
-        // Set the pen to draw with.
-        m_pen_polygon = std::make_shared<QPen>(pen);
+    // Emit that we need to redraw to display this change.
+    emit requestRedraw();
+}
 
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
+void ESRIShapefile::draw(QPainter &painter, const RectWorldPx &backbuffer_rect_px, const int &controller_zoom) const
+{
+    // Check whether the controller zoom is within range?
+    if (m_zoom_minimum > controller_zoom || m_zoom_maximum < controller_zoom) {
+        // Outside of supported zoom levels.
+    } else {
+        // Calculate the world coordinates.
+        const RectWorldCoord backbuffer_rect_coord(
+                projection::get().toPointWorldCoord(backbuffer_rect_px.topLeftPx(), controller_zoom),
+                projection::get().toPointWorldCoord(backbuffer_rect_px.bottomRightPx(), controller_zoom));
 
-    const QBrush& ESRIShapefile::getBrushPolygon() const
-    {
-        // Do we have a brush?
-        if(m_brush_polygon == nullptr)
-        {
-            // Create a default brush.
-            m_brush_polygon = std::make_shared<QBrush>();
-        }
-
-        // Get the brush to draw with.
-        return *(m_brush_polygon.get());
-    }
-
-    void ESRIShapefile::setBrushPolygon(const std::shared_ptr<QBrush>& brush)
-    {
-        // Set the brush to draw with.
-        m_brush_polygon = brush;
-
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
-
-    void ESRIShapefile::setBrushPolygon(const QBrush& brush)
-    {
-        // Set the brush to draw with.
-        m_brush_polygon = std::make_shared<QBrush>(brush);
-
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
-
-    const QPen& ESRIShapefile::getPenLineString() const
-    {
-        // Do we have a pen?
-        if(m_pen_linestring == nullptr)
-        {
-            // Create a default pen.
-            m_pen_linestring = std::make_shared<QPen>();
-        }
-
-        // Get the pen to draw with.
-        return *(m_pen_linestring.get());
-    }
-
-    void ESRIShapefile::setPenLineString(const std::shared_ptr<QPen>& pen)
-    {
-        // Set the pen to draw with.
-        m_pen_linestring = pen;
-
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
-
-    void ESRIShapefile::setPenLineString(const QPen& pen)
-    {
-        // Set the pen to draw with.
-        m_pen_linestring = std::make_shared<QPen>(pen);
-
-        // Emit that we need to redraw to display this change.
-        emit requestRedraw();
-    }
-
-    void ESRIShapefile::draw(QPainter& painter, const RectWorldPx& backbuffer_rect_px, const int& controller_zoom) const
-    {
-        // Check whether the controller zoom is within range?
-        if(m_zoom_minimum > controller_zoom || m_zoom_maximum < controller_zoom)
-        {
-            // Outside of supported zoom levels.
-        }
-        else
-        {
-            // Calculate the world coordinates.
-            const RectWorldCoord backbuffer_rect_coord(projection::get().toPointWorldCoord(backbuffer_rect_px.topLeftPx(), controller_zoom), projection::get().toPointWorldCoord(backbuffer_rect_px.bottomRightPx(), controller_zoom));
-
-            // Do we have a data set open?
-            if(m_ogr_data_set != nullptr)
-            {
-                // Do we have a layer name set?
-                if(m_layer_name.empty() == false)
-                {
-                    // Get layer.
-                    const auto ogr_layer(m_ogr_data_set->GetLayerByName(m_layer_name.c_str()));
-                    if(ogr_layer == nullptr)
-                    {
-                        // Invalid layer name!
+        // Do we have a data set open?
+        if (m_ogr_data_set != nullptr) {
+            // Do we have a layer name set?
+            if (m_layer_name.empty() == false) {
+                // Get layer.
+                const auto ogr_layer(m_ogr_data_set->GetLayerByName(m_layer_name.c_str()));
+                if (ogr_layer == nullptr) {
+                    // Invalid layer name!
+                } else {
+                    if (mTransformation == nullptr) {
+                        createProjections(ogr_layer->GetSpatialRef());
                     }
-                    else
-                    {
-                        // Reset reading.
-                        ogr_layer->ResetReading();
 
-                        // Set the Spatial Filter.
-                        ogr_layer->SetSpatialFilterRect(backbuffer_rect_coord.rawRect().left(), backbuffer_rect_coord.rawRect().top(), backbuffer_rect_coord.rawRect().right(), backbuffer_rect_coord.rawRect().bottom());
+                    auto points = backbuffer_rect_coord.toStdVector();
+                    std::vector<double> xs, ys;
+                    std::transform(points.begin(), points.end(), std::back_inserter(xs),
+                                   [](PointWorldCoord const &pt) {
+                                       return pt.rawPoint().x();
+                                   });
+                    std::transform(points.begin(), points.end(), std::back_inserter(ys),
+                                   [](PointWorldCoord const &pt) {
+                                       return pt.rawPoint().y();
+                                   });
 
-                        // Loop through features.
-                        OGRFeature* ogr_feature;
-                        while((ogr_feature = ogr_layer->GetNextFeature()) != nullptr)
-                        {
-                            // Draw the feature.
-                            drawFeature(ogr_feature, painter, controller_zoom);
+                    mInvTransformation->Transform(points.size(), xs.data(), ys.data());
 
-                            // Destroy the feature.
-                            OGRFeature::DestroyFeature(ogr_feature);
-                        }
+                        // Note: sequence is: topleft, topright, botRIGHT, botleft
+//                        qDebug() << "Window " << backbuffer_rect_coord.rawRect() << " => "
+//                                 << xs[0] << ys[0] << xs[2] << ys[2];
+
+                    // Reset reading.
+                    ogr_layer->ResetReading();
+
+                    // Set the Spatial Filter.
+                    ogr_layer->SetSpatialFilterRect(xs[0],
+                                                    ys[0],
+                                                    xs[2],
+                                                    ys[2]);
+
+                    if (!attributeFilter.empty()) {
+                        ogr_layer->SetAttributeFilter(attributeFilter.c_str());
                     }
+
+                    // Loop through features.
+                    OGRFeature *ogr_feature;
+                    while ((ogr_feature = ogr_layer->GetNextFeature()) != nullptr) {
+                        // Draw the feature.
+                        drawFeature(ogr_feature, painter, controller_zoom);
+
+                        // Destroy the feature.
+                        OGRFeature::DestroyFeature(ogr_feature);
+                    }
+                }
                 }
                 else
                 {
                     // Loop through and draw each layer.
-                    for(int i = 0; i < m_ogr_data_set->GetLayerCount(); ++i)
-                    {
+                    for (int i = 0; i < m_ogr_data_set->GetLayerCount(); ++i) {
                         // Get layer.
                         const auto ogr_layer(m_ogr_data_set->GetLayer(i));
-                        if(ogr_layer != nullptr)
-                        {
+                        if (ogr_layer != nullptr) {
+                            if (mTransformation) {
+                                delete mTransformation;
+                            }
+                            createProjections(ogr_layer->GetSpatialRef());
+
+                            auto points = backbuffer_rect_coord.toStdVector();
+                            std::vector<double> xs, ys;
+                            std::transform(points.begin(), points.end(), std::back_inserter(xs),
+                                           [](PointWorldCoord const &pt) {
+                                               return pt.rawPoint().x();
+                                           });
+                            std::transform(points.begin(), points.end(), std::back_inserter(ys),
+                                           [](PointWorldCoord const &pt) {
+                                               return pt.rawPoint().y();
+                                           });
+
+                            // Note: sequence is: topleft, topright, botRIGHT, botleft
+                            mInvTransformation->Transform(points.size(), xs.data(), ys.data());
+
+//                            qDebug() << "Window " << backbuffer_rect_coord.rawRect() << " => "
+//                                     << xs[0] << ys[0] << xs[2] << ys[2];
+//
+
                             // Reset reading.
                             ogr_layer->ResetReading();
 
                             // Set the Spatial Filter.
-                            ogr_layer->SetSpatialFilterRect(backbuffer_rect_coord.rawRect().left(), backbuffer_rect_coord.rawRect().top(), backbuffer_rect_coord.rawRect().right(), backbuffer_rect_coord.rawRect().bottom());
+                            ogr_layer->SetSpatialFilterRect(xs[0],
+                                                            ys[0],
+                                                            xs[2],
+                                                            ys[2]);
+
+                            if (!attributeFilter.empty()) {
+                                ogr_layer->SetAttributeFilter(attributeFilter.c_str());
+                            }
 
                             // Loop through features.
-                            OGRFeature* ogr_feature;
-                            while((ogr_feature = ogr_layer->GetNextFeature()) != nullptr)
-                            {
+                            OGRFeature *ogr_feature;
+                            while ((ogr_feature = ogr_layer->GetNextFeature()) != nullptr) {
+
+                                if (featurePainterSetupFunction != nullptr) {
+                                    featurePainterSetupFunction(ogr_feature, painter);
+                                } else {
+                                    painter.setPen(getPen());
+                                    painter.setBrush(getBrush());
+                                }
+
                                 // Draw the feature.
                                 drawFeature(ogr_feature, painter, controller_zoom);
 
@@ -262,6 +272,7 @@ namespace qmapcontrol
                 {
                     // Fetch the point.
                     ogr_exterior_ring->getPoint(i, &ogr_point);
+                    toWorldCoords(ogr_point);
 
                     // Add the point to be drawn.
                     polygon_px.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()), controller_zoom).rawPoint());
@@ -275,18 +286,14 @@ namespace qmapcontrol
                     QPolygonF pf;
                     for (int j = 0; j < inn->getNumPoints(); ++j) {
                         inn->getPoint(j, &ogr_point);
-                        pf.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()), controller_zoom).rawPoint());
+                        toWorldCoords(ogr_point);
+                        pf.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()),
+                                                                   controller_zoom).rawPoint());
                     }
                     inp.addPolygon(pf);
                 }
 
                 path = path.subtracted(inp);
-
-                // Set the pen to use.
-                painter.setPen(getPenPolygon());
-
-                // Set the brush to use.
-                painter.setBrush(getBrushPolygon());
 
                 // Draw the polygon line.
                 painter.drawPath(path);
@@ -294,7 +301,6 @@ namespace qmapcontrol
         }
         else if(wkbFlatten(ogr_geometry->getGeometryType()) == wkbMultiPolygon)
         {
-            qDebug() << "MultiPoly";
             // Cast to a multi polygon.
             const auto ogr_multi_polygon(static_cast<OGRMultiPolygon*>(ogr_geometry));
             if(ogr_multi_polygon == nullptr)
@@ -330,6 +336,7 @@ namespace qmapcontrol
                         {
                             // Fetch the point.
                             ogr_exterior_ring->getPoint(i, &ogr_point);
+                            toWorldCoords(ogr_point);
 
                             // Add the point to be drawn.
                             polygon_px.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()), controller_zoom).rawPoint());
@@ -343,7 +350,10 @@ namespace qmapcontrol
                             QPolygonF pf;
                             for (int j = 0; j < inn->getNumPoints(); ++j) {
                                 inn->getPoint(j, &ogr_point);
-                                pf.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()), controller_zoom).rawPoint());
+                                toWorldCoords(ogr_point);
+                                pf.append(projection::get().toPointWorldPx(
+                                        PointWorldCoord(ogr_point.getX(), ogr_point.getY()),
+                                        controller_zoom).rawPoint());
                             }
                             inp.addPolygon(pf);
                         }
@@ -352,14 +362,6 @@ namespace qmapcontrol
 
                     }
                 }
-
-                // Set the pen to use.
-                painter.setPen(getPenPolygon());
-
-                // Set the brush to use.
-                painter.setBrush(getBrushPolygon());
-
-                // Draw the polygon line.
                 painter.drawPath(path);
 
             }
@@ -367,7 +369,7 @@ namespace qmapcontrol
         else if(wkbFlatten(ogr_geometry->getGeometryType()) == wkbLineString) // wkbLineString
         {
             // Cast to a line string.
-            const auto ogr_line_string(static_cast<OGRLineString*>(ogr_geometry));
+            const auto ogr_line_string(static_cast<OGRLineString *>(ogr_geometry));
 
             // Prepare storage for point.
             OGRPoint ogr_point;
@@ -376,20 +378,105 @@ namespace qmapcontrol
             QPolygonF polygon_line_px;
 
             // Loop through the points.
-            for(int i = 0; i < ogr_line_string->getNumPoints(); ++i)
-            {
+            for (int i = 0; i < ogr_line_string->getNumPoints(); ++i) {
                 // Fetch the point.
                 ogr_line_string->getPoint(i, &ogr_point);
+                toWorldCoords(ogr_point);
 
                 // Add the point to be drawn.
-                polygon_line_px.append(projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()), controller_zoom).rawPoint());
+                polygon_line_px.append(
+                        projection::get().toPointWorldPx(PointWorldCoord(ogr_point.getX(), ogr_point.getY()),
+                                                         controller_zoom).rawPoint());
             }
-
-            // Set the pen to use.
-            painter.setPen(getPenLineString());
 
             // Draw the polygon line.
             painter.drawPolyline(polygon_line_px);
+        } else if (wkbFlatten(ogr_geometry->getGeometryType()) == wkbPoint) {
+            auto ogr_point(static_cast<OGRPoint *>(ogr_geometry));
+            toWorldCoords(*ogr_point);
+            auto point = projection::get().toPointWorldPx(PointWorldCoord(ogr_point->getX(), ogr_point->getY()),
+                                                          controller_zoom).rawPoint().toPoint();
+
+            QRect pointRect;
+            pointRect.setSize(mPointGeometrySize);
+            pointRect.moveCenter(point);
+
+            painter.drawEllipse(pointRect);
+        } else {
+//            qDebug() << "Unsupported feature: " << ogr_geometry->getGeometryType();
         }
     }
+
+std::vector<OGRFeature *> ESRIShapefile::findFeatureByRect(RectWorldCoord rw)
+{
+    std::vector<OGRFeature *> foundFeatures;
+
+    auto points = rw.toStdVector();
+    std::vector<double> xs, ys;
+    std::transform(points.begin(), points.end(), std::back_inserter(xs),
+                   [](PointWorldCoord const &pt) {
+                       return pt.rawPoint().x();
+                   });
+    std::transform(points.begin(), points.end(), std::back_inserter(ys),
+                   [](PointWorldCoord const &pt) {
+                       return pt.rawPoint().y();
+                   });
+
+    // Note: sequence is: topleft, topright, botRIGHT, botleft
+    mInvTransformation->Transform(points.size(), xs.data(), ys.data());
+
+    auto minX = std::min(xs[0], xs[1]);
+    auto maxX = std::max(xs[0], xs[1]);
+    auto minY = std::min(ys[1], ys[2]);
+    auto maxY = std::max(ys[1], ys[2]);
+
+    for (int i = 0; i < m_ogr_data_set->GetLayerCount(); ++i) {
+        const auto ogr_layer(m_ogr_data_set->GetLayer(i));
+
+        ogr_layer->ResetReading();
+        ogr_layer->SetSpatialFilterRect(minX,
+                                        minY,
+                                        maxX,
+                                        maxY);
+
+        if (!attributeFilter.empty()) {
+            ogr_layer->SetAttributeFilter(attributeFilter.c_str());
+        }
+
+        OGRFeature *ogr_feature;
+        while ((ogr_feature = ogr_layer->GetNextFeature()) != nullptr) {
+            foundFeatures.push_back(ogr_feature);
+        }
+    }
+
+    return foundFeatures;
+}
+
+void ESRIShapefile::toWorldCoords(OGRPoint &ogr) const
+{
+    double x = ogr.getX();
+    double y = ogr.getY();
+
+    mTransformation->Transform(1, &x, &y);
+    ogr.setX(x);
+    ogr.setY(y);
+}
+
+void ESRIShapefile::setAttributeFilter(std::string filter)
+{
+    attributeFilter = std::move(filter);
+    emit requestRedraw();
+}
+
+void ESRIShapefile::clearAttributeFilter()
+{
+    attributeFilter.clear();
+    emit requestRedraw();
+}
+
+void ESRIShapefile::setFeaturePainterSetupFunction(ESRIShapefile::FeaturePainterSetupFunction f)
+{
+    featurePainterSetupFunction = f;
+}
+
 }

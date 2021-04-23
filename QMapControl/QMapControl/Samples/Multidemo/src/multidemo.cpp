@@ -252,12 +252,6 @@ void Multidemo::setupLayout()
     QWidget::setLayout(layout_main);
 }
 
-void Multidemo::resizeEvent(QResizeEvent* event)
-{
-    // Set the new viewport size.
-    m_map_control->setViewportSize(event->size());
-}
-
 void Multidemo::toggleAddPoint(bool enable)
 {
     // Should we enable it?

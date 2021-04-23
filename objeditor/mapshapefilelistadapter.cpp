@@ -104,10 +104,10 @@ MapShapefileListAdapter::MapEntry::MapEntry(const QString &path, qmapcontrol::QM
 
     auto file = std::make_shared<qmapcontrol::ESRIShapefile>(mDataSource, "");
 
-    file->setPenPolygon(QPen(Qt::red));
+    file->setPen(QPen(Qt::red));
     QColor col (Qt::yellow);
     col.setAlpha(64);
-    file->setBrushPolygon(QBrush(col));
+    file->setBrush(QBrush(col));
 
     mLayer = std::make_shared<qmapcontrol::LayerESRIShapefile>(mPath.toStdString());
     mLayer->addESRIShapefile(file);

@@ -22,7 +22,9 @@ PopulationParametersQuery::PopulationParametersQuery(msqlitecpp::v2::Storage &_d
                       fieldValue)
 {
     if (period != 0) {
-        selectQuery.where(fieldPeriod == 0);
+        msqlitecpp::v2::WhereStatement ws(
+                (fieldPeriod == "0"), "OR", (msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null")));
+        selectQuery.where(ws);
         selectQuery.bind(period);
     }
 

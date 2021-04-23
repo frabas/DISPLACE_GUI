@@ -1561,7 +1561,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
             double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
 
-            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz))/12);
+            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
 
 
             //this is assuming that the M is uniformly applied to the pop

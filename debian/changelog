@@ -1,3 +1,9 @@
+displace (1.0.3) bionic; urgency=medium
+
+  * Experimental new input format implemented for some data structure.
+
+ -- Federico Fuga <happycactus@MintPad.studiofuga.local>  Fri, 07 Feb 2020 10:20:37 +0100
+
 displace (1.0) bionic; urgency=medium
 
   * Implement a effort harvest control rules entry point

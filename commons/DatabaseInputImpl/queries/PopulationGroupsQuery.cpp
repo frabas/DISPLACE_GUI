@@ -43,7 +43,7 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db, int p
         dispatcher["percent_szgroup_per_age"] = &fillPercentSzGroupPerAge;
         dispatcher["propmigrants"] = &fillPropMigrants;
         dispatcher["proprecru"] = &fillInitPropRecru;
-        //static_avai
+        dispatcher["static_avai"] = &fillStaticAvai;
     }
 }
 

@@ -71,3 +71,9 @@ fillPropMigrants(PopulationsLoader::PopulationData &population, int group, int a
 {
     at(population.init_prop_migrants_in_tot_N_at_szgroup, group) = value;
 }
+
+void
+fillStaticAvai(PopulationsLoader::PopulationData &population, int group, int age, int node, int period, double value)
+{
+    population.full_spatial_availability.insert(std::make_pair(node, value));
+}

@@ -29,4 +29,7 @@ void fillPercentSzGroupPerAge(PopulationsLoader::PopulationData &population, int
 void fillPropMigrants(PopulationsLoader::PopulationData &population, int group, int age, int node, int period,
                       double value);
 
+void fillStaticAvai(PopulationsLoader::PopulationData &population, int group, int age, int node, int period,
+                    double value);
+
 #endif //DISPLACE_POPGROUPSFUNCTIONS_H

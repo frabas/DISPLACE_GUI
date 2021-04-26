@@ -53,8 +53,8 @@ public:
         std::vector<double> init_tac;
         double tac_percent_simulated;
         double hyperstability_param;
-        double a_calib_cpue_multiplier;
-        double a_calib_weight_at_szgroup;
+        double a_calib_cpue_multiplier=1;
+        double a_calib_weight_at_szgroup=1;
     };
 
     std::vector<PopulationData> loadPopulationBaseData(int period);

@@ -1867,6 +1867,12 @@ int app_main(int argc, char const* argv[])
     popdyn_N.flush();
     guiSendUpdateCommand(popdyn_N_filename, 0);
 
+    // check input
+    //vector<double> W_at_szgroup = simModel->populations().at(0)->get_weight_at_szgroup();
+    //vector<double> prop_recru = simModel->populations().at(2)->get_proprecru_at_szgroup();
+    //vector<double> mort = simModel->populations().at(2)->get_M_at_szgroup();
+    //multimap<types::NodeId, double> mm =simModel->populations().at(2)->get_full_spatial_availability();
+
 
     // a check
     vector<double> there_some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();

@@ -75,3 +75,10 @@ fillStaticAvai(PopulationsLoader::PopulationData &population, int group, int age
 {
     population.full_spatial_availability.insert(std::make_pair(node, value));
 }
+
+void
+fillOthLand(PopulationsLoader::PopulationData& population, int group, int age, int node, int period, double value)
+{
+    population.oth_land.insert(std::make_pair(node, value));
+}
+

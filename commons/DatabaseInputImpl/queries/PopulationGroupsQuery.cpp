@@ -44,6 +44,7 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db, int p
         dispatcher["propmigrants"] = &fillPropMigrants;
         dispatcher["proprecru"] = &fillInitPropRecru;
         dispatcher["static_avai"] = &fillStaticAvai;
+        dispatcher["oth_land"] = &fillOthLand;
     }
 }
 

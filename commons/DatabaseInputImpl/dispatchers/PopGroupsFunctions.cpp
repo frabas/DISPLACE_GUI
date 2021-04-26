@@ -55,15 +55,13 @@ fillInitPropRecru(PopulationsLoader::PopulationData &population, int group, int 
 void fillPercentAgePerSzGroup(PopulationsLoader::PopulationData &population, int group, int age, int node, int period,
                               double value)
 {
-    // TODO check the ordering of the indexes!
-    at(at(population.percent_age_per_szgroup_matrix, age), group) = value;
+    at(at(population.percent_age_per_szgroup_matrix, group), age) = value;
 }
 
 void fillPercentSzGroupPerAge(PopulationsLoader::PopulationData &population, int group, int age, int node, int period,
                               double value)
 {
-    // TODO check the ordering of the indexes!
-    at(at(population.percent_szgroup_per_age_matrix, group), age) = value;
+    at(at(population.percent_szgroup_per_age_matrix, age), group) = value;
 }
 
 void

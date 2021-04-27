@@ -55,8 +55,8 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
         
         auto& vessel_beta = vesselData->vessel_betas_per_pop;
         idx_vessel += 1;
-        double nbpops = vessel_beta.size();
-        double nbszgroups = 14; // caution: magic number
+        int nbpops = vessel_beta.size();
+        int nbszgroups = 14; // caution: magic number
 
 
         auto v = new Vessel(

@@ -390,6 +390,9 @@ public:
         void set_spe_experiencedcpue_fgrounds (const std::vector<double> &_experiencedcpue);
         void set_spe_betas_per_pop (const std::vector<double> &_betas_per_pop);
         void set_spe_percent_tac_per_pop (const std::vector<double> &_tacs_per_pop);
+        void set_catch_pop_at_szgroup(std::vector<vector <double>> & init_catch_pop_at_szgroup);
+        void set_ping_catch_pop_at_szgroup(std::vector<vector <double>>& init_ping_catch_pop_at_szgroup);
+        void set_discards_pop_at_szgroup(std::vector<vector <double>> & init_discards_pop_at_szgroup);
         void set_spe_possible_metiers (const std::multimap <types::NodeId, int>  &_possible_metiers);
         void set_spe_freq_possible_metiers (const std::multimap <types::NodeId, double>  &_freq_possible_metiers);
 		void init_cpue_nodes_species(int nbnodes, int nbspecies);

@@ -259,23 +259,21 @@ Vessel::Vessel(Node* p_location,
     vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));// trip based landings...
     vector< vector<double> > init_ping_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups)); // ...instantaneous catches (land+disc)
     vector< vector<double> > init_discards_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
-    catch_pop_at_szgroup= init_catch_pop_at_szgroup;
-    ping_catch_pop_at_szgroup=init_ping_catch_pop_at_szgroup;
-    discards_pop_at_szgroup= init_discards_pop_at_szgroup;
     for(int i = 0; i < nbpops; i++)
     {
 
         for(int j = 0; j < nbszgroups; j++)
         {
 
-            catch_pop_at_szgroup[i][j] = 0;
-            ping_catch_pop_at_szgroup[i][j] = 0;
-            //dout(cout  << catch_pop_at_szgroup[i][j] << " ");
-            discards_pop_at_szgroup[i][j] = 0;
-            //dout(cout  << discards_pop_at_szgroup[i][j] << " ");
+            init_catch_pop_at_szgroup[i][j] = 0;
+            init_ping_catch_pop_at_szgroup[i][j] = 0;
+            init_discards_pop_at_szgroup[i][j] = 0;
         }
-        //dout(cout  << endl);
     }
+    this->set_catch_pop_at_szgroup(init_catch_pop_at_szgroup);
+    this->set_ping_catch_pop_at_szgroup(init_ping_catch_pop_at_szgroup);
+    this->set_discards_pop_at_szgroup (init_discards_pop_at_szgroup);
+
 
     // length class
     if(length<15) {
@@ -1461,6 +1459,22 @@ void Vessel::set_spe_percent_tac_per_pop (const vector<double> &_tacs_per_pop)
     percent_tac_per_pop=_tacs_per_pop;
 }
 
+void Vessel::set_catch_pop_at_szgroup(vector<vector <double> >& init_catch_pop_at_szgroup)
+{
+    catch_pop_at_szgroup = init_catch_pop_at_szgroup;
+}
+
+void Vessel::set_ping_catch_pop_at_szgroup(vector<vector <double> >& init_ping_catch_pop_at_szgroup)
+{
+    ping_catch_pop_at_szgroup = init_ping_catch_pop_at_szgroup;
+}
+
+
+void Vessel::set_discards_pop_at_szgroup(vector<vector <double> >& init_discards_pop_at_szgroup)
+{
+    discards_pop_at_szgroup = init_discards_pop_at_szgroup;
+}
+
 
 void Vessel::set_fishing_credits (const vector<double> &_fishing_credits)
 {
@@ -2632,22 +2646,23 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
 
     // for loop over pop
-    vector <double> global_quotas(catch_pop_at_szgroup.size(), 0);
-    vector <int> individual_quotas(catch_pop_at_szgroup.size(), 0);
+    int nbpops = this->get_catch_pop_at_szgroup().size();
+    vector <double> global_quotas(nbpops, 0);
+    vector <int> individual_quotas(nbpops, 0);
     vector <double> grouped_quotas(*max_element(grouped_tacs.begin(),grouped_tacs.end())+1, 0);
     if(is_tacs)
     {
         // IQs
         if(tstep>1  && is_individual_vessel_quotas)
         {
-            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+            for (unsigned int pop=0; pop< nbpops; pop++)
             {
                individual_quotas.at(pop) = this->get_individual_tac(pop); // default when IQ
                if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=individual_quotas.at(pop); // sum up if grouped quotas
             }
             if(is_grouped_tacs)
             {
-               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+               for (unsigned int pop=0; pop< nbpops; pop++)
                 {
                    individual_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
                 }
@@ -2666,7 +2681,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
             }
             if(is_grouped_tacs)
             {
-               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+               for (unsigned int pop=0; pop< nbpops; pop++)
                 {
                    global_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
                 }
@@ -2680,12 +2695,12 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
     // OUTPUTS
     // declare with length nbpops
-    vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
+    vector<double> tot_catch_per_pop(nbpops);
 
     //this->clear_catch_pop_at_szgroup();
 
     // for loop over pop
-    for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+    for (unsigned int pop=0; pop< nbpops; pop++)
     {
         int namepop = populations[pop]->get_name();
 

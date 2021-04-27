@@ -92,7 +92,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
             calib_oth_landings = t.getCalibLandingsStock();
             calib_w = t.getCalibW();
             calib_cpue = t.getCalibCpue();
-            interesting_harbours = t.getInterestingArbours();
+            interesting_harbours = t.getInterestingHarbours();
             return true;
         } catch (std::exception &x) {
             std::cerr << "Cannot read config database: " << x.what() << "\n";

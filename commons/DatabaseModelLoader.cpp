@@ -47,7 +47,7 @@ bool DatabaseModelLoader::loadConfigImpl(int &nbpops, int &nbbenthospops, std::v
     calib_oth_landings = config.getCalibLandingsStock();
     calib_w = config.getCalibW();
     calib_cpue = config.getCalibCpue();
-    interesting_harbours = config.getInterestingArbours();
+    interesting_harbours = config.getInterestingHarbours();
 
     return true;
 }

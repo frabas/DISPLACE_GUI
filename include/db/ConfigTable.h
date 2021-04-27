@@ -120,7 +120,7 @@ public:
         return getVector<double>("calib_cpue_stock");
     }
 
-    auto getInterestingArbours() const
+    auto getInterestingHarbours() const
     {
         return types::helpers::toIdVector<types::NodeId>(getVector<double>("interesting_harbours"));
     }

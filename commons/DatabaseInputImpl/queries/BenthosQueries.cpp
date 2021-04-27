@@ -29,7 +29,7 @@ BenthosQueries::map BenthosQueries::dispatcher;
 
 static void fillMeanWeight(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
 {
-    benthos.mmapidparam1.insert(std::make_pair(funcgroup, value));
+    benthos.meanWeightPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
 }
 
 BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)

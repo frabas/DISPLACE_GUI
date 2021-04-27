@@ -61,8 +61,10 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
         if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-            multimap<int, double>::iterator lower_it_lgy = loadedDataBenthos.mmapidparam2.lower_bound(0);
-            multimap<int, double>::iterator upper_it_lgy = loadedDataBenthos.mmapidparam2.upper_bound(0);
+            multimap<int, double>::iterator lower_it_lgy = loadedDataBenthos.longevityClassesConditionPerFuncGroupPerNode.lower_bound(
+                    0);
+            multimap<int, double>::iterator upper_it_lgy = loadedDataBenthos.longevityClassesConditionPerFuncGroupPerNode.upper_bound(
+                    0);
 
             vector<double> a_vector;
             for (multimap<int, double>::iterator pos = lower_it_lgy; pos != upper_it_lgy; pos++) {
@@ -78,9 +80,9 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 cin >> aa;
             }
 
-            multimap<int, double>::iterator lower_landdd = loadedDataBenthos.mmapidparam3.lower_bound(
+            multimap<int, double>::iterator lower_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.lower_bound(
                     a_marine_landscape);
-            multimap<int, double>::iterator upper_landdd = loadedDataBenthos.mmapidparam3.upper_bound(
+            multimap<int, double>::iterator upper_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.upper_bound(
                     a_marine_landscape);
             for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                 outc(cout << pos->second << endl);
@@ -89,9 +91,9 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
             }
         } else {
             if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-                multimap<int, double>::iterator lower_land = loadedDataBenthos.mmapidparam4.lower_bound(
+                multimap<int, double>::iterator lower_land = loadedDataBenthos.numberPerFuncGroupPerNode.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_land = loadedDataBenthos.mmapidparam4.upper_bound(
+                multimap<int, double>::iterator upper_land = loadedDataBenthos.numberPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_land; pos != upper_land; pos++) {
                     outc(cout << pos->second << endl);
@@ -99,9 +101,9 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                     init_prop_funcgr_number_per_node.push_back(pos->second);
                 }
 
-                multimap<int, double>::iterator lower_landddd = loadedDataBenthos.mmapidparam5.lower_bound(
+                multimap<int, double>::iterator lower_landddd = loadedDataBenthos.carryingCapNumberPerFuncGroupPerNode.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_landddd = loadedDataBenthos.mmapidparam5.upper_bound(
+                multimap<int, double>::iterator upper_landddd = loadedDataBenthos.carryingCapNumberPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landddd; pos != upper_landddd; pos++) {
                     outc(cout << pos->second << endl);
@@ -112,9 +114,9 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
             } else {
 
-                multimap<int, double>::iterator lower_land2 = loadedDataBenthos.mmapidparam6.lower_bound(
+                multimap<int, double>::iterator lower_land2 = loadedDataBenthos.propPerFuncGroupPerNode.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_land2 = loadedDataBenthos.mmapidparam6.upper_bound(
+                multimap<int, double>::iterator upper_land2 = loadedDataBenthos.propPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
 
                 for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
@@ -132,9 +134,9 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                     cin >> aa;
                 }
 
-                multimap<int, double>::iterator lower_landdd = loadedDataBenthos.mmapidparam3.lower_bound(
+                multimap<int, double>::iterator lower_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.lower_bound(
                         a_marine_landscape);
-                multimap<int, double>::iterator upper_landdd = loadedDataBenthos.mmapidparam3.upper_bound(
+                multimap<int, double>::iterator upper_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
                     outc(cout << pos->second << endl);
@@ -147,8 +149,10 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         }
 
 
-        multimap<int, double>::iterator lower_land3 = loadedDataBenthos.mmapidparam1.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_land3 = loadedDataBenthos.mmapidparam1.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_land3 = loadedDataBenthos.meanWeightPerFuncGroupPerNode.lower_bound(
+                a_marine_landscape);
+        multimap<int, double>::iterator upper_land3 = loadedDataBenthos.meanWeightPerFuncGroupPerNode.upper_bound(
+                a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land3; pos != upper_land3; pos++) {
             outc(cout << pos->second << endl);
             // biomass per cell for this group specific to this landscape
@@ -156,16 +160,20 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         }
 
 
-        multimap<int, double>::iterator lower_landd = loadedDataBenthos.mmapidparam7.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_landd = loadedDataBenthos.mmapidparam7.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_landd = loadedDataBenthos.recoveryRatePerFuncGroupPerNode.lower_bound(
+                a_marine_landscape);
+        multimap<int, double>::iterator upper_landd = loadedDataBenthos.recoveryRatePerFuncGroupPerNode.upper_bound(
+                a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_landd; pos != upper_landd; pos++) {
             outc(cout << pos->second << endl);
             // logistic recovery rates for this group specific to this landscape
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
 
-        multimap<int, double>::iterator lower_land2 = loadedDataBenthos.mmapidparam8.lower_bound(a_marine_landscape);
-        multimap<int, double>::iterator upper_land2 = loadedDataBenthos.mmapidparam8.upper_bound(a_marine_landscape);
+        multimap<int, double>::iterator lower_land2 = loadedDataBenthos.hBetasPerFuncGroupPerNode.lower_bound(
+                a_marine_landscape);
+        multimap<int, double>::iterator upper_land2 = loadedDataBenthos.hBetasPerFuncGroupPerNode.upper_bound(
+                a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
             outc(cout << pos->second << endl);
             // habitat_deltas_per_pop specific to this landscape
@@ -191,7 +199,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                                           p->model->is_benthos_in_numbers(),
                                           p->model->is_benthos_in_longevity_classes(),
                                           init_h_betas_per_pop,
-                                          loadedDataBenthos.mmapidparam2
+                                          loadedDataBenthos.longevityClassesConditionPerFuncGroupPerNode
         );
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);

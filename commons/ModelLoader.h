@@ -60,16 +60,16 @@ public:
     virtual bool loadPopulations(int year) = 0;
 
     struct BenthosData {
-        int int1;       // is_benthos_in_numbers
-        int int2;       // is_benthos_in_longevity_classes
-        std::multimap<int, double> mmapidparam1;
-        std::multimap<int, double> mmapidparam2;
-        std::multimap<int, double> mmapidparam3;
-        std::multimap<int, double> mmapidparam4;
-        std::multimap<int, double> mmapidparam5;
-        std::multimap<int, double> mmapidparam6;
-        std::multimap<int, double> mmapidparam7;
-        std::multimap<int, double> mmapidparam8;
+        int isBenthosInNumbers;       // is_benthos_in_numbers
+        int isBenthosInLongevityClasses;       // is_benthos_in_longevity_classes
+        std::multimap<int, double> meanWeightPerFuncGroupPerNode;
+        std::multimap<int, double> longevityClassesConditionPerFuncGroupPerNode;
+        std::multimap<int, double> carryingCapBiomassPerFuncGroupPerNode;
+        std::multimap<int, double> numberPerFuncGroupPerNode;
+        std::multimap<int, double> carryingCapNumberPerFuncGroupPerNode;
+        std::multimap<int, double> propPerFuncGroupPerNode;
+        std::multimap<int, double> recoveryRatePerFuncGroupPerNode;
+        std::multimap<int, double> hBetasPerFuncGroupPerNode;
     };
 
     SimModel &model();

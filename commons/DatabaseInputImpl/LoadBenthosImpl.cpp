@@ -12,15 +12,15 @@ DatabaseModelLoader::loadBenthosData(const PopSceOptions &dyn_pop_sce, const Dyn
     BenthosData data;
 
     if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-        data.int1 = 1; // is_benthos_in_numbers
+        data.isBenthosInNumbers = 1; // is_benthos_in_numbers
     } else {
-        data.int1 = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
+        data.isBenthosInNumbers = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
     }
 
     if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-        data.int2 = 1; //is_benthos_in_longevity_classes
+        data.isBenthosInLongevityClasses = 1; //is_benthos_in_longevity_classes
     } else {
-        data.int2 = 0; // is_benthos_in_longevity_classes
+        data.isBenthosInLongevityClasses = 0; // is_benthos_in_longevity_classes
     }
 
 

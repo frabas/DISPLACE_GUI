@@ -209,47 +209,50 @@ ModelLoader::BenthosData TextfileModelLoader::loadBenthosData(
     BenthosData data;
 
     if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-        data.int1 = 1; // is_benthos_in_numbers
+        data.isBenthosInNumbers = 1; // is_benthos_in_numbers
     } else {
-        data.int1 = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
+        data.isBenthosInNumbers = 0; // is_benthos_in_numbers // if not N then it impacts the benthos biomass by default
     }
 
     if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-        data.int2 = 1; //is_benthos_in_longevity_classes
+        data.isBenthosInLongevityClasses = 1; //is_benthos_in_longevity_classes
     } else {
-        data.int2 = 0; // is_benthos_in_longevity_classes
+        data.isBenthosInLongevityClasses = 0; // is_benthos_in_longevity_classes
     }
 
 
 // read estimates
-    data.mmapidparam1 = read_meanw_funcgr_per_landscape(p->folder_name_parameterization,
-                                                        p->inputfolder);
+    data.meanWeightPerFuncGroupPerNode = read_meanw_funcgr_per_landscape(p->folder_name_parameterization,
+                                                                         p->inputfolder);
 
 
     if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
-        data.mmapidparam2 = read_longevity_classes_condition_per_node(p->folder_name_parameterization,
-                                                                      p->inputfolder);
-        data.mmapidparam3 = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+        data.longevityClassesConditionPerFuncGroupPerNode = read_longevity_classes_condition_per_node(
+                p->folder_name_parameterization,
+                p->inputfolder);
+        data.carryingCapBiomassPerFuncGroupPerNode = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
                 p->folder_name_parameterization, p->inputfolder);
     } else {
         if (dyn_pop_sce.option(Options::modelBenthosInN)) {
-            data.mmapidparam4 = read_prop_funcgr_number_per_node_per_landscape(p->folder_name_parameterization,
-                                                                               p->inputfolder);
-            data.mmapidparam5 = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(
+            data.numberPerFuncGroupPerNode = read_prop_funcgr_number_per_node_per_landscape(
+                    p->folder_name_parameterization,
+                    p->inputfolder);
+            data.carryingCapNumberPerFuncGroupPerNode = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(
                     p->folder_name_parameterization, p->inputfolder);
         } else {
-            data.mmapidparam6 = read_prop_funcgr_biomass_per_node_per_landscape(p->folder_name_parameterization,
-                                                                                p->inputfolder);
-            data.mmapidparam3 = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
+            data.propPerFuncGroupPerNode = read_prop_funcgr_biomass_per_node_per_landscape(
+                    p->folder_name_parameterization,
+                    p->inputfolder);
+            data.carryingCapBiomassPerFuncGroupPerNode = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(
                     p->folder_name_parameterization, p->inputfolder);
         }
     }
 
 
-    data.mmapidparam7 = read_logistic_recovery_rates_per_month_per_funcgr(
+    data.recoveryRatePerFuncGroupPerNode = read_logistic_recovery_rates_per_month_per_funcgr(
             p->folder_name_parameterization, p->inputfolder);
 
-    data.mmapidparam8 = read_habitat_deltas_per_pop(p->folder_name_parameterization,
-                                                    p->inputfolder);
+    data.hBetasPerFuncGroupPerNode = read_habitat_deltas_per_pop(p->folder_name_parameterization,
+                                                                 p->inputfolder);
     return data;
 }

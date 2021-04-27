@@ -2163,6 +2163,7 @@ void Node::set_is_harbour(int id)
 {
     harbour = id;
     is_harbour = true;
+    if(id==0) is_harbour = false; // reading 0 in entry means the node is at_sea
 }
 
 

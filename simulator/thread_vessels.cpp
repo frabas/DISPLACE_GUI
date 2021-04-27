@@ -496,13 +496,17 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
         outc(cout  << "roadmap is not empty... ");
         // display the road map
-        //list<int>::iterator pos;
-        //dout(cout  << "roadmap (in): ");
-        //for(pos=lst.begin(); pos!=lst.end(); pos++)
-        //{
-        //    dout(cout  << *pos << " ");
-        //}
-        //dout(cout  << endl);
+         /* // show the roadmap
+        list<types::NodeId> road= this->get_roadmap();
+        // check path
+        list<types::NodeId>::iterator road_iter = road.begin();
+            dout(cout << "path: ");
+            for( ; road_iter != road.end(); road_iter++)
+            {
+               dout(cout << *road_iter << " " );
+            }
+            dout(cout << endl);
+        */
 
         // find.next.pt.on.the.graph()
         model->vessels()[index_v]->find_next_point_on_the_graph(model->nodes());

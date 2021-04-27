@@ -799,6 +799,11 @@ int app_main(int argc, char const* argv[])
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
 #endif
     createRTreeFromNodes(simModel->nodes(), simModel->diffusionTree());
+    
+    // check 
+    //bool ns = simModel->nodes().at(0)->get_is_harbour();
+    //cout << ns;
+
 
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);

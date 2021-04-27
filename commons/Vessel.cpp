@@ -4868,17 +4868,17 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         path.pop_front();		 // delete the first node (departure) because we are lying in...
         this->set_roadmap(path);
 
-       /* // show the roadmap
+        /* show the roadmap
         list<types::NodeId> road= this->get_roadmap();
 
         // check path
         list<types::NodeId>::iterator road_iter = road.begin();
-            dout(cout << "path: ");
+            cout << "path: ";
             for( ; road_iter != road.end(); road_iter++)
             {
-               dout(cout << *road_iter << " " );
+              cout << *road_iter << " " ;
             }
-            dout(cout << endl);
+            cout << endl;
         */
 
         // then, call to find.next.pt.on.the.graph()

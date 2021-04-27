@@ -309,6 +309,10 @@ int will_stop=0; // see Options::DEBUG_TAC
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
 if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
+    // check N
+    //vector <double>tot_N_at_szgroup = populations.at(0)->get_tot_N_at_szgroup();
+    
+
     int will_I_discard_all=0; // init
     vector<int> a_mls_cat = vessels.at(0)->get_metier()->get_mls_cat_per_pop();
 
@@ -776,7 +780,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 cout << "Fail in aggregate_N after impact computation" << endl;
                 return false;
             }
-
+            vector <double>tot_N_at_szgroup = populations.at(name_pop)->get_tot_N_at_szgroup();
+            cout << "hi" << endl;
 
             // then, compute F_at_age from F_at_szgroup as -log(N(t)/N(t-1))
             // knowing the ALK i.e.  prop szgroup in each age
@@ -1603,7 +1608,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 dout(cout  << "END: POP MODEL TASKS----------" << endl);
 
-   // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+    //vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
    // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
    // cout << "tstep " << tstep << " AT THE END OF BIOL: a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 

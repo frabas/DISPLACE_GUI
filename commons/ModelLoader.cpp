@@ -38,12 +38,26 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
     auto loadedDataBenthos = loadBenthosData(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
 
+    // find the vector of landscapes
+    cout << "landscape codes are:" << endl;
+    vector<int> v;
+    for (auto it = loadedDataBenthos.meanWeightPerFuncGroupPerNode.begin(), end = loadedDataBenthos.meanWeightPerFuncGroupPerNode.end();
+        it != end;
+        it = loadedDataBenthos.meanWeightPerFuncGroupPerNode.upper_bound(it->first)
+        )
+    {
+        v.push_back(it->first);
+        cout << it->first << endl;
+    }
+    model().set_graph_point_code_landscape(std::move(v));
     int nbland = model().graph_point_code_landscape_unique().size();
+
+   
 
     // creation of a vector of benthos shared (one benthos shared per landscape)
     auto benthoss = vector<Benthos *>(nbland);
 
-    outc(cout << "nb of marine landscapes " << nbland << endl);
+    cout << "nb of marine landscapes " << nbland << endl;
 
     // LOOP OVER BENTHOS OBJECT
     for (int landscape = 0; landscape < nbland; landscape++) {

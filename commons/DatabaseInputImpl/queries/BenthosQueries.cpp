@@ -29,23 +29,28 @@ BenthosQueries::map BenthosQueries::dispatcher;
 
 static void fillMeanWeight(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
 {
-    benthos.meanWeightPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+    benthos.meanWeightPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
 }
 
-static void fillCarryingCap(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
+static void fillCarryingCapNumber(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
 {
-    benthos.carryingCapNumberPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+    benthos.carryingCapNumberPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
+}
+
+static void fillCarryingCapBiomass(ModelLoader::BenthosData& benthos, int landscape, int funcgroup, int period, double value)
+{
+    benthos.carryingCapBiomassPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
 }
 
 static void
 fillRecoveryingRate(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
 {
-    benthos.recoveryRatePerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+    benthos.recoveryRatePerFuncGroupPerNode.insert(std::make_pair(landscape, value));
 }
 
 static void fillPropOnHab(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
 {
-    benthos.propPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+    benthos.propPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
 }
 
 BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
@@ -67,7 +72,8 @@ BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
 
     if (dispatcher.empty()) {
         dispatcher["MeanWeight"] = &fillMeanWeight;
-        dispatcher["CarryingCap"] = &fillCarryingCap;
+        dispatcher["carryingCap"] = &fillCarryingCapNumber;
+        dispatcher["carryingCap"] = &fillCarryingCapBiomass;
         dispatcher["RecoveryRate"] = &fillRecoveryingRate;
         dispatcher["PropOnHab"] = &fillPropOnHab;
     }

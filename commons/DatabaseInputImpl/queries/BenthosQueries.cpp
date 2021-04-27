@@ -32,6 +32,22 @@ static void fillMeanWeight(ModelLoader::BenthosData &benthos, int landscape, int
     benthos.meanWeightPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
 }
 
+static void fillCarryingCap(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
+{
+    benthos.carryingCapNumberPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+}
+
+static void
+fillRecoveryingRate(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
+{
+    benthos.recoveryRatePerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+}
+
+static void fillPropOnHab(ModelLoader::BenthosData &benthos, int landscape, int funcgroup, int period, double value)
+{
+    benthos.propPerFuncGroupPerNode.insert(std::make_pair(funcgroup, value));
+}
+
 BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
         : db(_db),
           selectQuery(db,
@@ -51,6 +67,9 @@ BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
 
     if (dispatcher.empty()) {
         dispatcher["MeanWeight"] = &fillMeanWeight;
+        dispatcher["CarryingCap"] = &fillCarryingCap;
+        dispatcher["RecoveryRate"] = &fillRecoveryingRate;
+        dispatcher["PropOnHab"] = &fillPropOnHab;
     }
 }
 

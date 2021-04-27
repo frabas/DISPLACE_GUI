@@ -4,6 +4,7 @@
 
 #include "DatabaseModelLoader.h"
 #include "Impl.h"
+#include "queries/BenthosQueries.h"
 
 ModelLoader::BenthosData
 DatabaseModelLoader::loadBenthosData(const PopSceOptions &dyn_pop_sce, const DynAllocOptions &dyn_alloc_sce,
@@ -23,6 +24,8 @@ DatabaseModelLoader::loadBenthosData(const PopSceOptions &dyn_pop_sce, const Dyn
         data.isBenthosInLongevityClasses = 0; // is_benthos_in_longevity_classes
     }
 
+    BenthosQueries queries(*p->db);
+    queries.execute(data);
 
-    return BenthosData();
+    return data;
 }

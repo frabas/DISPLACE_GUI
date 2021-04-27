@@ -53,7 +53,7 @@ class BenthosQueries {
 public:
     explicit BenthosQueries(msqlitecpp::v2::Storage &_db, int period = 0);
 
-    void execute(std::vector<ModelLoader::BenthosData> &benthos);
+    void execute(ModelLoader::BenthosData &benthos);
 };
 
 #endif //DISPLACE_BENTHOSQUERIES_H

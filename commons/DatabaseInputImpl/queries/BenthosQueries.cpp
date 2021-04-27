@@ -85,11 +85,11 @@ void BenthosQueries::dispatch(ModelLoader::BenthosData &benthos, std::string par
 
 }
 
-void BenthosQueries::execute(std::vector<ModelLoader::BenthosData> &benthos)
+void BenthosQueries::execute(ModelLoader::BenthosData &benthos)
 {
     selectQuery.execute(
             [this, &benthos](std::string parameter, int landscape, int funcgroup, int period, double value) {
-                dispatch(benthos[landscape], parameter, landscape, funcgroup, period, value);
+                dispatch(benthos, parameter, landscape, funcgroup, period, value);
                 return true;
             });
 }

@@ -53,6 +53,11 @@ static void fillPropOnHab(ModelLoader::BenthosData &benthos, int landscape, int 
     benthos.propPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
 }
 
+static void fillDeltaHab(ModelLoader::BenthosData& benthos, int landscape, int funcgroup, int period, double value)
+{
+    benthos.hBetasPerFuncGroupPerNode.insert(std::make_pair(landscape, value));
+}
+
 BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
         : db(_db),
           selectQuery(db,
@@ -76,6 +81,7 @@ BenthosQueries::BenthosQueries(msqlitecpp::v2::Storage &_db, int period)
         dispatcher["carryingCap"] = &fillCarryingCapBiomass;
         dispatcher["RecoveryRate"] = &fillRecoveryingRate;
         dispatcher["PropOnHab"] = &fillPropOnHab;
+        dispatcher["DeltaHab"] = &fillDeltaHab;
     }
 }
 

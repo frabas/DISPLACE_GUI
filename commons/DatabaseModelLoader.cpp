@@ -68,10 +68,3 @@ bool DatabaseModelLoader::loadWindmillsImpl()
 {
     return false;
 }
-
-ModelLoader::BenthosData
-DatabaseModelLoader::loadBenthosData(const PopSceOptions &dyn_pop_sce, const DynAllocOptions &dyn_alloc_sce,
-                                     const std::string &biolsce, const std::string &fleetsce)
-{
-    return BenthosData();
-}

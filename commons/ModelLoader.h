@@ -60,8 +60,8 @@ public:
     virtual bool loadPopulations(int year) = 0;
 
     struct BenthosData {
-        int int1;
-        int int2;
+        int int1;       // is_benthos_in_numbers
+        int int2;       // is_benthos_in_longevity_classes
         std::multimap<int, double> mmapidparam1;
         std::multimap<int, double> mmapidparam2;
         std::multimap<int, double> mmapidparam3;

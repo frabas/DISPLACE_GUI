@@ -163,7 +163,7 @@ set(SOURCES
         DatabaseInputImpl/queries/PopulationTableDefs.cpp DatabaseInputImpl/queries/PopulationGroupsQuery.cpp
         DatabaseInputImpl/queries/PopulationGroupsQuery.h DatabaseInputImpl/dispatchers/PopGroupsFunctions.cpp
         DatabaseInputImpl/dispatchers/PopGroupsFunctions.h
-        )
+        DatabaseInputImpl/LoadBenthosImpl.cpp DatabaseInputImpl/queries/BenthosQueries.cpp DatabaseInputImpl/queries/BenthosQueries.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

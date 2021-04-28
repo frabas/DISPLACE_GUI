@@ -26,6 +26,14 @@ db::Column<db::ColumnTypes::Real> fieldValue{"Value"};
 
 }
 
+template<typename V>
+V& at(std::vector<V>& v, int index)
+{
+    while (v.size() <= index) {
+        v.emplace_back(V{});
+    }
+    return v.at(index);
+}
 
 struct MetiersLoader::Impl {
     msqlitecpp::v2::Storage& db;
@@ -50,6 +58,11 @@ struct MetiersLoader::Impl {
     db::SelectStatement<
             decltype(fieldParameter), decltype(fieldSpecies), decltype(fieldSzGroup), decltype(fieldValue)>
             selectParamSpeciesSzGroup;
+
+    db::SelectStatement<
+        decltype(fieldParameter), decltype(fieldFuncGroup), decltype(fieldLandscape), decltype(fieldValue)>
+        selectParamFuncGroupLandscape;
+    
 
     Impl(msqlitecpp::v2::Storage &thedb);
 
@@ -89,12 +102,15 @@ MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
     : db(thedb),
       selectOpt1ValueFromNameParameter(db, MetierTableName, fieldOpt1, fieldValue),
       selectParamOpt1Opt2ValueFromNamePeriod(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
-      selectParamSpeciesSzGroup(db, MetierTableNameSpSz, fieldParameter, fieldSpecies, fieldSzGroup, fieldValue)
+      selectParamSpeciesSzGroup(db, MetierTableNameSpSz, fieldParameter, fieldSpecies, fieldSzGroup, fieldValue),
+      selectParamFuncGroupLandscape(db, MetierTableNameScape, fieldParameter, fieldFuncGroup, fieldLandscape, fieldValue)
 {
-    selectOpt1ValueFromNameParameter.where(fieldMetiername == "name" && fieldParameter == "parameter");
-    selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "name" && fieldPeriod == "period");
+    selectOpt1ValueFromNameParameter.where(fieldMetiername == "MetierName" && fieldParameter == "parameter");
+    selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "MetierName" && fieldPeriod == "period");
     selectParamSpeciesSzGroup.where(
-            fieldMetiername == "name" && fieldSpecies == "species" && fieldSzGroup == "szgroup");
+            fieldMetiername == "MetierName" && fieldSpecies == "species" && fieldSzGroup == "szgroup");
+    selectParamFuncGroupLandscape.where(
+        fieldMetiername == "MetierName" && fieldFuncGroup == "funcgroup" && fieldLandscape == "landscape");
 }
 
 std::vector<std::string> MetiersLoader::Impl::getListOfAllMetiers()
@@ -247,12 +263,12 @@ class MetiersSpeciesSzGroupDispatcher {
 
     static void loadSelectivityPerStock(MetiersLoader::MetierData &data, int species, int szgroup, double val)
     {
-        data.selectivity_per_stock.at(species).at(szgroup) = val;    
-    }
+            at(at(data.selectivity_per_stock, species),szgroup) = val;
+      }
 
     static void loadSelectivityOthPerStock(MetiersLoader::MetierData& data, int species, int szgroup, double val)
     {
-        data.selectivity_per_stock_ogives_for_oth_land.at(species).at(szgroup) = val;
+        at(at(data.selectivity_per_stock_ogives_for_oth_land, species), szgroup) = val;   
     }
 
 public:
@@ -345,6 +361,15 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
                 szGroupDispatcher.load(param, species, group, value);
                 return true;
             });
+
+    MetiersFuncGroupLandscapeDispatcher FuncGroupLandscapeDispatcher(data);
+    selectParamFuncGroupLandscape.bind(metiername);
+    selectParamFuncGroupLandscape.execute(
+        [&data, &FuncGroupLandscapeDispatcher](std::string param, int funcgroup, int landscape, double value) {
+            FuncGroupLandscapeDispatcher.load(param, funcgroup, landscape, value);
+            return true;
+        });
+
 
     return data;
 }

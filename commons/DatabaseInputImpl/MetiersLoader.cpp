@@ -112,7 +112,9 @@ MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
             msqlitecpp::v2::WhereStatement((fieldPeriod == "period"), "OR",
                                            msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null")));
     selectParamFuncGroupLandscape.where(
-            fieldMetiername == "MetierName" && fieldFuncGroup == "funcgroup" && fieldLandscape == "landscape");
+            fieldMetiername == "MetierName" &&
+            msqlitecpp::v2::WhereStatement((fieldPeriod == "period"), "OR",
+                msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null")));
 }
 
 std::vector<std::string> MetiersLoader::Impl::getListOfAllMetiers()
@@ -310,7 +312,7 @@ class MetiersFuncGroupLandscapeDispatcher {
     static map dispatcher;
     std::shared_ptr<MetiersLoader::MetierData> metier;
 
-    static void loadDepletionOnHab(MetiersLoader::MetierData& data, int funcgroup, int landscape, double val)
+    static void loadDepletionOnHab(MetiersLoader::MetierData& data, int landscape, int funcgroup, double val)
     {
         data.loss_after_1_passage.insert(std::make_pair(landscape, val));
     }
@@ -369,10 +371,12 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
             });
 
     MetiersFuncGroupLandscapeDispatcher FuncGroupLandscapeDispatcher(data);
-    selectParamFuncGroupLandscape.bind(metiername);
+    selectParamFuncGroupLandscape.bind(metiername, period);
+    std::cout << "SQL: " << selectParamFuncGroupLandscape.toString() << "; %1="
+        << metiername << ", %2=" << period << "\n";
     selectParamFuncGroupLandscape.execute(
-            [&data, &FuncGroupLandscapeDispatcher](std::string param, int funcgroup, int landscape, double value) {
-                FuncGroupLandscapeDispatcher.load(param, funcgroup, landscape, value);
+            [&data, &FuncGroupLandscapeDispatcher](std::string param, int landscape, int funcgroup, double value) {
+                FuncGroupLandscapeDispatcher.load(param, landscape, funcgroup, value);
                 return true;
             });
 

@@ -2674,7 +2674,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
         if(!is_individual_vessel_quotas)
         {
             // remember that grouped_tacs is in form of e.g. 1 1 1 2 2 3 3 4 4 5 5 5 5 5 etc. as many as stocks.
-            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+            for (unsigned int pop=0; pop< nbpops; pop++)
             {
              global_quotas.at(pop) = populations.at(pop)->get_tac()->get_current_tac(); // default when global TAC
              if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=global_quotas.at(pop); // sum up if grouped quotas
@@ -2860,7 +2860,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         if(selszi==1) avai_beta_param =populations[pop]->get_avai2_beta();
                         if(selszi==2) avai_beta_param =populations[pop]->get_avai3_beta();
                         if(selszi==3) avai_beta_param =populations[pop]->get_avai5_beta();
-                        if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TO DO: simplify this crap...
+                        if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TODO: discuss such assumptions
                             avai_betas +=  avai_beta_param * avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
                         }
 
@@ -3494,7 +3494,8 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
             double a_shape;
             double a_scale;
             double cpue;
-            if(idx_node_v<(int)gshape_cpue_nodes_species.size()){
+            if(idx_node_v<(int)gshape_cpue_nodes_species.size())
+            {
                 a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
                 // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);

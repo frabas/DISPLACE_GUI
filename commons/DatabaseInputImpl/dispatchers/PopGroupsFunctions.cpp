@@ -29,6 +29,12 @@ void fillInitM(PopulationsLoader::PopulationData &population, int group, int age
     at(population.init_M_at_szgroup, group) = value;
 }
 
+void fillSelectedSzgroups(PopulationsLoader::PopulationData& population, int group, int age, int node, int period, double value)
+{
+    at(population.selected_szgroups, group) = value;
+}
+
+
 void fillInitFec(PopulationsLoader::PopulationData &population, int group, int age, int node, int period, double value)
 {
     at(population.init_fecundity_at_szgroup, group) = value;

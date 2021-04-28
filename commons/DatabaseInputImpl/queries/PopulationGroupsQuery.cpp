@@ -39,6 +39,7 @@ PopulationGroupsQuery::PopulationGroupsQuery(msqlitecpp::v2::Storage &_db, int p
         dispatcher["init_mat"] = &fillInitMaturity;
         dispatcher["init_popN"] = &fillInitPopN;
         dispatcher["init_weight"] = &fillInitWeight;
+        dispatcher["selected_szgroups"] = &fillSelectedSzgroups;
         dispatcher["percent_age_per_szgroup"] = &fillPercentAgePerSzGroup;
         dispatcher["percent_szgroup_per_age"] = &fillPercentSzGroupPerAge;
         dispatcher["propmigrants"] = &fillPropMigrants;

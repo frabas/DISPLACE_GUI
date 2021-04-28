@@ -47,10 +47,7 @@ struct MetiersLoader::Impl {
         decltype(makeSelectStatement(std::declval<msqlitecpp::v2::Storage&>())) selectStatement;
     */
 
-    db::SelectStatement<
-            decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
-        selectValueFromNameParameter;
-
+   
     db::SelectStatement<
             decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
             selectParamOpt1Opt2ValueFromNamePeriod;
@@ -100,13 +97,17 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::getMetierData(std::string m
 
 MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
     : db(thedb),
-    selectValueFromNameParameter(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
       selectParamOpt1Opt2ValueFromNamePeriod(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
       selectParamSpeciesSzGroup(db, MetierTableNameSpSz, fieldParameter, fieldSpecies, fieldSzGroup, fieldValue),
       selectParamFuncGroupLandscape(db, MetierTableNameScape, fieldParameter, fieldFuncGroup, fieldLandscape, fieldValue)
 {
-    selectValueFromNameParameter.where(fieldMetiername == "MetierName" && fieldParameter == "Parameter");
-    selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "MetierName" && fieldPeriod == "period");
+    selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "MetierName" &&
+        msqlitecpp::v2::WhereStatement((fieldPeriod == "period"), "OR",
+            msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null"))  &&
+        msqlitecpp::v2::WhereStatement((fieldOpt1 == "Opt1"), "OR",
+            msqlitecpp::v2::WhereStatement(fieldOpt1.name(), "is", "null")) &&
+        msqlitecpp::v2::WhereStatement((fieldOpt2 == "Opt2"), "OR",
+            msqlitecpp::v2::WhereStatement(fieldOpt2.name(), "is", "null")));
     selectParamSpeciesSzGroup.where(
             fieldMetiername == "MetierName" &&
             msqlitecpp::v2::WhereStatement((fieldPeriod == "period"), "OR",
@@ -350,25 +351,14 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
 {
     auto data = std::make_shared<MetiersLoader::MetierData>();
 
-    MetiersLoaderDataDispatcher dispatcher1(data);
-
-    std::cout << "SQL: " << selectValueFromNameParameter.toString() << "; %1="
-        << metiername  << "\n";
-    selectValueFromNameParameter.bind(metiername);
-    selectValueFromNameParameter.execute(
-            [&data, &dispatcher1](std::string param, int opt1, int opt2, double value) {
-                dispatcher1.load(param, opt1, opt2, value);
-                return true;
-            });
-
-    MetiersLoaderDataDispatcher dispatcher2(data);
+       MetiersLoaderDataDispatcher dispatcher(data);
     
     std::cout << "SQL: " << selectParamOpt1Opt2ValueFromNamePeriod.toString() << "; %1="
         << metiername << ", %2=" << period << "\n";
     selectParamOpt1Opt2ValueFromNamePeriod.bind(metiername, period);
     selectParamOpt1Opt2ValueFromNamePeriod.execute(
-        [&data, &dispatcher2](std::string param, int opt1, int opt2, double value) {
-            dispatcher2.load(param, opt1, opt2, value);
+        [&data, &dispatcher](std::string param, int opt1, int opt2, double value) {
+            dispatcher.load(param, opt1, opt2, value);
             return true;
         });
 

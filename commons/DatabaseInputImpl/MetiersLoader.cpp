@@ -108,9 +108,11 @@ MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
     selectOpt1ValueFromNameParameter.where(fieldMetiername == "MetierName" && fieldParameter == "parameter");
     selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "MetierName" && fieldPeriod == "period");
     selectParamSpeciesSzGroup.where(
-            fieldMetiername == "MetierName" && fieldSpecies == "species" && fieldSzGroup == "szgroup");
+            fieldMetiername == "MetierName" &&
+            msqlitecpp::v2::WhereStatement((fieldPeriod == "period"), "OR",
+                                           msqlitecpp::v2::WhereStatement(fieldPeriod.name(), "is", "null")));
     selectParamFuncGroupLandscape.where(
-        fieldMetiername == "MetierName" && fieldFuncGroup == "funcgroup" && fieldLandscape == "landscape");
+            fieldMetiername == "MetierName" && fieldFuncGroup == "funcgroup" && fieldLandscape == "landscape");
 }
 
 std::vector<std::string> MetiersLoader::Impl::getListOfAllMetiers()
@@ -263,8 +265,9 @@ class MetiersSpeciesSzGroupDispatcher {
 
     static void loadSelectivityPerStock(MetiersLoader::MetierData &data, int species, int szgroup, double val)
     {
-            at(at(data.selectivity_per_stock, species),szgroup) = val;
-      }
+        //std::cout << "SelOgive (" << species << "," << szgroup << ") =" << val << "\n";
+        at(at(data.selectivity_per_stock, species), szgroup) = val;
+    }
 
     static void loadSelectivityOthPerStock(MetiersLoader::MetierData& data, int species, int szgroup, double val)
     {
@@ -355,7 +358,10 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
             });
 
     MetiersSpeciesSzGroupDispatcher szGroupDispatcher(data);
-    selectParamSpeciesSzGroup.bind(metiername);
+    selectParamSpeciesSzGroup.bind(metiername, period);
+
+    std::cout << "SQL: " << selectParamSpeciesSzGroup.toString() << "; %1="
+              << metiername << ", %2=" << period << "\n";
     selectParamSpeciesSzGroup.execute(
             [&data, &szGroupDispatcher](std::string param, int species, int group, double value) {
                 szGroupDispatcher.load(param, species, group, value);
@@ -365,10 +371,10 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
     MetiersFuncGroupLandscapeDispatcher FuncGroupLandscapeDispatcher(data);
     selectParamFuncGroupLandscape.bind(metiername);
     selectParamFuncGroupLandscape.execute(
-        [&data, &FuncGroupLandscapeDispatcher](std::string param, int funcgroup, int landscape, double value) {
-            FuncGroupLandscapeDispatcher.load(param, funcgroup, landscape, value);
-            return true;
-        });
+            [&data, &FuncGroupLandscapeDispatcher](std::string param, int funcgroup, int landscape, double value) {
+                FuncGroupLandscapeDispatcher.load(param, funcgroup, landscape, value);
+                return true;
+            });
 
 
     return data;

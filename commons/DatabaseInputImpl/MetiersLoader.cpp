@@ -48,8 +48,8 @@ struct MetiersLoader::Impl {
     */
 
     db::SelectStatement<
-            decltype(fieldOpt1), decltype(fieldValue)
-    > selectOpt1ValueFromNameParameter;
+            decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
+        selectValueFromNameParameter;
 
     db::SelectStatement<
             decltype(fieldParameter), decltype(fieldOpt1), decltype(fieldOpt2), decltype(fieldValue)>
@@ -100,12 +100,12 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::getMetierData(std::string m
 
 MetiersLoader::Impl::Impl(msqlitecpp::v2::Storage& thedb)
     : db(thedb),
-      selectOpt1ValueFromNameParameter(db, MetierTableName, fieldOpt1, fieldValue),
+    selectValueFromNameParameter(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
       selectParamOpt1Opt2ValueFromNamePeriod(db, MetierTableName, fieldParameter, fieldOpt1, fieldOpt2, fieldValue),
       selectParamSpeciesSzGroup(db, MetierTableNameSpSz, fieldParameter, fieldSpecies, fieldSzGroup, fieldValue),
       selectParamFuncGroupLandscape(db, MetierTableNameScape, fieldParameter, fieldFuncGroup, fieldLandscape, fieldValue)
 {
-    selectOpt1ValueFromNameParameter.where(fieldMetiername == "MetierName" && fieldParameter == "parameter");
+    selectValueFromNameParameter.where(fieldMetiername == "MetierName" && fieldParameter == "Parameter");
     selectParamOpt1Opt2ValueFromNamePeriod.where(fieldMetiername == "MetierName" && fieldPeriod == "period");
     selectParamSpeciesSzGroup.where(
             fieldMetiername == "MetierName" &&
@@ -350,15 +350,29 @@ shared_ptr<MetiersLoader::MetierData> MetiersLoader::Impl::getMetierData(std::st
 {
     auto data = std::make_shared<MetiersLoader::MetierData>();
 
-    MetiersLoaderDataDispatcher dispatcher(data);
+    MetiersLoaderDataDispatcher dispatcher1(data);
 
-    selectParamOpt1Opt2ValueFromNamePeriod.bind(metiername, period);
-    selectParamOpt1Opt2ValueFromNamePeriod.execute(
-            [&data, &dispatcher](std::string param, int opt1, int opt2, double value) {
-                dispatcher.load(param, opt1, opt2, value);
+    std::cout << "SQL: " << selectValueFromNameParameter.toString() << "; %1="
+        << metiername  << "\n";
+    selectValueFromNameParameter.bind(metiername);
+    selectValueFromNameParameter.execute(
+            [&data, &dispatcher1](std::string param, int opt1, int opt2, double value) {
+                dispatcher1.load(param, opt1, opt2, value);
                 return true;
             });
 
+    MetiersLoaderDataDispatcher dispatcher2(data);
+    
+    std::cout << "SQL: " << selectParamOpt1Opt2ValueFromNamePeriod.toString() << "; %1="
+        << metiername << ", %2=" << period << "\n";
+    selectParamOpt1Opt2ValueFromNamePeriod.bind(metiername, period);
+    selectParamOpt1Opt2ValueFromNamePeriod.execute(
+        [&data, &dispatcher2](std::string param, int opt1, int opt2, double value) {
+            dispatcher2.load(param, opt1, opt2, value);
+            return true;
+        });
+
+    
     MetiersSpeciesSzGroupDispatcher szGroupDispatcher(data);
     selectParamSpeciesSzGroup.bind(metiername, period);
 

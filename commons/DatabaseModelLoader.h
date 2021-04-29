@@ -29,7 +29,7 @@ public:
 
     void loadMetiers(int year, int month, int quarter, int semester) override;
 
-    bool loadPopulations(int year) override;
+    bool loadPopulations(int quarter) override;
 
 protected:
     bool loadConfigImpl(int &nbpops, int &nbbenthospops, std::vector<int> &implicit_pops,

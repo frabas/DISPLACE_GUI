@@ -25,8 +25,8 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
     double idx_vessel = -1;
 
     for (auto &vessel: allVessels) {
-        // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
-        auto vesselData = loader.getVesselData(vessel, month);
+        // in the DB we just have opt1 as "period". We select quarter here. 
+        auto vesselData = loader.getVesselData(vessel, quarter);
         auto &spe_harbours = vesselData->harbours;
         auto &spe_freq_harbours = vesselData->freq_harbours;
 

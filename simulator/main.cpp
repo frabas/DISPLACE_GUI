@@ -2122,14 +2122,14 @@ int app_main(int argc, char const* argv[])
 
         // RE-READ DATA FOR EVENT => change of month
         // TODO use a wall clock object instead
+        int a_quarter_i, a_semester_i;
         if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
             CurrentMonth += 1;
 
             {
                 count_months += 1;
                 auto a_month_i = count_months % 12;
-                int a_quarter_i, a_semester_i;
-
+          
                 if (a_month_i == 0) { a_month_i = 12; }
                 if (a_month_i == 1 || a_month_i == 2 || a_month_i == 3) { a_quarter_i = 1; }
                 if (a_month_i == 4 || a_month_i == 5 || a_month_i == 6) { a_quarter_i = 2; }
@@ -2272,7 +2272,7 @@ int app_main(int argc, char const* argv[])
 
             cout << "Reload population data" << endl;
 
-            modelLoader->loadPopulations(a_year);
+            modelLoader->loadPopulations(a_quarter_i);
 
 
 

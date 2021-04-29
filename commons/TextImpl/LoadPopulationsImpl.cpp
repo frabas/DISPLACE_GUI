@@ -1543,7 +1543,7 @@ read_fbar_ages_min_max_and_ftarget(int a_pop, string folder_name_parameterizatio
     return (fbar_ages_min_max);
 }
 
-bool TextfileModelLoader::loadPopulations(int a_year)
+bool TextfileModelLoader::loadPopulations(int a_quarter)
 {
     map<int, string> pop_names;
     read_pop_names_in_string(pop_names, p->folder_name_parameterization, p->inputfolder);
@@ -1566,6 +1566,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     string str_rand_avai_file = "baseline"; // deprecated?
     // by default, will use the initial avai input
 
+    int year = model().year() +1;
     auto month = std::to_string(model().month());
     auto quarter = std::to_string(model().quarter());
     auto semester = std::to_string(model().semester());
@@ -1757,7 +1758,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_avai7_beta_v.at(sp) = pos->second;
 
         // initial selected szgroups
-        if (a_year == 1 && model().month() == 1)
+        if (year== 1 && model().month() == 1)
         {
             multimap<int, int>::iterator lower_init_selsz = selected_szgroups.lower_bound(sp);
             multimap<int, int>::iterator upper_init_selsz = selected_szgroups.upper_bound(sp);
@@ -1767,7 +1768,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial N for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init = init_pops_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init = init_pops_per_szgroup.upper_bound(sp);
@@ -1786,7 +1787,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_init_prop_migrants_in_N_per_szgroup_vov.at(sp).push_back(pos->second);
 
         // initial fecundity for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
@@ -1795,7 +1796,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial maturity for particular this pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init_ma = init_maturity_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init_ma = init_maturity_per_szgroup.upper_bound(sp);
@@ -1804,7 +1805,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial weight for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(sp);
@@ -1813,7 +1814,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial comcat for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, int>::iterator lower_init_cc = init_comcat_per_szgroup.lower_bound(sp);
             multimap<int, int>::iterator upper_init_cc = init_comcat_per_szgroup.upper_bound(sp);
@@ -1822,7 +1823,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial M for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(sp);
@@ -1831,7 +1832,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // initial beta_ssm for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_beta_ssm = init_beta_ssm_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_beta_ssm = init_beta_ssm_per_szgroup.upper_bound(sp);
@@ -1840,7 +1841,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
         
         // initial background_mortality for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_background_mortality = init_background_mortality_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_background_mortality = init_background_mortality_per_szgroup.upper_bound(sp);
@@ -1849,7 +1850,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
         
         // initial proprecru for this particular pop
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             multimap<int, double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(sp);
             multimap<int, double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(sp);
@@ -1875,7 +1876,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
 
         // input data
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             if (model().scenario().dyn_pop_sce.option(Options::diffusePopN)) {
                 cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
@@ -1887,7 +1888,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // input data, read a other landings per node for this species
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             // oth_land on node per pop
             vect_of_oth_land_map.at(sp) = read_oth_land_nodes_with_pop(semester, month, sp,
@@ -1912,7 +1913,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         
         }
 
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
                 p->folder_name_parameterization,
@@ -1928,7 +1929,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // input data, growth transition, percent_szgroup_per_age_matrix
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_growth_transition_matrix_vov.at(sp) = read_growth_transition_matrix(sp, iparam3,
                 p->folder_name_parameterization,
@@ -1936,7 +1937,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 model().scenario().biolsce);
         }
         
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_percent_szgroup_per_age_matrix_vov.at(sp) = read_percent_szgroup_per_age_matrix(sp, iparam3,
                 iparam2,
@@ -1945,7 +1946,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 model().scenario().biolsce);
         }
 
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_percent_age_per_szgroup_matrix_vov.at(sp) = read_percent_age_per_szgroup_matrix(sp, iparam3,
                 iparam2,
@@ -1955,14 +1956,14 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // input data, parameter for stock-recruitment relationship
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_param_sr_v.at(sp) = read_param_sr(sp, p->folder_name_parameterization, p->inputfolder,
                 model().scenario().biolsce);
         }
 
         // input data, fbar ages
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_fbar_ages_min_max_and_ftarget_this_pop_v.at(sp) = read_fbar_ages_min_max_and_ftarget(sp,
                 p->folder_name_parameterization,
@@ -1971,13 +1972,13 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         }
 
         // input data, initial tac
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             vect_of_tac_this_pop.at(sp) = read_initial_tac(sp, p->folder_name_parameterization, p->inputfolder);
             cout << "initial tac has been read correctly" << endl;
         }
 
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             if (model().scenario().dyn_alloc_sce.option(Options::TACs) && vect_of_tac_this_pop.at(sp).at(0) == 0) {
                 cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp
@@ -1997,7 +1998,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
         dout(cout << "overall migration has been read correctly" << endl);
 
 
-        if (a_year == 1 && model().month() == 1)
+        if (year == 1 && model().month() == 1)
         {
             landings_so_far.push_back(1.0);
         }
@@ -2055,7 +2056,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
 
 
     // create Populations only once, i.e. at y1 m1
-    if (a_year==1 && model().month()==1) {
+    if (year == 1 && model().month()==1) {
 
         int nbmets = 100; // CAUTION: for now we don´t care as a large value will be resized. but best to ultimately include it to config()
         for (unsigned int i = 0; i < model().nodes().size(); i++) {

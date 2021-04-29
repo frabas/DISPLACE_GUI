@@ -23,10 +23,8 @@ void DatabaseModelLoader::loadMetiers(int year, int month, int quarter, int seme
     double idx_metier = -1;
 
     for (auto& metier : allMetiers) {
-        // TODO: in the DB we just have opt1 as "period". We select month here. FIXME.
-        auto metierData = loader.getMetierData(metier, month);
-
-       // TODO: selectivity_per_stock and loss_after_1_passage, bothcurrently not at the right format
+        //  in the DB we just have opt1 as "period". We select semester here.
+        auto metierData = loader.getMetierData(metier, semester);
        
         idx_metier += 1;
 

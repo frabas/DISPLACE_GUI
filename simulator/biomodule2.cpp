@@ -781,7 +781,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 return false;
             }
             vector <double>tot_N_at_szgroup = populations.at(name_pop)->get_tot_N_at_szgroup();
-            cout << "hi" << endl;
+            
 
             // then, compute F_at_age from F_at_szgroup as -log(N(t)/N(t-1))
             // knowing the ALK i.e.  prop szgroup in each age

@@ -89,6 +89,7 @@ class  Harbour : public Node
         virtual vector<types::NodeId> get_usual_fgrounds_this_met(int met) override;
         virtual vector<double> get_freq_usual_fgrounds_this_met(int met) override;
 
+        void set_fishprice(int species, int marketcat);
 
 	private:
 		string name;

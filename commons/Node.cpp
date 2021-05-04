@@ -241,7 +241,7 @@ Node::~Node()
 
 types::NodeId Node::get_idx_node() const
 {
-	return(idx_node);
+    return (idx_node);
 }
 
 void Node::set_idx_node(types::NodeId idx)
@@ -251,13 +251,13 @@ void Node::set_idx_node(types::NodeId idx)
 
 int Node::get_code_area() const
 {
-	return(code_area);
+    return (code_area);
 }
 
 
 int Node::get_benthos_id() const
 {
-    return(benthos_id);
+    return (benthos_id);
 }
 
 void Node::set_benthos_id(int _benthos_id)

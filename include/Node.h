@@ -376,49 +376,60 @@ class  Node
         void export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold);
         void export_popnodes_cumdiscards(ofstream& popnodes, int tstep);
         void export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep);
-        void export_popnodes_nbchoked(ofstream& popnodes, int tstep);
-        void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
-        void export_nodes_envt(ofstream& nodes_event, int tstep);
-        void export_popnodes_tariffs(ofstream& popnodes, int tstep);
-        
-        void init_benthos_tot_biomass_on_node(int funcgrp);
-        void init_benthos_tot_number_on_node(int funcgrp);
-        void init_benthos_tot_meanweight_on_node(int funcgrp);
-        void init_benthos_tot_biomass_K_on_node(int funcgrp);
-        void init_benthos_tot_number_K_on_node(int funcgrp);
-        
-        void setAreaType(int _area_type);
-        int evaluateAreaType();
+    void export_popnodes_nbchoked(ofstream &popnodes, int tstep);
+    void export_popnodes_cumulcatches_per_pop(ofstream &popnodes, int tstep, int pop);
+    void export_nodes_envt(ofstream &nodes_event, int tstep);
+    void export_popnodes_tariffs(ofstream &popnodes, int tstep);
 
-        int get_nbpops() const { return m_nbpops; }
-        int get_nbbenthospops() const { return m_nbbenthospops; }
-        int get_nszgroups() const { return m_nszgrp; }
+    void init_benthos_tot_biomass_on_node(int funcgrp);
+    void init_benthos_tot_number_on_node(int funcgrp);
+    void init_benthos_tot_meanweight_on_node(int funcgrp);
+    void init_benthos_tot_biomass_K_on_node(int funcgrp);
+    void init_benthos_tot_number_K_on_node(int funcgrp);
 
-        void set_is_harbour(int id);
-        void set_idx_node(types::NodeId idx);
+    void setAreaType(int _area_type);
+    int evaluateAreaType();
 
-        void setBannedMetier(int metier) {
-            while (mBannedMetiers.size() <= (size_t)metier)
-                mBannedMetiers.push_back(false);
-            mBannedMetiers[metier] = true;
+    int get_nbpops() const
+    { return m_nbpops; }
+
+    int get_nbbenthospops() const
+    { return m_nbbenthospops; }
+
+    int get_nszgroups() const
+    { return m_nszgrp; }
+
+    void set_is_harbour(int id);
+    void set_idx_node(types::NodeId idx);
+
+    void setBannedMetier(int metier)
+    {
+        while (mBannedMetiers.size() <= (size_t) metier) {
+            mBannedMetiers.push_back(false);
         }
+        mBannedMetiers[metier] = true;
+    }
 
-        void setBannedVsize(int vsize) {
-            while (mBannedVsizes.size() <= (size_t)vsize)
-                mBannedVsizes.push_back(false);
-            mBannedVsizes[vsize] = true;
+    void setBannedVsize(int vsize)
+    {
+        while (mBannedVsizes.size() <= (size_t) vsize) {
+            mBannedVsizes.push_back(false);
         }
+        mBannedVsizes[vsize] = true;
+    }
 
-      void setNbOfDaysClosedPerMonth (int metier, double NbOfDaysClosedPerMonth) {
-          while (mNbDaysClosedForBannedMetiers.size() <= (size_t)metier)
-              mNbDaysClosedForBannedMetiers.push_back(0.0);
-          mNbDaysClosedForBannedMetiers[metier] = NbOfDaysClosedPerMonth;
-      }
+    void setNbOfDaysClosedPerMonth(int metier, double NbOfDaysClosedPerMonth)
+    {
+        while (mNbDaysClosedForBannedMetiers.size() <= (size_t) metier) {
+            mNbDaysClosedForBannedMetiers.push_back(0.0);
+        }
+        mNbDaysClosedForBannedMetiers[metier] = NbOfDaysClosedPerMonth;
+    }
 
 
-
-       bool isMetierBanned(int metier) const {
-            if ((size_t)metier < mBannedMetiers.size())
+    bool isMetierBanned(int metier) const
+    {
+        if ((size_t)metier < mBannedMetiers.size())
                 return mBannedMetiers[metier];
             return false;
         }

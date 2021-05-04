@@ -258,4 +258,7 @@ void Harbour::set_freq_usual_metiers(multimap<int, double> _freq_usual_metiers)
  freq_usual_metiers=_freq_usual_metiers;
 }
 
-
+void Harbour::set_fishprice(int species, int marketcat)
+{
+    mean_fish_price_per_pop_per_cat.insert(std::make_pair(species, marketcat));
+}

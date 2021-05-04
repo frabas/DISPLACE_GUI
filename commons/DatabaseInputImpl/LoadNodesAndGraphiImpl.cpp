@@ -8,6 +8,7 @@
 #include "Harbour.h"
 #include "SimModel.h"
 #include "shortestpath/GeoGraph.h"
+#include "queries/HarboursQueries.h"
 
 #include <msqlitecpp/v2/selectstatement.h>
 #include <msqlitecpp/v2/fields.h>
@@ -51,6 +52,8 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
 {
     std::vector<Node *> nodes;
     GeoGraph graph;
+    HarboursQueries harboursQueries(p->db.get());
+    auto fishprices = harboursQueries.getFishPrices(1);
 
     auto query = db::makeSelectStatement(*p->db, NodesTableName,
                                          fieldId, fieldX, fieldY, fieldHIdx,
@@ -59,35 +62,43 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
                                          fieldNitrogen, fieldPhosphorus, fieldOxygen,
                                          fieldCarbon,
                                          fieldBathymetry,
-                                         fieldShipping, fieldSilt, fieldIcesRectangleCode, fieldBenthosBio, fieldBenthosNum
+                                         fieldShipping, fieldSilt, fieldIcesRectangleCode, fieldBenthosBio,
+                                         fieldBenthosNum
     );
     query.where(fieldGraphSce == "agraph");
 
     query.bind(model().scenario().a_graph);
-    query.execute([&nodes, &graph](int id, double x, double y, int hidx, int codeArea, int marineLandscape,
-                                   double wind, double salinity, double sst, double ni, double ph, double ox, double ca,
-                                   double bath, double ship, double silt, double icesrectanglecode, double bb, double bn
-    ) {
-        Node *node;
-        if (hidx != 0) {
-            // is an harbour: sets harbours variables here
-            auto harbour = new Harbour();
+    query.execute(
+            [&nodes, &graph, &fishprices](int id, double x, double y, int hidx, int codeArea, int marineLandscape,
+                                          double wind, double salinity, double sst, double ni, double ph,
+                                          double ox, double ca,
+                                          double bath, double ship, double silt, double icesrectanglecode,
+                                          double bb, double bn
+            ) {
+                Node *node;
+                if (hidx != 0) {
+                    types::NodeId nidx(hidx);
+                    // is an harbour: sets harbours variables here
+                    auto harbour = new Harbour();
+                    harbour->set_is_harbour(hidx);
 
-            harbour->set_is_harbour(hidx);
+                    for (auto it = fishprices.lower_bound(nidx); it != fishprices.upper_bound(nidx); ++it) {
+                        harbour->set_fishprice(it->second.species, it->second.marketCat);
+                    }
 
-            node = harbour;
-        } else {
-            // is a standard Node
+                    node = harbour;
+                } else {
+                    // is a standard Node
 
-            node = new Node();
-            node->set_is_harbour(0);
+                    node = new Node();
+                    node->set_is_harbour(0);
 
-            node->setMarineLandscape(marineLandscape);
-            node->setCodeArea(codeArea);
+                    node->setMarineLandscape(marineLandscape);
+                    node->setCodeArea(codeArea);
 
-            node->setWind(wind);
-            node->setSalinity(salinity);
-            node->setSST(sst);
+                    node->setWind(wind);
+                    node->setSalinity(salinity);
+                    node->setSST(sst);
             node->setNitrogen(ni);
             node->setPhosphorus(ph);
             node->setOxygen(ox);

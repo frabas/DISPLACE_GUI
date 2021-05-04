@@ -109,7 +109,7 @@ class HarboursStockTableQueries {
 public:
     HarboursStockTableQueries(sql::Storage *db)
             : db(db),
-              mSelectParameter(*db, HarboursParametersPerVesselSizeTableName,
+              mSelectParameter(*db, HarboursParametersMarketTableName,
                                fieldNodeId, fieldMarketCat, fieldSpecies, fieldPeriod, fieldValue),
               mFilterByParameter(fieldParameter == "param")
     {

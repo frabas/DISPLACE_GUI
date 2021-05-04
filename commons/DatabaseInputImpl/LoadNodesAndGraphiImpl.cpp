@@ -76,10 +76,10 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
             ) {
                 Node *node;
                 if (hidx != 0) {
-                    types::NodeId nidx(hidx);
+                    types::NodeId nidx(id);
                     // is an harbour: sets harbours variables here
                     auto harbour = new Harbour();
-                    harbour->set_is_harbour(hidx);
+                    harbour->set_is_harbour(id);
 
                     for (auto it = fishprices.lower_bound(nidx); it != fishprices.upper_bound(nidx); ++it) {
                         harbour->set_fishprice(it->second.species, it->second.marketCat);

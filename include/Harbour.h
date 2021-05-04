@@ -88,6 +88,9 @@ class  Harbour : public Node
         virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met) override;
         virtual vector<types::NodeId> get_usual_fgrounds_this_met(int met) override;
         virtual vector<double> get_freq_usual_fgrounds_this_met(int met) override;
+        virtual void set_mean_fish_price_per_pop_per_cat(multimap<int, double> _mean_fish_price_per_pop_per_cat);
+        virtual void set_fuelprice(map<int, double> _mean_fish_price_per_pop_per_cat);
+
 
         void set_fishprice(int species, int marketcat);
 

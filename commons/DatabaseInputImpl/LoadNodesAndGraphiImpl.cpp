@@ -62,8 +62,7 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
                                          fieldNitrogen, fieldPhosphorus, fieldOxygen,
                                          fieldCarbon,
                                          fieldBathymetry,
-                                         fieldShipping, fieldSilt, fieldIcesRectangleCode, fieldBenthosBio,
-                                         fieldBenthosNum
+                                         fieldShipping, fieldSilt, fieldIcesRectangleCode, fieldBenthosBio, fieldBenthosNum
     );
     query.where(fieldGraphSce == "agraph");
 

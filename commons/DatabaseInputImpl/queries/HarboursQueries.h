@@ -25,6 +25,16 @@ public:
         double value;
     };
     std::map<types::NodeId, FuelPrices> getFuelPrices(int period);
+
+    struct FishPrices {
+        types::NodeId node;
+        int marketCat;
+        int species;
+
+        int period;
+        double value;
+    };
+    std::map<types::NodeId, FishPrices> getFishPrices(int period);
 };
 
 

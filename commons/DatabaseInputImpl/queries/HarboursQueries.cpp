@@ -19,6 +19,8 @@ static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldNodeId(
 static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldHarbourName("harbour_name");
 static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldPeriod("period");
 static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldVesselSize("vesselsize");
+static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldMarketCat("marketcat");
+static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Integer> fieldSpecies("species");
 static msqlitecpp::v2::Column<msqlitecpp::v2::ColumnTypes::Real> fieldValue("value");
 
 }
@@ -84,6 +86,66 @@ std::map<types::NodeId, HarboursQueries::FuelPrices> HarboursQueries::getFuelPri
         price.node = types::NodeId(nodeId);
         price.period = period;
         price.vesselSize = vesselSize;
+        price.value = value;
+        values.insert(std::make_pair(price.node, price));
+        return true;
+    });
+
+    return values;
+}
+
+
+class HarboursStockTableQueries {
+    sql::Storage *db;
+
+    sql::SelectStatement<decltype(fieldNodeId),
+            decltype(fieldMarketCat),
+            decltype(fieldSpecies),
+            decltype(fieldPeriod),
+            decltype(fieldValue)> mSelectParameter;
+
+    sql::WhereStatement mFilterByParameter;
+
+public:
+    HarboursStockTableQueries(sql::Storage *db)
+            : db(db),
+              mSelectParameter(*db, HarboursParametersPerVesselSizeTableName,
+                               fieldNodeId, fieldMarketCat, fieldSpecies, fieldPeriod, fieldValue),
+              mFilterByParameter(fieldParameter == "param")
+    {
+    }
+
+    using SetterFunction = std::function<bool(int nodeId,
+                                              int marketcat,
+                                              int species,
+                                              int period,
+                                              double value)>;
+
+    void getParameters(std::string parameter,
+                       SetterFunction func)
+    {
+        mSelectParameter.where(mFilterByParameter);
+        mSelectParameter.bind(parameter);
+
+        mSelectParameter.execute(func);
+    }
+};
+
+std::map<types::NodeId, HarboursQueries::FishPrices> HarboursQueries::getFishPrices(int period)
+{
+    HarboursStockTableQueries q(p->db);
+
+    std::map<types::NodeId, HarboursQueries::FishPrices> values;
+    q.getParameters("fishPrice", [&values](int nodeId,
+                                           int marketcat,
+                                           int species,
+                                           int period,
+                                           double value) -> bool {
+        HarboursQueries::FishPrices price;
+        price.node = types::NodeId(nodeId);
+        price.period = period;
+        price.marketCat = marketcat;
+        price.species = species;
         price.value = value;
         values.insert(std::make_pair(price.node, price));
         return true;

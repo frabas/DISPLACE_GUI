@@ -74,6 +74,7 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
             auto harbour = new Harbour();
 
             harbour->set_is_harbour(hidx);
+            //??harbour->set_mean_fish_price_per_pop_per_cat();
 
             node = harbour;
         } else {

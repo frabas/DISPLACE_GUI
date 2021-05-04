@@ -259,3 +259,14 @@ void Harbour::set_freq_usual_metiers(multimap<int, double> _freq_usual_metiers)
 }
 
 
+
+void Harbour::set_mean_fish_price_per_pop_per_cat(multimap<int, double> _mean_fish_price_per_pop_per_cat)
+{
+ mean_fish_price_per_pop_per_cat = _mean_fish_price_per_pop_per_cat;
+}
+
+
+void Harbour::set_fuelprice(map<int, double> _fuelprice)
+{
+ fuelprice = _fuelprice;
+}

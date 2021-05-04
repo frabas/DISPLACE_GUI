@@ -24,7 +24,7 @@ public:
         int period;
         double value;
     };
-    std::map<types::NodeId, FuelPrices> getFuelPrices(int period);
+    std::multimap<types::NodeId, FuelPrices> getFuelPrices(int period);
 
     struct FishPrices {
         types::NodeId node;
@@ -34,7 +34,7 @@ public:
         int period;
         double value;
     };
-    std::map<types::NodeId, FishPrices> getFishPrices(int period);
+    std::multimap<types::NodeId, FishPrices> getFishPrices(int period);
 };
 
 

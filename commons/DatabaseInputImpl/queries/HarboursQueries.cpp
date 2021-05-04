@@ -73,11 +73,11 @@ public:
     }
 };
 
-std::map<types::NodeId, HarboursQueries::FuelPrices> HarboursQueries::getFuelPrices(int period)
+std::multimap<types::NodeId, HarboursQueries::FuelPrices> HarboursQueries::getFuelPrices(int period)
 {
     HarboursVesselsTableQueries q(p->db);
 
-    std::map<types::NodeId, HarboursQueries::FuelPrices> values;
+    std::multimap<types::NodeId, HarboursQueries::FuelPrices> values;
     q.getParameters("fuelPrice", [&values](int nodeId,
                                            int vesselSize,
                                            int period,
@@ -131,11 +131,11 @@ public:
     }
 };
 
-std::map<types::NodeId, HarboursQueries::FishPrices> HarboursQueries::getFishPrices(int period)
+std::multimap<types::NodeId, HarboursQueries::FishPrices> HarboursQueries::getFishPrices(int period)
 {
     HarboursStockTableQueries q(p->db);
 
-    std::map<types::NodeId, HarboursQueries::FishPrices> values;
+    std::multimap<types::NodeId, HarboursQueries::FishPrices> values;
     q.getParameters("fishPrice", [&values](int nodeId,
                                            int marketcat,
                                            int species,

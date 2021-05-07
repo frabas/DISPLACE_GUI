@@ -73,6 +73,8 @@ static const char *dyn_pop_options[] = {
     "modelShippingOnBenthos",
     "diffusePopN",
     "sizeSpectra",
+    "stochasticGrowth",
+    "massiveMortalityEvent20perY1",
     "massiveMortalityEvent20perY5",
     "nbcpCoupling",
     "biolsceOnStaticAvai",

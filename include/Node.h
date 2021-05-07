@@ -354,7 +354,7 @@ class  Node
         void clear_cpue_per_pop_per_met_this_month();
         void compute_cpue_per_pop_per_met_this_month(int pop, int met);
         void clear_cumdiscards_per_pop();
-        void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
+        void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background);
         void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, int testep,
                                                                         const vector<vector<double> > & Ws_at_szgroup,
                                                                         const vector<vector<vector<vector<double> > > > & predkernel,

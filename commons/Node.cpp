@@ -1398,7 +1398,7 @@ void Node::clear_avai_pops_at_selected_szgroup()
 }
 
 
-void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions)
+void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1409,7 +1409,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
         double M_at_szgroup_i_on_node=0;
         for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
         {
-            M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i];
+            M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i]* multiplier_on_M_background;
         }
 
         //cout  << "this pop " << name_pop << ", this sz " << i << "M_at_szgroup[i] is " << M_at_szgroup[i] << " and a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << endl;

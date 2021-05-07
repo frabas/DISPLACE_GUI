@@ -89,7 +89,9 @@ PopSceOptions::PopSceOptions()
     O(mMap,modelShippingOnBenthos);
     O(mMap,modelResuspensionEffectOnBenthos);
     O(mMap,sizeSpectra);
-    O(mMap,massiveMortalityEvent20perY5);
+    O(mMap, stochasticGrowth);
+    O(mMap,massiveMortalityEvent20perY1);
+    O(mMap, massiveMortalityEvent20perY5);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
     

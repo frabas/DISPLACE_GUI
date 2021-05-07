@@ -825,6 +825,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                vector <int> species_on_node;
                
                double multiplier_on_M_background=1.0;
+               if (a_year_i == 0 && dyn_pop_sce.option(Options::massiveMortalityEvent20perY1))
+               {
+                   multiplier_on_M_background = 1.2; //20 percent more in Year 1
+               }
                if (a_year_i==4 && dyn_pop_sce.option(Options::massiveMortalityEvent20perY5))
                {
                    multiplier_on_M_background = 1.2; //20 percent more in Year 5
@@ -872,7 +876,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             }
                         }
                         try {
-                              a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
+                              a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M, multiplier_on_M_background);
                           } catch (runtime_error &) {
                               cout << "Fail in apply_natural_mortality_at_node" << endl;
                               return false;

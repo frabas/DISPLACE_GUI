@@ -991,9 +991,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    }
                    */
 
+                   int is_stochastic = 0;
+                   if (dyn_pop_sce.option(Options::stochasticGrowth))
+                   {
+                       is_stochastic = 1;
+                   }
                    outc(cout<<"tstep " << tstep << "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
                    try {
-                       populations[sp]->do_growth();
+                       populations[sp]->do_growth(is_stochastic);
                      } catch (runtime_error &) {
                          cout << "Fail in do_growth" << endl;
                          return false;

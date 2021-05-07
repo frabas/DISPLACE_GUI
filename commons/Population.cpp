@@ -1312,7 +1312,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
 
-void Population::do_growth()
+void Population::do_growth(int is_stochastic)
 {
     dout(cout << "BEGIN do_growth() "  << endl );
 
@@ -1321,8 +1321,51 @@ void Population::do_growth()
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
 
-	// aggregate from nodes
-	//aggregate_N();
+    double growth_error;
+    if(is_stochastic)
+    {
+        //cout << "before adding norm error on growth matrix:" << endl;
+
+        //for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        //{
+        //    for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+        //    {
+        //        std::cout << growth_transition_matrix[i][j] << " ";
+        //    }
+        //    std::cout << std::endl;
+        //}
+ 
+        //cout << "after adding norm error on growth matrix:" << endl;
+
+        double sd = 0.1;
+        vector<double> marginal_col_sums(growth_transition_matrix[0].size(), 0);
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                // adding a lognormal error
+                growth_transition_matrix[i][j] *= exp(0 + sd * norm_rand()) / exp((sd * sd) / 2.0);
+                marginal_col_sums.at(j) += growth_transition_matrix[i][j];
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
+ 
+        //cout << "then normalize it to sum to 1 in columns:" << endl;
+
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                growth_transition_matrix[i][j] /= marginal_col_sums.at(j);
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
+
+    }
+
+    //cout << endl;
 
 	// size transition matrix:
 	// row i: output

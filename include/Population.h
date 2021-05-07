@@ -223,7 +223,7 @@ class  Population
         void clear_tot_M_at_age();
         void clear_tot_C_at_szgroup();
         void clear_tot_D_at_szgroup();
-        void do_growth();		 // apply the size transition matrix
+        void do_growth(int is_stochastic);		 // apply the size transition matrix
 								 // stock-recruitment relationship via fecundity_at_szgroup
         void apply_overall_migration_fluxes(vector<Population* >& populations);
 

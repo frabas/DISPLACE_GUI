@@ -1326,14 +1326,14 @@ void Population::do_growth(int is_stochastic)
     {
         //cout << "before adding norm error on growth matrix:" << endl;
 
-        //for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
-        //{
-        //    for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
-        //    {
-        //        std::cout << growth_transition_matrix[i][j] << " ";
-        //    }
-        //    std::cout << std::endl;
-        //}
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
  
         //cout << "after adding norm error on growth matrix:" << endl;
 
@@ -1357,7 +1357,7 @@ void Population::do_growth(int is_stochastic)
         {
             for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
             {
-                growth_transition_matrix[i][j] /= marginal_col_sums.at(j);
+                if(marginal_col_sums.at(j)>0) growth_transition_matrix[i][j] /= marginal_col_sums.at(j);
                 //std::cout << growth_transition_matrix[i][j] << " ";
             }
             //std::cout << std::endl;
@@ -1365,7 +1365,7 @@ void Population::do_growth(int is_stochastic)
 
     }
 
-    //cout << endl;
+    cout << endl;
 
 	// size transition matrix:
 	// row i: output
@@ -1392,8 +1392,15 @@ void Population::do_growth(int is_stochastic)
 	// set the tot N at szgroup
 	this->set_tot_N_at_szgroup(new_tot_N_at_szgroup);
 
-	// redistribute on nodes
-	//distribute_N();
+   
+    //check
+    //cout << "Check the Ns:" << endl;
+    //for (unsigned int i = 0; i < new_tot_N_at_szgroup.size(); i++)
+    //{
+    //    std::cout << new_tot_N_at_szgroup[i] << " ";
+    //}
+    //std::cout << std::endl;
+
 
     dout(cout << "END do_growth() "  << endl );
 }

@@ -42,7 +42,8 @@ void open_file_error(string filename);
 
 bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db, string folder_name_parameterization,
                       string inputfolder,
-                      int &a_int_line2,
+                      int& a_int_line2,
+                      int &a_int_notdefined,
                       int &a_int_line4,
                       vector<int> &a_vector_line6,
                       vector<int> &implicit_pops_level2,
@@ -55,6 +56,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db, string folder
 
 bool read_config_file(std::istream &stream,
                       int &a_int_line2,
+                      int& a_int_notdefined,
                       int &a_int_line4,
                       vector<int> &a_vector_line6,
                       vector<int> &implicit_pops_level2,

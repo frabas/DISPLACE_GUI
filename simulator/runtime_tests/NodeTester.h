@@ -12,7 +12,7 @@ class NodeTester {
     spimpl::unique_impl_ptr<Impl> p;
 
 public:
-    NodeTester(int nbpops, int nbbenthospops);
+    NodeTester(int nbpops, int nbmets, int nbbenthospops);
 
     void test();
 };

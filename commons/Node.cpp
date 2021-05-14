@@ -50,7 +50,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
            double _bathymetry, double _shippingdensity, double _siltfraction, double _icesrectanglecode,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            double _benthos_biomass_K, double _benthos_number_K,
-           int nbpops, int nbbenthospops, int nbszgroups)
+           int nbpops, int nbmets, int nbbenthospops, int nbszgroups)
     : idx_node(idx)
 {
 	x=xval;
@@ -111,6 +111,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
 	}
 
     m_nbpops = nbpops;
+    m_nbmets = nbmets;
     m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
 
@@ -227,6 +228,7 @@ Node::Node()
       benthos_tot_number_K(0),
       tariffs(),
       m_nbpops(0),
+      m_nbmets(0),
       m_nbbenthospops(0),
       m_nszgrp(0)
 {

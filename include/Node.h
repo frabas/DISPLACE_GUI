@@ -53,7 +53,7 @@ class  Node
               double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
               double _bathymetry, double _shippingdensity, double _siltfraction, double _icesrect,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
-              int nbpops, int nbbenthospops,  int nbszgroups);
+              int nbpops, int nbmets, int nbbenthospops,  int nbszgroups);
         /*
         Node (types::NodeId idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
@@ -390,6 +390,7 @@ class  Node
         void setAreaType(int _area_type);
         int evaluateAreaType();
 
+        int get_nbmets() const { return m_nbmets; }
         int get_nbpops() const { return m_nbpops; }
         int get_nbbenthospops() const { return m_nbbenthospops; }
         int get_nszgroups() const { return m_nszgrp; }
@@ -513,6 +514,7 @@ private:
         static const multimap<int,double> mFreqUsualMetiers;
 
         int m_nbpops;
+        int m_nbmets;
         int m_nbbenthospops;
         int m_nszgrp;
 

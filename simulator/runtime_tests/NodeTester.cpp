@@ -9,12 +9,14 @@
 
 struct NodeTester::Impl {
     int mNbPops;
+    int mNbMets;
     int mNbBenthosPops;
 };
 
-NodeTester::NodeTester(int nbPops, int nbBenthosPops)
+NodeTester::NodeTester(int nbPops, int nbMets, int nbBenthosPops)
         : p(spimpl::make_unique_impl<Impl>())
 {
+    p->mNbMets = nbMets;
     p->mNbPops = nbPops;
     p->mNbBenthosPops = nbBenthosPops;
 }
@@ -23,7 +25,7 @@ void NodeTester::test()
 {
     // check the class Node
     Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, p->mNbPops, p->mNbBenthosPops, 5);
+              0, 0, 0, 0, 0, 0, 0, 0, p->mNbPops, p->mNbMets, p->mNbBenthosPops, 5);
     dout(cout << "is the node at 1,1? "
               << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 

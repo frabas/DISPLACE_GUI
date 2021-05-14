@@ -90,6 +90,11 @@ int NodeData::getPopCount() const
     return mNode->get_nbpops();
 }
 
+int NodeData::getMetCount() const
+{
+    return mNode->get_nbmets();
+}
+
 int NodeData::getBenthosPopCount() const
 {
     return mNode->get_nbbenthospops();

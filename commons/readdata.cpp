@@ -67,6 +67,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
         string folder_name_parameterization,
                       string inputfolder,
                       int& nbpops,
+                      int& nbmets,
                       int& nbbenthospops,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
@@ -84,6 +85,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
             t.query(*indb);
 
             nbpops = t.getNbPops();
+            nbmets = t.getNbMets();
             nbbenthospops = t.getNbBenthosPops();
             implicit_pops = t.getImplicitStocks();
             implicit_pops_level2 = t.getImplicitPopLevels2();
@@ -104,13 +106,14 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
     std::cout << "Reading config file from " << filename << std::endl;
 
     std::ifstream fstream (filename.c_str(), std::ios_base::in);
-    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
+    return read_config_file(fstream, nbpops, nbmets, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
                             calib_w, calib_cpue, interesting_harbours);
     }
 }
 
 bool read_config_file(std::istream &stream,
                       int& nbpops,
+                      int& nbmets,
                       int& nbbenthospops,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
@@ -123,9 +126,9 @@ bool read_config_file(std::istream &stream,
 {
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
-        {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
-        {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"},
-        {15,"implicit_pops_level2"}, {17,"grouped_tacs"},{19,"nbcp_coupling_pops"},
+        {1,"nbpops"},{3,"nbmets"},{5,"nbbenthospops"},{7,"implicit_pops"},{9,"calib_oth_landings"},
+        {11,"calib_weight_at_szgroup"},{13,"calib_cpue_multiplier"},{15,"int_harbours"},
+        {17,"implicit_pops_level2"}, {19,"grouped_tacs"},{21,"nbcp_coupling_pops"}, 
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -133,6 +136,7 @@ bool read_config_file(std::istream &stream,
 
     try {
         nbpops = reader.getAs<int>("nbpops");
+        nbmets = reader.getAs<int>("nbmets");
         nbbenthospops= reader.getAs<int>("nbbenthospops");
         implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
         implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");

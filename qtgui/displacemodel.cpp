@@ -269,6 +269,7 @@ bool DisplaceModel::loadDatabase(QString path)
 
         ModelMetadataAccessor accessor(mOutSqlite->metadata());
         mConfig.setNbpops(accessor.nbPops());
+        mConfig.setNbmets(accessor.nbMets());
         mConfig.setSzGroups(accessor.nbSize());
         mConfig.setNbbenthospops(accessor.nbBenthos());
         mCalendar = std::shared_ptr<Calendar>(Calendar::build(mOutSqlite));
@@ -1123,7 +1124,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                     nd = std::shared_ptr<Node>(
                             new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), 0, 0, 0, 0, 0, 0, 0,
                                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0));
+                                     0, 0, 0));
                 }
 
                 std::shared_ptr<NodeData> nodedata(new NodeData(nd, this));
@@ -1773,6 +1774,13 @@ int DisplaceModel::getPopulationsCount() const
     return mConfig.getNbpops();
 }
 
+int DisplaceModel::getMetiersCount() const
+{
+    return mConfig.getNbmets();
+}
+
+
+
 int DisplaceModel::getBenthosPopulationsCount() const
 {
     return mConfig.getNbbenthospops();
@@ -1940,6 +1948,7 @@ bool DisplaceModel::loadNodes()
     auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
+    int nbmets = mConfig.getNbmets();
     int nbbenthospops = mConfig.getNbbenthospops();
     string a_quarter = "1";// start quarter
 
@@ -2362,6 +2371,7 @@ bool DisplaceModel::loadNodes()
                                                    0, // because  is not informed by GIS layer
                                                    0, // because  is not informed by GIS layer
                                                    nbpops,
+                                                   nbmets,
                                                    nbbenthospops,
                                                    NBSZGROUP,
                                                    a_name,
@@ -2418,6 +2428,7 @@ bool DisplaceModel::loadNodes()
                                               0,// because is not informed by GIS layer
                                               0,// because is not informed by GIS layer
                                               nbpops,
+                                              nbmets,
                                               nbbenthospops,
                                               NBSZGROUP));
             std::shared_ptr<NodeData> n(new NodeData(nd, this));

@@ -31,6 +31,18 @@ int ModelMetadataAccessor::nbPops() const
     return meta->getMetadataAs<size_t>("nbPops");
 }
 
+void ModelMetadataAccessor::setNbMets(int n)
+{
+    std::ostringstream ss;
+    ss << n;
+    meta->setMetadata("nbMets", ss.str());
+}
+
+int ModelMetadataAccessor::nbMets() const
+{
+    return meta->getMetadataAs<size_t>("nbMets");
+}
+
 void ModelMetadataAccessor::setNbSizes(int n)
 {
     std::ostringstream ss;

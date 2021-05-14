@@ -20,6 +20,7 @@ public:
 
 protected:
     bool loadConfigImpl(int &nbpops,
+                        int &nbmets,
                         int &nbbenthospops,
                         std::vector<int> &implicit_pops,
                         std::vector<int> &implicit_pops_level2,

@@ -105,6 +105,7 @@ public:
     TimelineData getFishFarmStatData(displace::plot::FishfarmsStat stattype, displace::plot::AggregationType aggtype, int ffid, std::vector<int> ftypes);
 
     size_t getNbPops();
+    size_t getNbMets();
 
     std::vector<std::string> getNationsList();
     std::vector<std::string> getPopulationsList();

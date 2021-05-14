@@ -49,6 +49,7 @@
 class Config
 {
     int nbpops;
+    int nbmets;
     int nbbenthospops;
     int szGroups;
 
@@ -72,6 +73,8 @@ public:
 
     int getNbpops() const;
     void setNbpops(int value);
+    int getNbmets() const;
+    void setNbmets(int value);
     int getNbbenthospops() const;
     void setNbbenthospops(int value);
     const QList<int> &implicit_pops() const;

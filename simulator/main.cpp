@@ -759,6 +759,7 @@ int app_main(int argc, char const* argv[])
 
     if (metadata) {
         metadata->setNbPops(simModel->config().nbpops);
+        metadata->setNbMets(simModel->config().nbmets);
         metadata->setNbBenthos(simModel->config().nbbenthospops);
         metadata->setNbSizes(NBSZGROUP);
     }
@@ -779,7 +780,7 @@ int app_main(int argc, char const* argv[])
         dout(cout << "---------------------------" << endl);
         dout(cout << "---------------------------" << endl);
 
-        NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbbenthospops);
+        NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbmets, simModel->config().nbbenthospops);
         nodeTester.test();
     }
 
@@ -1946,7 +1947,7 @@ int app_main(int argc, char const* argv[])
                                     benthosbiomassnodes,
                                     benthosnumbernodes,
                                     simModel->config().nbbenthospops,
-                                    nb_mets,
+                                    simModel->config().nbmets,
                                     use_gui,
                                     popstats_filename,
                                     popdyn_N_filename,

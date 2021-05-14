@@ -149,6 +149,7 @@ public:
     DisplaceModel *getModel() const { return mModel; }
 
     int getPopCount() const;
+    int getMetCount() const;
     int getBenthosPopCount() const;
     [[deprecated]]
     void setPop(int pop, double v);

@@ -115,10 +115,9 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
 
-    // length 2 for type 0 and 1
-    tariffs.push_back(0);
-    tariffs.push_back(0);
-
+    // a tariff map per met
+    for(int i=0;i<nbmets;++i) tariffs.push_back(0);
+  
     // initialize the vectors
 
     totNs_per_pop.resize(m_nbpops);

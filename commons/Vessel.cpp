@@ -2622,7 +2622,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                 " has tariffs0 " << tariff_this_cell.at(0) << endl);
         dout(cout << "this vessel " << this->get_name() <<
                 " has credits " << fishing_credits.at(0) << endl);
-        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(0);
+        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name());
         this->set_fishing_credits(fishing_credits);
         dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
                 " has remaining credits " << this->get_fishing_credits().at(0) << endl);

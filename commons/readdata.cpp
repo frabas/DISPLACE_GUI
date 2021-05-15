@@ -673,12 +673,15 @@ int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
 
 
 
-multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name)
+multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name, int metidx)
 {
 
+    stringstream ametidx;
+    ametidx << metidx;
+    
     // obtained from looking at average cpue on nodes for the explicit species
     //string filename=  inputfolder+"/graphsspe_"+folder_name_parameterization+"/initial_tariffs_on_nodes.dat";
-    string filename=  inputfolder+"/graphsspe/initial_tariffs_on_nodes_"+a_graph_name+".dat";
+    string filename=  inputfolder+"/graphsspe/initial_tariffs_on_nodes_"+a_graph_name+"met"+ ametidx.str() +".dat";
 
     ifstream initial_tariffs_on_nodes_file;
     initial_tariffs_on_nodes_file.open(filename.c_str());

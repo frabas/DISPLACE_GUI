@@ -77,7 +77,7 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
 
 
 multimap<types::NodeId, double>
-read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name, int metidx);
 
 
 // harbour specific

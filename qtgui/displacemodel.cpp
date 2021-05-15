@@ -2477,33 +2477,37 @@ bool DisplaceModel::loadNodes()
     string a_graph_name = "a_graph";
     a_graph_name = a_graph_name + a_graph_s;
     if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits")) {
-        auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(mInputName.toStdString(), mBasePath.toStdString(),
-                                                                      a_graph_name);
+       
+        for (int metidx = 0; metidx < nbmets; ++metidx)
+        {
+            auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(mInputName.toStdString(), mBasePath.toStdString(),
+                a_graph_name, metidx);
 
 
-        // init
-        for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++) {
-            auto idx_node = mNodes.at(a_idx)->get_idx_node();
+            // init
+            for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++)
+            {
+                auto idx_node = mNodes.at(a_idx)->get_idx_node();
 
-            // initial tariff for this particular node
-            auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
-            auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
-            vector<double> init_tariffs;
-            for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
-                init_tariffs.push_back(pos->second);
+                // initial tariff for this particular node
+                auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
+                auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
+                vector<double> init_tariffs;
+                for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
+                    init_tariffs.push_back(pos->second);
 
-            if (initial_tariffs_on_nodes.count(idx_node) == 0) {
-                init_tariffs.push_back(0);
-            } // put 0 if this node is not informed
+                if (initial_tariffs_on_nodes.count(idx_node) == 0) {
+                    init_tariffs.push_back(0);
+                } // put 0 if this node is not informed
 
-            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+                mNodes.at(a_idx)->set_tariffs(init_tariffs);
+            }
         }
-
     } else {
-        // need to inform with a vector of three zeros at least
-        vector<double> init_tariffs(3, 0);
+        // need to inform with a vector of nmmets zeros
+        vector<double> init_tariffs(nbmets, 0);
         for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++) {
-            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+            mNodes.at(a_idx)->set_tariffs(init_tariffs); 
         }
     }
 

@@ -378,8 +378,13 @@ void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *mo
             }
             int id = fields[1].toInt();
             vector<double> tariffs;
-            tariffs.push_back(fields[4].toDouble());
-            tariffs.push_back(0);
+            
+            int i = 4;
+            while (i < fields.size()) {
+                tariffs.push_back(fields[i].toDouble());
+                ++i;
+            }
+            
             model->collectPopTariffs (step, id, tariffs);
         }
     }

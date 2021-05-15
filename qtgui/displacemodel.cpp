@@ -2478,7 +2478,7 @@ bool DisplaceModel::loadNodes()
     a_graph_name = a_graph_name + a_graph_s;
     if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits")) {
        
-        for (int metidx = 0; metidx < nbmets; ++metidx)
+        for (int metidx = 0; metidx < nbmets; metidx++)
         {
             auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(mInputName.toStdString(), mBasePath.toStdString(),
                 a_graph_name, metidx);
@@ -2489,18 +2489,18 @@ bool DisplaceModel::loadNodes()
             {
                 auto idx_node = mNodes.at(a_idx)->get_idx_node();
 
-                // initial tariff for this particular node
+                // initial tariff for this particular node and met
                 auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
                 auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
-                vector<double> init_tariffs;
+                double init_tariff;
                 for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
-                    init_tariffs.push_back(pos->second);
+                    init_tariff=pos->second;
 
                 if (initial_tariffs_on_nodes.count(idx_node) == 0) {
-                    init_tariffs.push_back(0);
+                    init_tariff=0;
                 } // put 0 if this node is not informed
 
-                mNodes.at(a_idx)->set_tariffs(init_tariffs);
+                mNodes.at(a_idx)->set_tariffs(metidx, init_tariff);
             }
         }
     } else {

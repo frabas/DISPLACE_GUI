@@ -116,10 +116,9 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     m_nszgrp = nbszgroups;
 
     // a tariff map per met
-    for(int i=0;i<nbmets;++i) tariffs.push_back(0);
-  
+    for (int i = 0; i < nbmets; i++) tariffs.push_back(0);
+   
     // initialize the vectors
-
     totNs_per_pop.resize(m_nbpops);
     totWs_per_pop.resize(m_nbpops);
     impact_per_pop.resize(m_nbpops);
@@ -2111,12 +2110,17 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
     dout(cout  << "export tariffs on nodes...." << endl);
     // note that this file will also be used by the ui for displaying the statistics on node
 
+    int met = 0;
+
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tariffs
-    if(tariffs.at(0)>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " <<
-        tariffs.at(0) << " " <<  endl;
-
+    if (tariffs.at(0) > 1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " " <<
+        " " << this->get_x() << " " << this->get_y() << " ";
+    while (met < tariffs.size()) {
+        popnodes << tariffs.at(met) << " ";
+        ++met;
+    }
+    popnodes << endl;
 }
 
 

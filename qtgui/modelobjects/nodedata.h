@@ -137,6 +137,7 @@ public:
 
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
+    void set_tariffs(int met, double tariff) { mNode->set_tariffs(met, tariff); }
     const vector<types::NodeId> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }
     void set_usual_fgrounds(vector<types::NodeId> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
     const vector<double> &get_freq_usual_fgrounds() { return mNode->get_freq_usual_fgrounds(); }

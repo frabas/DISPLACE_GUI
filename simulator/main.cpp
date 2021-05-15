@@ -952,7 +952,7 @@ int app_main(int argc, char const* argv[])
 
     if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
      
-        for (int metidx = 0; metidx < simModel->config().nbmets; ++metidx)
+        for (int metidx = 0; metidx < simModel->config().nbmets; metidx++)
         {
             auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
                 a_graph_name, metidx);
@@ -966,21 +966,15 @@ int app_main(int argc, char const* argv[])
             // initial tariff for this particular node
             auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
             auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
-            vector<double> init_tariffs;
+            double init_tariff;
             for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
-                init_tariffs.push_back(pos->second);
-
-
-            // complete  values for tariff per node because we expect tariff per metier
-            while (init_tariffs.size() <= simModel->config().nbmets) { init_tariffs.push_back(0); }
-
+                init_tariff = pos->second;
 
             if (initial_tariffs_on_nodes.count(idx_node) == 0) {
-                init_tariffs.push_back(0);
+                init_tariff = 0;
             } // put 0 if this node is not informed
 
-            simModel->nodes().at(a_idx)->set_tariffs(init_tariffs); // type 0
-           }
+            simModel->nodes().at(a_idx)->set_tariffs(metidx, init_tariff);            }
 
 
            // check

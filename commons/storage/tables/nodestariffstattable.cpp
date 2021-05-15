@@ -73,7 +73,7 @@ bool NodesTariffStatTable::insert(int tstep, Node *node)
                                         (int) node->get_idx_node().toIndex(),
                                         node->get_tariffs().at(0),
                                         node->get_tariffs().at(1),
-                                        node->get_tariffs().at(2)
+                                        node->get_tariffs().at(1) //TODO: adapt for more met
                         )
     );
     return 0;
@@ -90,7 +90,7 @@ void NodesTariffStatTable::queryAllNodesAtStep(int tstep, std::function<bool(Nod
         s.nodeId = types::NodeId(st.getIntValue(0));
         s.tariffmet0 = st.getDoubleValue(1);
         s.tariffmet1 = st.getDoubleValue(2);
-        s.tariffmet2 = st.getDoubleValue(3);
+        s.tariffmet2 = st.getDoubleValue(2); //TODO: adapt for more met
         if (op) {
             return op(s);
         }

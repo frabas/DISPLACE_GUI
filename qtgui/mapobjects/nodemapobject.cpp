@@ -289,18 +289,18 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithTariffs0:
-        text += QString("<br/><b>Tariffs (type All):</b> %1<br/>")
+        text += QString("<br/><b>Tariffs (Met0):</b> %1<br/>")
                 .arg(tariffs.at(0));
         break;
 
     case GraphNodeWithTariffs1:
-        text += QString("<br/><b>Tariffs (type Pop):</b> %1<br/>")
+        text += QString("<br/><b>Tariffs (Met1):</b> %1<br/>")
                 .arg(tariffs.at(1));
         break;
 
     case GraphNodeWithTariffs2:
-        text += QString("<br/><b>Tariffs (type Benthos):</b> %1<br/>")
-                .arg(tariffs.at(2));
+        text += QString("<br/><b>Tariffs (Met2):</b> %1<br/>")
+                .arg(tariffs.at(1)); // adapt to more met
         break;
 
     case GraphNodeWithSalinity:

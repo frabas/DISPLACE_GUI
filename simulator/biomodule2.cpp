@@ -1447,7 +1447,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
     //...and export the cumulated effort on nodes (a cumul from t=0)
     for (unsigned int n=0; n<nodes.size(); n++)
-    {
+    { 
         nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
         nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);

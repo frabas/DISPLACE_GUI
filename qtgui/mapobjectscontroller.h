@@ -223,9 +223,9 @@ public:
     };
 
     enum TariffLayerIds {
-        TariffLayerTariffAll,
-        TariffLayerTariffPop,
-        TariffLayerTariffBenthos,
+        TariffLayerTariffMet0,
+        TariffLayerTariffMet1,
+        TariffLayerTariffMet2,
 
      TariffLayerMax
     };
@@ -402,9 +402,9 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscards[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumdiscardsratio[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerNbchoked[MainWindow::MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffMet0[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffMet1[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffMet2[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerWind[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSST[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSalinity[MainWindow::MAX_MODELS];

@@ -30,9 +30,9 @@ void NodesTariffStatTable::dropAndCreate()
 
     create(std::make_tuple(fldNodeId,
                            fldTStep,
-                           tariffAll,
-                           tariffPop,
-                           tariffBenthos
+                           tariffMet0,
+                           tariffMet1,
+                           tariffMet2
     ));
 }
 
@@ -43,14 +43,14 @@ void NodesTariffStatTable::init()
 
         p->insertStatement = prepareInsert(std::make_tuple(fldTStep,
                                                            fldNodeId,
-                                                           tariffAll,
-                                                           tariffPop,
-                                                           tariffBenthos
+                                                           tariffMet0,
+                                                           tariffMet1,
+                                                           tariffMet2
         ));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       fldNodeId,
-                                                      tariffAll, tariffPop, tariffBenthos,
+                                                      tariffMet0, tariffMet1, tariffMet2,
                                                       sqlite::op::max(fldTStep)
         )
                 .where(sqlite::op::le(fldTStep))
@@ -88,9 +88,9 @@ void NodesTariffStatTable::queryAllNodesAtStep(int tstep, std::function<bool(Nod
         auto &st = p->allNodesQueryStatement;
         NodeTariffStat s;
         s.nodeId = types::NodeId(st.getIntValue(0));
-        s.tariffall = st.getDoubleValue(1);
-        s.tariffpop = st.getDoubleValue(2);
-        s.tariffbenthos = st.getDoubleValue(3);
+        s.tariffmet0 = st.getDoubleValue(1);
+        s.tariffmet1 = st.getDoubleValue(2);
+        s.tariffmet2 = st.getDoubleValue(3);
         if (op) {
             return op(s);
         }

@@ -1983,7 +1983,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
  //   cout << "this->other_variable_costs_per_unit_effort is "<< this->other_variable_costs_per_unit_effort << " this vessel " << this->get_name() <<  endl;
  //   cout << "get_cumsteaming() "<< get_cumsteaming() << endl;
  //  cout << "TotVarCosts is "<< TotVarCosts << endl;
-    GVA               = (TotLandingIncome+(annual_other_income*tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
+    GVA               = (TotLandingIncome+(annual_other_income* (double)tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs* (double)tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
  //  cout << "GVA is "<< GVA << endl;
 
@@ -2010,48 +2010,58 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
     double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * this_vessel_nb_crew *  TotHoursAtSea;
 // cout << "LabourOpportunityCosts is "<< LabourOpportunityCosts << endl;
     LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent/100) -
-                                      (annual_insurance_costs_per_crew * this_vessel_nb_crew) -
+                                      ((annual_insurance_costs_per_crew * (double)tstep / 8761) * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
 // cout << "LabourSurplus is "<< LabourSurplus << endl;
 
-    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100 *tstep/8761;
+    double CapitalOpportunityCosts = (vessel_value * opportunity_interest_rate/100) * (double)tstep/8761;
 // cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
 
     if(vessel_value<0) vessel_value=0;
-    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
+    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* ((100-annual_depreciation_rate)/100) * (double)tstep/8761);
 // cout << "NetProfit is "<< NetProfit << endl;
 
 
-   double divider=(TotLandingIncome+(annual_other_income*tstep/8761));
-   if(divider>0) {
+   double divider=(TotLandingIncome+(annual_other_income* (double)tstep/8761));
+   if(divider>0) 
+   {
          NetProfitMargin=(NetProfit*100)/divider;
-    } else {
+    } 
+   else 
+   {
        NetProfitMargin=0;
    }
     // AER indicator (in %)
 // cout << "NetProfitMargin is "<< NetProfitMargin << endl;
 
+   // overwrite input with a harcoded value to avoid confusion in informing this bit. What is meeded here is the max hours worked that correspond to one unit of FTE 
+   // i.e. 8 hours per day x 5 work days per week x 52 weeks per year = 2080
+   double stdard_annual_full_time_employement_hours = 2080.0;
+   double nb_crew_on_this_vessel = this->get_this_vessel_nb_crew();
+    
+   if (GVA > 0 && stdard_annual_full_time_employement_hours > 0)
+   {
+       GVAPerFTE = GVA / ((TotHoursAtSea * nb_crew_on_this_vessel) / (stdard_annual_full_time_employement_hours * ((double)tstep / 8761)));
+       // a proxy of Labour Productivity
+   }
 
-    if(GVA>0 && standard_annual_full_time_employement_hours>0)
-        GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
-                                               // a proxy of Labour Productivity
-// cout << "GVAPerFTE is "<< GVAPerFTE << endl;
-
-    if((vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)>1){
-    RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
+    if((vessel_value* ((100-annual_depreciation_rate)/100)*((double)tstep/8761))>1)
+    {
+    RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* ((100.0-annual_depreciation_rate)/100.0)*((double)tstep/8761));
                                                // Capital Productivity i.e. Return on Fixed Tangible Assets
-    } else{
+    } else
+    {
     RoFTA             =0;
     }
 // cout << "RoFTA is "<< RoFTA << endl;
 
-   if(GVA>0) BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)) /
+   if(GVA>0) BER               = (other_annual_fixed_costs* (double)tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* ((100-annual_depreciation_rate)/100)* (double)tstep/8761)) /
                            (1-(  ((GVA*crewshare_and_unpaid_labour_costs_percent/100) + TotFuelCosts + TotVarCosts)   /TotLandingIncome) );
                                                // Break-Even Revenue
 // cout << "BER is "<< BER << endl;
 
     if(BER>0){
-    CRBER             = (TotLandingIncome + (annual_other_income*tstep/8761)) / BER;
+    CRBER             = (TotLandingIncome + (annual_other_income* (double)tstep/8761)) / BER;
                                                // Revenue to Break-even revenue Ratio
     } else{
     CRBER             =0;
@@ -2059,7 +2069,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
 // cout << "CRBER is "<< CRBER << endl;
 
-    if(GVA>0)   NetPresentValue = GVA* (1/pow((1+annual_discount_rate/100),(ceil(tstep / 8761))));
+    if(GVA>0)   NetPresentValue = GVA* (1/pow((1+annual_discount_rate/100),(ceil((double)tstep / 8761))));
                                                // annual_discount_rate is in percent
 // cout << "NetPresentValue is "<< NetPresentValue << endl;
 

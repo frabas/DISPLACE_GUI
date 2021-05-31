@@ -1199,7 +1199,7 @@ void Population::aggregate_N()
             const vector<double> &Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
             for(unsigned int i=0; i<agg_Ns_at_szgroup.size(); i++)
 			{
-				agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);
+				if(!isnan(Ns_this_node.at(i))) agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);
 			}
 
 		}
@@ -1459,7 +1459,7 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
 
 
           // do a weighted average of the weight
-          weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
+          if(tot_now_in_arr!=0) weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
                                                     (tot_before_in_arr/tot_now_in_arr)* weight_at_szgroup_this_pop.at(sz);
 
 cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;

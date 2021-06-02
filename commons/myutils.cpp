@@ -1931,6 +1931,16 @@ bool fill_from_relative_stability(istream& in, map<string, double>& relative_sta
 fill in the attributes into a multimap
 @param the specification file, ...
 */
+bool fill_from_percent_tac_per_vessel_length_class(istream& in, map<int, double>& percent_tac_per_vessel_length_class, string folder_name_parameterization)
+{
+    return fill_map_from_specifications_i_d(in, percent_tac_per_vessel_length_class, folder_name_parameterization);
+}
+
+
+/**
+fill in the attributes into a multimap
+@param the specification file, ...
+*/
 bool fill_from_percent_tac_cumul_over_months_key(istream& in, map<int, double>& percent_tac_cumul_over_months_key, string folder_name_parameterization)
 {
     return fill_map_from_specifications_i_d(in, percent_tac_cumul_over_months_key, folder_name_parameterization);

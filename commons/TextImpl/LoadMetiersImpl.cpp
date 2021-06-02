@@ -65,6 +65,7 @@ struct [[deprecated]] LoadedData {
     std::vector<int> vectiparam2;
     std::vector<map<string, double> > vectmapsdparam1;
     std::vector<map<int, double> > vectmapsdparam2;
+    std::vector<map<int, double> > vectmapsdparam3;
     std::map<int, int> mapiiparam1;
     std::map<int, double> mapidparam1;
     std::vector<map<types::NodeId, double> > vectmapndparam1;

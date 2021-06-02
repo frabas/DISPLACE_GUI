@@ -48,6 +48,7 @@ Population::Population(int a_name,
                        const vector<map<types::NodeId, double> >& _oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
+                       const map<int, double>& percent_tac_per_vessel_length_class,   
                        const map<int, double> & percent_tac_cumul_over_months_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
                        const vector<vector<double> > &_percent_age_per_szgroup_matrix,
@@ -287,7 +288,8 @@ Population::Population(int a_name,
     dout(cout << "init tac " << name << endl);
 
     // init tac
-	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, percent_tac_cumul_over_months_key);
+	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, 
+                    percent_tac_per_vessel_length_class, percent_tac_cumul_over_months_key);
     fbar=0.0;
     oth_land_multiplier=1.0;
 
@@ -296,6 +298,11 @@ Population::Population(int a_name,
         landings_so_far_per_nation.insert(std::make_pair(it->first, 0));
     }
     
+    for (auto it2 = percent_tac_per_vessel_length_class.begin(); it2 != percent_tac_per_vessel_length_class.end(); it2++)
+    {
+        landings_so_far_per_vessel_length_class.insert(std::make_pair(it2->first, 0));
+    }
+
     // check
     //cout << "check relative_stability_key " << endl;
     //for (auto elem : relative_stability_key)
@@ -613,6 +620,11 @@ double Population::get_landings_so_far() const
 map<string,double> Population::get_landings_so_far_per_nation() 
 {
     return(landings_so_far_per_nation);
+}
+
+map<int, double> Population::get_landings_so_far_per_vessel_length_class()
+{
+    return(landings_so_far_per_vessel_length_class);
 }
 
 
@@ -1040,6 +1052,11 @@ void Population::set_landings_so_far_this_nation(string nation, double _landings
     landings_so_far_per_nation[nation] = _landings_so_far;
 }
 
+void Population::set_landings_so_far_this_vessel_length_class(int vessel_class, double _landings_so_far)
+{
+    landings_so_far_per_vessel_length_class[vessel_class] = _landings_so_far;
+}
+
 void Population::reset_landings_so_far_per_nation()
 {
     for (auto& p : landings_so_far_per_nation) p.second = 0;
@@ -1047,6 +1064,12 @@ void Population::reset_landings_so_far_per_nation()
 
 }
 
+void Population::reset_landings_so_far_per_vessel_length_class()
+{
+    for (auto& p : landings_so_far_per_vessel_length_class) p.second = 0;
+    cout << "reset_landings_so_far_per_vessel_length_class this pop " << this->get_name() << endl;
+
+}
 
 void Population::add_to_landings_at_end_of_years(double value)
 {

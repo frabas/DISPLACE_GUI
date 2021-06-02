@@ -120,6 +120,7 @@ struct LoadedData {
     std::multimap<types::NodeId, double> mmapndparam2;
     std::vector<map<string, double> > vectmapsdparam1;
     std::vector<map<int, double> > vectmapsdparam2;
+    std::vector<map<int, double> > vectmapsdparam3;
     std::vector<vector<map<types::NodeId, double> > > vovomapndparam1;
     std::map<int, int> mapiiparam1;
     std::map<int, int> mapiiparam2;
@@ -1103,6 +1104,64 @@ read_relative_stability_keys(string a_semester, int a_pop, string folder_name_pa
 
 
 map<int, double>
+read_percent_tac_per_vessel_length_class(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder)
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+
+    string filename;
+    if (folder_name_parameterization == "final") {
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" +
+            a_pop_s + "vesselslengthspe_percent_tac_per_vessel_length_class.dat";
+    }
+    else {
+        //=> NEW_VERSION: replaced by:
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" +
+            a_pop_s + "vesselslengthspe_percent_tac_per_vessel_length_class.dat";
+    }
+
+    ifstream file_percent_tac_per_vessel_length_class;
+    file_percent_tac_per_vessel_length_class.open(filename.c_str());
+    if (file_percent_tac_per_vessel_length_class.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        //exit(-1);
+         // back compatibility: if not informed then fill out with 100% 
+        map<int, double> percent_tac_per_vessel_length_class;
+        percent_tac_per_vessel_length_class[0] = 100;
+        percent_tac_per_vessel_length_class[1] = 100;
+        percent_tac_per_vessel_length_class[2] = 100;
+        percent_tac_per_vessel_length_class[3] = 100;
+        percent_tac_per_vessel_length_class[4] = 100;
+        return(percent_tac_per_vessel_length_class);
+
+    }
+    map<int, double> percent_tac_per_vessel_length_class;
+    fill_from_percent_tac_per_vessel_length_class(file_percent_tac_per_vessel_length_class,
+                                                   percent_tac_per_vessel_length_class,
+                                                   folder_name_parameterization);
+    file_percent_tac_per_vessel_length_class.close();
+
+#ifdef VERBOSE
+    // check input
+    map<string, double>::iterator pos;
+    dout(cout << " percent_tac_per_vessel_length_class " << endl);
+    for (pos = percent_tac_per_vessel_length_class.begin(); pos != percent_tac_per_vessel_length_class.end(); pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return (percent_tac_per_vessel_length_class);
+}
+
+
+
+map<int, double>
 read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder)
 {
     // casting a_pop into a string
@@ -1149,6 +1208,8 @@ read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string fol
     fill_from_percent_tac_cumul_over_months_key(file_percent_tac_cumul_over_months_key,
                                                    percent_tac_cumul_over_months_key, 
                                                    folder_name_parameterization);
+
+    
     file_percent_tac_cumul_over_months_key.close();
 
 #ifdef VERBOSE
@@ -1771,6 +1832,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     vector<map<types::NodeId, double> > vect_of_oth_land_map(name_pops.size());
     vector<vector<map<types::NodeId, double> > > vect_of_vect_of_oth_land_map(name_pops.size());
     vector<map<string, double> > vect_of_relative_stability_key_map(name_pops.size());
+    vector<map<int, double> > vect_of_percent_tac_per_vessel_length_class_map(name_pops.size());
     vector<map<int, double> > vect_of_percent_tac_cumul_over_months_key_map(name_pops.size());
     vector<vector<vector<double> > > vect_of_growth_transition_matrix_vov(name_pops.size());
     vector<vector<vector<double> > > vect_of_percent_szgroup_per_age_matrix_vov(name_pops.size());
@@ -1983,6 +2045,9 @@ bool TextfileModelLoader::loadPopulations(int a_year)
             vect_of_relative_stability_key_map.at(sp) = read_relative_stability_keys(semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder);
+            vect_of_percent_tac_per_vessel_length_class_map.at(sp) = read_percent_tac_per_vessel_length_class(semester, sp,
+                p->folder_name_parameterization,
+                p->inputfolder);
             vect_of_percent_tac_cumul_over_months_key_map.at(sp) = read_percent_tac_cumul_over_months_keys(semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder);
@@ -2101,7 +2166,8 @@ bool TextfileModelLoader::loadPopulations(int a_year)
     loadedData.vovomapndparam1 = vect_of_vect_of_oth_land_map;  
     loadedData.vectmmapidparam1 = vect_of_overall_migration_fluxes_mmap;
     loadedData.vectmapsdparam1 = vect_of_relative_stability_key_map;
-    loadedData.vectmapsdparam2 = vect_of_percent_tac_cumul_over_months_key_map;
+    loadedData.vectmapsdparam2 = vect_of_percent_tac_per_vessel_length_class_map;
+    loadedData.vectmapsdparam3 = vect_of_percent_tac_cumul_over_months_key_map;
     loadedData.vovovd2 = vect_of_percent_szgroup_per_age_matrix_vov;
     loadedData.vovovd3 = vect_of_percent_age_per_szgroup_matrix_vov;
     loadedData.vovovd1 = vect_of_growth_transition_matrix_vov;
@@ -2167,6 +2233,7 @@ bool TextfileModelLoader::loadPopulations(int a_year)
                 loadedData.vectmmapidparam1.at(sp),
                 loadedData.vectmapsdparam1.at(sp),
                 loadedData.vectmapsdparam2.at(sp),
+                loadedData.vectmapsdparam3.at(sp),
                 loadedData.vovovd2.at(sp),
                 loadedData.vovovd3.at(sp),
                 loadedData.vovovd1.at(sp),

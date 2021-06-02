@@ -283,7 +283,9 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
 
 map<string, double>
 read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
-map<string, double>
+map<int, double>
+read_percent_tac_per_vessel_length_class(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+map<int, double>
 read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 
 

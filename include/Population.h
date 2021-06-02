@@ -57,6 +57,7 @@ class  Population
                    const vector<map<types::NodeId, double> > &oth_land_map_per_met,
                    const multimap<int, double> &overall_migration_fluxes,
                    const map<string,double> &relative_stability_key,
+                   const map<int, double>& percent_tac_per_vessel_length_class,
                    const map<int, double>& percent_tac_cumul_over_months_key,
                    const vector< vector<double> > &percent_szgroup_per_age_matrix,
                    const vector< vector<double> > &percent_age_perszgroup_matrix,
@@ -151,6 +152,7 @@ class  Population
         int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
         map<string,double> get_landings_so_far_per_nation();
+        map<int, double> get_landings_so_far_per_vessel_length_class();
         double get_tot_N_at_age0() const;
         const vector<double>& get_landings_at_end_of_years() const;
         void set_quota(double _quota);
@@ -201,7 +203,9 @@ class  Population
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
         void set_landings_so_far_this_nation(string _nation, double _landings_so_far_per_nation);
+        void set_landings_so_far_this_vessel_length_class(int _vessel_class, double _landings_so_far_per_vessel_length_class);
         void reset_landings_so_far_per_nation();
+        void reset_landings_so_far_per_vessel_length_class();
         void add_to_landings_at_end_of_years(double value);
         void set_param_sr(const vector<double>& _param_sr);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
@@ -330,6 +334,7 @@ class  Population
         double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
         map <string, double> landings_so_far_per_nation;
+        map <int, double> landings_so_far_per_vessel_length_class;
         vector <double> landings_at_end_of_years;
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
         double tot_N_at_age0;

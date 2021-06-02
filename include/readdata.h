@@ -283,6 +283,10 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
 
 map<string, double>
 read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+map<string, double>
+read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+
+
 
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 

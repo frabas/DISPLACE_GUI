@@ -1922,10 +1922,21 @@ bool fill_from_overall_migration_fluxes(istream& in, multimap<int, double>& over
 fill in the attributes into a multimap
 @param the specification file, ...
 */
-bool fill_from_relative_stability (istream& in, map<string, double>& relative_stability)
+bool fill_from_relative_stability(istream& in, map<string, double>& relative_stability)
 {
     return fill_map_from_specifications_s_d(in, relative_stability);
 }
+
+/**
+fill in the attributes into a multimap
+@param the specification file, ...
+*/
+bool fill_from_percent_tac_cumul_over_months_key(istream& in, map<int, double>& percent_tac_cumul_over_months_key, string folder_name_parameterization)
+{
+    return fill_map_from_specifications_i_d(in, percent_tac_cumul_over_months_key, folder_name_parameterization);
+}
+
+
 
 
 /**

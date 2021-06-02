@@ -42,6 +42,7 @@ public:
         vector<map<types::NodeId, double> > oth_land_map_per_met;
         std::multimap<int, double> overall_migration_fluxes;
         std::map<string, double> relative_stability_key;
+        std::map<int, double> percent_tac_cumul_over_months_key;
         std::vector<std::vector<double> > percent_szgroup_per_age_matrix;
         std::vector<std::vector<double> > percent_age_per_szgroup_matrix;
         std::vector<std::vector<double> > growth_transition_matrix;

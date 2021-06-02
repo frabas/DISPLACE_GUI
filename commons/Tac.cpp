@@ -25,7 +25,9 @@
 #include "Tac.h"
 #include <helpers.h>
 
-Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,double> _relative_stability_key)
+Tac::Tac(double init_tac, double _percent_for_simulated_vessels, 
+	map<string,double> _relative_stability_key,
+	map<int, double> _percent_tac_cumul_over_months_key)
 {
 
     dout(cout << "create tac "  << endl);
@@ -36,6 +38,7 @@ Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,doub
 	ts_tac.push_back(init_tac);
 	current_tac=init_tac;
 
+	percent_tac_cumul_over_months_key = _percent_tac_cumul_over_months_key;
 	map<string, double>::iterator it;
 	for (it = _relative_stability_key.begin(); it != _relative_stability_key.end(); it++)
 	{
@@ -76,6 +79,10 @@ map<string,double> Tac::get_relative_stability_key() const
 	return(relative_stability_key);
 }
 
+map<int, double> Tac::get_percent_tac_cumul_over_months_key() const
+{
+	return(percent_tac_cumul_over_months_key);
+}
 
 vector<double> Tac::get_ts_tac() const
 {

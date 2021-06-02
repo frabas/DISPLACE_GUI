@@ -48,6 +48,7 @@ Population::Population(int a_name,
                        const vector<map<types::NodeId, double> >& _oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
+                       const map<int, double> & percent_tac_cumul_over_months_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
                        const vector<vector<double> > &_percent_age_per_szgroup_matrix,
                        const vector<vector<double> > &_growth_transition_matrix,
@@ -286,7 +287,7 @@ Population::Population(int a_name,
     dout(cout << "init tac " << name << endl);
 
     // init tac
-	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
+	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, percent_tac_cumul_over_months_key);
     fbar=0.0;
     oth_land_multiplier=1.0;
 

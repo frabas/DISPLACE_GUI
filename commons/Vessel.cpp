@@ -2434,6 +2434,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(std::ofstream &export_individual_tacs,
+                      int a_month,
                       std::vector<Population *> const &populations,
                       std::vector<Node *> const &nodes,
                       vector<Benthos *> const &benthoshabs,
@@ -3287,17 +3288,26 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         // because the first year is the calibration year:
                         //if(tstep>8761  && !is_individual_vessel_quotas)
                         {
+                            double prop_tac_up_to_this_month= populations.at(pop)->get_tac()->get_percent_tac_cumul_over_months_key()[a_month] / 100;
+
                             // 4. compare in tons (AT THE GLOBAL SCALE, OR PER NATION GIVEN THE QUOTA SHARE AMONG NATIONS)
-                            if( ((so_far/1000) > (global_quotas.at(pop)))  ||
-                                  (so_far_this_nation/1000 > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation)) )
+                            if( ((so_far/1000) > (global_quotas.at(pop))* prop_tac_up_to_this_month)  ||
+                                  (so_far_this_nation/1000 > populations.at(pop)->get_tac()->get_tac_per_nation(a_nation) *
+                                      prop_tac_up_to_this_month) )
                             {
-                                if (((so_far / 1000) > (global_quotas.at(pop)))) populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
+                                if (((so_far / 1000) > (global_quotas.at(pop) * prop_tac_up_to_this_month))) populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
 
-                                prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
+                                prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop)* prop_tac_up_to_this_month);
 
-                                dout (cout << "prop used " <<
+                                dout(cout << "landings so far in tons is " << so_far / 1000 << endl;)
+                                dout(cout << "global_quotas.at(pop) is " << global_quotas.at(pop) << endl;)
+                                dout(cout << "prop tac_cumul_over_months_key this month (up to 1) "<< a_month <<" is " << prop_tac_up_to_this_month << endl;)
+
+                                dout(cout << "prop used (max is 1): " <<
                                       prop_remaining_global_quotas.at(pop)  <<
-                                      "  global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
+                                      "  Allowed global quota up to this month is " << global_quotas.at(pop) * prop_tac_up_to_this_month <<
+                                        " this pop: this is overshoot..." << endl;)
+                                
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);

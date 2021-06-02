@@ -121,6 +121,7 @@ struct VesselsData {
     std::multimap<types::NodeId, double> mmapndparam1;
     std::multimap<types::NodeId, double> mmapndparam2;
     std::vector<map<string, double> > vectmapsdparam1;
+    std::vector<map<int, double> > vectmapsdparam2;
     std::map<int, int> mapiiparam1;
     std::map<int, int> mapiiparam2;
     std::map<int, double> mapidparam1;

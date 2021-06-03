@@ -82,7 +82,7 @@ bool DatabaseModelLoader::loadNodesAndGraphsDataImpl()
                     harbour->set_is_harbour(id);
 
                     for (auto it = fishprices.lower_bound(nidx); it != fishprices.upper_bound(nidx); ++it) {
-                        harbour->set_fishprice(it->second.species, it->second.marketCat);
+                        harbour->set_fishprice(it->second.species, it->second.value);
                     }
 
                     node = harbour;

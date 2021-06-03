@@ -7,6 +7,7 @@
 
 struct  ModelConfig {
     int nbpops;
+    int nbmets;
     int nbbenthospops;
     int szGroups;
 

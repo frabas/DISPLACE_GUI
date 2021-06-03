@@ -42,7 +42,8 @@ void open_file_error(string filename);
 
 bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db, string folder_name_parameterization,
                       string inputfolder,
-                      int &a_int_line2,
+                      int& a_int_line2,
+                      int &a_int_notdefined,
                       int &a_int_line4,
                       vector<int> &a_vector_line6,
                       vector<int> &implicit_pops_level2,
@@ -55,6 +56,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db, string folder
 
 bool read_config_file(std::istream &stream,
                       int &a_int_line2,
+                      int& a_int_notdefined,
                       int &a_int_line4,
                       vector<int> &a_vector_line6,
                       vector<int> &implicit_pops_level2,
@@ -75,7 +77,7 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
 
 
 multimap<types::NodeId, double>
-read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name, int metidx);
 
 
 // harbour specific
@@ -281,6 +283,12 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
 
 map<string, double>
 read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+map<int, double>
+read_percent_tac_per_vessel_length_class(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+map<int, double>
+read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+
+
 
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 

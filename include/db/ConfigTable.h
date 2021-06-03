@@ -95,6 +95,11 @@ public:
         return get<int>("nbpops");
     }
 
+    auto getNbMets() const
+    {
+        return get<int>("nbmets");
+    }
+
     auto getNbBenthosPops() const
     {
         return get<int>("nbbenthospops");

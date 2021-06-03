@@ -53,7 +53,7 @@ class  Node
               double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
               double _bathymetry, double _shippingdensity, double _siltfraction, double _icesrect,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
-              int nbpops, int nbbenthospops,  int nbszgroups);
+              int nbpops, int nbmets, int nbbenthospops,  int nbszgroups);
         /*
         Node (types::NodeId idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
@@ -354,7 +354,7 @@ class  Node
         void clear_cpue_per_pop_per_met_this_month();
         void compute_cpue_per_pop_per_met_this_month(int pop, int met);
         void clear_cumdiscards_per_pop();
-        void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions);
+        void apply_natural_mortality_at_node(int name_pop,  const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background);
         void apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop, int testep,
                                                                         const vector<vector<double> > & Ws_at_szgroup,
                                                                         const vector<vector<vector<vector<double> > > > & predkernel,
@@ -376,16 +376,21 @@ class  Node
         void export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold);
         void export_popnodes_cumdiscards(ofstream& popnodes, int tstep);
         void export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep);
-    void export_popnodes_nbchoked(ofstream &popnodes, int tstep);
-    void export_popnodes_cumulcatches_per_pop(ofstream &popnodes, int tstep, int pop);
-    void export_nodes_envt(ofstream &nodes_event, int tstep);
-    void export_popnodes_tariffs(ofstream &popnodes, int tstep);
+        void export_popnodes_nbchoked(ofstream &popnodes, int tstep);
+        void export_popnodes_cumulcatches_per_pop(ofstream &popnodes, int tstep, int pop);
+        void export_nodes_envt(ofstream &nodes_event, int tstep);
+        void export_popnodes_tariffs(ofstream &popnodes, int tstep);
 
-    void init_benthos_tot_biomass_on_node(int funcgrp);
-    void init_benthos_tot_number_on_node(int funcgrp);
-    void init_benthos_tot_meanweight_on_node(int funcgrp);
-    void init_benthos_tot_biomass_K_on_node(int funcgrp);
-    void init_benthos_tot_number_K_on_node(int funcgrp);
+        void init_benthos_tot_biomass_on_node(int funcgrp);
+        void init_benthos_tot_number_on_node(int funcgrp);
+        void init_benthos_tot_meanweight_on_node(int funcgrp);
+        void init_benthos_tot_biomass_K_on_node(int funcgrp);
+        void init_benthos_tot_number_K_on_node(int funcgrp);
+        
+		int get_nbmets() const { return m_nbmets; }
+        int get_nbpops() const { return m_nbpops; }
+        int get_nbbenthospops() const { return m_nbbenthospops; }
+        int get_nszgroups() const { return m_nszgrp; }
 
     void setAreaType(int _area_type);
     int evaluateAreaType();
@@ -524,6 +529,7 @@ private:
         static const multimap<int,double> mFreqUsualMetiers;
 
         int m_nbpops;
+        int m_nbmets;
         int m_nbbenthospops;
         int m_nszgrp;
 

@@ -23,6 +23,9 @@ public:
     void setNbPops(int n);
     int nbPops() const;
 
+    void setNbMets(int n);
+    int nbMets() const;
+    
     void setNbSizes(int n);
     int nbSize() const;
 

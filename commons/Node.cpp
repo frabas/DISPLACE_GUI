@@ -50,7 +50,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
            double _bathymetry, double _shippingdensity, double _siltfraction, double _icesrectanglecode,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            double _benthos_biomass_K, double _benthos_number_K,
-           int nbpops, int nbbenthospops, int nbszgroups)
+           int nbpops, int nbmets, int nbbenthospops, int nbszgroups)
     : idx_node(idx)
 {
 	x=xval;
@@ -111,15 +111,14 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
 	}
 
     m_nbpops = nbpops;
+    m_nbmets = nbmets;
     m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
 
-    // length 2 for type 0 and 1
-    tariffs.push_back(0);
-    tariffs.push_back(0);
-
+    // a tariff map per met
+    for (int i = 0; i < nbmets; i++) tariffs.push_back(0);
+   
     // initialize the vectors
-
     totNs_per_pop.resize(m_nbpops);
     totWs_per_pop.resize(m_nbpops);
     impact_per_pop.resize(m_nbpops);
@@ -227,6 +226,7 @@ Node::Node()
       benthos_tot_number_K(0),
       tariffs(),
       m_nbpops(0),
+      m_nbmets(0),
       m_nbbenthospops(0),
       m_nszgrp(0)
 {
@@ -1398,7 +1398,7 @@ void Node::clear_avai_pops_at_selected_szgroup()
 }
 
 
-void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions)
+void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1409,7 +1409,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
         double M_at_szgroup_i_on_node=0;
         for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
         {
-            M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i];
+            M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i]* multiplier_on_M_background;
         }
 
         //cout  << "this pop " << name_pop << ", this sz " << i << "M_at_szgroup[i] is " << M_at_szgroup[i] << " and a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << endl;
@@ -2110,12 +2110,17 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
     dout(cout  << "export tariffs on nodes...." << endl);
     // note that this file will also be used by the ui for displaying the statistics on node
 
+    int met = 0;
+
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tariffs
-    if(tariffs.at(0)>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " <<
-        tariffs.at(0) << " " <<  endl;
-
+    if (tariffs.at(0) > 1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " " <<
+        " " << this->get_x() << " " << this->get_y() << " ";
+    while (met < tariffs.size()) {
+        popnodes << tariffs.at(met) << " ";
+        ++met;
+    }
+    popnodes << endl;
 }
 
 

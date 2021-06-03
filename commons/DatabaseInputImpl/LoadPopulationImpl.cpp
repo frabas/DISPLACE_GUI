@@ -57,6 +57,8 @@ bool DatabaseModelLoader::loadPopulations(int period)
                                std::move(d.oth_land_map_per_met),
                                std::move(d.overall_migration_fluxes),
                                std::move(d.relative_stability_key),
+                               std::move(d.percent_tac_per_vessel_length_class),
+                               std::move(d.percent_tac_cumul_over_months_key),
 
                                std::move(d.percent_szgroup_per_age_matrix),
                                std::move(d.percent_age_per_szgroup_matrix),

@@ -59,6 +59,7 @@ class  Harbour : public Node
             double _benthos_biomass_K,
             double _benthos_number_K,
             int nbpops,
+            int nbmets,
             int nbbenthospops,
             int nbszgroups,
             string _name,

@@ -278,6 +278,7 @@ bool ModelLoader::loadConfig()
 {
     auto config = std::make_unique<displace::commons::Config>();
     p->configLoaded = loadConfigImpl(config->nbpops,
+                                     config->nbmets,
                                      config->nbbenthospops,
                                      config->implicit_pops,
                                      config->implicit_pops_level2,

@@ -472,6 +472,8 @@ bool  fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId
 bool  fill_from_oth_land (istream& in, map<types::NodeId, double> &oth_land);
 bool  fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
 bool  fill_from_relative_stability(istream& in, map<string, double>& relative_stability);
+bool  fill_from_percent_tac_per_vessel_length_class(istream& in, map<int, double>& percent_tac_per_vessel_length_class, string folder_name_parameterization);
+bool  fill_from_percent_tac_cumul_over_months_key(istream& in, map<int, double>& percent_tac_cumul_over_months_key, string folder_name_parameterization);
 bool  fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
 
 bool  fill_multimap_from_specifications_s_i(istream& in, multimap<string, int>& infos);

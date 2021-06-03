@@ -269,6 +269,7 @@ bool DisplaceModel::loadDatabase(QString path)
 
         ModelMetadataAccessor accessor(mOutSqlite->metadata());
         mConfig.setNbpops(accessor.nbPops());
+        mConfig.setNbmets(accessor.nbMets());
         mConfig.setSzGroups(accessor.nbSize());
         mConfig.setNbbenthospops(accessor.nbBenthos());
         mCalendar = std::shared_ptr<Calendar>(Calendar::build(mOutSqlite));
@@ -1123,7 +1124,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                     nd = std::shared_ptr<Node>(
                             new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), 0, 0, 0, 0, 0, 0, 0,
                                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0));
+                                     0, 0, 0));
                 }
 
                 std::shared_ptr<NodeData> nodedata(new NodeData(nd, this));
@@ -1773,6 +1774,13 @@ int DisplaceModel::getPopulationsCount() const
     return mConfig.getNbpops();
 }
 
+int DisplaceModel::getMetiersCount() const
+{
+    return mConfig.getNbmets();
+}
+
+
+
 int DisplaceModel::getBenthosPopulationsCount() const
 {
     return mConfig.getNbbenthospops();
@@ -1940,6 +1948,7 @@ bool DisplaceModel::loadNodes()
     auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
+    int nbmets = mConfig.getNbmets();
     int nbbenthospops = mConfig.getNbbenthospops();
     string a_quarter = "1";// start quarter
 
@@ -2362,6 +2371,7 @@ bool DisplaceModel::loadNodes()
                                                    0, // because  is not informed by GIS layer
                                                    0, // because  is not informed by GIS layer
                                                    nbpops,
+                                                   nbmets,
                                                    nbbenthospops,
                                                    NBSZGROUP,
                                                    a_name,
@@ -2418,6 +2428,7 @@ bool DisplaceModel::loadNodes()
                                               0,// because is not informed by GIS layer
                                               0,// because is not informed by GIS layer
                                               nbpops,
+                                              nbmets,
                                               nbbenthospops,
                                               NBSZGROUP));
             std::shared_ptr<NodeData> n(new NodeData(nd, this));
@@ -2466,33 +2477,37 @@ bool DisplaceModel::loadNodes()
     string a_graph_name = "a_graph";
     a_graph_name = a_graph_name + a_graph_s;
     if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits")) {
-        auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(mInputName.toStdString(), mBasePath.toStdString(),
-                                                                      a_graph_name);
+       
+        for (int metidx = 0; metidx < nbmets; metidx++)
+        {
+            auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(mInputName.toStdString(), mBasePath.toStdString(),
+                a_graph_name, metidx);
 
 
-        // init
-        for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++) {
-            auto idx_node = mNodes.at(a_idx)->get_idx_node();
+            // init
+            for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++)
+            {
+                auto idx_node = mNodes.at(a_idx)->get_idx_node();
 
-            // initial tariff for this particular node
-            auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
-            auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
-            vector<double> init_tariffs;
-            for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
-                init_tariffs.push_back(pos->second);
+                // initial tariff for this particular node and met
+                auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
+                auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
+                double init_tariff;
+                for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
+                    init_tariff=pos->second;
 
-            if (initial_tariffs_on_nodes.count(idx_node) == 0) {
-                init_tariffs.push_back(0);
-            } // put 0 if this node is not informed
+                if (initial_tariffs_on_nodes.count(idx_node) == 0) {
+                    init_tariff=0;
+                } // put 0 if this node is not informed
 
-            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+                mNodes.at(a_idx)->set_tariffs(metidx, init_tariff);
+            }
         }
-
     } else {
-        // need to inform with a vector of three zeros at least
-        vector<double> init_tariffs(3, 0);
+        // need to inform with a vector of nmmets zeros
+        vector<double> init_tariffs(nbmets, 0);
         for (size_t a_idx = 0; a_idx < mNodes.size(); a_idx++) {
-            mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+            mNodes.at(a_idx)->set_tariffs(init_tariffs); 
         }
     }
 

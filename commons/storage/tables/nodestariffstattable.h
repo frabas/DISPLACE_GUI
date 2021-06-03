@@ -26,9 +26,9 @@ private:
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep", FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
 
-    FieldDef<FieldType::Real> tariffAll = makeFieldDef("TariffAll", FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> tariffPop = makeFieldDef("TariffPop", FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> tariffBenthos = makeFieldDef("TariffBenthos", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> tariffMet0 = makeFieldDef("TariffMet0", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> tariffMet1 = makeFieldDef("TariffMet1", FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> tariffMet2 = makeFieldDef("TariffMet2", FieldType::Real()).notNull();
 
     inline void init();
 
@@ -44,9 +44,9 @@ public:
     struct NodeTariffStat {
         types::NodeId nodeId;
         int tstep;
-        double tariffall;
-        double tariffpop;
-        double tariffbenthos;
+        double tariffmet0;
+        double tariffmet1;
+        double tariffmet2;
     };
 
     void queryAllNodesAtStep(int tstep, std::function<bool(NodeTariffStat stat)>);

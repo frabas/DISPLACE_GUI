@@ -289,7 +289,7 @@ void NodeWithTariffs2Graphics::drawShape(QPainter &painter, const qmapcontrol::R
     Q_UNUSED(rect);
 
     vector<double>  tariffs =mNode->get_tariffs();
-    painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(2) ));
+    painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(1) )); // adapt to more met
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 

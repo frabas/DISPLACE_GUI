@@ -48,6 +48,7 @@ ModelLoader::BenthosData TextfileModelLoader::loadBenthosData(
 }*/
 
 bool TextfileModelLoader::loadConfigImpl(int &nbpops,
+                                         int& nbmets,
                                          int &nbbenthospops,
                                          std::vector<int> &implicit_pops,
                                          std::vector<int> &implicit_pops_level2,
@@ -62,6 +63,7 @@ bool TextfileModelLoader::loadConfigImpl(int &nbpops,
                             p->folder_name_parameterization,
                             p->inputfolder,
                             nbpops,
+                            nbmets,
                             nbbenthospops,
                             implicit_pops,
                             implicit_pops_level2,
@@ -543,6 +545,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                     0, // biomass_K not set from a GIS layer....
                                     0, // number_K not set from a GIS layer....
                                     model().config().nbpops,
+                                    model().config().nbmets,
                                     model().config().nbbenthospops,
                                     NBSZGROUP,
                                     a_name,
@@ -595,6 +598,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                  0, // biomass_K not set from a GIS layer....
                                  0, // number_K not set from a GIS layer....
                                  model().config().nbpops,
+                                 model().config().nbmets,
                                  model().config().nbbenthospops,
                                  NBSZGROUP));
             dout(cout << nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()

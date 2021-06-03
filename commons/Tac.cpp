@@ -25,7 +25,10 @@
 #include "Tac.h"
 #include <helpers.h>
 
-Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,double> _relative_stability_key)
+Tac::Tac(double init_tac, double _percent_for_simulated_vessels, 
+	map<string,double> _relative_stability_key,
+	map<int,double> _percent_tac_per_vessel_length_class,
+	map<int, double> _percent_tac_cumul_over_months_key)
 {
 
     dout(cout << "create tac "  << endl);
@@ -36,11 +39,20 @@ Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,doub
 	ts_tac.push_back(init_tac);
 	current_tac=init_tac;
 
+	percent_tac_cumul_over_months_key = _percent_tac_cumul_over_months_key;
 	map<string, double>::iterator it;
 	for (it = _relative_stability_key.begin(); it != _relative_stability_key.end(); it++)
 	{
 		tac_per_nation.insert(std::make_pair(it->first, it->second / 100 * init_tac));
 	}
+
+	map<int, double>::iterator it2;
+	for (it2 = _percent_tac_per_vessel_length_class.begin(); it2 != _percent_tac_per_vessel_length_class.end(); it2++)
+	{
+		tac_accessible_per_vessel_length_class.insert(std::make_pair(it2->first, it2->second / 100 * init_tac));
+	}
+	
+
 		
     is_tac_exhausted=0;
 }
@@ -76,6 +88,10 @@ map<string,double> Tac::get_relative_stability_key() const
 	return(relative_stability_key);
 }
 
+map<int, double> Tac::get_percent_tac_cumul_over_months_key() const
+{
+	return(percent_tac_cumul_over_months_key);
+}
 
 vector<double> Tac::get_ts_tac() const
 {
@@ -93,6 +109,10 @@ double Tac::get_tac_per_nation(string nation)
 	return(tac_per_nation[nation]);
 }
 
+double Tac::get_tac_accessible_per_vessel_length_class(int vessel_length_class)
+{
+	return(tac_accessible_per_vessel_length_class[vessel_length_class]);
+}
 
 void Tac::reset_tac_per_nation()
 {
@@ -102,6 +122,16 @@ void Tac::reset_tac_per_nation()
 		tac_per_nation[it->first] = (it->second) / 100 * this->get_current_tac();
 	}
 	
+}
+
+void Tac::reset_tac_accessible_per_vessel_length_class()
+{
+	map<int, double>::iterator it;
+	for (it = percent_tac_per_vessel_length_class.begin(); it != percent_tac_per_vessel_length_class.end(); it++)
+	{
+		tac_accessible_per_vessel_length_class[it->first] = (it->second) / 100 * this->get_current_tac();
+	}
+
 }
 
 int Tac::get_is_tac_exhausted() const

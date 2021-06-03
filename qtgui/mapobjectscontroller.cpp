@@ -196,14 +196,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerIcesrectanglecode[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Icesrectanglecode")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerIcesrectanglecode, mStatsLayerIcesrectanglecode[model_n], type != DisplaceModel::LiveModelType ? false : false);
     
-    mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all (NodesTariffStat TariffAll)")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
+    mStatsLayerTariffMet0[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff Met0 (NodesTariffStat Tariff Met0)")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffMet0, mStatsLayerTariffMet0[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerTariffPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff pop (NodesTariffStat TariffPop)")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffPop, mStatsLayerTariffPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
+    mStatsLayerTariffMet1[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff Met1 (NodesTariffStat Tariff Met1)")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffMet1, mStatsLayerTariffMet1[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerTariffBenthos[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff benthos (NodesTariffStat TariffBenthos)")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffBenthos, mStatsLayerTariffBenthos[model_n], type != DisplaceModel::LiveModelType ? false : false);
+    mStatsLayerTariffMet2[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff Met2 (NodesTariffStat Tariff Met2)")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffMet2, mStatsLayerTariffMet2[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
@@ -513,9 +513,9 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerBenthosNumber[model_n]->clearGeometries();
     mStatsLayerBenthosMeanweight[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
-    mStatsLayerTariffAll[model_n]->clearGeometries();
-    mStatsLayerTariffPop[model_n]->clearGeometries();
-    mStatsLayerTariffBenthos[model_n]->clearGeometries();
+    mStatsLayerTariffMet0[model_n]->clearGeometries();
+    mStatsLayerTariffMet1[model_n]->clearGeometries();
+    mStatsLayerTariffMet2[model_n]->clearGeometries();
     mStatsLayerSalinity[model_n]->clearGeometries();
     mStatsLayerSST[model_n]->clearGeometries();
     mStatsLayerWind[model_n]->clearGeometries();
@@ -643,15 +643,15 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs0, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffAll[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+    mStatsLayerTariffMet0[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs1, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+    mStatsLayerTariffMet1[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs2, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffBenthos[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+    mStatsLayerTariffMet2[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSalinity, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

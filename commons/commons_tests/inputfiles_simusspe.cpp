@@ -213,6 +213,8 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<types::NodeId> ex_interesting_harbours = { types::NodeId(3), types::NodeId(6), types::NodeId(18), types::NodeId(29)};
 
     std::istringstream is("# nbpops\n"
+                          "3\n"
+                          "# nbmets\n"
                           "2\n"
                           "# nbbenthospops\n"
                           "22\n"
@@ -232,6 +234,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
                           "\n");
 
     int nbpops;
+    int nbmets;
     int nbbenthospops;
     vector<int> implicit_pops;
     vector<int> implicit_pops_level2;
@@ -242,7 +245,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<double> calib_cpue;
     vector<types::NodeId> interesting_harbours;
 
-    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs,
+    bool r = read_config_file(is, nbpops, nbmets, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs,
                               nbcp_coupling_pops, calib_oth_landings,
                              calib_w, calib_cpue, interesting_harbours);
 
@@ -265,12 +268,14 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     // Check for errors: bad cast
     string test = "# nbpops\n"
                   "x\n"
+                  "# nbmets\n"
+                  "x\n"
                   "# nbbenthospops\n"
                   "22\n"
                   "# implicit stocks\n";
     is.str(test);
     is.clear();
-    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2,
+    r = read_config_file(is, nbpops, nbmets, nbbenthospops, implicit_pops, implicit_pops_level2,
                          grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
                                   calib_w, calib_cpue, interesting_harbours);
 

@@ -758,6 +758,7 @@ int app_main(int argc, char const* argv[])
 
     if (metadata) {
         metadata->setNbPops(simModel->config().nbpops);
+        metadata->setNbMets(simModel->config().nbmets);
         metadata->setNbBenthos(simModel->config().nbbenthospops);
         metadata->setNbSizes(NBSZGROUP);
     }
@@ -778,7 +779,7 @@ int app_main(int argc, char const* argv[])
         dout(cout << "---------------------------" << endl);
         dout(cout << "---------------------------" << endl);
 
-        NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbbenthospops);
+        NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbmets, simModel->config().nbbenthospops);
         nodeTester.test();
     }
 
@@ -985,47 +986,46 @@ int app_main(int argc, char const* argv[])
     //tariffs.push_back(init_tariff1_on_localities);
 
     if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
-        auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
-            a_graph_name);
+     
+        for (int metidx = 0; metidx < simModel->config().nbmets; metidx++)
+        {
+            auto initial_tariffs_on_nodes = read_initial_tariffs_on_nodes(folder_name_parameterization, inputfolder,
+                a_graph_name, metidx);
+     
 
-
-        // init
-        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
+           // init
+           for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
 
             auto idx_node = simModel->nodes().at(a_idx)->get_idx_node();
 
             // initial tariff for this particular node
             auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
             auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
-            vector<double> init_tariffs;
+            double init_tariff;
             for (auto pos = lower_init_cr; pos != upper_init_cr; pos++)
-                init_tariffs.push_back(pos->second);
-
-
-            // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-            while (init_tariffs.size() <= 3) { init_tariffs.push_back(0); }
-
+                init_tariff = pos->second;
 
             if (initial_tariffs_on_nodes.count(idx_node) == 0) {
-                init_tariffs.push_back(0);
+                init_tariff = 0;
             } // put 0 if this node is not informed
 
-            simModel->nodes().at(a_idx)->set_tariffs(init_tariffs); // type 0
-        }
+            simModel->nodes().at(a_idx)->set_tariffs(metidx, init_tariff);            }
 
 
-        // check
-        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
+           // check
+           for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++)
+           {
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
                 " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << endl);
 
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
                 " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << endl);
+           }
         }
     }
     else {
-        // need to inform with a vector of three zeros at least
-        vector<double> init_tariffs(3, 0);
+        // need to inform with a vector of zeros at least
+        vector<double> init_tariffs(simModel->config().nbmets, 0);
         for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++) {
             simModel->nodes().at(a_idx)->set_tariffs(init_tariffs); // type 0
         }
@@ -2012,7 +2012,7 @@ int app_main(int argc, char const* argv[])
                                     benthosbiomassnodes,
                                     benthosnumbernodes,
                                     simModel->config().nbbenthospops,
-                                    nb_mets,
+                                    simModel->config().nbmets,
                                     use_gui,
                                     popstats_filename,
                                     popdyn_N_filename,
@@ -2766,67 +2766,71 @@ int app_main(int argc, char const* argv[])
                     double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;
                     for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
                     {
-                        tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
+                        for (unsigned int a_met = 0; a_met < nb_mets; ++a_met)
+                        {
+                            tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(a_met);
 
-                        effort_on_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
-                        double cumcatches_this_node = 0;
-                        if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
-                            for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                                cumcatches_this_node += simModel->nodes()[list_nodes_idx.at(
+                            effort_on_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
+                            double cumcatches_this_node = 0;
+                            if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
+                                for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                                    cumcatches_this_node += simModel->nodes()[list_nodes_idx.at(
                                         inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                                }
                             }
-                        }
-                        double cumdiscards_this_node = 0;
-                        if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
-                            for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
-                                cumdiscards_this_node += simModel->nodes()[list_nodes_idx.at(
+                            double cumdiscards_this_node = 0;
+                            if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
+                                for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
+                                    cumdiscards_this_node += simModel->nodes()[list_nodes_idx.at(
                                         inode).toIndex()]->get_cumdiscards_per_pop().at(ipop);
+                                }
                             }
+                            if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
+                                node_pue = cumcatches_this_node / effort_on_this_node;
+                                nb_times_diff = node_pue / mean_pue;
+                            }
+
+                            if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
+                                node_pue = cumdiscards_this_node / effort_on_this_node;
+                                nb_times_diff = node_pue / mean_pue;
+                            }
+
+                            //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
+
+
+
+
+                            // find out which category the tariff should be
+                            unsigned int count1 = 0;
+                            while (nb_times_diff > arbitary_breaks_for_tariff.at(count1)) {
+                                if ((count1) >= arbitary_breaks_for_tariff.size() - 1) { break; }
+                                count1 = count1 + 1;
+                            }
+
+                            // constraint +/-1 category
+                            double updated_tariff;
+                            //cout << "...tariff_this_node is "  << tariff_this_node << endl;
+                            unsigned int count2 = 0;
+                            while (tariff_this_node > arbitary_breaks_for_tariff.at(count2)) {
+                                if ((count2) >= arbitary_breaks_for_tariff.size() - 1) { break; }
+                                count2 = count2 + 1;
+                            }
+
+                            // if landing/effort or discard/effort increases we want to increase the tariff on this areas
+                            if (count1 > count2 && ((count2 + 1) < arbitary_breaks_for_tariff.size())) {
+                                updated_tariff = arbitary_breaks_for_tariff.at(count2 + 1);
+                            }
+                            if (count1 < count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2 - 1); }
+                            if (count1 == count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2); }
+
+                            // update the tariff (unless the effort on this node is 0)
+                            if (effort_on_this_node != 0) {
+                                simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(a_met, updated_tariff);
+                            }
+                            //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
+
+
                         }
-                        if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
-                            node_pue = cumcatches_this_node / effort_on_this_node;
-                            nb_times_diff = node_pue / mean_pue;
-                        }
-
-                        if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
-                            node_pue = cumdiscards_this_node / effort_on_this_node;
-                            nb_times_diff = node_pue / mean_pue;
-                        }
-
-                        //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
-
-
-
-
-                        // find out which category the tariff should be
-                        unsigned int count1 = 0;
-                        while (nb_times_diff > arbitary_breaks_for_tariff.at(count1)) {
-                            if ((count1) >= arbitary_breaks_for_tariff.size() - 1) { break; }
-                            count1 = count1 + 1;
-                        }
-
-                        // constraint +/-1 category
-                        double updated_tariff;
-                        //cout << "...tariff_this_node is "  << tariff_this_node << endl;
-                        unsigned int count2 = 0;
-                        while (tariff_this_node > arbitary_breaks_for_tariff.at(count2)) {
-                            if ((count2) >= arbitary_breaks_for_tariff.size() - 1) { break; }
-                            count2 = count2 + 1;
-                        }
-
-                        // if landing/effort or discard/effort increases we want to increase the tariff on this areas
-                        if (count1 > count2 && ((count2 + 1) < arbitary_breaks_for_tariff.size())) {
-                            updated_tariff = arbitary_breaks_for_tariff.at(count2 + 1);
-                        }
-                        if (count1 < count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2 - 1); }
-                        if (count1 == count2) { updated_tariff = arbitary_breaks_for_tariff.at(count2); }
-
-                        // update the tariff (unless the effort on this node is 0)
-                        if (effort_on_this_node != 0) {
-                            simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
-                        }
-                        //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
-
                     }
                     
                     if (scenario.dyn_alloc_sce.option(Options::averageTariffsPerRectangle)) {
@@ -2842,12 +2846,15 @@ int app_main(int argc, char const* argv[])
 
 
                         for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                        {
+                            for (unsigned int a_met = 0; a_met < nb_mets; ++a_met)
                             {
-                                tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
+                                tariff_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(a_met);
                                 rect_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
                                 mymultimap.insert(pair<double, double>(rect_this_node, tariff_this_node));
                                 mymap.insert(pair<double, double>(rect_this_node, tariff_this_node));
                             }
+                        }
                        
                         for (it2 = mymap.begin(); it2 != mymap.end(); ++it2)
                         {
@@ -2863,12 +2870,15 @@ int app_main(int argc, char const* argv[])
                         // then use the look up...
                         double updated_tariff;
                         for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                        {
+                            for (unsigned int a_met = 0; a_met < nb_mets; ++a_met)
                             {
-                            rect_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
-                            updated_tariff = mymap_lookup[rect_this_node];
-                            simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
-                            //cout << "updated_tariff for this node is: " << updated_tariff << endl;
-                           }
+                                rect_this_node = simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
+                                updated_tariff = mymap_lookup[rect_this_node];
+                                simModel->nodes()[list_nodes_idx.at(inode).toIndex()]->set_tariffs(a_met, updated_tariff);
+                                //cout << "updated_tariff for this node is: " << updated_tariff << endl;
+                            }
+                        }
                     }
 
                 }

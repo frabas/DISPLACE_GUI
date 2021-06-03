@@ -32,19 +32,26 @@ class  Tac
 {
 
 	public:
-		Tac(double init_tac, double tac_percent_simulated, map<string,double> relative_stability_key);
+		Tac(double init_tac, double tac_percent_simulated,
+			map<string,double> relative_stability_key,
+			map<int, double> percent_tac_per_vessel_length_class,
+			map<int, double> percent_tac_cumul_over_months_key);
 		Tac();
 		virtual ~Tac();
 		Tac(const Tac& other);	 // Copy constructor
 		double get_percent_for_simulated_vessels() const;
 		map<string,double>  get_relative_stability_key() const;
+		map<int, double>  get_percent_tac_per_vessel_length_class() const;
+		map<int, double>  get_percent_tac_cumul_over_months_key() const;
 		vector<double> get_ts_tac() const;
 		double get_current_tac() const;
         int get_is_tac_exhausted() const;
         void add_tac_to_ts(double a_tac, int current_is);
         void set_is_tac_exhausted(int val);
 		double get_tac_per_nation(string nation);
+		double get_tac_accessible_per_vessel_length_class(int vessel_length_class);
 		void reset_tac_per_nation();
+		void reset_tac_accessible_per_vessel_length_class();
 
 
 	protected:
@@ -52,7 +59,10 @@ class  Tac
 		double percent_for_simulated_vessels;
 								 // nrow is nb of countries
 		map<string,double>  relative_stability_key;
+		map<int, double> percent_tac_per_vessel_length_class;
+		map<int, double>  percent_tac_cumul_over_months_key;
 		map<string, double>  tac_per_nation;
+		map<int, double> tac_accessible_per_vessel_length_class;
 
 		vector<double> ts_tac;	 // time series per year
 		double current_tac;

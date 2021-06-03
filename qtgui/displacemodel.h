@@ -125,6 +125,9 @@ public:
     int getNBPops() const {
         return mConfig.getNbpops();
     }
+    int getNBMets() const {
+        return mConfig.getNbmets();
+    }
     int getNBBenthosPops() const {
         return mConfig.getNbbenthospops();
     }
@@ -189,13 +192,14 @@ public:
     int getBenthosCount() const;
 
     const QList<std::shared_ptr<objecttree::MetiersInterest> > &getMetiersList() const { return mMetiers; }
-    int getMetiersCount() const {
-        return mMetiers.size();
-    }
+    //int getMetiersCount() const {
+    //    return mMetiers.size();
+    //}
     void addMetier(int id);
 
     /* Access to Population statistics */
     int getPopulationsCount() const;
+    int getMetiersCount() const;
     int getBenthosPopulationsCount() const;
     const QList<std::shared_ptr<PopulationData> > &getPopulationsList() const { return mPops; }
     const PopulationData &getPop(int idx) const { return *mPops.at(idx); }

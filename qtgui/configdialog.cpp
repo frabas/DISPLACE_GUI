@@ -98,6 +98,7 @@ bool ConfigDialog::get(Config &config) const
     }
 
     config.setNbpops(ui->nbpops->value());
+    config.setNbmets(ui->nbmets->value());
     config.setNbbenthospops(ui->nbbenthospops->value());
     config.setSzGroups(ui->szGroups->value());
     config.setImplicit_pops(impl);
@@ -112,6 +113,7 @@ bool ConfigDialog::get(Config &config) const
 void ConfigDialog::set(const Config &config)
 {
     ui->nbpops->setValue(config.getNbpops());
+    ui->nbmets->setValue(config.getNbmets());
     ui->nbbenthospops->setValue(config.getNbbenthospops());
     ui->szGroups->setValue(config.getSzGroups());
 

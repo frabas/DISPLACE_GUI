@@ -259,21 +259,23 @@ Vessel::Vessel(Node* p_location,
     vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));// trip based landings...
     vector< vector<double> > init_ping_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups)); // ...instantaneous catches (land+disc)
     vector< vector<double> > init_discards_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
+    catch_pop_at_szgroup= init_catch_pop_at_szgroup;
+    ping_catch_pop_at_szgroup=init_ping_catch_pop_at_szgroup;
+    discards_pop_at_szgroup= init_discards_pop_at_szgroup;
     for(int i = 0; i < nbpops; i++)
     {
 
         for(int j = 0; j < nbszgroups; j++)
         {
 
-            init_catch_pop_at_szgroup[i][j] = 0;
-            init_ping_catch_pop_at_szgroup[i][j] = 0;
-            init_discards_pop_at_szgroup[i][j] = 0;
+            catch_pop_at_szgroup[i][j] = 0;
+            ping_catch_pop_at_szgroup[i][j] = 0;
+            //dout(cout  << catch_pop_at_szgroup[i][j] << " ");
+            discards_pop_at_szgroup[i][j] = 0;
+            //dout(cout  << discards_pop_at_szgroup[i][j] << " ");
         }
+        //dout(cout  << endl);
     }
-    this->set_catch_pop_at_szgroup(init_catch_pop_at_szgroup);
-    this->set_ping_catch_pop_at_szgroup(init_ping_catch_pop_at_szgroup);
-    this->set_discards_pop_at_szgroup (init_discards_pop_at_szgroup);
-
 
     // length class
     if(length<15) {
@@ -1459,22 +1461,6 @@ void Vessel::set_spe_percent_tac_per_pop (const vector<double> &_tacs_per_pop)
     percent_tac_per_pop=_tacs_per_pop;
 }
 
-void Vessel::set_catch_pop_at_szgroup(vector<vector <double> >& init_catch_pop_at_szgroup)
-{
-    catch_pop_at_szgroup = init_catch_pop_at_szgroup;
-}
-
-void Vessel::set_ping_catch_pop_at_szgroup(vector<vector <double> >& init_ping_catch_pop_at_szgroup)
-{
-    ping_catch_pop_at_szgroup = init_ping_catch_pop_at_szgroup;
-}
-
-
-void Vessel::set_discards_pop_at_szgroup(vector<vector <double> >& init_discards_pop_at_szgroup)
-{
-    discards_pop_at_szgroup = init_discards_pop_at_szgroup;
-}
-
 
 void Vessel::set_fishing_credits (const vector<double> &_fishing_credits)
 {
@@ -2657,23 +2643,22 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
 
     // for loop over pop
-    int nbpops = this->get_catch_pop_at_szgroup().size();
-    vector <double> global_quotas(nbpops, 0);
-    vector <int> individual_quotas(nbpops, 0);
+    vector <double> global_quotas(catch_pop_at_szgroup.size(), 0);
+    vector <int> individual_quotas(catch_pop_at_szgroup.size(), 0);
     vector <double> grouped_quotas(*max_element(grouped_tacs.begin(),grouped_tacs.end())+1, 0);
     if(is_tacs)
     {
         // IQs
         if(tstep>1  && is_individual_vessel_quotas)
         {
-            for (unsigned int pop=0; pop< nbpops; pop++)
+            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
                individual_quotas.at(pop) = this->get_individual_tac(pop); // default when IQ
                if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=individual_quotas.at(pop); // sum up if grouped quotas
             }
             if(is_grouped_tacs)
             {
-               for (unsigned int pop=0; pop< nbpops; pop++)
+               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
                 {
                    individual_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
                 }
@@ -2685,14 +2670,14 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
         if(!is_individual_vessel_quotas)
         {
             // remember that grouped_tacs is in form of e.g. 1 1 1 2 2 3 3 4 4 5 5 5 5 5 etc. as many as stocks.
-            for (unsigned int pop=0; pop< nbpops; pop++)
+            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
              global_quotas.at(pop) = populations.at(pop)->get_tac()->get_current_tac(); // default when global TAC
              if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=global_quotas.at(pop); // sum up if grouped quotas
             }
             if(is_grouped_tacs)
             {
-               for (unsigned int pop=0; pop< nbpops; pop++)
+               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
                 {
                    global_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
                 }
@@ -2706,12 +2691,12 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
 
     // OUTPUTS
     // declare with length nbpops
-    vector<double> tot_catch_per_pop(nbpops);
+    vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
 
     //this->clear_catch_pop_at_szgroup();
 
     // for loop over pop
-    for (unsigned int pop=0; pop< nbpops; pop++)
+    for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
     {
         int namepop = populations[pop]->get_name();
 
@@ -2871,7 +2856,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                         if(selszi==1) avai_beta_param =populations[pop]->get_avai2_beta();
                         if(selszi==2) avai_beta_param =populations[pop]->get_avai3_beta();
                         if(selszi==3) avai_beta_param =populations[pop]->get_avai5_beta();
-                        if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TODO: discuss such assumptions
+                        if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TO DO: simplify this crap...
                             avai_betas +=  avai_beta_param * avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
                         }
 
@@ -3526,8 +3511,7 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
             double a_shape;
             double a_scale;
             double cpue;
-            if(idx_node_v<(int)gshape_cpue_nodes_species.size())
-            {
+            if(idx_node_v<(int)gshape_cpue_nodes_species.size()){
                 a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
                 // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
@@ -4922,17 +4906,17 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         path.pop_front();		 // delete the first node (departure) because we are lying in...
         this->set_roadmap(path);
 
-        /* show the roadmap
+       /* // show the roadmap
         list<types::NodeId> road= this->get_roadmap();
 
         // check path
         list<types::NodeId>::iterator road_iter = road.begin();
-            cout << "path: ";
+            dout(cout << "path: ");
             for( ; road_iter != road.end(); road_iter++)
             {
-              cout << *road_iter << " " ;
+               dout(cout << *road_iter << " " );
             }
-            cout << endl;
+            dout(cout << endl);
         */
 
         // then, call to find.next.pt.on.the.graph()

@@ -48,6 +48,8 @@ Population::Population(int a_name,
                        const vector<map<types::NodeId, double> >& _oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
+                       const map<int, double>& percent_tac_per_vessel_length_class,   
+                       const map<int, double> & percent_tac_cumul_over_months_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
                        const vector<vector<double> > &_percent_age_per_szgroup_matrix,
                        const vector<vector<double> > &_growth_transition_matrix,
@@ -286,7 +288,8 @@ Population::Population(int a_name,
     dout(cout << "init tac " << name << endl);
 
     // init tac
-	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
+	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, 
+                    percent_tac_per_vessel_length_class, percent_tac_cumul_over_months_key);
     fbar=0.0;
     oth_land_multiplier=1.0;
 
@@ -295,6 +298,11 @@ Population::Population(int a_name,
         landings_so_far_per_nation.insert(std::make_pair(it->first, 0));
     }
     
+    for (auto it2 = percent_tac_per_vessel_length_class.begin(); it2 != percent_tac_per_vessel_length_class.end(); it2++)
+    {
+        landings_so_far_per_vessel_length_class.insert(std::make_pair(it2->first, 0));
+    }
+
     // check
     //cout << "check relative_stability_key " << endl;
     //for (auto elem : relative_stability_key)
@@ -612,6 +620,11 @@ double Population::get_landings_so_far() const
 map<string,double> Population::get_landings_so_far_per_nation() 
 {
     return(landings_so_far_per_nation);
+}
+
+map<int, double> Population::get_landings_so_far_per_vessel_length_class()
+{
+    return(landings_so_far_per_vessel_length_class);
 }
 
 
@@ -1039,6 +1052,11 @@ void Population::set_landings_so_far_this_nation(string nation, double _landings
     landings_so_far_per_nation[nation] = _landings_so_far;
 }
 
+void Population::set_landings_so_far_this_vessel_length_class(int vessel_class, double _landings_so_far)
+{
+    landings_so_far_per_vessel_length_class[vessel_class] = _landings_so_far;
+}
+
 void Population::reset_landings_so_far_per_nation()
 {
     for (auto& p : landings_so_far_per_nation) p.second = 0;
@@ -1046,6 +1064,12 @@ void Population::reset_landings_so_far_per_nation()
 
 }
 
+void Population::reset_landings_so_far_per_vessel_length_class()
+{
+    for (auto& p : landings_so_far_per_vessel_length_class) p.second = 0;
+    cout << "reset_landings_so_far_per_vessel_length_class this pop " << this->get_name() << endl;
+
+}
 
 void Population::add_to_landings_at_end_of_years(double value)
 {
@@ -1199,7 +1223,7 @@ void Population::aggregate_N()
             const vector<double> &Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
             for(unsigned int i=0; i<agg_Ns_at_szgroup.size(); i++)
 			{
-				agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);
+				if(!isnan(Ns_this_node.at(i))) agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);
 			}
 
 		}
@@ -1312,7 +1336,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
 
-void Population::do_growth()
+void Population::do_growth(int is_stochastic)
 {
     dout(cout << "BEGIN do_growth() "  << endl );
 
@@ -1321,8 +1345,51 @@ void Population::do_growth()
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
 
-	// aggregate from nodes
-	//aggregate_N();
+    double growth_error;
+    if(is_stochastic)
+    {
+        //cout << "before adding norm error on growth matrix:" << endl;
+
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
+ 
+        //cout << "after adding norm error on growth matrix:" << endl;
+
+        double sd = 0.1;
+        vector<double> marginal_col_sums(growth_transition_matrix[0].size(), 0);
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                // adding a lognormal error
+                growth_transition_matrix[i][j] *= exp(0 + sd * norm_rand()) / exp((sd * sd) / 2.0);
+                marginal_col_sums.at(j) += growth_transition_matrix[i][j];
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
+ 
+        //cout << "then normalize it to sum to 1 in columns:" << endl;
+
+        for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
+        {
+            for (unsigned int j = 0; j < growth_transition_matrix[i].size(); j++)
+            {
+                if(marginal_col_sums.at(j)>0) growth_transition_matrix[i][j] /= marginal_col_sums.at(j);
+                //std::cout << growth_transition_matrix[i][j] << " ";
+            }
+            //std::cout << std::endl;
+        }
+
+    }
+
+    cout << endl;
 
 	// size transition matrix:
 	// row i: output
@@ -1349,8 +1416,15 @@ void Population::do_growth()
 	// set the tot N at szgroup
 	this->set_tot_N_at_szgroup(new_tot_N_at_szgroup);
 
-	// redistribute on nodes
-	//distribute_N();
+   
+    //check
+    //cout << "Check the Ns:" << endl;
+    //for (unsigned int i = 0; i < new_tot_N_at_szgroup.size(); i++)
+    //{
+    //    std::cout << new_tot_N_at_szgroup[i] << " ";
+    //}
+    //std::cout << std::endl;
+
 
     dout(cout << "END do_growth() "  << endl );
 }
@@ -1409,7 +1483,7 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
 
 
           // do a weighted average of the weight
-          weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
+          if(tot_now_in_arr!=0) weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
                                                     (tot_before_in_arr/tot_now_in_arr)* weight_at_szgroup_this_pop.at(sz);
 
 cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;

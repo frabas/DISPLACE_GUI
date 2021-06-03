@@ -460,6 +460,7 @@ public:
     void find_next_point_on_the_graph(std::vector<Node *> &nodes);
 
     void do_catch(std::ofstream &export_individual_tacs,
+                  int a_month,
                   std::vector<Population *> const &populations,
                   std::vector<Node *> const &nodes,
                   vector<Benthos *> const &benthoshabs,

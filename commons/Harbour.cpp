@@ -60,6 +60,7 @@ double _benthos_meanweight,
 double _benthos_biomass_K,
 double _benthos_number_K,
 int nbpops,
+int nbmets,
 int nbbenthospops,
 int nbszgroups,
 string _name,
@@ -78,7 +79,7 @@ vector<double> _freq_usual_fgrounds)
         _Oxygen,  _Oxygen_norm,  _Oxygen_alpha,
         _DissolvedCarbon,  _DissolvedCarbon_norm,  _DissolvedCarbon_alpha,
         _bathymetry, _shippingdensity, _siltfraction, _icesrectanglecode,
-       _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbbenthospops, nbszgroups)
+       _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbmets, nbbenthospops, nbszgroups)
 {
 	name=_name;
 	//mean_fish_price_per_met_per_pop= _mean_fish_price_per_met_per_pop;
@@ -102,7 +103,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 {
 
 }

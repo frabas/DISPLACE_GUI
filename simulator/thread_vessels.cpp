@@ -395,7 +395,8 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         {
                             dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
                                       << endl);
-                            model->vessels()[index_v]->do_catch(export_individual_tacs, 
+                            model->vessels()[index_v]->do_catch(export_individual_tacs,
+                                                                model->month(),
                                                                 model->populations(),
                                                                 model->nodes(),
                                                                 benthoss,

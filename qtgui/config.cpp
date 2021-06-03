@@ -34,6 +34,7 @@
 
 Config::Config()
     : nbpops(0),
+      nbmets(0),
       nbbenthospops(0),
       szGroups(0),
       m_implicit_pops(),
@@ -124,6 +125,16 @@ int Config::getNbpops() const
 void Config::setNbpops(int value)
 {
     nbpops = value;
+}
+
+int Config::getNbmets() const
+{
+    return nbmets;
+}
+
+void Config::setNbmets(int value)
+{
+    nbmets = value;
 }
 
 int Config::getNbbenthospops() const
@@ -230,6 +241,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         path.toStdString(),
         modelname.toStdString(),
         config.nbpops,
+        config.nbmets,
         config.nbbenthospops,
         implicit_pops,
         implicit_pops_level2,

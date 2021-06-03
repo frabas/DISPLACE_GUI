@@ -834,6 +834,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                vector <int> species_on_node;
                
                double multiplier_on_M_background=1.0;
+               if (a_year_i == 0 && dyn_pop_sce.option(Options::massiveMortalityEvent20perY1))
+               {
+                   multiplier_on_M_background = 1.2; //20 percent more in Year 1
+               }
                if (a_year_i==4 && dyn_pop_sce.option(Options::massiveMortalityEvent20perY5))
                {
                    multiplier_on_M_background = 1.2; //20 percent more in Year 5
@@ -884,7 +888,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             }
                         }
                         try {
-                              a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
+                              a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M, multiplier_on_M_background);
                           } catch (runtime_error &) {
                               cout << "Fail in apply_natural_mortality_at_node" << endl;
                               return false;
@@ -999,9 +1003,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    }
                    */
 
+                   int is_stochastic = 0;
+                   if (dyn_pop_sce.option(Options::stochasticGrowth))
+                   {
+                       is_stochastic = 1;
+                   }
                    outc(cout<<"tstep " << tstep << "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
                    try {
-                       populations[sp]->do_growth();
+                       populations[sp]->do_growth(is_stochastic);
                      } catch (runtime_error &) {
                          cout << "Fail in do_growth" << endl;
                          return false;
@@ -1450,7 +1459,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
     //...and export the cumulated effort on nodes (a cumul from t=0)
     for (unsigned int n=0; n<nodes.size(); n++)
-    {
+    { 
         nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
         nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);

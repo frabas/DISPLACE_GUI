@@ -1075,6 +1075,9 @@ size_t SQLiteOutputStorage::getNbPops()
     return p->mPopTable->getNbPops();
 }
 
+
+
+
 std::vector<std::string> SQLiteOutputStorage::getNationsList()
 {
     return p->mVesselDefTable->getNationsList();

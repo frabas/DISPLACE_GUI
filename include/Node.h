@@ -395,15 +395,7 @@ class  Node
     void setAreaType(int _area_type);
     int evaluateAreaType();
 
-    int get_nbpops() const
-    { return m_nbpops; }
-
-    int get_nbbenthospops() const
-    { return m_nbbenthospops; }
-
-    int get_nszgroups() const
-    { return m_nszgrp; }
-
+ 
     void set_is_harbour(int id);
     void set_idx_node(types::NodeId idx);
 

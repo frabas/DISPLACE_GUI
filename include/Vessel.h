@@ -503,7 +503,8 @@ public:
                                           vector<Node *> &nodes,
                                           const std::vector<types::NodeId> &relevant_nodes,
                                           const std::vector<PathShop> &pathshops,
-            std::ofstream& freq_profit);
+                                          std::ofstream& freq_profit,
+                                          const DynAllocOptions& dyn_alloc_sce);
         std::vector<double> expected_profit_on_grounds(const SimModel& simModel, 
                                                        int use_static_paths,
                                                        vector<Node*>& nodes,

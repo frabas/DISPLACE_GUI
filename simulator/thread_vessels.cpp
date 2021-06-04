@@ -270,11 +270,15 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             do_nothing = model->vessels()[index_v]->choose_a_ground_and_go_fishing(
                                     *model,
                                     model->timestep(), model->scenario(), model->scenario().use_dtrees,
-                                    model->scenario().dyn_alloc_sce, use_static_paths, pathshops,
+                                    model->scenario().dyn_alloc_sce, 
+                                    use_static_paths, 
+                                    pathshops,
                                     adjacency_map, relevant_nodes, nodes_in_polygons,
                                     model->nodes(),
                                     model->metiers(),
-                                    freq_cpue, freq_profit, freq_distance
+                                    freq_cpue,
+                                    freq_profit, 
+                                    freq_distance
                             );
                             freshly_departed_from_port = 1;
 

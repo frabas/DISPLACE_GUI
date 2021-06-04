@@ -4186,7 +4186,8 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
                                           vector<Node* >&nodes,
                                           const std::vector<types::NodeId> &relevant_nodes,
                                           const std::vector<PathShop> &pathshops,
-                                          ofstream& freq_profit)
+                                          ofstream& freq_profit,
+                                          const DynAllocOptions& dyn_alloc_sce)
 {
 
 
@@ -4195,6 +4196,51 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
                                                                     nodes,
                                                                     relevant_nodes,
                                                                     pathshops);
+
+    if (dyn_alloc_sce.option(Options::fishing_credits))
+    {
+        int a_met = this->get_metier()->get_name();
+       
+        auto the_grounds = this->get_fgrounds();
+        double a_sum = 0;
+        for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
+        {
+            double tariff_this_cell_this_met = nodes.at(the_grounds.at(a_node).toIndex())->get_tariffs().at(a_met); // tariff per hour because visit (no more) one site per hour
+            //cout << "tariff_this_cell_this_met " << tariff_this_cell_this_met << endl;
+            //cout << "profit_per_fgrounds.at(a_node) " << profit_per_fgrounds.at(a_node) << endl;
+            if (tariff_this_cell_this_met > 0)
+            {
+                a_sum += profit_per_fgrounds.at(a_node) / tariff_this_cell_this_met;
+
+            }
+        }
+        //cout << "a_sum is " << a_sum << endl;
+
+     
+        vector<double> opportunity_costs(profit_per_fgrounds.size(), 0.0);
+        //cout << "opportunity_costs  per node this vessel " << this->get_name() << " this met" << a_met << endl;
+        for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
+        {
+            double tariff_this_cell_this_met = nodes.at(the_grounds.at(a_node).toIndex())->get_tariffs().at(a_met); // tariff per hour because visit (no more) one site per hour
+            if (tariff_this_cell_this_met > 0 && a_sum > 0)
+            {
+                opportunity_costs.at(a_node) = (profit_per_fgrounds.at(a_node) / tariff_this_cell_this_met) -
+                    exp(log(a_sum) / profit_per_fgrounds.size());
+            }
+          //  cout << opportunity_costs.at(a_node) << endl;
+        }
+
+        //cout << "Utility  per node  this met" << a_met << endl;
+        // then, substract the opportunity costs to the expected profits on node to follow the utility function
+        for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
+        {
+            profit_per_fgrounds.at(a_node) -= opportunity_costs.at(a_node);
+            if (profit_per_fgrounds.at(a_node) <= 0  || opportunity_costs.at(a_node)<=0) profit_per_fgrounds.at(a_node) = 0;
+          //  cout << profit_per_fgrounds.at(a_node) << endl;
+            // opportunity_costs.at(a_node) at 0 means the node should not be used because the opp costs cannot actually be calculated given it is infinite.
+        }
+    }
+
 
 
     vector <double> freq_grds = this->get_freq_fgrounds();
@@ -4685,7 +4731,8 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                                                nodes,
                                                relevant_nodes,
                                                pathshops,
-                                               freq_profit);
+                                               freq_profit,
+                                               dyn_alloc_sce);
         }
 
         // ********realloc among the 3 more used grounds to save 20%*******//

@@ -65,7 +65,7 @@ target_include_directories(QMapControl
         ${GDAL_INCLUDE_DIRS}
         )
 
-add_subdirectory(QMapControl/Samples)
+#add_subdirectory(QMapControl/Samples)
 
 # Set target directory
 install(TARGETS QMapControl

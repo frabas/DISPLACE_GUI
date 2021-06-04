@@ -1,8 +1,18 @@
+displace (1.0.7) groovy; urgency=medium
+
+  * massiveMortalityEvent implemented
+  * doNotExportDiscards option implemented
+  * stochasticGrowth bio option
+  * nbmets in config.dat added
+  * Debug & fixes
+
+ -- Federico Fuga <happycactus@Ubuntu20.4-VM>  Sat, 05 Jun 2021 17:02:26 +0200
+
 displace (1.0.3) bionic; urgency=medium
 
   * Experimental new input format implemented for some data structure.
 
- -- Federico Fuga <happycactus@MintPad.studiofuga.local>  Fri, 07 Feb 2020 10:20:37 +0100
+ -- Federico Fuga <fuga@studiofuga.com>  Fri, 07 Feb 2020 10:20:37 +0100
 
 displace (1.0) bionic; urgency=medium
 

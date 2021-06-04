@@ -3,6 +3,8 @@
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
+export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic -pthread
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed -pthread
 
 # This has to be exported to make some magic below work.
 export DH_OPTIONS

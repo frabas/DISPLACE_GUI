@@ -8,36 +8,46 @@
 #include "containers/Vector.h"
 
 template<typename Value>
-class Matrix {
+class Matrix3 {
 public:
-    using Row = Vector<Value>;
-
-    Row const &operator[](int row) const
+    Matrix3(size_t i = 1, size_t j = 1, size_t k = 1)
+            : di(i), dj(j), dk(k), m(di * dj * dk)
     {
-        return rows.at(row);
+
     }
 
-    Row &operator[](int row)
+    Matrix3(Matrix3<Value> &&) = default;
+    Matrix3(Matrix3<Value> &) = delete;
+
+    ~Matrix3() = default;
+
+    Matrix3<Value> &operator=(Matrix3<Value> &&) = default;
+    Matrix3<Value> &operator=(Matrix3<Value> &) = delete;
+
+    Value &at(size_t i, size_t j, size_t k)
     {
-        return rows.at(row);
+        return m[index(i, j, k)];
     }
 
-    Row &at(int rowIndex)
+    Value const &at(size_t i, size_t j, size_t k) const
     {
-        while (rows.size() <= rowIndex) {
-            rows.push_back(Row{});
-        }
-        return rows[rowIndex];
-    }
-
-
-    Value &at(int rowIndex, int colIndex)
-    {
-        return at(rowIndex).at(colIndex);
+        return m[index(i, j, k)];
     }
 
 private:
-    std::vector<Row> rows;
+    size_t index(size_t i, size_t j, size_t k) const
+    {
+        if (i < di && j < dj && k < dk) {
+            return k * dj * di + j * di + i;
+        }
+        std::ostringstream ss;
+        ss << "Matrix indexes out of range: [" << i << "," << j << "," << k << "] limits "
+           << di << "," << dj << "," << dk;
+        throw std::out_of_range(ss.str());
+    }
+
+    size_t di, dj, dk;
+    std::vector<Value> m;
 };
 
 

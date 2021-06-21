@@ -28,20 +28,16 @@ BOOST_AUTO_TEST_CASE (test_vectors_of_int)
 
 BOOST_AUTO_TEST_CASE (test_matrix_of_int)
 {
-    Matrix<int> matrixOfInts;
+    Matrix3<int> matrixOfInts(2, 2, 3);
 
     int v, ev = 3;
-    BOOST_CHECK_NO_THROW(matrixOfInts.at(2, 2) = ev);
-    BOOST_CHECK_NO_THROW(v = matrixOfInts.at(2, 2));
+    BOOST_CHECK_NO_THROW(matrixOfInts.at(1, 1, 2) = ev);
+    BOOST_CHECK_NO_THROW(v = matrixOfInts.at(1, 1, 2));
     BOOST_CHECK_EQUAL(v, ev);
-    BOOST_CHECK_NO_THROW(v = matrixOfInts[2][2]);
-    BOOST_CHECK_EQUAL(v, ev);
-    BOOST_CHECK_THROW(v = matrixOfInts[0][2], std::out_of_range);
-    BOOST_CHECK_NO_THROW(v = matrixOfInts[2][0]);
+    BOOST_CHECK_THROW(v = matrixOfInts.at(1, 2, 3), std::out_of_range);
+    BOOST_CHECK_NO_THROW(v = matrixOfInts.at(0, 1, 2));
     BOOST_CHECK_EQUAL(v, 0);
-    BOOST_CHECK_NO_THROW(v = matrixOfInts.at(0, 2));
-    BOOST_CHECK_EQUAL(v, 0);
-    BOOST_CHECK_THROW(v = matrixOfInts[3][0], std::out_of_range);
+    BOOST_CHECK_THROW(v = matrixOfInts.at(2, 0, 0), std::out_of_range);
 }
 
 

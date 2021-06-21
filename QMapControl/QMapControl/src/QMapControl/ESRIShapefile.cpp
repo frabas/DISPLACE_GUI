@@ -30,6 +30,7 @@
 #include <QPainterPath>
 
 #include <cmath>
+#include <system_error>
 
 namespace qmapcontrol
 {

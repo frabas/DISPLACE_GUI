@@ -10,6 +10,8 @@
 #include <QDateTime>
 #include <QDebug>
 
+#include <system_error>
+
 struct PersistentCache::Impl {
     QMutex m_mutex;
     QDir m_persistent_cache_directory;

@@ -842,7 +842,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vector<double> a_init_for_fgrounds(fgrounds.size());
         vector<double> a_cumeffort_fgrounds = a_init_for_fgrounds;
         vector<double> a_cumcatch_fgrounds = a_init_for_fgrounds;
-        vector<vector<double> > a_cumcatch_fgrounds_per_met (fgrounds.size(), vector<double>(model.config().nbmets));
+        vector<vector<double> > a_cumeffort_fgrounds_per_met(fgrounds.size(), vector<double>(model.config().nbmets));
         vector<double> a_cumdiscard_fgrounds = a_init_for_fgrounds;
         vector<double> a_experienced_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
         vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
@@ -855,6 +855,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                                                               vector<double>(model.config().nbpops));
         vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
                                                                    vector<double>(model.config().nbpops));
+        vector<vector<vector <double> > > a_experiencedcpue_fgrounds_per_pop_per_met(fgrounds.size(), vector<vector<double>>(model.config().nbpops, vector<double>(model.config().nbmets)));
         vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
                                                                         vector<double>(
                                                                                 model.config().nbpops));
@@ -873,12 +874,24 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
             // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
             dout(cout << "a_experiencedcpue_fgrounds" << a_experiencedcpue_fgrounds[g] << endl);
             // init the ones per pop
-            for (int pop = 0; pop < model.config().nbpops; pop++) {
+            for (int pop = 0; pop < model.config().nbpops; pop++)
+            {
                 // init
                 a_cumcatch_fgrounds_per_pop[g][pop] = 0;
                 //a_cumdiscard_fgrounds_per_pop[g][pop] = 0;
                 a_experiencedcpue_fgrounds_per_pop[g][pop] =
                         a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop);
+                if (model.quarter() == 1 && model.year() == 1)
+                {
+                    for (int met = 0; met < model.config().nbmets; met++)
+                    {
+                        a_cumeffort_fgrounds_per_met[g][met] = 0;
+                        a_cumcatch_fgrounds_per_pop_per_met[g][pop][met] = 0;
+                        a_experiencedcpue_fgrounds_per_pop_per_met[g][pop][met] =
+                            a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop); // init is not metier-specific
+                    }
+                }
+
             }
         }
         // per total...
@@ -889,6 +902,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vessel->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
                 a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
         vessel->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
+        if (model.quarter() == 1 && model.year() == 1) vessel->set_cumeffort_fgrounds_per_met(a_cumeffort_fgrounds_per_met);
         vessel->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
         vessel->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
         // compute for the first time, to get freq_experiencedcpue_fgrounds...
@@ -899,7 +913,11 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vessel->set_experiencedcpue_fgrounds_per_pop(a_experiencedcpue_fgrounds_per_pop);
         vessel->set_freq_experiencedcpue_fgrounds_per_pop(a_freq_experiencedcpue_fgrounds_per_pop);
         // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
+        if (model.quarter() == 1 && model.year() == 1) vessel->set_experiencedcpue_fgrounds_per_pop_per_met(a_experiencedcpue_fgrounds_per_pop_per_met);
+        if (model.quarter() == 1 && model.year() == 1) vessel->set_freq_experiencedcpue_fgrounds_per_pop_per_met(a_freq_experiencedcpue_fgrounds_per_pop_per_met);
         vessel->compute_experiencedcpue_fgrounds_per_pop();
+        if (model.quarter() == 1 && model.year() == 1) vessel->compute_experiencedcpue_fgrounds_per_pop_per_met();
+
 
         // note that, at the start of the simu, freq of visit will be equivalent to a_freq_fgrounds
         // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...

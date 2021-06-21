@@ -67,7 +67,7 @@ PersistentCache::PersistentCache(QDir cachePath, std::chrono::minutes expiration
 {
     p->m_persistent_cache_directory = cachePath;
     if (!cachePath.mkpath(cachePath.absolutePath())) {
-        throw std::system_error(errno, std::system_category());
+        //throw std::system_error(errno, std::system_category());
     }
 }
 
@@ -94,7 +94,7 @@ QString PersistentCache::insertPixmap(const QUrl &url, const QPixmap &resource)
 
     if (!resource.save(p->m_persistent_cache_directory.absoluteFilePath(hash), "PNG")) {
         qDebug() << "ohoh " << p->m_persistent_cache_directory.absoluteFilePath(hash);
-        throw std::system_error(errno, std::system_category());
+       // throw std::system_error(errno, std::system_category());
     }
 
     return hash;

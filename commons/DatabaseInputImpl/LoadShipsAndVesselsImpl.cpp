@@ -56,6 +56,7 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
         auto& vessel_beta = vesselData->vessel_betas_per_pop;
         idx_vessel += 1;
         int nbpops = vessel_beta.size();
+        int nbmets = 50;
         int nbszgroups = 14; // caution: magic number
 
 
@@ -64,7 +65,8 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
                 idx_vessel,
                 vessel,         // name
                 nbpops,
-                nbszgroups,           
+                nbmets,
+                nbszgroups,
                 vesselData->harbours,
                 vesselData->fground,
                 vesselData->fground_init,

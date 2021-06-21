@@ -529,6 +529,7 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
                                 model.config().nbpops,
+                                model.config().nbmets,
                                 model.config().nbszgroups,
                                 spe_harbours,
                                 spe_fgrounds,
@@ -841,6 +842,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vector<double> a_init_for_fgrounds(fgrounds.size());
         vector<double> a_cumeffort_fgrounds = a_init_for_fgrounds;
         vector<double> a_cumcatch_fgrounds = a_init_for_fgrounds;
+        vector<vector<double> > a_cumcatch_fgrounds_per_met (fgrounds.size(), vector<double>(model.config().nbmets));
         vector<double> a_cumdiscard_fgrounds = a_init_for_fgrounds;
         vector<double> a_experienced_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
         vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
@@ -848,6 +850,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vector<double> a_freq_experiencedcpue_fgrounds = a_init_for_fgrounds;
         vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(),
                                                             vector<double>(model.config().nbpops));
+        vector<vector<vector<double> > > a_cumcatch_fgrounds_per_pop_per_met(fgrounds.size(), vector<vector<double>>(model.config().nbpops, vector<double>(model.config().nbmets)));
         vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(),
                                                               vector<double>(model.config().nbpops));
         vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
@@ -855,6 +858,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
                                                                         vector<double>(
                                                                                 model.config().nbpops));
+        vector<vector<vector <double> > > a_freq_experiencedcpue_fgrounds_per_pop_per_met(fgrounds.size(), vector<vector<double>>(model.config().nbpops, vector<double>(model.config().nbmets)));
 
         for (unsigned int g = 0; g < fgrounds.size(); g++) {
             a_cumcatch_fgrounds[g] = 0;

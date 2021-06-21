@@ -2521,6 +2521,7 @@ bool DisplaceModel::loadVessels()
     //auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
+    int nbmets = mConfig.getNbmets();
     string a_quarter = "1";// start quarter
     string a_semester = "1";
 
@@ -2759,6 +2760,7 @@ bool DisplaceModel::loadVessels()
                                              i,
                                              vesselids[i],
                                              nbpops,
+                                             nbmets,
                                              NBSZGROUP,
                                              spe_harbours,
                                              spe_fgrounds,

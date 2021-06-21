@@ -56,7 +56,7 @@ void ESRIShapefile::createProjections(OGRSpatialReference *spatialReference) con
     OGRSpatialReference destinationWCS;
     // TODO check the correct destination WCS.
     if (destinationWCS.importFromEPSG(4326) != OGRERR_NONE) {
-        throw std::runtime_error("Can't import EPSG");
+        //throw std::runtime_error("Can't import EPSG");
     }
 #if GDAL_VERSION_MAJOR >= 3
     destinationWCS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);

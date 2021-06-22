@@ -455,23 +455,26 @@ Vessel::Vessel(Node* p_location,
     this->set_cumcatch_fgrounds(cumcatch_fgrounds);
     this->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
     this->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
-    this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(
-            experienced_avoided_stks_bycatch_prop_on_fgrounds);
+    this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(experienced_avoided_stks_bycatch_prop_on_fgrounds);
     this->set_cumeffort_fgrounds(cumeffort_fgrounds);
-    this->set_cumeffort_fgrounds_per_met(cumeffort_fgrounds_per_met);
     this->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
     this->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
     // compute for the first time, to get freq_experiencedcpue_fgrounds...
     this->compute_experiencedcpue_fgrounds();
+
     // ...or per pop
     this->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
     this->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
     this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
-    this->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
-    this->set_experiencedcpue_fgrounds_per_pop_per_met(experiencedcpue_fgrounds_per_pop_per_met);
-    this->set_freq_experiencedcpue_fgrounds_per_pop_per_met(freq_experiencedcpue_fgrounds_per_pop_per_met);
+    this->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);    
     // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
     this->compute_experiencedcpue_fgrounds_per_pop();
+  
+    // ...or per pop per met
+    this->set_cumeffort_fgrounds_per_met(cumeffort_fgrounds_per_met);
+    this->set_cumcatch_fgrounds_per_pop_per_met(cumcatch_fgrounds_per_pop_per_met);
+    this->set_experiencedcpue_fgrounds_per_pop_per_met(experiencedcpue_fgrounds_per_pop_per_met);
+    this->set_freq_experiencedcpue_fgrounds_per_pop_per_met(freq_experiencedcpue_fgrounds_per_pop_per_met);
     this->compute_experiencedcpue_fgrounds_per_pop_per_met();
 
 
@@ -3455,13 +3458,13 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                     this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, pop, met);
                     this->get_loc()->compute_cpue_per_pop_per_met_this_month(pop, met); // i.e. cumcatch/cumeffort
                     // catches
-                    cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
+                    this->cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
-                    cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += a_cumul_weight_this_pop_this_vessel;
-                    cumcatch_fgrounds_per_pop_per_met.at(idx_node_r).at(pop).at(met) += a_cumul_weight_this_pop_this_vessel;
+                    this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += a_cumul_weight_this_pop_this_vessel;
+                    this->cumcatch_fgrounds_per_pop_per_met.at(idx_node_r).at(pop).at(met) += a_cumul_weight_this_pop_this_vessel;
                     // effort
-                    cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
-                    cumeffort_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
+                    this->cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
+                    this->cumeffort_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
 
 
                     // cumul to later compute the proportion of discard to potentially influence future decision-making
@@ -3705,16 +3708,15 @@ void Vessel::do_catch(std::ofstream &export_individual_tacs,
                 // update dynamic trip-based cumul for this node
                 // catches
                 int met = this->get_metier()->get_name();
-                cumcatch_fgrounds.at(idx_node_r) += cpue*PING_RATE;
-                cumdiscard_fgrounds.at(idx_node_r) += 0;
+                this->cumcatch_fgrounds.at(idx_node_r) += cpue*PING_RATE;
+                this->cumdiscard_fgrounds.at(idx_node_r) += 0;
                 // catches per pop
-                cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
-                cumcatch_fgrounds_per_pop_per_met.at(idx_node_r).at(pop).at(met) += cpue * PING_RATE;
-                cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
+                this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
+                this->cumcatch_fgrounds_per_pop_per_met.at(idx_node_r).at(pop).at(met) += cpue * PING_RATE;
+                this->cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
                 // effort
-                cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
-                cumeffort_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
-
+                this->cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
+                this->cumeffort_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
                 // contribute to accumulated catches on this node
                 this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
                 this->get_loc()->add_to_cumcatches_per_pop_this_month(catch_pop_at_szgroup[pop][0], pop);

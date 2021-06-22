@@ -903,6 +903,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                 a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
         vessel->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
         if (model.quarter() == 1 && model.year() == 1) vessel->set_cumeffort_fgrounds_per_met(a_cumeffort_fgrounds_per_met);
+        if (model.quarter() == 1 && model.year() == 1) vessel->set_cumcatch_fgrounds_per_pop_per_met(a_cumcatch_fgrounds_per_pop_per_met);
         vessel->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
         vessel->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
         // compute for the first time, to get freq_experiencedcpue_fgrounds...

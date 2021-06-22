@@ -40,7 +40,7 @@ using namespace std;
 
 
 
-bool applyBiologicalModule2(int tstep, int a_month_i, int a_year_i, const string &namesimu,
+bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_year_i, const string &namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,

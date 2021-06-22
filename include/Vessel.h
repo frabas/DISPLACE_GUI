@@ -85,25 +85,29 @@ private:
         std::vector<double> experienced_bycatch_prop_on_fgrounds;
         std::vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds;
 
-        std::vector< std::vector<double> > cumcatch_fgrounds_per_pop;
-        std::vector< std::vector< std::vector<double> > > cumcatch_fgrounds_per_met_per_pop;
+        std::vector< std::vector< std::vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop;
         std::vector< std::vector<double> > cumdiscard_fgrounds_per_pop;
-                                 // cumulated effort per node for the last trip, reinit when new trip start
-        std::vector<double> cumeffort_fgrounds;
-								 // from cumcatch/cumeffort for last trip
-        std::vector< std::vector<double> > cumeffort_fgrounds_per_met;
         
+        // cumulated effort per node for the last trip, reinit when new trip start
+        std::vector<double> cumeffort_fgrounds;
+		std::vector< std::vector<double> > cumeffort_fgrounds_per_met;
+       
         std::vector<double> experiencedcpue_fgrounds;
-								 // from cumcatch/cumeffort for last trip
-        std::vector<std::vector<double> > experiencedcpue_fgrounds_per_pop;
-								 // scaled to 1 from experiencedcpue_fgrounds
-        std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop;
-        // scaled to 1 from experiencedcpue_fgrounds_per_met_per_pop
         std::vector<double> freq_experiencedcpue_fgrounds;
-								 // scaled to 1 from experiencedcpue_fgrounds
+        // from cumcatch/cumeffort for last trip scaled to 1
+        
+        std::vector< std::vector<double> > cumcatch_fgrounds_per_pop;
+        std::vector<std::vector<double> > experiencedcpue_fgrounds_per_pop;
         std::vector<std::vector<double> > freq_experiencedcpue_fgrounds_per_pop;
+
+        std::vector< std::vector< std::vector<double> > > cumcatch_fgrounds_per_met_per_pop;
+        std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop;
         std::vector<std::vector<vector<double> > > freq_experiencedcpue_fgrounds_per_met_per_pop;
-        // skipper effect, target factor
+
+        std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop;        
+        std::vector<std::vector<vector<double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop;
+       
+       // skipper effect, target factor:
         std::vector<double> vessel_betas_per_pop;
 								 //
         std::vector<double> percent_tac_per_pop;
@@ -268,15 +272,18 @@ public:
         const std::vector<double> &get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const;
         const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop () const;
         const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_met_per_pop() const;
+        const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_yearquarter_per_pop() const;
         const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
         const std::vector<double> &get_cumeffort_fgrounds () const;
         const std::vector<vector<double >>& get_cumeffort_fgrounds_per_met() const;
         const std::vector<double> &get_experiencedcpue_fgrounds () const;
         const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop () const;
         const std::vector<std::vector<vector <double> > >& get_experiencedcpue_fgrounds_per_met_per_pop() const;
+        const std::vector<std::vector<vector <double> > >& get_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
         const std::vector<double> &get_freq_experiencedcpue_fgrounds () const;
         const std::vector<std::vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop () const;
         const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_met_per_pop() const;
+        const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
         const std::vector<double> &get_vessel_betas_per_pop () const;
         const std::vector<double> &get_percent_tac_per_pop () const;
         const std::vector<double> &get_fishing_credits () const;
@@ -417,15 +424,18 @@ public:
         void set_experienced_avoided_stks_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
         void set_cumcatch_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumcatch_fgrounds_per_met_per_pop(const std::vector<std::vector<vector <double> > >& newval);
+        void set_cumcatch_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector <double> > >& newval);
         void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumeffort_fgrounds(const std::vector<double> &newval);
         void set_cumeffort_fgrounds_per_met(const std::vector<vector<double> >& newval);
         void set_experiencedcpue_fgrounds(const std::vector<double> &newval);
         void set_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_experiencedcpue_fgrounds_per_met_per_pop(const std::vector<std::vector<vector<double> > >& newval);
+        void set_experiencedcpue_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector<double> > >& newval);
         void set_freq_experiencedcpue_fgrounds(const std::vector<double> &newval);
         void set_freq_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_freq_experiencedcpue_fgrounds_per_met_per_pop(const std::vector<std::vector<vector <double> > >& newval);
+        void set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector <double> > >& newval);
         void clear_idx_used_metiers_this_trip();
         void set_roadmap (const std::list<types::NodeId> &_roadmap);
 		void set_inharbour (bool logic);
@@ -475,6 +485,7 @@ public:
 
     void do_catch(std::ofstream &export_individual_tacs,
                   int a_month,
+                  int a_quarter,
                   std::vector<Population *> const &populations,
                   std::vector<Node *> const &nodes,
                   vector<Benthos *> const &benthoshabs,
@@ -500,21 +511,23 @@ public:
     void clear_discards_pop_at_szgroup();
 
     void compute_experiencedcpue_fgrounds();
-   
     void compute_experiencedcpue_fgrounds_per_pop();
-
     void compute_experiencedcpue_fgrounds_per_met_per_pop();
+    void compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter);
 
     void clear_cumcatch_and_cumeffort();
-		void receive_message(int message);
-		void reset_message();
-        void export_loglike_prop_met(std::ofstream& loglike_prop_met, int tstep, int nbpops);
-		void reinit_after_a_trip();
-        void alter_freq_fgrounds_for_nodes_in_polygons(std::multimap <int, int> nodes_in_polygons);
-		void alloc_on_high_previous_cpue(const SimModel& simModel,
+    void reinit_after_a_trip();
+
+	void receive_message(int message);
+	void reset_message();
+    
+    void export_loglike_prop_met(std::ofstream& loglike_prop_met, int tstep, int nbpops);
+    
+    void alter_freq_fgrounds_for_nodes_in_polygons(std::multimap <int, int> nodes_in_polygons);
+	void alloc_on_high_previous_cpue(const SimModel& simModel,
                                          int tstep,
                                          std::ofstream& freq_cpue);
-        void alloc_on_high_profit_grounds(const SimModel& simModel,
+    void alloc_on_high_profit_grounds(const SimModel& simModel,
                                           int tstep,
                                           int use_static_paths,
                                           vector<Node *> &nodes,
@@ -522,26 +535,26 @@ public:
                                           const std::vector<PathShop> &pathshops,
                                           std::ofstream& freq_profit,
                                           const DynAllocOptions& dyn_alloc_sce);
-        std::vector<double> expected_profit_on_grounds(const SimModel& simModel, 
+    std::vector<double> expected_profit_on_grounds(const SimModel& simModel, 
                                                        int use_static_paths,
                                                        vector<Node*>& nodes,
                                                        const std::vector<types::NodeId> &relevant_nodes,
                                                        const std::vector<PathShop> &pathshops,
                                                         int per_met);
-        void alloc_while_saving_fuel(const SimModel& simModel, 
+    void alloc_while_saving_fuel(const SimModel& simModel, 
                                      int tstep,
                                      int use_static_paths,
                                      vector<Node*>& nodes,
                                     const std::vector<types::NodeId> &relevant_nodes,
            const std::vector<PathShop> &pathshops);
-        void alloc_on_closer_grounds(const SimModel& simModel, 
+    void alloc_on_closer_grounds(const SimModel& simModel, 
                                      int tstep, int use_static_paths,
                                      vector<Node *> &nodes,
                                      const std::vector<types::NodeId> &relevant_nodes,
             const std::vector<PathShop> &pathshops,
             std::ofstream& freq_distance);
 
-        bool choose_a_ground_and_go_fishing(const SimModel& simModel,
+    bool choose_a_ground_and_go_fishing(const SimModel& simModel,
                                            int tstep, 
             const displace::commons::Scenario &scenario, bool use_the_tree,
             const DynAllocOptions &dyn_alloc_sce,
@@ -557,7 +570,7 @@ public:
             std::ofstream& freq_distance);
 
 
-        int choose_another_ground_and_go_fishing(const SimModel& simModel, 
+    int choose_another_ground_and_go_fishing(const SimModel& simModel, 
                                                  int tstep,
                                                  const DynAllocOptions &dyn_alloc_sce,
                                                  int use_static_paths,

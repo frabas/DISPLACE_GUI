@@ -401,6 +401,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                       << endl);
                             model->vessels()[index_v]->do_catch(export_individual_tacs,
                                                                 model->month(),
+                                                                model->quarter(),
                                                                 model->populations(),
                                                                 model->nodes(),
                                                                 benthoss,

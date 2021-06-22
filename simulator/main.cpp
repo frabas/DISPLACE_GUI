@@ -1985,6 +1985,7 @@ int app_main(int argc, char const* argv[])
 
         if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
+                                    simModel->quarter(),
                                     simModel->year(),
                                     namesimu,
                                     namefolderinput,
@@ -2223,6 +2224,17 @@ int app_main(int argc, char const* argv[])
 
             cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
 
+            //...but first compute and track the past experience
+            int y = simModel->year() -1;
+            int q = simModel->quarter() - 1;
+            for (auto vessel : simModel->vessels())
+            {
+                vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y,q);
+                //vector<vector<vector<double> > > dd = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
+                //cout << "heho " << q << endl;
+
+            }           
+                
             // RE-READ VESSEL DATA
             // fill in with new input files for fgrounds and harbours, etc.
             // if change of year-quarter or semester, to be quarter or semester-specific.

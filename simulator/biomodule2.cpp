@@ -79,7 +79,7 @@ static void unlock()
 }
 
 
-bool applyBiologicalModule2(int tstep, int a_month_i, int a_year_i, const string & namesimu,
+bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_year_i, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream & popstats,
                           ofstream &popdyn_N,
@@ -1122,23 +1122,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 nodes.at(n)->set_Ns_pops_at_szgroup_at_month_start(name_pop, nodes.at(n)->get_Ns_pops_at_szgroup(sp));
             }
 
-            //...and update some indicators (i.e. cpue) and reinit monthly pop indicators on nodes after use
-            int is_start_quarter = binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep);
-            for (unsigned int n = 0; n < nodes.size(); n++)
-            {
-                // the cpue_per_pop_per_met is computed on the fly as a running average each time there are some do_catch() 
-                // the cpue_per_pop_per_met is cleared each quarter.
-                // but at the end of each month, cumcatch and cumeffort are reset because are being used in some other context (e.g. to compute oth_land per month)
-                //cout << "cumcatch per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " << 
-                //    nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(1) << endl;
-                nodes.at(n)->clear_cumcatches_per_pop_per_met_this_month(); // reinit after use
-                //cout << "cumeffort per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
-                //    nodes.at(n)->get_cumeffort_per_pop_per_met_this_month().at(sp).at(1) << endl;
-                nodes.at(n)->clear_cumeffort_per_pop_per_met_this_month(); // reinit after use
-                //cout << "cpue per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
-                //    nodes.at(n)->get_cpue_per_pop_per_met_this_month().at(sp).at(1) << endl;
-                if (is_start_quarter) nodes.at(n)->clear_cpue_per_pop_per_met_this_month(); // reinit after use
-            }
+           
 
 
             //... and export for plotting.
@@ -1390,6 +1374,24 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
+    //...and update some indicators (i.e. cpue) and reinit monthly pop indicators on nodes after use
+    int is_start_quarter = binary_search(tsteps_quarters.begin(), tsteps_quarters.end(), tstep);
+    for (unsigned int n = 0; n < nodes.size(); n++)
+    {
+           // the cpue_per_pop_per_met is computed on the fly as a running average each time there are some do_catch() 
+           // the cpue_per_pop_per_met is cleared each quarter.
+           // but at the end of each month, cumcatch and cumeffort are reset because are being used in some other context (e.g. to compute oth_land per month)
+           //cout << "cumcatch per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " << 
+           //    nodes.at(n)->get_cumcatches_per_pop_per_met_this_month().at(sp).at(1) << endl;
+           nodes.at(n)->clear_cumcatches_per_pop_per_met_this_month(); // reinit after use
+           //cout << "cumeffort per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
+           //    nodes.at(n)->get_cumeffort_per_pop_per_met_this_month().at(sp).at(1) << endl;
+           nodes.at(n)->clear_cumeffort_per_pop_per_met_this_month(); // reinit after use
+           //cout << "cpue per pop " << sp << " and met 1 this month on node " << nodes.at(n)->get_idx_node() << " is " <<
+           //    nodes.at(n)->get_cpue_per_pop_per_met_this_month().at(sp).at(1) << endl;
+           if (is_start_quarter) nodes.at(n)->clear_cpue_per_pop_per_met_this_month(); // reinit after use
+
+    }
 
 
 

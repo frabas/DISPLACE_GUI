@@ -48,6 +48,8 @@ static const char *dyn_alloc_options[] = {
     "LTMP",
     "FMSY",
     "FMSYrange",
+    "experiencedCPUEsPerMet",
+    "experiencedCPUEsPerYearQuarter",
     "fishing_credits",
     "promote_high_tariffs",
     "TechCreeping3Per",

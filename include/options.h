@@ -105,6 +105,8 @@ enum Dyn_Alloc {
     focus_on_high_previous_cpue,
     shared_harbour_knowledge,
     twoFoldTACconstr,
+    experiencedCPUEsPerMet,
+    experiencedCPUEsPerYearQuarter,
     fishing_credits,
     promote_high_tariffs,
     TechCreeping3Per,

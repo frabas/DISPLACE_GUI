@@ -47,6 +47,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,focus_on_high_previous_cpue);
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
+    O(mMap, experiencedCPUEsPerMet);
+    O(mMap, experiencedCPUEsPerYearQuarter);
     O(mMap,fishing_credits);
     O(mMap,promote_high_tariffs);
     O(mMap,TechCreeping3Per);

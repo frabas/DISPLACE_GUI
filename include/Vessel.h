@@ -546,7 +546,7 @@ public:
                                                        vector<Node*>& nodes,
                                                        const std::vector<types::NodeId> &relevant_nodes,
                                                        const std::vector<PathShop> &pathshops,
-                                                        int per_met);
+                                                       const DynAllocOptions& dyn_alloc_sce);
     void alloc_while_saving_fuel(const SimModel& simModel, 
                                      int tstep,
                                      int use_static_paths,

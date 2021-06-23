@@ -2232,7 +2232,7 @@ int app_main(int argc, char const* argv[])
                 vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y,q);
                 //vector<vector<vector<double> > > dd = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
                 //cout << "heho " << q << endl;
-
+                vessel->clear_cumeffort_per_yearquarter();
             }           
                 
             // RE-READ VESSEL DATA
@@ -2588,7 +2588,7 @@ int app_main(int argc, char const* argv[])
                         vessel->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessel->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         //vessel->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                        vessel->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                        vessel->set_cumeffort_per_trip_per_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
                         vessel->set_experiencedcpue_fgrounds_per_pop(
                                 experiencedcpue_fgrounds_per_pop); // re-dimensioned

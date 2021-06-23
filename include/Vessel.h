@@ -89,9 +89,11 @@ private:
         std::vector< std::vector<double> > cumdiscard_fgrounds_per_pop;
         
         // cumulated effort per node for the last trip, reinit when new trip start
-        std::vector<double> cumeffort_fgrounds;
-		std::vector< std::vector<double> > cumeffort_fgrounds_per_met;
-       
+        std::vector<double> cumeffort_per_trip_per_fgrounds;
+        std::vector< std::vector<double> > cumeffort_per_trip_per_fgrounds_per_met;
+        // cumulated effort per node for the last yearquarter, reinit when new quarter start
+        std::vector<double> cumeffort_per_yearquarter_per_fgrounds;
+		
         std::vector<double> experiencedcpue_fgrounds;
         std::vector<double> freq_experiencedcpue_fgrounds;
         // from cumcatch/cumeffort for last trip scaled to 1
@@ -274,8 +276,9 @@ public:
         const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_met_per_pop() const;
         const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_yearquarter_per_pop() const;
         const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
-        const std::vector<double> &get_cumeffort_fgrounds () const;
-        const std::vector<vector<double >>& get_cumeffort_fgrounds_per_met() const;
+        const std::vector<double> &get_cumeffort_per_trip_per_fgrounds() const;
+        const std::vector<double>& get_cumeffort_per_yearquarter_per_fgrounds() const;
+        const std::vector<vector<double >>& get_cumeffort_per_trip_per_fgrounds_per_met() const;
         const std::vector<double> &get_experiencedcpue_fgrounds () const;
         const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop () const;
         const std::vector<std::vector<vector <double> > >& get_experiencedcpue_fgrounds_per_met_per_pop() const;
@@ -403,7 +406,8 @@ public:
         void set_spe_cumdiscard_fgrounds (const std::vector<double> &_cumdiscard);
         void set_spe_experienced_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_bycatch_prop_on_fgrounds);
         void set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_avoided_stks_bycatch_prop_on_fgrounds);
-        void set_spe_cumeffort_fgrounds (const std::vector<double> &_cumeffort);
+        void set_spe_cumeffort_per_trip_per_fgrounds(const std::vector<double> &_cumeffort);
+        void set_spe_cumeffort_per_yearquarter_per_fgrounds(const std::vector<double>& _cumeffort);
         void set_spe_experiencedcpue_fgrounds (const std::vector<double> &_experiencedcpue);
         void set_spe_betas_per_pop (const std::vector<double> &_betas_per_pop);
         void set_spe_percent_tac_per_pop (const std::vector<double> &_tacs_per_pop);
@@ -426,8 +430,9 @@ public:
         void set_cumcatch_fgrounds_per_met_per_pop(const std::vector<std::vector<vector <double> > >& newval);
         void set_cumcatch_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector <double> > >& newval);
         void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
-        void set_cumeffort_fgrounds(const std::vector<double> &newval);
-        void set_cumeffort_fgrounds_per_met(const std::vector<vector<double> >& newval);
+        void set_cumeffort_per_trip_per_fgrounds(const std::vector<double> &newval);
+        void set_cumeffort_per_yearquarter_per_fgrounds(const std::vector<double>& newval);
+        void set_cumeffort_per_trip_per_fgrounds_per_met(const std::vector<vector<double> >& newval);
         void set_experiencedcpue_fgrounds(const std::vector<double> &newval);
         void set_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_experiencedcpue_fgrounds_per_met_per_pop(const std::vector<std::vector<vector<double> > >& newval);
@@ -515,7 +520,8 @@ public:
     void compute_experiencedcpue_fgrounds_per_met_per_pop();
     void compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter);
 
-    void clear_cumcatch_and_cumeffort();
+    void clear_cumcatch_and_cumeffort_per_trip();
+    void clear_cumeffort_per_yearquarter();
     void reinit_after_a_trip();
 
 	void receive_message(int message);

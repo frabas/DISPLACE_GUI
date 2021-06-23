@@ -488,7 +488,8 @@ public:
 
     void find_next_point_on_the_graph(std::vector<Node *> &nodes);
 
-    void do_catch(std::ofstream &export_individual_tacs,
+    void do_catch(const DynAllocOptions& dyn_alloc_sce, 
+                  std::ofstream &export_individual_tacs,
                   int a_month,
                   int a_quarter,
                   std::vector<Population *> const &populations,

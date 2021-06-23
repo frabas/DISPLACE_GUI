@@ -847,29 +847,31 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vector<double> a_experienced_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
         vector<double> a_experienced_avoided_stks_bycatch_prop_on_fgrounds = a_init_for_fgrounds;
         
-        // overall
+        // overall (new objects each quarter)
         vector<double> a_cumdiscard_fgrounds = a_init_for_fgrounds;
         vector<double> a_experiencedcpue_fgrounds = a_init_for_fgrounds;
         vector<double> a_freq_experiencedcpue_fgrounds = a_init_for_fgrounds;
         
-        // or per pop
-        vector<vector<double> > a_cumcatch_fgrounds_per_pop = vessel->get_cumcatch_fgrounds_per_pop();
-        vector<vector<double> > a_cumdiscard_fgrounds_per_pop = vessel->get_cumdiscard_fgrounds_per_pop();
-        vector<vector<double> > a_experiencedcpue_fgrounds_per_pop = vessel->get_experiencedcpue_fgrounds_per_pop();
-        vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop= vessel->get_freq_experiencedcpue_fgrounds_per_pop();
-    
-        // or per met per pop
-        vector<vector<vector<double> > > a_cumcatch_fgrounds_per_met_per_pop= vessel->get_cumcatch_fgrounds_per_met_per_pop();
-        vector<vector<vector <double> > > a_experiencedcpue_fgrounds_per_met_per_pop= vessel->get_experiencedcpue_fgrounds_per_met_per_pop();
-        vector<vector<vector <double> > > a_freq_experiencedcpue_fgrounds_per_met_per_pop= vessel->get_freq_experiencedcpue_fgrounds_per_met_per_pop();
+        // or per pop (new objects each quarter)
+        vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(model.config().nbpops));
+        vector<vector<vector <double> > > a_cumcatch_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(model.config().nbmets, vector<double>(model.config().nbpops)));
+        vector<vector<double> > a_cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(model.config().nbpops));
+        vector<vector<double> > a_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(model.config().nbpops));
 
-        // or per yearquarter per pop
+        // or per met per pop (new objects each quarter)
+        vector<vector<vector <double> > > a_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(model.config().nbmets, vector<double>(model.config().nbpops)));
+        vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(model.config().nbpops));
+        vector<vector<vector <double> > > a_freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(model.config().nbmets, vector<double>(model.config().nbpops)));
+
+        // or per yearquarter per pop (CARRYING OVER QUARTERS - for Option experiencedCPUEsPerYearQuarter: THIS CANNOT WORK IF THE VESSEL HAS NOT STRICTLY THE SAME GROUND FOR EACH QUARTER)
+        //initialisation of objects useful for if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
         int nbyearquarters = 11 * 4;
-        vector<vector<vector<double> > > a_cumcatch_fgrounds_per_yearquarter_per_pop= vessel->get_cumcatch_fgrounds_per_yearquarter_per_pop();
-        vector<vector<vector <double> > > a_experiencedcpue_fgrounds_per_yearquarter_per_pop= vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
-        vector<vector<vector <double> > > a_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop= vessel->get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop();
+        vector<vector<vector<double> > > a_cumcatch_fgrounds_per_yearquarter_per_pop = vessel->get_cumcatch_fgrounds_per_yearquarter_per_pop();          
+        vector<vector<vector <double> > > a_experiencedcpue_fgrounds_per_yearquarter_per_pop = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
+        vector<vector<vector <double> > > a_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop = vessel->get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop();
         int q = model.quarter() - 1;
         int y = model.year() - 1;
+      
 
         for (unsigned int g = 0; g < fgrounds.size(); g++) {
             a_cumcatch_fgrounds[g] = 0;
@@ -902,11 +904,18 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                             a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop); // init is not metier-specific
                     }
                 }
-                if (model.year() == 1)
+                if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
                 {
-                    a_cumcatch_fgrounds_per_yearquarter_per_pop[g][q][pop] = 0;
-                    a_experiencedcpue_fgrounds_per_yearquarter_per_pop[g][q][pop] =
-                        a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop); // init 
+                    if (a_cumcatch_fgrounds_per_yearquarter_per_pop.size() != fgrounds.size())
+                    {
+                        cout << "experiencedCPUEsPerYearQuarter cannot carry info over quarters: correct input files: the Option requires strictly identical vesselsspe_fgrounds_quarterXX.dat files" << endl;
+                    }
+                    if (model.year() == 1)
+                    {
+                        a_cumcatch_fgrounds_per_yearquarter_per_pop[g][q][pop] = 0;
+                        a_experiencedcpue_fgrounds_per_yearquarter_per_pop[g][q][pop] =
+                            a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop); // init 
+                    }
                 }
             }
         }
@@ -935,17 +944,20 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vessel->compute_experiencedcpue_fgrounds_per_pop();
 
         // ...or per met per pop
-        if (model.quarter() == 1 && model.year() == 1) vessel->set_cumeffort_per_trip_per_fgrounds_per_met(a_cumeffort_per_trip_per_fgrounds_per_met);
-        if (model.quarter() == 1 && model.year() == 1) vessel->set_cumcatch_fgrounds_per_met_per_pop(a_cumcatch_fgrounds_per_met_per_pop);
-        if (model.quarter() == 1 && model.year() == 1) vessel->set_experiencedcpue_fgrounds_per_met_per_pop(a_experiencedcpue_fgrounds_per_met_per_pop);
-        if (model.quarter() == 1 && model.year() == 1) vessel->set_freq_experiencedcpue_fgrounds_per_met_per_pop(a_freq_experiencedcpue_fgrounds_per_met_per_pop);
-        if (model.quarter() == 1 && model.year() == 1) vessel->compute_experiencedcpue_fgrounds_per_met_per_pop();
+        vessel->set_cumeffort_per_trip_per_fgrounds_per_met(a_cumeffort_per_trip_per_fgrounds_per_met);
+        vessel->set_cumcatch_fgrounds_per_met_per_pop(a_cumcatch_fgrounds_per_met_per_pop);
+        vessel->set_experiencedcpue_fgrounds_per_met_per_pop(a_experiencedcpue_fgrounds_per_met_per_pop);
+        vessel->set_freq_experiencedcpue_fgrounds_per_met_per_pop(a_freq_experiencedcpue_fgrounds_per_met_per_pop);
+        vessel->compute_experiencedcpue_fgrounds_per_met_per_pop();
 
         // ...or per yearquarter per pop (caution: reload only the first y)
-        if (model.year() == 1) vessel->set_cumcatch_fgrounds_per_yearquarter_per_pop(a_cumcatch_fgrounds_per_yearquarter_per_pop);
-        if (model.year() == 1) vessel->set_experiencedcpue_fgrounds_per_yearquarter_per_pop(a_experiencedcpue_fgrounds_per_yearquarter_per_pop);
-        if (model.year() == 1) vessel->set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(a_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
-        if (model.year() == 1) vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y,q);
+        if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
+        {
+            if (model.year() == 1) vessel->set_cumcatch_fgrounds_per_yearquarter_per_pop(a_cumcatch_fgrounds_per_yearquarter_per_pop);
+            if (model.year() == 1) vessel->set_experiencedcpue_fgrounds_per_yearquarter_per_pop(a_experiencedcpue_fgrounds_per_yearquarter_per_pop);
+            if (model.year() == 1) vessel->set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(a_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
+            if (model.year() == 1) vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y, q);
+        }
 
         // note that, at the start of the simu, freq of visit will be equivalent to a_freq_fgrounds
         // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...

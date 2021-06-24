@@ -401,6 +401,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                       << endl);
                             model->vessels()[index_v]->do_catch(model->scenario().dyn_alloc_sce,
                                                                 export_individual_tacs,
+                                                                model->timestep(),
                                                                 model->month(),
                                                                 model->quarter(),
                                                                 model->populations(),
@@ -515,8 +516,11 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             dout(cout << endl);
         */
 
-        // find.next.pt.on.the.graph()
-        model->vessels()[index_v]->find_next_point_on_the_graph(model->nodes());
+        bool is_fishing_credits = false;
+        if (model->scenario().dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
+
+        // then, call to find.next.pt.on.the.graph()
+        model->vessels()[index_v]->find_next_point_on_the_graph(model->nodes(), model->timestep(), is_fishing_credits);
 
         outc(cout << "CURRENT LAST POS " << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << endl);
 

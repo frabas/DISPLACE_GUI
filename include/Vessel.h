@@ -196,7 +196,7 @@ private:
 
 protected:
         void init();
-        void find_next_point_on_the_graph_unlocked(std::vector<Node* >& nodes);
+        void find_next_point_on_the_graph_unlocked(std::vector<Node* >& nodes, int a_tstep, bool is_fishing_credits);
 
 public:
         //Vessel(std::string name,  std::shared_ptr<Node> a_location);
@@ -486,10 +486,11 @@ public:
 
     void set_is_choked(int pop, int val);
 
-    void find_next_point_on_the_graph(std::vector<Node *> &nodes);
+    void find_next_point_on_the_graph(std::vector<Node *> &nodes, int a_tstep, bool is_fishing_credits);
 
-    void do_catch(const DynAllocOptions& dyn_alloc_sce, 
+    void do_catch(const DynAllocOptions& dyn_alloc_sce,
                   std::ofstream &export_individual_tacs,
+                  int a_tstep,
                   int a_month,
                   int a_quarter,
                   std::vector<Population *> const &populations,

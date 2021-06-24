@@ -2356,15 +2356,15 @@ void Vessel::set_metier(Metier* pnew_metier)
     metier= pnew_metier;
 }
 
-void Vessel::find_next_point_on_the_graph(vector<Node *> &nodes)
+void Vessel::find_next_point_on_the_graph(vector<Node *> &nodes, int a_tstep, bool is_fishing_credits)
 {
     lock();
-    find_next_point_on_the_graph_unlocked(nodes);
+    find_next_point_on_the_graph_unlocked(nodes, a_tstep, is_fishing_credits);
     unlock();
 }
 
 
-void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
+void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_tstep, bool is_fishing_credits)
 {
     if(roadmap.size()==0)
     {
@@ -2539,6 +2539,22 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
             set_state(2);
             dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << endl);
 
+            if (is_fishing_credits && (a_tstep % 2))
+            {
+                cout << a_tstep << endl;
+                // pay the tariff every two steps only, and at steaming as well
+                vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
+                vector<double> fishing_credits = this->get_fishing_credits();
+                // check
+                dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when transiting through node " <<
+                    this->get_loc()->get_idx_node().toIndex() << ", with metier " << this->get_metier()->get_name() <<
+                      " the tariff paid is " << tariff_this_cell.at(this->get_metier()->get_name()) << endl);
+                fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name());
+                this->set_fishing_credits(fishing_credits);
+                dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
+                    " has remaining credits " << this->get_fishing_credits().at(0) << endl);
+            }
+
         }
 
         // update
@@ -2575,6 +2591,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 
 void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                       std::ofstream &export_individual_tacs,
+                      int a_tstep,
                       int a_month,
                       int a_quarter,
                       std::vector<Population *> const &populations,
@@ -2766,16 +2783,15 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     // TARIFFS ON THE NODE
     //vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
     //vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
-    if(is_fishing_credits)
+    if(is_fishing_credits &&  (a_tstep % 2))
     {
+        // pay the tariff every two steps only
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
-        dout(cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
-                " has tariffs0 " << tariff_this_cell.at(0) << endl);
-        dout(cout << "this vessel " << this->get_name() <<
-                " has credits " << fishing_credits.at(0) << endl);
-        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name());
+        dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when fishing here, with metier "<< this->get_metier()->get_name() << " the tariff paid is " <<
+             tariff_this_cell.at(this->get_metier()->get_name()) << endl;
+        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name()));
         this->set_fishing_credits(fishing_credits);
         dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
                 " has remaining credits " << this->get_fishing_credits().at(0) << endl);
@@ -5384,8 +5400,11 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             cout << endl;
         */
 
+        bool is_fishing_credits = false;
+        if (dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
+
         // then, call to find.next.pt.on.the.graph()
-        this-> find_next_point_on_the_graph_unlocked(nodes);
+        this-> find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
 
         // decide on the rest duration for the next time (drawn from a gamma law)
         double calib=1;
@@ -5787,8 +5806,12 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     {
         this->set_metier(  metiers[ 0 ]  );   // a dangerous fix
     }
+    
+    bool is_fishing_credits = false;
+    if (dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
+    
     // find.next.pt.on.the.graph()
-    this->find_next_point_on_the_graph_unlocked(nodes);
+    this->find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
     unlock();
 return 0;
 }

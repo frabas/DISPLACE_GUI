@@ -67,6 +67,7 @@ struct Scenario {
     std::vector <int> tariff_pop;
     int freq_update_tariff_code;
     std::vector <double> arbitary_breaks_for_tariff;
+    std::vector <double> met_multiplier_on_arbitary_breaks_for_tariff;
     int total_amount_credited;
     double tariff_annual_hcr_percent_change;
     int update_tariffs_based_on_lpue_or_dpue_code;
@@ -100,6 +101,7 @@ struct Scenario {
                 s1.tariff_pop == s2.tariff_pop &&
                 s1.freq_update_tariff_code == s2.freq_update_tariff_code &&
                 check(s1.arbitary_breaks_for_tariff, s2.arbitary_breaks_for_tariff) &&
+                check(s1.met_multiplier_on_arbitary_breaks_for_tariff, s2.met_multiplier_on_arbitary_breaks_for_tariff) &&
                 s1.total_amount_credited == s2.total_amount_credited &&
                 std::abs((double)(s1.tariff_annual_hcr_percent_change - s2.tariff_annual_hcr_percent_change)) < 1e-3 &&
                 s1.update_tariffs_based_on_lpue_or_dpue_code == s2.update_tariffs_based_on_lpue_or_dpue_code &&

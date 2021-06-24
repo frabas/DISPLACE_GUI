@@ -72,6 +72,7 @@ struct print_log_value<displace::commons::Scenario>
               s1.tariff_pop << "," <<
               s1.freq_update_tariff_code << "," <<
               s1.arbitary_breaks_for_tariff << "," <<
+              s1.met_multiplier_on_arbitary_breaks_for_tariff << "," <<
               s1.total_amount_credited << "," <<
               s1.tariff_annual_hcr_percent_change << "," <<
               s1.update_tariffs_based_on_lpue_or_dpue_code << "," <<

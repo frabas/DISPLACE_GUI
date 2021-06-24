@@ -101,6 +101,7 @@ extern int update_tariffs_based_on_lpue_or_dpue_code;
 extern int freq_do_growth;
 extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;
+extern vector<double> met_multiplier_on_arbitary_breaks_for_tariff;
 extern int total_amount_credited;
 extern double tariff_annual_hcr_percent_change;
 extern double tech_creeping_multiplier;

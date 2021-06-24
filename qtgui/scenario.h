@@ -77,6 +77,7 @@ private:
     int freq_update_tariff_code;
     int update_tariffs_based_on_lpue_or_dpue_code;
     QStringList arbitary_breaks_for_tariff;
+    QStringList met_multiplier_on_arbitary_breaks_for_tariff;
     int total_amount_credited;
     double tariff_annual_hcr_percent_change;
 
@@ -144,6 +145,8 @@ public:
     void setUpdateTariffsBasedOnLpueOrDpueCode(int value);
     std::vector<double> getArbitraryBreaksForTariff_asVector() const;
     void setArbitraryBreaksForTariff(const QStringList &value);
+    std::vector<double> getMetMultiplierOnArbitraryBreaksForTariff_asVector() const;
+    void setMetMultiplierOnArbitraryBreaksForTariff(const QStringList& value);
     int getTotalAmountCredited() const;
     void setTotalAmountCredited(int value);
     double getTariffAnnualHcrPercentChange() const;

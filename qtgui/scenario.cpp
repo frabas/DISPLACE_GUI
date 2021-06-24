@@ -51,6 +51,7 @@ Scenario::Scenario()
       tariff_pop(0),
       freq_update_tariff_code(0),
       arbitary_breaks_for_tariff(0),
+      met_multiplier_on_arbitary_breaks_for_tariff(0),
       total_amount_credited(0),
       tariff_annual_hcr_percent_change(0.0),
       update_tariffs_based_on_lpue_or_dpue_code(1)
@@ -255,6 +256,12 @@ void Scenario::setArbitraryBreaksForTariff(const QStringList &value)
     arbitary_breaks_for_tariff = value;
 }
 
+void Scenario::setMetMultiplierOnArbitraryBreaksForTariff(const QStringList& value)
+{
+    met_multiplier_on_arbitary_breaks_for_tariff = value;
+}
+
+
 vector<double> Scenario::getArbitraryBreaksForTariff_asVector() const
 {
     std::vector<double> vec;
@@ -262,6 +269,15 @@ vector<double> Scenario::getArbitraryBreaksForTariff_asVector() const
         vec.push_back(s.toDouble());
     return vec;
 }
+
+vector<double> Scenario::getMetMultiplierOnArbitraryBreaksForTariff_asVector() const
+{
+    std::vector<double> vec;
+    foreach(QString s, met_multiplier_on_arbitary_breaks_for_tariff)
+        vec.push_back(s.toDouble());
+    return vec;
+}
+
 
 
 void Scenario::setTotalAmountCredited(int value)
@@ -386,6 +402,9 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     std::stringstream breaks_for_tariff;
     std::copy(scenario.arbitary_breaks_for_tariff.begin(), scenario.arbitary_breaks_for_tariff.end(), std::ostream_iterator<int>(breaks_for_tariff, " "));
+    std::stringstream met_multiplier_on_breaks_for_tariff;
+    std::copy(scenario.met_multiplier_on_arbitary_breaks_for_tariff.begin(), scenario.met_multiplier_on_arbitary_breaks_for_tariff.end(), std::ostream_iterator<int>(met_multiplier_on_breaks_for_tariff, " "));
+
     QStringList breaks_for_tariffs = QString::fromStdString(breaks_for_tariff.str().c_str()).split(" ", QString::SkipEmptyParts);
 
     s.setTariffPop(tariff_pops);

@@ -2541,15 +2541,16 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 
             if (is_fishing_credits && (a_tstep % 2))
             {
-                cout << a_tstep << endl;
+                //cout << a_tstep << endl;
                 // pay the tariff every two steps only, and at steaming as well
-                vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
+                double tariff_this_cell = this->get_loc()->get_tariffs().at(this->get_metier()->get_name()) * 
+                                             this->get_metier()->get_met_multiplier_on_arbitary_breaks_for_tariff(); // tariff per (2) hour(s) * multiplier to account for hours per day specific to the met
                 vector<double> fishing_credits = this->get_fishing_credits();
                 // check
                 dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when transiting through node " <<
                     this->get_loc()->get_idx_node().toIndex() << ", with metier " << this->get_metier()->get_name() <<
-                      " the tariff paid is " << tariff_this_cell.at(this->get_metier()->get_name()) << endl);
-                fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name());
+                      " the tariff paid is " << tariff_this_cell << endl);
+                fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell;
                 this->set_fishing_credits(fishing_credits);
                 dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
                     " has remaining credits " << this->get_fishing_credits().at(0) << endl);
@@ -2786,12 +2787,13 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     if(is_fishing_credits &&  (a_tstep % 2))
     {
         // pay the tariff every two steps only
-        vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
+        double tariff_this_cell = this->get_loc()->get_tariffs().at(this->get_metier()->get_name()) *
+            this->get_metier()->get_met_multiplier_on_arbitary_breaks_for_tariff(); // tariff per (2) hour(s) * multiplier to account for hours per day specific to the met
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
         dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when fishing here, with metier "<< this->get_metier()->get_name() << " the tariff paid is " <<
-             tariff_this_cell.at(this->get_metier()->get_name()) << endl;
-        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(this->get_metier()->get_name()));
+             tariff_this_cell << endl);
+        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell;
         this->set_fishing_credits(fishing_credits);
         dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
                 " has remaining credits " << this->get_fishing_credits().at(0) << endl);

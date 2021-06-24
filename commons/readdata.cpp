@@ -234,6 +234,9 @@ bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
         scenario.freq_update_tariff_code = reader.template getAs<int>("freq_update_tariff_code");
         scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(
                 reader.get("arbitary_breaks_for_tariff"), " ");
+        scenario.met_multiplier_on_arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(
+            reader.get("met_multiplier_on_arbitary_breaks_for_tariff"), " ");
+        
 
         scenario.total_amount_credited = reader.template getAs<int>("total_amount_credited", 0);
         scenario.tariff_annual_hcr_percent_change = reader.template getAs<double>("tariff_annual_hcr_percent_change",
@@ -297,9 +300,12 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
         {37,"dt_change_port"},{39,"use_dtrees"},
         {41,"tariff_pop"},{43,"freq_update_tariff_code"},
-        {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
-        {51,"update_tariffs_based_on_lpue_or_dpue_code"},
-        {53,"metier_closures"}
+        {45,"arbitary_breaks_for_tariff"},
+        {47,"met_multiplier_on_arbitary_breaks_for_tariff"},    
+        {49,"total_amount_credited"},
+        {51,"tariff_annual_hcr_percent_change"},
+        {53,"update_tariffs_based_on_lpue_or_dpue_code"},
+        {55,"metier_closures"}
     };
 
     if (!reader.importFromStream(stream, specs))

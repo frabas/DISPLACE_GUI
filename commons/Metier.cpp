@@ -55,6 +55,7 @@ vector<int> _metier_suitable_seabottomtypes)
     loss_after_1_passage=_loss_after_1_passage;
     metier_target_stocks=_metier_target_stocks;
     metier_suitable_seabottomtypes=_metier_suitable_seabottomtypes;
+    met_multiplier_on_arbitary_breaks_for_tariff = 1;
  
   
 }
@@ -204,6 +205,13 @@ vector<int> Metier::get_metier_suitable_seabottomtypes()
     return(metier_suitable_seabottomtypes);
 }
 
+double Metier::get_met_multiplier_on_arbitary_breaks_for_tariff()
+{
+
+    return(met_multiplier_on_arbitary_breaks_for_tariff);
+}
+
+
 
 void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 {
@@ -228,6 +236,13 @@ void Metier::set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop)
 
     mls_cat_per_pop=metier_mls_cat_per_pop;
 }
+
+void Metier::set_met_multiplier_on_arbitary_breaks_for_tariff(double _met_multiplier_on_arbitary_breaks_for_tariff)
+{
+
+    met_multiplier_on_arbitary_breaks_for_tariff = _met_multiplier_on_arbitary_breaks_for_tariff;
+}
+
 
 
 

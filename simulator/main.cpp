@@ -221,6 +221,7 @@ vector<int> tariff_pop;
 int freq_update_tariff_code;
 int update_tariffs_based_on_lpue_or_dpue_code;
 vector<double> arbitary_breaks_for_tariff;
+vector<double> met_multiplier_on_arbitary_breaks_for_tariff;
 int total_amount_credited;
 double tariff_annual_hcr_percent_change;
 
@@ -1301,7 +1302,19 @@ int app_main(int argc, char const* argv[])
     
     int nb_mets = simModel->metiers().size();
 
-  
+    if (simModel->scenario().dyn_alloc_sce.option(Options::fishing_credits))
+    {
+
+        int a_count = -1;
+        for (auto metier : simModel->metiers()) 
+        {
+            a_count++;
+            metier->set_met_multiplier_on_arbitary_breaks_for_tariff(scenario.met_multiplier_on_arbitary_breaks_for_tariff.at(a_count));
+        
+        }
+    }
+
+
     dout(cout << "---------------------------" << endl);
     dout(cout << "---------------------------" << endl);
     dout(cout << " SHIP-RELATED STUFFS       " << endl);

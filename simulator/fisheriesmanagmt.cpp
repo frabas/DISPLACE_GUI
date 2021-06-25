@@ -80,9 +80,10 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                             multimap<string,double> reloaded_fcredits)
 {
 
-// UPDATE THE TARIFF MAP & RE-READ FISHING_CREDITS PER VESSEL
+// UPDATE THE TARIFF MAP 
 
     // 1- annual tariff HCR (currently pooling all tariff pops together)
+    // (note that beside this, vessel total credits (spe_fishing_credits) have been re-loaded in reloadVessels() the first day of the year)
     if (isFirstDayOfYear) {
         cout << "Annual tariff HCR... " << endl;
         double fbar_py_allpopav = 0.0;
@@ -122,20 +123,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
         }
         cout << "The fmultiplier has been applied ok" << endl;
 
-        // 2 - Re-init vessel total credits
-        tout(cout << "Re-init vessel total credits..." << endl);
-        for (auto vessel : vessels) {
-            dout(cout << "RE-READ in fishing credits for this vessel " << vessel->get_name() << endl);
-            vector<double> spe_fishing_credits = find_entries_s_d(reloaded_fcredits, vessel->get_name());
-            for (int icr = 0; icr < spe_fishing_credits.size(); ++icr) {
-                spe_fishing_credits.at(icr) = spe_fishing_credits.at(icr) * total_amount_credited;
-            }
-
-            // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
-            while (spe_fishing_credits.size() <= 3) { spe_fishing_credits.push_back(0); }
-
-            vessel->set_fishing_credits(spe_fishing_credits);
-        }
+       
     }
 
 
@@ -248,10 +236,11 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                             node_pue += nodes[list_nodes_idx.at(
                                 inode).toIndex()]->get_cpue_per_pop_per_met_this_month().at(tariff_pop.at(ipop)).at(a_met);
+                            // note: be cautious with where cpue_per_pop_per_met_this_month is being re-init
                         }
                         node_pue = node_pue / nbpops;
-                        cout << " mean_pue for the update is.... " << mean_pue << endl;
-                        cout << " node_pue for the update is.... " << node_pue << endl;
+                        //cout << " mean_pue for the update is.... " << mean_pue << endl;
+                        //cout << " node_pue for the update is.... " << node_pue << endl;
                         nb_times_diff = node_pue / mean_pue;
                     }
 

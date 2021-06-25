@@ -2650,13 +2650,13 @@ int app_main(int argc, char const* argv[])
    // compute tarif map update      
    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
 
-
-       //cout << "isFirstDayOfYear " <<  simModel->calendar().isFirstDayOfYear(simModel->timestep()) << endl;
-       
-       if (!computeTariffMapUpdate(
+     int is_first_tstep_of_the_year = binary_search(simModel->calendar().years().begin(), simModel->calendar().years().end(), simModel->timestep());
+     int is_first_tstep_of_the_month = binary_search(simModel->calendar().months().begin(), simModel->calendar().months().end(), simModel->timestep());
+   
+     if (!computeTariffMapUpdate(
            scenario.dyn_alloc_sce,
-           binary_search(simModel->calendar().years().begin(), simModel->calendar().years().end(), simModel->timestep()), // simModel->calendar().isFirstDayOfYear(simModel->timestep()) does not work?!         
-           simModel->calendar().isFirstDayOfMonth(simModel->timestep()),
+           is_first_tstep_of_the_year,     
+           is_first_tstep_of_the_month,
            simModel->timestep(),
            simModel->config().nbpops,
            simModel->config().nbmets,

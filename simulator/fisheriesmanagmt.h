@@ -23,8 +23,11 @@
 #ifndef FISHERIESMANAGMENT_H
 #define FISHERIESMANAGMENT_H
 
+#include <Node.h>
 #include <Population.h>
 #include <Vessel.h>
+#include <options.h>
+
 
 using namespace std;
 
@@ -35,6 +38,24 @@ using namespace std;
 #include <windows.h>
 #include <direct.h>
 #endif
+
+bool computeTariffMapUpdate(
+        const DynAllocOptions& dyn_alloc_sce,
+        int isFirstDayOfYear,
+        int isFirstDayOfMonth,
+        int tstep,
+        int nbpops,
+        int nbmets,
+        vector<Node* >& nodes,
+        vector<Population* >& populations,
+        vector<Vessel* >& vessels,
+        vector<double> arbitary_breaks_for_tariff,
+        vector<int> tariff_pop,
+        double tariff_annual_hcr_percent_change,
+        int update_tariffs_based_on_lpue_or_dpue_code,
+        int freq_update_tariff_code,
+        int total_amount_credited,
+        multimap<string, double> reloaded_fcredits);
 
 
 

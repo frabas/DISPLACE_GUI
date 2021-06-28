@@ -186,15 +186,14 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                 dout(cout << "Updating tariffs based on lpue" << endl);
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                     cumcatches += nodes[list_nodes_idx.at(
-                        inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
+                        inode).toIndex()]->get_cumcatches_per_pop().at(tariff_pop.at(ipop));
                 }
             }
             if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
                 dout(cout << "Updating tariffs based on dpue" << endl);
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                     cumdiscards += nodes[list_nodes_idx.at(
-                        inode).toIndex()]->get_cumdiscards_per_pop().at(
-                            ipop);
+                        inode).toIndex()]->get_cumdiscards_per_pop().at(tariff_pop.at(ipop));
                 }
             }
 

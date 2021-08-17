@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.18"
+#define MyAppVersion "1.0.7"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -16,11 +16,16 @@
 
 #define Build "release"
 #define QT_DEBUG ""
-#define QT_DIR "C:\Qt\5.12.5\msvc2017_64"
-#define QT_PLUGINS_DIR "C:\Qt\5.12.5\msvc2017_64\plugins"
-#define SDK_DIR "install\msvc"
 
-[Setup]
+#if FileExists("local.iss")
+#include "local.iss"
+#else
+#define QT_DIR "C:\Qt\5.15.0\msvc2019_64"
+#define QT_PLUGINS_DIR "C:\Qt\5.15.0\msvc2019_64\plugins"
+#define SDK_DIR "C:\vcpkg\installed\x64-windows"
+#endif
+
+ [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -40,37 +45,119 @@ Compression=lzma
 SolidCompression=true
 
 [Languages]
-Name: english; MessagesFile: compiler:Default.isl
+Name: english; MessagesFile: compiler:Default.isl; LicenseFile: LICENSE.txt
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;;QtCreator
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;;MSV2019
+Source: "build\x64-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
-Source: "{#SDK_DIR}\lib\gdal111.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\geos.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\geos_c.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\CGAL-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\CGAL_core-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\gmp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_program_options-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_atomic-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_chrono-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_container-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_context-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_coroutine-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_date_time-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_filesystem-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_graph-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_iostreams.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_locale-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log_setup-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_c99f-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_c99l-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_c99-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_tr1f-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_tr1l-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_math_tr1-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_prg_exec_monitor-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_program_options-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_random-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_regex-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_thread-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_timer-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_serialization-vc142-mt-x64-1_71.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;Source: "{#SDK_DIR}\bin\CGAL_Core-vc140-mt-4.13-I-900.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\CGAL_ImageIO-vc140-mt-4.13-I-900.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\CGAL-vc140-mt-4.13-I-900.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\gdal204.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\Geographic.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\Geographic_d.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\geos.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\geos_c.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+;Source: "{#SDK_DIR}\bin\icudt61.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\icuio61.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\icutu61.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\icuuc61.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\libbz2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libcharset.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libcurl.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libiconv.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\libmysql.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libpng16.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libxml2.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\lz4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\lzma.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+Source: "{#SDK_DIR}\bin\mpfr.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+Source: "{#SDK_DIR}\bin\msqlitecpp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\openjp2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\proj.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\webp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\webpmux.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -86,7 +173,8 @@ Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
-Source: "install\vcredist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
@@ -99,3 +187,5 @@ Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
+
+

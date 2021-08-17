@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include <QVector>
 #include <QList>
 
 class DisplaceModel;

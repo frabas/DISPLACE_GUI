@@ -11,8 +11,12 @@
 ;#define Build "debug"
 ;#define QT_DEBUG "d"
 
-; Download install/vc_redist.x64.exe from
+; Download install/vc_redist.x64_2015.exe from
 ; https://www.microsoft.com/it-it/download/details.aspx?id=48145
+
+; update to 2019:
+; Download install/VC_redist.x64.exe from
+; https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0
 
 #define Build "release"
 #define QT_DEBUG ""
@@ -120,6 +124,7 @@ Source: "{#SDK_DIR}\bin\boost_serialization-vc142-mt-x64-1_71.dll"; DestDir: "{a
 Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\gdal204.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\Geographic.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\x64-Release\bin\Geographic_d.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\geos.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\geos_c.dll"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -168,7 +173,7 @@ Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\p
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 ;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "install\VC_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
@@ -179,7 +184,7 @@ Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 
 [Run]
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
-Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
+Filename: {tmp}\VC_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
 
 

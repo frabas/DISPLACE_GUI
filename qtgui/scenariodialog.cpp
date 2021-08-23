@@ -58,6 +58,7 @@ static const char *dyn_alloc_options[] = {
     "EffortMinControl",
     "EffortMaxControl",
     "averageTariffsPerRectangle",
+    "averageCPUEsPerRectangle",
     "otherLandPerMetPerPop",
     "otherLandAsMultiplierOnSp",
     "doNotExportDiscardsInLogbooks",

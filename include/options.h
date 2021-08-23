@@ -116,6 +116,7 @@ enum Dyn_Alloc {
     EffortMinControl,
     EffortMaxControl,
     averageTariffsPerRectangle,
+    averageCPUEsPerRectangle,
     otherLandPerMetPerPop,
     otherLandAsMultiplierOnSp,
     doNotExportDiscardsInLogbooks,

@@ -206,6 +206,60 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
             if (update_tariffs_based_on_lpue_or_dpue_code == 2) { mean_pue = cumdiscards / cumeffort; }
             dout(cout << " mean_pue of reference for the update is.... " << mean_pue << endl);
 
+            if (dyn_alloc_sce.option(Options::averageCPUEsPerRectangle)) {
+                // average the tariff per rectangle
+                double cpue_this_node, rect_this_node;
+
+                multimap<double, double> mymultimap;
+                map<double, double> mymap;
+                map<double, double> mymap_lookup;
+                map<double, double>::iterator it2;
+                multimap<double, double>::iterator it;
+                pair<multimap<double, double>::iterator, multimap<double, double>::iterator> ret;
+
+
+                for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                {
+                    for (unsigned int a_met = 0; a_met < nbmets; ++a_met)
+                    {
+                        for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop)
+                        {
+                            cpue_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cpue_per_pop_per_met_this_month().at(tariff_pop.at(ipop)).at(a_met);
+                            rect_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
+                            mymultimap.insert(pair<double, double>(rect_this_node, cpue_this_node));
+                            mymap.insert(pair<double, double>(rect_this_node, cpue_this_node));
+                        }
+                    }
+                }
+
+                for (it2 = mymap.begin(); it2 != mymap.end(); ++it2)
+                {
+                    int cnt = mymultimap.count((*it2).first);
+                    ret = mymultimap.equal_range((*it2).first);
+                    double sum = 0;
+                    for (it = ret.first; it != ret.second; ++it)
+                        sum += (*it).second;
+                    //cout << "average tariff for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    mymap_lookup.insert(pair<double, double>(it2->first, sum / cnt));
+                }
+
+                // then use the look up...
+                double updated_cpue;
+                for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
+                {
+                    for (unsigned int a_met = 0; a_met < nbmets; ++a_met)
+                    {
+                        for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) 
+                        {
+                            rect_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
+                            updated_cpue = mymap_lookup[rect_this_node];
+                            nodes[list_nodes_idx.at(inode).toIndex()]->set_cpue_per_pop_per_met_this_month(ipop, a_met, updated_cpue);
+                            //cout << "updated_cpue for this node is: " << updated_cpue << endl;
+                        }
+                    }
+                }
+            }
+
 
             // loop over to scale the tariff (on each node) up or down (caution: by one category)
             double tariff_this_node, node_pue, nb_times_diff, effort_on_this_node;

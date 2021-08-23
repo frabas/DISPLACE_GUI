@@ -58,6 +58,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,EffortMinControl);
     O(mMap,EffortMaxControl);
     O(mMap, averageTariffsPerRectangle);
+    O(mMap, averageCPUEsPerRectangle);
     O(mMap, otherLandPerMetPerPop);
     O(mMap, otherLandAsMultiplierOnSp);
     O(mMap, doNotExportDiscardsInLogbooks);

@@ -5283,6 +5283,13 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         auto grounds = do_sample(1, grds.size(), grds, freq_grds);
         ground= types::NodeId(grounds[0]);
 
+        if (dyn_alloc_sce.option(Options::PickUpTheMostFrequentGroundEachTime))
+        {
+            int idxmax = max_element(std::begin(freq_grds), std::end(freq_grds)) - std::begin(freq_grds);
+            ground = types::NodeId(grds.at(idxmax));
+            //cout << "ground is " << ground << endl;
+        }
+
     }
 
 

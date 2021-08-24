@@ -120,6 +120,7 @@ enum Dyn_Alloc {
     otherLandPerMetPerPop,
     otherLandAsMultiplierOnSp,
     doNotExportDiscardsInLogbooks,
+    PickUpTheMostFrequentGroundEachTime,
 
     Dyn_Alloc_last
 };

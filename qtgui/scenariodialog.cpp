@@ -62,6 +62,7 @@ static const char *dyn_alloc_options[] = {
     "otherLandPerMetPerPop",
     "otherLandAsMultiplierOnSp",
     "doNotExportDiscardsInLogbooks",
+    "PickUpTheMostFrequentGroundEachTime",
 
 };
 

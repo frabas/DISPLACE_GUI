@@ -208,14 +208,20 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
 
             if (dyn_alloc_sce.option(Options::averageCPUEsPerRectangle)) {
                 // average the tariff per rectangle
-                double cpue_this_node, rect_this_node;
+                double effort_this_node, catches_this_node, rect_this_node;
 
-                multimap<double, double> mymultimap;
-                map<double, double> mymap;
-                map<double, double> mymap_lookup;
+                multimap<double, double> mymultimap_effort;
+                map<double, double> mymap_effort;
+                map<double, double> mymap_lookup_effort;
+                multimap<double, double> mymultimap_catches;
+                map<double, double> mymap_catches;
+                map<double, double> mymap_lookup_catches;
                 map<double, double>::iterator it2;
                 multimap<double, double>::iterator it;
-                pair<multimap<double, double>::iterator, multimap<double, double>::iterator> ret;
+                map<double, double>::iterator it3;
+                multimap<double, double>::iterator it4;
+                pair<multimap<double, double>::iterator, multimap<double, double>::iterator> ret1;
+                pair<multimap<double, double>::iterator, multimap<double, double>::iterator> ret2;
 
 
                 for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode)
@@ -224,23 +230,39 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                     {
                         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop)
                         {
-                            cpue_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cpue_per_pop_per_met_this_month().at(tariff_pop.at(ipop)).at(a_met);
                             rect_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
-                            mymultimap.insert(pair<double, double>(rect_this_node, cpue_this_node));
-                            mymap.insert(pair<double, double>(rect_this_node, cpue_this_node));
+                       
+                            effort_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumeffort_per_pop_per_met_this_month().at(tariff_pop.at(ipop)).at(a_met);
+                            mymultimap_effort.insert(pair<double, double>(rect_this_node, effort_this_node));
+                            mymap_effort.insert(pair<double, double>(rect_this_node, effort_this_node));
+
+                            catches_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop_per_met_this_month().at(tariff_pop.at(ipop)).at(a_met);
+                            mymultimap_catches.insert(pair<double, double>(rect_this_node, catches_this_node));
+                            mymap_catches.insert(pair<double, double>(rect_this_node, catches_this_node));
                         }
                     }
                 }
 
-                for (it2 = mymap.begin(); it2 != mymap.end(); ++it2)
+                for (it2 = mymap_effort.begin(); it2 != mymap_effort.end(); ++it2)
                 {
-                    int cnt = mymultimap.count((*it2).first);
-                    ret = mymultimap.equal_range((*it2).first);
+                    int cnt = mymultimap_effort.count((*it2).first);
+                    ret1 = mymultimap_effort.equal_range((*it2).first);
                     double sum = 0;
-                    for (it = ret.first; it != ret.second; ++it)
+                    for (it = ret1.first; it != ret1.second; ++it)
                         sum += (*it).second;
-                    //cout << "average tariff for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
-                    mymap_lookup.insert(pair<double, double>(it2->first, sum / cnt));
+                    //cout << "average for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    mymap_lookup_effort.insert(pair<double, double>(it2->first, sum / cnt));
+                }
+             
+                for (it3 = mymap_catches.begin(); it3 != mymap_catches.end(); ++it3)
+                {
+                    int cnt = mymultimap_catches.count((*it3).first);
+                    ret2 = mymultimap_catches.equal_range((*it3).first);
+                    double sum = 0;
+                    for (it4 = ret2.first; it4 != ret2.second; ++it4)
+                        sum += (*it4).second;
+                    //cout << "average for: " << it3->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    mymap_lookup_catches.insert(pair<double, double>(it3->first, sum / cnt));
                 }
 
                 // then use the look up...
@@ -252,9 +274,16 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) 
                         {
                             rect_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
-                            updated_cpue = mymap_lookup[rect_this_node];
+                            if (mymap_lookup_effort[rect_this_node] != 0) {
+                                updated_cpue = mymap_lookup_catches[rect_this_node] / mymap_lookup_effort[rect_this_node];
+                            }
+                            else {
+                                updated_cpue = 0;
+                            }
                             nodes[list_nodes_idx.at(inode).toIndex()]->set_cpue_per_pop_per_met_this_month(ipop, a_met, updated_cpue);
-                            //cout << "updated_cpue for this node is: " << updated_cpue << endl;
+                            cout << "mymap_lookup_catches[rect_this_node] is: " << mymap_lookup_catches[rect_this_node] << updated_cpue << endl;
+                            cout << "mymap_lookup_effort[rect_this_node] is: " << mymap_lookup_effort[rect_this_node] << endl;
+                            cout << "updated_cpue for this node "<< list_nodes_idx.at(inode).toIndex() <<" is: " << updated_cpue << endl;
                         }
                     }
                 }

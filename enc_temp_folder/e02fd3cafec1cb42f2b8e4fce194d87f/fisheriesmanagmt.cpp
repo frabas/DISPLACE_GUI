@@ -281,9 +281,9 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                                 updated_cpue = 0;
                             }
                             nodes[list_nodes_idx.at(inode).toIndex()]->set_cpue_per_pop_per_met_this_month(ipop, a_met, updated_cpue);
-                            //cout << "mymap_lookup_catches[rect_this_node] is: " << mymap_lookup_catches[rect_this_node] << updated_cpue << endl;
-                            //cout << "mymap_lookup_effort[rect_this_node] is: " << mymap_lookup_effort[rect_this_node] << endl;
-                            //cout << "updated_cpue for this node "<< list_nodes_idx.at(inode).toIndex() <<" is: " << updated_cpue << endl;
+                            cout << "mymap_lookup_catches[rect_this_node] is: " << mymap_lookup_catches[rect_this_node] << updated_cpue << endl;
+                            cout << "mymap_lookup_effort[rect_this_node] is: " << mymap_lookup_effort[rect_this_node] << endl;
+                            cout << "updated_cpue for this node "<< list_nodes_idx.at(inode).toIndex() <<" is: " << updated_cpue << endl;
                         }
                     }
                 }

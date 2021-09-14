@@ -125,7 +125,6 @@ Source: "{#SDK_DIR}\bin\boost_serialization-vc142-mt-x64-1_71.dll"; DestDir: "{a
 Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\gdal204.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\Geographic.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\Geographic_d.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\geos.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\geos_c.dll"; DestDir: "{app}"; Flags: ignoreversion
 

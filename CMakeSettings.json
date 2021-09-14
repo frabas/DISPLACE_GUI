@@ -1,8 +1,5 @@
 ﻿{
-  "environments": [
-    {
-    }
-  ],
+  "environments": [ {} ],
   "configurations": [
     {
       "name": "x64-Debug",
@@ -30,7 +27,7 @@
     {
       "name": "x64-Release",
       "generator": "Ninja",
-      "configurationType": "RelWithDebInfo",
+      "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",

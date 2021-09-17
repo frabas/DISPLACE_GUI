@@ -54,21 +54,6 @@ ESRIShapefile::ESRIShapefile(GDALDataset *datasource, const std::string &layer_n
 
 void ESRIShapefile::createProjections(OGRSpatialReference *spatialReference) const
 {
-    OGRSpatialReference destinationWCS;
-    // TODO check the correct destination WCS.
-    if (destinationWCS.importFromEPSG(4326) != OGRERR_NONE) {
-        //throw std::runtime_error("Can't import EPSG");
-    }
-#if GDAL_VERSION_MAJOR >= 3
-    destinationWCS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-#endif
-
-    if (spatialReference == nullptr) {
-        spatialReference = &destinationWCS;
-    }
-
-    mTransformation = OGRCreateCoordinateTransformation(spatialReference, &destinationWCS);
-    mInvTransformation = OGRCreateCoordinateTransformation(&destinationWCS, spatialReference);
 }
 
 ESRIShapefile::~ESRIShapefile()
@@ -126,10 +111,6 @@ void ESRIShapefile::draw(QPainter &painter, const RectWorldPx &backbuffer_rect_p
                 if (ogr_layer == nullptr) {
                     // Invalid layer name!
                 } else {
-                    if (mTransformation == nullptr) {
-                        createProjections(ogr_layer->GetSpatialRef());
-                    }
-
                     auto points = backbuffer_rect_coord.toStdVector();
                     std::vector<double> xs, ys;
                     std::transform(points.begin(), points.end(), std::back_inserter(xs),
@@ -140,12 +121,6 @@ void ESRIShapefile::draw(QPainter &painter, const RectWorldPx &backbuffer_rect_p
                                    [](PointWorldCoord const &pt) {
                                        return pt.rawPoint().y();
                                    });
-
-                    mInvTransformation->Transform(points.size(), xs.data(), ys.data());
-
-                        // Note: sequence is: topleft, topright, botRIGHT, botleft
-//                        qDebug() << "Window " << backbuffer_rect_coord.rawRect() << " => "
-//                                 << xs[0] << ys[0] << xs[2] << ys[2];
 
                     // Reset reading.
                     ogr_layer->ResetReading();
@@ -178,11 +153,6 @@ void ESRIShapefile::draw(QPainter &painter, const RectWorldPx &backbuffer_rect_p
                         // Get layer.
                         const auto ogr_layer(m_ogr_data_set->GetLayer(i));
                         if (ogr_layer != nullptr) {
-                            if (mTransformation) {
-                                delete mTransformation;
-                            }
-                            createProjections(ogr_layer->GetSpatialRef());
-
                             auto points = backbuffer_rect_coord.toStdVector();
                             std::vector<double> xs, ys;
                             std::transform(points.begin(), points.end(), std::back_inserter(xs),
@@ -193,13 +163,6 @@ void ESRIShapefile::draw(QPainter &painter, const RectWorldPx &backbuffer_rect_p
                                            [](PointWorldCoord const &pt) {
                                                return pt.rawPoint().y();
                                            });
-
-                            // Note: sequence is: topleft, topright, botRIGHT, botleft
-                            mInvTransformation->Transform(points.size(), xs.data(), ys.data());
-
-//                            qDebug() << "Window " << backbuffer_rect_coord.rawRect() << " => "
-//                                     << xs[0] << ys[0] << xs[2] << ys[2];
-//
 
                             // Reset reading.
                             ogr_layer->ResetReading();
@@ -423,9 +386,6 @@ std::vector<OGRFeature *> ESRIShapefile::findFeatureByRect(RectWorldCoord rw)
                        return pt.rawPoint().y();
                    });
 
-    // Note: sequence is: topleft, topright, botRIGHT, botleft
-    mInvTransformation->Transform(points.size(), xs.data(), ys.data());
-
     auto minX = std::min(xs[0], xs[1]);
     auto maxX = std::max(xs[0], xs[1]);
     auto minY = std::min(ys[1], ys[2]);
@@ -458,7 +418,6 @@ void ESRIShapefile::toWorldCoords(OGRPoint &ogr) const
     double x = ogr.getX();
     double y = ogr.getY();
 
-    mTransformation->Transform(1, &x, &y);
     ogr.setX(x);
     ogr.setY(y);
 }

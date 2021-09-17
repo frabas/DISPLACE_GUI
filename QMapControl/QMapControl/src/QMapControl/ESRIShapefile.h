@@ -164,8 +164,6 @@ namespace qmapcontrol
         /// The OGR data set of the ESRI Shapefile.
         GDALDataset *m_ogr_data_set;
         bool hasDatasetOwnership = true;
-        mutable OGRCoordinateTransformation *mTransformation = nullptr;       /**< Transformation from Data Source to World (Local) */
-        mutable OGRCoordinateTransformation *mInvTransformation = nullptr;       /**< Transformation from World (Local) to Data Source */
 
         /// The layer name.
         std::string m_layer_name;

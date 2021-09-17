@@ -37,6 +37,8 @@
  */
 namespace qmapcontrol
 {
+    extern const char*wgs84;
+
     class QMAPCONTROL_EXPORT Projection
     {
     public:

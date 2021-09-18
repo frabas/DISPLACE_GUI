@@ -209,18 +209,35 @@ bool DisplaceModel::load(QString path, ModelType type)
         } else {
             qDebug() << shortestPath << "doesn't exist";
         }
+        qDebug() << "read an interesting harbour in config.dat";
+
         mInterestingHarb = mConfig.m_interesting_harbours;
 
+        qDebug() << "read an interesting harbour in config.dat...ok";
 
-        loadNodes();
+        qDebug() << "loadNodes...";
+        if (!loadNodes()) {
+            throw DisplaceException("Cannot read Nodes Features");
+        }
+
+        qDebug() << "loadNodes...ok";
+
+        qDebug() << "loadVessels...";
         if (!loadVessels()) {
             throw DisplaceException("Cannot read Vessels Features");
         }
+
+        qDebug() << "loadVessels...ok";
+
+        qDebug() << "loadGraphs...";
+    
         loadGraphs();
         if (!initShips()) {
             throw DisplaceException("Cannot read Ships Features");
         }
 
+        qDebug() << "loadGraphs...ok";
+        
         initFirm();
 
         initFishfarm();
@@ -1944,6 +1961,7 @@ void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
 
 bool DisplaceModel::loadNodes()
 {
+    qDebug() << "Enter in LoadNodes()";
     int nrow_coord = mScenario.getNrow_coord();
     auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
@@ -1959,6 +1977,9 @@ bool DisplaceModel::loadNodes()
     stringstream out;
     out << mScenario.getGraph();
     string a_graph_s = out.str();
+   
+    qDebug() << "Read in LoadNodes() for graph" << QString::fromStdString(a_graph_s);
+
     string filename_graph = mBasePath.toStdString() +
                             "/graphsspe/coord" + a_graph_s + ".dat";
 
@@ -2251,9 +2272,12 @@ bool DisplaceModel::loadNodes()
                                         .arg(filename_code_benthos_number_graph.c_str()));
     }
 
+    qDebug() << "Try to read harbour names.." ;
 
     // read harbour specific files
     auto harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());
+
+    qDebug() << "Read harbour names..ok";
 
     // creation of a vector of nodes from coord
     // and check with the coord in input.
@@ -2277,6 +2301,8 @@ bool DisplaceModel::loadNodes()
                 a_name = pos->second;
             }
 
+            
+            
             map<int, double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
             if (a_name != "none" && a_point == inode) {
@@ -2323,6 +2349,12 @@ bool DisplaceModel::loadNodes()
                 cout << "...OK" << endl;
 
             }
+            
+            //stringstream out;
+            //out << i;
+            //string nodeidx = out.str();
+            //qDebug() << "Read in for node "  << QString::fromStdString(nodeidx);
+
 
             // TODO check this, node 0 is a valid node.
             vector<types::NodeId> usual_fgrounds;
@@ -2432,6 +2464,11 @@ bool DisplaceModel::loadNodes()
                                               nbbenthospops,
                                               NBSZGROUP));
             std::shared_ptr<NodeData> n(new NodeData(nd, this));
+              
+            //stringstream out;
+            //out << i;
+            //string nodeidx = out.str();
+            //qDebug() << "Read in for node "  << QString::fromStdString(nodeidx) << "..ok";
 
             mNodes.push_back(n);
 
@@ -2556,6 +2593,10 @@ bool DisplaceModel::loadVessels()
 
     cout << "read_vessels_features() in loadVessels()" << endl;
 
+    //qDebug() << "Read in for vessel for graph "  << QString::fromStdString(a_graph_name) << "..ok";
+
+    qDebug() << "Read read_vessels_features..";
+    
     if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                                speeds, fuelcons, lengths, vKWs,
                                carrycapacities, tankcapacities, nbfpingspertrips,
@@ -2566,6 +2607,9 @@ bool DisplaceModel::loadVessels()
         return false;
     }
 
+    qDebug() << "Read read_vessels_features..ok";
+  
+    
     // read general vessel features
     // (quarter specific, mainly because of the gamma parameters)
 
@@ -2582,6 +2626,8 @@ bool DisplaceModel::loadVessels()
     vector<double> annual_depreciation_rates;
     vector<double> opportunity_interest_rates;
     vector<double> annual_discount_rates;
+
+    qDebug() << "Read in read_vessels_economic_features..";
 
     cout << "read_vessels_economic_features() in loadVessels()" << endl;
     if (!read_vessels_economics_features(
@@ -2604,6 +2650,7 @@ bool DisplaceModel::loadVessels()
         return false;
     }
 
+    qDebug() << "Read in read_vessels_economic_features..ok";
 
     cout << "fill in multimaps in loadVessels()" << endl;
 

@@ -291,24 +291,36 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
 
     }
 
+    cout << "read_vessels_economic_features() in loadVesselsImpl()..ok" << endl;
+
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     auto fgrounds = read_fgrounds(quarterString, fname, folder);
     auto fgrounds_init = read_fgrounds_init(quarterString, fname, folder);
     auto harbours = read_harbours(quarterString, fname, folder);
 
+    //cout << "read_freq_fgrounds() in loadVesselsImpl().." << endl;
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(quarterString, fname,
                                                                 folder);
+    //cout << "read_freq_fgrounds() in loadVesselsImpl()..ok" << endl;
+    //cout << "read_freq_fgrounds_init() in loadVesselsImpl().." << endl;
     multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(quarterString,
                                                                           fname,
                                                                           folder);
+    //cout << "read_freq_fgrounds_init() in loadVesselsImpl()..ok" << endl;
+    //cout << "read_freq_harbours() in loadVesselsImpl().." << endl;
     multimap<string, double> freq_harbours = read_freq_harbours(quarterString, fname,
                                                                 folder);
+    //cout << "read_freq_harbours() in loadVesselsImpl()..ok" << endl;
+    //cout << "read_vessels_betas() in loadVesselsImpl().." << endl;
     multimap<string, double> vessels_betas = read_vessels_betas(semesterString, fname,
                                                                 folder);
+    //cout << "read_vessels_betas() in loadVesselsImpl()..ok" << endl;
+    //cout << "read_vessels_tacs() in loadVesselsImpl().." << endl;
     multimap<string, double> vessels_tacs = read_vessels_tacs(semesterString, fname,
                                                               folder);
-
+    //cout << "read_vessels_tacs() in loadVesselsImpl()..ok" << endl;
+   
 
     multimap<string, double> fishing_credits;
     if (model.scenario().dyn_alloc_sce.option(Options::fishing_credits)) {
@@ -323,26 +335,36 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     vector<multimap<types::NodeId, double> > vect_of_gshape_cpue_per_stk_on_nodes_mmap(vesselids.size());
     vector<multimap<types::NodeId, double> > vect_of_gscale_cpue_per_stk_on_nodes_mmap(vesselids.size());
 
+    //cout << "a data load loop over vessel " << endl;
+
     for (unsigned int i = 0; i < vesselids.size(); i++) {
         outc(cout << "a data load loop over vessel " << i << endl);
 
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
+        //cout << "read_possible_metiers for vessel " << i << endl;
         vect_of_possible_metiers_mmap.at(i) = read_possible_metiers(quarterString, vesselids[i],
                                                                     fname, folder);
+        //cout << "read_possible_metiers for vessel " << i << "..ok" << endl;
+        //cout << "read_freq_possible_metiers for vessel " << i << endl;
         vect_of_freq_possible_metiers_mmap.at(i) = read_freq_possible_metiers(quarterString, vesselids[i],
                                                                               fname,
                                                                               folder);
+        //cout << "read_freq_possible_metiers for vessel " << i << "..ok" << endl;
 
-        //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], fname);
+        ////cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], fname);
+        //cout << "read_gshape_cpue_per_stk_on_nodes for vessel " << i << endl;
         vect_of_gshape_cpue_per_stk_on_nodes_mmap.at(i) = read_gshape_cpue_per_stk_on_nodes(quarterString,
                                                                                             vesselids[i],
                                                                                             fname,
                                                                                             folder);
+        //cout << "read_gshape_cpue_per_stk_on_nodes for vessel " << i << "...ok" << endl;
+        //cout << "read_gscale_cpue_per_stk_on_nodes for vessel " << i << endl;
         vect_of_gscale_cpue_per_stk_on_nodes_mmap.at(i) = read_gscale_cpue_per_stk_on_nodes(quarterString,
                                                                                             vesselids[i],
                                                                                             fname,
                                                                                             folder);
+        //cout << "read_gscale_cpue_per_stk_on_nodes for vessel " << i << "..ok" << endl;
 
 
 
@@ -356,6 +378,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
 
     }
 
+    //cout << "a data load loop over vessel..ok " << endl;
 
     outc(cout << "export back the loaded vessel data to simulator.cpp " << endl);
 
@@ -405,7 +428,9 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     loadedData.vectdparam26 = annual_depreciation_rates;
     loadedData.vectdparam27 = opportunity_interest_rates;
     loadedData.vectdparam28 = annual_discount_rates;
-
+    
+    //cout << "a data load...ok " << endl;
+    
     return loadedData;
 }
 
@@ -525,6 +550,8 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             outc(cout << "then take node: " << start_harbour << endl);
         }
 
+        cout << "Creating vessel " << i << endl;
+
         vessels[i] = new Vessel(model.nodes().at(start_harbour.toIndex()),
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
@@ -576,6 +603,8 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
                                 i < loadedDataVessels.vectdparam28.size() ? loadedDataVessels.vectdparam28.at(i) : 0
         );
 
+
+        cout << "Creating vessel " << i << "..ok" << endl;
 
 #if 0
         if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {

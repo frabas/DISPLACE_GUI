@@ -189,6 +189,8 @@ Vessel::Vessel(Node* p_location,
     course=0;
     name = a_name;
 
+    cout << "in Vessel() creator: Creating this vessel " << a_name << endl;
+
     this->set_spe_possible_metiers(_possible_metiers);
     this->set_spe_freq_possible_metiers(_freq_possible_metiers);
     this->set_spe_fgrounds(_fgrounds);
@@ -244,6 +246,8 @@ Vessel::Vessel(Node* p_location,
 
     // deduce the vessel nationality from the vessel name
     nationality = nationalityFromName(get_name());
+
+    //cout << "Creating this vessel " << a_name << "first steps done" << endl;
 
     // init individual tac
     for(int i = 0; i < nbpops; i++)
@@ -308,6 +312,7 @@ Vessel::Vessel(Node* p_location,
     opportunity_interest_rate= _opportunity_interest_rate;
     annual_discount_rate= _annual_discount_rate;
 
+    //cout << "Creating this vessel " << a_name << "second steps done" << endl;
 
     // a particular setters for the CPUE STUFF...
     // for implicit pops or "out of range" fishing: create cpue_nodes_species
@@ -325,6 +330,7 @@ Vessel::Vessel(Node* p_location,
     auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
     gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
 
+    //cout << "Creating this vessel, third steps done " << endl;
 
     // init cpue_nodes_species for this vessel
     int nbnodes = gshape_name_nodes_with_cpue.size();
@@ -345,14 +351,22 @@ Vessel::Vessel(Node* p_location,
         }
     }
 
+    //cout << "Creating this vessel, fourth steps done " << endl;
+    
     // need to compute expected cpue (averaged over node but cumulated over species)
     // for this particular vessel, in order to scale the prior guess (see below)
     double expected_cpue = 0;
     vector<vector<double> > gshape_cpue_nodes_species = this->get_gshape_cpue_nodes_species();
     vector<vector<double> > gscale_cpue_nodes_species = this->get_gscale_cpue_nodes_species();
     const auto &fgrounds = this->get_fgrounds();
+
+    //cout << "fgrounds.size() is " << fgrounds.size() <<  endl;
+    //cout << "while gshape_cpue_nodes_species.size() is " << gshape_cpue_nodes_species.size() << endl;
+
     vector<double> expected_cpue_this_pop(nbpops);
     for (int pop = 0; pop < nbpops; pop++) {
+        
+        //cout << "pop is " << pop << endl;
 
         vector<double> cpue_per_fground(fgrounds.size());
         // init
@@ -360,6 +374,8 @@ Vessel::Vessel(Node* p_location,
 
         // compute cpue on nodes
         for (unsigned int f = 0; f < fgrounds.size(); f++) {
+            //cout << "f is " << f << endl;
+            
             // look into the vector of vector....
             double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
             // look into the vector of vector....
@@ -398,6 +414,7 @@ Vessel::Vessel(Node* p_location,
     }
 
     dout(cout << "expected_cpue for this vessel is " << expected_cpue << endl);
+    //cout << "expected_cpue for this vessel is " << expected_cpue << endl;
 
     // init at 0 cumcatch and cumeffort per trip,
     // init at best guest the experiencedcpue_fgrounds
@@ -431,6 +448,8 @@ Vessel::Vessel(Node* p_location,
     vector<vector<vector <double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
     vector<vector<vector <double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
 
+
+   
     for (unsigned int f = 0; f < fgrounds.size(); f++) {
         cumcatch_fgrounds[f] = 0;
         cumdiscard_fgrounds[f] = 0;
@@ -510,7 +529,7 @@ Vessel::Vessel(Node* p_location,
 
 
 
-
+    cout << "vessel creator...OK" << endl;
     dout(cout <<"vessel creator...OK" << endl);
     init();
 }

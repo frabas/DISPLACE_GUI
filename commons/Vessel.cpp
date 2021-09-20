@@ -3444,8 +3444,17 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                       
                         string a_nation = this->get_nationality();
                         map<string, double> landings_so_far_per_nation = populations.at(pop)->get_landings_so_far_per_nation();
-                        if (landings_so_far_per_nation.count(a_nation)==0) cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability " << endl;
-                        double so_far_this_nation= landings_so_far_per_nation.at(a_nation) +
+                        if (landings_so_far_per_nation.count(a_nation) == 0) {
+                            cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability " << endl;
+                            cout << "This vessel nationality is "<< a_nation << endl;
+                            cout << "relative stability key is " << endl;
+                            for (map<string, double >::const_iterator it = landings_so_far_per_nation.begin();
+                                it != landings_so_far_per_nation.end(); ++it)
+                            {
+                                std::cout << it->first << " " << it->second << "\n";
+                            }
+                        }
+                        double so_far_this_nation = landings_so_far_per_nation.at(a_nation) +
                                 a_cumul_weight_this_pop_this_vessel;
                         populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 

@@ -443,7 +443,7 @@ Vessel::Vessel(Node* p_location,
     vector<vector<vector <double> > > freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(nbmets, vector<double>(nbpops)));
     
     // or per yearquarter per pop
-    int nbyearquarters = 11 * 4;
+    int nbyearquarters = 13 * 4;
     vector<vector<vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
     vector<vector<vector <double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
     vector<vector<vector <double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));

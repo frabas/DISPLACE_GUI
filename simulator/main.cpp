@@ -2240,11 +2240,13 @@ int app_main(int argc, char const* argv[])
             //...but first compute and track the past experience
             int y = simModel->year() -1;
             int q = simModel->quarter() - 1;
+            // caution with q from 1...nbyearquarters. given hardcoded limit in horizon time i.e. see "nbyearquarters"
             for (auto vessel : simModel->vessels())
             {
+                //cout << "heho q" << q << endl;
+                //cout << "heho y" << y << endl;
                 vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y,q);
                 //vector<vector<vector<double> > > dd = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
-                //cout << "heho " << q << endl;
                 vessel->clear_cumeffort_per_yearquarter();
             }           
                 

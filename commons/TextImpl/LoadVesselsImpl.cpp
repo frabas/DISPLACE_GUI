@@ -514,6 +514,11 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
 
+        if (model.scenario().dyn_alloc_sce.option(Options::gear_fuel_efficiency_gain_30percent)) {
+              // decrease consumption when fishing by altering mult_fuelcons_when_fishing
+            loadedDataVessels.vectdparam12.at(i) = loadedDataVessels.vectdparam12.at(i) * 0.70;
+        }
+
         if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
             // a decrease by 30%...
             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.7;

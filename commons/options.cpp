@@ -42,6 +42,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,reduced_speed_10percent);
     O(mMap,reduced_speed_20percent);
     O(mMap,reduced_speed_30percent);
+    O(mMap,gear_fuel_efficiency_gain_30percent);
     O(mMap,closer_grounds);
     O(mMap,closer_port);
     O(mMap,focus_on_high_previous_cpue);

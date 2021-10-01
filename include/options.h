@@ -100,6 +100,7 @@ enum Dyn_Alloc {
     reduced_speed_10percent,
     reduced_speed_20percent,
     reduced_speed_30percent,
+    gear_fuel_efficiency_gain_30percent,
     closer_grounds,
     closer_port,
     focus_on_high_previous_cpue,

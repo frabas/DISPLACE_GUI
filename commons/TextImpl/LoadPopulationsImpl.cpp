@@ -696,7 +696,7 @@ read_background_mortality_szgroup(string folder_name_parameterization, string in
     ifstream file_background_mortality_per_szgroup;
     file_background_mortality_per_szgroup.open(filename.c_str());
     if (file_background_mortality_per_szgroup.fail()) {
-        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "background_mortality_biolsce1.dat";
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/background_mortality_biolsce1.dat";
         file_background_mortality_per_szgroup.open(filename.c_str());
     }
     if (file_background_mortality_per_szgroup.fail()) {

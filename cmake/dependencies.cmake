@@ -1,6 +1,9 @@
 # Check dependencies
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+        ${CMAKE_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/scripts)
 
 ## Common packages to all modules
 find_package(Boost 1.55 REQUIRED COMPONENTS date_time filesystem system thread program_options log unit_test_framework)
@@ -32,8 +35,10 @@ if (NOT WITHOUT_GUI)
     link_directories(${CGAL_LIBRARY_DIRS})
 endif ()
 
+set(SPARSEPP_ROOT ${CMAKE_SOURCE_DIR})
 find_package(Sparsepp REQUIRED)
 
-find_package(msqlitecpp REQUIRED)
 include_directories(${sparsepp_INCLUDE_DIR})
 link_directories(${sparsepp_LIBRARY_DIRS})
+
+find_package(msqlitecpp REQUIRED)

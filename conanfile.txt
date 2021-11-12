@@ -1,0 +1,13 @@
+[requires]
+cgal/5.2.1
+gdal/3.2.1
+geographiclib/1.52
+boost/1.77.0
+msqlitecpp/1.99.6.3@studiofuga/testing
+
+[generators]
+cmake_find_package
+deploy
+
+[options]
+boost:shared=True

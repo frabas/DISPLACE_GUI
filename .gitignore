@@ -40,7 +40,6 @@ docs/latex
 build-*
 run.sh
 
-sparsepp/
 cmake-build-*
 
 .idea/shelf

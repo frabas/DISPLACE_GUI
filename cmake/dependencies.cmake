@@ -23,6 +23,8 @@ if (WITHOUT_GUI)
 endif ()
 link_directories(${GeographicLib_LIBRARY_DIRS})
 
+find_package(LibLZMA REQUIRED)
+find_package(CURL REQUIRED)
 find_package(GDAL REQUIRED 1.11)
 message("GDAL library: ${GDAL_LIBRARY}")
 message("GDAL include: ${GDAL_INCLUDE_DIR}")
@@ -35,10 +37,11 @@ if (NOT WITHOUT_GUI)
     link_directories(${CGAL_LIBRARY_DIRS})
 endif ()
 
-set(SPARSEPP_ROOT ${CMAKE_SOURCE_DIR})
+set(SPARSEPP_ROOT ${CMAKE_SOURCE_DIR}/include)
 find_package(Sparsepp REQUIRED)
 
 include_directories(${sparsepp_INCLUDE_DIR})
 link_directories(${sparsepp_LIBRARY_DIRS})
 
+find_package(SQLite3 REQUIRED)
 find_package(msqlitecpp REQUIRED)

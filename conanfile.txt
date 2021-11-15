@@ -4,6 +4,7 @@ gdal/3.2.1
 geographiclib/1.52
 boost/1.77.0
 msqlitecpp/1.99.6.3@studiofuga/testing
+sqlite3/3.35.5
 
 [generators]
 cmake_find_package

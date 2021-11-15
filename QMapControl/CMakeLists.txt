@@ -41,7 +41,7 @@ file(GLOB HEADERS QMapControl/src/QMapControl/*.h)
 file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 
 set(LIBRARIES
-        ${GDAL_LIBRARY}
+        GDAL::GDAL
         )
 
 add_library(QMapControl SHARED

@@ -2,7 +2,7 @@
   "environments": [ {} ],
   "configurations": [
     {
-      "name": "x64-Debug",
+      "name": "Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
@@ -13,19 +13,14 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
-          "type": "STRING"
-        },
-        {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]
     },
     {
-      "name": "x64-Release",
+      "name": "Release",
       "generator": "Ninja",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
@@ -36,19 +31,14 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
-          "type": "STRING"
-        },
-        {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]
     },
     {
-      "name": "x64-RelDebug",
+      "name": "RelDebug",
       "generator": "Ninja",
       "configurationType": "RelWithDebInfo",
       "inheritEnvironments": [ "msvc_x64_x64" ],
@@ -59,13 +49,8 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
-          "type": "STRING"
-        },
-        {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]

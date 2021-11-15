@@ -44,7 +44,7 @@ file(GLOB HEADERS *.h
 file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui)
 file(GLOB QRCS *.qrc)
 
-set(EXTRA_LIBRARIES
+set(EXTRA_LIBRARIES SQLite::SQLite3
         )
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
@@ -63,7 +63,6 @@ else (WIN32)
     list(APPEND EXTRA_LIBRARIES
             CGAL::CGAL
             ${GeographicLib_LIBRARIES}
-            sqlite3
             )
 endif (WIN32)
 

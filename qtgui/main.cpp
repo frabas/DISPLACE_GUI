@@ -58,6 +58,8 @@ int main (int argc, char *argv[])
 
     mw.show();
 
+#if 0
+
 #ifndef WIN32
     QString path = QDir::homePath() + "/.displace/cache";
 #else
@@ -65,7 +67,8 @@ int main (int argc, char *argv[])
 #endif
 
     QDir cachepath(path);
-    qmapcontrol::ImageManager::get().enablePersistentCache(std::chrono::minutes(24*60), cachepath);
+    qmapcontrol::ImageManager::get().enablePersistentCache(std::chrono::minutes(24 * 60), cachepath);
+#endif
 
     return app.exec();
 }

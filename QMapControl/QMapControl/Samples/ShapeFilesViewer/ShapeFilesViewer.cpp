@@ -26,8 +26,8 @@ ShapeFilesViewer::ShapeFilesViewer()
     statusBar()->show();
 
     map = new QMapControl(QSizeF(800, 600), this);
-//    map->enablePersistentCache(std::chrono::minutes{24 * 60});
-//    map->startPersistentCacheHousekeeping();
+    map->enablePersistentCache(std::chrono::minutes{24 * 60});
+    map->startPersistentCacheHousekeeping();
 
     baseAdapter = std::make_shared<MapAdapterGoogle>();
     baseLayer = std::make_shared<LayerMapAdapter>("Map Layer", baseAdapter);

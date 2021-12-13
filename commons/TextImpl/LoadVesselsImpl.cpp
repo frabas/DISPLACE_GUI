@@ -749,7 +749,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                                                 model.scenario().a_graph_name,
                                                 fname,
                                                 folder)) {
-                exit(1);
+                throw std::runtime_error("this went wrong reading metier_quarterly_closure.dat files, quitting");
             }
         }
 

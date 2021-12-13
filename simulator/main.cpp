@@ -729,7 +729,7 @@ int app_main(int argc, char const* argv[])
     if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
         namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
-        exit(1);
+        throw std::runtime_error("this went wrong with instantiating the OutputExporter, quitting");
     }
 
 
@@ -754,7 +754,7 @@ int app_main(int argc, char const* argv[])
     }
     catch (SQLiteException& x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
-        exit(1);
+        throw std::runtime_error("this went wrong with opening output sqlite file, quitting");
     }
 
     if (metadata) {
@@ -1401,12 +1401,12 @@ int app_main(int argc, char const* argv[])
         if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                           folder_name_parameterization,
                                           inputfolder)) {
-            exit(1);
+            throw std::runtime_error("this went wrong with reading metier_monthly_closures files, quitting");
         }
         if (!read_vsize_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                          folder_name_parameterization,
                                          inputfolder)) {
-            exit(1);
+            throw std::runtime_error("this went wrong with reading vsize_monthly_closures files, quitting");
         }
 
     }
@@ -1415,7 +1415,7 @@ int app_main(int argc, char const* argv[])
         if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                             folder_name_parameterization,
                                             inputfolder)) {
-            exit(1);
+            throw std::runtime_error("this went wrong with reading metier_quarterly_closures files, quitting");
         }
     }
 
@@ -2175,12 +2175,12 @@ int app_main(int argc, char const* argv[])
                 if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                   folder_name_parameterization,
                                                   inputfolder)) {
-                    exit(1);
+                    throw std::runtime_error("this went wrong with reading metier_monthly_closures files, quitting");
                 }
                 if (!read_vsize_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                  folder_name_parameterization,
                                                  inputfolder)) {
-                    exit(1);
+                    throw std::runtime_error("this went wrong with reading vsize_monthly_closures files, quitting");
                 }
 
                 // check for myfish graph1

@@ -211,7 +211,7 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
         stream << a << " ";
     stream << endl;
 
-    stream <<"# nbcp merging index pops (will be used if active Options::nbcpCoupling)"<< endl;
+    stream <<"# nbcp merging index pops (will be used if active Options::lgnbCoupling)"<< endl;
     foreach (int a, m_nbcp_coupling_pops)
         stream << a << " ";
     stream << endl;

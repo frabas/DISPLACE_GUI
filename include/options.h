@@ -130,7 +130,7 @@ enum Pop_Sce {
     pop_baseline,
     use_SMS,
     use_SMS_single,
-    nbcpCoupling,
+    lgnbCoupling,
     biolsceOnStaticAvai,
     diffusePopN,
     avai_shuffler_on,

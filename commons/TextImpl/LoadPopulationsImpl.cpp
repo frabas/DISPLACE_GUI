@@ -1848,7 +1848,8 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
     vector<string> popnames(name_pops.size());
 
-    for (unsigned int sp = 0; sp < iparam1; sp++) {
+    for (unsigned int sp = 0; sp < iparam1; sp++) 
+    {
         dout(cout << endl);
 
         popnames.at(sp) = pop_names[sp];
@@ -1987,6 +1988,144 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         }
 
       
+
+        // OPTIONS ALTERING THE SPATIAL AVAILABILITY OF STOCKS
+        // default
+        if (year == 1 && model().month() == 1)
+        {
+            type_of_avai_field_to_read.push_back("");
+        }
+
+        // ...or if a biolsce informed on staticAvai
+        if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) 
+        {
+                type_of_avai_field_to_read.at(sp) = "_biolsce" + model().scenario().biolsce;
+            }
+
+        // ...or if a dynamic coupling done with LGNB
+        if (model().scenario().dyn_pop_sce.option(Options::lgnbCoupling)) 
+        {
+            string a_command_for_R;
+
+                if (binary_search(model().config().nbcp_coupling_pops.begin(),
+                    model().config().nbcp_coupling_pops.end(), sp)) 
+                {
+                    type_of_avai_field_to_read.at(sp) = "_updated";
+
+                    stringstream out;
+                    out << sp;
+                    string a_pop = out.str();
+
+                    stringstream outtstep;
+                    outtstep << model().timestep();
+                    string atstep = outtstep.str();
+#if defined(_WIN32)
+                    cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+                    a_command_for_R = "Rscript .\\interactiverscripts\\lgnb-displace_coupling_script2.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
+                    cout << "executing " << a_command_for_R << endl;
+                    system(a_command_for_R.c_str());
+#else
+                    cout << "lgnb-displace_coupling...done" << endl;
+                    // caution with HPC, annoying lower cases in file names and paths required!
+                    a_command_for_R =
+                        "Rscript " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
+                        a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() +
+                        " " + model().scenario().a_graph_name;
+                    system(a_command_for_R.c_str());
+#endif
+                }  // end nbcp coupling pops
+           
+        }
+
+
+        if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on) ||
+            model().scenario().dyn_pop_sce.option(Options::avai_updater_on))
+        {
+
+
+            // alter the availability field, if required
+            for (unsigned int pp = 0; pp < model().populations().size(); pp++)
+            {
+                if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(),
+                    pp)) 
+                {
+                    stringstream out;
+                    out << pp;
+                    string a_pop = out.str();
+
+                    stringstream out2;
+                    out2 << model().scenario().nrow_coord;
+                    string a_nrow_coord = out2.str();
+
+                    string a_command;
+                    string a_command_for_R;
+                    stringstream outtstep;
+                    outtstep << model().timestep();
+                    string atstep = outtstep.str();
+                    // the system command line
+#if defined(_WIN32)
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
+                        // note that nothing is done before end of 1st month (745) to get enough catch data for an update
+                        type_of_avai_field_to_read.at(pp) = "_updated";
+                        //system("dir");
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        cout
+                            << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?"
+                            << endl;
+                        a_command_for_R =
+                            "Rscript .\\interactiverscripts\\input2avaiupdater.r " + a_pop + " " + atstep +
+                            " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
+                        //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
+                        cout << "look after " << a_command_for_R << endl;
+                        cout << "This supposes StockId " << a_pop
+                            << " is informed in displace_input_for_data_merger.csv input file" << endl;
+                        system(a_command_for_R.c_str());
+                        a_command = "avaifieldupdater.exe -tstep " + atstep + " -f " + p->folder_name_parameterization + " -a " +
+                            p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
+                            model().scenario().a_graph_name + " -nr " + a_nrow_coord + " -dist 15 -shepard_p 0.5";
+                        cout << "look after " << a_command
+                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                        system(a_command.c_str());
+                    }
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                        type_of_avai_field_to_read.at(pp) = "_shuffled";
+                        a_command = "avaifieldshuffler.exe -f " + p->folder_name_parameterization + " -s " +
+                            std::to_string(model().semester()) + " -p " + a_pop;
+                        cout << "look after " << a_command
+                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                        system(a_command.c_str());
+                    }
+#else
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
+                        type_of_avai_field_to_read.at(pp) = "_updated";
+                        // caution with HPC, annoying lower cases in file names and paths required!
+                        a_command_for_R =
+                            "Rscript " + p->inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
+                            " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " +
+                            model().scenario().a_graph_name;
+                        system(a_command_for_R.c_str());
+                        a_command =
+                            p->inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " +
+                            p->folder_name_parameterization +
+                            " -a " + p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
+                            model().scenario().a_graph_name +
+                            " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
+                        system(a_command.c_str());
+                    }
+                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
+                        a_command = p->inputfolder + "/avaifieldshufflertool -f " + p->folder_name_parameterization +
+                            " -s " +
+                            std::to_string(model().semester()) + " -p " + a_pop;
+                        system(a_command.c_str());
+                    }
+                    cout << "avaifieldshuffler...done" << endl;
+#endif
+
+                }
+            }
+        }
+
+
         vect_of_full_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_full_avai_szgroup_nodes_with_pop(
                 semester, sp,
                 p->folder_name_parameterization,
@@ -2137,7 +2276,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
             landings_so_far.push_back(1.0);
         }
 
-    }
+    } // end sp
 
     LoadedData loadedData;
 
@@ -2192,7 +2331,8 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
 
     // create Populations only once, i.e. at y1 m1
-    if (year == 1 && model().month()==1) {
+    if (year == 1 && model().month()==1)
+    {
 
         int nbmets = 100; // CAUTION: for now we don´t care as a large value will be resized. but best to ultimately include it to config()
         for (unsigned int i = 0; i < model().nodes().size(); i++) {
@@ -2371,137 +2511,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         }
         cout << "aggregate_N over all pops....done" << endl;
 
-        // default
-        for (unsigned int ip = 0; ip < model().populations().size(); ip++) {
-            type_of_avai_field_to_read.push_back("");
-        } 
-
-        // ...or if a biolsce informed on staticAvai
-        if (model().scenario().dyn_pop_sce.option(Options::biolsceOnStaticAvai)) {
-            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
-                type_of_avai_field_to_read.at(pp) = "_biolsce" + model().scenario().biolsce;
-            }
-        }
-
-        // ...or if a dynamic coupling done with LGNB
-        if (model().scenario().dyn_pop_sce.option(Options::nbcpCoupling)) {
-            string a_command_for_R;
-
-            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
-                if (binary_search(model().config().nbcp_coupling_pops.begin(),
-                    model().config().nbcp_coupling_pops.end(), pp)) {
-                    type_of_avai_field_to_read.at(pp) = "_updated";
-
-                    stringstream out;
-                    out << pp;
-                    string a_pop = out.str();
-
-                    stringstream outtstep;
-                    outtstep << model().timestep();
-                    string atstep = outtstep.str();
- #if defined(_WIN32)
-                    cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                    a_command_for_R = "Rscript .\\interactiverscripts\\nbcp_displace_coupling_part02.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
-                    cout << "executing " << a_command_for_R << endl;
-                    system(a_command_for_R.c_str());
-#else
-                    cout << "nbcp_coupling...done" << endl;
-                    // caution with HPC, annoying lower cases in file names and paths required!
-                    a_command_for_R =
-                            "Rscript " + p->inputfolder + "/interactiverscripts/nbcp_displace_coupling_part02.r " +
-                            a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() +
-                            " " + model().scenario().a_graph_name;
-                    system(a_command_for_R.c_str());
-#endif
-                }  // end nbcp coupling pops
-            }  // end pop
-        }
-
-
-        if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on) ||
-            model().scenario().dyn_pop_sce.option(Options::avai_updater_on)) {
-
-
-            // alter the availability field, if required
-            for (unsigned int pp = 0; pp < model().populations().size(); pp++) {
-                if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(),
-                    pp)) {
-                    stringstream out;
-                    out << pp;
-                    string a_pop = out.str();
-
-                    stringstream out2;
-                    out2 << model().scenario().nrow_coord;
-                    string a_nrow_coord = out2.str();
-
-                    string a_command;
-                    string a_command_for_R;
-                    stringstream outtstep;
-                    outtstep << model().timestep();
-                    string atstep = outtstep.str();
-                    // the system command line
-#if defined(_WIN32)
-                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
-                        // note that nothing is done before end of 1st month (745) to get enough catch data for an update
-                        type_of_avai_field_to_read.at(pp) = "_updated";
-                        //system("dir");
-                        // caution with HPC, annoying lower cases in file names and paths required!
-                        cout
-                            << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?"
-                            << endl;
-                        a_command_for_R =
-                            "Rscript .\\interactiverscripts\\input2avaiupdater.r " + a_pop + " " + atstep +
-                            " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
-                        //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
-                        cout << "look after " << a_command_for_R << endl;
-                        cout << "This supposes StockId " << a_pop
-                            << " is informed in displace_input_for_data_merger.csv input file" << endl;
-                        system(a_command_for_R.c_str());
-                        a_command = "avaifieldupdater.exe -tstep " + atstep + " -f " + p->folder_name_parameterization + " -a " +
-                            p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
-                            model().scenario().a_graph_name + " -nr " + a_nrow_coord + " -dist 15 -shepard_p 0.5";
-                        cout << "look after " << a_command
-                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
-                        system(a_command.c_str());
-                    }
-                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
-                        type_of_avai_field_to_read.at(pp) = "_shuffled";
-                        a_command = "avaifieldshuffler.exe -f " + p->folder_name_parameterization + " -s " +
-                            std::to_string(model().semester()) + " -p " + a_pop;
-                        cout << "look after " << a_command
-                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
-                        system(a_command.c_str());
-                    }
-#else
-                    if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
-                        type_of_avai_field_to_read.at(pp) = "_updated";
-                        // caution with HPC, annoying lower cases in file names and paths required!
-                        a_command_for_R =
-                                "Rscript " + p->inputfolder + "/interactiverscripts/input2avaiupdater.r " + a_pop +
-                                " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " +
-                                model().scenario().a_graph_name;
-                        system(a_command_for_R.c_str());
-                        a_command =
-                                p->inputfolder + "/avaifieldupdatertool -tstep " + atstep + " -f " +
-                                p->folder_name_parameterization +
-                                " -a " + p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
-                                model().scenario().a_graph_name +
-                                " -nr " + a_nrow_coord + " -dist 30 -shepard_p 0.5";
-                        system(a_command.c_str());
-                    }
-                    if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
-                        a_command = p->inputfolder + "/avaifieldshufflertool -f " + p->folder_name_parameterization +
-                                    " -s " +
-                                std::to_string(model().semester()) + " -p " + a_pop;
-                        system(a_command.c_str());
-                    }
-                    cout << "avaifieldshuffler...done" << endl;
-#endif
-
-                }
-            }
-        }
-
+        
 
         // then, clean up all nodes before changing of spatial avai
         // (necessary to remove any fish in now wrong locations)

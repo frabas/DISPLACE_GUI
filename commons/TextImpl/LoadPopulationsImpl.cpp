@@ -2028,7 +2028,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                     cout << "lgnb-displace_coupling...done" << endl;
                     // caution with HPC, annoying lower cases in file names and paths required!
                     a_command_for_R =
-                        "Rscript " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
+                        "/appl/R/bin/Rscript-3.6.3-mkl " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
                         a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() +
                         " " + model().scenario().a_graph_name;
                     system(a_command_for_R.c_str());

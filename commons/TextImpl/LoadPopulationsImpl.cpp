@@ -2026,11 +2026,14 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                     system(a_command_for_R.c_str());
 #else
                     cout << "lgnb-displace_coupling...done" << endl;
-                    // caution with HPC, annoying lower cases in file names and paths required!
+                    // caution with HPC, annoying lower cases in file names and paths required! 
                     a_command_for_R =
-                        "/appl/R/bin/Rscript-3.6.3-mkl " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
+                        "Rscript  " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
                         a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() +
                         " " + model().scenario().a_graph_name;
+
+		    // alternatively, if the module load for this R version fails on HPC (see in base_script_ui.txt bash file), use a hardcoding path to Rscript like /appl/R/bin/Rscript-3.6.3-mkl and recompile DISPLACE
+
                     system(a_command_for_R.c_str());
 #endif
                 }  // end nbcp coupling pops

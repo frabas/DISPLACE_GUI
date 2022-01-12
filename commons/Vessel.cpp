@@ -6084,7 +6084,7 @@ void Vessel::reinit_after_a_trip()
     this-> set_traveled_dist_this_trip(0);
     this-> set_natio(true);
     this->set_tstep_dep(0);
-    this->set_reason_to_go_back(0);
+    //this->set_reason_to_go_back(0);
     outc(cout << "reinit after a trip...OK" << endl);
 }
 

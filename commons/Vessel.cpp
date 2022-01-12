@@ -3787,7 +3787,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
            
 
 
-            //if((this->get_name())=="FIN000020014") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
+            //if((this->get_name())=="BEL000071985") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
             //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
             dout (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
                   << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl);
@@ -6084,7 +6084,7 @@ void Vessel::reinit_after_a_trip()
     this-> set_traveled_dist_this_trip(0);
     this-> set_natio(true);
     this->set_tstep_dep(0);
-    this->set_reason_to_go_back(0);
+    //this->set_reason_to_go_back(0);
     outc(cout << "reinit after a trip...OK" << endl);
 }
 
@@ -7132,7 +7132,11 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
 
 
         //STOP FISHING!
-        if(unif_rand()<the_value) {
+        double d = unif_rand();
+        if(d<the_value) {
+            cout << " d " << d << ", the_value " << the_value << endl;
+            cout << "Current reason is: " << this->get_reason_to_go_back() << endl;
+            cout << "STOP!" << endl;
             return(1);
         } else {
             return(0);		 // DON´T STOP!

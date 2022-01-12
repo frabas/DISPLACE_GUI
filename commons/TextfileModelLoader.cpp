@@ -441,7 +441,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     auto nodes = vector<Node *>(graph_coord_x.size());
     for (unsigned int i = 0; i < graph_coord_x.size(); i++) {
 
-        if (graph_coord_harbour[i]) {
+        if (graph_coord_harbour[i]>0) {
             types::NodeId nId(i);
 
             string a_name = "none";
@@ -458,6 +458,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             multimap<int, double> fishprices_each_species_per_cat;
             if (a_name != "none" && a_point == nId) {
                 outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
+                cout << "load prices for port " << a_name << " which is point " << a_point << endl;
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point, quarterString(),
                                                                    fishprices_each_species_per_cat,
                                                                    p->folder_name_parameterization, p->inputfolder);

@@ -101,9 +101,10 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     benthos_number_K=_benthos_number_K;
     area_type=0;
 
-    if(_harbour!=0)
+    if(_harbour>0)
 	{
 		is_harbour = true;
+        cout << "Node " << idx.toIndex() << " is an harbour because _harbour is " << _harbour << endl;
 	}
 	else
 	{

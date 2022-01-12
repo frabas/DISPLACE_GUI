@@ -208,6 +208,10 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // i.e. just arrived!
                     if (!inactive) {
                         outc(cout << "...just arrived!" << endl);
+                        cout << model->vessels()[index_v]->get_name() << " has just arrived on port ("<< 
+                             model->vessels()[index_v]->get_loc()->get_idx_node() << "), the reason is: " <<
+                               model->vessels()[index_v]->get_reason_to_go_back() << endl;
+
                         model->vessels()[index_v]->updateTripsStatistics(model->populations(),
                                                                          model->config().implicit_pops,
                                                                          model->timestep(),
@@ -328,6 +332,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 if (model->vessels()[index_v]->read_message() == 1) {
                     if (model->vessels()[index_v]->get_fgrounds().size() < 3) {
                         //in this case, forced to go back to port instead!
+                        model->vessels()[index_v]->set_reason_to_go_back(4);
                         stop_fishing = true;
                     }
                     //in this case, forced to change!
@@ -336,9 +341,11 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     model->vessels()[index_v]->reset_message();
                 }
 
-                if (freshly_departed_from_port && stop_fishing) outc(
+                if (freshly_departed_from_port && stop_fishing) {
+                    outc(
                         cout << "OH! SOMETHING WRONG WITH MY CHOICE! CHECK MY -STOP FISHING- TRIGGERS"
-                             << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
+                        << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
+                }
 
                 /*if((model->vessels()[index_v]->get_name())=="POL023600922"){
                     cout  << model->vessels()[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;

@@ -207,10 +207,9 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // i.e. write this trip down in the logbook output file
                     // i.e. just arrived!
                     if (!inactive) {
-                        outc(cout << "...just arrived!" << endl);
-                        cout << model->vessels()[index_v]->get_name() << " has just arrived on port ("<< 
+                        outc(cout << model->vessels()[index_v]->get_name() << " has just arrived on port ("<<
                              model->vessels()[index_v]->get_loc()->get_idx_node() << "), the reason is: " <<
-                               model->vessels()[index_v]->get_reason_to_go_back() << endl;
+                               model->vessels()[index_v]->get_reason_to_go_back() << endl);
 
                         model->vessels()[index_v]->updateTripsStatistics(model->populations(),
                                                                          model->config().implicit_pops,

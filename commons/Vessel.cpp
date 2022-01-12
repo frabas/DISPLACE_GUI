@@ -6084,7 +6084,7 @@ void Vessel::reinit_after_a_trip()
     this-> set_traveled_dist_this_trip(0);
     this-> set_natio(true);
     this->set_tstep_dep(0);
-    //this->set_reason_to_go_back(0);
+    this->set_reason_to_go_back(0);
     outc(cout << "reinit after a trip...OK" << endl);
 }
 
@@ -7132,11 +7132,9 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
 
 
         //STOP FISHING!
-        double d = unif_rand();
-        if(d<the_value) {
-            cout << " d " << d << ", the_value " << the_value << endl;
-            cout << "Current reason is: " << this->get_reason_to_go_back() << endl;
-            cout << "STOP!" << endl;
+        if(unif_rand()<the_value) {
+            //cout << "Current reason is: " << this->get_reason_to_go_back() << endl;
+            //cout << "STOP!" << endl;
             return(1);
         } else {
             return(0);		 // DON´T STOP!

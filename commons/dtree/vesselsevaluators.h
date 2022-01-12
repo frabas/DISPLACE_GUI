@@ -134,14 +134,15 @@ private:
 public:
     VesselFuelTankStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-        //return vessel->get_cumfuelcons() > (vessel->get_tankcapacity() * 0.5) ? 1.0 : 0.0; //0: "still ok" node; 1: "low"
          int exit= vessel->get_cumfuelcons() > (vessel->get_tankcapacity() * 0.5); //0: "still ok" node; 1: "low"
-         if (exit) { 
+         if (exit) 
+         { 
              vessel->set_reason_to_go_back(2);
          }
-         else {
-             vessel->set_reason_to_go_back(-2);
-         }
+        // else
+        // {
+        //     vessel->set_reason_to_go_back(-2);
+        // }
          return exit==1 ? 1.0 : 0.0; //0: "still ok" node; 1: "low"
           //  a more complicated alternative require computing (all) distance to ports:
           //  return (	vessel->get_tankcapacity() - vessel->get_cumfuelcons()
@@ -156,13 +157,15 @@ private:
 public:
     VesselCatchVolumeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          //return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.9)  ? 1.0 : 0.0; //0: "still ok" node; 1: "fullfilled"
           int exit= vessel->get_cumcatches() > (vessel->get_carrycapacity() * 0.9); 
-          if(exit){ vessel->set_reason_to_go_back(3);
-           }
-         else {
-         vessel->set_reason_to_go_back(-3);
-         }
+          if(exit)
+          { 
+              vessel->set_reason_to_go_back(3);
+          }
+       //  else
+       //   {
+       //     vessel->set_reason_to_go_back(-3);
+       //  }
          return exit ? 1.0 : 0.0; //0: "still ok" node; 1: "fullfilled"
     }
 };
@@ -190,21 +193,15 @@ public:
                   (current_hour == vessel->getWorkDayEndHour()) ||
                   (current_hour == vessel->getWorkDayEndHour() + 1) ||
                   (vessel->get_timeatsea() > 20); // worst case, end of the day triggered as soon as trying to fish again within the next day...
-              if (stop_fishing){ vessel->set_reason_to_go_back(1);
-    }
-         else {
-         vessel->set_reason_to_go_back(-1);
-         }
+              if (stop_fishing)
+              { 
+                  vessel->set_reason_to_go_back(1);
+              }
+        // else 
+        //{
+        // vessel->set_reason_to_go_back(-1);
+        // }
          return stop_fishing ? 0.0 : 1.0; //0: "true" node i.e. stop fishing; 1: "false"
-
-             // return ((
-             //         // caution: we expect getWorkDayEndHour to be within 0 and 23...(i.e. no 24)
-             //         (vessel->getWorkDayEndHour() == 23 && current_hour == vessel->getWorkDayEndHour()-1) ||  // end of day is true if +/- 1 hour of the usual return hour (make flexible because the vessel might be steaming at the exact hour then not taking any stop fishing decision...)
-             //         (current_hour == vessel->getWorkDayEndHour()) ||
-             //         (current_hour == vessel->getWorkDayEndHour()+1) ||
-             //         (vessel->get_timeatsea() > 20) // worst case, end of the day triggered as soon as trying to fish again within the next day...
-             //         )
-             //         ? 0.0 : 1.0); //0: "true" node; 1: "false"
           }
 };
 

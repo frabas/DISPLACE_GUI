@@ -493,9 +493,9 @@ Vessel::Vessel(Node* p_location,
             for (int met = 0; met < nbmets; met++)
             {
                 cumeffort_per_trip_per_fgrounds_per_met[f][met] = 0;
-                cumcatch_fgrounds_per_met_per_pop[f][met][pop] = 0;
+                cumcatch_fgrounds_per_met_per_pop.zero(f, met, pop);
                 experiencedcpue_fgrounds_per_met_per_pop[f][met][pop] =
-                    freq_fgrounds[f] * expected_cpue_this_pop.at(pop); // init is not metier-specific
+                        freq_fgrounds[f] * expected_cpue_this_pop.at(pop); // init is not metier-specific
             }
             for (int yquarter = 0; yquarter < 44; yquarter++) // hardcoded: play with 44 yearquarters
             {
@@ -817,9 +817,16 @@ const vector<vector<double> > &Vessel::get_cumcatch_fgrounds_per_pop() const
     return (cumcatch_fgrounds_per_pop);
 }
 
-const vector<vector<vector<double> > >& Vessel::get_cumcatch_fgrounds_per_met_per_pop() const
+/*
+const vector<vector<vector<double> > > &Vessel::get_cumcatch_fgrounds_per_met_per_pop() const
 {
-    return(cumcatch_fgrounds_per_met_per_pop);
+    return (cumcatch_fgrounds_per_met_per_pop);
+}
+
+*/
+double Vessel::get_cumcatch_fgrounds_per_met_per_pop(int fground, int met, int pop) const
+{
+    return cumcatch_fgrounds_per_met_per_pop.value(fground, met, pop);
 }
 
 const vector<vector<vector<double> > > &Vessel::get_cumcatch_fgrounds_per_yearquarter_per_pop() const
@@ -4229,8 +4236,8 @@ void Vessel::clear_cumcatch_and_cumeffort_per_trip()
             cumcatch_fgrounds_per_pop.at(n).at(pop) = 0;
             cumdiscard_fgrounds_per_pop.at(n).at(pop) = 0;
         }
-        for (unsigned int met = 0; met < cumcatch_fgrounds_per_met_per_pop.at(n).size(); met++) {
-            for (unsigned int pop = 0; pop < cumcatch_fgrounds_per_met_per_pop.at(n).at(met).size(); pop++) {
+        for (unsigned int met = 0; met < cumcatch_fgrounds_per_met_per_pop.dimension(1); met++) {
+            for (unsigned int pop = 0; pop < cumcatch_fgrounds_per_met_per_pop.dimension(2); pop++) {
                 //clear
                 cumcatch_fgrounds_per_met_per_pop.zero(n, met, pop);
             }

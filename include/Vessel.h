@@ -55,6 +55,8 @@ public:
         NumLenghClasses
     };
 
+    using CumcatchFgroundsPerMetPerPop = SparseContainer<double, types::NodeId, int8_t, int16_t>;
+
 private:
     std::string name;
     int vid_is_active;
@@ -100,7 +102,6 @@ private:
     std::vector<std::vector<double> > freq_experiencedcpue_fgrounds_per_pop;
 
 //        std::vector< std::vector< std::vector<double> > > cumcatch_fgrounds_per_met_per_pop;
-    using CumcatchFgroundsPerMetPerPop = SparseContainer<double, types::NodeId, int8_t, int16_t>;
     CumcatchFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
 
     std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop;
@@ -264,27 +265,28 @@ public:
         const vector<types::NodeId> &get_harbours() const;
         const vector<types::NodeId> &get_fgrounds() const;
         const vector<types::NodeId> &get_fgrounds_init() const;
-        vector<types::NodeId> &get_fgrounds_in_closed_areas();
-        const std::vector<double> &get_freq_harbours () const;
-        const std::vector<double> &get_freq_fgrounds () const;
-        const std::vector<double> &get_freq_fgrounds_init () const;
-        const std::vector<double> &get_cumcatch_fgrounds () const;
-        const std::vector<double> &get_cumdiscard_fgrounds () const;
-        const std::vector<double> &get_experienced_bycatch_prop_on_fgrounds () const;
-        const std::vector<double> &get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const;
-        const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop () const;
+    vector<types::NodeId> &get_fgrounds_in_closed_areas();
+    const std::vector<double> &get_freq_harbours() const;
+    const std::vector<double> &get_freq_fgrounds() const;
+    const std::vector<double> &get_freq_fgrounds_init() const;
+    const std::vector<double> &get_cumcatch_fgrounds() const;
+    const std::vector<double> &get_cumdiscard_fgrounds() const;
+    const std::vector<double> &get_experienced_bycatch_prop_on_fgrounds() const;
+    const std::vector<double> &get_experienced_avoided_stks_bycatch_prop_on_fgrounds() const;
+    const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop() const;
 //        const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_met_per_pop() const;
-        const std::vector<std::vector<vector <double> > >& get_cumcatch_fgrounds_per_yearquarter_per_pop() const;
-        const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
-        const std::vector<double> &get_cumeffort_per_trip_per_fgrounds() const;
-        const std::vector<double>& get_cumeffort_per_yearquarter_per_fgrounds() const;
-        const std::vector<vector<double >>& get_cumeffort_per_trip_per_fgrounds_per_met() const;
-        const std::vector<double> &get_experiencedcpue_fgrounds () const;
-        const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop () const;
-        const std::vector<std::vector<vector <double> > >& get_experiencedcpue_fgrounds_per_met_per_pop() const;
-        const std::vector<std::vector<vector <double> > >& get_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
-        const std::vector<double> &get_freq_experiencedcpue_fgrounds () const;
-        const std::vector<std::vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop () const;
+    double get_cumcatch_fgrounds_per_met_per_pop(int fground, int met, int pop) const;
+    const std::vector<std::vector<vector<double> > > &get_cumcatch_fgrounds_per_yearquarter_per_pop() const;
+    const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop() const;
+    const std::vector<double> &get_cumeffort_per_trip_per_fgrounds() const;
+    const std::vector<double> &get_cumeffort_per_yearquarter_per_fgrounds() const;
+    const std::vector<vector<double >> &get_cumeffort_per_trip_per_fgrounds_per_met() const;
+    const std::vector<double> &get_experiencedcpue_fgrounds() const;
+    const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop() const;
+    const std::vector<std::vector<vector<double> > > &get_experiencedcpue_fgrounds_per_met_per_pop() const;
+    const std::vector<std::vector<vector<double> > > &get_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
+    const std::vector<double> &get_freq_experiencedcpue_fgrounds() const;
+    const std::vector<std::vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop() const;
         const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_met_per_pop() const;
         const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
         const std::vector<double> &get_vessel_betas_per_pop () const;

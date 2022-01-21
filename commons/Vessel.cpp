@@ -424,32 +424,48 @@ Vessel::Vessel(Node* p_location,
     vector<double> cumeffort_per_trip_per_fgrounds = init_for_fgrounds;
     vector<double> cumeffort_per_yearquarter_per_fgrounds = init_for_fgrounds;
     vector<double> cumcatch_fgrounds = init_for_fgrounds;
-    vector<vector <double> > cumeffort_per_trip_per_fgrounds_per_met(fgrounds.size(), vector<double>(nbmets));
+    vector<vector<double> > cumeffort_per_trip_per_fgrounds_per_met(fgrounds.size(), vector<double>(nbmets));
     vector<double> cumdiscard_fgrounds = init_for_fgrounds;
     vector<double> experienced_bycatch_prop_on_fgrounds = init_for_fgrounds;
     vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds = init_for_fgrounds;
     vector<double> experiencedcpue_fgrounds = init_for_fgrounds;
     vector<double> freq_experiencedcpue_fgrounds = init_for_fgrounds;
-    
+
     // or per pop
     vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-    vector<vector<vector <double> > > cumcatch_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(nbmets, vector<double>(nbpops)));
+
+    CumcatchFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
     vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
     vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-    
+
     // or per met per pop
-    vector<vector<vector <double> > > experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(nbmets, vector<double>(nbpops)));
+    vector<vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
+                                                                              vector<vector<double>>(nbmets,
+                                                                                                     vector<double>(
+                                                                                                             nbpops)));
     vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-    vector<vector<vector <double> > > freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), vector<vector<double>>(nbmets, vector<double>(nbpops)));
-    
+    vector<vector<vector<double> > > freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
+                                                                                   vector<vector<double>>(nbmets,
+                                                                                                          vector<double>(
+                                                                                                                  nbpops)));
+
     // or per yearquarter per pop
     int nbyearquarters = 13 * 4;
-    vector<vector<vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
-    vector<vector<vector <double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
-    vector<vector<vector <double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(), vector<vector<double>>(nbyearquarters, vector<double>(nbpops)));
+    vector<vector<vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop(fgrounds.size(),
+                                                                               vector<vector<double>>(nbyearquarters,
+                                                                                                      vector<double>(
+                                                                                                              nbpops)));
+    vector<vector<vector<double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(),
+                                                                                      vector<vector<double>>(
+                                                                                              nbyearquarters,
+                                                                                              vector<double>(nbpops)));
+    vector<vector<vector<double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(fgrounds.size(),
+                                                                                           vector<vector<double>>(
+                                                                                                   nbyearquarters,
+                                                                                                   vector<double>(
+                                                                                                           nbpops)));
 
 
-   
     for (unsigned int f = 0; f < fgrounds.size(); f++) {
         cumcatch_fgrounds[f] = 0;
         cumdiscard_fgrounds[f] = 0;
@@ -792,13 +808,13 @@ const vector<double> &Vessel::get_experienced_avoided_stks_bycatch_prop_on_fgrou
 
 types::NodeId Vessel::get_previous_harbour_idx () const
 {
-    return(previous_harbour_idx);
+    return (previous_harbour_idx);
 }
 
 
 const vector<vector<double> > &Vessel::get_cumcatch_fgrounds_per_pop() const
 {
-    return(cumcatch_fgrounds_per_pop);
+    return (cumcatch_fgrounds_per_pop);
 }
 
 const vector<vector<vector<double> > >& Vessel::get_cumcatch_fgrounds_per_met_per_pop() const
@@ -806,14 +822,14 @@ const vector<vector<vector<double> > >& Vessel::get_cumcatch_fgrounds_per_met_pe
     return(cumcatch_fgrounds_per_met_per_pop);
 }
 
-const vector<vector<vector<double> > >& Vessel::get_cumcatch_fgrounds_per_yearquarter_per_pop() const
+const vector<vector<vector<double> > > &Vessel::get_cumcatch_fgrounds_per_yearquarter_per_pop() const
 {
-    return(cumcatch_fgrounds_per_yearquarter_per_pop);
+    return (cumcatch_fgrounds_per_yearquarter_per_pop);
 }
 
 const vector<vector<double> > &Vessel::get_cumdiscard_fgrounds_per_pop() const
 {
-    return(cumdiscard_fgrounds_per_pop);
+    return (cumdiscard_fgrounds_per_pop);
 }
 
 const vector<double> &Vessel::get_cumeffort_per_trip_per_fgrounds() const
@@ -1745,9 +1761,9 @@ void Vessel::set_cumcatch_fgrounds_per_pop (const vector<vector<double> >  &_cum
     cumcatch_fgrounds_per_pop=_cumcatch_fgrounds_per_pop;
 }
 
-void Vessel::set_cumcatch_fgrounds_per_met_per_pop(const vector<vector<vector <double> > >& _cumcatch_fgrounds_per_met_per_pop)
+void Vessel::set_cumcatch_fgrounds_per_met_per_pop(CumcatchFgroundsPerMetPerPop _cumcatch_fgrounds_per_met_per_pop)
 {
-    cumcatch_fgrounds_per_met_per_pop = _cumcatch_fgrounds_per_met_per_pop;
+    cumcatch_fgrounds_per_met_per_pop = std::move(_cumcatch_fgrounds_per_met_per_pop);
 }
 
 
@@ -3568,20 +3584,23 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     int met = this->get_metier()->get_name();
-                    this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
+                    this->cumcatches += a_cumul_weight_this_pop_this_vessel;
                     this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
                     this->get_loc()->add_to_cumcatches_per_pop_this_month(a_cumul_weight_this_pop_this_vessel, pop);
-                    this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(a_cumul_weight_this_pop_this_vessel, pop, met);
+                    this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(a_cumul_weight_this_pop_this_vessel,
+                                                                                  pop, met);
                     this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, pop, met);
                     this->get_loc()->compute_cpue_per_pop_per_met_this_month(pop, met); // i.e. cumcatch/cumeffort
                     // catches
                     this->cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
                     this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += a_cumul_weight_this_pop_this_vessel;
-                    this->cumcatch_fgrounds_per_met_per_pop.at(idx_node_r).at(met).at(pop) += a_cumul_weight_this_pop_this_vessel;
+                    this->cumcatch_fgrounds_per_met_per_pop(idx_node_r, met,
+                                                            pop) += a_cumul_weight_this_pop_this_vessel;
                     int q = a_quarter - 1;
                     if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                        this->cumcatch_fgrounds_per_yearquarter_per_pop.at(idx_node_r).at(q).at(pop) += a_cumul_weight_this_pop_this_vessel;
+                        this->cumcatch_fgrounds_per_yearquarter_per_pop.at(idx_node_r).at(q).at(
+                                pop) += a_cumul_weight_this_pop_this_vessel;
                     }
                     // effort
                     this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
@@ -3808,35 +3827,36 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 // "real-time" update, accounting for this last bit of catches
                 populations.at(pop)->set_landings_so_far(so_far);
 
-                if (tstep > 1 && is_tacs && !is_individual_vessel_quotas)
-                {
+                if (tstep > 1 && is_tacs && !is_individual_vessel_quotas) {
                     string a_nation = this->get_nationality();
                     double so_far_this_nation = 0.0;
                     so_far_this_nation = populations.at(pop)->get_landings_so_far_per_nation().at(a_nation) +
-                        cpue * PING_RATE;
+                                         cpue * PING_RATE;
                     populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
                     int a_length_class = this->get_length_class();
                     double so_far_this_vessel_length_class = 0.0;
-                    so_far_this_vessel_length_class = populations.at(pop)->get_landings_so_far_per_vessel_length_class().at(a_length_class) +
-                        cpue * PING_RATE;
-                    populations.at(pop)->set_landings_so_far_this_vessel_length_class(a_length_class, so_far_this_vessel_length_class);
+                    so_far_this_vessel_length_class =
+                            populations.at(pop)->get_landings_so_far_per_vessel_length_class().at(a_length_class) +
+                            cpue * PING_RATE;
+                    populations.at(pop)->set_landings_so_far_this_vessel_length_class(a_length_class,
+                                                                                      so_far_this_vessel_length_class);
 
                 }
 
                 // CUMUL ON VESSEL
-                this->cumcatches+= catch_pop_at_szgroup[pop][0];
-                this->cumdiscards+= discards_pop_at_szgroup[pop][0];
+                this->cumcatches += catch_pop_at_szgroup[pop][0];
+                this->cumdiscards += discards_pop_at_szgroup[pop][0];
 
 
                 // update dynamic trip-based cumul for this node
                 // catches
                 int met = this->get_metier()->get_name();
-                this->cumcatch_fgrounds.at(idx_node_r) += cpue*PING_RATE;
+                this->cumcatch_fgrounds.at(idx_node_r) += cpue * PING_RATE;
                 this->cumdiscard_fgrounds.at(idx_node_r) += 0;
                 // catches per pop
-                this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
-                this->cumcatch_fgrounds_per_met_per_pop.at(idx_node_r).at(met).at(pop) += cpue * PING_RATE;
+                this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue * PING_RATE;
+                this->cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop) += cpue * PING_RATE;
                 int q = a_quarter - 1;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
                     this->cumcatch_fgrounds_per_yearquarter_per_pop.at(idx_node_r).at(q).at(pop) += cpue * PING_RATE;
@@ -4092,13 +4112,14 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
 
 
                  // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
-                 if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0)
-                 {
+                 if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0) {
                      //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << endl);
                      //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << endl);
-                     experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) = cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) / cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
+                     experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) =
+                             cumcatch_fgrounds_per_met_per_pop(a_node, a_met, a_pop) /
+                             cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
                      //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                 //TODO: a running average putting more weight on the more recent trips..... 
+                     //TODO: a running average putting more weight on the more recent trips.....
                  }
                  // cumul to scale to 1 (just below)
                  cum_cpue_over_met_pop.at(a_node).at(a_met) += experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop);
@@ -4196,26 +4217,22 @@ void Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
 void Vessel::clear_cumcatch_and_cumeffort_per_trip()
 {
     auto the_grds = this->get_fgrounds();
-    for(unsigned int n=0; n<the_grds.size(); n++)
-    {
+    for (unsigned int n = 0; n < the_grds.size(); n++) {
         //clear
         cumcatch_fgrounds.at(n) = 0;
         cumdiscard_fgrounds.at(n) = 0;
         //clear
         cumeffort_per_trip_per_fgrounds.at(n) = 0;
-   
-        for(unsigned int pop=0; pop< cumcatch_fgrounds_per_pop.at(n).size(); pop++)
-        {
+
+        for (unsigned int pop = 0; pop < cumcatch_fgrounds_per_pop.at(n).size(); pop++) {
             //clear
-            cumcatch_fgrounds_per_pop.at(n).at(pop) =0;
-            cumdiscard_fgrounds_per_pop.at(n).at(pop) =0;
+            cumcatch_fgrounds_per_pop.at(n).at(pop) = 0;
+            cumdiscard_fgrounds_per_pop.at(n).at(pop) = 0;
         }
-        for (unsigned int met = 0; met < cumcatch_fgrounds_per_met_per_pop.at(n).size(); met++)
-        {
-            for (unsigned int pop = 0; pop < cumcatch_fgrounds_per_met_per_pop.at(n).at(met).size(); pop++)
-            {
+        for (unsigned int met = 0; met < cumcatch_fgrounds_per_met_per_pop.at(n).size(); met++) {
+            for (unsigned int pop = 0; pop < cumcatch_fgrounds_per_met_per_pop.at(n).at(met).size(); pop++) {
                 //clear
-                cumcatch_fgrounds_per_met_per_pop.at(n).at(met).at(pop) = 0;
+                cumcatch_fgrounds_per_met_per_pop.zero(n, met, pop);
             }
             cumeffort_per_trip_per_fgrounds_per_met.at(n).at(met) = 0;
         }
@@ -4229,7 +4246,7 @@ void Vessel::clear_cumeffort_per_yearquarter()
     for (unsigned int n = 0; n < the_grds.size(); n++)
     {
         cumeffort_per_yearquarter_per_fgrounds.at(n) = 0;
-       
+
     }
 }
 

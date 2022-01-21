@@ -36,10 +36,38 @@ BOOST_AUTO_TEST_CASE(Access)
 
     BOOST_CHECK_EQUAL(sp.size(), 3);
 
-    BOOST_CHECK_EQUAL(sp(1, 1, 1), 0.0);
+    auto b = sp.value(1, 1, 1);
+    BOOST_CHECK_EQUAL(b, 0.0);
+    BOOST_CHECK_EQUAL(sp.size(), 3);
 
+    BOOST_CHECK_EQUAL(sp(1, 1, 1), 0.0);
     BOOST_CHECK_EQUAL(sp.size(), 4);
 }
 
+BOOST_AUTO_TEST_CASE(Remove)
+{
+    SparseContainer<double, uint8_t, uint16_t, uint8_t> sp;
+
+    for (size_t i = 0; i < 1000; ++i)
+        sp(3, i, 2) = 2.0;
+    BOOST_CHECK_EQUAL(sp.size(), 1000);
+
+    for (size_t i = 1; i < 999; ++i)
+        sp.zero(3, i, 2);
+
+    BOOST_CHECK_EQUAL(sp.size(), 2);
+}
+
+BOOST_AUTO_TEST_CASE(Clear)
+{
+    SparseContainer<double, uint8_t, uint16_t, uint8_t> sp;
+
+    for (size_t i = 0; i < 1000; ++i)
+        sp(3, i, 2) = 2.0;
+    BOOST_CHECK_EQUAL(sp.size(), 1000);
+
+    BOOST_CHECK_NO_THROW(sp.clear());
+    BOOST_CHECK_EQUAL(sp.size(), 0);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

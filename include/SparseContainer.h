@@ -15,6 +15,8 @@ public:
 private:
     spp::sparse_hash_map<HashType, Value> hashMap;
 
+    Value defaultValue = {};
+
     template<int i, typename ...GenIndexes, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
     HashType hashBy(HashType hash, unsigned int pos, std::tuple<GenIndexes...> indexes) const
     {
@@ -45,7 +47,34 @@ public:
     template<typename ... GenIndexes>
     Value const &operator()(GenIndexes ... indexes) const
     {
-        return hashMap[hashKey(indexes...)];
+        auto k = hashKey(indexes...);
+        if (hashMap.contains(k)) {
+            return hashMap.at(hashKey(indexes...));
+        } else {
+            return defaultValue;
+        }
+    }
+
+    template<typename ... GenIndexes>
+    Value value(GenIndexes ... indexes) const
+    {
+        auto k = hashKey(indexes...);
+        if (hashMap.contains(k)) {
+            return hashMap.at(hashKey(indexes...));
+        } else {
+            return defaultValue;
+        }
+    }
+
+    template<typename ... GenIndexes>
+    void zero(GenIndexes ... indexes)
+    {
+        hashMap.erase(hashKey(indexes...));
+    }
+
+    void clear()
+    {
+        hashMap.clear();
     }
 
     size_t size() const

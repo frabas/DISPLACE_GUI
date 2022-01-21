@@ -67,6 +67,8 @@ bool MemStats::collect()
     double vm, rs;
     process_mem_usage(vm, rs);
 
-    mVM = static_cast<size_t>(std::floor(vm*1024 +0.5));
-    mRSS = static_cast<size_t>(std::floor(rs*1024 +0.5));
+    mVM = static_cast<size_t>(std::floor(vm * 1024 + 0.5));
+    mRSS = static_cast<size_t>(std::floor(rs * 1024 + 0.5));
+
+    return true;
 }

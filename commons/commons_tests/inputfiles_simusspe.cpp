@@ -7,7 +7,7 @@
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <myutils.h>
 #include <readdata.h>
@@ -103,15 +103,15 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
             {100, 101},
             8,
             {200.1, 200.2},
-            9,
+            {9},
             10.5,
             1,
             "dt_go_fishing",
             "dt_choose_ground",
-        "dt_start_fishing",
-        "dt_change_ground",
-        "dt_stop_fishing",
-        "dt_change_port"
+            "dt_start_fishing",
+            "dt_change_ground",
+            "dt_stop_fishing",
+            "dt_change_port"
     };
 
     ex.dyn_alloc_sce.setOption(Options::alloc_baseline, true);

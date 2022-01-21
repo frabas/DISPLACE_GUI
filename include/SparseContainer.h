@@ -14,15 +14,27 @@ public:
 
 private:
     spp::sparse_hash_map<HashType, Value> hashMap;
+    std::vector<size_t> maxDim;
 
     Value defaultValue = {};
 
     template<int i, typename ...GenIndexes, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
     HashType hashBy(HashType hash, unsigned int pos, std::tuple<GenIndexes...> indexes) const
     {
-        hash = hash | (static_cast<HashType>(std::get<i>(indexes)) << pos);
+        auto index = static_cast<HashType>(std::get<i>(indexes));
+        hash = hash | (index << pos);
         pos = pos + sizeof(std::tuple_element_t<i, std::tuple<Indexes...>>) * 8;
         return hashBy<i + 1>(hash, pos, indexes);
+    }
+
+    template<int i, typename ...GenIndexes, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
+    HashType hashByRedim(HashType hash, unsigned int pos, std::tuple<GenIndexes...> indexes)
+    {
+        auto index = static_cast<HashType>(std::get<i>(indexes));
+        maxDim[i] = std::max(maxDim[i], index + 1);
+        hash = hash | (index << pos);
+        pos = pos + sizeof(std::tuple_element_t<i, std::tuple<Indexes...>>) * 8;
+        return hashByRedim<i + 1>(hash, pos, indexes);
     }
 
     template<int i, typename ...GenIndexes, std::enable_if_t<i >= sizeof...(Indexes), int> = 0>
@@ -31,7 +43,41 @@ private:
         return hash;
     }
 
+    template<int i, typename ...GenIndexes, std::enable_if_t<i >= sizeof...(Indexes), int> = 0>
+    HashType hashByRedim(HashType hash, unsigned int, std::tuple<GenIndexes...>) const
+    {
+        return hash;
+    }
+
+    template<int i, typename ... Sizes, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
+    void setSizes(std::tuple<Sizes...> sizes)
+    {
+        maxDim[i] = std::get<i>(sizes);
+        setSizes<i + 1>(sizes);
+    };
+
+    template<int i, typename ... Sizes, std::enable_if_t<i >= sizeof...(Indexes), int> = 0>
+    void setSizes(std::tuple<Sizes...> sizes)
+    {
+    };
+
+    template<typename ... GenIndexes>
+    HashType hashKeyRedim(GenIndexes ... indexes)
+    {
+        return hashByRedim<0>(0, 0, std::make_tuple(indexes...));
+    }
+
 public:
+    SparseContainer() : maxDim(sizeof...(Indexes))
+    {
+    }
+
+    template<typename ... Sizes>
+    SparseContainer(Sizes ...sizes) : maxDim(sizeof...(Indexes))
+    {
+        setSizes<0>(std::make_tuple(sizes...));
+    }
+
     template<typename ... GenIndexes>
     HashType hashKey(GenIndexes ... indexes) const
     {
@@ -41,7 +87,7 @@ public:
     template<typename ... GenIndexes>
     Value &operator()(GenIndexes ... indexes)
     {
-        return hashMap[hashKey(indexes...)];
+        return hashMap[hashKeyRedim(indexes...)];
     }
 
     template<typename ... GenIndexes>
@@ -80,6 +126,11 @@ public:
     size_t size() const
     {
         return hashMap.size();
+    }
+
+    size_t dimension(int index) const
+    {
+        return maxDim[index];
     }
 };
 

@@ -70,4 +70,24 @@ BOOST_AUTO_TEST_CASE(Clear)
     BOOST_CHECK_EQUAL(sp.size(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(Dimensions)
+{
+    SparseContainer<int, uint16_t, uint8_t, uint8_t> sp(4, 5, 6);
+
+    BOOST_CHECK_EQUAL(sp.dimension(0), 4);
+    BOOST_CHECK_EQUAL(sp.dimension(1), 5);
+    BOOST_CHECK_EQUAL(sp.dimension(2), 6);
+
+    sp(0, 3, 0) = 1;
+    BOOST_CHECK_EQUAL(sp.dimension(0), 4);
+    BOOST_CHECK_EQUAL(sp.dimension(1), 5);
+    BOOST_CHECK_EQUAL(sp.dimension(2), 6);
+
+    sp(9, 9, 9) = 1000;
+
+    BOOST_CHECK_EQUAL(sp.dimension(0), 10);
+    BOOST_CHECK_EQUAL(sp.dimension(1), 10);
+    BOOST_CHECK_EQUAL(sp.dimension(2), 10);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

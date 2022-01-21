@@ -12,14 +12,34 @@ BOOST_AUTO_TEST_CASE(HashCalc)
 {
     SparseContainer<double, uint8_t, uint16_t, uint8_t> sp;
 
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{2}, uint16_t{3}, uint8_t{1}), 0x01000302);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{32}, uint16_t{1000}, uint8_t{0}), 0x0003e820);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{0}, uint16_t{0}, uint8_t{0}), 0x00000000);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{255}, uint16_t{65535}, uint8_t{255}), 0xffffffff);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{0}, uint16_t{65535}, uint8_t{0}), 0x00ffff00);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{255}, uint16_t{0}, uint8_t{0}), 0x000000ff);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{0}, uint16_t{0}, uint8_t{128}), 0x80000000);
-    BOOST_CHECK_EQUAL(sp.hashKey(uint8_t{0}, uint16_t{0}, uint8_t{127}), 0x7f000000);
+    BOOST_CHECK_EQUAL(sp.hashKey(2, 3, 1), 0x01000302);
+    BOOST_CHECK_EQUAL(sp.hashKey(32, 1000, 0), 0x0003e820);
+    BOOST_CHECK_EQUAL(sp.hashKey(0, 0, 0), 0x00000000);
+    BOOST_CHECK_EQUAL(sp.hashKey(255, 65535, 255), 0xffffffff);
+    BOOST_CHECK_EQUAL(sp.hashKey(0, 65535, 0), 0x00ffff00);
+    BOOST_CHECK_EQUAL(sp.hashKey(255, 0, 0), 0x000000ff);
+    BOOST_CHECK_EQUAL(sp.hashKey(0, 0, 128), 0x80000000);
+    BOOST_CHECK_EQUAL(sp.hashKey(0, 0, 127), 0x7f000000);
 }
+
+BOOST_AUTO_TEST_CASE(Access)
+{
+    SparseContainer<double, uint8_t, uint16_t, uint8_t> sp;
+
+    BOOST_CHECK_NO_THROW(sp(3, 1000, 2) = 2.0);
+    BOOST_CHECK_NO_THROW(sp(3, 0, 128) = 128.0);
+    BOOST_CHECK_NO_THROW(sp(222, 0, 0) = -222.0);
+
+    BOOST_CHECK_EQUAL(sp(3, 1000, 2), 2.0);
+    BOOST_CHECK_EQUAL(sp(3, 0, 128), 128.0);
+    BOOST_CHECK_EQUAL(sp(222, 0, 0), -222.0);
+
+    BOOST_CHECK_EQUAL(sp.size(), 3);
+
+    BOOST_CHECK_EQUAL(sp(1, 1, 1), 0.0);
+
+    BOOST_CHECK_EQUAL(sp.size(), 4);
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

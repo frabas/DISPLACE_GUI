@@ -15,24 +15,42 @@ public:
 private:
     spp::sparse_hash_map<HashType, Value> hashMap;
 
-    template<int i, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
-    HashType hashBy(HashType hash, unsigned int pos, std::tuple<Indexes...> indexes)
+    template<int i, typename ...GenIndexes, std::enable_if_t<i < sizeof...(Indexes), int> = 0>
+    HashType hashBy(HashType hash, unsigned int pos, std::tuple<GenIndexes...> indexes) const
     {
         hash = hash | (static_cast<HashType>(std::get<i>(indexes)) << pos);
-        pos = pos + sizeof(std::get<i>(indexes)) * 8;
+        pos = pos + sizeof(std::tuple_element_t<i, std::tuple<Indexes...>>) * 8;
         return hashBy<i + 1>(hash, pos, indexes);
     }
 
-    template<int i, std::enable_if_t<i >= sizeof...(Indexes), int> = 0>
-    HashType hashBy(HashType hash, unsigned int, std::tuple<Indexes...>)
+    template<int i, typename ...GenIndexes, std::enable_if_t<i >= sizeof...(Indexes), int> = 0>
+    HashType hashBy(HashType hash, unsigned int, std::tuple<GenIndexes...>) const
     {
         return hash;
     }
 
 public:
-    HashType hashKey(Indexes ... indexes)
+    template<typename ... GenIndexes>
+    HashType hashKey(GenIndexes ... indexes) const
     {
         return hashBy<0>(0, 0, std::make_tuple(indexes...));
+    }
+
+    template<typename ... GenIndexes>
+    Value &operator()(GenIndexes ... indexes)
+    {
+        return hashMap[hashKey(indexes...)];
+    }
+
+    template<typename ... GenIndexes>
+    Value const &operator()(GenIndexes ... indexes) const
+    {
+        return hashMap[hashKey(indexes...)];
+    }
+
+    size_t size() const
+    {
+        return hashMap.size();
     }
 };
 

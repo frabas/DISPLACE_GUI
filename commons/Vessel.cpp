@@ -434,20 +434,15 @@ Vessel::Vessel(Node* p_location,
     // or per pop
     vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
 
-    CumcatchFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
+    ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
     vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
     vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
 
     // or per met per pop
-    vector<vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
-                                                                              vector<vector<double>>(nbmets,
-                                                                                                     vector<double>(
-                                                                                                             nbpops)));
+    ValueFgroundsPerMetPerPop experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), nbmets, nbpops);
+
     vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
-    vector<vector<vector<double> > > freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
-                                                                                   vector<vector<double>>(nbmets,
-                                                                                                          vector<double>(
-                                                                                                                  nbpops)));
+    ValueFgroundsPerMetPerPop freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), nbmets, nbpops);
 
     // or per yearquarter per pop
     int nbyearquarters = 13 * 4;
@@ -494,7 +489,7 @@ Vessel::Vessel(Node* p_location,
             {
                 cumeffort_per_trip_per_fgrounds_per_met[f][met] = 0;
                 cumcatch_fgrounds_per_met_per_pop.zero(f, met, pop);
-                experiencedcpue_fgrounds_per_met_per_pop[f][met][pop] =
+                experiencedcpue_fgrounds_per_met_per_pop(f, met, pop) =
                         freq_fgrounds[f] * expected_cpue_this_pop.at(pop); // init is not metier-specific
             }
             for (int yquarter = 0; yquarter < 44; yquarter++) // hardcoded: play with 44 yearquarters
@@ -865,9 +860,9 @@ const vector<vector<double> > &Vessel::get_experiencedcpue_fgrounds_per_pop()con
     return(experiencedcpue_fgrounds_per_pop);
 }
 
-const vector<vector<vector<double> > >& Vessel::get_experiencedcpue_fgrounds_per_met_per_pop()const
+double Vessel::get_experiencedcpue_fgrounds_per_met_per_pop(types::NodeId n, int met, int pop) const
 {
-    return(experiencedcpue_fgrounds_per_met_per_pop);
+    return experiencedcpue_fgrounds_per_met_per_pop.value(n.toIndex(), met, pop);
 }
 
 const vector<vector<vector<double> > >& Vessel::get_experiencedcpue_fgrounds_per_yearquarter_per_pop()const
@@ -883,22 +878,28 @@ const vector<double> &Vessel::get_freq_experiencedcpue_fgrounds()const
 
 const vector<vector<double> > &Vessel::get_freq_experiencedcpue_fgrounds_per_pop() const
 {
-    return(freq_experiencedcpue_fgrounds_per_pop);
+    return (freq_experiencedcpue_fgrounds_per_pop);
 }
 
-const vector<vector<vector<double> > >& Vessel::get_freq_experiencedcpue_fgrounds_per_met_per_pop()const
+double Vessel::get_freq_experiencedcpue_fgrounds_per_met_per_pop(
+        types::NodeId node, int met, int pop) const
 {
-    return(freq_experiencedcpue_fgrounds_per_met_per_pop);
+    return freq_experiencedcpue_fgrounds_per_met_per_pop.value(node.toIndex(), met, pop);
 }
 
-const vector<vector<vector<double> > >& Vessel::get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop()const
+const Vessel::ValueFgroundsPerMetPerPop &Vessel::copy_freq_experiencedcpue_fgrounds_per_met_per_pop() const
 {
-    return(freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
+    return freq_experiencedcpue_fgrounds_per_met_per_pop;
+}
+
+const vector<vector<vector<double> > > &Vessel::get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop() const
+{
+    return (freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
 }
 
 const vector<double> &Vessel::get_vessel_betas_per_pop() const
 {
-    return(vessel_betas_per_pop);
+    return (vessel_betas_per_pop);
 }
 
 
@@ -1768,7 +1769,7 @@ void Vessel::set_cumcatch_fgrounds_per_pop (const vector<vector<double> >  &_cum
     cumcatch_fgrounds_per_pop=_cumcatch_fgrounds_per_pop;
 }
 
-void Vessel::set_cumcatch_fgrounds_per_met_per_pop(CumcatchFgroundsPerMetPerPop _cumcatch_fgrounds_per_met_per_pop)
+void Vessel::set_cumcatch_fgrounds_per_met_per_pop(ValueFgroundsPerMetPerPop _cumcatch_fgrounds_per_met_per_pop)
 {
     cumcatch_fgrounds_per_met_per_pop = std::move(_cumcatch_fgrounds_per_met_per_pop);
 }
@@ -1813,9 +1814,10 @@ void Vessel::set_experiencedcpue_fgrounds_per_pop (const vector<vector<double> >
     experiencedcpue_fgrounds_per_pop=_experiencedcpue_fgrounds_per_pop;
 }
 
-void Vessel::set_experiencedcpue_fgrounds_per_met_per_pop(const vector<vector<vector<double> > >& _experiencedcpue_fgrounds_per_met_per_pop)
+void Vessel::set_experiencedcpue_fgrounds_per_met_per_pop(
+        ValueFgroundsPerMetPerPop _experiencedcpue_fgrounds_per_met_per_pop)
 {
-    experiencedcpue_fgrounds_per_met_per_pop = _experiencedcpue_fgrounds_per_met_per_pop;
+    experiencedcpue_fgrounds_per_met_per_pop = std::move(_experiencedcpue_fgrounds_per_met_per_pop);
 }
 
 void Vessel::set_experiencedcpue_fgrounds_per_yearquarter_per_pop(const vector<vector<vector<double> > >& _experiencedcpue_fgrounds_per_yearquarter_per_pop)
@@ -1834,9 +1836,10 @@ void Vessel::set_freq_experiencedcpue_fgrounds_per_pop (const vector<vector<doub
     freq_experiencedcpue_fgrounds_per_pop=_freq_experiencedcpue_fgrounds_per_pop;
 }
 
-void Vessel::set_freq_experiencedcpue_fgrounds_per_met_per_pop(const vector<vector<vector<double> > >& _freq_experiencedcpue_fgrounds_per_met_per_pop)
+void Vessel::set_freq_experiencedcpue_fgrounds_per_met_per_pop(
+        ValueFgroundsPerMetPerPop _freq_experiencedcpue_fgrounds_per_met_per_pop)
 {
-    freq_experiencedcpue_fgrounds_per_met_per_pop = _freq_experiencedcpue_fgrounds_per_met_per_pop;
+    freq_experiencedcpue_fgrounds_per_met_per_pop = std::move(_freq_experiencedcpue_fgrounds_per_met_per_pop);
 }
 
 void Vessel::set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(const vector<vector<vector<double> > >& _freq_experiencedcpue_fgrounds_per_yearquarter_per_pop)
@@ -3127,7 +3130,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         inter = a_szgroup;
                         a_szgroup+=1;
                     }
-                    dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
+//                    dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
                     double left_to_MLS=0;
                     double right_to_MLS=0;
 // if(this->get_name()=="DNK000011569" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
@@ -4108,44 +4111,43 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
     // but there are qualified guesses: actually cpue from the frequency given by the input data...
 
     outc(cout << "compute experienced cpue on grounds per pop per met..." << endl);
-    for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_met_per_pop.size(); a_node++)
-    {
+    for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_met_per_pop.dimension(0); a_node++) {
         cum_cpue_over_met_pop.push_back(vector<double>(0));
 
-        for (unsigned int a_met = 0; a_met < experiencedcpue_fgrounds_per_met_per_pop.at(a_node).size(); a_met++)
-        {
-             cum_cpue_over_met_pop.at(a_node).push_back(0);
+        for (unsigned int a_met = 0; a_met < experiencedcpue_fgrounds_per_met_per_pop.dimension(1); a_met++) {
+            cum_cpue_over_met_pop.at(a_node).push_back(0);
 
-             for (unsigned int a_pop = 0; a_pop < experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).size(); a_pop++)
-             {
+            for (unsigned int a_pop = 0; a_pop < experiencedcpue_fgrounds_per_met_per_pop.dimension(2); a_pop++) {
 
 
-                 // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
-                 if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0) {
-                     //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << endl);
-                     //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << endl);
-                     experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) =
-                             cumcatch_fgrounds_per_met_per_pop(a_node, a_met, a_pop) /
-                             cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
-                     //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                     //TODO: a running average putting more weight on the more recent trips.....
-                 }
-                 // cumul to scale to 1 (just below)
-                 cum_cpue_over_met_pop.at(a_node).at(a_met) += experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop);
-             }
+                // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
+                if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0) {
+                    //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << endl);
+                    //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << endl);
+                    experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, a_pop) =
+                            cumcatch_fgrounds_per_met_per_pop.value(a_node, a_met, a_pop) /
+                            cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
+                    //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                    //TODO: a running average putting more weight on the more recent trips.....
+                }
+                // cumul to scale to 1 (just below)
+                cum_cpue_over_met_pop.at(a_node).at(a_met) += experiencedcpue_fgrounds_per_met_per_pop.value(a_node,
+                                                                                                             a_met,
+                                                                                                             a_pop);
+            }
 
-             //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
-             if (cum_cpue_over_met_pop.at(a_node).at(a_met) != 0)
-             {
-                    for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).size(); pop++)
-                    {
-                        freq_experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) = experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) / cum_cpue_over_met_pop.at(a_node).at(a_met);
-                        //dout(cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl);
-                        //cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl;
-                    }
-             }
+            //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
+            if (cum_cpue_over_met_pop.at(a_node).at(a_met) != 0) {
+                for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_met_per_pop.dimension(2); pop++) {
+                    freq_experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, pop) =
+                            experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) /
+                            cum_cpue_over_met_pop.at(a_node).at(a_met);
+                    //dout(cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl);
+                    //cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl;
+                }
+            }
 
-            
+
         }
 
     }
@@ -4390,40 +4392,34 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
 
     outc(cout << "compute expected profit on grounds " << endl);
 //cout << "compute expected profit on grounds " << endl;
-    double price_multiplier=1.0;
+    double price_multiplier = 1.0;
 
-    vector <double> freq_grds = this->get_freq_fgrounds();
-  
+    vector<double> freq_grds = this->get_freq_fgrounds();
+
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
-    
-    vector <vector<double> > past_freq_cpue_grds_pops;
-    vector <vector<double> > past_freq_cpue_grds_targts;
-    vector <vector<vector<double> > > past_freq_cpue_grds_pops_mets;
-    vector <vector<vector<double> > > past_freq_cpue_grds_targts_mets;
-    vector <vector<vector<double> > > past_freq_cpue_grds_pops_yquarters;
-    vector <vector<vector<double> > > past_freq_cpue_grds_targts_yquarters;
+
+    vector<vector<double> > past_freq_cpue_grds_pops;
+    vector<vector<double> > past_freq_cpue_grds_targts;
+    ValueFgroundsPerMetPerPop past_freq_cpue_grds_pops_mets;
+    ValueFgroundsPerMetPerPop past_freq_cpue_grds_targts_mets;
+    vector<vector<vector<double> > > past_freq_cpue_grds_pops_yquarters;
+    vector<vector<vector<double> > > past_freq_cpue_grds_targts_yquarters;
     int a_met = this->get_metier()->get_name();
     //cout << "a year is " << simModel.year() << endl;
     //cout << "a quarter is " << simModel.quarter() << endl;
-    int a_yquarter = ((simModel.year()-1)*4) + simModel.quarter() -1;
-    if (simModel.timestep() < 745) a_yquarter = 0; // caution bc year=0 for first month
+    int a_yquarter = ((simModel.year() - 1) * 4) + simModel.quarter() - 1;
+    if (simModel.timestep() < 745) { a_yquarter = 0; } // caution bc year=0 for first month
     //cout << "a_yquarter is " << a_yquarter << endl;
     //cout  << endl;
 
-    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet))
-    {
-        past_freq_cpue_grds_pops_mets = this->get_freq_experiencedcpue_fgrounds_per_met_per_pop();
+    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
+        past_freq_cpue_grds_pops_mets = this->copy_freq_experiencedcpue_fgrounds_per_met_per_pop();
         past_freq_cpue_grds_targts_mets = past_freq_cpue_grds_pops_mets;
-    }
-    else 
-    {
-        if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
-        {
+    } else {
+        if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
             past_freq_cpue_grds_pops_yquarters = this->get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop();
             past_freq_cpue_grds_targts_yquarters = past_freq_cpue_grds_pops_yquarters;
-        }
-        else
-        {
+        } else {
             past_freq_cpue_grds_pops = this->get_freq_experiencedcpue_fgrounds_per_pop();
             past_freq_cpue_grds_targts = past_freq_cpue_grds_pops;
 
@@ -4469,43 +4465,36 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         for(unsigned int i=0; i<trgts.size(); ++i)
         {
             int a_trgt=trgts.at(i);
-            dout(if(past_freq_cpue_grds_pops.at(gr).size()<trgts.size()) cout << "error: inconsistent nb of pops in config.dat vs. nb of targets in metier files")
+//            dout(if(past_freq_cpue_grds_pops.at(gr).size()<trgts.size()) cout << "error: inconsistent nb of pops in config.dat vs. nb of targets in metier files")
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet))
                 {
-                    cum_cpue_over_trgt_pop.at(gr) += past_freq_cpue_grds_targts_mets.at(gr).at(a_met).at(a_trgt);
+                    cum_cpue_over_trgt_pop.at(gr) += past_freq_cpue_grds_targts_mets.value(gr, a_met, a_trgt);
                 }
-                else
-                {
-                    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
-                    {
-                        cum_cpue_over_trgt_pop.at(gr) += past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(a_trgt);
-                    }
-                    else
-                    {
+                else {
+                    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                        cum_cpue_over_trgt_pop.at(gr) += past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(
+                                a_trgt);
+                    } else {
                         cum_cpue_over_trgt_pop.at(gr) += past_freq_cpue_grds_pops.at(gr).at(a_trgt);
 
                     }
                 }
         }
         //  scale to 1
-        if(cum_cpue_over_trgt_pop.at(gr)!=0)
-        {
-            for(unsigned int i=0; i<trgts.size(); ++i)
-            {
-                int a_trgt=trgts.at(i);
-                if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet))
-                {
-                    past_freq_cpue_grds_targts_mets.at(gr).at(a_met).at(a_trgt) = past_freq_cpue_grds_pops_mets.at(gr).at(a_met).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
-                }
-                else
-                {
-                    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
-                    {
-                        past_freq_cpue_grds_targts_yquarters.at(gr).at(a_yquarter).at(a_trgt) = past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
-                    }
-                    else
-                    {
-                        past_freq_cpue_grds_targts.at(gr).at(a_trgt) = past_freq_cpue_grds_pops.at(gr).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
+        if (cum_cpue_over_trgt_pop.at(gr) != 0) {
+            for (unsigned int i = 0; i < trgts.size(); ++i) {
+                int a_trgt = trgts.at(i);
+                if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
+                    past_freq_cpue_grds_targts_mets(gr, a_met, a_trgt) =
+                            past_freq_cpue_grds_pops_mets.value(gr, a_met, a_trgt) / cum_cpue_over_trgt_pop.at(gr);
+                } else {
+                    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                        past_freq_cpue_grds_targts_yquarters.at(gr).at(a_yquarter).at(a_trgt) =
+                                past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(a_trgt) /
+                                cum_cpue_over_trgt_pop.at(gr);
+                    } else {
+                        past_freq_cpue_grds_targts.at(gr).at(a_trgt) =
+                                past_freq_cpue_grds_pops.at(gr).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
 
                     }
                 }
@@ -4517,78 +4506,73 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
         // .....only looking at the targeted stocks
 
-        double tot_revenue=0.0;
-        for(unsigned int i=0; i<trgts.size(); ++i)
-        {
-            int a_trgt=trgts.at(i);
-            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet))
-            {
-                revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_targts_mets.at(gr).at(a_met).at(a_trgt) * // weighted average of cpues
-                    this->get_carrycapacity() *
-                    // choose the most valuable cat (but actually currently the first one is returned: to do)
-                    this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
-            }
-            else
-            {
-                if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
-                {
-                    revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_targts_yquarters.at(gr).at(a_yquarter).at(a_trgt) * // weighted average of cpues
+        double tot_revenue = 0.0;
+        for (unsigned int i = 0; i < trgts.size(); ++i) {
+            int a_trgt = trgts.at(i);
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
+                revenue_per_fgrounds.at(gr) +=
+                        past_freq_cpue_grds_targts_mets.value(gr, a_met, a_trgt) * // weighted average of cpues
                         this->get_carrycapacity() *
                         // choose the most valuable cat (but actually currently the first one is returned: to do)
                         this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
-                }
-                else
-                {
-                    revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_targts.at(gr).at(a_trgt) * // weighted average of cpues
-                        this->get_carrycapacity() *
-                        // choose the most valuable cat (but actually currently the first one is returned: to do)
-                        this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
+            } else {
+                if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                    revenue_per_fgrounds.at(gr) +=
+                            past_freq_cpue_grds_targts_yquarters.at(gr).at(a_yquarter).at(a_trgt) *
+                            // weighted average of cpues
+                            this->get_carrycapacity() *
+                            // choose the most valuable cat (but actually currently the first one is returned: to do)
+                            this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
+                } else {
+                    revenue_per_fgrounds.at(gr) +=
+                            past_freq_cpue_grds_targts.at(gr).at(a_trgt) * // weighted average of cpues
+                            this->get_carrycapacity() *
+                            // choose the most valuable cat (but actually currently the first one is returned: to do)
+                            this->get_loc()->get_prices_per_cat(a_trgt, 0) * price_multiplier;
 
                 }
             }
-            tot_revenue+=revenue_per_fgrounds.at(gr);
+            tot_revenue += revenue_per_fgrounds.at(gr);
         }
 
-        
 
-        if(tot_revenue==0) // we shouldn´t expect this...
+        if (tot_revenue == 0) // we shouldn´t expect this...
         {
-            
-            // cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
-            outc(cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl);
-            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet))
-            {
-                for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops_mets.at(gr).at(a_met).size(); ++pop)
-                {
-                    revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_pops_mets.at(gr).at(a_met).at(pop) * // weighted average of cpues
-                        this->get_carrycapacity() *
-                        // choose the most valuable cat (but actually currently the first one is returned: to do)
-                        this->get_loc()->get_prices_per_cat(pop, 0) * price_multiplier;
-                }
-            }
-            else
-            {
-                    if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
-                    {
-                        for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).size(); ++pop)
-                        {
-                            revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(pop) * // weighted average of cpues
-                                this->get_carrycapacity() *
-                                // choose the most valuable cat (but actually currently the first one is returned: to do)
-                                this->get_loc()->get_prices_per_cat(pop, 0) * price_multiplier;
-                        }
-                    }
-                    else // default
-                    {
-                        for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops.at(gr).size(); ++pop)
-                        {
 
-                            revenue_per_fgrounds.at(gr) += past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
+            // cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
+            outc(cout << this->get_name()
+                      << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "
+                      << endl);
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
+                for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops_mets.dimension(2); ++pop) {
+                    revenue_per_fgrounds.at(gr) +=
+                            past_freq_cpue_grds_pops_mets.value(gr, a_met, pop) * // weighted average of cpues
+                            this->get_carrycapacity() *
+                            // choose the most valuable cat (but actually currently the first one is returned: to do)
+                            this->get_loc()->get_prices_per_cat(pop, 0) * price_multiplier;
+                }
+            } else {
+                if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                    for (unsigned int pop = 0;
+                         pop < past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).size(); ++pop) {
+                        revenue_per_fgrounds.at(gr) +=
+                                past_freq_cpue_grds_pops_yquarters.at(gr).at(a_yquarter).at(pop) *
+                                // weighted average of cpues
                                 this->get_carrycapacity() *
                                 // choose the most valuable cat (but actually currently the first one is returned: to do)
                                 this->get_loc()->get_prices_per_cat(pop, 0) * price_multiplier;
-                        }
                     }
+                } else // default
+                {
+                    for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops.at(gr).size(); ++pop) {
+
+                        revenue_per_fgrounds.at(gr) +=
+                                past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
+                                this->get_carrycapacity() *
+                                // choose the most valuable cat (but actually currently the first one is returned: to do)
+                                this->get_loc()->get_prices_per_cat(pop, 0) * price_multiplier;
+                    }
+                }
             }
             tot_revenue+=revenue_per_fgrounds.at(gr);
             

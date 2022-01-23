@@ -55,7 +55,10 @@ public:
         NumLenghClasses
     };
 
-    using CumcatchFgroundsPerMetPerPop = SparseContainer<double, types::NodeId, int8_t, int16_t>;
+    using ValueFgroundsPerMetPerPop = SparseContainer<double, uint16_t, uint8_t, uint16_t>;
+    using ValueFgroundsPerYearQuarterPerPop = std::vector<std::vector<std::vector<double> > >;
+    using ValuePerFgroundPerPop = std::vector<std::vector<double> >;
+    using CumEffortPerTripPerFgroundsPerMet = std::vector<std::vector<double> >;
 
 private:
     std::string name;
@@ -84,12 +87,12 @@ private:
     std::vector<double> experienced_bycatch_prop_on_fgrounds;
     std::vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds;
 
-    std::vector<std::vector<std::vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop;
-    std::vector<std::vector<double> > cumdiscard_fgrounds_per_pop;
+    ValueFgroundsPerYearQuarterPerPop cumcatch_fgrounds_per_yearquarter_per_pop;
+    ValuePerFgroundPerPop cumdiscard_fgrounds_per_pop;
 
     // cumulated effort per node for the last trip, reinit when new trip start
     std::vector<double> cumeffort_per_trip_per_fgrounds;
-    std::vector<std::vector<double> > cumeffort_per_trip_per_fgrounds_per_met;
+    CumEffortPerTripPerFgroundsPerMet cumeffort_per_trip_per_fgrounds_per_met;
     // cumulated effort per node for the last yearquarter, reinit when new quarter start
     std::vector<double> cumeffort_per_yearquarter_per_fgrounds;
 
@@ -97,18 +100,18 @@ private:
     std::vector<double> freq_experiencedcpue_fgrounds;
     // from cumcatch/cumeffort for last trip scaled to 1
 
-    std::vector<std::vector<double> > cumcatch_fgrounds_per_pop;
-    std::vector<std::vector<double> > experiencedcpue_fgrounds_per_pop;
-    std::vector<std::vector<double> > freq_experiencedcpue_fgrounds_per_pop;
+    ValuePerFgroundPerPop cumcatch_fgrounds_per_pop;
+    ValuePerFgroundPerPop experiencedcpue_fgrounds_per_pop;
+    ValuePerFgroundPerPop freq_experiencedcpue_fgrounds_per_pop;
 
 //        std::vector< std::vector< std::vector<double> > > cumcatch_fgrounds_per_met_per_pop;
-    CumcatchFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
+    ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
 
-    std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_met_per_pop;
-    std::vector<std::vector<vector<double> > > freq_experiencedcpue_fgrounds_per_met_per_pop;
+    ValueFgroundsPerMetPerPop experiencedcpue_fgrounds_per_met_per_pop;
+    ValueFgroundsPerMetPerPop freq_experiencedcpue_fgrounds_per_met_per_pop;
 
-    std::vector<std::vector<vector<double> > > experiencedcpue_fgrounds_per_yearquarter_per_pop;
-    std::vector<std::vector<vector<double> > > freq_experiencedcpue_fgrounds_per_yearquarter_per_pop;
+    ValueFgroundsPerYearQuarterPerPop experiencedcpue_fgrounds_per_yearquarter_per_pop;
+    ValueFgroundsPerYearQuarterPerPop freq_experiencedcpue_fgrounds_per_yearquarter_per_pop;
 
     // skipper effect, target factor:
     std::vector<double> vessel_betas_per_pop;
@@ -283,41 +286,42 @@ public:
     const std::vector<vector<double >> &get_cumeffort_per_trip_per_fgrounds_per_met() const;
     const std::vector<double> &get_experiencedcpue_fgrounds() const;
     const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop() const;
-    const std::vector<std::vector<vector<double> > > &get_experiencedcpue_fgrounds_per_met_per_pop() const;
+    double get_experiencedcpue_fgrounds_per_met_per_pop(types::NodeId n, int met, int pop) const;
     const std::vector<std::vector<vector<double> > > &get_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
     const std::vector<double> &get_freq_experiencedcpue_fgrounds() const;
     const std::vector<std::vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop() const;
-        const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_met_per_pop() const;
-        const std::vector<std::vector<vector<double> > >& get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
-        const std::vector<double> &get_vessel_betas_per_pop () const;
-        const std::vector<double> &get_percent_tac_per_pop () const;
-        const std::vector<double> &get_fishing_credits () const;
-        const std::vector<int> &get_idx_used_metiers_this_trip ();
-        const multimap<types::NodeId, int> &get_possible_metiers() const;
-        const multimap<types::NodeId, double> &get_freq_possible_metiers() const;
-        const std::list<types::NodeId> &get_roadmap () const;
-		bool get_inharbour() const;
-		bool get_inactive() const;
-        int get_is_vessel_exited () const;
-		bool get_natio() const;
-		int get_state() const;
-		int get_reason_to_go_back () const;
-		int get_tstep_dep() const;
-		double get_x() const;	 // in the continuous space
-		double get_y() const;	 // in the continuous space
-		double get_course() const;
-		double get_timeforrest() const;
-		double get_fuelcons() const;
-		double get_cumfuelcons() const;
-		double get_consotogetthere() const;
-		double get_cumsteaming() const;
-		double get_distprevpos() const;
-		double get_timeatsea() const;
-		double get_traveled_dist_this_trip() const;
-        double get_sweptareathistrip() const;
-        double get_subsurfacesweptareathistrip() const;
-        double get_tankcapacity() const;
-		double get_carrycapacity() const;
+    const Vessel::ValueFgroundsPerMetPerPop &copy_freq_experiencedcpue_fgrounds_per_met_per_pop() const;
+    double get_freq_experiencedcpue_fgrounds_per_met_per_pop(types::NodeId node, int met, int pop) const;
+    const std::vector<std::vector<vector<double> > > &get_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop() const;
+    const std::vector<double> &get_vessel_betas_per_pop() const;
+    const std::vector<double> &get_percent_tac_per_pop() const;
+    const std::vector<double> &get_fishing_credits() const;
+    const std::vector<int> &get_idx_used_metiers_this_trip();
+    const multimap<types::NodeId, int> &get_possible_metiers() const;
+    const multimap<types::NodeId, double> &get_freq_possible_metiers() const;
+    const std::list<types::NodeId> &get_roadmap() const;
+    bool get_inharbour() const;
+    bool get_inactive() const;
+    int get_is_vessel_exited() const;
+    bool get_natio() const;
+    int get_state() const;
+    int get_reason_to_go_back() const;
+    int get_tstep_dep() const;
+    double get_x() const;     // in the continuous space
+    double get_y() const;     // in the continuous space
+    double get_course() const;
+    double get_timeforrest() const;
+    double get_fuelcons() const;
+    double get_cumfuelcons() const;
+    double get_consotogetthere() const;
+    double get_cumsteaming() const;
+    double get_distprevpos() const;
+    double get_timeatsea() const;
+    double get_traveled_dist_this_trip() const;
+    double get_sweptareathistrip() const;
+    double get_subsurfacesweptareathistrip() const;
+    double get_tankcapacity() const;
+    double get_carrycapacity() const;
 		int get_nbfpingspertrip() const;
 		double get_resttime_par1() const;
 		double get_resttime_par2() const;
@@ -429,7 +433,7 @@ public:
     void set_experienced_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
     void set_experienced_avoided_stks_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
     void set_cumcatch_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
-    void set_cumcatch_fgrounds_per_met_per_pop(CumcatchFgroundsPerMetPerPop newval);
+    void set_cumcatch_fgrounds_per_met_per_pop(ValueFgroundsPerMetPerPop newval);
     void set_cumcatch_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector<double> > > &newval);
     void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
     void set_cumeffort_per_trip_per_fgrounds(const std::vector<double> &newval);
@@ -437,12 +441,13 @@ public:
     void set_cumeffort_per_trip_per_fgrounds_per_met(const std::vector<vector<double> > &newval);
     void set_experiencedcpue_fgrounds(const std::vector<double> &newval);
     void set_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
-    void set_experiencedcpue_fgrounds_per_met_per_pop(const std::vector<std::vector<vector<double> > > &newval);
+    void set_experiencedcpue_fgrounds_per_met_per_pop(ValueFgroundsPerMetPerPop newval);
     void set_experiencedcpue_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector<double> > > &newval);
     void set_freq_experiencedcpue_fgrounds(const std::vector<double> &newval);
     void set_freq_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
-        void set_freq_experiencedcpue_fgrounds_per_met_per_pop(const std::vector<std::vector<vector <double> > >& newval);
-        void set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector <double> > >& newval);
+    void set_freq_experiencedcpue_fgrounds_per_met_per_pop(ValueFgroundsPerMetPerPop newval);
+    void
+    set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(const std::vector<std::vector<vector<double> > > &newval);
         void clear_idx_used_metiers_this_trip();
         void set_roadmap (const std::list<types::NodeId> &_roadmap);
 		void set_inharbour (bool logic);

@@ -881,7 +881,7 @@ const vector<double> &Vessel::get_freq_experiencedcpue_fgrounds()const
 }
 
 
-const vector<vector<double> > &Vessel::get_freq_experiencedcpue_fgrounds_per_pop()const
+const vector<vector<double> > &Vessel::get_freq_experiencedcpue_fgrounds_per_pop() const
 {
     return(freq_experiencedcpue_fgrounds_per_pop);
 }

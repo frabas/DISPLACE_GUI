@@ -123,7 +123,7 @@ public:
         hashMap.clear();
     }
 
-    size_t size() const
+    size_t allocated_size() const
     {
         return hashMap.size();
     }

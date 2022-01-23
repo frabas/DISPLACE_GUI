@@ -3872,7 +3872,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 // catches per pop
                 this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue * PING_RATE;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
-                    this->cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop) += cpue * PING_RATE;
+                    auto v = cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop);
+                    v += cpue * PING_RATE;
+                    if (std::abs(v) >= 1e-6) {
+                        cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop) = v;
+                    }
                 }
                 int q = a_quarter - 1;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {

@@ -102,6 +102,13 @@ public:
     }
 
     template<typename ... GenIndexes>
+    bool hasValue(GenIndexes ... indexes) const
+    {
+        auto k = hashKey(indexes...);
+        return (hashMap.contains(k));
+    }
+
+    template<typename ... GenIndexes>
     Value value(GenIndexes ... indexes) const
     {
         auto k = hashKey(indexes...);

@@ -36,6 +36,10 @@ BOOST_AUTO_TEST_CASE(Access)
 
     BOOST_CHECK_EQUAL(sp.allocated_size(), 3);
 
+    BOOST_CHECK(sp.hasValue(3, 1000, 2));
+    BOOST_CHECK(sp.hasValue(3, 0, 128));
+    BOOST_CHECK(!sp.hasValue(0, 0, 0));
+
     auto b = sp.value(1, 1, 1);
     BOOST_CHECK_EQUAL(b, 0.0);
     BOOST_CHECK_EQUAL(sp.allocated_size(), 3);
@@ -51,9 +55,11 @@ BOOST_AUTO_TEST_CASE(Remove)
     for (size_t i = 0; i < 1000; ++i)
         sp(3, i, 2) = 2.0;
     BOOST_CHECK_EQUAL(sp.allocated_size(), 1000);
+    BOOST_CHECK(sp.hasValue(3, 500, 2));
 
     for (size_t i = 1; i < 999; ++i)
         sp.zero(3, i, 2);
+    BOOST_CHECK(!sp.hasValue(3, 500, 2));
 
     BOOST_CHECK_EQUAL(sp.allocated_size(), 2);
 }

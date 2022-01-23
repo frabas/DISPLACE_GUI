@@ -485,12 +485,17 @@ Vessel::Vessel(Node* p_location,
             cumcatch_fgrounds_per_pop[f][pop] = 0;
             cumdiscard_fgrounds_per_pop[f][pop] = 0;
             experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
-            for (int met = 0; met < nbmets; met++)
-            {
+            for (int met = 0; met < nbmets; met++) {
                 cumeffort_per_trip_per_fgrounds_per_met[f][met] = 0;
                 cumcatch_fgrounds_per_met_per_pop.zero(f, met, pop);
-                experiencedcpue_fgrounds_per_met_per_pop(f, met, pop) =
-                        freq_fgrounds[f] * expected_cpue_this_pop.at(pop); // init is not metier-specific
+
+                auto v = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
+                if (std::abs(v) < 1e-6) {
+                    experiencedcpue_fgrounds_per_met_per_pop.zero(f, met, pop);
+                } else {
+                    experiencedcpue_fgrounds_per_met_per_pop(f, met, pop) = v;
+                }
+                // init is not metier-specific
             }
             for (int yquarter = 0; yquarter < 44; yquarter++) // hardcoded: play with 44 yearquarters
             {
@@ -4124,9 +4129,15 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
                 if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0) {
                     //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << endl);
                     //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << endl);
-                    experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, a_pop) =
-                            cumcatch_fgrounds_per_met_per_pop.value(a_node, a_met, a_pop) /
-                            cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
+
+                    if (cumcatch_fgrounds_per_met_per_pop.hasValue(a_node, a_met, a_pop)) {
+                        experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, a_pop) =
+                                cumcatch_fgrounds_per_met_per_pop.value(a_node, a_met, a_pop) /
+                                cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met);
+                    } else {
+                        experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, a_pop);
+                    }
+
                     //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
                     //TODO: a running average putting more weight on the more recent trips.....
                 }
@@ -4139,9 +4150,14 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
             //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
             if (cum_cpue_over_met_pop.at(a_node).at(a_met) != 0) {
                 for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_met_per_pop.dimension(2); pop++) {
-                    freq_experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, pop) =
-                            experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) /
-                            cum_cpue_over_met_pop.at(a_node).at(a_met);
+
+                    if (freq_experiencedcpue_fgrounds_per_met_per_pop.hasValue(a_node, a_met, pop)) {
+                        freq_experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, pop) =
+                                experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) /
+                                cum_cpue_over_met_pop.at(a_node).at(a_met);
+                    } else {
+                        freq_experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, pop);
+                    }
                     //dout(cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl);
                     //cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl;
                 }

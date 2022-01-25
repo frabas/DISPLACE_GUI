@@ -3153,8 +3153,12 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                     double tot_landings_this_pop=tot_catch_per_pop[pop];
                     double discardfactor = left_to_MLS/right_to_MLS; // (dis/lan)
+                    if (isinf(discardfactor)) discardfactor = 0.05; // assign a default value if inf
+
+
                     //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
                     discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
+                    discardfactor = 0; // metier and pop specific limit
                     // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic disrcards will be produced when no adult left on zones
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
@@ -3529,17 +3533,21 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                                 prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop)* prop_tac_up_to_this_month);
 
-                                dout(cout << "landings so far in tons is " << so_far / 1000 << endl;)
-                                dout(cout << "landings so far this vessel class is (in tons) " << so_far_this_vessel_length_class / 1000 << endl;)
-                                dout(cout << "...compared to the quotas accessible to this vessel length class, which is: " <<  populations.at(pop)->get_tac()->get_tac_accessible_per_vessel_length_class(this->get_length_class()) << endl;)
-                                dout(cout << "global_quotas.at(pop) is " << global_quotas.at(pop) << endl;)
-                                dout(cout << "prop tac_cumul_over_months_key this month  "<< a_month <<" is " << prop_tac_up_to_this_month << " (should not exceed 1)" << endl;)
+                           
+                              
+                                dout(cout << "landings so far in tons is " << so_far / 1000 << endl);
+                                dout(cout << "so_far_this_nation is (in tons) " << so_far_this_nation / 1000 << endl);
+                                dout(cout << "...compared to the quotas accessible to this nation "<< a_nation <<" on this pop " << pop <<", which is: " << populations.at(pop)->get_tac()->get_tac_per_nation(a_nation) * prop_tac_up_to_this_month << " as described by the relative stability" << endl);
+                                dout(cout << "landings so far this vessel class is (in tons) " << so_far_this_vessel_length_class / 1000 << endl);
+                                dout(cout << "...compared to the quotas accessible to this vessel length class, which is: " << populations.at(pop)->get_tac()->get_tac_accessible_per_vessel_length_class(this->get_length_class()) << endl);
+                                dout(cout << "global_quotas.at(pop) is " << global_quotas.at(pop) << endl);
+                                dout(cout << "prop tac_cumul_over_months_key this month  " << a_month << " is " << prop_tac_up_to_this_month << " (should not exceed 1)" << endl);
 
                                 dout(cout << "Therefore, the prop of the overall tac used so far (max is 1): " <<
-                                      prop_remaining_global_quotas.at(pop)  <<
-                                      "  given the allowed global quota up to this month is " << global_quotas.at(pop) * prop_tac_up_to_this_month <<
-                                        " this pop: this is overshoot..." << endl;)
-                                
+                                        prop_remaining_global_quotas.at(pop) <<
+                                        "  given the allowed global quota up to this month is " << global_quotas.at(pop) * prop_tac_up_to_this_month <<
+                                        " this pop: this is overshoot..." << endl);
+
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
@@ -3566,7 +3574,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
                                     dout(cout << "tac exhausted for pop "<< pop << ": discards all !!!!  because " << "(" << so_far << "/1000) > (" << global_quotas.at(pop) << ")" << endl);
-                                    discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
+                                    double unwantedcatchfactor = 0.1; // caution: hardcoded, back-correction assuming a certain level of stock avoidance have been tried 
+                                    discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup]*unwantedcatchfactor;// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all! => no landings
                                     ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // => catches=discards
                                     landings_per_szgroup[szgroup]=0;// discard all! => no landings

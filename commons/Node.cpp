@@ -1703,14 +1703,16 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
 
         double discardfactor;
         discardfactor = left_to_MLS / right_to_MLS; // (dis/lan)
-
+        if (isinf(discardfactor)) discardfactor = 0.05; // assign a default value if inf
+        //cout << " here again, in oth_land, discardfactor this pop " << this->get_name() << " is " << discardfactor << endl;
 
         //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
         //discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
-        discardfactor = min( 0.5, discardfactor); // HARDCODED THRESHOLD
+        discardfactor = min( 0.05, discardfactor); // HARDCODED THRESHOLD (if 0.1, it means discards is 9% of the catch i.e. land+disc)
         // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic discards will be produced when no adult left on zones
         double tot_landings_this_pop=oth_land_this_pop_this_node;
         double tot_discards_this_pop=oth_land_this_pop_this_node*discardfactor ;
+        //cout << "in oth_land, tot_discards_this_pop  " << this->get_name() << " is " << tot_discards_this_pop << endl;
 
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "oth_land_this_pop_this_node in kg is " << oth_land_this_pop_this_node << endl;
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "discardfactor" << discardfactor << endl;

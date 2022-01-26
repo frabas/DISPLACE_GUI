@@ -363,7 +363,8 @@ class  Node
                                                                         const vector<vector<double> > & adults_diet_preference,
                                                                         const vector<int> &mat_cats,
                                                                         const vector<double> &M_background_this_pop,
-                                                                        double multiplier_on_M_background);
+                                                                        double multiplier_on_M_background,
+                                                                        double a_scaling);
         void apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN, int will_I_discard_all, vector<vector<double> > &selectivity_per_stock_ogives_for_oth_land);
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);

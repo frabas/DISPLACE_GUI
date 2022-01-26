@@ -1437,7 +1437,8 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                                       const vector<vector<double> > & adults_diet_preference,
                                                                       const vector<int> & mat_cats,
                                                                       const vector<double> & M_background_this_pop,
-                                                                      double multiplier_on_M_background)
+                                                                      double multiplier_on_M_background,
+                                                                      double a_scaling)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -1560,17 +1561,15 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            // divide according to tstep (month in this case)
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
-            double a_scaling = 1.e4; // TODO: FIX PARAMETERISATION LATER TO REMOVE THIS FACTOR...
-
+            
             Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
 
-            //if (name_pop == 2) {
+            //if (name_pop == 36) {
+            //cout << "check her pop 36" << endl;
             //cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << endl;
             //cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;
-            //cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz " << sz << " is " << M2_on_node.at(sz) * a_scaling << endl;
             //cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << endl;
             //cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << endl;
-            //cout << "check her pop 2" << endl;
             //}
 
 

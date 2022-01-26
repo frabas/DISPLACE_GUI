@@ -3158,7 +3158,6 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                     //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
                     discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
-                    discardfactor = 0; // metier and pop specific limit
                     // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic disrcards will be produced when no adult left on zones
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....

@@ -132,7 +132,8 @@ class  Population
         const vector<double>& get_proprecru_at_szgroup() const;
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;
-        double get_fbar() const;
+        double get_fbar_type1() const;
+        double get_fbar_type2() const;
         double get_proportion_mature_fish() const;
         const vector<double> &get_FFmsy() const;
         const vector<double>& get_param_sr() const;
@@ -196,7 +197,8 @@ class  Population
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
-        void set_fbar(double _fbar);
+        void set_fbar_type1(double _fbar);
+        void set_fbar_type2(double _fbar);
         void set_FFmsy(const vector<double>& _FFmsy);
         void set_is_choking_fisheries(int is_choking_fisheries);
         void set_proportion_mature_fish(double _proportion_mature_fish);
@@ -221,7 +223,7 @@ class  Population
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
         void compute_tot_N_and_F_and_W_at_age(int a_month_i);
         void compute_tot_M_at_age();
-		double compute_fbar();
+		void compute_fbar();
         vector <double> compute_SSB();
         double compute_proportion_mature_fish();
         void clear_tot_F_at_age();
@@ -311,7 +313,7 @@ class  Population
         
         vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
-        double SSB ,fbar;				 //
+        double SSB ,fbar_type1, fbar_type2;				 //
         vector<double>  FFmsy;				 //
         double proportion_mature_fish;				 //
         int is_choking_fisheries;

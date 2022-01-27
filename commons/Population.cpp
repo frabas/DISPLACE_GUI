@@ -290,7 +290,8 @@ Population::Population(int a_name,
     // init tac
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, 
                     percent_tac_per_vessel_length_class, percent_tac_cumul_over_months_key);
-    fbar=0.0;
+    fbar_type1 = 0.0;
+    fbar_type2 = 0.0;
     oth_land_multiplier=1.0;
 
     for (auto it = relative_stability_key.begin(); it != relative_stability_key.end(); it++)
@@ -597,9 +598,15 @@ double Population::get_SSB() const
 	return(SSB);
 }
 
-double Population::get_fbar() const
+
+double Population::get_fbar_type1() const
 {
-    return(fbar);
+    return(fbar_type1);
+}
+
+double Population::get_fbar_type2() const
+{
+    return(fbar_type2);
 }
 
 const vector<double>& Population::get_FFmsy() const
@@ -1021,9 +1028,14 @@ void Population::set_SSB(double _SSB)
 	SSB=_SSB;
 }
 
-void Population::set_fbar(double _fbar)
+void Population::set_fbar_type1(double _fbar)
 {
-    fbar=_fbar;
+    fbar_type1=_fbar;
+}
+
+void Population::set_fbar_type2(double _fbar)
+{
+    fbar_type2 = _fbar;
 }
 
 void Population::set_FFmsy(const vector<double> &_FFmsy)
@@ -1953,11 +1965,12 @@ void Population::clear_tot_D_at_szgroup()
 }
 
 
-double Population::compute_fbar()
+void Population::compute_fbar()
 {
     dout(cout<< "compute fbar for pop..." << this->get_name() << endl);
 
-    vector <double> a_tot_F_at_age= this->get_tot_F_at_age_running_average(); // perceived
+    vector <double> a_tot_F_at_age_1  = this->get_tot_F_at_age_running_average(); // perceived
+    vector <double> a_tot_F_at_age_2 = this->get_tot_F_at_age();
 
 
     dout(cout<< "compute fbar..." << endl);
@@ -1973,20 +1986,28 @@ double Population::compute_fbar()
 
     if(age_max == age_min)
     {
-      return(a_tot_F_at_age[age_max]);
+        this->set_fbar_type1(a_tot_F_at_age_1[age_max]);
+        this->set_fbar_type2(a_tot_F_at_age_2[age_max]);
     }
 
     for(int a = age_min; a < age_max; a++)
 	{
 								 // sum...
-        fbar+=a_tot_F_at_age[a];
-	}
+        fbar_type1+= a_tot_F_at_age_1[a];
+        fbar_type2 += a_tot_F_at_age_2[a];
+    }
 								 // then do the average...
     dout(cout<< "sum fbar..." << fbar << endl);
-    fbar=fbar/((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) +1);
-    dout(cout<< "fbar..." << fbar << endl);
+    fbar_type1= fbar_type1 /((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) +1);
+    this->set_fbar_type1(fbar_type1);
+
+    fbar_type2 = fbar_type2 / ((fbar_ages_min_max.at(1) - fbar_ages_min_max.at(0)) + 1);
+    this->set_fbar_type2(fbar_type2);
+
+    dout(cout<< "fbar type 1..." << fbar_type1 << endl);
+    dout(cout << "fbar type 2..." << fbar_type2 << endl);
     dout(cout<< "compute fbar...ok" << endl);
-    return(fbar);
+  
 }
 
 
@@ -2128,8 +2149,10 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 	popdyn_annual_indic  << oth_mult << " " << cpue_mult << " ";
 
     dout(cout<< "when exporting, get fbar for pop..." << this->get_name() << endl);
-    double fbar_py= this->get_fbar();
-	popdyn_annual_indic  << fbar_py << " ";
+    double fbar_type1_py= this->get_fbar_type1();
+	popdyn_annual_indic  << fbar_type1_py << " ";
+    double fbar_type2_py = this->get_fbar_type2();
+    popdyn_annual_indic << fbar_type2_py << " ";
 
 								 //...also including the oth land
     //double so_far    =this->get_landings_so_far();

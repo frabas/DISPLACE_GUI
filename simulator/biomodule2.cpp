@@ -1225,9 +1225,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         {
                            // first, compute fbar, whatever the management regime will be...
                            double fbar_py=0.0;
-                           fbar_py= populations.at(sp)->compute_fbar();
-                           populations.at(sp)->set_fbar(fbar_py);
-
+                           populations.at(sp)->compute_fbar();
+                         
                            if(dyn_alloc_sce.option(Options::TACs))
                             {
                                // compute a TAC for y+1 from a short-term forecast (STF)

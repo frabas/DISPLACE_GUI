@@ -98,7 +98,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
             ftarget_allpopav += ftarget; // cumul...
             cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop)
                 << endl;
-            double fbar_py = populations.at(tariff_pop.at(ipop))->get_fbar();
+            double fbar_py = populations.at(tariff_pop.at(ipop))->get_fbar_type1();
             fbar_py_allpopav += fbar_py; // cumul...
             cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
         }
@@ -440,7 +440,7 @@ bool computeEffortMultiplier(vector<Population* >& populations,
     {
 
         // first, retrieve fbar for this pop (computed in biomodule2)...
-        double fbar_py= populations.at(sp)->get_fbar();
+        double fbar_py= populations.at(sp)->get_fbar_type1();
 
         if(fbar_py>0 && fbar_py<2)
         {
@@ -556,14 +556,15 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep, double mul
     }
     else
     {   // by default...
-        fbar_py= populations.at(sp)->compute_fbar();
+        populations.at(sp)->compute_fbar();
+        fbar_py = populations.at(sp)->get_fbar_type1();
         tot_F_at_age_end_previous_y = populations.at(sp)->get_tot_F_at_age_running_average();
         tot_N_at_sz_end_previous_y  = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1(); // true N
         tot_N_at_age_end_previous_y = populations.at(sp)->get_perceived_tot_N_at_age(); // perceived
         tot_W_at_age_y_plus_1       = populations.at(sp)->get_tot_W_at_age();
         maturity_at_age_y_plus_1    = populations.at(sp)->get_tot_Mat_at_age();
     }
-    populations.at(sp)->set_fbar(fbar_py);
+    populations.at(sp)->set_fbar_type1(fbar_py);
     dout(cout << "the fbar at y-1 for this pop is " << fbar_py << endl);
 
 

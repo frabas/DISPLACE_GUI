@@ -1562,7 +1562,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
            //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
 
             
-            Np.at(sz) =  Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
+            Np.at(sz) = Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
 
             // check for the need for a_scaling factor. The depletion from M on node should be kept in a realistic range.
             //if (name_pop == 36 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.90) {

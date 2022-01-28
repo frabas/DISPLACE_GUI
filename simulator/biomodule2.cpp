@@ -854,7 +854,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         vector <double> M_background_this_pop = populations.at(sp)->get_background_mortality_at_szgroup();
                       try {
                           double a_scaling = 1e4; //default
-                          if (namefolderinput=="NorthSea") a_scaling = 1e-1; // (based on predation on sprat)
+                          if (namefolderinput=="NorthSea") a_scaling = 0.005; // (based on predation on sprat)
                           a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp,
                                                                                                            tstep,
                                                                                                            Ws_at_szgroup,

@@ -31,6 +31,7 @@
 #include "dtree/stateevaluator.h"
 #include "shortestpath/GeoGraph.h"
 #include "SparseContainer.h"
+#include "ValuesPerMetPerPopContainer.h"
 
 #include <mutex>
 #include <string>
@@ -55,7 +56,7 @@ public:
         NumLenghClasses
     };
 
-    using ValueFgroundsPerMetPerPop = SparseContainer<double, uint16_t, uint8_t, uint16_t>;
+    using ValueFgroundsPerMetPerPop = ValuesPerMetPerPopContainer;
     using ValueFgroundsPerYearQuarterPerPop = std::vector<std::vector<std::vector<double> > >;
     using ValuePerFgroundPerPop = std::vector<std::vector<double> >;
     using CumEffortPerTripPerFgroundsPerMet = std::vector<std::vector<double> >;

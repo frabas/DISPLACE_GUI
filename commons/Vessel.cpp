@@ -434,7 +434,7 @@ Vessel::Vessel(Node* p_location,
     // or per pop
     vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
 
-    ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop;
+    ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop(fgrounds.size(), nbmets, nbpops);
     vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
     vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
 
@@ -524,7 +524,7 @@ Vessel::Vessel(Node* p_location,
     this->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);    
     // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
     this->compute_experiencedcpue_fgrounds_per_pop();
-  
+
     // ...or per pop per met
     this->set_cumeffort_per_trip_per_fgrounds_per_met(cumeffort_per_trip_per_fgrounds_per_met);
     this->set_cumcatch_fgrounds_per_met_per_pop(cumcatch_fgrounds_per_met_per_pop);
@@ -535,7 +535,8 @@ Vessel::Vessel(Node* p_location,
     // ...or per yearquarter per pop
     this->set_cumcatch_fgrounds_per_yearquarter_per_pop(cumcatch_fgrounds_per_yearquarter_per_pop);
     this->set_experiencedcpue_fgrounds_per_yearquarter_per_pop(experiencedcpue_fgrounds_per_yearquarter_per_pop);
-    this->set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
+    this->set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(
+            freq_experiencedcpue_fgrounds_per_yearquarter_per_pop);
     this->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(0, 0);
 
     // note that, at the start of the simu, freq of visit will be equivalent to freq_fgrounds
@@ -543,10 +544,8 @@ Vessel::Vessel(Node* p_location,
     // the expected_cpue is to scale to the encountered cpue i.e. freq of visit will decrease if experienced cpue < expected cpue
     // and vice versa...
 
-
-
     cout << "vessel creator...OK" << endl;
-    dout(cout <<"vessel creator...OK" << endl);
+    dout(cout << "vessel creator...OK" << endl);
     init();
 }
 

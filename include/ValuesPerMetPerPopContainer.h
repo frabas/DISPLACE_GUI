@@ -6,6 +6,8 @@
 #define DISPLACE_VALUESPERMETPERPOPCONTAINER_H
 
 #include <vector>
+#include <stdexcept>
+#include <iostream>
 
 class ValuesPerMetPerPopContainer {
     using MetierVector = std::vector<double>;
@@ -18,7 +20,10 @@ class ValuesPerMetPerPopContainer {
 
     size_t metierIndex(size_t metierNumber) const
     {
-        return metierMapper[metierNumber];
+        if (metierNumber < metierMapper.size()) {
+            return metierMapper[metierNumber];
+        }
+        return NullIndex;
     }
 
     size_t newMetierIndex(size_t metierNumber)
@@ -48,7 +53,7 @@ public:
 
     void init(int maxVal, int maxMet, int maxPop)
     {
-        if (maxVal != 0 || maxMet != 0 || maxPop != 0) {
+        if (valueCount != 0 || metierCount != 0 || popCount != 0) {
             throw std::runtime_error("Double initialization of ValuesPerMetPerPopContainer");
         }
 
@@ -63,10 +68,14 @@ public:
     double &operator()(int index, int metier, int pop)
     {
         auto metIndex = metierIndex(metier);
-        if (metIndex != NullIndex) {
-            return data[metierVectorIndex(index, pop)][metIndex];
+        if (metIndex == NullIndex) {
+            metIndex = newMetierIndex(metier);
         }
-        return data[metierVectorIndex(index, pop)][newMetierIndex(metIndex)];
+        auto pindex = metierVectorIndex(index, pop);
+        while (data[pindex].size() <= metIndex) {
+            data[pindex].push_back({});
+        }
+        return data[pindex][metIndex];
     }
 
     double const &operator()(int index, int metier, int pop) const
@@ -80,14 +89,17 @@ public:
 
     bool hasValue(int index, int metier, int pop) const
     {
-        return metierMapper[metier] != NullIndex;
+        auto mIndex = metierMapper[metier];
+        return mIndex != NullIndex &&
+               metier < data[metierVectorIndex(index, pop)].size();
     }
 
     double value(int index, int metier, int pop) const
     {
         auto metIndex = metierIndex(metier);
-        if (metIndex != NullIndex) {
-            return data[metierVectorIndex(index, pop)][metIndex];
+        auto pIndex = metierVectorIndex(index, pop);
+        if (metIndex != NullIndex && metIndex < data[pIndex].size()) {
+            return data[pIndex][metIndex];
         }
         return {};
     }
@@ -95,8 +107,9 @@ public:
     void zero(int index, int metier, int pop)
     {
         auto metIndex = metierIndex(metier);
-        if (metIndex != NullIndex) {
-            data[metierVectorIndex(index, pop)][metIndex] = 0;
+        auto pIndex = metierVectorIndex(index, pop);
+        if (metIndex != NullIndex && metIndex < data[pIndex].size()) {
+            data[pIndex][metIndex] = 0;
         }
     }
 

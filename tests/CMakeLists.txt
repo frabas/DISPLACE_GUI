@@ -23,7 +23,7 @@ file(GLOB QRCS *.qrc)
 
 add_executable(unittests
         ${SOURCES} ${HEADERS}
-        ${UIS} ${QRCS})
+        ${UIS} ${QRCS} valuespermet_test.cpp)
 
 
 target_link_libraries(unittests

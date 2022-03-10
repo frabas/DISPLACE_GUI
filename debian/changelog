@@ -1,3 +1,12 @@
+displace (1.1) focal; urgency=medium
+
+  * Memory footprint optimized
+  * Fix the (renamed) IgnbCouplingOption
+  * Complement on the SizeSpectra and fishing_credits Options
+  * Other fixes and optimizations
+
+ -- Federico Fuga <fuga@studiofuga.com>  Thu, 10 Mar 2022 13:45:19 +0100
+
 displace (1.0.3) bionic; urgency=medium
 
   * Experimental new input format implemented for some data structure.

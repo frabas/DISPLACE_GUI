@@ -6,7 +6,7 @@
 
 CsvImporter::CsvImporter()
     : mSeparator(','),
-      mSplitBehaviour(QString::SkipEmptyParts)
+      mSplitBehaviour(Qt::SplitBehaviorFlags::SkipEmptyParts)
 {
 }
 

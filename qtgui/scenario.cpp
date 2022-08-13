@@ -367,8 +367,8 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     Scenario s;
 
-    QStringList alsce = QString::fromStdString(scenario.dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
-    QStringList popsce = QString::fromStdString(scenario.dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
+    QStringList alsce = QString::fromStdString(scenario.dyn_alloc_sce.toString()).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
+    QStringList popsce = QString::fromStdString(scenario.dyn_pop_sce.toString()).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
 
 
     s.setDyn_alloc_sce(alsce);
@@ -382,7 +382,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setNrow_graph(scenario.nrow_graph);
     std::stringstream graphres;
     std::copy(scenario.graph_res.begin(), scenario.graph_res.end(), std::ostream_iterator<int>(graphres, " "));
-    QStringList graphresxy = QString::fromStdString(graphres.str().c_str()).split(" ", QString::SkipEmptyParts);
+    QStringList graphresxy = QString::fromStdString(graphres.str().c_str()).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     s.setGraph_res(graphresxy);
     s.setA_port(scenario.a_port);
 
@@ -398,14 +398,14 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     std::stringstream tariff;
     std::copy(scenario.tariff_pop.begin(), scenario.tariff_pop.end(), std::ostream_iterator<int>(tariff, " "));
-    QStringList tariff_pops = QString::fromStdString(tariff.str().c_str()).split(" ", QString::SkipEmptyParts);
+    QStringList tariff_pops = QString::fromStdString(tariff.str().c_str()).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
 
     std::stringstream breaks_for_tariff;
     std::copy(scenario.arbitary_breaks_for_tariff.begin(), scenario.arbitary_breaks_for_tariff.end(), std::ostream_iterator<int>(breaks_for_tariff, " "));
     std::stringstream met_multiplier_on_breaks_for_tariff;
     std::copy(scenario.met_multiplier_on_arbitary_breaks_for_tariff.begin(), scenario.met_multiplier_on_arbitary_breaks_for_tariff.end(), std::ostream_iterator<int>(met_multiplier_on_breaks_for_tariff, " "));
 
-    QStringList breaks_for_tariffs = QString::fromStdString(breaks_for_tariff.str().c_str()).split(" ", QString::SkipEmptyParts);
+    QStringList breaks_for_tariffs = QString::fromStdString(breaks_for_tariff.str().c_str()).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
 
     s.setTariffPop(tariff_pops);
     s.setFreqUpdateTariffCode(scenario.freq_update_tariff_code);

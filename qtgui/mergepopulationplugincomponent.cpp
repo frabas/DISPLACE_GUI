@@ -75,7 +75,7 @@ void MergePopulationPluginComponent::loadStocksAndSizes(QString filename, QChar 
     QTextStream strm(&file);
 
     line = strm.readLine();
-    QStringList fields = line.split(separator, QString::SkipEmptyParts);
+    QStringList fields = line.split(separator, Qt::SplitBehaviorFlags::SkipEmptyParts);
 
     int stock_fld = -1;
     for (int i = 0; i < fields.size(); ++i) {
@@ -95,7 +95,7 @@ void MergePopulationPluginComponent::loadStocksAndSizes(QString filename, QChar 
     QSet<QString> stocks;
     while (!strm.atEnd()) {
         line = strm.readLine();
-        fields = line.split(separator, QString::SkipEmptyParts);
+        fields = line.split(separator, Qt::SplitBehaviorFlags::SkipEmptyParts);
         if (stock_fld < fields.size()) {
             stocks.insert(fields.at(stock_fld));
         }
@@ -106,7 +106,7 @@ void MergePopulationPluginComponent::loadStocksAndSizes(QString filename, QChar 
         stocksel << true;
     }
 
-    qSort(stocklist);
+    std::sort(stocklist.begin(),stocklist.end());
 
     mModelStocks->load(stocklist, stocksel);
     mModelSizes->load(sizelist, sizesel);

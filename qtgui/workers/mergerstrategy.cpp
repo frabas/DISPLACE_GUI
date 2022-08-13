@@ -83,7 +83,7 @@ void MergerStrategy::processLine (int linenum, QString line)
 {
     bool ok;
 
-    QStringList entry = line.split(mOwner->separator(), QString::SkipEmptyParts);
+    QStringList entry = line.split(mOwner->separator(), Qt::SplitBehaviorFlags::SkipEmptyParts);
     if (entry.size() < col_lat || entry.size() < col_lon)  // Skip empty / incorrect lines
         return;
 

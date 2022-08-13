@@ -282,7 +282,7 @@ bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
         if (fields.size() < 2) {
             qDebug() << "Cannot read relevant nodes. " << file << "at line " << linenum;
             return false;
@@ -317,7 +317,7 @@ bool InputFileParser::parseRelevantInterNodes(const QString &file, QVector<int> 
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
         if (fields.size() < 2) {
             qDebug() << "Cannot read relevant nodes. " << file << "at line " << linenum;
             return false;
@@ -354,7 +354,7 @@ bool InputFileParser::parseStockNamesFile(const QString &path, QMap<QString, int
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
        // int nd = fields[1].toInt(&ok);
         int nd = fields[0].toInt(&ok);
         if (!ok) {

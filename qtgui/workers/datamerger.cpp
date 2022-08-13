@@ -109,7 +109,7 @@ bool DataMerger::doWork(QString in, QString out)
     try {
     // First: read the headers
         line = instream.readLine();
-        QStringList fields = line.split(mSeparator, QString::SkipEmptyParts);
+        QStringList fields = line.split(mSeparator, Qt::SplitBehaviorFlags::SkipEmptyParts);
 
         // Search for the proper column
         for (int i = 0; i < fields.size(); ++i) {

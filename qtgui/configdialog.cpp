@@ -40,7 +40,7 @@ bool ConfigDialog::get(Config &config) const
 {
     bool ok;
     QList<int> impl;
-    QStringList l = ui->m_implicit_pops->text().split(" ", QString::SkipEmptyParts);
+    QStringList l = ui->m_implicit_pops->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l) {
         impl.push_back(s.toInt(&ok));
         if (!ok)
@@ -49,7 +49,7 @@ bool ConfigDialog::get(Config &config) const
 
     bool ok2;
     QList<int> impl2;
-    QStringList l2 = ui->m_grouped_tacs->text().split(" ", QString::SkipEmptyParts);
+    QStringList l2 = ui->m_grouped_tacs->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l2) {
         impl2.push_back(s.toInt(&ok2));
         if (!ok2)
@@ -58,7 +58,7 @@ bool ConfigDialog::get(Config &config) const
 
     bool ok3;
     QList<int> impl3;
-    QStringList l3 = ui->m_nbcp_coupling_pops->text().split(" ", QString::SkipEmptyParts);
+    QStringList l3 = ui->m_nbcp_coupling_pops->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l3) {
         impl3.push_back(s.toInt(&ok3));
         if (!ok3)
@@ -66,7 +66,7 @@ bool ConfigDialog::get(Config &config) const
     }
 
     QList<double> cal1;
-    l = ui->m_calib_oth_landings->text().split(" ", QString::SkipEmptyParts);
+    l = ui->m_calib_oth_landings->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l) {
         cal1.push_back(s.toDouble(&ok));
         if (!ok)
@@ -74,7 +74,7 @@ bool ConfigDialog::get(Config &config) const
     }
 
     QList<double> cal2;
-    l = ui->m_calib_weight_at_szgroup->text().split(" ", QString::SkipEmptyParts);
+    l = ui->m_calib_weight_at_szgroup->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l) {
         cal2.push_back(s.toDouble(&ok));
         if (!ok)
@@ -82,7 +82,7 @@ bool ConfigDialog::get(Config &config) const
     }
 
     QList<double> cal3;
-    l = ui->m_calib_cpue_multiplier->text().split(" ", QString::SkipEmptyParts);
+    l = ui->m_calib_cpue_multiplier->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l) {
         cal3.push_back(s.toDouble(&ok));
         if (!ok)
@@ -90,7 +90,7 @@ bool ConfigDialog::get(Config &config) const
     }
 
     QList<types::NodeId> ih;
-    l = ui->m_int_harbours->text().split(" ", QString::SkipEmptyParts);
+    l = ui->m_int_harbours->text().split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
     foreach(QString s, l) {
         ih.push_back(types::NodeId(s.toInt(&ok)));
         if (!ok)

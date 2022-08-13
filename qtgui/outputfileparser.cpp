@@ -120,7 +120,7 @@ void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *mode
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (tstep == -1 || step == tstep) {
@@ -161,7 +161,7 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -189,7 +189,7 @@ void OutputFileParser::parsePopCumsweptarea(QFile *file, int tstep, DisplaceMode
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -221,7 +221,7 @@ void OutputFileParser::parsePopCumdiscards(QFile *file, int tstep, DisplaceModel
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -249,7 +249,7 @@ void OutputFileParser::parsePopCumdiscardsratio(QFile *file, int tstep, Displace
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -277,7 +277,7 @@ void OutputFileParser::parsePopNbchoked(QFile *file, int tstep, DisplaceModel *m
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -306,7 +306,7 @@ void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel 
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -336,7 +336,7 @@ void OutputFileParser::parsePopCumcatchesWithThreshold(QFile *file, int tstep, D
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -365,7 +365,7 @@ void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *mo
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -401,7 +401,7 @@ void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *mod
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -431,7 +431,7 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -460,7 +460,7 @@ void OutputFileParser::parseNodesEnvt(QFile *file, int tstep, DisplaceModel *mod
     int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
@@ -509,7 +509,7 @@ void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceMode
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[1].toInt();
 
         if (last_step != -1 && last_step != step) {
@@ -557,7 +557,7 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (last_step != -1 && last_step != step) {
@@ -615,7 +615,7 @@ void OutputFileParser::parsePopStats(QFile *file, int tstep, DisplaceModel *mode
     int step, laststep = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (laststep != -1 && step != laststep)
@@ -637,7 +637,7 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[1].toInt();
 
         if (last_step != -1 && last_step != step) {
@@ -738,7 +738,7 @@ void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *mo
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 
         if (last_step != -1 && last_step != step) {

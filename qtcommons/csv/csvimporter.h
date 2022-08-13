@@ -34,7 +34,7 @@ public:
     void setSeparator (QChar sep) { mSeparator = sep; }
 protected:
     QChar mSeparator;
-    QString::SplitBehavior mSplitBehaviour;
+    Qt::SplitBehaviorFlags mSplitBehaviour;
 };
 
 #endif // CSVIMPORTER_H

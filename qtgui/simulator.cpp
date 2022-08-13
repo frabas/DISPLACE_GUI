@@ -296,7 +296,7 @@ bool Simulator::processCodedLine(QString line)
     if (!line.startsWith("="))
         return false;
 
-    QStringList args = line.trimmed().mid(2).split(" ", QString::SkipEmptyParts);
+    QStringList args = line.trimmed().mid(2).split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
 
     switch(line.at(1).toLatin1()) {
     case 'S':

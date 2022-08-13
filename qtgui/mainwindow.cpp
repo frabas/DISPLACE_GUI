@@ -1169,7 +1169,7 @@ QProcess *MainWindow::prepareAppExecutableStart(QString exename)
     ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->setProgram(app);
 
-    connect(ed, static_cast<void (QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+    connect(ed, static_cast<void (QProcess::*)(QProcess::ProcessError)>(&QProcess::errorOccurred),
             [this, ed, app](QProcess::ProcessError /*err*/) {
                 QMessageBox::warning(this, tr("Failed to start"),
                                      QString(tr("The process %1 failed to start")).arg(app));
@@ -2967,7 +2967,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                                 }
                             }
 
-                        qSort(snodes);
+                        std::sort(snodes.begin(), snodes.end());
 
                         int n = dlg.getMaxLinks();
                         if (n == -1) {
@@ -3051,19 +3051,20 @@ void MainWindow::on_cmdProfileSave_clicked()
         }
 
         QTextStream strm(&f);
-        strm << endl << endl << "--------" << endl;
-        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << endl;
-        strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName() << endl;
-        strm << models[0]->getSimulationSteps() << " total steps" << endl;
-        strm << "Linked database: " << models[0]->linkedDatabase() << endl;
+        strm << Qt::endl << Qt::endl << "--------" << Qt::endl;
+        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << Qt::endl;
+        strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName()
+             << Qt::endl;
+        strm << models[0]->getSimulationSteps() << " total steps" << Qt::endl;
+        strm << "Linked database: " << models[0]->linkedDatabase() << Qt::endl;
 #ifdef DEBUG
-        strm << "Debug version" << endl;
+        strm << "Debug version" << Qt::endl;
 #else
-        strm << "Release version" << endl;
+        strm << "Release version" << Qt::endl;
 #endif
-        strm << endl;
+        strm << Qt::endl;
         strm << ui->profilingOutput->toPlainText();
-        strm << endl;
+        strm << Qt::endl;
 
         f.close();
 
@@ -3311,7 +3312,7 @@ void MainWindow::on_actionRemove_isolated_subgraphs_triggered()
         mMapController->clearNodeSelection(currentModelIdx);
         mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
 
-        qDebug() << "Nb nodes to remove " << isn.size() << endl;
+        qDebug() << "Nb nodes to remove " << isn.size() << Qt::endl;
         mMapController->delSelectedNodes(currentModelIdx);
 
     } else {

@@ -1851,7 +1851,7 @@ void DisplaceModel::setInterestingPop(int n)
     if (!mInterestingPop.contains(n)) {
         mInterestingPop.append(n);
     }
-    qSort(mInterestingPop);
+    std::sort(mInterestingPop.begin(),mInterestingPop.end());
 }
 
 void DisplaceModel::setInterestingPop2(int n)
@@ -1859,7 +1859,7 @@ void DisplaceModel::setInterestingPop2(int n)
     if (!mInterestingPop2.contains(n)) {
         mInterestingPop2.append(n);
     }
-    qSort(mInterestingPop2);
+    std::sort(mInterestingPop2.begin(),mInterestingPop2.end());
 }
 
 void DisplaceModel::remInterestingPop(int n)
@@ -1920,7 +1920,7 @@ void DisplaceModel::setInterestingSize(int n)
     if (!mInterestingSizes.contains(n)) {
         mInterestingSizes.append(n);
     }
-    qSort(mInterestingSizes);
+    std::sort(mInterestingSizes.begin(),mInterestingSizes.end());
 }
 
 void DisplaceModel::remInterestingSize(int n)
@@ -1938,7 +1938,7 @@ void DisplaceModel::setInterestingHarb(types::NodeId n)
     if (!mInterestingHarb.contains(n)) {
         mInterestingHarb.append(n);
     }
-    qSort(mInterestingHarb);
+    std::sort(mInterestingHarb.begin(),mInterestingHarb.end());
 }
 
 void DisplaceModel::remInterestingHarb(types::NodeId n)
@@ -3255,7 +3255,7 @@ bool DisplaceModel::initBenthos()
             benthos->appendNode(nd.get());
         }
 
-    qSort(ids);
+    std::sort(ids.begin(),ids.end());
     int idx = 0;
             foreach (int id, ids) {
             mBenthosInfo[id]->setIdx(idx++);
@@ -3271,10 +3271,10 @@ bool DisplaceModel::initPopulations()
     cout << "init pop" << endl;
 
     QList<int> imp = mConfig.implicit_pops();
-    qSort(imp);
+    std::sort(imp.begin(),imp.end());
 
     QList<int> imp2 = mConfig.implicit_pops_level2();
-    qSort(imp2);
+    std::sort(imp2.begin(),imp2.end());
 
     clearInterestingPop();
 

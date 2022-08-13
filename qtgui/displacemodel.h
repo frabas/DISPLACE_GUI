@@ -340,7 +340,7 @@ public:
     void setInterestingNations(int n) {
         if (!mInterestingNations.contains(n))
             mInterestingNations.append(n);
-            qSort(mInterestingNations);
+            std::sort(mInterestingNations.begin(),mInterestingNations.end());
     }
 
     /** \brief remove the pop from the list of interest for pops */
@@ -358,7 +358,7 @@ public:
     void setInterestingVessels(int n) {
         if (!mInterestingVessels.contains(n))
             mInterestingVessels.append(n);
-            qSort(mInterestingVessels);
+            std::sort(mInterestingVessels.begin(),mInterestingVessels.end());
     }
 
     /** \brief remove the pop from the list of interest for pops */

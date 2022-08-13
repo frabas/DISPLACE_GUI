@@ -67,7 +67,7 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
 {
     bool ok;
 
-    QStringList entry = line.split(mOwner->separator(), QString::SkipEmptyParts);
+    QStringList entry = line.split(mOwner->separator(), Qt::SplitBehaviorFlags::SkipEmptyParts);
 
     double lat = entry.at(col_lat).toDouble(&ok);
     if (!ok)
@@ -214,7 +214,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
 
         QList<QString> keys = mStockNames.keys();
         for (int i = 0; i < keys.size(); ++i) {
-            ps << i << " " << keys[i] << endl;
+            ps << i << " " << keys[i] << Qt::endl;
         }
         f.close();
     }

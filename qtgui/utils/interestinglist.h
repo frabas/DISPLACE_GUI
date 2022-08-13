@@ -15,7 +15,7 @@ public:
     void set(T n) {
         if (!mList.contains(n))
             mList.append(n);
-            qSort(mList);
+            std::sort(mList.begin(),mList.end());
     }
 
     void rem(T n) {

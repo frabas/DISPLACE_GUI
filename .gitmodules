@@ -1,0 +1,3 @@
+[submodule "mSqliteCpp"]
+	path = mSqliteCpp
+	url = https://github.com/studiofuga/mSqliteCpp.git

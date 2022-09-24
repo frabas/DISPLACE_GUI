@@ -411,11 +411,7 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
 {
     QList<std::shared_ptr<NodeData> > nodes;
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
     double mx, my, Mx, My, d;
     geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist_km * 1000, My, d);

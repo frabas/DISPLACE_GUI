@@ -56,15 +56,14 @@ In Windows, from the GUI, create a variable in the cache and put the path (see n
 
 ### Windows compilation: inform the IDE for where to find CMake and the DISPLACE SDK
 
-First install Qt 5.12.0 https://www.qt.io/download and QtCreator that comes with.
+First install Qt 5.15.5 https://www.qt.io/download and QtCreator that comes with.
 
 Alternatively, install JetBrains CLion, but the smooth edition of ui files will require QtCreator anyway.
 
 But remember to set et up CLion in Menu>File> settings
 For amd64 architecture because we are working in 64bits.
 
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CLion_for_amd64.png)
-
+![alt text](./set_CLion_for_amd64.png)
 
 Install CMake on your computer.
 
@@ -79,15 +78,17 @@ the folder for "vcpkg"
 ```bash
 CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
 ```
-Also erase in the Release output folder or the cmake CMakeCache.txt and the subfolder CMakeFiles in the Release folder if something goes wrong. 
+
+Also erase in the Release output folder or the cmake CMakeCache.txt and the subfolder CMakeFiles in the Release folder
+if something goes wrong.
 
 In QtCreator:
 
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CMAKE_TOOLCHAIN_FILE_in_QtCreator.png)
+![alt text](./set_CMAKE_TOOLCHAIN_FILE_in_QtCreator.png)
 
 In CLion:
 
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/set_CMAKE_TOOLCHAIN_FILE_in_CLion.png)
+![alt text](./set_CMAKE_TOOLCHAIN_FILE_in_CLion.png)
 
 Clear or reset cache and re-run CMake
 
@@ -97,7 +98,7 @@ Set the Run on displacegui and run!
 
 (If CLion, Run displace first to Build it with CMake)
 
-on Windows, possibly check PATH for e.g.  C:\Qt\5.12.0\msvc2017_64\bin that should be in PATH
+on Windows, possibly check PATH for e.g.  `C:\Qt\5.12.0\msvc2017_64\bin` that should be in `PATH`
 
 
 

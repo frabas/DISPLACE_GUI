@@ -1,9 +1,9 @@
 # vcpkg-setup script
 # Version: 2020.06.01
 
-#echo off
+echo off
 
-set MODULES=GeographicLib cgal gdal msqlitecpp boost-program-options boost-interprocess boost-geometry sparsepp boost-log boost-filesystem
+set MODULES=GeographicLib cgal gdal sparsepp boost-date-time boost-filesystem boost-system boost-thread boost-program-options boost-log boost-test msqlitecpp
 set TRIPLET=x64-windows
 set EXE=%~0
 
@@ -17,7 +17,7 @@ goto help
 
 :build
 #vcpkg.exe --triplet %TRIPLET% build %MODULES%
-vcpkg.exe --triplet %TRIPLET% install %MODULES%
+vcpkg.exe --recurse --triplet %TRIPLET% install %MODULES%
 
 goto end
 

@@ -224,11 +224,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
                 double d;
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
                 const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-                const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
                 geod.Inverse(p1.y(), p1.x(), p2.y(), p2.x(), d);
                 ld.weight = d;

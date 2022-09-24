@@ -26,7 +26,7 @@ QMapControl/QMapControl/src/QMapControl/qmapcontrold_resource.rc
 commons/commons_tests/moc/
 */GeneratedFiles/
 simulator/displace
-/build*
+/build*/
 /install
 *~
 Thumbs.db
@@ -37,7 +37,6 @@ qtgui/resources/qrc_qtgui.cpp
 docs/html
 docs/latex
 *.autosave
-build-*
 run.sh
 
 sparsepp/

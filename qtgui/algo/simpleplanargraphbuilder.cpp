@@ -129,11 +129,7 @@ bool SimplePlanarGraphBuilder::endCreateGrid()
 
 void SimplePlanarGraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double bearing, QPointF &p2)
 {
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
     double x,y;
     geod.Direct(p1.y()/ M_PI * 180.0, p1.x()/ M_PI * 180.0, bearing / M_PI * 180.0, dist, y, x);

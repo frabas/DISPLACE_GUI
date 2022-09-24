@@ -97,11 +97,7 @@ void MergerStrategy::processLine (int linenum, QString line)
 
     int idx = -1;
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
     QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
 

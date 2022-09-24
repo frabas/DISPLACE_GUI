@@ -674,11 +674,7 @@ void MainWindow::editorAddEdge(int from, int to)
 
     double d;
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
     std::shared_ptr<NodeData> fn = currentModel->getNodesList()[from];
     std::shared_ptr<NodeData> tn = currentModel->getNodesList()[to];
@@ -2936,11 +2932,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                 }
         }
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
         const GeographicLib::Geodesic &geod = GeographicLib::Geodesic::WGS84();
-#else
-        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
                 foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
                 auto harbid = harbour->mHarbour->get_idx_node();

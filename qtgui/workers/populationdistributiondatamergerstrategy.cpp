@@ -77,11 +77,7 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     if (!ok)
         (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
 
     // COLLECT NODE + Y/SEM/STOCK => u(x) w(x) per pop
     // See: http://en.wikipedia.org/wiki/Inverse_distance_weighting

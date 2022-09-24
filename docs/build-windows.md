@@ -75,3 +75,39 @@ as an alternative, simply run our script with the export command:
 ```
 PS ...> .\vcpkg-setup.bat export
 ```
+
+## Building (Visual Studio)
+
+On Visual Studio, you need to add the following options to the CMake settings.
+
+Select "Cmake Settings for displace" in the Project menu.
+
+For each configuration (debug, release, etc) add the following line in the "Cmake command argument" box:
+
+
+
+```
+-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake
+```
+
+Then build the project as usual.
+
+
+## Building (command line)
+
+To build displace with VCPKG, the procedure is similar as building on other OSs.
+
+First, run cmake with the proper options:
+
+```
+cmake -G Ninja -DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake
+```
+
+we assume vcpkg is installed in C:\Displace-vcpkg, if this is not the case, correct the command above with the proper
+path.
+
+Then build with
+
+```
+
+```

@@ -8,13 +8,13 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "value": "C:\\DISPLACE-vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
           "type": "STRING"
         },
         {
@@ -31,13 +31,13 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "value": "C:\\DISPLACE-vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
           "type": "STRING"
         },
         {
@@ -54,13 +54,13 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "value": "C:\\DISPLACE-vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
           "type": "STRING"
         },
         {

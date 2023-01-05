@@ -33,13 +33,14 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
                                     QString bathymetrypath, QString shippingdensitypath,  QString siltfractionpath, QString icesrectanglecodepath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
-                                    QString closedpath_month, QString closedpath_vessz,
+                                    QString closedpath_month, QString closedpath_vessz, QString closedpath_nations,
                                     bool export_closedpoly,
                                     DisplaceModel *currentModel, QString *error)
 {
     closedpath = closedpath.replace("?", "%1");
     closedpath_month = closedpath_month.replace("?", "%1");
     closedpath_vessz = closedpath_vessz.replace("?", "%1");
+    closedpath_nations = closedpath_nations.replace("?", "%1");
 
     QFile cfile(coordspath);
     if (!cfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -395,12 +396,23 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 return false;
 
             fn = closedpath_vessz.arg(month+1);
-
-            auto outputVesSizeFunc = [](const displace::NodePenalty &penalty) {
+        
+        
+            auto outputVesSizeFunc = [](const displace::NodePenalty& penalty) {
                 return penalty.vesSizes;
             };
-
             r = outputClosedPolyFile(fn, currentModel,  monthSelectorFunc, outputVesSizeFunc, error);
+            if (!r)
+                return false;
+       
+            
+            fn = closedpath_nations.arg(month + 1);
+            
+            auto outputNationFunc = [](const displace::NodePenalty& penalty) {
+                return penalty.Nations;
+            };
+
+            r = outputClosedPolyFile(fn, currentModel, monthSelectorFunc, outputNationFunc, error);
             if (!r)
                 return false;
         }

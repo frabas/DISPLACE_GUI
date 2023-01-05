@@ -64,7 +64,7 @@ public:
     bool exportGraph(QString graphpath, QString coordspath, QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                      QString Nitrogenpath, QString Phosporuspath, QString Oxygenpath, QString DissolvedCarbonpath, QString bathymetrypath, QString shippingdensitypath,
                      QString siltfractionpath, QString icesrectanglecodepath, QString benthospath, QString benthosnbpath, QString areacodepath,
-                     QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
+                     QString closedpath, QString closedpath_month, QString closedpath_vessz, QString closedpath_nations, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:
     bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel,
                               std::function<bool(const displace::NodePenalty &)> selector,

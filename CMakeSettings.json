@@ -8,7 +8,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "cmakeCommandArgs": "-DWITH_TESTS=OFF",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
@@ -19,7 +19,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]
@@ -31,7 +31,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "cmakeCommandArgs": "-DWITH_TESTS=OFF",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
@@ -42,7 +42,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]
@@ -54,7 +54,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${workspaceRoot}\\build\\${name}",
       "installRoot": "${workspaceRoot}\\install\\${name}",
-      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 -DWITH_TESTS=OFF -DCMAKE_TOOLCHAIN_FILE=C:/DISPLACE-vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "cmakeCommandArgs": "-DWITH_TESTS=OFF",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
@@ -65,7 +65,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.12.5\\msvc2017_64",
+          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
           "type": "STRING"
         }
       ]

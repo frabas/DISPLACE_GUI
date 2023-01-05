@@ -74,6 +74,7 @@ public:
     std::vector<bool> getCheckedMonths() const;
     std::vector<int> getBannedMetiers() const;
     std::vector<int> getVesSizeSelection() const;
+    std::vector<int> getNationSelection() const;
 
 private slots:
     void on_ok_clicked();
@@ -81,6 +82,7 @@ private slots:
     void metierEnableToggled(bool);
 
     void on_enableSizes_toggled(bool checked);
+    void on_enableNations_toggled(bool checked);
 
 private:
     Ui::PathPenaltyDialog *ui;

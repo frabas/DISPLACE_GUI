@@ -57,6 +57,7 @@ public:
     QString getClosedPolygonFilename() const;
     QString getClosedPolygonFilenameMonthly() const;
     QString getClosedPolygonFilenameVesSize() const;
+    QString getClosedPolygonFilenameNation() const;
     bool isClosedPolygonExportChecked() const;
 
 private slots:

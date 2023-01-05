@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>585</width>
-    <height>997</height>
+    <width>707</width>
+    <height>930</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,31 +47,10 @@
       <string>Output options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="optBathymetry">
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="optOxygen">
         <property name="text">
-         <string>Bathymetry file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="optDissolvedCarbon">
-        <property name="text">
-         <string>DissolvedCarbon file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QCheckBox" name="optBenthosNb">
-        <property name="text">
-         <string>Benthos Number file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="optWind">
-        <property name="text">
-         <string>Wind file</string>
+         <string>Oxygen file</string>
         </property>
        </widget>
       </item>
@@ -82,45 +61,24 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QCheckBox" name="optBenthosBio">
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="optSiltfraction">
         <property name="text">
-         <string>Benthos Biomass file</string>
+         <string>Silt fraction file</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="optNitrogen">
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="optBenthosNb">
         <property name="text">
-         <string>Nitrogen file</string>
+         <string>Benthos Number file</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="optSalinity">
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="optDissolvedCarbon">
         <property name="text">
-         <string>Salinity file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QCheckBox" name="optLandscape">
-        <property name="text">
-         <string>Landscape file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="optOxygen">
-        <property name="text">
-         <string>Oxygen file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="optPhosphorus">
-        <property name="text">
-         <string>Phosphorus file</string>
+         <string>DissolvedCarbon file</string>
         </property>
        </widget>
       </item>
@@ -131,6 +89,27 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="optLandscape">
+        <property name="text">
+         <string>Landscape file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="optWind">
+        <property name="text">
+         <string>Wind file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="optBenthosBio">
+        <property name="text">
+         <string>Benthos Biomass file</string>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="0">
        <widget class="QCheckBox" name="optShippingdensity">
         <property name="text">
@@ -138,10 +117,24 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QCheckBox" name="optSiltfraction">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="optBathymetry">
         <property name="text">
-         <string>Silt fraction file</string>
+         <string>Bathymetry file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="optSalinity">
+        <property name="text">
+         <string>Salinity file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="optNitrogen">
+        <property name="text">
+         <string>Nitrogen file</string>
         </property>
        </widget>
       </item>
@@ -152,7 +145,37 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="optPhosphorus">
+        <property name="text">
+         <string>Phosphorus file</string>
+        </property>
+       </widget>
+      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
    <item row="5" column="0">
@@ -370,30 +393,17 @@
       <item row="19" column="1">
        <widget class="QLineEdit" name="closedPolyFilename_VesSize"/>
       </item>
+      <item row="20" column="0">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>Closed polygon files (Nations)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="20" column="1">
+       <widget class="QLineEdit" name="closedPolyFilename_Nation"/>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>

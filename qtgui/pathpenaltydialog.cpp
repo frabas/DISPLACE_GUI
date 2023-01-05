@@ -62,6 +62,9 @@ PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
 
     ui->enableSizes->setChecked(true);
     ui->enableSizes->setChecked(false);
+
+    ui->enableNations->setChecked(true);
+
 }
 
 PathPenaltyDialog::~PathPenaltyDialog()
@@ -174,6 +177,17 @@ std::vector<int> PathPenaltyDialog::getVesSizeSelection() const
     return selection;
 }
 
+std::vector<int> PathPenaltyDialog::getNationSelection() const
+{
+    std::vector<int> selection;
+    if (ui->cbNation0->isChecked()) selection.push_back(0);
+    if (ui->cbNation1->isChecked()) selection.push_back(1);
+    if (ui->cbNation2->isChecked()) selection.push_back(2);
+    if (ui->cbNation3->isChecked()) selection.push_back(3);
+    if (ui->cbNation4->isChecked()) selection.push_back(4);
+    return selection;
+}
+
 void PathPenaltyDialog::on_ok_clicked()
 {
     if (ui->shapefileGroup->isVisible() && clickCount == 0)
@@ -200,4 +214,9 @@ void PathPenaltyDialog::metierEnableToggled(bool status)
 void PathPenaltyDialog::on_enableSizes_toggled(bool enabled)
 {
     ui->sizeGroup->setEnabled(enabled);
+}
+
+void PathPenaltyDialog::on_enableNations_toggled(bool enabled)
+{
+    ui->nationGroup->setEnabled(enabled);
 }

@@ -1301,7 +1301,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 void
 DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth,
                                             bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
-                                            const vector<int> &checkedVesSizes,
+                                            const vector<int> &checkedVesSizes, const vector<int>& checkedNations,
                                             vector<int> bannedMetiers)
 {
     OGRLinearRing *gring = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
@@ -1315,7 +1315,7 @@ DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double w
     gpoly->addRing(gring);
 
     addPenaltyToNodesByAddWeight(gpoly, weight, nbOfDaysClosedPerMonth,
-                                 onQ1, onQ2, onQ3, onQ4, checkedMonths, checkedVesSizes, bannedMetiers);
+                                 onQ1, onQ2, onQ3, onQ4, checkedMonths, checkedVesSizes, checkedNations, bannedMetiers);
 
     delete gpoly;
 }
@@ -1570,7 +1570,7 @@ void DisplaceModel::setBenthosNbFromFeature(OGRGeometry *geometry, double nb,
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,
                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
-                                                 const vector<int> &checkedVesSizes,
+                                                 const vector<int> &checkedVesSizes, const vector<int>& checkedNations,
                                                  vector<int> bannedMetiers)
 {
     QList<int> penaltyNodes;
@@ -1619,6 +1619,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         pen.months = checkedMonths;
         pen.nbOfDaysClosed = nbOfDaysClosedPerMonth;
         pen.vesSizes = checkedVesSizes;
+        pen.Nations = checkedNations;
         pen.polyId = 0;
         pen.metiers = bannedMetiers;
 

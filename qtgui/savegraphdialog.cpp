@@ -199,6 +199,11 @@ QString SaveGraphDialog::getClosedPolygonFilenameVesSize() const
     return ui->outputFolder->text() + "/" + ui->closedPolyFilename_VesSize->text();
 }
 
+QString SaveGraphDialog::getClosedPolygonFilenameNation() const
+{
+    return ui->outputFolder->text() + "/" + ui->closedPolyFilename_Nation->text();
+}
+
 bool SaveGraphDialog::isClosedPolygonExportChecked() const
 {
     return ui->optClosed->isChecked();
@@ -225,6 +230,7 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->closedPolyFilename->setEnabled(checked);
     ui->closedPolyFilename_Months->setEnabled(checked);
     ui->closedPolyFilename_VesSize->setEnabled(checked);
+    ui->closedPolyFilename_Nation->setEnabled(checked);
 }
 
 void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
@@ -248,6 +254,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));
     ui->closedPolyFilename_Months->setText(QString("metier_closure_a_graph%1_month?.dat").arg(gn));
     ui->closedPolyFilename_VesSize->setText(QString("vsize_closure_a_graph%1_month?.dat").arg(gn));
+    ui->closedPolyFilename_Nation->setText(QString("nation_closure_a_graph%1_month?.dat").arg(gn));
 }
 
 void SaveGraphDialog::on_cmdBrowse_clicked()

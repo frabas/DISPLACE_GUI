@@ -1636,6 +1636,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
         auto checkedVesSizes = dlg.getVesSizeSelection();
+        auto checkedNations = dlg.getNationSelection();
 
         std::ostringstream ss;
         for (auto b : bannedMetiers)
@@ -1645,7 +1646,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.nbOfDaysClosedPerMonth(),
                                                    dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(),
                                                    dlg.isPenaltyQ4(), checkedMonths,
-                                                   checkedVesSizes,
+                                                   checkedVesSizes, checkedNations,
                                                    bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
@@ -1829,7 +1830,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
                                  bathymetrypath, shippingdensitypath, siltfractionpath, icesrectanglecodepath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
-                                 savedlg.getClosedPolygonFilenameVesSize(),
+                                 savedlg.getClosedPolygonFilenameVesSize(), savedlg.getClosedPolygonFilenameNation(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
@@ -1945,6 +1946,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
         auto checkedVesSizes = dlg.getVesSizeSelection();
+        auto checkedNations = dlg.getNationSelection();
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
@@ -1963,7 +1965,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
                                                                nbOfDaysClosedPerMonth,
                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(),
                                                                dlg.isPenaltyQ4(), checkedMonths,
-                                                               checkedVesSizes,
+                                                               checkedVesSizes, checkedNations,
                                                                bannedMetiers);
                 }
             }
@@ -2886,7 +2888,7 @@ void MainWindow::on_actionSave_Graph_triggered()
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
                                  bathymetrypath, shippingdensitypath, siltfractionpath, icesrectanglecodepath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
-                                 dlg.getClosedPolygonFilenameVesSize(),
+                                 dlg.getClosedPolygonFilenameVesSize(), dlg.getClosedPolygonFilenameNation(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving graph/coords file"), error);

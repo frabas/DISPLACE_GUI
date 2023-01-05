@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
+    <width>570</width>
     <height>465</height>
    </rect>
   </property>
@@ -256,16 +256,177 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>30</y>
-         <width>487</width>
-         <height>93</height>
+         <y>20</y>
+         <width>515</width>
+         <height>111</height>
         </rect>
        </property>
        <property name="title">
         <string>Nations</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="cbNation1">
+          <property name="text">
+           <string>BEL</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QCheckBox" name="cbNation2">
+          <property name="text">
+           <string>BGR</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QCheckBox" name="cbNation3">
+          <property name="text">
+           <string>CYP</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="5">
+         <widget class="QCheckBox" name="cbNation4">
+          <property name="text">
+           <string>DEU</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="6">
+         <widget class="QCheckBox" name="cbNation5">
+          <property name="text">
+           <string>DNK</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="7">
+         <widget class="QCheckBox" name="cbNation6">
+          <property name="text">
+           <string>ESP</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="8">
+         <widget class="QCheckBox" name="cbNation7">
+          <property name="text">
+           <string>EST</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="9">
+         <widget class="QCheckBox" name="cbNation8">
+          <property name="text">
+           <string>FIN</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="cbNation9">
+          <property name="text">
+           <string>FRA</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="cbNation10">
+          <property name="text">
+           <string>GBR</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="cbNation11">
+          <property name="text">
+           <string>GRC</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="cbNation12">
+          <property name="text">
+           <string>HRV</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QCheckBox" name="cbNation13">
+          <property name="text">
+           <string>IRL</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="5">
+         <widget class="QCheckBox" name="cbNation14">
+          <property name="text">
+           <string>ITA</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="6">
+         <widget class="QCheckBox" name="cbNation15">
+          <property name="text">
+           <string>LTU</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="7">
+         <widget class="QCheckBox" name="cbNation16">
+          <property name="text">
+           <string>LVA</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="8">
+         <widget class="QCheckBox" name="cbNation17">
+          <property name="text">
+           <string>MLT</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="9">
+         <widget class="QCheckBox" name="cbNation18">
+          <property name="text">
+           <string>NLD</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="cbNation19">
+          <property name="text">
+           <string>POL</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="cbNation20">
+          <property name="text">
+           <string>PRT</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QCheckBox" name="cbNation21">
+          <property name="text">
+           <string>ROU</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QCheckBox" name="cbNation22">
+          <property name="text">
+           <string>SVN</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QCheckBox" name="cbNation23">
+          <property name="text">
+           <string>SWE</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
          <widget class="QCheckBox" name="cbNation0">
           <property name="text">
            <string>All nations</string>
@@ -275,31 +436,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="cbNation1">
+        <item row="3" column="5" colspan="2">
+         <widget class="QCheckBox" name="cbNation24">
           <property name="text">
-           <string>DNK</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="cbNation2">
-          <property name="text">
-           <string>GBR</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="cbNation3">
-          <property name="text">
-           <string>ITA</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="cbNation4">
-          <property name="text">
-           <string>HVR</string>
+           <string>OTHERS</string>
           </property>
          </widget>
         </item>

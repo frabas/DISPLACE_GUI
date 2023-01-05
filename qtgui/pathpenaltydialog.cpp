@@ -185,6 +185,26 @@ std::vector<int> PathPenaltyDialog::getNationSelection() const
     if (ui->cbNation2->isChecked()) selection.push_back(2);
     if (ui->cbNation3->isChecked()) selection.push_back(3);
     if (ui->cbNation4->isChecked()) selection.push_back(4);
+    if (ui->cbNation5->isChecked()) selection.push_back(5);
+    if (ui->cbNation6->isChecked()) selection.push_back(6);
+    if (ui->cbNation7->isChecked()) selection.push_back(7);
+    if (ui->cbNation8->isChecked()) selection.push_back(8);
+    if (ui->cbNation9->isChecked()) selection.push_back(9);
+    if (ui->cbNation10->isChecked()) selection.push_back(10);
+    if (ui->cbNation11->isChecked()) selection.push_back(11);
+    if (ui->cbNation12->isChecked()) selection.push_back(12);
+    if (ui->cbNation13->isChecked()) selection.push_back(13);
+    if (ui->cbNation14->isChecked()) selection.push_back(14);
+    if (ui->cbNation15->isChecked()) selection.push_back(15);
+    if (ui->cbNation16->isChecked()) selection.push_back(16);
+    if (ui->cbNation17->isChecked()) selection.push_back(17);
+    if (ui->cbNation18->isChecked()) selection.push_back(18);
+    if (ui->cbNation19->isChecked()) selection.push_back(19);
+    if (ui->cbNation20->isChecked()) selection.push_back(20);
+    if (ui->cbNation21->isChecked()) selection.push_back(21);
+    if (ui->cbNation22->isChecked()) selection.push_back(22);
+    if (ui->cbNation23->isChecked()) selection.push_back(23);
+    if (ui->cbNation24->isChecked()) selection.push_back(24);
     return selection;
 }
 

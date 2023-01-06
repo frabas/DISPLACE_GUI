@@ -93,7 +93,7 @@ enum Dyn_Alloc {
     LTMP,
     FMSY,
     FMSYrange,
-    area_closure,
+    //area_closure, // [DEPRECATED]
     area_monthly_closure,
     closed_to_others_as_well,
     fuelprice_plus20percent,

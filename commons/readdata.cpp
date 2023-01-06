@@ -842,6 +842,7 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
     return(nodes_in_polygons);
 }
 
+/* [DEPRECATED]
 bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {
     UNUSED(folder_name_parameterization);
@@ -876,6 +877,7 @@ bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, st
     is.close();
     return r;
 }
+*/
 
 bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder)
 {

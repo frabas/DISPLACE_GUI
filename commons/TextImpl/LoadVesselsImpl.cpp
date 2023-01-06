@@ -744,7 +744,8 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vessel->set_resttime_par2(loadedDataVessels.vectdparam9.at(v));
         vessel->set_av_trip_duration(loadedDataVessels.vectdparam10.at(v));
 
-        if (model.scenario().dyn_alloc_sce.option(Options::area_closure)) {
+        /* [DEPRECATED]
+            if (model.scenario().dyn_alloc_sce.option(Options::area_closure)) {
             if (!read_metier_quarterly_closures(model.nodes(), quarterString,
                                                 model.scenario().a_graph_name,
                                                 fname,
@@ -753,7 +754,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                 throw std::runtime_error("this went wrong reading metier_quarterly_closure.dat files, quitting");
             }
         }
-
+        */
 
         vessel->set_spe_fgrounds(spe_fgrounds);
         vessel->set_spe_fgrounds_init(spe_fgrounds_init);

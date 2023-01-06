@@ -65,10 +65,10 @@ public:
     void setMetierNumber(int num);
     QStringList selectedShapefile() const;
     double nbOfDaysClosedPerMonth() const;
-    bool isPenaltyQ1();
-    bool isPenaltyQ2();
-    bool isPenaltyQ3();
-    bool isPenaltyQ4();
+    //bool isPenaltyQ1();
+    //bool isPenaltyQ2();
+    //bool isPenaltyQ3();
+    //bool isPenaltyQ4();
     double weight() const;
 
     std::vector<bool> getCheckedMonths() const;

@@ -5259,6 +5259,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         }
 
         // ****************area_closure**********************************//
+        /*
         if (dyn_alloc_sce.option(Options::area_closure)  || scenario.closure_opts.isMetierBanned(this->get_metier()->get_name()))
         {
             //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
@@ -5275,6 +5276,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                 }
             }
         }
+        */
 
         if (dyn_alloc_sce.option(Options::area_monthly_closure))
         {
@@ -5594,11 +5596,10 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
 
         // check for area_closure
-        if (
-                (dyn_alloc_sce.option(Options::area_closure) && nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()))
-                || (dyn_alloc_sce.option(Options::area_monthly_closure)  && nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                    nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()))
-                )
+        if ( dyn_alloc_sce.option(Options::area_monthly_closure)  && 
+                    nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                    nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class())
+           )
         {
 
             //	if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from.toIndex()))
@@ -5657,10 +5658,9 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         else
         {
             // this time, check for closure for the potential dest vx
-            if(
-                    (dyn_alloc_sce.option(Options::area_closure) && nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()))
-                    || (dyn_alloc_sce.option(Options::area_monthly_closure)  && nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                        nodes.at(vx.toIndex())->isVsizeBanned(this->get_length_class()))
+            if(    dyn_alloc_sce.option(Options::area_monthly_closure)  &&
+                        nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                        nodes.at(vx.toIndex())->isVsizeBanned(this->get_length_class())
               )
             {
                dout(cout  << "this other ground is also part of the closed area!!!" << endl);
@@ -5706,10 +5706,9 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << endl);
 
         // check for area_closure
-        if (
-                (dyn_alloc_sce.option(Options::area_closure) && !nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name())) ||
-                (dyn_alloc_sce.option(Options::area_monthly_closure)  && !nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                 !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()))
+        if ( dyn_alloc_sce.option(Options::area_monthly_closure)  &&
+                 !nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                 !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class())
                 )
         {
 

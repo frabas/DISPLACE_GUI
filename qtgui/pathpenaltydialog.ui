@@ -14,10 +14,10 @@
    <string>Graph Penalties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="2">
-    <widget class="QDoubleSpinBox" name="weight">
-     <property name="maximum">
-      <double>100000000.000000000000000</double>
+   <item row="4" column="0" colspan="3">
+    <widget class="QGroupBox" name="shapefileGroup">
+     <property name="title">
+      <string>Shapefiles</string>
      </property>
     </widget>
    </item>
@@ -25,6 +25,23 @@
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Resistance to cross the area (i.e. penalty)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Nb of days closed per month</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QDoubleSpinBox" name="nbOfDaysClosedPerMonth">
+     <property name="maximum">
+      <double>31.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>31.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -40,6 +57,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="2">
+    <widget class="QDoubleSpinBox" name="weight">
+     <property name="maximum">
+      <double>100000000.000000000000000</double>
+     </property>
+    </widget>
    </item>
    <item row="6" column="0" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -75,90 +99,19 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Nb of days closed per month</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QGroupBox" name="shapefileGroup">
-     <property name="title">
-      <string>Shapefiles</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="nbOfDaysClosedPerMonth">
-     <property name="maximum">
-      <double>31.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>31.000000000000000</double>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0" colspan="3">
     <widget class="QTabWidget" name="tabWidgetPeriods">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tabWidgetPage1">
-      <attribute name="title">
-       <string>Quarters</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="optPenaltyQ2">
-         <property name="text">
-          <string>Quarter2</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="optPenaltyQ1">
-         <property name="text">
-          <string>Quarter1</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="optPenaltyQ3">
-         <property name="text">
-          <string>Quarter3</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="optPenaltyQ4">
-         <property name="text">
-          <string>Quarter4</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabPageMonths">
       <attribute name="title">
-       <string>Months</string>
+       <string>Closure Months</string>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabPageMetiers">
       <attribute name="title">
-       <string>Metiers</string>
+       <string>AND Metiers</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -179,7 +132,7 @@
      </widget>
      <widget class="QWidget" name="tabPageVesselsSizes">
       <attribute name="title">
-       <string>Vessels sizes</string>
+       <string>AND Vessels sizes</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
@@ -237,7 +190,7 @@
      </widget>
      <widget class="QWidget" name="tabPageNations">
       <attribute name="title">
-       <string>Vessels Nations</string>
+       <string>AND Vessels Nations</string>
       </attribute>
       <widget class="QCheckBox" name="enableNations">
        <property name="geometry">

@@ -504,8 +504,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     // not farther than 200 km than a closed node.
                     // pseudocode: if a closed node then cumul otherwise apply oth_land + cumul if <200km otherwise apply oth_land only and continue the cumul
                     //
-                    if ((dyn_alloc_sce.option(Options::area_closure) ||
-                         dyn_alloc_sce.option(Options::area_monthly_closure)) && dyn_alloc_sce.option(Options::closed_to_others_as_well))
+                    if (dyn_alloc_sce.option(Options::area_monthly_closure) && dyn_alloc_sce.option(Options::closed_to_others_as_well))
                     {
 
                         //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node().toIndex()))
@@ -608,7 +607,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         }
 
-                    } // end area_closure
+                    } // end area_monthly_closure
                     else
                     {
 

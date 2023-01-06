@@ -451,8 +451,12 @@ public:
     int addEdge(types::NodeId srcidx, types::NodeId targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
-    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, const vector<int>& checkedNations, vector<int> bannedMetiers);
-    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, const vector<int>& checkedNations, vector<int> bannedMetiers);
+    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth, 
+                                       //bool onQ1, bool onQ2, bool onQ3, bool onQ4, 
+                                       vector<bool> checkedMonths, const vector<int> &checkedVesSizes, const vector<int>& checkedNations, vector<int> bannedMetiers);
+    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,
+                                         // bool onQ1, bool onQ2, bool onQ3, bool onQ4,
+                                         vector<bool> checkedMonths, const vector<int> &checkedVesSizes, const vector<int>& checkedNations, vector<int> bannedMetiers);
 
     const QList<displace::NodePenalty> getPenaltyCollection() const { return mPenaltyNodes; }
 

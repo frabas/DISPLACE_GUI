@@ -133,8 +133,8 @@ struct NodeBanningInfo {
 };
 
 // area_closure and area_monthly_closure options
-bool read_metier_quarterly_closures(vector<Node *> &nodes, string a_quarter, string a_graph,
-                                    string folder_name_parameterization, string inputfolder);
+//bool read_metier_quarterly_closures(vector<Node *> &nodes, string a_quarter, string a_graph,
+//                                    string folder_name_parameterization, string inputfolder);
 
 bool
 read_metier_monthly_closures(vector<Node *> &nodes, string a_month, string a_graph, string folder_name_parameterization,

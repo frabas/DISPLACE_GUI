@@ -1300,7 +1300,8 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 
 void
 DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth,
-                                            bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
+                                            //bool onQ1, bool onQ2, bool onQ3, bool onQ4,
+                                            vector<bool> checkedMonths,
                                             const vector<int> &checkedVesSizes, const vector<int>& checkedNations,
                                             vector<int> bannedMetiers)
 {
@@ -1315,7 +1316,8 @@ DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double w
     gpoly->addRing(gring);
 
     addPenaltyToNodesByAddWeight(gpoly, weight, nbOfDaysClosedPerMonth,
-                                 onQ1, onQ2, onQ3, onQ4, checkedMonths, checkedVesSizes, checkedNations, bannedMetiers);
+                                 //onQ1, onQ2, onQ3, onQ4, 
+                                 checkedMonths, checkedVesSizes, checkedNations, bannedMetiers);
 
     delete gpoly;
 }
@@ -1569,7 +1571,8 @@ void DisplaceModel::setBenthosNbFromFeature(OGRGeometry *geometry, double nb,
 }
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,
-                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
+                                                 //bool onQ1, bool onQ2, bool onQ3, bool onQ4, 
+                                                 vector<bool> checkedMonths,
                                                  const vector<int> &checkedVesSizes, const vector<int>& checkedNations,
                                                  vector<int> bannedMetiers)
 {
@@ -1612,10 +1615,10 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
     if (nbOfDaysClosedPerMonth > 0.0 && penaltyNodes.size() > 0) {
         displace::NodePenalty pen;
 
-        pen.q[0] = onQ1;
-        pen.q[1] = onQ2;
-        pen.q[2] = onQ3;
-        pen.q[3] = onQ4;
+        //pen.q[0] = onQ1;
+        //pen.q[1] = onQ2;
+        //pen.q[2] = onQ3;
+        //pen.q[3] = onQ4;
         pen.months = checkedMonths;
         pen.nbOfDaysClosed = nbOfDaysClosedPerMonth;
         pen.vesSizes = checkedVesSizes;

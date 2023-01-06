@@ -1415,6 +1415,9 @@ int app_main(int argc, char const* argv[])
          }
 
     }
+    
+    /*
+    [DEPRECATED]
     if (scenario.dyn_alloc_sce.option(Options::area_closure)) {
 
         if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
@@ -1423,6 +1426,7 @@ int app_main(int argc, char const* argv[])
             throw std::runtime_error("this went wrong with reading metier_quarterly_closures files: quitting");
         }
     }
+    */
 
     // init individual tacs
     if (simModel->is_tacs()) {

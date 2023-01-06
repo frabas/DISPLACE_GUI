@@ -247,6 +247,34 @@ Vessel::Vessel(Node* p_location,
     // deduce the vessel nationality from the vessel name
     nationality = nationalityFromName(get_name());
 
+    std::map<std::string, int> nationality_indices;
+    nationality_indices["BEL"] = 1;
+    nationality_indices["BGR"] = 2;
+    nationality_indices["CYP"] = 3;
+    nationality_indices["DEU"] = 4;
+    nationality_indices["DNK"] = 5;
+    nationality_indices["ESP"] = 6;
+    nationality_indices["EST"] = 7;
+    nationality_indices["FIN"] = 8;
+    nationality_indices["FRA"] = 9;
+    nationality_indices["GBR"] = 10;
+    nationality_indices["GRC"] = 11;
+    nationality_indices["HRV"] = 12;
+    nationality_indices["IRL"] = 13;
+    nationality_indices["ITA"] = 14;
+    nationality_indices["LTU"] = 15;
+    nationality_indices["LVA"] = 16;
+    nationality_indices["MLT"] = 17;
+    nationality_indices["NLD"] = 18;
+    nationality_indices["POL"] = 19;
+    nationality_indices["PRT"] = 20;
+    nationality_indices["ROU"] = 21;
+    nationality_indices["SVN"] = 22;
+    nationality_indices["SWE"] = 23;
+
+    nationality_idx = 0; // default 0 is "all nations"
+    nationality_idx = nationality_indices[nationality];
+
     //cout << "Creating this vessel " << a_name << "first steps done" << endl;
 
     // init individual tac
@@ -557,6 +585,35 @@ void Vessel::init()
 
     nationality = nationalityFromName(get_name());
 
+    std::map<std::string, int> nationality_indices;
+    nationality_indices["BEL"] = 1;
+    nationality_indices["BGR"] = 2;
+    nationality_indices["CYP"] = 3;
+    nationality_indices["DEU"] = 4;
+    nationality_indices["DNK"] = 5;
+    nationality_indices["ESP"] = 6;
+    nationality_indices["EST"] = 7;
+    nationality_indices["FIN"] = 8;
+    nationality_indices["FRA"] = 9;
+    nationality_indices["GBR"] = 10;
+    nationality_indices["GRC"] = 11;
+    nationality_indices["HRV"] = 12;
+    nationality_indices["IRL"] = 13;
+    nationality_indices["ITA"] = 14;
+    nationality_indices["LTU"] = 15;
+    nationality_indices["LVA"] = 16;
+    nationality_indices["MLT"] = 17;
+    nationality_indices["NLD"] = 18;
+    nationality_indices["POL"] = 19;
+    nationality_indices["PRT"] = 20;
+    nationality_indices["ROU"] = 21;
+    nationality_indices["SVN"] = 22;
+    nationality_indices["SWE"] = 23;
+
+    nationality_idx = 0; // default 0 is "all nations"
+    nationality_idx = nationality_indices[nationality];
+
+
     // Lazy initialization of the global State Evaluator.
     if (mStateEvaluators.size() == 0) {
         for (int i = 0; i < dtree::VarLast; ++i) {
@@ -735,6 +792,11 @@ int Vessel::get_length_class() const
 string Vessel::get_nationality () const
 {
     return(nationality);
+}
+
+int Vessel::get_nationality_idx() const
+{
+    return(nationality_idx);
 }
 
 
@@ -5300,7 +5362,8 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             {
                 auto a_grd = grds.at(i);
                 if (nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) &&
-                        nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class())
+                        nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) &&
+                        (nodes.at(a_grd.toIndex())->isNationBanned(0) || nodes.at(a_grd.toIndex())->isNationBanned(this->get_nationality_idx()))
                         )
 
                 {
@@ -5364,8 +5427,10 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
     if (dyn_alloc_sce.option(Options::area_monthly_closure))
     {
         int met_idx = this->get_metier()->get_name();
-        if (nodes.at(ground.toIndex())->isMetierBanned(met_idx) &&
-                nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) )
+        if  (  nodes.at(ground.toIndex())->isMetierBanned(met_idx) &&
+               nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) &&
+               (nodes.at(ground.toIndex())->isNationBanned(0) || nodes.at(ground.toIndex())->isNationBanned(this->get_nationality_idx()))
+            )
         {
         this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
         //cout << "ADDING 1 DAY HERE" << endl;
@@ -5598,7 +5663,8 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         // check for area_closure
         if ( dyn_alloc_sce.option(Options::area_monthly_closure)  && 
                     nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                    nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class())
+                    nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()) &&
+                    (nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx()))
            )
         {
 
@@ -5660,7 +5726,8 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             // this time, check for closure for the potential dest vx
             if(    dyn_alloc_sce.option(Options::area_monthly_closure)  &&
                         nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                        nodes.at(vx.toIndex())->isVsizeBanned(this->get_length_class())
+                        nodes.at(vx.toIndex())->isVsizeBanned(this->get_length_class()) &&
+                        (nodes.at(vx.toIndex())->isNationBanned(0) || nodes.at(vx.toIndex())->isNationBanned(this->get_nationality_idx()))
               )
             {
                dout(cout  << "this other ground is also part of the closed area!!!" << endl);
@@ -5708,7 +5775,9 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         // check for area_closure
         if ( dyn_alloc_sce.option(Options::area_monthly_closure)  &&
                  !nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                 !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class())
+                 !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()) &&
+                 !nodes.at(from.toIndex())->isNationBanned(0) &&
+                 !nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())
                 )
         {
 
@@ -6409,8 +6478,9 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         vector<types::NodeId>  grds_in_closure(0);
         for (int i=0; i<grds.size();++i)
         {
-            if (nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                    nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class())
+            if (    nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                    nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class()) &&
+                    (nodes.at(grds.at(i).toIndex())->isNationBanned(0) || nodes.at(grds.at(i).toIndex())->isNationBanned(this->get_nationality_idx()))
                     )
             {
                 freq_grds_in_closure.push_back(freq_grds.at(i));
@@ -6462,7 +6532,8 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
             for (int i = 0; i < grds.size(); ++i)
             {
                 if (nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                    nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class())
+                    nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class()) &&
+                    (nodes.at(grds.at(i).toIndex())->isNationBanned(0) || nodes.at(grds.at(i).toIndex())->isNationBanned(this->get_nationality_idx()))
                     )
                 {
                     freq_grds_in_closure.push_back(freq_grds.at(i));
@@ -6997,9 +7068,10 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     //cout << this->get_name() << endl;
     for (unsigned int n = 0; n < grds.size(); n++)
     {
-            if (nodes.at(grds.at(n).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                    nodes.at(grds.at(n).toIndex())->isVsizeBanned(this->get_length_class())
-                    )
+            if ( nodes.at(grds.at(n).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                 nodes.at(grds.at(n).toIndex())->isVsizeBanned(this->get_length_class()) &&
+                (nodes.at(grds.at(n).toIndex())->isNationBanned(0) || nodes.at(grds.at(n).toIndex())->isNationBanned(this->get_nationality_idx()))
+               )
             { 
                     freq_grds.at(n) = 1e-8; // to avoid removing if nb of grounds outside is 0
                 // but potential non-compliance if all grounds are in the closed areas....
@@ -7024,7 +7096,8 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     
     /* CHECK
     if (nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-        nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class())
+        nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) &&
+        nodes.at(ground.toIndex())->isNationBanned(this->get_nationality_idx())
         )
     {
         cout << "this node " << ground.toIndex() << " is inside the closed area!" << endl;

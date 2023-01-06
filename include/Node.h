@@ -446,6 +446,12 @@ class  Node
             return false;
         }
 
+        bool isNationBanned(int nation) const {
+            if ((size_t)nation < mBannedNations.size())
+                return mBannedNations[nation];
+            return false;
+        }
+
         double getNbOfDaysClosed(int metier) const {
             if ((size_t)metier < mNbDaysClosedForBannedMetiers.size())
                 return mNbDaysClosedForBannedMetiers[metier];

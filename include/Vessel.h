@@ -144,6 +144,7 @@ private:
 
     int length_class;
     std::string nationality;
+    int nationality_idx;
     LengthClass mLengthClassId;
     int message;
 		int state;
@@ -266,6 +267,7 @@ public:
 		double get_KW () const;
         int get_length_class() const;
         std::string get_nationality () const;
+        int get_nationality_idx() const;
         const vector<types::NodeId> &get_harbours() const;
         const vector<types::NodeId> &get_fgrounds() const;
         const vector<types::NodeId> &get_fgrounds_init() const;

@@ -1022,6 +1022,79 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 }
 
 
+bool read_nation_monthly_closures(vector <Node*>& nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder)
+{
+    UNUSED(folder_name_parameterization);
+
+    const string separator = " ";
+
+    string filename = inputfolder + "/graphsspe/nation_closure_" + a_graph + "_month" + a_month + ".dat";
+
+    ifstream is;
+    is.open(filename.c_str());
+    if (is.fail())
+    {
+        open_file_error(filename);
+        return false;
+    }
+
+    std::vector<NodeBanningInfo> banning;
+    bool r = read_nation_closures(is, separator, banning);
+
+    if (r) {
+        for (auto& info : banning) {
+            for (auto id : info.banned) {
+                nodes.at(info.nodeId.toIndex())->setBannedNation(id);
+                nodes.at(info.nodeId.toIndex())->setAreaType(1);
+            }
+        }
+    }
+
+    is.close();
+    return r;
+}
+
+bool read_nation_closures(istream& stream, const std::string& separator, vector<NodeBanningInfo>& nodes)
+{
+    // Format:
+    // PolyId nbOfDaysClosed NodeId Nation [Nation[ Nation...]]
+
+    int linenum = 0;
+    try {
+        while (stream) {
+            std::string line;
+            std::getline(stream, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            std::vector<std::string> sr;
+            boost::split(sr, line, boost::is_any_of(separator));
+
+
+            NodeBanningInfo info;
+            info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[2]));
+            for (size_t i = 3; i < sr.size(); ++i) {
+                int m = boost::lexical_cast<int>(sr[i]);
+                info.banned.push_back(m);
+            }
+            nodes.push_back(info);
+            ++linenum;
+        }
+    }
+    catch (boost::bad_lexical_cast& ex) {
+        //#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on read_nation_closure file line " << linenum <<
+            " : " << ex.what() << "\n";
+        //#endif
+        return false;
+    }
+
+    return true;
+}
+
+
 
 bool read_biological_traits_params(istream &stream, const std::string &separator, std::vector <std::tuple< string, double, double, double, double,
                                    double, double, double, double,

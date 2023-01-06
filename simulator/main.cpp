@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012-2022 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2023 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ using namespace sqlite;
 
 // for Windows
 #ifdef _WIN32
-                                                                                                                        #include <windows.h>
+#include <windows.h>
 #include <direct.h>
 #define GetCurrentDir _getcwd
 #else
@@ -189,7 +189,7 @@ namespace sql = msqlitecpp::v2;
 
 // global variables
 #ifdef _WIN32
-                                                                                                                        FILE *pipe2;
+FILE *pipe2;
 FILE *pipe3;
 FILE *pipe4;
 #endif
@@ -1401,13 +1401,18 @@ int app_main(int argc, char const* argv[])
         if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                           folder_name_parameterization,
                                           inputfolder)) {
-            throw std::runtime_error("this went wrong with reading metier_monthly_closures files, quitting");
+            throw std::runtime_error("this went wrong with reading metier_monthly_closures files: quitting");
         }
         if (!read_vsize_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                          folder_name_parameterization,
                                          inputfolder)) {
-            throw std::runtime_error("this went wrong with reading vsize_monthly_closures files, quitting");
+            throw std::runtime_error("this went wrong with reading vsize_monthly_closures files: quitting");
         }
+        if (!read_nation_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
+                                         folder_name_parameterization,
+                                         inputfolder)) {
+            throw std::runtime_error("this went wrong with reading nation_monthly_closures files: quitting");
+         }
 
     }
     if (scenario.dyn_alloc_sce.option(Options::area_closure)) {
@@ -1415,7 +1420,7 @@ int app_main(int argc, char const* argv[])
         if (!read_metier_quarterly_closures(simModel->nodes(), modelLoader->quarterString(), a_graph_name,
                                             folder_name_parameterization,
                                             inputfolder)) {
-            throw std::runtime_error("this went wrong with reading metier_quarterly_closures files, quitting");
+            throw std::runtime_error("this went wrong with reading metier_quarterly_closures files: quitting");
         }
     }
 
@@ -2183,6 +2188,12 @@ int app_main(int argc, char const* argv[])
                     throw std::runtime_error("this went wrong with reading vsize_monthly_closures files, quitting");
                 }
 
+                if (!read_nation_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
+                                                 folder_name_parameterization,
+                                                 inputfolder)) {
+                    throw std::runtime_error("this went wrong with reading nation_monthly_closures files, quitting");
+                }
+                
                 // check for myfish graph1
                 // cout << " isMetierBanned   "  << nodes.at(13)->isMetierBanned(vessels.at(v)->get_metier()->get_name()) << endl;
                 // cout << " isVsizeBanned   " << nodes.at(13)->isVsizeBanned(vessels.at(v)->get_length_class()) << endl;

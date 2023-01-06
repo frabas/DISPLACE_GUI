@@ -6488,13 +6488,19 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                     freq_possible_metiers_from_harbours.insert(
                         std::make_pair(grds.at(gr), 1.0));
                 }
+               int nbmets = cumeffort_per_trip_per_fgrounds_per_met.at(0).size();
+               int nbpops = simModel.config().nbpops;
                this->set_experienced_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
                this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
                this->set_cumcatch_fgrounds(vector <double> (grds.size(), 1.0));// re-dimensioned
                this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+               ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop(grds.size(), nbmets, nbpops);
+               this->set_cumcatch_fgrounds_per_met_per_pop(cumcatch_fgrounds_per_met_per_pop);// re-dimensioned       
                this->set_cumdiscard_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
                this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                this->set_cumeffort_per_trip_per_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
+               this->set_cumeffort_per_trip_per_fgrounds_per_met(vector <vector <double> > (grds.size(), vector<double> (nbmets, 0)));// re-dimensioned              
+               this->set_cumeffort_per_yearquarter_per_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned
                this->set_experiencedcpue_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned
                this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
                this->set_freq_experiencedcpue_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned

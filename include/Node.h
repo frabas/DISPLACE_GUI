@@ -416,6 +416,14 @@ class  Node
         mBannedVsizes[vsize] = true;
     }
 
+    void setBannedNation(int nation)
+    {
+        while (mBannedNations.size() <= (size_t)nation) {
+            mBannedNations.push_back(false);
+        }
+        mBannedNations[nation] = true;
+    }
+
     void setNbOfDaysClosedPerMonth(int metier, double NbOfDaysClosedPerMonth)
     {
         while (mNbDaysClosedForBannedMetiers.size() <= (size_t) metier) {
@@ -512,6 +520,7 @@ private:
 
         vector<bool> mBannedMetiers;
         vector<bool> mBannedVsizes;
+        vector<bool> mBannedNations;
         vector<double> mNbDaysClosedForBannedMetiers;
 
         static const vector<types::NodeId> mUsualFGrounds;

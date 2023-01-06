@@ -1557,10 +1557,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         // (ONLY IF NOT THE LONGEVITY APPROACH, BECAUSE LONGEVITY IS ON HOURLY BASIS)
         if(!dyn_pop_sce.option(Options::modelBenthosInLongevity))
         {
-           for (unsigned int b=0; b<benthoss.size(); b++)
+            for (unsigned int b=0; b<benthoss.size(); b++)
            {
-            benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(0);
-           }
+                cout << "applying benthos recovery for group " << b << endl;
+                benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup(0);
+            }
         }
     }
 

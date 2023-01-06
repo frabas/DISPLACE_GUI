@@ -144,9 +144,15 @@ bool
 read_vsize_monthly_closures(vector<Node *> &nodes, string a_month, string a_graph, string folder_name_parameterization,
                             string inputfolder);
 
+bool
+read_nation_monthly_closures(vector<Node*>& nodes, string a_month, string a_graph, string folder_name_parameterization,
+    string inputfolder);
+
 bool read_metier_closures(std::istream &stream, const string &separator, vector<NodeBanningInfo> &nodes);
 
 bool read_vsize_closures(std::istream &stream, const string &separator, vector<NodeBanningInfo> &nodes);
+
+bool read_nation_closures(std::istream& stream, const string& separator, vector<NodeBanningInfo>& nodes);
 
 bool read_biological_traits_params(istream &stream, const std::string &separator,
                                    std::vector<std::tuple<string, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, string> > &biological_traits_params);

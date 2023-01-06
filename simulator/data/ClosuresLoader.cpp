@@ -56,6 +56,11 @@ bool ClosuresLoader::read_vsize_closures(int graph_spe, int period, vector<NodeB
     return p->read_metier_closures(graph_spe, period, "vsize", ban_info);
 }
 
+bool ClosuresLoader::read_nation_closures(int graph_spe, int period, vector<NodeBanningInfo>& ban_info)
+{
+    return p->read_metier_closures(graph_spe, period, "nation", ban_info);
+}
+
 ClosuresLoader::Impl::Impl(msqlitecpp::v2::Storage &d)
         : db(d),
           selectClosures(db, ClosuresTableName, fieldClosuresId,fieldNodeId,

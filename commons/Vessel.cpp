@@ -1601,7 +1601,7 @@ void Vessel::set_spe_freq_fground(int index, double _fground)
 
 void Vessel::set_spe_freq_fgrounds_init (const vector<double> &_freq_fgrounds_init)
 {
-    freq_fgrounds=_freq_fgrounds_init;
+    freq_fgrounds_init=_freq_fgrounds_init;
 }
 
 

@@ -9,10 +9,10 @@ Copyright
 <br/>
 <br/>
 
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+ * DISPLACE: A DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
  * AND EFFORT DISPLACEMENT
 <br/>
- * Copyright (c) 2012-2021 Francois Bastardie <fba@aqua.dtu.dk>
+ * Copyright (c) 2012-2023 Francois Bastardie <fba@aqua.dtu.dk>
 <br/>
  *
 <br/>
@@ -114,27 +114,16 @@ fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3
 Available from: 10.1139/cjfas-2013-0126
 <br/>
 <br/>
-* Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 2014.
-Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions, ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
-<br/>
-<br/>
-* Bastardie, F., S. Angelini, L. Bolognini, F. Fuga,
-C. Manfredi, M. Martinelli, J. R. Nielsen, A. Santojanni, G. Scarcella, and F. Grati. 2017.
-Spatial planning for fisheries in the Northern Adriatic:
-working toward viable and sustainable fishing. Ecosphere 8(2):e01696.
-Developers
-<br/>
-<br/>
+
 
 <br/>
 ============
 <br/>
 <br/>
 
-* Francois Bastardie (core model)
+* Francois Bastardie (core simulation model)
 <br/>
-* Federico Fuga (user interface)
+* Federico Fuga (graphical user interface)
 
 <br/>
 <br/>

@@ -530,7 +530,7 @@ public:
     void compute_experiencedcpue_fgrounds();
     void compute_experiencedcpue_fgrounds_per_pop();
     void compute_experiencedcpue_fgrounds_per_met_per_pop();
-    void compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter);
+    bool compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter);
 
     void clear_cumcatch_and_cumeffort_per_trip();
     void clear_cumeffort_per_yearquarter();

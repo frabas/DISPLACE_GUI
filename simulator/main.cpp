@@ -1340,6 +1340,8 @@ int app_main(int argc, char const* argv[])
         }
     }
 
+   
+
 #if 0
     //check vessel specifications
     outc(cout << " vessel" << vessels[0]->get_idx() << " have the specific harbours:" << endl);
@@ -2251,7 +2253,6 @@ int app_main(int argc, char const* argv[])
         {
 
             cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
-
             //...but first compute and track the past experience
             int y = simModel->year() -1;
             int q = simModel->quarter() - 1;
@@ -2260,11 +2261,15 @@ int app_main(int argc, char const* argv[])
             {
                 //cout << "heho q" << q << endl;
                 //cout << "heho y" << y << endl;
-                vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y,q);
+                if (simModel->scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                    if (!vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y, q)) {
+                        throw std::runtime_error("this went wrong with compute_experiencedcpue_fgrounds_per_yearquarter_per_pop: quitting");
+                    };
+                }
                 //vector<vector<vector<double> > > dd = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
                 vessel->clear_cumeffort_per_yearquarter();
-            }           
-                
+            }
+           
             // RE-READ VESSEL DATA
             // fill in with new input files for fgrounds and harbours, etc.
             // if change of year-quarter or semester, to be quarter or semester-specific.

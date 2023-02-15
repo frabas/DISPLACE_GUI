@@ -4247,7 +4247,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
 
 
 
-void Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter)
+bool Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter)
 {
     vector<double> cum_cpue_over_pop;
 
@@ -4258,18 +4258,21 @@ void Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
     for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_yearquarter_per_pop.size(); a_node++)
     {
         cum_cpue_over_pop.push_back(0);
-
+        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on node i " << a_node << endl;
         int a_quarter = (the_year * 4) + (the_quarter);
         int last_quarter = a_quarter - 1;
-        //cout << "in this year " << the_year << " current quarter idx is " << a_quarter << " last quarter idx is " << last_quarter << " last year quarter for current quarter is " << a_quarter + 1 - 5 << endl;
+        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "in this year " << the_year << " current quarter idx is " << a_quarter << " last quarter idx is " << last_quarter << " last year quarter for current quarter is " << a_quarter + 1 - 5 << endl;
         for (unsigned int a_pop = 0; a_pop < experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).size(); a_pop++)
             {
+            //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on pop i " << a_pop << endl;
 
                 // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
                 if (the_year>0)
                 {
                     // do a weighted average of past cpues looking at the similar quarter in past years
                     vector<double> cpues;
+                    //if (this->get_name() == "POL022500003" && the_year > 0) cout << "size is " << cumeffort_per_yearquarter_per_fgrounds.size() << endl;
+                    // caution: fgrounds need to be the same over quarter for this to work.....
                     if (cumeffort_per_yearquarter_per_fgrounds.at(a_node) > 0) 
                     {
                         double cpues_this_quarter = cumcatch_fgrounds_per_yearquarter_per_pop.at(a_node).at(last_quarter).at(a_pop) / cumeffort_per_yearquarter_per_fgrounds.at(a_node);
@@ -4310,7 +4313,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
             }   
     }
     outc(cout << "experienced cpue on grounds per yearquarter per pop...OK" << endl);
-
+    return true;
 }
 
 

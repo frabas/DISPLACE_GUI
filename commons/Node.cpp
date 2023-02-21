@@ -1571,6 +1571,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
             //cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;
             //cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << endl;
             //cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << endl;
+            //cout << endl;
             //}
 
 

@@ -280,8 +280,8 @@ Vessel::Vessel(Node* p_location,
     // init individual tac
     for(int i = 0; i < nbpops; i++)
     {
-        individual_tac_per_pop.push_back(0);
-        individual_tac_per_pop_at_year_start.push_back(0);
+        individual_tac_per_pop.push_back(1);
+        individual_tac_per_pop_at_year_start.push_back(1);
         prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
         prop_remaining_global_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
         is_choked.push_back(0); // inform when the quota is exhausted by stock
@@ -4224,10 +4224,18 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
             if (cum_cpue_over_met_pop.at(a_node).at(a_met) != 0) {
                 for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_met_per_pop.dimension(2); pop++) {
 
+                    // if the tac is exhausted on this pop, then do not include this pop in the cpue that will be later used to decide on fishing grounds frequency of visit
+                    if (this->get_individual_tac(pop) <= 0) {
+                        experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, pop);
+                        //cout << "The individual tac of "<<  this->get_name() << " is exhausted on this pop " << pop << ": remove from the CPUE calculation : " << experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) << endl;
+                    }
+
                     if (freq_experiencedcpue_fgrounds_per_met_per_pop.hasValue(a_node, a_met, pop)) {
                         freq_experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, pop) =
                                 experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) /
                                 cum_cpue_over_met_pop.at(a_node).at(a_met);
+
+             
                     } else {
                         freq_experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, pop);
                     }
@@ -4294,6 +4302,9 @@ bool Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
                         sum = sum + weight.at(i);
                     }
                     experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(a_pop) = num_weight / sum; // weighted average with more weight on current quarter
+                    // if the tac is exhausted on this pop, then do not include this pop in the cpue that will be later used to decide on fishing grounds frequency of visit
+                    if (this->get_individual_tac(a_pop) <= 0) experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(a_pop) = 0;
+                
                 } // else use init values per quarter for the quarters of the first y
                  
                     // cumul to scale to 1 (just below)

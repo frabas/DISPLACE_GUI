@@ -2305,6 +2305,7 @@ bool DisplaceModel::loadNodes()
             
             map<int, double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
+            double a_muliplier_on_fish_price = 1.0;
             if (a_name != "none" && a_point == inode) {
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
@@ -2313,6 +2314,22 @@ bool DisplaceModel::loadNodes()
                                                          mInputName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 cout << "....OK" << endl;
+           
+                if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishprice_plus100percent"))
+                {
+                    a_muliplier_on_fish_price = 2;
+                }
+                if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishprice_plus700percent"))
+                {
+                    a_muliplier_on_fish_price = 7;
+                }
+
+                multimap<int, double>::iterator pos;
+                for (pos = fishprices_each_species_per_cat.begin(); pos != fishprices_each_species_per_cat.end(); pos++) {
+                    pos->second = (pos->second) * a_muliplier_on_fish_price;
+                }
+
+            
             } else {
 
                 cout << a_point

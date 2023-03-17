@@ -464,6 +464,26 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                                                    p->folder_name_parameterization, p->inputfolder);
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 assert(er2 == 0);
+
+                double a_multiplier_on_fishprices = 1.0;
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus100percent))
+                {
+                    a_multiplier_on_fishprices = 2.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus700percent))
+                {
+                    a_multiplier_on_fishprices = 7.0;
+                }
+
+                multimap<int, double>::iterator pos;
+                for (pos = fishprices_each_species_per_cat.begin(); pos != fishprices_each_species_per_cat.end(); pos++) {
+                    pos->second = (pos->second) * a_multiplier_on_fishprices;
+                }
+
+                for (pos = fishprices_each_species_per_cat.begin(); pos != fishprices_each_species_per_cat.end(); pos++) {
+                    outc(cout << pos->first << " " << pos->second);
+                }
+
                 outc(cout << "....OK" << endl);
             } else {
                 outc(cout << a_point
@@ -479,65 +499,34 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             }
 
             // read fuel price (vessel size dependent for the time being)
+            double a_multiplier_on_fuelprices = 1.0;
             if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus20percent))
             {
-                read_fuel_prices_per_vsize(model().scenario().a_port,
+                a_multiplier_on_fuelprices = 1.2;
+            }
+            if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus50percent))
+            {
+                a_multiplier_on_fuelprices = 1.5;
+            }
+            if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus100percent))
+            {
+                a_multiplier_on_fuelprices = 2.0;
+            }
+            read_fuel_prices_per_vsize(model().scenario().a_port,
                                            quarterString(), init_fuelprices,
                                            p->folder_name_parameterization,
                                            p->inputfolder);
 
-                map<int, double>::iterator pos;
-                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                    pos->second = (pos->second) * 1.2;
+            map<int, double>::iterator pos;
+            for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                    pos->second = (pos->second) * a_multiplier_on_fuelprices;
                 }
 
-                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+            for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
                     outc(cout << pos->first << " " << pos->second);
                 }
-            }
-            else {
-                if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus50percent))
-                {
-                    read_fuel_prices_per_vsize(model().scenario().a_port,
-                        quarterString(), init_fuelprices,
-                        p->folder_name_parameterization,
-                        p->inputfolder);
-
-                    map<int, double>::iterator pos;
-                    for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                        pos->second = (pos->second) * 1.5;
-                    }
-
-                    for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                        outc(cout << pos->first << " " << pos->second);
-                    }
-                }
-                else {
-
-                    if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus100percent))
-                    {
-                        read_fuel_prices_per_vsize(model().scenario().a_port,
-                            quarterString(), init_fuelprices,
-                            p->folder_name_parameterization,
-                            p->inputfolder);
-
-                        map<int, double>::iterator pos;
-                        for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                            pos->second = (pos->second) * 2;
-                        }
-
-                        for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                            outc(cout << pos->first << " " << pos->second);
-                        }
-                    }
-                    else {
-                        read_fuel_prices_per_vsize(model().scenario().a_port, "quarter1", init_fuelprices,
-                            p->folder_name_parameterization,
-                            p->inputfolder);
-
-                    }
-                }
-            }
+            
+            
 
 
 

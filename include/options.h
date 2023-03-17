@@ -99,6 +99,8 @@ enum Dyn_Alloc {
     fuelprice_plus20percent,
     fuelprice_plus50percent,
     fuelprice_plus100percent,
+    fishprice_plus100percent,
+    fishprice_plus700percent,
     reduced_speed_10percent,
     reduced_speed_20percent,
     reduced_speed_30percent,

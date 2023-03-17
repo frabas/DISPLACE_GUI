@@ -39,6 +39,8 @@ DynAllocOptions::DynAllocOptions()
     M(mMap,"area_monthly_closure", area_monthly_closure);
     M(mMap,"closed_to_others_as_well", closed_to_others_as_well);
     O(mMap,fuelprice_plus20percent);
+    O(mMap,fuelprice_plus50percent);
+    O(mMap,fuelprice_plus100percent);
     O(mMap,reduced_speed_10percent);
     O(mMap,reduced_speed_20percent);
     O(mMap,reduced_speed_30percent);
@@ -48,6 +50,15 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,focus_on_high_previous_cpue);
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
+    O(mMap, multiOnF01);
+    O(mMap, multiOnF02);
+    O(mMap, multiOnF03);
+    O(mMap, multiOnF04);
+    O(mMap, multiOnF05);
+    O(mMap, multiOnF06);
+    O(mMap, multiOnF07);
+    O(mMap, multiOnF08);
+    O(mMap, multiOnF09);
     O(mMap, experiencedCPUEsPerMet);
     O(mMap, experiencedCPUEsPerYearQuarter);
     O(mMap,fishing_credits);

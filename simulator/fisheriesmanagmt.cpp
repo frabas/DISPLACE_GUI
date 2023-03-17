@@ -486,7 +486,8 @@ return true;
 
 
 
-bool computeTAC(vector<Population* >& populations, int sp, int tstep, double multiOnTACconstraint, int HCR)
+bool computeTAC(vector<Population* >& populations, int sp, int tstep, 
+     double multiOnTACconstraint, double multiOnF, int HCR)
 {
     dout(cout<< "------------" << endl);
     dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year for pop " << populations.at(sp)->get_name() << endl);
@@ -503,7 +504,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep, double mul
     dout(cout<< "TACpercent:" << TACpercent << endl);
     double Btrigger = fbar_ages_min_max.at(5);
     dout(cout<< "TACpercent:" << Btrigger << endl);
-    double FMSY = fbar_ages_min_max.at(6);
+    double FMSY = fbar_ages_min_max.at(6) * multiOnF;
     dout(cout<< "FMSY:" << FMSY << endl);
     //double FMSYdown = fbar_ages_min_max.at(7);
     double FMSYdown=FMSY*0.9; // TO BE REMOVED WHEN INPUT DATA

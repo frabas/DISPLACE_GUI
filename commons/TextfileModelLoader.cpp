@@ -479,7 +479,8 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             }
 
             // read fuel price (vessel size dependent for the time being)
-            if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus20percent)) {
+            if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus20percent))
+            {
                 read_fuel_prices_per_vsize(model().scenario().a_port,
                                            quarterString(), init_fuelprices,
                                            p->folder_name_parameterization,
@@ -493,12 +494,51 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                 for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
                     outc(cout << pos->first << " " << pos->second);
                 }
-            } else {
-                read_fuel_prices_per_vsize(model().scenario().a_port, "quarter1", init_fuelprices,
-                                           p->folder_name_parameterization,
-                                           p->inputfolder);
-
             }
+            else {
+                if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus50percent))
+                {
+                    read_fuel_prices_per_vsize(model().scenario().a_port,
+                        quarterString(), init_fuelprices,
+                        p->folder_name_parameterization,
+                        p->inputfolder);
+
+                    map<int, double>::iterator pos;
+                    for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                        pos->second = (pos->second) * 1.5;
+                    }
+
+                    for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                        outc(cout << pos->first << " " << pos->second);
+                    }
+                }
+                else {
+
+                    if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus100percent))
+                    {
+                        read_fuel_prices_per_vsize(model().scenario().a_port,
+                            quarterString(), init_fuelprices,
+                            p->folder_name_parameterization,
+                            p->inputfolder);
+
+                        map<int, double>::iterator pos;
+                        for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                            pos->second = (pos->second) * 2;
+                        }
+
+                        for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                            outc(cout << pos->first << " " << pos->second);
+                        }
+                    }
+                    else {
+                        read_fuel_prices_per_vsize(model().scenario().a_port, "quarter1", init_fuelprices,
+                            p->folder_name_parameterization,
+                            p->inputfolder);
+
+                    }
+                }
+            }
+
 
 
             vector<types::NodeId> init_usual_fgrounds;

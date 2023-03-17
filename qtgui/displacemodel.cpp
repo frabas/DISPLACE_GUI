@@ -2327,28 +2327,33 @@ bool DisplaceModel::loadNodes()
             }
 
             // read fuel price (vessel size dependent for the time being)
-            if (!binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-                               "fuelprice_plus20percent")) {
-                cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(),
-                                           mBasePath.toStdString());
-                cout << "...OK" << endl;
-            } else {
-                cout << "read fuel price..." << endl;
-                read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(),
-                                           mBasePath.toStdString());
-
-                map<int, double>::iterator pos;
-                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                    pos->second = (pos->second) * 1.2;
-                }
-
-                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
-                    cout << pos->first << " " << pos->second;
-                }
-                cout << "...OK" << endl;
-
+            double a_muliplier_on_fuel_price = 1.0;
+            if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fuelprice_plus20percent"))
+            {
+                a_muliplier_on_fuel_price = 1.2;
             }
+            if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fuelprice_plus50percent"))
+            {
+                a_muliplier_on_fuel_price = 1.5;
+            }
+            if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fuelprice_plus100percent"))
+            {
+                a_muliplier_on_fuel_price = 2;
+            }
+            read_fuel_prices_per_vsize(a_port, "quarter1", init_fuelprices, mInputName.toStdString(),
+                                           mBasePath.toStdString());
+                
+            map<int, double>::iterator pos;
+                for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) {
+                    pos->second = (pos->second) * a_muliplier_on_fuel_price;
+                }
+
+            for (pos = init_fuelprices.begin(); pos != init_fuelprices.end(); pos++) 
+            {
+                    cout << pos->first << " " << pos->second;
+            }
+                
+                cout << "...OK" << endl;
             
             //stringstream out;
             //out << i;

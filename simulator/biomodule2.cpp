@@ -243,8 +243,9 @@ int will_stop=0; // see Options::DEBUG_TAC
                        will_stop=1; // trigger to stop the simu at the end of biomodule to avoid going further after this below computation that have potential side effects
                        if(dyn_alloc_sce.option(Options::FMSY))
                           {
-                          int multiOnTACconstraint=1.0;
-                          if(!computeTAC(populations, sp, tstep, multiOnTACconstraint, 2))
+                          double multiOnTACconstraint=1.0;
+                          double multiOnF = 1.0;
+                          if(!computeTAC(populations, sp, tstep, multiOnTACconstraint, multiOnF, 2))
                               throw std::runtime_error("Error while executing: computeTAC"); // use for checking
                           }
                      }
@@ -1240,11 +1241,48 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                   multiOnTACconstraint=1.0; // default
                                }
 
+                               double multiOnF = 1.0;
+                               if (dyn_alloc_sce.option(Options::multiOnF01))
+                               {
+                                   multiOnF = 0.1;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF02))
+                               {
+                                   multiOnF = 0.2;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF03))
+                               {
+                                   multiOnF = 0.3;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF04))
+                               {
+                                   multiOnF = 0.4;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF05))
+                               {
+                                   multiOnF = 0.5;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF06))
+                               {
+                                   multiOnF = 0.6;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF07))
+                               {
+                                   multiOnF = 0.7;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF08))
+                               {
+                                   multiOnF = 0.8;
+                               }
+                               if (dyn_alloc_sce.option(Options::multiOnF09))
+                               {
+                                   multiOnF = 0.9;
+                               }
 
                                if(dyn_alloc_sce.option(Options::LTMP)){
 
                                    try {
-                                       bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 1);
+                                       bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, multiOnF, 1);
                                      } catch (runtime_error &) {
                                          cout << "Fail in computeTAC LTMP" << endl;
                                          return false;
@@ -1253,7 +1291,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                    if(dyn_alloc_sce.option(Options::FMSY)){
 
                                        try {
-                                           bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 2);
+                                           bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, multiOnF, 2);
                                          } catch (runtime_error &) {
                                              cout << "Fail in computeTAC FMSY" << endl;
                                              return false;
@@ -1261,14 +1299,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                     } else{
                                        if(dyn_alloc_sce.option(Options::FMSYrange)){
                                            try {
-                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 3);
+                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, multiOnF, 3);
                                              } catch (runtime_error &) {
                                                  cout << "Fail in computeTAC FMSYrange" << endl;
                                                  return false;
                                              }
                                        } else{
                                            try {
-                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, 4); // statuquo is default
+                                               bool er=computeTAC(populations, sp, tstep, multiOnTACconstraint, multiOnF, 4); // statuquo is default
                                              } catch (runtime_error &) {
                                                  cout << "Fail in computeTAC statuquo" << endl;
                                                  return false;

@@ -505,6 +505,16 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 
         }
 
+        
+        if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
+            // a decrease by 10%...
+            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.9;
+            // corresponds to a decrease by 30% in fuelcons
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.7;
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+        
         if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_20percent)) {
             // a decrease of vessel speed by 20%...
             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.8;
@@ -512,11 +522,6 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.512;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
-        }
-
-        if (model.scenario().dyn_alloc_sce.option(Options::gear_fuel_efficiency_gain_30percent)) {
-              // decrease consumption when fishing by altering mult_fuelcons_when_fishing
-            loadedDataVessels.vectdparam12.at(i) = loadedDataVessels.vectdparam12.at(i) * 0.70;
         }
 
         if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_30percent)) {
@@ -528,15 +533,21 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
 
-        if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
-            // a decrease by 10%...
-            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.9;
-            // corresponds to a decrease by 30% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.7;
-            // cubic law  c=v^3, see Ronen 1982
-            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        if (model.scenario().dyn_alloc_sce.option(Options::multiOnFuelcons50percent)) {
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 1.5;
+        }
+        
+        if (model.scenario().dyn_alloc_sce.option(Options::multiOnFuelcons100percent)) {
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 2.0;
         }
 
+
+        if (model.scenario().dyn_alloc_sce.option(Options::gear_fuel_efficiency_gain_30percent)) {
+              // decrease consumption when fishing by altering mult_fuelcons_when_fishing
+            loadedDataVessels.vectdparam12.at(i) = loadedDataVessels.vectdparam12.at(i) * 0.70;
+        }
+
+       
 
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data

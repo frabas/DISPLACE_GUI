@@ -107,6 +107,8 @@ enum Dyn_Alloc {
     multiOnFuelcons50percent,
     multiOnFuelcons100percent,
     gear_fuel_efficiency_gain_30percent,
+    multiOnVesselValue50percent,
+    multiOnVesselValue100percent,
     closer_grounds,
     closer_port,
     focus_on_high_previous_cpue,

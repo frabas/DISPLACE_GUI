@@ -2285,7 +2285,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
     // AER indicator (in %)
 // cout << "NetProfitMargin is "<< NetProfitMargin << endl;
 
-   // overwrite input with a harcoded value to avoid confusion in informing this bit. What is meeded here is the max hours worked that correspond to one unit of FTE 
+   // overwrite input with a harcoded value to avoid confusion in informing this bit. What is needed here is the max hours worked that correspond to one unit of FTE 
    // i.e. 8 hours per day x 5 work days per week x 52 weeks per year = 2080
    double stdard_annual_full_time_employement_hours = 2080.0;
    double nb_crew_on_this_vessel = this->get_this_vessel_nb_crew();

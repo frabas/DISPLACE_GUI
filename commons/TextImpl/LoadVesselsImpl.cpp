@@ -547,7 +547,13 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             loadedDataVessels.vectdparam12.at(i) = loadedDataVessels.vectdparam12.at(i) * 0.70;
         }
 
-       
+        if (model.scenario().dyn_alloc_sce.option(Options::multiOnVesselValue50percent)) {
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam25.at(i) * 1.5;
+        }
+
+        if (model.scenario().dyn_alloc_sce.option(Options::multiOnVesselValue100percent)) {
+            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam25.at(i) * 2.0;
+        }
 
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data

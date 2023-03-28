@@ -128,7 +128,6 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           const vector<int> & tsteps_years, const vector<int> & tsteps_months,
                           const vector<int> & implicit_pops,
                           const vector<double> & calib_oth_landings,
-                          vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
                           bool is_other_land_as_multiplier_on_sp,
                           bool is_oth_land_per_metier,
@@ -330,8 +329,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
-            /*
-            if(sp==1){
+            
+            if(sp==2){
                 vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
                 for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                  cout << "START THIS STEP: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
@@ -340,7 +339,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
                  cout << "START THIS STEP: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
             }
-            */
+            
 
           
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
@@ -575,6 +574,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                             // apply_oth_land()
                                 try {
+                                    vector<double> selectivity_per_stock_ogives_for_oth_land = populations.at(name_pop)->get_selectivity_per_stock_ogives_for_oth_land();
                                     if(oth_land_this_pop_this_node.at(n)>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
                                                                                                      a_mls_cat.at(name_pop),
                                                                                                      oth_land_this_pop_this_node.at(n),
@@ -636,6 +636,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
                         // apply_oth_land()
                             try {
+                                vector<double> selectivity_per_stock_ogives_for_oth_land = populations.at(name_pop)->get_selectivity_per_stock_ogives_for_oth_land();
                                 if(oth_land_this_pop_this_node.at(n) >0) a_list_nodes.at(n)->apply_oth_land(name_pop,
                                                                                                  a_mls_cat.at(name_pop),
                                                                                                  oth_land_this_pop_this_node.at(n),
@@ -791,8 +792,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             dout(cout  << "compute this month the cumulated F_at_age on the whole pop..." << endl);
 
 
-           /*
-             if(populations.at(sp)->get_name()==1){
+           
+             if(populations.at(sp)->get_name()==2){
                 vector <double> a_tot_N_at_szgroup_minus_1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
                 for(int sz=0; sz < a_tot_N_at_szgroup_minus_1_here.size(); sz++)
                  cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup_minus_1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus_1_here[sz]  << endl;
@@ -802,7 +803,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                  cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
             }
-            */
+           
 
             populations.at(sp)->compute_tot_N_and_F_and_W_at_age(a_month_i);
 
@@ -1060,8 +1061,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> a_tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
                populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( a_tot_N_at_szgroup );
 
-               /*
-               if(sp==1){
+               
+               if(sp==2){
                    for(int sz=0; sz < a_tot_N_at_szgroup.size(); sz++)
                        cout <<"tstep " << tstep << "STORED N HERE:  a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup[sz]  << endl;
 
@@ -1069,7 +1070,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
                    cout <<"tstep " << tstep << "STORED N MINUS 1:  a_tot_N_at_szgroup_minus1_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
                }
-               */
+               
 
                // apply only at the beginning of the year (this is maybe not always relevant...)
                if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
@@ -1110,14 +1111,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                   }
             }
 
-            /*
-            if(sp==1){
+            
+            if(sp==2){
             populations.at(sp)->aggregate_N();
             vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
             for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                 cout <<"tstep " << tstep << "AFTER distribute_N and aggregate_N:  a_tot_N_at_szgroup_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
             }
-            */
+            
 
             //...and compute the Ns on nodes at the start of this month!
             for (unsigned int n=0; n<nodes.size(); n++)

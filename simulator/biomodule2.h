@@ -89,7 +89,6 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           const vector<int> & tsteps_years, const vector<int> & tsteps_months,
                           const vector<int> & implicit_pops,
                           const vector<double> & calib_oth_landings,
-                          vector<vector <double> >& selectivity_per_stock_ogives_for_oth_land,
                           bool is_tacs,
                           bool is_other_land_as_multiplier_on_sp,
                           bool is_oth_land_per_metier,

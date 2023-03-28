@@ -1565,14 +1565,14 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
             Np.at(sz) = Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
 
             // check for the need for a_scaling factor. The depletion from M on node should be kept in a realistic range.
-            //if (name_pop == 36 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.90) {
-            //cout << "check her pop 36" << endl;
-            //cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << endl;
-            //cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;
-            //cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << endl;
-            //cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << endl;
-            //cout << endl;
-            //}
+            if (name_pop == 2 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.90) {
+                cout << "check her pop 2" << endl;
+            cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << endl;
+            cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;
+            cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << endl;
+            cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << endl;
+            cout << endl;
+            }
 
 
             //this is assuming that the M is uniformly applied to the pop
@@ -1590,7 +1590,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN,
-                          int will_I_discard_all,  vector<vector<double> >& selectivity_per_stock_ogives_for_oth_land)
+                          int will_I_discard_all,  vector<double>& selectivity_per_stock_ogives_for_oth_land)
 {
     dout(cout << "BEGIN: apply_oth_land()" << endl);
 
@@ -1639,7 +1639,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
     }
     else
     {
-            sel_ogive=selectivity_per_stock_ogives_for_oth_land.at(name_pop);  // ...or read from param
+            sel_ogive=selectivity_per_stock_ogives_for_oth_land;  // ...or read from param
     }
 
 

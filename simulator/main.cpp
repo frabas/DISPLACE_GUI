@@ -254,7 +254,6 @@ vector<PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
 ofstream shipslogs;
-vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
 
 std::mutex listVesselMutex;
 vector<int> listVesselIdForVmsLikeToExport;
@@ -2064,7 +2063,6 @@ int app_main(int argc, char const* argv[])
                                     simModel->calendar().months(),
                                     simModel->config().implicit_pops,
                                     simModel->config().calib_oth_landings,
-                                    selectivity_per_stock_ogives_for_oth_land,
                                     simModel->is_tacs(),
                                     simModel->is_other_land_as_multiplier_on_sp(),
                                     simModel->is_oth_land_per_metier(),

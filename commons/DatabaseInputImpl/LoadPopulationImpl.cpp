@@ -51,6 +51,8 @@ bool DatabaseModelLoader::loadPopulations(int period)
                                std::move(d.init_proprecru_at_szgroup),
 
                                std::move(d.param_sr),
+                               std::move(d.selectivity_per_stock_ogives_for_oth_land),
+                           
                                std::move(d.full_spatial_availability),
                                std::move(d.field_of_coeff_diffusion_this_pop),
                                std::move(d.oth_land),

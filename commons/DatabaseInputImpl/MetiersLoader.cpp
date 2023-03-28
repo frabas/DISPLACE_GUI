@@ -272,10 +272,10 @@ class MetiersSpeciesSzGroupDispatcher {
         at(at(data.selectivity_per_stock, species), szgroup) = val;
     }
 
-    static void loadSelectivityOthPerStock(MetiersLoader::MetierData& data, int species, int szgroup, double val)
-    {
-        at(at(data.selectivity_per_stock_ogives_for_oth_land, species), szgroup) = val;   
-    }
+    //static void loadSelectivityOthPerStock(MetiersLoader::MetierData& data, int species, int szgroup, double val)
+    //{
+    //    at(at(data.selectivity_per_stock_ogives_for_oth_land, species), szgroup) = val;   
+    //}
 
 public:
     explicit MetiersSpeciesSzGroupDispatcher(std::shared_ptr<MetiersLoader::MetierData> met) : metier(met)
@@ -283,8 +283,8 @@ public:
         if (dispatcher.empty()) {
             dispatcher.insert(
                     std::make_pair("SelOgive", &MetiersSpeciesSzGroupDispatcher::loadSelectivityPerStock));
-            dispatcher.insert(
-                    std::make_pair("SelOgiveOth", &MetiersSpeciesSzGroupDispatcher::loadSelectivityOthPerStock)); // TODO: add to metier creator()
+          //  dispatcher.insert(
+          //          std::make_pair("SelOgiveOth", &MetiersSpeciesSzGroupDispatcher::loadSelectivityOthPerStock)); // TODO: add to metier creator()
         }
     }
 

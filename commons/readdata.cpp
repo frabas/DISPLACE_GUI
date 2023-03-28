@@ -1873,30 +1873,3 @@ vector<vector<double> > read_selectivity_per_stock_ogives(int a_met,
 }
 
 
-vector<vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpops,
-                                                                       int nbszgroup,
-                                                                       string folder_name_parameterization,
-                                                                       string inputfolder,
-                                                                       string fleetsce)
-{
-
-    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization +
-                      "/metier_selectivity_per_stock_ogives_fleetsce" + fleetsce + "_for_oth_land.dat";
-
-    ifstream file_selectivity_per_stock_ogives_for_oth_land;
-    file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
-    if (file_selectivity_per_stock_ogives_for_oth_land.fail()) {
-        vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
-        return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
-    }
-    vector<vector<double> > selectivity_per_stock_ogives_for_oth_land(nbpops, vector<double>(nbszgroup));
-    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives_for_oth_land,
-                                       selectivity_per_stock_ogives_for_oth_land)) {
-        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
-    }
-
-    file_selectivity_per_stock_ogives_for_oth_land.close();
-
-    return (selectivity_per_stock_ogives_for_oth_land);
-}
-

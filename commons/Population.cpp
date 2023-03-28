@@ -42,6 +42,7 @@ Population::Population(int a_name,
                        vector<double> init_M_at_szgroup,
                        const vector<double> &init_proprecru_at_szgroup,
                        const vector<double> &_param_sr,
+                       const vector<double> &_selectivity_per_stock_ogives_for_oth_land,
                        const multimap<types::NodeId, double> &_full_spatial_availability,
                        const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
                        const map<types::NodeId, double> &_oth_land,
@@ -82,6 +83,7 @@ Population::Population(int a_name,
     nb_ages=percent_szgroup_per_age_matrix[0].size();
 
 	param_sr=_param_sr;
+    selectivity_per_stock_ogives_for_oth_land = _selectivity_per_stock_ogives_for_oth_land;
 
     this->set_landings_so_far(0.0);
 
@@ -652,6 +654,11 @@ const vector<double>& Population::get_param_sr() const
 	return(param_sr);
 }
 
+const vector<double>& Population::get_selectivity_per_stock_ogives_for_oth_land() const
+{
+    return(selectivity_per_stock_ogives_for_oth_land);
+}
+
 
 vector< vector <double> > Population::get_growth_transition_matrix() const
 {
@@ -1097,6 +1104,16 @@ void Population::set_param_sr(const vector<double>& _param_sr)
 		param_sr[i]=_param_sr[i];
 	}
 }
+
+void Population::set_selectivity_per_stock_ogives_for_oth_land(const vector<double>& _selectivity_per_stock_ogives_for_oth_land)
+{
+
+    for (unsigned int i = 0; i < _selectivity_per_stock_ogives_for_oth_land.size(); i++)
+    {
+        selectivity_per_stock_ogives_for_oth_land[i] = _selectivity_per_stock_ogives_for_oth_land[i];
+    }
+}
+
 
 
 void Population::set_full_spatial_availability(multimap<types::NodeId,double> _full_spatial_availability)

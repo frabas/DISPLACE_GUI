@@ -36,6 +36,7 @@ public:
         std::vector<double> init_M_at_szgroup;
         std::vector<double> init_proprecru_at_szgroup;
         std::vector<double> param_sr;
+        std::vector<double> selectivity_per_stock_ogives_for_oth_land;
         std::multimap<types::NodeId, double> full_spatial_availability;
         std::multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
         std::map<types::NodeId, double> oth_land;

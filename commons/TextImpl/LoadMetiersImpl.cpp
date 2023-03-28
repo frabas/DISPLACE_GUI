@@ -157,11 +157,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     map<int, string> metiers_gear_widths_model_type = read_gear_widths_model_type(p->folder_name_parameterization,
                                                                                   p->inputfolder);
 
-    // oth_land are not metier-specific by nature, but the reader is placed here for coherence...
-    vector<vector<double> > selectivity_per_stock_ogives_for_oth_land = read_selectivity_per_stock_ogives_for_oth_land(
-            paramsForLoad.iparam1, paramsForLoad.iparam3, p->folder_name_parameterization, p->inputfolder,
-            model().scenario().fleetsce);
-
+  
     // get the name of the metiers
     // copy only unique elements into name_metiers
     cout << "retrieve the metier names.... " << endl;
@@ -284,9 +280,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     loadedData.vovi3 = vect_of_the_metier_target_stocks_vovi;
     loadedData.vovi4 = vect_of_the_metier_suitable_seabottomtypes_vovi;
 
-    // NOT for Metier() creator
-    loadedData.vovd5 = selectivity_per_stock_ogives_for_oth_land;
-
+   
     cout << "export metier loaded data back to simulator.cpp....done " << endl;
 
 
@@ -324,7 +318,6 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
 
             cout << "Create metier " << i << "...done" << endl;
 
-            selectivity_per_stock_ogives_for_oth_land = loadedData.vovd5; // TODO: move to the right place
         }
 
         model().setMetiers(std::move(metiers));

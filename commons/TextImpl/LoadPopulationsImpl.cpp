@@ -150,6 +150,7 @@ struct LoadedData {
     std::vector<vector<double> > vovd10;
     std::vector<vector<double> > vovd11;
     std::vector<vector<double> > vovd12;
+    std::vector<vector<double> > vovd13;
     std::vector<vector<types::NodeId> > vovn1;
     std::vector<vector<int> > vovi1;
     std::vector<vector<int> > vovi2;
@@ -1008,6 +1009,33 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
 }
 
 
+vector<vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpops,
+    int nbszgroup,
+    string folder_name_parameterization,
+    string inputfolder,
+    string fleetsce)
+{
+
+    string filename = inputfolder + "/metiersspe_" + folder_name_parameterization +
+        "/metier_selectivity_per_stock_ogives_fleetsce" + fleetsce + "_for_oth_land.dat";
+
+    ifstream file_selectivity_per_stock_ogives_for_oth_land;
+    file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
+    if (file_selectivity_per_stock_ogives_for_oth_land.fail()) {
+        vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
+        return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
+    }
+    vector<vector<double> > selectivity_per_stock_ogives_for_oth_land(nbpops, vector<double>(nbszgroup));
+    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives_for_oth_land,
+        selectivity_per_stock_ogives_for_oth_land)) {
+        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+    }
+
+    file_selectivity_per_stock_ogives_for_oth_land.close();
+
+    return (selectivity_per_stock_ogives_for_oth_land);
+}
+
 
 
 
@@ -1831,6 +1859,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     vector<multimap<types::NodeId, double> > vect_of_full_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
     vector<multimap<types::NodeId, double> > vect_of_field_of_coeff_diffusion_this_pop_mmap(name_pops.size());
     vector<map<types::NodeId, double> > vect_of_oth_land_map(name_pops.size());
+    vector<vector<double> > vect_of_selectivity_per_stock_ogives_for_oth_land(name_pops.size());
     vector<vector<map<types::NodeId, double> > > vect_of_vect_of_oth_land_map(name_pops.size());
     vector<map<string, double> > vect_of_relative_stability_key_map(name_pops.size());
     vector<map<int, double> > vect_of_percent_tac_per_vessel_length_class_map(name_pops.size());
@@ -2183,6 +2212,14 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 
             }
         
+            // oth_land are not metier-specific by nature, but the reader is placed here for coherence...
+            vect_of_selectivity_per_stock_ogives_for_oth_land = read_selectivity_per_stock_ogives_for_oth_land(
+              model().config().nbpops, NBSZGROUP,
+              p->folder_name_parameterization, p->inputfolder,
+             model().scenario().fleetsce);
+
+
+
         }
 
         if (year == 1 && model().month() == 1)
@@ -2303,8 +2340,9 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     loadedData.vovd6 = vect_of_init_M_per_szgroup_vov;
     loadedData.vovd7 = vect_of_init_proprecru_per_szgroup_vov;
     loadedData.vovd8 = vect_of_param_sr_v;
-    loadedData.vovd11 = vect_of_beta_ssm_per_szgroup_vov;
-    loadedData.vovd12 = vect_of_background_mortality_per_szgroup_vov;
+    loadedData.vovd9 = vect_of_selectivity_per_stock_ogives_for_oth_land;
+    loadedData.vovd12 = vect_of_beta_ssm_per_szgroup_vov;
+    loadedData.vovd13 = vect_of_background_mortality_per_szgroup_vov;
     loadedData.vectmmapndparam1 = vect_of_full_avai_szgroup_nodes_with_pop_mmap;
     loadedData.vectmmapndparam2 = vect_of_field_of_coeff_diffusion_this_pop_mmap;
     loadedData.vectmapndparam1 = vect_of_oth_land_map;
@@ -2317,8 +2355,8 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     loadedData.vovovd3 = vect_of_percent_age_per_szgroup_matrix_vov;
     loadedData.vovovd1 = vect_of_growth_transition_matrix_vov;
     // nodes,
-    loadedData.vovd9 = vect_of_fbar_ages_min_max_and_ftarget_this_pop_v;
-    loadedData.vovd10 = vect_of_tac_this_pop;
+    loadedData.vovd10 = vect_of_fbar_ages_min_max_and_ftarget_this_pop_v;
+    loadedData.vovd11 = vect_of_tac_this_pop;
     loadedData.mapiiparam1 = tac_percent_simulated;
     loadedData.mapidparam1 = hyperstability_param;
     loadedData.vectdparam6 = vdparam1; // calib_cpue_multiplier;
@@ -2372,6 +2410,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 loadedData.vovd6.at(sp),
                 loadedData.vovd7.at(sp),
                 loadedData.vovd8.at(sp),
+                loadedData.vovd9.at(sp),
                 loadedData.vectmmapndparam1.at(sp),
                 loadedData.vectmmapndparam2.at(sp),
                 loadedData.vectmapndparam1.at(sp),
@@ -2384,8 +2423,8 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 loadedData.vovovd3.at(sp),
                 loadedData.vovovd1.at(sp),
                 model().nodes(),
-                loadedData.vovd9.at(sp),
                 loadedData.vovd10.at(sp),
+                loadedData.vovd11.at(sp),
                 loadedData.mapiiparam1.at(sp),
                 loadedData.mapidparam1.at(sp),
                 loadedData.vectdparam6.at(sp),
@@ -2399,16 +2438,16 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
             if (model().scenario().dyn_pop_sce.option(Options::sizeSpectra)) {
 
-                if (loadedData.vovd11.at(sp).size() != NBSZGROUP)
+                if (loadedData.vovd12.at(sp).size() != NBSZGROUP)
                 {
                     cout << "check beta_ssm for pop" << sp << ": some missing szgroups...." << endl; 
                 }
-                if (loadedData.vovd12.at(sp).size() != NBSZGROUP)
+                if (loadedData.vovd13.at(sp).size() != NBSZGROUP)
                 {
                     cout << "check background_mortality for pop" << sp << ": some missing szgroups...." << endl;
                 }
-                populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd11.at(sp)); // beta_ssm
-                populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd12.at(sp));   // background_M
+                populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd12.at(sp)); // beta_ssm
+                populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd13.at(sp));   // background_M
 
             }
 

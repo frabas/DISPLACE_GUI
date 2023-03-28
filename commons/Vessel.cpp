@@ -3703,7 +3703,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
                     this->get_loc()->add_to_cumdiscards_per_pop(totDiscThisEvent, pop);
 
-                    cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
+                    this->cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
                     if(this->get_metier()->get_is_avoided_stocks(pop)==1)

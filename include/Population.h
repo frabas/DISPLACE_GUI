@@ -51,6 +51,7 @@ class  Population
                    vector<double> init_M_at_szgroup,
                    const vector<double> &init_proprecru_at_szgroup,
                    const vector<double> &param_sr,
+                   const vector<double> &selectivity_per_stock_ogives_for_oth_land,
                    const multimap<types::NodeId,double> &full_spatial_availability,
                    const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
                    const map<types::NodeId,double> &oth_land,
@@ -137,6 +138,7 @@ class  Population
         double get_proportion_mature_fish() const;
         const vector<double> &get_FFmsy() const;
         const vector<double>& get_param_sr() const;
+        const vector<double>& get_selectivity_per_stock_ogives_for_oth_land() const;
 		vector< vector <double> >get_growth_transition_matrix() const;
 		vector< vector <double> >get_percent_szgroup_per_age_matrix() const;
 		vector< vector <double> >get_percent_age_per_szgroup_matrix() const;
@@ -210,6 +212,7 @@ class  Population
         void reset_landings_so_far_per_vessel_length_class();
         void add_to_landings_at_end_of_years(double value);
         void set_param_sr(const vector<double>& _param_sr);
+        void set_selectivity_per_stock_ogives_for_oth_land(const vector<double>& _selectivity_per_stock_ogives_for_oth_land);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
         void set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId, double> _field_of_coeff_diffusion_this_pop);
         void set_overall_migration_fluxes(multimap<int,double> _overall_migration_fluxes);
@@ -317,8 +320,9 @@ class  Population
         vector<double>  FFmsy;				 //
         double proportion_mature_fish;				 //
         int is_choking_fisheries;
-        vector<double> param_sr; //
-								 // area distribution
+        vector<double> param_sr; 
+        vector<double> selectivity_per_stock_ogives_for_oth_land;//
+								 
 		vector<Node* > list_nodes;
 								 // for sharing the total N by node
         multimap<types::NodeId,double> full_spatial_availability;

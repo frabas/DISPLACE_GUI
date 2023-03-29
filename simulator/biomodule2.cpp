@@ -312,12 +312,19 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     // check N
     //vector <double>tot_N_at_szgroup = populations.at(0)->get_tot_N_at_szgroup();
     
-
+   
     int will_I_discard_all=0; // init
     vector<int> a_mls_cat = vessels.at(0)->get_metier()->get_mls_cat_per_pop();
 
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
+        
+        // a check
+        if (sp == 2) {
+            cout << "start of pop model" << endl;
+            populations.at(sp)->aggregate_N_display_for_check();
+        }
+        
         outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
@@ -329,19 +336,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
-            
-            if(sp==2){
-                vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
-                for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                 cout << "START THIS STEP: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-
-                vector <double> a_tot_N_at_szgroup_minus1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
-                for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
-                 cout << "START THIS STEP: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
-            }
-            
-
-          
+              
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
 
@@ -572,7 +567,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                      }
                                  }
 
-                            // apply_oth_land()
+                                
+                                // apply_oth_land()
                                 try {
                                     vector<double> selectivity_per_stock_ogives_for_oth_land = populations.at(name_pop)->get_selectivity_per_stock_ogives_for_oth_land();
                                     if(oth_land_this_pop_this_node.at(n)>0) a_list_nodes.at(n)->apply_oth_land(name_pop,
@@ -632,6 +628,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                              }
                          }
 
+                    
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
                         // apply_oth_land()
@@ -644,12 +641,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                                                                                  totN,
                                                                                                  will_I_discard_all,
                                                                                                  selectivity_per_stock_ogives_for_oth_land);
+            
+                           
                             } catch (runtime_error &) {
                                 cout << "Fail in apply_oth_land 2" << endl;
                                 return false;
                             }
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node.at(n) << endl);
 
+                     
 
                         // then, collect and accumulate tot_C_at_szgroup
                         a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
@@ -683,6 +683,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                
 
             }
+
+            if (sp == 2) {
+                cout << "just after oth_land() " << endl;
+                populations.at(sp)->aggregate_N_display_for_check();
+            }
+
 
             dout(cout  << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << endl);
             // impact computed for the last month from N at the start month
@@ -770,7 +776,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             outc(cout << "landings so far for this pop " << sp << ", after applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
             
-      
+          
             dout(cout  << endl);
 
             // At the aggregated population scale,
@@ -784,6 +790,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double>tot_N_at_szgroup = populations.at(name_pop)->get_tot_N_at_szgroup();
             
 
+            // a check
+            if (sp == 2) {
+                cout << "just after aggregate()" << endl;
+                populations.at(sp)->aggregate_N_display_for_check();
+            }
+
             // then, compute F_at_age from F_at_szgroup as -log(N(t)/N(t-1))
             // knowing the ALK i.e.  prop szgroup in each age
             // (and no need of mortality_at_szgroup in the equ. because applied independently after)
@@ -792,18 +804,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             dout(cout  << "compute this month the cumulated F_at_age on the whole pop..." << endl);
 
 
-           
-             if(populations.at(sp)->get_name()==2){
-                vector <double> a_tot_N_at_szgroup_minus_1_here = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
-                for(int sz=0; sz < a_tot_N_at_szgroup_minus_1_here.size(); sz++)
-                 cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup_minus_1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus_1_here[sz]  << endl;
-
-                vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
-                for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                 cout <<"tstep " << tstep << " Code 121:  a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-
-            }
-           
 
             populations.at(sp)->compute_tot_N_and_F_and_W_at_age(a_month_i);
 
@@ -1062,6 +1062,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( a_tot_N_at_szgroup );
 
                
+               /*
                if(sp==2){
                    for(int sz=0; sz < a_tot_N_at_szgroup.size(); sz++)
                        cout <<"tstep " << tstep << "STORED N HERE:  a_tot_N_at_szgroup[" << sz << "]  here  is "<< a_tot_N_at_szgroup[sz]  << endl;
@@ -1070,6 +1071,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
                    cout <<"tstep " << tstep << "STORED N MINUS 1:  a_tot_N_at_szgroup_minus1_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
                }
+               */
                
 
                // apply only at the beginning of the year (this is maybe not always relevant...)
@@ -1113,10 +1115,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             
             if(sp==2){
-            populations.at(sp)->aggregate_N();
-            vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
-            for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                cout <<"tstep " << tstep << "AFTER distribute_N and aggregate_N:  a_tot_N_at_szgroup_here[" << sz << "]  here  is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                cout << "after distribute_N()" << endl;
+                populations.at(sp)->aggregate_N_display_for_check();
             }
             
 

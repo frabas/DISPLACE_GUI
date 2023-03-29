@@ -222,6 +222,7 @@ class  Population
 		void set_list_nodes(vector<Node* > _list_nodes);
 		void distribute_N();	 // split tot N among nodes
 		void aggregate_N();		 // aggregate from nodes
+        void aggregate_N_display_for_check(); // just a tool to check numbers in console
 								 // do a cumul for F
         void diffuse_N_from_field(adjacency_map_t& adjacency_map);
         void compute_tot_N_and_F_and_W_at_age(int a_month_i);

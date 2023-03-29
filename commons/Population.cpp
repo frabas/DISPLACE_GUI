@@ -1278,6 +1278,55 @@ void Population::aggregate_N()
 }
 
 
+void Population::aggregate_N_display_for_check()
+{ 
+    cout << "in aggregate_N_display_for_check(): tot N at szgroup for the pop " << this->get_name() << " before aggregation:" << endl;
+    for (int i = 0; i < tot_N_at_szgroup.size(); i++)
+    {
+        cout << tot_N_at_szgroup[i] << " ";
+    }
+    cout << endl;
+
+    // temporary objects
+    vector<double> agg_Ns_at_szgroup;
+ 
+    // a for-loop over nodes specficic to this pop
+    for (unsigned int idx = 0; idx < list_nodes.size(); idx++)
+    {
+        // get idx node (just for info)
+//		int idx_node = list_nodes[idx]->get_idx_node();
+
+        // init with the first node
+        if (idx == 0)
+        {
+            agg_Ns_at_szgroup = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+        }
+        else
+        {
+            // get the Ns on this node and add to the agg
+            const vector<double>& Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+            for (unsigned int i = 0; i < agg_Ns_at_szgroup.size(); i++)
+            {
+                if (!isnan(Ns_this_node.at(i))) agg_Ns_at_szgroup.at(i) = agg_Ns_at_szgroup.at(i) + Ns_this_node.at(i);
+            }
+
+        }
+    }							 // end for-loop over nodes
+
+    // check
+    cout << "in aggregate_N_display_for_check(): tot N at szgroup for the pop "<< this->get_name() << " after aggregation:"  << endl;
+        for(int i=0; i< agg_Ns_at_szgroup.size(); i++)
+        {
+            cout << agg_Ns_at_szgroup[i] << " ";
+        }
+   
+
+    cout << endl;
+
+}
+
+
+
 
 void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 {

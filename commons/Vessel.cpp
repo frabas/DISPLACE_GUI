@@ -3069,6 +3069,13 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
 
+                    if (all_biomass[szgroup] < 0)
+                    {
+                        cout << "Negative biomass detected! in all_biomass[szgroup] ...set to 0!" << endl;
+                        all_biomass[szgroup] = 0;
+                    }
+
+
                   /*if(this->get_name()=="FIN000020014"){
                       cout  << "-------------------------" << endl;
                       cout  << "pop" << pop << endl;
@@ -3237,7 +3244,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     int a_count=0;
                     for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
                     {
-                        if(avail_biomass[szgroup]!=0)
+                        if(avail_biomass[szgroup]>0)
                         {
                             // compute alloc key
                             // proportion
@@ -3294,6 +3301,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             {
                                 cout <<"nan detected! in removals_per_szgroup[szgroup] ... "<< endl;
                             }
+                            if (removals_per_szgroup[szgroup] <0)
+                            {
+                                cout << "Negative removals detected! in removals_per_szgroup[szgroup] ...set to 0!" << endl;
+                                removals_per_szgroup[szgroup] = 0;
+                            }
 
                             dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
                             //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
@@ -3328,6 +3340,12 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                                 new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 
+                                if (new_Ns_at_szgroup_pop[szgroup] < 0)
+                                {
+                                    cout << "Negative Ns detected in do_catch() new_Ns_at_szgroup_pop! ...set to 0!" << endl;
+                                    new_Ns_at_szgroup_pop[szgroup] = 0;
+                                }
+
                                 /*
                                 // check (before)
                                 vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
@@ -3356,7 +3374,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
                                 // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
                                 // init
-                                double val=0;
+                                /*double val=0;
                                 if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
                                    {
                                     val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
@@ -3364,6 +3382,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                     if(a_count<(selected_szgroups.size()-1)) a_count+=1;
                                     }
                                 nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
+                                */
 
                                 /*
 

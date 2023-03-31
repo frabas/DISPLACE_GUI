@@ -1197,9 +1197,16 @@ void Population::distribute_N()
 
 		// distribute on node applying avai
 		vector <double> N_at_szgroup;
-        for(unsigned int i=0; i<tot_N_at_szgroup.size(); i++)
-			N_at_szgroup.push_back( tot_N_at_szgroup.at(i)*avai_this_node.at(i) );
-
+        for (unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
+        {
+            double a_N = tot_N_at_szgroup.at(i) * avai_this_node.at(i);
+            if (a_N < 0) {
+                cout << "A negative a_N in distribute_N() detected for this pop " << this->get_name() << "!...set to 0" << endl;
+                cout << " check the avai_this_node.at(sz) value. currently: " << avai_this_node.at(i) << endl;
+                cout << endl;
+            }
+            N_at_szgroup.push_back(a_N);
+        }
         /*dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl;
         for(int i=0; i<N_at_szgroup.size(); i++)
            cout << N_at_szgroup[i] << " ";

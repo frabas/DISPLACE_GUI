@@ -1420,6 +1420,12 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 		//this is assuming that the M is uniformly applied to the pop
 		// e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
 		// (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
+    
+        if (a_Ns_at_szgroup[i] < 0)
+        {
+            cout << "Negative Ns detected in apply_natural_mortality()! ...set to 0!" << endl;
+            a_Ns_at_szgroup[i] = 0;
+        }
     }
 
 	set_Ns_pops_at_szgroup(name_pop, a_Ns_at_szgroup);
@@ -1563,6 +1569,12 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
             
             Np.at(sz) = Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
+
+            if (Np[sz] < 0)
+            {
+                cout << "Negative Ns detected in apply_natural_mortality() version size spectra! ...set to 0!" << endl;
+                Np[sz] = 0;
+            }
 
             // check for the need for a_scaling factor. The depletion from M on node should be kept in a realistic range.
             if (name_pop == 2 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.90) {
@@ -1752,6 +1764,8 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                 removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/weight_at_szgroup[szgroup];
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << endl;
 
+
+
                 // do not allow negative abundance!
                 if(removals_per_szgroup[szgroup] > new_Ns_at_szgroup_pop[szgroup])
                 {
@@ -1788,6 +1802,12 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                 {
                     // finally, impact the N
                     new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
+                    if (removals_per_szgroup[szgroup] < 0)
+                    {
+                        cout << "Negative removals detected in oth_land! in removals_per_szgroup[szgroup] ...set to 0!" << endl;
+                        removals_per_szgroup[szgroup] = 0;
+                    }
+
                                  // reverse back to get the landings only
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << endl;
                     land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1+discardfactor) ; // first...
@@ -1804,6 +1824,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                     }
 
                    // update the availability to impact the future vessel cpue
+                    /*
                     double val=0;// init
                     if(szgroup==0 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
                     {
@@ -1832,7 +1853,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                     }
 
                     this->set_avai_pops_at_selected_szgroup(name_pop, new_avai_pops_at_selected_szgroup);
-
+                    */
 
                 }
 

@@ -1577,7 +1577,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
             }
 
             // check for the need for a_scaling factor. The depletion from M on node should be kept in a realistic range.
-            if (name_pop == 2 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.90) {
+            if (name_pop == 2 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.94) {
                 cout << "check her pop 2" << endl;
             cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << endl;
             cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;

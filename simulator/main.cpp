@@ -889,6 +889,14 @@ int app_main(int argc, char const* argv[])
     }
 
 
+    // a check (pop2 only)
+    cout << " " << endl;
+    cout << "-----------------------------------------" << endl;
+    cout << "after the initial loading of the population data" << endl;
+    simModel->populations().at(2)->aggregate_N_display_for_check();
+
+
+
 #ifdef PROFILE
     mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
 #endif
@@ -2320,8 +2328,13 @@ int app_main(int argc, char const* argv[])
             modelLoader->loadPopulations(a_quarter_i);
 
 
-
+            // a check (pop2 only)
+                cout << " " << endl;
+                cout << "-----------------------------------------" << endl;
+                cout << "after re-loading the population data" << endl;
+                simModel->populations().at(2)->aggregate_N_display_for_check();
             
+
             // CHECK...CHECK...CHECK...
             // write done  pop number in popdyn_test
             /*for (unsigned int sp=0; sp<simModel->populations().size(); sp++)

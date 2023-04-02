@@ -1374,7 +1374,6 @@ void Population::aggregate_N_display_for_check()
         cout << sz << ": " << SSB_vect.at(sz);
     }
     // check numbers
-    cout << endl;
     cout << "given a_tot_N_at_szgroup: " << endl;
     for (unsigned int sz = 0; sz < agg_Ns_at_szgroup.size(); sz++)
     {

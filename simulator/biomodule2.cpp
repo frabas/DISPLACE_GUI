@@ -321,6 +321,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         
         // a check
         if (sp == 2) {
+            cout << " " << endl;
+            cout << "-----------------------------------------" << endl;
             cout << "start of pop model" << endl;
             populations.at(sp)->aggregate_N_display_for_check();
         }
@@ -685,6 +687,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             }
 
             if (sp == 2) {
+                cout << " " << endl;
+                cout << "-----------------------------------------" << endl;
                 cout << "just after oth_land() " << endl;
                 populations.at(sp)->aggregate_N_display_for_check();
             }
@@ -792,7 +796,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             // a check
             if (sp == 2) {
-                cout << "just after aggregate()" << endl;
+                cout << " " << endl;
+                cout << "-----------------------------------------" << endl;
+                cout << "just after the true aggregate_N()" << endl;
                 populations.at(sp)->aggregate_N_display_for_check();
             }
 
@@ -903,6 +909,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // then, re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();
 
+                // a check
+                if (sp == 2) {
+                    cout << " " << endl;
+                    cout << "-----------------------------------------" << endl;
+                    cout << "just after the second time true aggregate_N() occurring after applying M on nodes" << endl;
+                    populations.at(sp)->aggregate_N_display_for_check();
+                }
+
+
                 // then, re-estimate what the applied M has been, to keep it tracked later in popstats
                 populations.at(sp)->compute_tot_M_at_age();
 
@@ -910,18 +925,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // apply only at the beginning of the year (this is maybe not always relevant...)
                 if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                 {
-                   outc(cout<< "ADD RECRUITS" << endl);
-                    //populations[sp]->add_recruits_from_eggs();
-                    //vector <double> params = populations[sp]->get_param_sr();
-                    //if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
-                    //{
-                    //   populations[sp]->add_recruits_from_a_fixed_number();
-                    //}
-                    //else
-                    //{
-                     //  populations[sp]->add_recruits_from_SR();
-                    //}
-
+                
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
                     // compute the cpue_multiplier
                     // at the beginning of the year as N(y)/N(y-1)
@@ -948,6 +952,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                 }
                 cout << ".....monthly pop model (apply M on nodes) for pop " << sp << "...ok" << endl;
+
+              
+
 
              } // end !=implcit
            } // end sp
@@ -1032,6 +1039,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                   */
                    cout << ".....monthly pop model (apply growth) for pop " << sp << "...ok" << endl;
 
+
+                   if (sp == 2) {
+                       cout << " " << endl;
+                       cout << "-----------------------------------------" << endl;
+                       cout << "just after applying growth transition" << endl;
+                       populations.at(sp)->aggregate_N_display_for_check();
+                   }
+
+
                }
 
             }
@@ -1076,7 +1092,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                // apply only at the beginning of the year (this is maybe not always relevant...)
                if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
-                   {
+               {
                   outc(cout<< "ADD RECRUITS" << endl);
                    //populations[sp]->add_recruits_from_eggs();
                    vector <double> params = populations[sp]->get_param_sr();
@@ -1098,7 +1114,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                              return false;
                          }
                    }
-                }
+               
+               
+               }
 
             // spread out the recruits
             // apply only by semester, to be consistent with the timeframe of survey data
@@ -1111,13 +1129,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                       cout << "Fail in distribute_N" << endl;
                       return false;
                   }
+           
+                  if (sp == 2) {
+                      cout << " " << endl;
+                      cout << "-----------------------------------------" << endl;
+                      cout << "after applying growth (and adding recruits if start of y) and calling distribute_N()" << endl;
+                      populations.at(sp)->aggregate_N_display_for_check();
+                  }
             }
 
             
-            if(sp==2){
-                cout << "after distribute_N()" << endl;
-                populations.at(sp)->aggregate_N_display_for_check();
-            }
             
 
             //...and compute the Ns on nodes at the start of this month!

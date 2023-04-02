@@ -1332,7 +1332,7 @@ void Population::aggregate_N_display_for_check()
         tot_N_before_agg += tot_N_at_szgroup.at(sz);
     }
     cout << "===>tot_SSB_before_agg is " << tot_SSB_kg_before_agg/1e3 << " tonnes" << endl;
-    cout << "===>tot_N_after_agg is " << tot_N_before_agg / 1e3 << " thousands" << endl;
+    cout << "===>tot_N_before_agg is " << tot_N_before_agg / 1e3 << " thousands" << endl;
 
 
 

@@ -1397,7 +1397,7 @@ void Population::aggregate_N_display_for_check()
     double tot_N_after_agg = 0;
     for (int sz = 0; sz < SSB_vect.size(); sz++)
     {
-        tot_SSB_kg_after_agg += SSB_vect_before.at(sz);
+        tot_SSB_kg_after_agg += SSB_vect.at(sz);
         tot_N_after_agg += agg_Ns_at_szgroup.at(sz);
     }
     cout << "===>tot_SSB_after_agg is " << tot_SSB_kg_after_agg/ 1e3 << " tonnes" << endl;

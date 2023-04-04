@@ -2637,18 +2637,25 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         if(!flag)
         {
             pos= roadmap.begin();
-            b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);
-            //  } else{
-            //       b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
-            // }
+            dout(cout << "x " << x << " y " << y << " next_x " << next_x << " next_y " << next_y << endl);
+            
+            
+            // USELESS CODE DEACTIVATE IN MARCH 2023...WAS INDUCING THE DISANCHORING SYMPTOM IN THE MEESO APP HAVING LONG LINKS.... 
+            /*b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
+            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);       
+            if (b != this->get_course()) {
+                int aa;
+                cin >> aa;
+            }
             this->set_course(b);
+            */
+
             dout(cout  << "END BEARING " <<  this->get_course() <<endl);
-            dout(cout  << "destB " << " x " << x <<" y " << y << " course " << course  << " remaining dist_traveled "  << dist_traveled << endl);
             vector<double> xy = destB(x, y, course, dist_traveled);
             this->set_xy(xy[0], xy[1]);
             set_state(2);
             dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << endl);
+            
 
             if (is_fishing_credits && (a_tstep % 2))
             {

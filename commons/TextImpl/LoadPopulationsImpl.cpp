@@ -2039,7 +2039,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 if (binary_search(model().config().nbcp_coupling_pops.begin(),
                     model().config().nbcp_coupling_pops.end(), sp)) 
                 {
-                    type_of_avai_field_to_read.at(sp) = "_updated";
+                    type_of_avai_field_to_read.at(sp) = "_updated_" + model().nameSimu();
 
                     stringstream out;
                     out << sp;
@@ -2100,7 +2100,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 #if defined(_WIN32)
                     if (model().scenario().dyn_pop_sce.option(Options::avai_updater_on) && model().timestep() > 744) {
                         // note that nothing is done before end of 1st month (745) to get enough catch data for an update
-                        type_of_avai_field_to_read.at(pp) = "_updated";
+                        type_of_avai_field_to_read.at(pp) = "_updated_" + model().nameSimu();
                         //system("dir");
                         // caution with HPC, annoying lower cases in file names and paths required!
                         cout

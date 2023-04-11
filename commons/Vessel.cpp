@@ -5398,9 +5398,17 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             outc(cout << " getDaysSpentInRestrictedAreaThisMonth().size() is: " << this->daysSpentInRestrictedAreaThisMonth.size() << endl);
             nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
             outc(cout << "for "<< this->get_name() << ", metier " << met_idx << " nbDaysSpent: " << nbDaysSpent << endl);
+          
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
+               
+                //outc(cout << "scrutinize grounds " << a_grd.toIndex() << endl);
+                //outc(cout << "metier is closed on this ground? " << nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) << endl);
+                //outc(cout << "vsize is closed on this ground? " << nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) << endl);
+                //bool is_nation_banned = nodes.at(a_grd.toIndex())->isNationBanned(0) || nodes.at(a_grd.toIndex())->isNationBanned(this->get_nationality_idx());
+                //outc(cout << "nation is closed on this ground? " << is_nation_banned << endl);
+
                 if (nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) &&
                         nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) &&
                         (nodes.at(a_grd.toIndex())->isNationBanned(0) || nodes.at(a_grd.toIndex())->isNationBanned(this->get_nationality_idx()))
@@ -5410,6 +5418,10 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                     nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
                     dout(cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl);
+
+                   // if (tstep > 2000) {
+                   //     cout << endl;
+                   // }
 
                   if(nbDaysSpent >= nbOpenedDays)
                     {

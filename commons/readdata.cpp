@@ -904,10 +904,16 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
                 nodes.at(info.nodeId.toIndex())->setBannedMetier(id);
                 nodes.at(info.nodeId.toIndex())->setNbOfDaysClosedPerMonth(id, info.nbOfDaysClosedPerMonth.at(count));
                 ++count;
+                //if (info.nodeId.toIndex() == 9268) 
+                //{
+                //    cout << "Is metier banned for id "<< id  << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(id) << endl;
+                //    cout << "Is metier 5 banned " << 5 << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(5) << endl;
+                //}
             }
 
         }
     }
+
 
 
     is.close();

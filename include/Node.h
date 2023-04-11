@@ -410,6 +410,12 @@ class  Node
         mBannedMetiers[metier] = true;
     }
 
+    void reinitBannedMetier()
+    {
+       for(int i=0; i< mBannedMetiers.size(); i++)
+            mBannedMetiers.at(i)=false;
+    }
+
     void setBannedVsize(int vsize)
     {
         while (mBannedVsizes.size() <= (size_t) vsize) {
@@ -418,6 +424,12 @@ class  Node
         mBannedVsizes[vsize] = true;
     }
 
+    void reinitBannedVsize()
+    {
+        for (int i = 0; i < mBannedVsizes.size(); i++)
+            mBannedVsizes.at(i) = false;
+    }
+    
     void setBannedNation(int nation)
     {
         while (mBannedNations.size() <= (size_t)nation) {
@@ -425,6 +437,13 @@ class  Node
         }
         mBannedNations[nation] = true;
     }
+
+    void reinitBannedNation()
+    {
+        for (int i = 0; i < mBannedNations.size(); i++)
+            mBannedNations.at(i) = false;
+    }
+
 
     void setNbOfDaysClosedPerMonth(int metier, double NbOfDaysClosedPerMonth)
     {

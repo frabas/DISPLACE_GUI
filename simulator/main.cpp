@@ -1407,6 +1407,13 @@ int app_main(int argc, char const* argv[])
     // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
     if (scenario.dyn_alloc_sce.option(Options::area_monthly_closure)) {
 
+        for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++)
+        {
+            simModel->nodes().at(a_idx)->reinitBannedMetier();
+            simModel->nodes().at(a_idx)->reinitBannedVsize();
+            simModel->nodes().at(a_idx)->reinitBannedNation();
+        }
+
         if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                           folder_name_parameterization,
                                           inputfolder)) {
@@ -2188,6 +2195,15 @@ int app_main(int argc, char const* argv[])
                 for (auto vessel: simModel->vessels()) {
                     vessel->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
+
+                for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++)
+                {
+                    simModel->nodes().at(a_idx)->reinitBannedMetier();
+                    simModel->nodes().at(a_idx)->reinitBannedVsize();
+                    simModel->nodes().at(a_idx)->reinitBannedNation();
+                }
+
+
                 // update the monthly closures on nodes
                 if (!read_metier_monthly_closures(simModel->nodes(), modelLoader->monthString(), a_graph_name,
                                                   folder_name_parameterization,

@@ -1096,25 +1096,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                   outc(cout<< "ADD RECRUITS" << endl);
                    //populations[sp]->add_recruits_from_eggs();
                    vector <double> params = populations[sp]->get_param_sr();
-                   if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
-                   {
-                       try {
-                           populations[sp]->add_recruits_from_a_fixed_number();
-                         } catch (runtime_error &) {
-                             cout << "Fail in add_recruits_from_a_fixed_number" << endl;
-                             return false;
-                         }
-                   }
-                   else
-                   {
-                       try {
+                   
+
+                   try {
                            populations[sp]->add_recruits_from_SR();
-                         } catch (runtime_error &) {
+                   } catch (runtime_error &) {
                              cout << "Fail in add_recruits_from_SR" << endl;
                              return false;
-                         }
                    }
-               
+                   
                
                }
 

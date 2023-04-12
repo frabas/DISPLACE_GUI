@@ -1721,9 +1721,26 @@ void Population::add_recruits_from_SR()
 
 	// compute R from SSB-R relationship
 	// (caution: age dependent, e.g. SSB-R for cod 2532 is usually simulated for age2)...
-	double recruits =(param_sr[0]*SSB*exp(-param_sr[1]*SSB)) * 1000;
-    dout(cout << "New recruits are " << recruits  << endl );
-
+    double recruits = 0.0;
+    // ricker (default):
+    if (param_sr[3] < 1) 
+    {
+        recruits = (param_sr[0] * SSB * exp(-param_sr[1] * SSB)) * 1000;
+        cout << "pop" << this->get_name() << ", Ricker model with param alpha "<< param_sr[0]  << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+    }
+    // B&H ((alpha*ssb)/(1+beta*ssb)):
+    if (param_sr[3] == 1)
+    {
+        recruits = (param_sr[0] * SSB) / (1 + param_sr[1] * SSB) * 1000;
+        cout << "pop" << this->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+    }
+    // fixed recruits:
+    if (param_sr[3] == 2) 
+    {
+        recruits = (param_sr[0]) * 1000;
+        cout << "pop" << this->get_name() <<  ", Fixed recruits model: New recruits are " << recruits << endl;
+    }
+    
     // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
 	// TO DO: use a stock-specific input there...
     double sd=param_sr[2];

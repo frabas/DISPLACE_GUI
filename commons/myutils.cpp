@@ -1116,7 +1116,7 @@ bool fill_in_param_sr(istream& in, vector<double>& param_sr)
         return false;
     }
 
-    while(param_sr.size()<3) param_sr.emplace_back (0.0);
+    while(param_sr.size()<4) param_sr.emplace_back (0.0);
 
     cout  << "read param_sr"  << endl;
 

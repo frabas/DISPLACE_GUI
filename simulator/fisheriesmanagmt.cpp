@@ -832,21 +832,34 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          //double recruits = this->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
          double recruits=0.0;
          vector <double> param_sr=populations.at(sp)->get_param_sr();
-         if(param_sr[0]>2000)
+         
+         double ssb_py_computed_from_ages =0.0;
+         for (unsigned int a=0; a < tot_N_at_age_end_previous_y.size(); a++)
          {
-             recruits =param_sr[0];
-         }
-         else
-         {
-             double ssb_py_computed_from_ages =0.0;
-             for (unsigned int a=0; a < tot_N_at_age_end_previous_y.size(); a++)
-             {
                  ssb_py_computed_from_ages+= tot_N_at_age_end_previous_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
-             }
-             ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
-             recruits =(param_sr[0]*(ssb_py_computed_from_ages)*exp(-param_sr[1]*(ssb_py_computed_from_ages))) * 1000;
          }
+         
+         ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
+         
+         // ricker:
+         if (param_sr[3] < 1)
+         {
+             recruits = (param_sr[0] * ssb_py_computed_from_ages * exp(-param_sr[1] * ssb_py_computed_from_ages)) * 1000;
+             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", Ricker model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+         }
+             // B&H ((alpha*ssb)/(1+beta*ssb)):
+         if (param_sr[3] == 1) {
+             recruits = (param_sr[0] * ssb_py_computed_from_ages) / (1 + param_sr[1] * ssb_py_computed_from_ages) * 1000;
+             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+         }
+         // fixed recruits:
+         if (param_sr[3] == 2) {
+             recruits = (param_sr[0]) * 1000;
+             cout << "In HCR pop" << populations.at(sp)->get_name() << ", fixed recruits model, New recruits are " << recruits << endl;
+         }
+
          forecast_tot_N_at_age_end_y.at(0)=recruits * exp( -((tot_F_at_age_y.at(0)) + tot_M_at_age_y.at(0)) );
+
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
@@ -969,14 +982,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          //  Adding recruits After the F, assuming fixed or SR recruits
          //recruits = populations.at(sp)->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
-         if(param_sr.at(0)>2000)
-         {
-             recruits =param_sr.at(0);
-         }
-         else
-         {
-             recruits =(param_sr.at(0)*(ssb_y_computed_from_ages)*exp(-param_sr.at(1)*(ssb_y_computed_from_ages))) * 1000;
-         }
+     
+         recruits = 0.0;
+         // ricker:
+         if (param_sr[3] < 1) recruits = (param_sr[0] * ssb_y_computed_from_ages * exp(-param_sr[1] * ssb_y_computed_from_ages)) * 1000;
+         // B&H ((alpha*ssb)/(1+beta*ssb)):
+         if (param_sr[3] == 1) recruits = (param_sr[0] * ssb_y_computed_from_ages) / (1 + param_sr[1] * ssb_y_computed_from_ages) * 1000;
+         // fixed recruits:
+         if (param_sr[3] == 2) recruits = (param_sr[0]) * 1000;
+
+         
          forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits * exp( -((tot_F_at_age_y_plus_1.at(0)) + tot_M_at_age_y_plus_1.at(0)) );
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
@@ -1065,20 +1080,22 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          //double recruits = populations.at(sp)->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
          double recruits=0.0;
          vector <double> param_sr=populations.at(sp)->get_param_sr();
-         if(param_sr[0]>2000)
+         double ssb_py_computed_from_ages =0.0;
+             
+         for (unsigned int a=0; a < tot_N_at_age_end_previous_y.size(); a++)
          {
-             recruits =param_sr[0];
+             ssb_py_computed_from_ages+= tot_N_at_age_end_previous_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
          }
-         else
-         {
-             double ssb_py_computed_from_ages =0.0;
-             for (unsigned int a=0; a < tot_N_at_age_end_previous_y.size(); a++)
-             {
-                 ssb_py_computed_from_ages+= tot_N_at_age_end_previous_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
-             }
-             ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
-             recruits =(param_sr[0]*(ssb_py_computed_from_ages)*exp(-param_sr[1]*(ssb_py_computed_from_ages))) * 1000;
-         }
+         ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
+         
+         recruits = 0.0;
+         // ricker:
+         if (param_sr[3] < 1) recruits = (param_sr[0] * ssb_py_computed_from_ages * exp(-param_sr[1] * ssb_py_computed_from_ages)) * 1000;
+         // B&H ((alpha*ssb)/(1+beta*ssb)):
+         if (param_sr[3] == 1) recruits = (param_sr[0] * ssb_py_computed_from_ages) / (1 + param_sr[1] * ssb_py_computed_from_ages) * 1000;
+         // fixed recruits:
+         if (param_sr[3] == 2) recruits = (param_sr[0]) * 1000;
+
          forecast_tot_N_at_age_end_y.at(0)=recruits * exp( -((tot_F_at_age_y.at(0)) + tot_M_at_age_y.at(0)) );
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
@@ -1204,14 +1221,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          //  Adding recruits After the F, assuming fixed or SR recruits
          //recruits = populations.at(sp)->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
-         if(param_sr.at(0)>2000)
-         {
-             recruits =param_sr.at(0);
-         }
-         else
-         {
-             recruits =(param_sr.at(0)*(ssb_y_computed_from_ages)*exp(-param_sr.at(1)*(ssb_y_computed_from_ages))) * 1000;
-         }
+        
+         recruits = 0.0;
+         // ricker:
+         if (param_sr[3] < 1) recruits = (param_sr[0] * ssb_y_computed_from_ages * exp(-param_sr[1] * ssb_y_computed_from_ages)) * 1000;
+         // B&H ((alpha*ssb)/(1+beta*ssb)):
+         if (param_sr[3] == 1) recruits = (param_sr[0] * ssb_y_computed_from_ages) / (1 + param_sr[1] * ssb_y_computed_from_ages) * 1000;
+         // fixed recruits:
+         if (param_sr[3] == 2) recruits = (param_sr[0]) * 1000;
+         
+             
          forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits * exp( -((tot_F_at_age_y_plus_1.at(0)) + tot_M_at_age_y_plus_1.at(0)) );
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
@@ -1301,20 +1320,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               //double recruits = populations.at(sp)->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
               double recruits=0.0;
               vector <double> param_sr=populations.at(sp)->get_param_sr();
-              if(param_sr.at(0)>2000)
-              {
-                  recruits =param_sr.at(0);
-              }
-              else
-              {
-                  double ssb_py_computed_from_ages =0.0;
+              
+              double ssb_py_computed_from_ages =0.0;
                   for (unsigned int a=0; a < tot_N_at_age_end_previous_y.size(); a++)
                   {
                       ssb_py_computed_from_ages+= tot_N_at_age_end_previous_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
                   }
-                  ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
-                  recruits =(param_sr.at(0)*(ssb_py_computed_from_ages)*exp(-param_sr.at(1)*(ssb_py_computed_from_ages))) * 1000;
-              }
+              ssb_py_computed_from_ages= ssb_py_computed_from_ages/1000; // SSB in tons
+              
+              recruits = 0.0;
+              // ricker:
+              if (param_sr[3] < 1) recruits = (param_sr[0] * ssb_py_computed_from_ages * exp(-param_sr[1] * ssb_py_computed_from_ages)) * 1000;
+              // B&H ((alpha*ssb)/(1+beta*ssb)):
+              if (param_sr[3] == 1) recruits = (param_sr[0] * ssb_py_computed_from_ages) / (1 + param_sr[1] * ssb_py_computed_from_ages) * 1000;
+              // fixed recruits:
+              if (param_sr[3] == 2) recruits = (param_sr[0]) * 1000;
+
+
               forecast_tot_N_at_age_end_y.at(0)=recruits * exp( -((tot_F_at_age_y.at(0)) + tot_M_at_age_y.at(0)) );
 
               for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
@@ -1432,14 +1454,15 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               //  Adding recruits After the F, assuming fixed or SR recruits
               //recruits = populations.at(sp)->get_tot_N_at_age0()*0.5; // precautionary recruits assuming a timing for recruits different from start y estimation
               param_sr=populations.at(sp)->get_param_sr();
-              if(param_sr.at(0)>2000)
-              {
-                  recruits =param_sr.at(0);
-              }
-              else
-              {
-                  recruits =(param_sr.at(0)*(ssb_y_computed_from_ages)*exp(-param_sr.at(1)*(ssb_y_computed_from_ages))) * 1000;
-              }
+             
+              recruits = 0.0;
+              // ricker:
+              if (param_sr[3] < 1) recruits = (param_sr[0] * ssb_y_computed_from_ages * exp(-param_sr[1] * ssb_y_computed_from_ages)) * 1000;
+              // B&H ((alpha*ssb)/(1+beta*ssb)):
+              if (param_sr[3] == 1) recruits = (param_sr[0] * ssb_y_computed_from_ages) / (1 + param_sr[1] * ssb_y_computed_from_ages) * 1000;
+              // fixed recruits:
+              if (param_sr[3] == 2) recruits = (param_sr[0]) * 1000;
+              
               forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits * exp( -((tot_F_at_age_y_plus_1.at(0)) + tot_M_at_age_y_plus_1.at(0)) );
 
               for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)

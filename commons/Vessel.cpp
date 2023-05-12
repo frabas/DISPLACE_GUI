@@ -2747,6 +2747,17 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     //    dout(cout  << endl);
     //}
 
+    //auto  idx= this->get_loc()->get_idx_node();
+    // if(idx.toIndex()==5706){
+    //        cout  << "WHAT? I CANNOT CHANGE FOR " << idx << " WHERE I AM... " << endl;
+    //        cout << "isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(idx.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
+    //        cout << "isVsizeBanned(this->get_length_class()) is "<< nodes.at(idx.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+    //        cout << "isNationBanned(0) is "<< nodes.at(idx.toIndex())->isNationBanned(0)  << endl;
+    //        cout << "(nodes.at(idx)->isNationBanned(0) || nodes.at(idx)->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(idx.toIndex())->isNationBanned(0) || nodes.at(idx.toIndex())->isNationBanned(this->get_nationality_idx())) << endl;
+    //        cout << endl;
+    // }
+     
+
 
     // VESSEL EFFECT
     vector<double> v_betas_per_pop  = this->get_vessel_betas_per_pop ();
@@ -5829,7 +5840,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                  !nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
                  !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()) &&
                  !nodes.at(from.toIndex())->isNationBanned(0) &&
-                 !nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())
+                 !(nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx()))
                 )
         {
 
@@ -5857,10 +5868,12 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
         dout(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
-       /* if(next_ground.toIndex()==12132){
+       /* if(next_ground.toIndex()==5706){
             cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl;
             cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
             cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+            cout << "nodes.at(from.toIndex())->isNationBanned(0) is "<< nodes.at(from.toIndex())->isNationBanned(0)  << endl;
+            cout << "(nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) << endl;  
          }
        */
         unlock();

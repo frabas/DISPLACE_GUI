@@ -168,6 +168,9 @@ enum Pop_Sce {
     massiveMortalityEvent20perY5,
     diffuseNutrients,
     noHyperstability,
+    static_avai_2,
+    static_avai_3,
+    static_avai_4,
   
     Pop_Sce_last
 };

@@ -243,14 +243,15 @@ multimap<int, types::NodeId>
 read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder,
                            string str_rand_avai_file);
 
-multimap<types::NodeId, double>
-read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder,
-                                 string str_rand_avai_file, vector<string> type_of_avai_field_to_read);
+//multimap<types::NodeId, double>
+//read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder,
+//                                 string str_rand_avai_file, vector<string> type_of_avai_field_to_read);
 
 multimap<types::NodeId, double>
 read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization,
                                       string inputfolder, string str_rand_avai_file,
-                                      vector<string> type_of_avai_field_to_read);
+                                      vector<string> type_of_avai_field_to_read,
+                                      string avai_folder_addon_name);
 
 multimap<types::NodeId, double>
 read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization,

@@ -116,7 +116,10 @@ PopSceOptions::PopSceOptions()
     O(mMap, massiveMortalityEvent20perY5);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
-    
+    O(mMap, static_avai_2);
+    O(mMap, static_avai_3);
+    O(mMap, static_avai_4);
+
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

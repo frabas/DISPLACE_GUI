@@ -778,7 +778,8 @@ multimap<int, types::NodeId>
 read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder,
                            string str_rand_avai_file)
 {
-
+    
+    
     string filename;
     if (str_rand_avai_file == "baseline") {
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" +
@@ -1023,12 +1024,17 @@ vector<vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpop
     file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
     if (file_selectivity_per_stock_ogives_for_oth_land.fail()) {
         vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
-        return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
+        cout << "Unfortunately the selectivity_per_stock_ogives_for_oth_land is not informed..."  << endl;
+        cout << "You´ll have to stop the simu, correct input in metiersspe and re-run. " << endl;
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+        exit(-1);
+        //   return selectivity_per_stock_ogives_for_oth_land; // caution: returns an empty object
     }
     vector<vector<double> > selectivity_per_stock_ogives_for_oth_land(nbpops, vector<double>(nbszgroup));
     if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives_for_oth_land,
         selectivity_per_stock_ogives_for_oth_land)) {
-        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+        throw std::runtime_error("Error while executing: fill_in_selectivity_per_stock");
     }
 
     file_selectivity_per_stock_ogives_for_oth_land.close();
@@ -1255,6 +1261,7 @@ read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string fol
 }
 
 
+/* []DEPRECATED
 multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester,
                                                                  int a_pop, string folder_name_parameterization,
                                                                  string inputfolder,
@@ -1315,13 +1322,15 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
 
     return (avai_szgroup_nodes_with_pop);
 }
+*/
 
 
 multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
                                                                       string folder_name_parameterization,
                                                                       string inputfolder,
                                                                       string str_rand_avai_file,
-                                                                      vector<string> type_of_avai_field_to_read)
+                                                                      vector<string> type_of_avai_field_to_read,
+                                                                      string avai_folder_addon_name)
 {
     // casting a_pop into a string
     stringstream out;
@@ -1332,7 +1341,7 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
 
     string filename;
     if (str_rand_avai_file == "baseline") {
-        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" +
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai"+ avai_folder_addon_name +"/" +
                    a_pop_s + "spe_full_avai_szgroup_nodes_semester" + a_semester + a_type_of_avai_field_to_read +
                    ".dat";
     } else {
@@ -1345,7 +1354,7 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     file_avai_szgroup_nodes_with_pop.open(filename.c_str());
     if (file_avai_szgroup_nodes_with_pop.fail()) {
     
-        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" +
+        filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai"+ avai_folder_addon_name +"/" +
             a_pop_s + "spe_full_avai_szgroup_nodes_semester" + a_semester +
             ".dat"; // default naming
         file_avai_szgroup_nodes_with_pop.open(filename.c_str());
@@ -2160,11 +2169,18 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         }
 
 
+
+        string avai_folder_addon_name = "";
+        if (model().scenario().dyn_pop_sce.option(Options::static_avai_2)) avai_folder_addon_name = "_2";
+        if (model().scenario().dyn_pop_sce.option(Options::static_avai_3)) avai_folder_addon_name = "_3";
+        if (model().scenario().dyn_pop_sce.option(Options::static_avai_4)) avai_folder_addon_name = "_4";
+
         vect_of_full_avai_szgroup_nodes_with_pop_mmap.at(sp) = read_full_avai_szgroup_nodes_with_pop(
                 semester, sp,
                 p->folder_name_parameterization,
                 p->inputfolder, str_rand_avai_file,
-                type_of_avai_field_to_read);
+                type_of_avai_field_to_read,
+            avai_folder_addon_name);
 
 
         // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)

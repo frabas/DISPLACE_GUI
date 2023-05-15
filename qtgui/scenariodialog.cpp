@@ -84,6 +84,9 @@ static const char *dyn_pop_options[] = {
     "biolsceOnStaticAvai",
     "diffuseNutrients",
     "noHyperstability",
+    "static_avai_2",
+    "static_avai_3",
+    "static_avai_4",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

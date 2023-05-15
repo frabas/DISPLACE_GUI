@@ -133,9 +133,10 @@ private:
     // fixed
     double speed, fuelcons, length, KW, tankcapacity, carrycapacity, nbfpingspertrip, resttime_par1, resttime_par2, av_trip_duration;
     // dynamic
-    double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip;
+    double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, timeatseasincefirstcatch, traveled_dist_this_trip;
     double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, cumdiscards, reason_to_go_back;
     double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
+    int hasfishedatleastonce;
 
     double this_vessel_nb_crew, annual_other_income;
     double landing_costs_percent, crewshare_and_unpaid_labour_costs_percent, other_variable_costs_per_unit_effort, annual_insurance_costs_per_crew;
@@ -320,6 +321,8 @@ public:
     double get_cumsteaming() const;
     double get_distprevpos() const;
     double get_timeatsea() const;
+    int get_hasfishedatleastonce() const;
+    double get_timeatseasincefirstcatch() const;
     double get_traveled_dist_this_trip() const;
     double get_sweptareathistrip() const;
     double get_subsurfacesweptareathistrip() const;
@@ -472,7 +475,9 @@ public:
 		void set_cumsteaming (double _cumsteaming);
 		void set_consotogetthere (double _consotogetthere);
 		void set_timeatsea (double _timeatsea);
-		void set_traveled_dist_this_trip (double _traveled_dist_this_trip);
+        void set_hasfishedatleastonce(int _hasfishedatleastonce);
+        void set_timeatseasincefirstcatch(double _timeatseasincefirstcatch);
+        void set_traveled_dist_this_trip (double _traveled_dist_this_trip);
         void set_sweptareathistrip (double _sweptareathistrip);
         void set_subsurfacesweptareathistrip(double _subsurfacesweptareathistrip);
         void set_cumcatches (double _cumcatches);

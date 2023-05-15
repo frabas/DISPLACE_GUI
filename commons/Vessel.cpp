@@ -235,6 +235,8 @@ Vessel::Vessel(Node* p_location,
     mult_fuelcons_when_inactive= _mult_fuelcons_when_inactive;// FILLED FROM DATA
     distprevpos=0;
     timeatsea=0;
+    hasfishedatleastonce = 0;
+    timeatseasincefirstcatch = 0;
     traveled_dist_this_trip=0;
     areasweptthistrip=0;
     inactive=true;
@@ -674,9 +676,11 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselCatchVolumeStateEvaluator);
         mStateEvaluators[dtree::nbOfDaysAtSeaSoFarIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
+        mStateEvaluators[dtree::moreThan3DaysAfterFirstCatchIs] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselMoreThan3DaysAfterFirstCatchIsStateEvaluator);
         mStateEvaluators[dtree::endOfTheDayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
-
+        
 
         // chooseGround
         mStateEvaluators[dtree::smartCatch] =
@@ -1098,6 +1102,17 @@ double Vessel::get_timeforrest () const
 double Vessel::get_timeatsea () const
 {
     return(timeatsea);
+}
+
+int Vessel::get_hasfishedatleastonce() const
+{
+    return(hasfishedatleastonce);
+}
+
+
+double Vessel::get_timeatseasincefirstcatch() const
+{
+    return(timeatseasincefirstcatch);
 }
 
 double Vessel::get_mult_fuelcons_when_steaming () const
@@ -2000,12 +2015,20 @@ void Vessel::set_distprevpos(double _distprevpos)
     distprevpos=_distprevpos;
 }
 
-
 void Vessel::set_timeatsea(double _timeatsea)
 {
-    timeatsea=_timeatsea;
+    timeatsea = _timeatsea;
 }
 
+void Vessel::set_hasfishedatleastonce(int _hasfishedatleastonce)
+{
+    hasfishedatleastonce =_hasfishedatleastonce;
+}
+
+void Vessel::set_timeatseasincefirstcatch(double _timeatseasincefirstcatch)
+{
+    timeatseasincefirstcatch = _timeatseasincefirstcatch;
+}
 
 void Vessel::set_traveled_dist_this_trip(double _traveled_dist_this_trip)
 {
@@ -2689,6 +2712,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
         set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
         set_timeatsea(get_timeatsea()+ PING_RATE);
+        if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + PING_RATE);
         set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
         set_state(2);
         //		this->set_roadmap(roadmap);
@@ -6217,6 +6241,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
 
     // update
     this->set_timeatsea(this->get_timeatsea()+ PING_RATE);
+    if(this->get_hasfishedatleastonce()) this->set_timeatseasincefirstcatch(this->get_timeatseasincefirstcatch() + PING_RATE);
     this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
 
 }
@@ -6251,6 +6276,8 @@ void Vessel::reinit_after_a_trip()
     this-> set_distprevpos(0);
     this-> set_state(3);
     this-> set_timeatsea(0);
+    this-> set_hasfishedatleastonce(0);
+    this-> set_timeatseasincefirstcatch(0);
     this-> set_traveled_dist_this_trip(0);
     this-> set_natio(true);
     this->set_tstep_dep(0);

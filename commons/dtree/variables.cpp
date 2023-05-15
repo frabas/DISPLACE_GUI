@@ -74,6 +74,7 @@ const char *const VariableNames::names[] = {
         "fuelTankIs", // StopFishing
         "endOfTheDayIs", // StopFishing
         "nbOfDaysAtSeaSoFarIs", // StopFishing
+        "moreThan3DaysAfterFirstCatchIs", // StopFishing
 //  "windSpeedIs", // goFishing and StopFishing
 
         "distanceToPortIs",   // ChoosePort
@@ -135,6 +136,7 @@ const char *const VariableNames::bins[][40] = {
     { "still ok", "low",0 },
     { "true", "false",0 },
     { "<5days", ">5days",0 },  //or  {"short", "long" },
+    { "false", "true",0 }, 
 //    { "low", "medium", "large",0 }, // or { "<5knots", "5-10knots", ">10knots" },
 
 

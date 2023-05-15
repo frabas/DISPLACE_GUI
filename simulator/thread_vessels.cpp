@@ -444,6 +444,9 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         model->vessels()[index_v]->lock();
                         model->vessels()[index_v]->set_timeatsea(
                                 model->vessels()[index_v]->get_timeatsea() + PING_RATE);
+                        model->vessels()[index_v]->set_hasfishedatleastonce(1);
+                        model->vessels()[index_v]->set_timeatseasincefirstcatch(
+                            model->vessels()[index_v]->get_timeatseasincefirstcatch() + PING_RATE);
                         // note: no traveled_dist_this_trip cumulated here...might be changed.
                         model->vessels()[index_v]->set_state(1);
                         double cumfuelcons;
@@ -471,6 +474,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout << "my catches so far is " << model->vessels()[index_v]->get_cumcatches() << endl);
                         outc(cout << "my consumed fuel so far is " << cumfuelcons << endl);
                         outc(cout << "my time at sea so far is " << model->vessels()[index_v]->get_timeatsea() << endl);
+                        outc(cout << "my time at sea since first catch so far is " << model->vessels()[index_v]->get_timeatseasincefirstcatch() << endl);
 
 
                     } else{

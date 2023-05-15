@@ -176,9 +176,20 @@ private:
 public:
     VesselNbOfDaysAtSeaSoFarIsStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_timeatsea() > 5*24  ? 1.0 : 0.0; //0:<5days ; 1:><5days
+          return vessel->get_timeatsea() > 5*24  ? 1.0 : 0.0; //0:<5days ; 1:>5days
         }
 };
+
+class VesselMoreThan3DaysAfterFirstCatchIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselMoreThan3DaysAfterFirstCatchIsStateEvaluator() {}
+    double evaluate(int, Vessel* vessel) const {
+        return vessel->get_timeatseasincefirstcatch() > 3 * 24 ? 1.0 : 0.0; //0:<3days ; 1:>3days
+    }
+};
+
+
 
 
 class VesselEndOfTheDayIsStateEvaluator : public dtree::StateEvaluator {

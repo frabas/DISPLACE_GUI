@@ -43,6 +43,15 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,fuelprice_plus100percent);
     O(mMap,fishprice_plus100percent);
     O(mMap,fishprice_plus700percent);
+    O(mMap, fishprice_plus700percent);
+    O(mMap, fishprice_plus800percent);
+    O(mMap, fishprice_plus900percent);
+    O(mMap, fishprice_plus1000percent);
+    O(mMap, fishprice_plus1100percent);
+    O(mMap, fishprice_plus1200percent);
+    O(mMap, fishprice_plus1300percent);
+    O(mMap, fishprice_plus1400percent);
+    O(mMap, fishprice_plus1500percent);
     O(mMap,reduced_speed_10percent);
     O(mMap,reduced_speed_20percent);
     O(mMap,reduced_speed_30percent);

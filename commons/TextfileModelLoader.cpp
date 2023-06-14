@@ -474,6 +474,38 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                 {
                     a_multiplier_on_fishprices = 7.0;
                 }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus800percent))
+                {
+                    a_multiplier_on_fishprices = 8.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus900percent))
+                {
+                    a_multiplier_on_fishprices = 9.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1000percent))
+                {
+                    a_multiplier_on_fishprices = 10.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1100percent))
+                {
+                    a_multiplier_on_fishprices = 11.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1200percent))
+                {
+                    a_multiplier_on_fishprices = 12.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1300percent))
+                {
+                    a_multiplier_on_fishprices = 13.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1400percent))
+                {
+                    a_multiplier_on_fishprices = 14.0;
+                }
+                if (model().scenario().dyn_alloc_sce.option(Options::fishprice_plus1500percent))
+                {
+                    a_multiplier_on_fishprices = 15.0;
+                }
 
                 multimap<int, double>::iterator pos;
                 for (pos = fishprices_each_species_per_cat.begin(); pos != fishprices_each_species_per_cat.end(); pos++) {

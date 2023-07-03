@@ -2292,7 +2292,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 // cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
 
     if(vessel_value<0) vessel_value=0;
-    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* ((100.0-annual_depreciation_rate)/100.0) * (double)tstep/8761);
+    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (1-((100.0-annual_depreciation_rate)/100.0)) * (double)tstep/8761);
 // cout << "NetProfit is "<< NetProfit << endl;
 
 

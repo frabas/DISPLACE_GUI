@@ -548,11 +548,11 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         }
 
         if (model.scenario().dyn_alloc_sce.option(Options::multiOnVesselValue50percent)) {
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam25.at(i) * 1.5;
+            loadedDataVessels.vectdparam25.at(i) = loadedDataVessels.vectdparam25.at(i) * 1.5;
         }
 
         if (model.scenario().dyn_alloc_sce.option(Options::multiOnVesselValue100percent)) {
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam25.at(i) * 2.0;
+            loadedDataVessels.vectdparam25.at(i) = loadedDataVessels.vectdparam25.at(i) * 2.0;
         }
 
 

@@ -555,9 +555,14 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             // Keep the export for the last year only to avoid too large db output:
             //bool alogic = (ceil((double)model->timestep()/(double)8761) == ceil((double)nbsteps/(double)8761));
             // DOES NOT WORK UNDER UNIX, so USE:
-            bool alogic = (model->timestep() <= 8762);
+            bool alogic;
+            if(export_vmslike == 1)  alogic = (model->timestep() <= 8762);
+            if(export_vmslike == 7)  alogic = (model->timestep() >= 52610 && model->timestep() <= 61369);
+            if(export_vmslike == 10) alogic = (model->timestep() >= 78889 && model->timestep() <= 87673);
+            //tstep start 7th year = 52610
+            //tstep end 7th year = 61369
 
-            if (export_vmslike && alogic) { //  && model->timestep()<8641) {
+            if (export_vmslike!=0 && alogic) { //  && model->timestep()<8641) {
                 std::unique_lock<std::mutex> m(listVesselMutex);
                 listVesselIdForVmsLikeToExport.push_back(index_v);
                 //OutputExporter::instance().exportVmsLike(model->timestep(), model->vessels()[index_v]);

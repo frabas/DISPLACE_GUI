@@ -145,6 +145,9 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     arguments.push_back("-V");
     arguments.push_back(QString::number(mVerbosity));
 
+    // for testing 
+    //arguments.push_back("--disable-sqlite"); //=> TODO: FIXME the hanging when db disabled?
+    
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");
 

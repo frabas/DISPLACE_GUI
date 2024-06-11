@@ -2929,6 +2929,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     auto the_grds = this->get_fgrounds();
     // relative node index to this vessel
     int idx_node_r= find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
+    dout(cout << "the_grds.size() is  " << the_grds.size() << "and should never be equal to the idx_node_r, which is "<< idx_node_r << endl);
 
     // VARIABLES VALID FOR THIS FISHING EVENT ONLY
     double totLandThisEvent=1;
@@ -3284,18 +3285,19 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     // init
                     vector<double> new_avai_pops_at_selected_szgroup=avai_pops_at_selected_szgroup;
 
-
+  
                     int a_count=0;
                     for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
                     {
-                        if(avail_biomass[szgroup]>0)
+                       
+                        if(avail_biomass.at(szgroup)>0)
                         {
                             // compute alloc key
                             // proportion
                             if(szgroup>=MLS_cat){
-                                alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_land);
+                                alloc_key.at(szgroup)=avail_biomass.at(szgroup) /(tot_avai_for_land);
                             } else{
-                                alloc_key[szgroup]=0;
+                                alloc_key.at(szgroup)=0;
                             }
 
                             dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
@@ -3473,13 +3475,12 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             catch_pop_at_szgroup[pop][szgroup] += 0; // in weight
                             discards_pop_at_szgroup[pop][szgroup] += 0;// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup] = 0;
-
+                            dout(cout << "no biomass for this szgroup to fish there! fill out with 0s" << endl);
+               
 
                         }
 
                     } // end szgroup
-
-
 
                     // new Ns on this node= old Ns - removals
                     this->get_loc()->set_Ns_pops_at_szgroup(  namepop, new_Ns_at_szgroup_pop);
@@ -3531,7 +3532,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         }
 
                     }
-
+               
                     // the management is also applied the first year, (caution, the first year is also the calibration year)
                     if(is_tacs)
                     {
@@ -3727,7 +3728,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                     }
 
-
+                    
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     int met = this->get_metier()->get_name();
@@ -3735,9 +3736,10 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     this->get_loc()->add_to_cumcatches_per_pop(a_cumul_weight_this_pop_this_vessel, pop);
                     this->get_loc()->add_to_cumcatches_per_pop_this_month(a_cumul_weight_this_pop_this_vessel, pop);
                     this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(a_cumul_weight_this_pop_this_vessel,
-                                                                                  pop, met);
+                    pop, met);
                     this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, pop, met);
                     this->get_loc()->compute_cpue_per_pop_per_met_this_month(pop, met); // i.e. cumcatch/cumeffort
+               
                     // catches
                     this->cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
@@ -3753,10 +3755,10 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
                     if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
                         this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE;
-                    }
+                    }                 
                     this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
 
-
+               
                     // cumul to later compute the proportion of discard to potentially influence future decision-making
                     for (unsigned int sz=0; sz<landings_per_szgroup.size(); ++sz){
                         totLandThisEvent += landings_per_szgroup[sz];
@@ -3775,7 +3777,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         totAvoiStksDiscThisEvent+= totDiscThisEvent;
                     }
 
-
+      
                     // check
                     /*
                      for(int i=0; i<new_Ns_at_szgroup_pop.size(); i++)
@@ -3851,12 +3853,12 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
             }
             */
 
-
+       
 
         }
         else  // implicit pop:
         {
-           if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
+            if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
            {
 
 

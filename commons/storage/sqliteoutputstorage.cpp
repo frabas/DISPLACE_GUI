@@ -31,6 +31,7 @@
 #include "Population.h"
 
 
+
 const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 4;
 
 using namespace sqlite;
@@ -342,7 +343,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
-    //qDebug() << "VesselStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+    std::cout << "VesselStat: " << std::string(select.string()) << " : " << std::string(nation);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 

@@ -1644,6 +1644,8 @@ int app_main(int argc, char const* argv[])
 
     }
 
+    int init_verbosity = verbosity;
+
 
     dout(cout << "---------------------------------" << endl);
     dout(cout << "---------------------------------" << endl);
@@ -2918,6 +2920,16 @@ int app_main(int argc, char const* argv[])
         ///------------------------------///
         ///------------------------------///
         // LOOP OVER VESSELS
+
+        // help the debugging:
+       /* if (simModel->timestep() == 8761) {
+            verbosity = 3;
+        }
+        else {
+            verbosity = init_verbosity;
+        }
+       */
+
 #ifdef PROFILE
         mVesselLoopProfile.start();
 #endif
@@ -2938,6 +2950,15 @@ int app_main(int argc, char const* argv[])
 #ifdef PROFILE
         mVesselLoopProfile.elapsed_ms();
 #endif
+
+
+        if (simModel->timestep()==8761) {
+            cout << "COUCOU THERE!! 8761" << endl;
+        }
+        if (simModel->timestep() == 8762) {
+            cout << "COUCOU THERE!! 8762" << endl;
+        }
+
 
         ///------------------------------///
         ///------------------------------///
@@ -2989,7 +3010,7 @@ int app_main(int argc, char const* argv[])
             }
         }
 
-
+    
 
         ///------------------------------///
         ///------------------------------///
@@ -3035,6 +3056,8 @@ int app_main(int argc, char const* argv[])
             }
         }
 
+   
+
         ///------------------------------///
         ///------------------------------///
         ///  THE DIFFUSIVE BENTHOS       ///
@@ -3060,7 +3083,7 @@ int app_main(int argc, char const* argv[])
         }
 
 
-
+   
 
         ///------------------------------///
         ///------------------------------///
@@ -3111,7 +3134,7 @@ int app_main(int argc, char const* argv[])
             }
         }
 
-
+  
 
         ///------------------------------///
         ///------------------------------///
@@ -3139,7 +3162,7 @@ int app_main(int argc, char const* argv[])
             }
         }
 
-
+  
         ///------------------------------///
         ///------------------------------///
         ///  EXPORTING TO DB             ///
@@ -3200,7 +3223,7 @@ int app_main(int argc, char const* argv[])
 
         }
 
-
+    
         // EXPORT: vessel_loglike - disabled
         /*
         if (use_gui) {

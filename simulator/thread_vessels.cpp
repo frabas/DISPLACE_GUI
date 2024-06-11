@@ -181,6 +181,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
     glob_mutex.lock();
     int index_v = ve[idx_v];
     outc(cout << ve[idx_v] << " idx of the vessel " << model->vessels()[ve[idx_v]]->get_name() << " " << endl);
+    //cout << ve[idx_v] << " idx of the CURRENTLY WORKING vessel " << model->vessels()[ve[idx_v]]->get_name() << " " << endl;
     glob_mutex.unlock();
 
     // check roadmap
@@ -192,6 +193,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
     int is_exited = model->vessels()[index_v]->get_is_vessel_exited();
     bool freshly_departed_from_port = 0;
     model->vessels()[index_v]->unlock();
+   
 
     if (!is_exited) {
 
@@ -396,7 +398,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
                     }
                     // ***************implement a decision************************************
-                    if (!(shall_I_change_to_another_ground || force_another_ground) || is_not_possible_to_change)
+                    if (!(shall_I_change_to_another_ground || force_another_ground) && !is_not_possible_to_change)
                         // keep go on catching on this ground...
                     {
                         outc(cout << "hey, I am fishing on "
@@ -478,8 +480,27 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
 
                     } else{
-                        outc(cout  << "go elsewhere... "  << endl);
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
+                        outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << endl);
+                        //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
+                        glob_mutex.lock();
+                        model->vessels()[index_v]->choose_a_port_and_then_return(
+                            *model,
+                            model->timestep(),
+                            model->scenario().dyn_alloc_sce,
+                            use_static_paths,
+                            pathshops,
+                            adjacency_map,
+                            relevant_nodes,
+                            model->nodes(),
+                            model->metiers(),
+                            freq_cpue,
+                            freq_distance,
+                            dist_to_ports
+                        );
+
+                        glob_mutex.unlock();
+                    
                     }
                 }
                 // ***************implement a decision************************************
@@ -509,9 +530,12 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             }
 
         }
-    }
+    
+
+   }
     else
     {
+     
 
         outc(cout  << "roadmap is not empty... ");
         // display the road map
@@ -550,6 +574,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
         // for VMS, export the first year only because the file is growing too big otherwise....
         model->vessels()[index_v]->lock();
 
+    
 
         if (model->vessels()[index_v]->get_state() != 3) {
             // Keep the export for the last year only to avoid too large db output:
@@ -584,7 +609,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             mOutQueue.enqueue(std::shared_ptr<OutputMessage>(
                     new MoveVesselOutputMessage(model->timestep(), model->vessels()[index_v])));
         }
-
+     
         model->vessels()[index_v]->unlock();
     } // end is_exited
 }
@@ -691,9 +716,9 @@ void thread_vessel_signal_exit()
         std::unique_lock<std::mutex> locker(work_mutex);
         work_cond.notify_all();
 #ifdef _WIN32
-        Sleep(1000);
+        Sleep(10000);
 #else
-        usleep(1000);
+        usleep(10000);
 #endif
 
     }

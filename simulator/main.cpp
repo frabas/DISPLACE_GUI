@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012-2023 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012-2024 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -2952,12 +2952,12 @@ int app_main(int argc, char const* argv[])
 #endif
 
 
-        if (simModel->timestep()==8761) {
-            cout << "COUCOU THERE!! 8761" << endl;
-        }
-        if (simModel->timestep() == 8762) {
-            cout << "COUCOU THERE!! 8762" << endl;
-        }
+     //   if (simModel->timestep()==8761) {
+     //       cout << "COUCOU THERE!! 8761" << endl;
+     //   }
+     //   if (simModel->timestep() == 8762) {
+     //       cout << "COUCOU THERE!! 8762" << endl;
+     //   }
 
 
         ///------------------------------///

@@ -273,6 +273,10 @@ Vessel::Vessel(Node* p_location,
     nationality_indices["ROU"] = 21;
     nationality_indices["SVN"] = 22;
     nationality_indices["SWE"] = 23;
+    nationality_indices["DEN"] = 24;
+    nationality_indices["NOR"] = 25;
+    nationality_indices["ISL"] = 26;
+    nationality_indices["FRO"] = 27;
 
     nationality_idx = 0; // default 0 is "all nations"
     nationality_idx = nationality_indices[nationality];
@@ -3978,9 +3982,17 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                 if (tstep > 1 && is_tacs && !is_individual_vessel_quotas) {
                     string a_nation = this->get_nationality();
+                    //cout << "this vessel name " << this->get_name() << endl;
+                    //cout << "a_nation is " << a_nation << endl;
+                    //cout << "pop is " << pop << endl;
                     double so_far_this_nation = 0.0;
-                    so_far_this_nation = populations.at(pop)->get_landings_so_far_per_nation().at(a_nation) +
-                                         cpue * PING_RATE;
+                    map<string,double> sof =populations.at(pop)->get_landings_so_far_per_nation();
+                    //for (auto it = sof.cbegin(); it != sof.cend(); ++it)
+                    //{
+                    //    std::cout << it->first << " " << it->second << " " << "\n";
+                    //}
+                    if (sof.find(a_nation) == sof.end()) cout << "debug "<< a_nation << ": check for inconsistent 3 - letters naming for nations between e.g.vessel names and relative_stability nations" << endl;
+                    so_far_this_nation = sof.at(a_nation) + cpue * PING_RATE;
                     populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
                     int a_length_class = this->get_length_class();

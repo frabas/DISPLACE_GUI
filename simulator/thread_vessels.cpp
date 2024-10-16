@@ -196,7 +196,6 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
    
 
     if (!is_exited) {
-
         if (roadmap_empty) {
             // check if the vessel is actually active this quarter
             // (when at least one possible metier within this quarter)
@@ -348,20 +347,20 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
                 }
 
-                /*if((model->vessels()[index_v]->get_name())=="POL023600922"){
+                if((model->vessels()[index_v]->get_name())=="PRTPTVELLLSVL10121"){
                     cout  << model->vessels()[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;
                     cout << "given cum fuel cons is: " << model->vessels()[index_v]->get_cumfuelcons() << endl;
                     cout << "given total tank capacity is: " << model->vessels()[index_v]->get_tankcapacity() << endl;
                     cout << "given cumcatches is: " << model->vessels()[index_v]->get_cumcatches() << endl;
                     cout << "given vessel carrying cap is: " << model->vessels()[index_v]->get_carrycapacity() << endl;
                 }
-                */
+                
 
                 // ***************implement a decision************************************
                 // go on fishing...
                 if (!stop_fishing) {
                     freshly_departed_from_port = 0;
-                    outc(cout << "OK, I´LL CONTINUE FISHING!" << endl);
+                    outc(cout << "OK, I´LL CONTINUE FISHING on "<< model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() <<"!" << endl);
                     //if((model->vessels()[index_v]->get_name())=="POL023600922") cout  << model->vessels()[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << endl;
 
                     // ***************make a decision************************************
@@ -380,7 +379,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     // ***************implement the decision************************************
                     // ...but not on this ground!
                     int is_not_possible_to_change = 0;
-                    if (shall_I_change_to_another_ground || force_another_ground) {
+                    if ((shall_I_change_to_another_ground || force_another_ground)) {
                         outc(cout << "CHANGE OF GROUND, FISHERS! " << endl);
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << endl;
                         is_not_possible_to_change = model->vessels()[index_v]->choose_another_ground_and_go_fishing(
@@ -393,12 +392,16 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                 model->metiers(),
                                 freq_cpue, freq_distance
                         );
-                        outc(cout << "GOOD JOB, FISHERS! " << endl);
+                        outc(cout << "GOOD JOB, FISHERS! WE ARE NOW ON GROUND: " << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << endl);
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << endl;
-
+                        if (!model->vessels()[index_v]->get_roadmap().empty()) {
+                            outc(cout << "THE NEW GROUND IS A BIT FAR...WE WILL NEED MORE THAN ONE PING TIME TO REACH IT...THE ROADMAP IS NOT EMPTY YET")
+                                roadmap_empty = false;
+                        }                  
                     }
                     // ***************implement a decision************************************
-                    if (!(shall_I_change_to_another_ground || force_another_ground) && !is_not_possible_to_change)
+                    //if (!(shall_I_change_to_another_ground || force_another_ground) && !is_not_possible_to_change)
+                    if (!(force_another_ground) && roadmap_empty)
                         // keep go on catching on this ground...
                     {
                         outc(cout << "hey, I am fishing on "
@@ -479,7 +482,9 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout << "my time at sea since first catch so far is " << model->vessels()[index_v]->get_timeatseasincefirstcatch() << endl);
 
 
-                    } else{
+                    } 
+                    if (force_another_ground)
+                    {
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
                         outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << endl);
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
@@ -498,6 +503,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             freq_distance,
                             dist_to_ports
                         );
+                        model->vessels()[index_v]->set_reason_to_go_back(4);
 
                         glob_mutex.unlock();
                     

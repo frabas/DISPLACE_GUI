@@ -457,9 +457,11 @@ Vessel::Vessel(Node* p_location,
     vector<double> init_for_fgrounds(fgrounds.size());
     vector<double> cumeffort_per_trip_per_fgrounds = init_for_fgrounds;
     vector<double> cumeffort_per_yearquarter_per_fgrounds = init_for_fgrounds;
-    vector<double> cumcatch_fgrounds = init_for_fgrounds;
+    //vector<double> cumcatch_fgrounds = init_for_fgrounds;
+    this->set_cumcatch_fgrounds(init_for_fgrounds);
     vector<vector<double> > cumeffort_per_trip_per_fgrounds_per_met(fgrounds.size(), vector<double>(nbmets));
-    vector<double> cumdiscard_fgrounds = init_for_fgrounds;
+    //vector<double> cumdiscard_fgrounds = init_for_fgrounds;
+    this->set_cumdiscard_fgrounds(init_for_fgrounds);
     vector<double> experienced_bycatch_prop_on_fgrounds = init_for_fgrounds;
     vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds = init_for_fgrounds;
     vector<double> experiencedcpue_fgrounds = init_for_fgrounds;
@@ -4089,6 +4091,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
     // contribute to accumulated catches on this node
+    outc(cout << "cumcatch_fgrounds this node is " << cumcatch_fgrounds.at(idx_node_r) << endl);
+    outc(cout << "cumdiscard_fgrounds is " << cumdiscard_fgrounds.at(idx_node_r) << endl);
     this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
     this->get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
     double discratio =  this->get_loc()->get_cumdiscards() / (this->get_loc()->get_cumdiscards()+this->get_loc()->get_cumcatches());
@@ -5733,7 +5737,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     // with the list of intermediate nodes
     vector <double> dist_to_others;
     auto from = this->get_loc()->get_idx_node();
-    dout(cout  << "current node: " << from.toIndex() << endl);
+    outc(cout  << "current node: " << from.toIndex() << endl);
     //min_distance.clear();
     //previous.clear();
     PathShop curr_path_shop;
@@ -5784,7 +5788,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                      {
 
 
-                      dout(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
+                      outc(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
                       double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
                                                  nodes.at(from.toIndex())->get_y(),
                                                  nodes.at(vx.toIndex())->get_x(),
@@ -5798,13 +5802,13 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                         // looking around in a radius of 200 km among the grounds I know...
                         &&  dist_to_this_node < 200 )
                 {
-                    dout(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << endl);
+                    outc(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << endl);
                     // force to steam away by assigning a very low distance
                     dist_to_others.push_back(1);
                 }
                 else
                 {
-                    dout(cout  << "this other ground is also part of the closed area!!!" << endl);
+                    outc(cout  << "this other ground is also part of the closed area!!!" << endl);
                     dist_to_others.push_back(950);
 
                 }
@@ -5873,7 +5877,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             }
         }
         next_ground = types::NodeId(grds[idx_scdlowest]);
-        dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << endl);
+        outc(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << endl);
 
         // check for area_closure
         if ( dyn_alloc_sce.option(Options::area_monthly_closure)  &&
@@ -5888,7 +5892,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             //if(nodes.at(next_ground)->evaluateAreaType()!=1)
             if (nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
             {
-                dout(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << endl);
+                outc(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << endl);
                 finally_I_should_go_for_the_closest = true;
                 // the closest might also be inside the closed area but at least we will oscillate back to outside
 
@@ -5901,13 +5905,13 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     {
         next_ground = types::NodeId(grds[idx_lowest]);
 
-        dout(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << endl);
+        outc(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << endl);
     }
 
     if (from.toIndex() == next_ground.toIndex() ||
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
-        dout(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
+        outc(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
        /* if(next_ground.toIndex()==5706){
             cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl;
             cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
@@ -5965,12 +5969,12 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
     if(path.size()==0)
     {
-        dout(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << " you should stop here because my path is empty!");
+        outc(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << " you should stop here because my path is empty!");
         // as we detected something wrong here, we try to recover(!):
         for(unsigned int i=0; i<grds.size(); i++)
         {
             next_ground =  types::NodeId(grds[i]);
-            dout(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
+            outc(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
 
             if(!use_static_paths)
             {
@@ -6007,7 +6011,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     }
 
 
-    dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
+    outc(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
     /*if(next_ground.toIndex()==12132){
         cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl;
         cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl;
@@ -6033,7 +6037,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     */
 
 
-    dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
+    outc(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
 
     // for this vessel, select the metier specific to this particular fishing ground
     // according to the observed frequency in data
@@ -6057,6 +6061,18 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     bool is_fishing_credits = false;
     if (dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
     
+ 
+    // check roadmap
+    /*
+    outc(cout << "new roadmap to new ground is: ");
+    list<types::NodeId> lst = this->get_roadmap();
+    for (auto pos = lst.begin(); pos != lst.end(); pos++)
+    {
+        outc(cout << (*pos).toIndex() << " ");
+    }
+    outc(cout << endl);
+    */
+
     // find.next.pt.on.the.graph()
     this->find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
     unlock();

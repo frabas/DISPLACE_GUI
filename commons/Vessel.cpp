@@ -3022,7 +3022,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     for (unsigned int pop=0; pop< nbpops; pop++)
     {
         int namepop = populations[pop]->get_name();
-
+        //outc(cout << "check this pop " << populations.at(pop)->get_name() << endl);
+        
         // init
         vector <double>landings_per_szgroup(NBSZGROUP, 0);
         // init
@@ -3864,7 +3865,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
         }
         else  // implicit pop:
         {
-            if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
+           if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
            {
 
 
@@ -3933,7 +3934,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 cpue = rgamma(a_shape, a_scale);
 
             }
-           dout(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
+           outc(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
 
             // TAC management effect for implicit species
             if(tstep>1 && is_tacs && is_individual_vessel_quotas)

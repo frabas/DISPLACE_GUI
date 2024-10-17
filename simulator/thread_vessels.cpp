@@ -347,13 +347,15 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         << endl); // ...maybe underestimated fuel tank capacity, or an overestimated geographical range for a vessel doing daily trips
                 }
 
-                if((model->vessels()[index_v]->get_name())=="PRTPTVELLLSVL10121"){
-                    cout  << model->vessels()[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl;
-                    cout << "given cum fuel cons is: " << model->vessels()[index_v]->get_cumfuelcons() << endl;
-                    cout << "given total tank capacity is: " << model->vessels()[index_v]->get_tankcapacity() << endl;
-                    cout << "given cumcatches is: " << model->vessels()[index_v]->get_cumcatches() << endl;
-                    cout << "given vessel carrying cap is: " << model->vessels()[index_v]->get_carrycapacity() << endl;
+                // outc() of verbose at 2
+                outc(cout << model->vessels()[index_v]->get_name() << " SHOULD I STOP? (0/1): " << stop_fishing << endl);
+                outc(cout << "given cum fuel cons is: " << model->vessels()[index_v]->get_cumfuelcons() << endl);
+                outc(cout << "given total tank capacity is: " << model->vessels()[index_v]->get_tankcapacity() << endl);
+                outc(cout << "given cumcatches is: " << model->vessels()[index_v]->get_cumcatches() << endl);
+                outc(cout << "given vessel carrying cap is: " << model->vessels()[index_v]->get_carrycapacity() << endl);
+                /*if ((model->vessels()[index_v]->get_name()) == "PRTPTVELLLSVL10121") {
                 }
+                */
                 
 
                 // ***************implement a decision************************************

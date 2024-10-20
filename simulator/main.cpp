@@ -3202,7 +3202,7 @@ int app_main(int argc, char const* argv[])
 
             for (unsigned int idx = 0; idx < listVesselIdForLogLikeToExport.size(); idx++) {
                 //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
-                OutputExporter::instance().exportLogLike(simModel->timestep(),
+                 OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
                                                          simModel->populations(), simModel->config().implicit_pops, 
                                                          export_discards_in_logbooks);

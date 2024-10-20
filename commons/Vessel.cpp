@@ -2768,6 +2768,10 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     dout(cout << "BEGIN do_catch()" << endl);
     dout(cout << "vessel " << this->get_name() <<endl);
 
+
+    // read in
+    vector <vector<double>> catch_pop_at_szgroup = this->get_catch_pop_at_szgroup(); 
+
     // check the matrix of catches
     //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << endl);
     //for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
@@ -3553,13 +3557,13 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             // 1bis. caution
                             if(is_grouped_tacs)
                             {
-                                for (unsigned int apop=0; apop<catch_pop_at_szgroup.size(); apop++)
+                                for (unsigned int apop=0; apop< ping_catch_pop_at_szgroup.size(); apop++)
                                 {
                                     if(apop!=pop && (grouped_tacs.at(apop)==grouped_tacs.at(pop)))
                                      {
-                                        for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[apop].size();++szgroup)
+                                        for(unsigned int szgroup=0; szgroup < ping_catch_pop_at_szgroup[apop].size();++szgroup)
                                         {
-                                        a_cumul_weight_this_pop_this_vessel += catch_pop_at_szgroup[apop][szgroup]; // add catches on other grouped pops
+                                        a_cumul_weight_this_pop_this_vessel += ping_catch_pop_at_szgroup[apop][szgroup]; // add catches on other grouped pops
                                         }
                                       }
                                  }
@@ -3583,8 +3587,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
-                                    discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
-                                    catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
+                                    discards_pop_at_szgroup[pop][szgroup]+=ping_catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // catches=discards
                                     landings_per_szgroup[szgroup]=0;// discard all! => no landings
                                     discards_per_szgroup[szgroup]=discards_pop_at_szgroup[pop][szgroup];
@@ -3906,7 +3909,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     a_scale=1; //  check with hist(rgamma(100, shape=1, scale=1))
 
                 }
-                cpue = rgamma(a_shape, a_scale);
+                cpue = rgamma(a_shape, a_scale) * populations[pop]->get_cpue_multiplier() * tech_creeping_multiplier;
             }
             else
             { // it occurs when fgrounds are not the initial ones...e.g. usual_fgrounds from harbour
@@ -3931,10 +3934,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     a_shape=1;
                     a_scale=0;
                 }
-                cpue = rgamma(a_shape, a_scale);
+                cpue = rgamma(a_shape, a_scale) * populations[pop]->get_cpue_multiplier() * tech_creeping_multiplier;
 
             }
-           outc(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
+            outc(cout << "implicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier()  << endl);
+            outc(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
 
             // TAC management effect for implicit species
             if(tstep>1 && is_tacs && is_individual_vessel_quotas)
@@ -3964,7 +3968,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
             //if((this->get_name())=="BEL000071985") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
             //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
-            dout (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
+            outc (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
                   << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl);
 
             if(cpue!=0)
@@ -4008,8 +4012,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                 }
 
-                // CUMUL ON VESSEL
-                this->cumcatches += catch_pop_at_szgroup[pop][0];
+                // ADD THIS TRIP CATCH TO TO CUMUL ON VESSEL (CAN BE USED A TRIGGERING EVENT FOR STOPPING FISHING)
+                this->cumcatches += ping_catch_pop_at_szgroup[pop][0];
                 this->cumdiscards += discards_pop_at_szgroup[pop][0];
 
 
@@ -4027,6 +4031,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop) = v;
                     }
                 }
+            
+          
                 int q = a_quarter - 1;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
                     this->cumcatch_fgrounds_per_yearquarter_per_pop.at(idx_node_r).at(q).at(pop) += cpue * PING_RATE;
@@ -4102,17 +4108,22 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
     // check the matrix of catches
-    //double a_cumul=0;
-    //dout(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << endl);
-    //for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
-    //{
-    //    for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
-    //   {
-    //        dout(cout  << catch_pop_at_szgroup[i][j] << " ");
-    //        a_cumul +=catch_pop_at_szgroup[i][j];
-    //    }
-    //    dout(cout  << endl);
-    //}
+    /*double a_cumul = 0;
+    outc(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << endl);
+    for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
+    {
+        for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
+       {
+            outc(cout  << catch_pop_at_szgroup[i][j] << " ");
+            a_cumul +=catch_pop_at_szgroup[i][j];
+        }
+        outc(cout  << endl);
+    }
+    */
+
+    // read out the accumulation that will be exported in loglike.dat (see exportLogLike () and output_fileformats.md)
+    this->set_catch_pop_at_szgroup(catch_pop_at_szgroup);
+
 
     // add the metier for this ping
     this->idx_used_metiers_this_trip.push_back(this->get_metier()->get_name());

@@ -272,6 +272,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
         {
             cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
         }
+        outc(cout << name << ": LANDINGS THIS TRIP THIS POP " << pop << " IS " << cumul.at(pop) << endl);
     }
 
     std::ostringstream oss;

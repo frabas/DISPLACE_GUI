@@ -300,6 +300,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                                                            model->vessels()[index_v]->get_y());
                     dout(cout << "...for the next " << model->vessels()[index_v]->get_timeforrest() << " steps"
                               << endl);
+                    model->vessels()[index_v]->reset_message(); // ignore message to change fground or return to port as the vessel is actually in harbour
 
                 }
              } // end else{} that is taking a decision because not arriving in harb
@@ -402,8 +403,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         }                  
                     }
                     // ***************implement a decision************************************
-                    //if (!(shall_I_change_to_another_ground || force_another_ground) && !is_not_possible_to_change)
-                    if (!(force_another_ground) && roadmap_empty)
+                    if (!(is_not_possible_to_change && force_another_ground) && roadmap_empty)
                         // keep go on catching on this ground...
                     {
                         outc(cout << "hey, I am fishing on "
@@ -485,7 +485,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
 
                     } 
-                    if (force_another_ground)
+                    if (is_not_possible_to_change && force_another_ground)
                     {
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
                         outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << endl);

@@ -129,7 +129,7 @@ const char *const VariableNames::bins[][40] = {
     { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
 
-    { "after 3 h", "after 6 h",0 },
+    { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
 
     { "still ok", "fulfilled",0 },

@@ -2303,7 +2303,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
 
    double divider=(TotLandingIncome+(annual_other_income* (double)tstep/8761));
-   if(divider>0) 
+   if(divider>0 && NetProfit>0)
    {
          NetProfitMargin=(NetProfit*100.0)/divider;
     } 

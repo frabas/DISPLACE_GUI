@@ -200,7 +200,7 @@ struct VesselsData {
 }
 
 static
-VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester, std::string fname, std::string folder)
+VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester, std::string fname, std::string folder, int selected_vessels_only)
 {
     auto quarterString = std::to_string(quarter);
     auto semesterString = std::to_string(semester);
@@ -236,7 +236,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     // paramsForLoad.iparam2; //NBAGE
     // paramsForLoad.iparam3; //NBSZGROUP
 
-    int selected_vessels_only = 0;
+    //int selected_vessels_only = 0;
 
 
     if (!read_vessels_features(quarterString, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
@@ -435,12 +435,12 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
 }
 
 static
-void loadVessels(SimModel &model, std::string fname, std::string folder, int month, int quarter, int semester)
+void loadVessels(SimModel &model, std::string fname, std::string folder, int month, int quarter, int semester, int selected_vessels_only)
 {
     auto quarterString = std::to_string(quarter);
     auto semesterString = std::to_string(semester);
 
-    auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder);
+    auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder, selected_vessels_only);
 
     vector<types::NodeId> spe_fgrounds;
     vector<types::NodeId> spe_fgrounds_init;
@@ -673,13 +673,13 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 }
 
 static
-void reloadVessels(SimModel &model, std::string fname, std::string folder, int month, int quarter, int semester)
+void reloadVessels(SimModel &model, std::string fname, std::string folder, int month, int quarter, int semester, int selected_vessels_only)
 {
     auto quarterString = std::to_string(quarter);
     auto semesterString = std::to_string(semester);
 
     cout << "reloadVessels()...." << endl;
-    auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder);
+    auto loadedDataVessels = loadLocalData(model, month, quarter, semester, fname, folder, selected_vessels_only);
 
     // LOOP OVER VESSELS
     int v = 0;
@@ -1045,11 +1045,11 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
 
 }
 
-void TextfileModelLoader::loadVessels(int year, int month, int quarter, int semester)
+void TextfileModelLoader::loadVessels(int year, int month, int quarter, int semester, int selected_vessels_only)
 {
     if (year==1 && month == 1) {
-        ::loadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester);
+        ::loadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester, selected_vessels_only);
     } else {
-        ::reloadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester);
+        ::reloadVessels(model(), p->folder_name_parameterization, p->inputfolder, month, quarter, semester, selected_vessels_only);
     }
 }

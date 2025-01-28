@@ -25,7 +25,7 @@ public:
 
     void loadShips() override;
 
-    void loadVessels(int year, int month, int quarter, int semester) override;
+    void loadVessels(int year, int month, int quarter, int semester, int selected_vessels_only) override;
 
     void loadMetiers(int year, int month, int quarter, int semester) override;
 

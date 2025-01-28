@@ -15,7 +15,7 @@
 namespace db = msqlitecpp::v2;
 
 
-void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int semester)
+void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int semester, int selected_vessels_only)
 {
     VesselsLoader loader(*p->db);
 

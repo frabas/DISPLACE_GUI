@@ -1340,7 +1340,7 @@ int app_main(int argc, char const* argv[])
     mLoadProfile.start();
 #endif
 
-    modelLoader->loadVessels(1, simModel->month(), simModel->quarter(), simModel->semester());
+    modelLoader->loadVessels(1, simModel->month(), simModel->quarter(), simModel->semester(), selected_vessels_only);
     for (auto vessel: simModel->vessels()) {
         if (enable_sqlite_out) {
             outSqlite->getVesselDefTable()->feedVesselsDefTable(vessel);
@@ -2302,7 +2302,7 @@ int app_main(int argc, char const* argv[])
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 
-            modelLoader->loadVessels(a_year, simModel->month(), simModel->quarter(), simModel->semester());
+            modelLoader->loadVessels(a_year, simModel->month(), simModel->quarter(), simModel->semester(), selected_vessels_only);
 
             // RE-read for metiers
             cout << "re-read metiers..." << endl;

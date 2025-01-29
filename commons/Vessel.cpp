@@ -2771,6 +2771,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
     // read in
     vector <vector<double>> catch_pop_at_szgroup = this->get_catch_pop_at_szgroup(); 
+    vector <vector<double>> ping_catch_pop_at_szgroup = this->get_ping_catch_pop_at_szgroup();
 
     // check the matrix of catches
     //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << endl);
@@ -4054,8 +4055,13 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
             }
             else
             {
+                // not required by just for consistency:
                 catch_pop_at_szgroup.at(pop).at(0) +=0;
                 ping_catch_pop_at_szgroup.at(pop).at(0)+=0;
+            
+            // note that a crash happening from out-of-range in vectors here 
+            // might come from inconsistent config.dat info, e.g. nb of pops or nb of metiers informed is not right...
+            // TODO: catch this error earlier...
             }
 
           } // endif pop present on this node

@@ -21,7 +21,8 @@
 bool DatabaseModelLoader::loadPopulations(int period)
 {
     if (period == 1) {
-        int nbmets = 100; // CAUTION: for now we don't care as a large value will be resized. but best to ultimately include it to config()
+        //int nbmets = 300; // CAUTION: for now we don't care as a large value will be resized. but best to ultimately include it to config()
+        int nbmets = 300; // CAUTION: for now we don't care as a large value will be resized. but best to ultimately include it to config()
         for (unsigned int i = 0; i < model().nodes().size(); i++) {
             model().nodes().at(i)->init_Ns_pops_at_szgroup(model().config().nbpops, NBSZGROUP, nbmets);
             model().nodes().at(i)->init_avai_pops_at_selected_szgroup(model().config().nbpops, SEL_NBSZGROUP);

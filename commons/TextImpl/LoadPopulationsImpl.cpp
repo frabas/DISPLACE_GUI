@@ -2393,7 +2393,8 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     if (year == 1 && model().month()==1)
     {
 
-        int nbmets = 100; // CAUTION: for now we don´t care as a large value will be resized. but best to ultimately include it to config()
+        //int nbmets = 100; // CAUTION: for now we don´t care as a large value will be resized. but best to ultimately include it to config()
+        int nbmets = model().config().nbmets; //  from config()
         for (unsigned int i = 0; i < model().nodes().size(); i++) {
             model().nodes().at(i)->init_Ns_pops_at_szgroup(iparam1, iparam3, nbmets);
             model().nodes().at(i)->init_avai_pops_at_selected_szgroup(iparam1, iparam4);

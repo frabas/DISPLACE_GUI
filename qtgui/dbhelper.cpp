@@ -216,7 +216,7 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 
     nodesTab->queryAllNodes(
             [&nodes, &model, &harbours](std::shared_ptr<Node> nodeData, std::shared_ptr<Harbour> harbour) {
-                nodeData->init_Ns_pops_at_szgroup(model->getNBPops(), model->getSzGrupsCount(), 100);
+            nodeData->init_Ns_pops_at_szgroup(model->getNBPops(), model->getSzGrupsCount(), 300); // nbmets
 
                 auto n = std::make_shared<NodeData>(nodeData, model);
 

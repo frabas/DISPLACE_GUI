@@ -1345,7 +1345,7 @@ void Node::clear_cumcatches_per_pop_per_met_this_month()
 {
     for (unsigned int i = 0; i < cumcatches_per_pop_per_met_this_month.size(); i++)
     {
-        for (unsigned int j = 0; j < cumcatches_per_pop_per_met_this_month.size(); j++)
+        for (unsigned int j = 0; j < cumcatches_per_pop_per_met_this_month.at(i).size(); j++)
         {
             cumcatches_per_pop_per_met_this_month.at(i).at(j) = 0;
         }
@@ -1357,7 +1357,7 @@ void Node::clear_cumeffort_per_pop_per_met_this_month()
 {
     for (unsigned int i = 0; i < cumeffort_per_pop_per_met_this_month.size(); i++)
     {
-        for (unsigned int j = 0; j < cumeffort_per_pop_per_met_this_month.size(); j++)
+        for (unsigned int j = 0; j < cumeffort_per_pop_per_met_this_month.at(i).size(); j++)
         {
             cumeffort_per_pop_per_met_this_month.at(i).at(j) = 0;
         }
@@ -1369,7 +1369,7 @@ void Node::clear_cpue_per_pop_per_met_this_month()
 {
     for (unsigned int i = 0; i < cpue_per_pop_per_met_this_month.size(); i++)
     {
-        for (unsigned int j = 0; j < cpue_per_pop_per_met_this_month.size(); j++)
+        for (unsigned int j = 0; j < cpue_per_pop_per_met_this_month.at(i).size(); j++)
         {
             cpue_per_pop_per_met_this_month.at(i).at(j) = 0;
         }

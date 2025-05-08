@@ -2564,7 +2564,10 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         if(returning_to_harbour)
         {
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		}
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_state(2);
+        }
         else
         {
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
@@ -2712,7 +2715,10 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         {
             dout(cout  << "returning" << endl);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		}
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_state(2);
+        }
         else
         {
             dout(cout  << "steaming to" << endl);
@@ -3432,15 +3438,15 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
                                 // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
                                 // init
-                                /*double val=0;
+                                // REACTIVATION ON THE 07-05-2025:
                                 if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
                                    {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
+                                    double val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
                                     new_avai_pops_at_selected_szgroup.at(a_count)=val;
                                     if(a_count<(selected_szgroups.size()-1)) a_count+=1;
                                     }
                                 nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
-                                */
+                                // END RE-ACITIVATION
 
                                 /*
 

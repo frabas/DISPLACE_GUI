@@ -2566,14 +2566,23 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning()) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+             // cout << "while returning, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
             set_state(2);
+
         }
         else
         {
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
-        set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
-        set_state(2);
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while steaming, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+           set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+           set_state(2);
+        }
+
         dout ( cout << "in find_next_point_on_the_graph: distance prev pt: " << dist_next_node
                << ", conso to get there: " << get_consotogetthere() << endl);
 
@@ -2711,25 +2720,32 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
 
         // update
+        //cout << "returning_to_harbour (0/1) here is at " << returning_to_harbour << endl;
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << endl);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		
             set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+            if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + PING_RATE);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
             set_state(2);
         }
         else
         {
-            dout(cout  << "steaming to" << endl);
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
-        set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
-        set_timeatsea(get_timeatsea()+ PING_RATE);
+            dout(cout << "steaming to" << endl);
+            set_cumfuelcons(get_cumfuelcons() + (get_fuelcons() * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_consotogetthere(get_consotogetthere() + (get_fuelcons() * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;
         if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + PING_RATE);
         set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
         set_state(2);
-        //		this->set_roadmap(roadmap);
+        }
+       
     }
 
     //if(this->get_x()>8 && this->get_x()<10 && this->get_y()<52 )
@@ -5951,11 +5967,11 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
     // in this case, get a time and fuel bonus for free! (i.e. note the MINUS sign!)
     // (in order to somehow correct for the discretisation creating jumps between sequential fgrounds)
-    this->set_timeatsea(this->get_timeatsea() - PING_RATE);
-    this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
-    double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
-    this->set_cumfuelcons(cumfuelcons);
-    this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
+    //this->set_timeatsea(this->get_timeatsea() - PING_RATE);
+    //this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+    //double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
+    //this->set_cumfuelcons(cumfuelcons);
+    //this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
 
 
     list<types::NodeId> path;
@@ -6296,9 +6312,9 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     }
 
     // update
-    this->set_timeatsea(this->get_timeatsea()+ PING_RATE);
-    if(this->get_hasfishedatleastonce()) this->set_timeatseasincefirstcatch(this->get_timeatseasincefirstcatch() + PING_RATE);
-    this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+    //this->set_timeatsea(this->get_timeatsea()+ PING_RATE);
+    //if(this->get_hasfishedatleastonce()) this->set_timeatseasincefirstcatch(this->get_timeatseasincefirstcatch() + PING_RATE);
+    //this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
 
 }
 

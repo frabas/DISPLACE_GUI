@@ -451,6 +451,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         model->vessels()[index_v]->lock();
                         model->vessels()[index_v]->set_timeatsea(
                                 model->vessels()[index_v]->get_timeatsea() + PING_RATE);
+                       // cout << "after do_catch, timeatsea is now uptaded to: " << model->vessels()[index_v]->get_timeatsea() << endl;
                         model->vessels()[index_v]->set_hasfishedatleastonce(1);
                         model->vessels()[index_v]->set_timeatseasincefirstcatch(
                             model->vessels()[index_v]->get_timeatseasincefirstcatch() + PING_RATE);
@@ -487,10 +488,16 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     } 
                     if (is_not_possible_to_change && force_another_ground)
                     {
+                        
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
                         outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << endl);
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                         glob_mutex.lock();
+                      
+                        // cancel last count that was supposed to be a fishing event...
+                        model->vessels()[index_v]->set_timeatsea(
+                            model->vessels()[index_v]->get_timeatsea() - PING_RATE);
+
                         model->vessels()[index_v]->choose_a_port_and_then_return(
                             *model,
                             model->timestep(),

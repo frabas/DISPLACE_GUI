@@ -6184,25 +6184,35 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     //*************************closer_port**************************//
     if (dyn_alloc_sce.option(Options::closer_port))			 // dyn sce.
     {
-        for (unsigned int i =0; i< harbs.size(); i++)
+        
+        // TO REMOVE: because USELESS and misleading:
+        /*
+            for (unsigned int i =0; i< harbs.size(); i++)
         {
             // destination
+            cout << "i " << i << " while size harbs is " << harbs.size() << endl;
             types::NodeId vx = types::NodeId(harbs[i]);
-            dout(cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb[vx.toIndex()] << endl);
-            dist_to_ports.push_back(distance_to_harb[vx.toIndex()]);
+            cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb.at(vx.toIndex()) << endl;
+            dist_to_ports.push_back(distance_to_harb.at(vx.toIndex()));
         }
+        */
+
+
         // init
-        double lowest =dist_to_ports[0];
+        double lowest = distance_to_harb[0];
         int idx_lowest=0;
-        for(unsigned int i=0; i<dist_to_ports.size(); i++)
+        for(unsigned int i=0; i< distance_to_harb.size(); i++)
         {
-            if(dist_to_ports[i]<lowest)
+            if(distance_to_harb[i]<lowest)
             {
-                lowest =dist_to_ports[i];
+                lowest = distance_to_harb[i];
                 idx_lowest =i;
+                //cout << "distance_to_harb[i]: " << distance_to_harb[i] << " i:" << i << endl;
             }
         }
         arr = types::NodeId(harbs[idx_lowest]); // destination: nearest port
+        //cout << "returning to closest port, which is:" << arr << "  " <<  endl;
+
     }
     else						 // ....otherwise (e.g. baseline), choose a harbour according to its frequency in data...
     {

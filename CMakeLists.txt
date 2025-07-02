@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.3)
 project(displace VERSION 1.0 LANGUAGES C CXX)
 
+set(VCPKG_MANIFEST_INSTALL OFF)
+
 include (cmake/options.cmake)
 include (cmake/compiler.cmake)
 
@@ -11,7 +13,6 @@ include (cmake/qt.cmake)
 if (UNIX)
     include(cmake/platform-linux.cmake)
 endif ()
-
 if (WIN32)
     include (cmake/platform_win.cmake)
 endif()

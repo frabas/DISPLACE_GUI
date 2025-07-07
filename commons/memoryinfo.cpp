@@ -28,7 +28,10 @@
  */
 
 #if defined(_WIN32)
+#define _HAS_STD_BYTE 0
 #include <windows.h>
+#undef _HAS_STD_BYTE
+
 #include <psapi.h>
 
 #elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))

@@ -17,7 +17,10 @@
 #ifndef WIN32_LEAN_AND_MEAN
 #   define WIN32_LEAN_AND_MEAN
 #endif
+#define _HAS_STD_BYTE 0
 #include <windows.h>
+#undef _HAS_STD_BYTE
+
 
 #include <stdio.h>
 #include <stdarg.h>

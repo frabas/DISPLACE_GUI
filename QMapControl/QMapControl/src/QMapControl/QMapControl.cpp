@@ -658,7 +658,7 @@ void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &or
 
     void QMapControl::mousePressEvent(QMouseEvent* mouse_event)
     {
-        auto local = localToRotatedPoint(mouse_event->localPos());
+        auto local = localToRotatedPoint(mouse_event->position());
         // Store the mouse location of the current/starting mouse click.
         m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
         m_mouse_position_pressed_px = m_mouse_position_current_px;
@@ -699,7 +699,7 @@ void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &or
 
     void QMapControl::mouseReleaseEvent(QMouseEvent* mouse_event)
     {
-        auto local = localToRotatedPoint(mouse_event->localPos());
+        auto local = localToRotatedPoint(mouse_event->position());
         // Store the mouse location of the current mouse click.
         m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
@@ -857,7 +857,7 @@ void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &or
 
     void QMapControl::mouseDoubleClickEvent(QMouseEvent* mouse_event)
     {
-        auto local = localToRotatedPoint(mouse_event->localPos());
+        auto local = localToRotatedPoint(mouse_event->position());
         // Store the mouse location of the current mouse click.
         m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
@@ -867,7 +867,7 @@ void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &or
 
     void QMapControl::mouseMoveEvent(QMouseEvent* mouse_event)
     {
-        auto local = localToRotatedPoint(mouse_event->localPos());
+        auto local = localToRotatedPoint(mouse_event->position());
         // Update the current mouse position.
         m_mouse_position_current_px = PointViewportPx(local.x(), local.y());
 
@@ -906,7 +906,7 @@ void QMapControl::setMouseButtonLeft(const MouseButtonMode &mode, const bool &or
 
     void QMapControl::wheelEvent(QWheelEvent* wheel_event)
     {
-        auto local = localToRotatedPoint(wheel_event->posF());
+        auto local = localToRotatedPoint(wheel_event->position());
         const PointPx wheel_delta(mapFocusPointWorldPx() - local);
 
         // Is the vertical angle delta positive?
@@ -1503,7 +1503,7 @@ bool QMapControl::checkBackbuffer() const
         if(force_redraw || checkBackbuffer())
         {
             // Schedule the redraw in a background thread.
-            QtConcurrent::run(this, &QMapControl::redrawBackbuffer);
+            auto _r = QtConcurrent::run([this]() {redrawBackbuffer(); } );
         }
 
         // Loop through the layers to update the Geometries that have widgets as well.

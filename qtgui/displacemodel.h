@@ -21,6 +21,10 @@
 #ifndef DISPLACEMODEL_H
 #define DISPLACEMODEL_H
 
+#if !defined(_HAS_STD_BYTE)
+#define _HAS_STD_BYTE 0
+#endif
+
 #include <scenario.h>
 #include <config.h>
 #include <nodepenalty.h>
@@ -46,6 +50,8 @@
 #include <stats/fishfarmsstats.h>
 #include <stats/shipsstats.h>
 #include <stats/windfarmsstats.h>
+
+#undef _HAS_STD_BYTE
 
 #include <QObject>
 #include <QString>

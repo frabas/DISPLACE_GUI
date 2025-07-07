@@ -5,7 +5,10 @@
 #ifndef DISPLACE_PRETTYPRINT_H
 #define DISPLACE_PRETTYPRINT_H
 
+#define _HAS_STD_BYTE 0
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 #include <iterator>
 #include <memory>
 #include <ostream>

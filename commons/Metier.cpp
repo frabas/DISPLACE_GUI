@@ -42,7 +42,7 @@ vector<int> _metier_suitable_seabottomtypes)
     percent_revenue_completeness=_percent_revenue_completeness;
     selectivity_per_stock=_selectivity_per_stock;
     betas_per_pop=_betas_per_pop;
-    int nbpops = _betas_per_pop.size();
+    auto nbpops = _betas_per_pop.size();
     if(_betas_per_pop.size()!=_mls_cat_per_pop.size())
          throw std::runtime_error("Error while reading: pop_betas_per_pop: check the dimension i.e. nbpops in the file");
     discardratio_limits=_discardratio_limits;

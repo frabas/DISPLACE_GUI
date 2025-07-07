@@ -158,7 +158,7 @@ void CsvEditor::closeEvent(QCloseEvent *)
 void CsvEditor::load(QString file)
 {
     mImporter.setSeparator(mSeparator);
-    mWorkLoading = QtConcurrent::run(&mImporter, &CsvImporter::import, file);
+    mWorkLoading = QtConcurrent::run(&CsvImporter::import, &mImporter,  file);
     mWorkLoadingWatcher.setFuture(mWorkLoading);
 
     mWaitDialog = new WaitDialog(this);

@@ -1476,9 +1476,9 @@ bool fill_from_firms_specifications (istream& in,
 
             int id      = boost::lexical_cast<int>(fields[0]);
             string name = fields[1];
-            double nb   = boost::lexical_cast<int>(fields[2]);
-            double lon  = boost::lexical_cast<double>(fields[3]);
-            double lat  = boost::lexical_cast<double>(fields[4]);
+            auto nb   = boost::lexical_cast<int>(fields[2]);
+            auto lon  = boost::lexical_cast<double>(fields[3]);
+            auto lat  = boost::lexical_cast<double>(fields[4]);
             firm_ids.push_back(id);
             firm_names.push_back(name);
             nb_vessels.push_back(nb);

@@ -18,7 +18,9 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+#if !defined(NOMINMAX)
 #define NOMINMAX
+#endif
 
 #include "ipcqueue.h"
 #include <algorithm>

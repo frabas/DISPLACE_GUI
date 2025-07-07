@@ -31,7 +31,11 @@
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/containers/list.hpp>
 #include <boost/interprocess/containers/string.hpp>
+
+#define _HAS_STD_BYTE 0
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 
 /** @brief implements a CircularBuffer to be used in a boost::interprocess::managed_heap_memory
  * @note DO NOT implements ANY virtual method in this class! Pointers are not portable across processes!

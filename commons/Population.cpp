@@ -18,12 +18,17 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include<string>
+#include <string>
+#include <algorithm>
+#include <random>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include "Population.h"
 #include <helpers.h>
+
+static std::random_device rd;
+static std::mt19937 g(rd());
 
 Population::Population(int a_name,
                        string a_pop_name,
@@ -1416,12 +1421,11 @@ void Population::aggregate_N_display_for_check()
 
 void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 {
-
    cout << "start diffusion for this pop...." << endl;
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
     vector<types::NodeId> list_of_nodes_idx;
-    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
+    std::shuffle (list_of_nodes.begin(), list_of_nodes.end(), g);
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());

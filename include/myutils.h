@@ -44,7 +44,12 @@
 #include <cmath>
 #include <math.h>
 
+#if !defined(_HAS_STD_BYTE)
+#define _HAS_STD_BYTE 0
+#endif
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 #include <pathshop.h>
 
 #include <numeric>

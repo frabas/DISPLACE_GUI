@@ -85,7 +85,7 @@ private:
     Ui::EditPaletteDialog *ui;
     Palette *mPalette;
     PaletteModel *mModel;
-    SpecialPaletteModel *mSpecialModel;
+    SpecialPaletteModel *mSpecialModel{};
 
     static QString mFileFilter;
 };

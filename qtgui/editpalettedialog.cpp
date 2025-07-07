@@ -55,40 +55,40 @@ public:
         endResetModel();
     }
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const {
+    [[nodiscard]] QModelIndex index(int row, int column, const QModelIndex &parent) const override {
         Q_UNUSED(parent);
         return createIndex(row, column);
     }
 
-    QModelIndex parent(const QModelIndex &child) const {
+    [[nodiscard]] QModelIndex parent(const QModelIndex &child) const override {
         Q_UNUSED(child);
-        return QModelIndex();
+        return {};
     }
 
-    int rowCount(const QModelIndex &parent) const {
+    [[nodiscard]] int rowCount(const QModelIndex &parent) const override {
         Q_UNUSED(parent);
-        return values.size();
+        return static_cast<int>(values.size());
     }
-    int columnCount(const QModelIndex &parent) const {
+    [[nodiscard]] int columnCount(const QModelIndex &parent) const override {
         Q_UNUSED(parent);
         return 2;
     }
 
-    QVariant data(const QModelIndex &index, int role) const {
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override {
         switch (index.column()) {
         case 0:
-            if (role != Qt::DisplayRole) return QVariant::Invalid;
+            if (role != Qt::DisplayRole) return {};
             return values[index.row()];
         case 1:
-            if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
-                return QVariant::Invalid;
+            if (role != Qt::BackgroundRole && role != Qt::ForegroundRole) {
+                return {};
             }
             return QVariant (colors[index.row()]);
         }
-        return QVariant::Invalid;
+        return {};
     }
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role) {
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override {
         bool ok;
         double v;
         switch (index.column()) {
@@ -107,7 +107,7 @@ public:
             emit dataChanged(index,index);
             return true;
         case 1:
-            if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
+            if (role != Qt::BackgroundRole && role != Qt::ForegroundRole) {
                 return false;
             }
             colors[index.row()] = value.value<QColor>();
@@ -117,25 +117,30 @@ public:
         return false;
     }
 
-    bool insertRow(int row, const QModelIndex &parent) {
+    bool insertRows(int row, int count, const QModelIndex &parent) override {
         Q_UNUSED(parent);
-        double val = ((row > 0 ? values[row-1] : 0.0) +
-                      (row < values.size() ? values[row] : (row > 0 ? 2*values[row-1] : 0.0))) /2;
+        while (count > 0) {
+            double val = ((row > 0 ? values[row - 1] : 0.0) +
+                          (row < values.size() ? values[row] : (row > 0 ? 2 * values[row - 1] : 0.0))) / 2;
 
-        values.insert(row,val);
-        colors.insert(row, QColor());
-
+            values.insert(row, val);
+            colors.insert(row, QColor());
+            --count;
+        }
         return true;
     }
 
-    bool removeRow(int row, const QModelIndex &parent) {
+    bool removeRows(int row, int count, const QModelIndex &parent) override {
         Q_UNUSED(parent);
-        values.removeAt(row);
-        colors.removeAt(row);
+        while (count > 0) {
+            values.removeAt(row);
+            colors.removeAt(row);
+            --count;
+        }
         return true;
     }
 
-    Qt::ItemFlags flags(const QModelIndex &index) const {
+    [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &index) const override {
         if (index.column() == 0)
             return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
         return QAbstractItemModel::flags(index);
@@ -162,33 +167,34 @@ private:
 class SpecialPaletteModel : public QAbstractItemModel
 {
 public:
-    SpecialPaletteModel (Palette *palette)
+    explicit SpecialPaletteModel (Palette *palette)
         : mPalette(palette) {
     }
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const {
+    [[nodiscard]] QModelIndex index(int row, int column, const QModelIndex &parent) const override {
         Q_UNUSED(parent);
         return createIndex(row, column);
     }
 
-    QModelIndex parent(const QModelIndex &child) const {
+    [[nodiscard]] QModelIndex parent(const QModelIndex &child) const override {
         Q_UNUSED(child);
-        return QModelIndex();
+        return {};
     }
 
-    int rowCount(const QModelIndex &parent) const {
+    [[nodiscard]] int rowCount(const QModelIndex &parent) const override {
         Q_UNUSED(parent);
         return mPalette->specialColorCount();
     }
-    int columnCount(const QModelIndex &parent) const {
+
+    [[nodiscard]] int columnCount(const QModelIndex &parent) const override {
         Q_UNUSED(parent);
         return 1;
     }
 
-    QVariant data(const QModelIndex &index, int role) const {
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override {
         if (index.row() == 0) {
             switch (role) {
-            case Qt::BackgroundColorRole:
+            case Qt::BackgroundRole:
                 return QVariant (mPalette->specialColor(index.column()));
             case Qt::ForegroundRole: {
                 QColor col = mPalette->specialColor(index.column());
@@ -198,12 +204,14 @@ public:
                 return QVariant (col);
                 }
             case Qt::DisplayRole:
-                return QVariant (index.column());
+                return {index.column()};
+            default:
+                return {};
             }
 
-            return QVariant::Invalid;
+            return {};
         }
-        return QVariant::Invalid;
+        return {};
     }
 
     void refresh() {
@@ -221,7 +229,7 @@ QString EditPaletteDialog::mFileFilter = QT_TR_NOOP("Palette files (*.p2c);;All 
 EditPaletteDialog::EditPaletteDialog(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::EditPaletteDialog),
-      mPalette(0), mModel(0)
+      mPalette(nullptr), mModel(nullptr)
 {
     ui->setupUi(this);
 }
@@ -259,11 +267,11 @@ void EditPaletteDialog::on_palette_doubleClicked(const QModelIndex &index)
 
     QString tit = QString(tr("Select color for values under '%1'"))
             .arg(s1);
-    QColor col = ui->palette->model()->data(index, Qt::BackgroundColorRole).value<QColor>();
+    auto col = ui->palette->model()->data(index, Qt::BackgroundRole).value<QColor>();
     col = QColorDialog::getColor(col, this, tit);
 
     if (col.isValid()) {
-        ui->palette->model()->setData(index, col, Qt::BackgroundColorRole);
+        ui->palette->model()->setData(index, col, Qt::BackgroundRole);
 
         emit paletteChanged();
     }
@@ -275,7 +283,7 @@ void EditPaletteDialog::on_specialPalette_doubleClicked(const QModelIndex &index
 
     QString tit = QString(tr("Select color for special value %1"))
             .arg(index.column());
-    QColor col = mSpecialModel->data(index, Qt::BackgroundColorRole).value<QColor>();
+    auto col = mSpecialModel->data(index, Qt::BackgroundRole).value<QColor>();
     col = QColorDialog::getColor(col, this, tit);
 
     if (col.isValid()) {

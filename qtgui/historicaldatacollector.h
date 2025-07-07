@@ -42,7 +42,6 @@
 #define HISTORICALDATACOLLECTOR_H
 
 #include <QMap>
-#include <QLinkedList>
 #include <memory>
 
 template <typename T>

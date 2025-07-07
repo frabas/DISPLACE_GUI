@@ -426,8 +426,7 @@ double  norm_rand(void)
 
     const static double A =  2.216035867166471;
 
-    double s, u1, w, y, u2, u3, aa, tt, theta, R;
-    int i;
+    double u1, u2, u3, tt;
 
     //KINDERMAN_RAMAGE: /* see Reference above */
     /* corrected version from Josef Leydold

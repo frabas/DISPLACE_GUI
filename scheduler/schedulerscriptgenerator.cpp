@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QTextStream>
+#include <QRegularExpression>
 
 const QString SchedulerScriptGenerator::sBeginHeader = "%%%Begin-Header%%%";
 const QString SchedulerScriptGenerator::sEndHeader = "%%%End-Header%%%";
@@ -55,19 +56,19 @@ bool SchedulerScriptGenerator::generate(QString path, SchedulerJob *scheduler, Q
     QTextStream strm(&out);
 
     for (auto s : mHeaders) {
-        strm << substKeywords(s) << endl;
+        strm << substKeywords(s) << "\n";
     }
 
     for (int i = 0; i < scheduler->jobsCount(); ++i) {
         auto &job = scheduler->job(i);
 
         for (auto s: mContent) {
-            strm << substKeywords(s, job) << endl;
+            strm << substKeywords(s, job) << "\n";
         }
     }
 
     for (auto s : mFooters) {
-        strm << substKeywords(s) << endl;
+        strm << substKeywords(s) << "\n";
     }
 
 
@@ -128,16 +129,16 @@ void SchedulerScriptGenerator::parseTemplate(QString templatePath)
 QString SchedulerScriptGenerator::substKeywords(QString in)
 {
     QString ret = in;
-    QRegExp r("%%%([a-zA-Z]+)%%%");
+    QRegularExpression r("%%%([a-zA-Z]+)%%%");
 
-    int pos;
-    if ((pos = r.indexIn(in)) != -1) {
+    auto match = r.match(in);
+    if (match.hasMatch()) {
         // found a keyword.
-        QString key = r.cap(1);
+        QString key = match.captured();
         QString value;
 
         if (getValue(key, value)) {
-            ret = in.mid(0, pos) + value + in.mid(pos + r.matchedLength());
+            ret = in.mid(0, match.capturedStart()) + value + in.mid(match.capturedEnd());
         }
     }
 
@@ -147,21 +148,16 @@ QString SchedulerScriptGenerator::substKeywords(QString in)
 QString SchedulerScriptGenerator::substKeywords(QString in, const SimulationRun &job)
 {
     QString ret = in;
-    QRegExp r("%%%([a-zA-Z]+)%%%");
+    QRegularExpression r("%%%([a-zA-Z]+)%%%");
 
-    int pos = 0;
-    while ((pos = r.indexIn(ret, pos)) != -1) {
-        // found a keyword.
-        QString key = r.cap(1);
+    auto match = r.match(in);
+    for (int i = 0; i < match.lastCapturedIndex(); ++i) {
+        QString key = match.captured(i);
         QString value;
 
-        if (getValue(key, job, value)) {
-            ret = ret.mid(0, pos) + value + ret.mid(pos + r.matchedLength());
-        } else if (getValue(key, value)) {
-            ret = ret.mid(0, pos) + value + ret.mid(pos + r.matchedLength());
+        if (getValue(key, value) || getValue(key, job, value)) {
+            ret = ret.mid(0, match.capturedStart(i)) + value + ret.mid(match.capturedEnd(i));
         }
-
-        pos += value.length();
     }
 
     return ret;

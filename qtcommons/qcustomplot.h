@@ -158,7 +158,7 @@ class QCPPolarGraph;
 */
 
 // Qt version < 6.2.0: to get metatypes Q_GADGET/Q_ENUMS/Q_FLAGS in namespace we have to make it look like a class during moc-run
-#if QT_VERSION >= 0x060200 // don't use QT_VERSION_CHECK here, some moc versions don't understand it
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0) // don't use QT_VERSION_CHECK here, some moc versions don't understand it
 namespace QCP {
   Q_NAMESPACE // this is how to add the staticMetaObject to namespaces in newer Qt versions
 #else // Qt version older than 6.2.0

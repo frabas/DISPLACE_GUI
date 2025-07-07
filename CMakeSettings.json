@@ -19,7 +19,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
+          "value": "C:\\Qt\\6.8.3\\msvc2019_64",
           "type": "STRING"
         }
       ]
@@ -42,7 +42,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
+          "value": "C:\\Qt\\6.8.3\\msvc2019_64",
           "type": "STRING"
         }
       ]
@@ -65,7 +65,7 @@
         },
         {
           "name": "CMAKE_PREFIX_PATH",
-          "value": "C:\\Qt\\5.15.2\\msvc2019_64",
+          "value": "C:\\Qt\\6.8.3\\msvc2019_64",
           "type": "STRING"
         }
       ]

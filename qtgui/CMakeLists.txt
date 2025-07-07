@@ -91,12 +91,12 @@ target_link_libraries(displacegui
         formats
         qtcommons
         QMapControl
-        Qt5::Widgets
-        Qt5::Concurrent
-        Qt5::Sql
-        Qt5::Xml
-        Qt5::PrintSupport
-        Qt5::Network
+        Qt6::Widgets
+        Qt6::Concurrent
+        Qt6::Sql
+        Qt6::Xml
+        Qt6::PrintSupport
+        Qt6::Network
 
         ${EXTRA_LIBRARIES}
         )

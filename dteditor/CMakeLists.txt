@@ -37,7 +37,7 @@ target_link_libraries(dteditor
         formats
         qtcommons
         ${LIBRARIE}
-        Qt5::Widgets
+        Qt6::Widgets
         )
 
 # Set target directory

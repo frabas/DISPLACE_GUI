@@ -56,8 +56,8 @@ target_compile_definitions(QMapControl
 
 target_link_libraries(QMapControl
         ${LIBRARIES}
-        Qt5::Widgets
-        Qt5::Network
+        Qt6::Widgets
+        Qt6::Network
         )
 
 target_include_directories(QMapControl

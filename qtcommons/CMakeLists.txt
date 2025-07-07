@@ -2,8 +2,6 @@ add_definitions(-DQTCOMMONS_LIBRARY -DQCUSTOMPLOT_COMPILE_LIBRARY)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/QMapControl/
-        ${Qt5Widgest_INCLUDE_DIRS}
-        ${Qt5PrintSupport_INCLUDE_DIRS}
 )
 
 file(GLOB SOURCES *.cpp
@@ -23,8 +21,8 @@ add_library(qtcommons SHARED
 
 target_link_libraries(qtcommons
         QMapControl
-        Qt5::Widgets
-        Qt5::PrintSupport
+        Qt6::Widgets
+        Qt6::PrintSupport
         )
 
 # Set target directory

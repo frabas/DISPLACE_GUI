@@ -31,7 +31,7 @@ target_link_libraries(scheduler
         commons
         formats
         qtcommons
-        Qt5::Widgets
+        Qt6::Widgets
         )
 
 # Set target directory

@@ -36,8 +36,8 @@ target_link_libraries(tseditor
         formats
         qtcommons
         ${LIBRARIES}
-        Qt5::Widgets
-        Qt5::Concurrent
+        Qt6::Widgets
+        Qt6::Concurrent
         )
 
 # Set target directory

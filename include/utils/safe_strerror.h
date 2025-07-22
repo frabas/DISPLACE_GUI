@@ -8,7 +8,7 @@
 #include <string>
 #include <cstring>
 
-#if defined(_WINDOWS)
+#if defined(_WIN32)
 
 inline std::string safe_strerror(int errnumber)
 {

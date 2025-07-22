@@ -2969,7 +2969,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                         if (n == -1) {
                             n = snodes.count();
                         } else {
-                            n = min(snodes.count(), dlg.getMaxLinks());
+                            n = min(snodes.count(), static_cast<qsizetype>(dlg.getMaxLinks()));
                         }
                         for (int i = 0; i < n; ++i) {
                             auto nodeid = snodes[i].node->get_idx_node();

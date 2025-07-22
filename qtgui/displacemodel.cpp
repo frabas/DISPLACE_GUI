@@ -18,6 +18,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+// This is required to avoid `error C2039: 'byte': is not a member of 'std'`
+#include <cstddef>
+
+
 #include "displacemodel.h"
 #include "utils/safe_strerror.h"
 #include "readvesseldata.h"
@@ -38,8 +42,7 @@
 #include <readdata.h>
 
 #include <qdebug.h>
-#include <QtAlgorithms>
-#include <QtDebug>
+#include <QRegularExpression>
 
 #include "storage/sqliteoutputstorage.h"
 #include "msqlitecpp/v1/sqlitestorage.h"
@@ -259,16 +262,17 @@ bool DisplaceModel::load(QString path, ModelType type)
 bool DisplaceModel::parse(const QString &path, QString *basepath, QString *inputname, QString *outputname)
 {
     // parse this form:  inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput+".dat";
+    QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    QRegularExpressionMatch match = regexp.match(path);
 
-    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
-
-    if (regexp.indexIn(path) == -1) {
+    if (!match.hasMatch())
+    {
         return false;
     }
 
-    *basepath = regexp.cap(1);
-    *inputname = regexp.cap(2);
-    *outputname = regexp.cap(3);
+    *basepath = match.captured(1);
+    *inputname = match.captured(2);
+    *outputname = match.captured(3);
 
     return true;
 }

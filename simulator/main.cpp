@@ -73,10 +73,7 @@ using namespace sqlite;
 
 // for Windows
 #ifdef _WIN32
-#define _HAS_STD_BYTE 0
 #include <windows.h>
-#undef _HAS_STD_BYTE
-
 #include <direct.h>
 #define GetCurrentDir _getcwd
 #else

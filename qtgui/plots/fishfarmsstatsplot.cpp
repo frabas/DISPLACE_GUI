@@ -278,7 +278,7 @@ std::tuple<QVector<double>, QVector<double> > FishfarmsStatsPlot::getData(Displa
 
     auto dt = db->getFishFarmStatData(stattype, aggtype, ffid, fftypes);
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    QVector<double> kd(dt.t.begin(), dt.t.end()), vd(dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }
 

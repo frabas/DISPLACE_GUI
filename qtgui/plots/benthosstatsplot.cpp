@@ -193,7 +193,8 @@ std::tuple<QVector<double>, QVector<double> > BenthosStatsPlot::getData(Displace
 
     auto dt = db->getBenthosStatData(stattype, aggtype, grpid, btype);
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    QVector<double> kd (dt.t.begin(), dt.t.end());
+    QVector<double> vd (dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }
 

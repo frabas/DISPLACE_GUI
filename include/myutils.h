@@ -91,7 +91,7 @@ vector<size_t> sort_indexes_ascending(const vector<T> &v) {
 }
 // usage:
 //for (auto i: sort_indexes(v)) {
-//  cout << v[i] << endl;
+//  cout << v[i] << "\n";
 //}
 template <typename T>
 vector<size_t> sort_indexes_descending(const vector<T> &v) {

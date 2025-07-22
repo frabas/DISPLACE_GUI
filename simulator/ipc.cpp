@@ -22,7 +22,7 @@ void guiSendCurrentStep (unsigned int tstep)
 {
     if (use_gui) {
         ostringstream ss;
-        ss << "=S" << tstep << endl;      /* use gui */
+        ss << "=S" << tstep << "\n";      /* use gui */
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
@@ -31,7 +31,7 @@ void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui) {
         ostringstream ss;
-        ss << "=U" << filename << " " << tstep << endl;
+        ss << "=U" << filename << " " << tstep << "\n";
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
@@ -40,7 +40,7 @@ void guiSendMemoryInfo(const MemoryInfo &info)
 {
     if (use_gui) {
         ostringstream ss;
-        ss << "=Dm" << info.rss() << " " << info.peakRss() << endl;
+        ss << "=Dm" << info.rss() << " " << info.peakRss() << "\n";
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 
@@ -50,7 +50,7 @@ void guiSendCapture(bool on)
 {
     if (use_gui) {
         ostringstream ss;
-        ss << "=Dc" << (on ? "+" : "-") << endl;
+        ss << "=Dc" << (on ? "+" : "-") << "\n";
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }

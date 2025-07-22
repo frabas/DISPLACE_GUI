@@ -43,7 +43,7 @@ Benthos::Benthos(int _id,
                     )
 {
 
-    cout << "creating benthos for " << _marine_landscape << endl;
+    cout << "creating benthos for " << _marine_landscape << "\n";
     id                                = _id;
     marine_landscape                  = _marine_landscape;
     prop_funcgr_biomass_per_node      = _prop_funcgr_biomass_per_node;
@@ -81,11 +81,11 @@ Benthos::Benthos(int _id,
 
     if(is_benthos_in_longevity_classes)
     {
-       cout << "Benthos longevity approach...for this landscape "<< marine_landscape  << endl;
+       cout << "Benthos longevity approach...for this landscape "<< marine_landscape  << "\n";
     }
 
 
-    dout(cout << endl);
+    dout(cout << "\n");
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
        list_nodes.push_back(p_spe_nodes[i]);
@@ -98,15 +98,15 @@ Benthos::Benthos(int _id,
            multimap<int,double>::iterator upper_it_lgy = _longevity_classes_condition_per_node.upper_bound(idx_node);
            for (multimap<int, double>::iterator pos=lower_it_lgy; pos != upper_it_lgy; pos++)
            {
-               //outc(cout << "check this: " << pos->second << endl);
+               //outc(cout << "check this: " << pos->second << "\n");
                // benthos condition per node
                init_longevity_classes_condition_per_node.push_back(pos->second);
            }
 
            for(unsigned int funcgr=0; funcgr< nbfuncgrp;funcgr++)
               {
-               //outc(cout << "funcgr is: " << funcgr << endl);
-               //outc(cout << "init_longevity_classes_condition_per_node.at(funcgr) is: " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
+               //outc(cout << "funcgr is: " << funcgr << "\n");
+               //outc(cout << "init_longevity_classes_condition_per_node.at(funcgr) is: " << init_longevity_classes_condition_per_node.at(funcgr) << "\n");
               // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
               p_spe_nodes[i]->set_benthos_tot_biomass(funcgr, 1.0 * init_longevity_classes_condition_per_node.at(funcgr));
               p_spe_nodes[i]->set_benthos_tot_meanweight(funcgr, 1.0);
@@ -114,7 +114,7 @@ Benthos::Benthos(int _id,
               p_spe_nodes[i]->set_benthos_tot_number_K(funcgr, 1.0);
               p_spe_nodes[i]->set_benthos_tot_biomass_K(funcgr, 1.0);
               //dout (cout << "this longevity group "<< funcgr << "initial condition on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
-              //       "this marine landscape " << marine_landscape << " is " << init_longevity_classes_condition_per_node.at(funcgr) << endl);
+              //       "this marine landscape " << marine_landscape << " is " << init_longevity_classes_condition_per_node.at(funcgr) << "\n");
               }
 
         } else{
@@ -134,7 +134,7 @@ Benthos::Benthos(int _id,
                p_spe_nodes[i]->set_benthos_tot_biomass_K(funcgr, benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr)*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr));
                }
                dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
-                      "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
+                      "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << "\n");
             }
            else
            {
@@ -155,7 +155,7 @@ Benthos::Benthos(int _id,
         }
     }
 
-    cout << "creating benthos for " << _marine_landscape <<" ...OK" << endl;
+    cout << "creating benthos for " << _marine_landscape <<" ...OK" << "\n";
 
 }
 
@@ -223,7 +223,7 @@ const vector<Node *> &Benthos::get_list_nodes() const
 
 void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
 {
-    dout(cout  << "the benthos recovering...." << endl);
+    dout(cout  << "the benthos recovering...." << "\n");
 
    vector<Node *> list_nodes_this_landsc= get_list_nodes();
    vector<double> all_benthos_tot_biomass = list_nodes_this_landsc.at(0)->get_benthos_tot_biomass();
@@ -272,7 +272,7 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup(int is_longevity)
 
 void Benthos::recover_benthos_tot_number_per_funcgroup()
 {
-    dout(cout  << "the benthos recovering...." << endl);
+    dout(cout  << "the benthos recovering...." << "\n");
 
    vector<Node *> list_nodes_this_landsc= get_list_nodes();
    vector<double> all_benthos_tot_number = list_nodes_this_landsc.at(0)->get_benthos_tot_number();

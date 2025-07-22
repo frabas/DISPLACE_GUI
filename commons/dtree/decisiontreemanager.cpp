@@ -79,14 +79,14 @@ int DecisionTreeManager::readFromDirectory(std::string path)
                 if (readFile (path + "/" + std::string(dirent->d_name))) {
                     ++nr;
                 } else {
-                    std::cerr << "Can't read " << dirent->d_name << std::endl;
+                    std::cerr << "Can't read " << dirent->d_name << "\n";
                 }
             }
         }
 
         closedir(dir);
     } else {
-        std::cerr << "Can't open " << path << std::endl;
+        std::cerr << "Can't open " << path << "\n";
     }
     return nr;
 }
@@ -107,7 +107,7 @@ void DecisionTreeManager::readScenarioFileIfAvailable(std::string path, std::str
 {
     if (scenarioname.length() > 0 && scenarioname.compare(0, 1, std::string("-")) != 0) {
         if (!readFile(path + "/" + scenarioname)) {
-            std::cerr << "Can't read " << scenarioname << std::endl;
+            std::cerr << "Can't read " << scenarioname << "\n";
             throw std::runtime_error("Can't read scenario file " +scenarioname);
         }
     }
@@ -126,7 +126,7 @@ struct NodePrototype {
  * */
 bool DecisionTreeManager::readFile (std::string filename)
 {
-//    std::cout << "@DEBUG: Reading file " << filename << std::endl;
+//    std::cout << "@DEBUG: Reading file " << filename << "\n";
 
     std::ifstream stream;
     stream.open(filename.c_str(), std::ios_base::in);
@@ -152,7 +152,7 @@ bool DecisionTreeManager::readFile (std::string filename)
             if (fields[0] == "#TreeVersion:") {
                 int v = atoi(fields[1].c_str());
                 if (v != VariableNames::VERSION) {
-                    std::cerr << "Incompatible version." << std::endl;
+                    std::cerr << "Incompatible version." << "\n";
                     return false;
                 }
             } else if (fields[0] == "#TreeType:") {
@@ -198,7 +198,7 @@ bool DecisionTreeManager::readFile (std::string filename)
 //                std::cout << ch << " ";
             }
             prt.value = atof(fields[5+n].c_str());
-//            std::cout << " value " << prt.value << std::endl;
+//            std::cout << " value " << prt.value << "\n";
             prt.node = std::shared_ptr<dtree::Node>(new dtree::Node(tree));
 
             while (nodes.size() <= (size_t)prt.id)
@@ -207,9 +207,9 @@ bool DecisionTreeManager::readFile (std::string filename)
         }
     }
 
-//    std::cout << "@DEBUG: TreeType = " << treeType << std::endl;
+//    std::cout << "@DEBUG: TreeType = " << treeType << "\n";
     if (treeType == DecisionTreeManager::InvalidTreeType) {
-        std::cerr << "Invalid Tree Type" << std::endl;
+        std::cerr << "Invalid Tree Type" << "\n";
         return false;
     }
 
@@ -246,7 +246,7 @@ bool DecisionTreeManager::readFile (std::string filename)
                           << n->getChild(i).get();
                 if (n->getUnmappedChild(i) != nullptr)
                     std::cout << " value " << n->getUnmappedChild(i)->value();
-                std::cout << std::endl;
+                std::cout << "\n";
             }
 
         }

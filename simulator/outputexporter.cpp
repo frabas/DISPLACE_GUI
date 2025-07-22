@@ -53,7 +53,7 @@ void OutputExporter::exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel)
              << setprecision(0) << fixed << vessel->get_course() << " "
                 //<< vessels[ index_v ]->get_inharbour() << " "
              << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
-             << vessel->get_state() << " " <<  endl;
+             << vessel->get_state() << " " <<  "\n";
 }
 
 void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
@@ -125,7 +125,7 @@ void OutputExporter::exportVmsLikeFPingsOnlyPlaintext(unsigned int tstep, Vessel
                             ss << setprecision(0) << fixed << a_ping_catch_pop_at_szgroup[pop][sz] << " ";
                         }
 
-                ss  << " " << std::endl;
+                ss  << " " << "\n";
 
 
 
@@ -237,7 +237,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     /* // check
     if(logbook.tstep == logbook.tstepdep)
     {
-        cout << "Pblm with " << v->get_name() << endl;
+        cout << "Pblm with " << v->get_name() << "\n";
         int aa;
         cin >> aa;
     }
@@ -272,7 +272,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
         {
             cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
         }
-        outc(cout << name << ": LANDINGS THIS TRIP THIS POP " << pop << " IS " << cumul.at(pop) << endl);
+        outc(cout << name << ": LANDINGS THIS TRIP THIS POP " << pop << " IS " << cumul.at(pop) << "\n");
     }
 
     std::ostringstream oss;
@@ -394,7 +394,7 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     ss << setprecision(0) << logbook.NetPresentValue << " " ;
     ss << setprecision(0) << logbook.numTrips << " " ;
 
-    ss  << " " << std::endl;
+    ss  << " " << "\n";
 
     std::unique_lock<std::mutex> l(glob_mutex);
 
@@ -433,7 +433,7 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
                             ss << setprecision(0) << fixed << a_catch_pop_at_szgroup[pop][sz] << " ";
                         }
 
-          ss  << " " << std::endl;
+          ss  << " " << "\n";
 
           mTripCatchesPerSzgroup << ss.str();
           }

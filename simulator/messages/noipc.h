@@ -38,7 +38,7 @@ public:
 
 void inline initIpcQueue()
 {
-    std::cout << "Ipc Queue are disabled." << std::endl;
+    std::cout << "Ipc Queue are disabled." << "\n";
 }
 
 void inline finalizeIpcQueue()

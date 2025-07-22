@@ -30,23 +30,23 @@ test(vector<vector<double> > const &selectivity_per_stock, vector<double> const 
     for (unsigned int i = 0; i < selectivity_per_stock.size(); i++) {
         for (unsigned int j = 0; j < selectivity_per_stock[i].size(); j++) {
 
-            cout << "pop is " << i << endl;
-            cout << "szgroup is " << j << endl;
-            cout << "selectivity_per_stock[i,j] is " << selectivity_per_stock[i][j] << endl;
+            cout << "pop is " << i << "\n";
+            cout << "szgroup is " << j << "\n";
+            cout << "selectivity_per_stock[i,j] is " << selectivity_per_stock[i][j] << "\n";
         }
     }
 
     // check metier betas
-    cout << "met_betas of the metier 0" << endl;
+    cout << "met_betas of the metier 0" << "\n";
     for (int i = 0; i < met_betas.size(); i++) {
         cout << " " << met_betas[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 
     // check gear_width_a
-    cout << "gear_width_a of the metier 0" << endl;
+    cout << "gear_width_a of the metier 0" << "\n";
     cout << " " << gear_width_a << " ";
-    cout << endl;
+    cout << "\n";
 }
 
 }
@@ -124,54 +124,54 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     LoadedData loadedData;
 
     //input data, metier characteristics: selectivty ogives, beta per pop
-    cout << "check whether all metiers informed in the following parameters files... " << endl;
-    cout << "read metier betas parameters....ok? " << endl;
+    cout << "check whether all metiers informed in the following parameters files... " << "\n";
+    cout << "read metier betas parameters....ok? " << "\n";
     multimap<int, double> metiers_betas = read_metiers_betas(paramsForLoad.sparam3, p->folder_name_parameterization,
                                                              p->inputfolder);
-    cout << "read discardratio_limits parameters....ok? " << endl;
+    cout << "read discardratio_limits parameters....ok? " << "\n";
     multimap<int, double> discards_rate_limits = read_discardratio_limits(paramsForLoad.sparam3,
                                                                           p->folder_name_parameterization,
                                                                           p->inputfolder);
-    cout << "read is_avoided_stocks parameters....ok? " << endl;
+    cout << "read is_avoided_stocks parameters....ok? " << "\n";
     multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(paramsForLoad.sparam3,
                                                                    p->folder_name_parameterization,
                                                                    p->inputfolder);
-    cout << "read mls cat parameters....ok? " << endl;
+    cout << "read mls cat parameters....ok? " << "\n";
     multimap<int, int> metiers_mls_cat = read_metiers_mls_cat(paramsForLoad.sparam3, p->folder_name_parameterization,
                                                               p->inputfolder);
-    cout << "read metiers types parameters....ok? " << endl;
+    cout << "read metiers types parameters....ok? " << "\n";
     map<int, int> metiers_types = read_metiers_types(p->folder_name_parameterization, p->inputfolder);
-    cout << "read revenue completeness parameters....ok? " << endl;
+    cout << "read revenue completeness parameters....ok? " << "\n";
     map<int, double> percent_revenue_completenesses = read_percent_revenue_completenesses(
             p->folder_name_parameterization,
             p->inputfolder);
-    cout << "read fspeed parameters....ok? " << endl;
+    cout << "read fspeed parameters....ok? " << "\n";
     map<int, double> metiers_fspeed = read_metiers_fspeed(p->folder_name_parameterization, p->inputfolder);
-    cout << "read metier gear width a parameters....ok? " << endl;
+    cout << "read metier gear width a parameters....ok? " << "\n";
     map<int, double> metiers_gear_widths_param_a = read_gear_widths_param_a(p->folder_name_parameterization,
                                                                             p->inputfolder);
-    cout << "read metier gear width b parameters....ok? " << endl;
+    cout << "read metier gear width b parameters....ok? " << "\n";
     map<int, double> metiers_gear_widths_param_b = read_gear_widths_param_b(p->folder_name_parameterization,
                                                                             p->inputfolder);
-    cout << "read metier gear width model type parameters....ok? " << endl;
+    cout << "read metier gear width model type parameters....ok? " << "\n";
     map<int, string> metiers_gear_widths_model_type = read_gear_widths_model_type(p->folder_name_parameterization,
                                                                                   p->inputfolder);
 
   
     // get the name of the metiers
     // copy only unique elements into name_metiers
-    cout << "retrieve the metier names.... " << endl;
+    cout << "retrieve the metier names.... " << "\n";
     vector<int> name_metiers;
     for (multimap<int, double>::iterator iter = metiers_gear_widths_param_a.begin();
          iter != metiers_gear_widths_param_a.end();
          iter = metiers_gear_widths_param_a.upper_bound(iter->first)) {
         name_metiers.push_back(iter->first);
-        outc(cout << "metier " << iter->first << endl);
+        outc(cout << "metier " << iter->first << "\n");
     }
-    cout << "nb metiers: " << name_metiers.size() << endl;
+    cout << "nb metiers: " << name_metiers.size() << "\n";
     cout
             << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! "
-            << endl;
+            << "\n";
 
 
 
@@ -199,7 +199,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     for (unsigned int i = 0; i < name_metiers.size(); i++) {
 
         int metier_name = i;
-        outc(cout << "creating metier " << i << endl);
+        outc(cout << "creating metier " << i << "\n");
 
         met_types.at(i) = metiers_types[i];
         met_speeds.at(i) = metiers_fspeed[i];
@@ -209,20 +209,20 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
         met_percent_revenue_completenesses.at(i) = percent_revenue_completenesses[i];
 
         vect_of_metier_betas_vovd.at(i) = find_entries_i_d(metiers_betas, metier_name);
-        cout << "Read metier_betas this met " << i << endl;
+        cout << "Read metier_betas this met " << i << "\n";
         for (int ii = 0; ii < vect_of_metier_betas_vovd.at(i).size(); ++ii)
             cout << vect_of_metier_betas_vovd.at(i).at(ii) << " ";
-        cout << endl;
+        cout << "\n";
 
         vect_of_discardratio_limits_vovd.at(i) = find_entries_i_d(discards_rate_limits, metier_name);
 
         vect_of_is_avoided_stocks_vovi.at(i) = find_entries_i_i(is_avoided_stockss, metier_name);
 
         vect_of_metier_mls_cat_vovi.at(i) = find_entries_i_i(metiers_mls_cat, metier_name);
-        cout << "Read metier_mls this met " << i << endl;
+        cout << "Read metier_mls this met " << i << "\n";
         for (int ii = 0; ii < vect_of_metier_mls_cat_vovi.at(i).size(); ++ii)
             cout << vect_of_metier_mls_cat_vovi.at(i).at(ii) << " ";
-        cout << endl;
+        cout << "\n";
 
         vect_of_loss_after_1_passage_mmapid.at(i) = read_loss_after_1_passage_per_landscape_per_func_group(metier_name,
                                                                                                            p->folder_name_parameterization,
@@ -260,7 +260,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     }
 
 
-    cout << "export metier loaded data back to simulator.cpp " << endl;
+    cout << "export metier loaded data back to simulator.cpp " << "\n";
 
     //  export
     // for Metier() creator
@@ -281,7 +281,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     loadedData.vovi4 = vect_of_the_metier_suitable_seabottomtypes_vovi;
 
    
-    cout << "export metier loaded data back to simulator.cpp....done " << endl;
+    cout << "export metier loaded data back to simulator.cpp....done " << "\n";
 
 
 
@@ -297,7 +297,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
 
         for (unsigned int i = 0; i < name_metiers.size(); i++) {
 
-            cout << "Create metier " << i << endl;
+            cout << "Create metier " << i << "\n";
 
 
             metiers[i] = new Metier(loadedData.vectiparam1.at(i),
@@ -316,7 +316,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
                                     loadedData.vovi3.at(i),
                                     loadedData.vovi4.at(i));
 
-            cout << "Create metier " << i << "...done" << endl;
+            cout << "Create metier " << i << "...done" << "\n";
 
         }
 

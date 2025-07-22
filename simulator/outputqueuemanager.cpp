@@ -126,7 +126,7 @@ void OutputQueueManager::thread()
                     exit = true;
                 } else if (len > 0) {
                     IpcMessageTypes t = msg->getType();
-                    //                std::cout << "** Sending message type " << t << " length: " << len << std::endl;
+                    //                std::cout << "** Sending message type " << t << " length: " << len << "\n";
                     ipcQueue.push(t,buffer, len);
                 }
                 break;

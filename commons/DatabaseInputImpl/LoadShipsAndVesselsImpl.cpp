@@ -38,13 +38,13 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
             start_harbour = one_harbour[0];
         } else {
             // if missing info for a given vessel for this quarter
-            outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
+            outc(cout << "no specified harbour in this quarter for this vessel..." << "\n");
             // CAUTION: LIKE A MAGIC NUMBER HERE!!!
             // TODO I don't know what this does.
 //            start_harbour = find_entries(loadedDataVessels.mmapsnparam1, loadedDataVessels.vectsparam1.at(0))[0];
 //            spe_harbours.push_back(start_harbour);
 //            spe_freq_harbours.push_back(1);
-            outc(cout << "then take node: " << start_harbour << endl);
+            outc(cout << "then take node: " << start_harbour << "\n");
             std::ostringstream ss;
             ss << "This part was not implemented, please fix it: " << __FILE__ << " line " << __LINE__;
             throw std::logic_error(ss.str());

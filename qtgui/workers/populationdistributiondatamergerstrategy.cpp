@@ -162,7 +162,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
                 outfiles [2*stkit.value() + s] = f;
                 outstream[2*stkit.value() + s] = new QTextStream(outfiles[2*stkit.value() + s]);
 
-                *outstream[2*stkit.value() + s] << "idx_node avai" << endl;
+                *outstream[2*stkit.value() + s] << "idx_node avai" << "\n";
             }
 
             ++stkit;
@@ -180,7 +180,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
             for (int i = 0; i < num_col_indiv; ++i) {
                 if (isGroupSelected(i)) {
                     double v = (std::abs(sumpop) < 1e-5 ? 0 : resl.value().population[i] / sumpop);
-                    *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
+                    *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << "\n";
                 }
             }
 
@@ -210,7 +210,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
 
         QList<QString> keys = mStockNames.keys();
         for (int i = 0; i < keys.size(); ++i) {
-            ps << i << " " << keys[i] << Qt::endl;
+            ps << i << " " << keys[i] << "\n";
         }
         f.close();
     }

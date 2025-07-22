@@ -453,7 +453,7 @@ void SimModel::initRandom(std::string const &namesimu)
     int a_seed = atoi(str.c_str());
 
     // print the result
-    std::cout << "The random seed is set to: " << a_seed << std::endl;
+    std::cout << "The random seed is set to: " << a_seed << "\n";
 
     // set always the same seed for a given simu name (that should include a integer with pattern s100 or sim100 or simu100...)
     srand(a_seed);

@@ -32,7 +32,7 @@ namespace displace {
                 inline typename std::enable_if< I == sizeof...(Ts)-1, void>::type
                 output( std::ostream &os, std::tuple<Ts...> &tuple, const char *separator)
                 {
-                    os << std::get<I>(tuple) << std::endl;
+                    os << std::get<I>(tuple) << "\n";
                     output<I+1, Ts...>(os, tuple, separator);
                 };
 

@@ -27,7 +27,7 @@ void NodeTester::test()
     Node node(types::NodeId(1), 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0, p->mNbPops, p->mNbMets, p->mNbBenthosPops, 5);
     dout(cout << "is the node at 1,1? "
-              << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
+              << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << "\n");
 
     if (node.get_x() != 1 || node.get_y() != 1) {
         throw std::logic_error("NodeTester failed.");
@@ -35,7 +35,7 @@ void NodeTester::test()
 
     node.set_xy(2, 2);
     dout(cout << "is the node now at 2,2? "
-              << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
+              << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << "\n");
 
     if (node.get_x() != 2 || node.get_y() != 2) {
         throw std::logic_error("NodeTester failed.");

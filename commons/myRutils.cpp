@@ -164,21 +164,21 @@ void  ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
     {
         rU = unif_rand();
         //rU = prUs[i];
-        dout(cout<< "rU " << rU << "" << endl);
-        dout(cout<< "proba[0] " << proba[0] << "" << endl);
+        dout(cout<< "rU " << rU << "" << "\n");
+        dout(cout<< "proba[0] " << proba[0] << "" << "\n");
         for (j = 0; j < nm1; j++)
         {
             if (rU <= proba[j])
                 break;
         }
-        dout(cout<< "j " << j << "" << endl);
-        dout(cout<< "perm[j] " << perm[j] << "" << endl);
+        dout(cout<< "j " << j << "" << "\n");
+        dout(cout<< "perm[j] " << perm[j] << "" << "\n");
         ans[i] = perm[j];
-        dout(cout<< "ans[i] " << ans[i] << "" << endl);
-        dout(cout<< "*ans " << *ans << "" << endl);
+        dout(cout<< "ans[i] " << ans[i] << "" << "\n");
+        dout(cout<< "*ans " << *ans << "" << "\n");
 
     }
-    dout(cout<< "*ans? " << *ans << "" << endl);
+    dout(cout<< "*ans? " << *ans << "" << "\n");
 
 }
 
@@ -220,14 +220,14 @@ vector<int>  do_sample( int n, int nval, const std::vector<int> &val, const std:
 
     //    for (auto x : prb)
     //        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
-    //    cout << endl;
+    //    cout << "\n";
 
     /* sort the probabilities into descending order */
     std::sort(prb.begin(), prb.end(), RecGreater());
 
     //    for (auto x : prb)
     //        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
-    //    cout << endl;
+    //    cout << "\n";
 
     /* compute cumulative probabilities */
     for (int i = 1 ; i < nval; i++) {
@@ -244,11 +244,11 @@ vector<int>  do_sample( int n, int nval, const std::vector<int> &val, const std:
             if (rU <= std::get<1>(prb[j]))
                 break;
         }
-        //        cout << j << "," << rU << "," << std::get<1>(prb[j]) << "," << std::get<0>(prb[j]) << endl;
+        //        cout << j << "," << rU << "," << std::get<1>(prb[j]) << "," << std::get<0>(prb[j]) << "\n";
         res.push_back(std::get<0>(prb[j]));
     }
 
-    //    cout << "----" << endl;
+    //    cout << "----" << "\n";
     return res;
 }
 

@@ -104,7 +104,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     if(_harbour>0)
 	{
 		is_harbour = true;
-        cout << "Node " << idx.toIndex() << " is an harbour because _harbour is " << _harbour << endl;
+        cout << "Node " << idx.toIndex() << " is an harbour because _harbour is " << _harbour << "\n";
 	}
 	else
 	{
@@ -1034,7 +1034,7 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
     reinit(avai_pops_at_selected_szgroup, nbpops, selected_nbszgroups);
 #if 0
 	// init at 0 the matrix of Ns
-    dout(cout  << "init matrix of Ns" << endl);
+    dout(cout  << "init matrix of Ns" << "\n");
 	vector< vector<double> > init_avai_pops_at_selected_szgroup(nbpops, vector<double>(selected_nbszgroups));
 	avai_pops_at_selected_szgroup= init_avai_pops_at_selected_szgroup;
     for(int i = 0; i < nbpops; i++)
@@ -1044,7 +1044,7 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
 			avai_pops_at_selected_szgroup.at(i).at(j) = 0;
             dout(cout  << avai_pops_at_selected_szgroup[i][j] << " ");
 		}
-        dout(cout  << endl);
+        dout(cout  << "\n");
 	}
 #endif
 }
@@ -1257,7 +1257,7 @@ void  Node::set_tariffs(vector<double> values)
 
 void Node::clear_Ns_pops_at_szgroup()
 {
-    dout(cout  << "clear pop on nodes..." << endl);
+    dout(cout  << "clear pop on nodes..." << "\n");
 	for(unsigned int i = 0; i < Ns_pops_at_szgroup.size(); i++)
 	{
 		for(unsigned int j = 0; j < Ns_pops_at_szgroup[i].size(); j++)
@@ -1270,7 +1270,7 @@ void Node::clear_Ns_pops_at_szgroup()
 
 void Node::clear_removals_pops_at_szgroup(int namepop)
 {
-    dout(cout  << "clear removals on nodes..." << endl);
+    dout(cout  << "clear removals on nodes..." << "\n");
         for(unsigned int sz = 0; sz < removals_pops_at_szgroup[namepop].size(); sz++)
 		{
             removals_pops_at_szgroup[namepop][sz] = 0;
@@ -1280,7 +1280,7 @@ void Node::clear_removals_pops_at_szgroup(int namepop)
 
 void Node::clear_last_oth_catch_pops_at_szgroup(int namepop)
 {
-    dout(cout  << "clear oth catch on nodes..." << endl);
+    dout(cout  << "clear oth catch on nodes..." << "\n");
         for(unsigned int sz = 0; sz < last_oth_catch_pops_at_szgroup[namepop].size(); sz++)
         {
             last_oth_catch_pops_at_szgroup[namepop][sz] = 0;
@@ -1289,7 +1289,7 @@ void Node::clear_last_oth_catch_pops_at_szgroup(int namepop)
 
 void Node::clear_last_oth_disc_pops_at_szgroup(int namepop)
 {
-    dout(cout  << "clear oth disc on nodes..." << endl);
+    dout(cout  << "clear oth disc on nodes..." << "\n");
         for(unsigned int sz = 0; sz < last_oth_disc_pops_at_szgroup[namepop].size(); sz++)
         {
             last_oth_disc_pops_at_szgroup[namepop][sz] = 0;
@@ -1388,7 +1388,7 @@ void Node::clear_cumdiscards_per_pop()
 
 void Node::clear_avai_pops_at_selected_szgroup()
 {
-    dout(cout  << "clear pop on nodes..." << endl);
+    dout(cout  << "clear pop on nodes..." << "\n");
 	for(unsigned int i = 0; i < avai_pops_at_selected_szgroup.size(); i++)
 	{
 		for(unsigned int j = 0; j < avai_pops_at_selected_szgroup[i].size(); j++)
@@ -1401,7 +1401,7 @@ void Node::clear_avai_pops_at_selected_szgroup()
 
 void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background)
 {
-    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
+    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << "\n");
 
 	vector <double> a_Ns_at_szgroup = get_Ns_pops_at_szgroup(name_pop);
 	for(unsigned int i=0; i<a_Ns_at_szgroup.size(); i++)
@@ -1413,7 +1413,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
             M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i]* multiplier_on_M_background;
         }
 
-        //cout  << "this pop " << name_pop << ", this sz " << i << "M_at_szgroup[i] is " << M_at_szgroup[i] << " and a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << endl;
+        //cout  << "this pop " << name_pop << ", this sz " << i << "M_at_szgroup[i] is " << M_at_szgroup[i] << " and a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << "\n";
 
         // divide according to tstep (month in this case)
         a_Ns_at_szgroup[i] =  a_Ns_at_szgroup[i]  *exp(-M_at_szgroup_i_on_node/12);
@@ -1423,14 +1423,14 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
     
         if (a_Ns_at_szgroup[i] < 0)
         {
-            cout << "Negative Ns detected in apply_natural_mortality()! ...set to 0!" << endl;
+            cout << "Negative Ns detected in apply_natural_mortality()! ...set to 0!" << "\n";
             a_Ns_at_szgroup[i] = 0;
         }
     }
 
 	set_Ns_pops_at_szgroup(name_pop, a_Ns_at_szgroup);
 
-    //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);
+    //dout(cout  << "END: apply_natural_mortality_at_node()" << "\n");
 }
 
 
@@ -1446,7 +1446,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                                                                       double multiplier_on_M_background,
                                                                       double a_scaling)
 {
-    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
+    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << "\n");
 
     vector<int> spp_on_this_node = this->get_pop_names_on_node();
 
@@ -1454,9 +1454,9 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
     // check
     //if(this->get_idx_node().toIndex()==40)
     //{
-    //    cout << "spp_on_this_node is" << endl;
+    //    cout << "spp_on_this_node is" << "\n";
     //    for (int i=0; i<spp_on_this_node.size();++i) cout << spp_on_this_node.at(i) << " ";
-    //    cout  << endl;
+    //    cout  << "\n";
     //}
 
     vector <double> Np = get_Ns_pops_at_szgroup(name_pop); // the prey
@@ -1475,77 +1475,77 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
     vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
 
-    //if (tstep > 9500)     cout << "on node " << this->get_idx_node().toIndex() << endl;
+    //if (tstep > 9500)     cout << "on node " << this->get_idx_node().toIndex() << "\n";
 
     for (unsigned int j=0; j<spp_on_this_node.size(); j++) // loop over predator
         {
             vector <double> Npred = get_Ns_pops_at_szgroup(spp_on_this_node.at(j));
             vector <double> Wpred = Ws_at_szgroup.at(spp_on_this_node.at(j));
 
-           //      if (tstep > 9500)     cout << "loop over predator pop" << spp_on_this_node.at(j) << ",  j is " << j  << endl;
+           //      if (tstep > 9500)     cout << "loop over predator pop" << spp_on_this_node.at(j) << ",  j is " << j  << "\n";
             for (unsigned int kprey=0; kprey<NBSZGROUP; kprey++)  // loop over prey sizes
             {
 
                 //if (tstep > 9500)     cout << "for prey pop" << name_pop << ", loop over prey size kprey is " << kprey << "and dwpred.size is " << 
-                //                                   dwpred.size()  << " and Wpred.size is " << Wpred.size()  <<  endl;
+                //                                   dwpred.size()  << " and Wpred.size is " << Wpred.size()  <<  "\n";
 
                 dwpred.at(0) = (Wpred[0]-0)/2;
                         for (unsigned int sz=1; sz<Wpred.size(); sz++) dwpred.at(sz) = (Wpred.at(sz) + Wpred.at(sz-1))/2;
                         for (unsigned int sz=(Wpred.size()-1); sz>1; sz--) dwpred.at(sz) = dwpred.at(sz) - dwpred.at(sz-1);
 
-                        //if (tstep > 9500)     cout << "for prey pop" << name_pop << ", loop over prey size kprey is " << kprey << "....OK!" << endl;
+                        //if (tstep > 9500)     cout << "for prey pop" << name_pop << ", loop over prey size kprey is " << kprey << "....OK!" << "\n";
 
                         //check
                         //for (unsigned int sz=0; sz<Wpred.size(); sz++){
-                        //    if(this->get_idx_node().toIndex()==40) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop << " sz " << sz << " dwpred[sz] " << dwpred[sz]   << endl;
+                        //    if(this->get_idx_node().toIndex()==40) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop << " sz " << sz << " dwpred[sz] " << dwpred[sz]   << "\n";
                         //}
 
 
-                        //if (tstep > 9500)  cout << "mat_cat.size() is " << mat_cats.size() << "while j is " << j <<  endl;
+                        //if (tstep > 9500)  cout << "mat_cat.size() is " << mat_cats.size() << "while j is " << j <<  "\n";
 
                         // juveniles
                         for (unsigned int k=0; k<mat_cats.at(j); k++)  // loop over PREDATOR sizes
                         {
-                            //if (tstep > 9500)   cout << "loop over predator JUV size is " << k << endl;
+                            //if (tstep > 9500)   cout << "loop over predator JUV size is " << k << "\n";
 
 
                                 if(juveniles_diet_preference.at(spp_on_this_node.at(j)).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
                                                    predKernel.at(spp_on_this_node.at(j)).at(kprey).at(k).at(name_pop)* juveniles_diet_preference.at(spp_on_this_node.at(j)).at(name_pop) *
                                                        (1- 0.6)* searchVolMat.at(spp_on_this_node.at(j)).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
-                                //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
-                                //if (tstep > 9500)       cout << "loop over predator JUV size is ok" << endl;
+                                //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << "\n";
+                                //if (tstep > 9500)       cout << "loop over predator JUV size is ok" << "\n";
                         }
 
                         // adults
                         for (unsigned int k=mat_cats.at(j); k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
-                            //if (tstep > 9500)         cout << "loop over predator ADULT size is " << k << endl;
+                            //if (tstep > 9500)         cout << "loop over predator ADULT size is " << k << "\n";
                             
                             if(adults_diet_preference.at(spp_on_this_node.at(j)).at(name_pop)>0) predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
                                                    predKernel.at(spp_on_this_node.at(j)).at(kprey).at(k).at(name_pop)* adults_diet_preference.at(j).at(name_pop) *
                                                        (1- 0.6)* searchVolMat.at(spp_on_this_node.at(j)).at(k) * 1* Npred.at(k)*dwpred.at(k);
 
-                                //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << endl;
+                                //cout << "Preference of this predator " << j << " on prey " << kprey <<" is "<< diet_preference.at(j).at(kprey) << "\n";
 
                            // assuming feeding level at 0.6
                            // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
 
-                            //if (tstep > 9500)     cout << "loop over predator ADULT size is ok " << endl;
+                            //if (tstep > 9500)     cout << "loop over predator ADULT size is ok " << "\n";
                         }
 
-                        //if (tstep > 9500)   cout << "loop over prey size kprey is ok" << endl;
+                        //if (tstep > 9500)   cout << "loop over prey size kprey is ok" << "\n";
 
             }
 
             // check
             //if(this->get_idx_node().toIndex()==40)
             //{
-            //    cout << "spp_on_this_node is" << endl;
-            //    for (int i=0; i<spp_on_this_node.size();++i) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop <<", predRate.at("<<j<<").at("<<i<<")  is "<< predRate.at(j).at(i)  << endl;
-            //    cout  << endl;
+            //    cout << "spp_on_this_node is" << "\n";
+            //    for (int i=0; i<spp_on_this_node.size();++i) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop <<", predRate.at("<<j<<").at("<<i<<")  is "<< predRate.at(j).at(i)  << "\n";
+            //    cout  << "\n";
             //}
-            //if (tstep > 9500)      cout << "loop over predator j is ok " << endl;
+            //if (tstep > 9500)      cout << "loop over predator j is ok " << "\n";
 
       }
 
@@ -1565,25 +1565,25 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
         for(unsigned int sz=0; sz<Np.size(); sz++)
         {
            // divide according to tstep (month in this case)
-           //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
+           //if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << "\n";
 
             
             Np.at(sz) = Np.at(sz)  *exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12);
 
             if (Np[sz] < 0)
             {
-                cout << "Negative Ns detected in apply_natural_mortality() version size spectra! ...set to 0!" << endl;
+                cout << "Negative Ns detected in apply_natural_mortality() version size spectra! ...set to 0!" << "\n";
                 Np[sz] = 0;
             }
 
             // check for the need for a_scaling factor. The depletion from M on node should be kept in a realistic range.
             if (name_pop == 2 && exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12)<0.94) {
-                cout << "check her pop 2" << endl;
-            cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << endl;
-            cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << endl;
-            cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << endl;
-            cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << endl;
-            cout << endl;
+                cout << "check her pop 2" << "\n";
+            cout << "pop" << name_pop << "a_scaling " << sz << " is " << a_scaling << "\n";
+            cout << "pop" << name_pop << " M2_on_node.at(sz) * a_scaling for sz "<< sz <<" is "<< M2_on_node.at(sz) * a_scaling << "\n";
+            cout << "pop" << name_pop << " M_background_this_pop.at(sz)*multiplier_on_M_background for sz " << sz << " is " << M_background_this_pop.at(sz) * multiplier_on_M_background << "\n";
+            cout << "pop" << name_pop << " exp(-((M2_on_node.at(sz)*a_scaling)+M_background_this_pop.at(sz)*multiplier_on_M_background)/12)  is " << exp(-((M2_on_node.at(sz) * a_scaling) + M_background_this_pop.at(sz) * multiplier_on_M_background) / 12) << "\n";
+            cout << "\n";
             }
 
 
@@ -1595,7 +1595,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
    
      set_Ns_pops_at_szgroup(name_pop, Np);
 
-    //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);
+    //dout(cout  << "END: apply_natural_mortality_at_node()" << "\n");
 }
 
 
@@ -1604,7 +1604,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN,
                           int will_I_discard_all,  vector<double>& selectivity_per_stock_ogives_for_oth_land)
 {
-    dout(cout << "BEGIN: apply_oth_land()" << endl);
+    dout(cout << "BEGIN: apply_oth_land()" << "\n");
 
 
     // DISAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
@@ -1655,9 +1655,9 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
     }
 
 
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND the sel_ogive in use is " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND the sel_ogive in use is " << "\n";
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290) for (int i=0; i <sel_ogive.size();++i) cout << sel_ogive.at(i) << " " ;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "\n";
 
 
     // compute available biomass via selectivity
@@ -1676,13 +1676,13 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
              avail_biomass_to_landings[szgroup] =0.0;
         }
         tot = tot+avail_biomass[szgroup];   // cumul
-        dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
+        dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << "\n");
 
 
 
     }
-    dout(cout  << "tot biomass available" << tot << endl);
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout  << "tot biomass available" << tot << endl;
+    dout(cout  << "tot biomass available" << tot << "\n");
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout  << "tot biomass available" << tot << "\n";
 
     if(tot>1.0)
     {
@@ -1702,7 +1702,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
             inter = a_szgroup;
             a_szgroup+=1;
         }
-        dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
+        dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << "\n";)
         double left_to_MLS=0;
         double right_to_MLS=0;
         if(sel_ogive.at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
@@ -1717,7 +1717,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
         double discardfactor;
         discardfactor = left_to_MLS / right_to_MLS; // (dis/lan)
         if (isinf(discardfactor)) discardfactor = 0.05; // assign a default value if inf
-        //cout << " here again, in oth_land, discardfactor this pop " << this->get_name() << " is " << discardfactor << endl;
+        //cout << " here again, in oth_land, discardfactor this pop " << this->get_name() << " is " << discardfactor << "\n";
 
         //  discardfactor = dis/lan != discard rate...btw, converting a discard rate into discardratio is disc/land=x/(1-x) with x=disc/(disc+land)
         //discardfactor = min( discardratio_limits[pop] , discardfactor); // metier and pop specific limit
@@ -1725,12 +1725,12 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
         // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic discards will be produced when no adult left on zones
         double tot_landings_this_pop=oth_land_this_pop_this_node;
         double tot_discards_this_pop=oth_land_this_pop_this_node*discardfactor ;
-        //cout << "in oth_land, tot_discards_this_pop  " << this->get_name() << " is " << tot_discards_this_pop << endl;
+        //cout << "in oth_land, tot_discards_this_pop  " << this->get_name() << " is " << tot_discards_this_pop << "\n";
 
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "oth_land_this_pop_this_node in kg is " << oth_land_this_pop_this_node << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "discardfactor" << discardfactor << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_landings_this_pop in kg is " << tot_landings_this_pop << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_discards_this_pop in kg is " << tot_discards_this_pop << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "oth_land_this_pop_this_node in kg is " << oth_land_this_pop_this_node << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "discardfactor" << discardfactor << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_landings_this_pop in kg is " << tot_landings_this_pop << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)  cout  << "tot_discards_this_pop in kg is " << tot_discards_this_pop << "\n";
 
 
         // init
@@ -1753,16 +1753,16 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                     alloc_key2[szgroup]=avail_biomass_to_discards[szgroup] /(tot_avai_for_disc);
                 }
 
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key1[" << szgroup<< "] is " << alloc_key1[szgroup] << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key2[" << szgroup<< "] is " << alloc_key2[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key1[" << szgroup<< "] is " << alloc_key1[szgroup] << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "alloc_key2[" << szgroup<< "] is " << alloc_key2[szgroup] << "\n";
 
 
                 // disaggregate total catch (in weight) for this pop according to the alloc key
                 catch_per_szgroup[szgroup]= (tot_landings_this_pop * alloc_key1[szgroup]) +(tot_discards_this_pop * alloc_key2[szgroup]);
                 // then get the removals in terms of N
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "total catch catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "total catch catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << "\n";
                 removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/weight_at_szgroup[szgroup];
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)   cout << "removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << "\n";
 
 
 
@@ -1774,22 +1774,22 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                     dout  (cout << "the szgroup " << szgroup <<
                         "for this pop " << name_pop << " is fully depleted on this node by other land. " <<
                         idx_node << "! catch is "<<
-                        catch_per_szgroup[szgroup] << endl);
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "total catch corrected catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
+                        catch_per_szgroup[szgroup] << "\n");
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "total catch corrected catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << "\n";
 
                                  // take all...
                     removals_per_szgroup[szgroup]=new_Ns_at_szgroup_pop[szgroup];
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "corrected removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "corrected removals_per_szgroup[" << szgroup<< "] is " << removals_per_szgroup[szgroup] << "\n";
                                  // nothing left.
                     new_Ns_at_szgroup_pop[szgroup]=0;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << "\n";
                                  // just right after the calculation of removals, reverse back to get the landings only
                   land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1+discardfactor); // first...
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << "\n";
                   disc_per_szgroup[szgroup] = catch_per_szgroup[szgroup] - land_per_szgroup[szgroup] ; // first...
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << "\n";
                   catch_per_szgroup[szgroup]= land_per_szgroup[szgroup]; //..second
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "1 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << "\n";
 
                     if(will_I_discard_all==1)
                     {
@@ -1804,18 +1804,18 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                     new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
                     if (removals_per_szgroup[szgroup] < 0)
                     {
-                        cout << "Negative removals detected in oth_land! in removals_per_szgroup[szgroup] ...set to 0!" << endl;
+                        cout << "Negative removals detected in oth_land! in removals_per_szgroup[szgroup] ...set to 0!" << "\n";
                         removals_per_szgroup[szgroup] = 0;
                     }
 
                                  // reverse back to get the landings only
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << "\n";
                     land_per_szgroup[szgroup] = catch_per_szgroup[szgroup] / (1+discardfactor) ; // first...
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 land_per_szgroup[" << szgroup<< "] is " << land_per_szgroup[szgroup] << "\n";
                     disc_per_szgroup[szgroup] = catch_per_szgroup[szgroup] - land_per_szgroup[szgroup] ; // first...
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "2 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "2 disc_per_szgroup[" << szgroup<< "] is " << disc_per_szgroup[szgroup] << "\n";
                     catch_per_szgroup[szgroup]= land_per_szgroup[szgroup]; //..second
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 catch_per_szgroup[" << szgroup<< "] is " << catch_per_szgroup[szgroup] << "\n";
 
                     if(will_I_discard_all==1)
                     {
@@ -1878,26 +1878,26 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
         } // end szgroup
 
         // check catches realized on this node
-        //dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
+        //dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << "\n");
         //oth_land_this_pop_this_node=0;
         //for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
         //{
         //	oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
         //}
-        //dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
+        //dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << "\n");
 
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND FINALLY new_Ns_at_szgroup_pop " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "OTH_LAND FINALLY new_Ns_at_szgroup_pop " << "\n";
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)        for (int i=0; i <new_Ns_at_szgroup_pop.size();++i) cout << new_Ns_at_szgroup_pop.at(i) << " " ;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)        cout << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY new_removals_at_szgroup_pop " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)        cout << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY new_removals_at_szgroup_pop " << "\n";
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)               for (int i=0; i <new_removals_at_szgroup_pop.size();++i) cout << new_removals_at_szgroup_pop.at(i) << " " ;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)               cout << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY catch_per_szgroup " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)               cout << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY catch_per_szgroup " << "\n";
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)                     for (int i=0; i <catch_per_szgroup.size();++i) cout << catch_per_szgroup.at(i) << " " ;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                     cout << endl;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY disc_per_szgroup " << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                     cout << "\n";
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)cout << "OTH_LAND FINALLY disc_per_szgroup " << "\n";
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290)                            for (int i=0; i <disc_per_szgroup.size();++i) cout << disc_per_szgroup.at(i) << " " ;
-//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                           cout << endl;
+//if(name_pop==2 && this->get_idx_node().toIndex()==19290)                           cout << "\n";
 
         // updates
         this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
@@ -1910,7 +1910,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
     }
     else
     {
-        dout(cout  << "no biomass available here...." << tot << endl);
+        dout(cout  << "no biomass available here...." << tot << "\n");
 
     }
 
@@ -1921,14 +1921,14 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
     //    {
     //        cout << "inconsistency in node->apply_oth_land() for this pop " << name_pop <<
     //                  " on this node " << idx_node <<
-    //                    " for this szgroup " <<  szgroup <<endl;
-    //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl);
-    //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl);
+    //                    " for this szgroup " <<  szgroup <<"\n";
+    //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << "\n");
+    //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << "\n");
     //        int a_int;
     //        cin >> a_int; // pause
     //    }
     //}
-    dout(cout << "END: apply_oth_land()" << endl);
+    dout(cout << "END: apply_oth_land()" << "\n");
 }
 
 
@@ -1938,7 +1938,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 	// note : pble with c++: circularity impossible then need to call init_weight_atszgroup
 	// instead of using population->get_weight_at_szgroup()
 
-    dout(cout  << "export biomass on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export biomass on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(3) << fixed;
@@ -1965,7 +1965,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
         popnodes << " " << totN_this_pop << " " << totW_this_pop;
 	}
 
-	popnodes << " " <<  endl;
+	popnodes << " " <<  "\n";
 
 }
 
@@ -1973,35 +1973,35 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
     if(impact_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
-        impact_per_pop.at(pop) << " " <<  endl;
+        impact_per_pop.at(pop) << " " <<  "\n";
 
 }
 
 void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop)
 {
 
-    dout(cout  << "export accumulated catches (i.e. landings) on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export accumulated catches (i.e. landings) on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumcatches pop
     if(cumcatches_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() <<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumcatches_per_pop.at(pop) << " " <<  endl;
+        cumcatches_per_pop.at(pop) << " " <<  "\n";
 
 }
 
 void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
 {
 
-    dout(cout  << "export nodes_envt" << endl);
+    dout(cout  << "export nodes_envt" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     nodes_envt << setprecision(8) << fixed;
@@ -2011,7 +2011,7 @@ void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
                   " " << this->get_sst() << " " << this->get_wind() << " " <<
                   " " << this->get_Nitrogen() << " " << this->get_Phosphorus() << " " <<
                   " " << this->get_Oxygen() << " " << this->get_DissolvedCarbon() << " " <<
-                     this->get_bathymetry()  << " " << this->get_shippingdensity() << " " << this->get_siltfraction() <<  endl;
+                     this->get_bathymetry()  << " " << this->get_shippingdensity() << " " << this->get_siltfraction() <<  "\n";
 
 }
 
@@ -2019,7 +2019,7 @@ void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
 void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
 	vector<double> impact_per_szgroup=get_pressure_pops_at_szgroup(pop);
@@ -2034,7 +2034,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
         popnodes << " " << impact_per_pop.at(sz);
 	}
 
-	popnodes << " " <<  endl;
+	popnodes << " " <<  "\n";
 
 }
 
@@ -2042,98 +2042,98 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
     if(cumftime>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
-		cumftime << " " <<  endl;
+		cumftime << " " <<  "\n";
 
 }
 
 void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export swept area on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export swept area on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  swept area
     if(cumsweptarea>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumsweptarea << " " <<  cumsubsurfacesweptarea << endl;
+        cumsweptarea << " " <<  cumsubsurfacesweptarea << "\n";
 
 }
 
 void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
    if(cumcatches>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumcatches << " " <<  endl;
+        cumcatches << " " <<  "\n";
 
 }
 
 void Node::export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
    if(cumcatches>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumcatches << " " << threshold << " " << endl;
+        cumcatches << " " << threshold << " " << "\n";
 
 }
 
 void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumdiscards pop
    if(cumdiscards>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumdiscards << " "  << endl;
+        cumdiscards << " "  << "\n";
 
 }
 
 void Node::export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export cumdiscardratio on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export cumdiscardratio on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  value
    if(this->get_cumdiscardsratio()>1e-6 && this->get_cumdiscards()>1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        this->get_cumdiscardsratio() << " "  << endl;
+        this->get_cumdiscardsratio() << " "  << "\n";
 
 }
 
 void Node::export_popnodes_nbchoked(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export nbchoked on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export nbchoked on nodes for use in e.g. a GIS engine" << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  value
    if(this->get_nbchoked()>=1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        this->get_nbchoked() << " "  << endl;
+        this->get_nbchoked() << " "  << "\n";
 
 }
 
@@ -2141,7 +2141,7 @@ void Node::export_popnodes_nbchoked(ofstream& popnodes, int tstep)
 void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export tariffs on nodes...." << endl);
+    dout(cout  << "export tariffs on nodes...." << "\n");
     // note that this file will also be used by the ui for displaying the statistics on node
 
     int met = 0;
@@ -2154,7 +2154,7 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
         popnodes << tariffs.at(met) << " ";
         ++met;
     }
-    popnodes << endl;
+    popnodes << "\n";
 }
 
 
@@ -2208,7 +2208,7 @@ void Node::set_is_harbour(int id)
 void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnodes, int tstep, int funcgr)
 {
 
-    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << "\n");
 
     double benthosnumber=0;
     if(!benthos_tot_meanweight.empty() && benthos_tot_meanweight.at(funcgr)!=0)  benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr);
@@ -2233,14 +2233,14 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
           setprecision(0) << fixed << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " " <<
           setprecision(2) << fixed << benthos_tot_meanweight.at(funcgr) << " " <<
           setprecision(3) << fixed << benthosbiomassoverK  << " " << benthosnumberoverK <<  " " <<
-          setprecision(0) << fixed << benthos_tot_biomass_K.at(funcgr) << endl;
+          setprecision(0) << fixed << benthos_tot_biomass_K.at(funcgr) << "\n";
 
 }
 
 void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes, int tstep, int funcgr)
 {
 
-    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << "\n");
 
     double benthosbiomass = 0;
     if (!benthos_tot_number.empty() && benthos_tot_meanweight.at(funcgr) != 0)  benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr);
@@ -2255,7 +2255,7 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosbiomassoverK / benthosnumberoverK / benthos_tot_number_K.at(funcgr)
     if(!benthos_tot_number.empty() && benthos_tot_number.at(funcgr)>1e-5) benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() <<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
-                       benthos_tot_meanweight.at(funcgr) <<  " " << benthosbiomassoverK  << " " << benthosnumberoverK << " " << benthos_tot_number_K.at(funcgr) << endl;
+                       benthos_tot_meanweight.at(funcgr) <<  " " << benthosbiomassoverK  << " " << benthosnumberoverK << " " << benthos_tot_number_K.at(funcgr) << "\n";
 
 
 }

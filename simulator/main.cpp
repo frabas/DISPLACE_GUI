@@ -531,7 +531,7 @@ int app_main(int argc, char const* argv[])
       "simu2" -i 8761 -p 1 -e 0 --huge 1 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
     */
 
-    cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
+    cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << "\n";
 
     auto simModel = std::make_shared<SimModel>(namesimu);
 
@@ -552,7 +552,7 @@ int app_main(int argc, char const* argv[])
 
     lock();
     cout << " nbsteps " << nbsteps
-        << " namefolderinput " << namefolderinput << " " << use_static_paths << endl;
+        << " namefolderinput " << namefolderinput << " " << use_static_paths << "\n";
     unlock();
 
     simModel->setQuarter(1);
@@ -613,7 +613,7 @@ int app_main(int argc, char const* argv[])
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if (status < 0) {
-        cerr << "could not create directory" << an_output_folder << ": " << safe_strerror(errno) << endl;
+        cerr << "could not create directory" << an_output_folder << ": " << safe_strerror(errno) << "\n";
         return -1;
     }
 
@@ -621,7 +621,7 @@ int app_main(int argc, char const* argv[])
     status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     if (status < 0) {
-        cerr << "could not create directory" << a_basic_output_folder << ": " << safe_strerror(errno) << endl;
+        cerr << "could not create directory" << a_basic_output_folder << ": " << safe_strerror(errno) << "\n";
         return -1;
     }
 
@@ -629,7 +629,7 @@ int app_main(int argc, char const* argv[])
     namefolder = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput;
     status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if (status < 0) {
-        cerr << "could not create directory" << namefolder << ": " << safe_strerror(errno) << endl;
+        cerr << "could not create directory" << namefolder << ": " << safe_strerror(errno) << "\n";
         return -1;
     }
 #endif
@@ -687,13 +687,13 @@ int app_main(int argc, char const* argv[])
 
     if (scenario.use_dtrees) {
         if (!sim_scenario->loadTimeSeries(inputfolder + "/timeseries", "")) {
-            std::cerr << "Cannot read time series. aborting." << std::endl;
+            std::cerr << "Cannot read time series. aborting." << "\n";
             return -1;
         }
 
         // Load dtrees
         if (dtree::DecisionTreeManager::manager()->readFromScenario(inputfolder + "/dtrees", scenario) <= 0) {
-            std::cerr << "Cannot read decision trees, aborting." << std::endl;
+            std::cerr << "Cannot read decision trees, aborting." << "\n";
             return -1;
         }
     }
@@ -721,7 +721,7 @@ int app_main(int argc, char const* argv[])
         char buffer[100];
         sprintf(buffer, "%03d", rand_avai_file);
         str_rand_avai_file = buffer;
-        outc(cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << endl);
+        outc(cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << "\n");
     }
     else {
         // no stochastic variation
@@ -730,7 +730,7 @@ int app_main(int argc, char const* argv[])
 
     if (!OutputExporter::instantiate(outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput,
         namesimu)) {
-        std::cerr << "Cannot open output files." << std::endl;
+        std::cerr << "Cannot open output files." << "\n";
         throw std::runtime_error("this went wrong with instantiating the OutputExporter, quitting");
     }
 
@@ -776,11 +776,11 @@ int app_main(int argc, char const* argv[])
         test::myRUtils();
         test::myUtils();
 
-        dout(cout << "---------------------------" << endl);
-        dout(cout << "---------------------------" << endl);
-        dout(cout << " NODE-RELATED STUFFS      " << endl);
-        dout(cout << "---------------------------" << endl);
-        dout(cout << "---------------------------" << endl);
+        dout(cout << "---------------------------" << "\n");
+        dout(cout << "---------------------------" << "\n");
+        dout(cout << " NODE-RELATED STUFFS      " << "\n");
+        dout(cout << "---------------------------" << "\n");
+        dout(cout << "---------------------------" << "\n");
 
         NodeTester nodeTester(simModel->config().nbpops, simModel->config().nbmets, simModel->config().nbbenthospops);
         nodeTester.test();
@@ -809,20 +809,20 @@ int app_main(int argc, char const* argv[])
     //cout << ns;
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " BENTHOS-RELATED STUFFS    " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " BENTHOS-RELATED STUFFS    " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     benthoss = modelLoader->loadBenthos(scenario.dyn_pop_sce, scenario.dyn_alloc_sce, scenario.biolsce,
         scenario.fleetsce);
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " FISHFARMS-RELATED STUFFS " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " FISHFARMS-RELATED STUFFS " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     // TODO do not ignore return values?
     modelLoader->loadFishFarms();
@@ -833,23 +833,23 @@ int app_main(int argc, char const* argv[])
         }
     }
 
-    cout << "all fishfarms created...." << endl;
+    cout << "all fishfarms created...." << "\n";
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " WINDMILLS-RELATED STUFFS " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " WINDMILLS-RELATED STUFFS " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     // TODO do not ignore return values, or remove them
     modelLoader->loadWindmills();
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " POPULATION-RELATED STUFFS " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " POPULATION-RELATED STUFFS " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -878,24 +878,24 @@ int app_main(int argc, char const* argv[])
     {
         cout << some_Ns_at_szgroup[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 
 
 
     // a check
     // nb of nodes for this pop this quarter:
     int nb_of_nodes_this_pop0_this_quarter = simModel->populations().at(0)->get_list_nodes().size();
-    cout << "nb_of_nodes_this_pop0_this_quarter " << nb_of_nodes_this_pop0_this_quarter << endl;
-    cout << endl;
+    cout << "nb_of_nodes_this_pop0_this_quarter " << nb_of_nodes_this_pop0_this_quarter << "\n";
+    cout << "\n";
     if (nb_of_nodes_this_pop0_this_quarter == 0) {
-        cout << "something wrong: check the code for this message" << endl; return -1;
+        cout << "something wrong: check the code for this message" << "\n"; return -1;
     }
 
 
     // a check (pop2 only)
-    cout << " " << endl;
-    cout << "-----------------------------------------" << endl;
-    cout << "after the initial loading of the population data" << endl;
+    cout << " " << "\n";
+    cout << "-----------------------------------------" << "\n";
+    cout << "after the initial loading of the population data" << "\n";
     simModel->populations().at(2)->aggregate_N_display_for_check();
 
 
@@ -908,84 +908,84 @@ int app_main(int argc, char const* argv[])
 
     /*
     // check on the node side
-   outc(cout << "check on the node side e.g. for node 2579: " << endl);
+   outc(cout << "check on the node side e.g. for node 2579: " << "\n");
     vector<double> a_Ns_at_szgroup = nodes[2579]->get_Ns_pops_at_szgroup(0);
     for(unsigned int i=0 ; i<a_Ns_at_szgroup.size();  i++)
     {
        outc(cout << a_Ns_at_szgroup[i] << " " );
     }
-   outc(cout << endl);
+   outc(cout << "\n");
 
     // check the function for aggregation from nodes
     simModel->populations()[0]->aggregate_N();
     vector<double> a_Ns_at_szgroup_pop0 = simModel->populations()[0]->get_tot_N_at_szgroup();
-   outc(cout << "check aggregate_N() " << endl);
+   outc(cout << "check aggregate_N() " << "\n");
     for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0.size();  i++)
     {
        outc(cout << a_Ns_at_szgroup_pop0[i] << " " );
     }
-   outc(cout << endl);
+   outc(cout << "\n");
 
     // restore back and check on node side
     simModel->populations()[0]->distribute_N();
     vector<double> a_Ns_at_szgroup_pop0_again = nodes[2579]->get_Ns_pops_at_szgroup(0);
-   outc(cout << "check on the node side for the node 2579 " << endl);
+   outc(cout << "check on the node side for the node 2579 " << "\n");
     for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0_again.size();  i++)
     {
        outc(cout << a_Ns_at_szgroup_pop0_again[i] << " " );
     }
-   outc(cout << endl);
+   outc(cout << "\n");
 
     //  check on node side
     vector<double> a_Ns_at_szgroup_pop0_2580 = nodes[2580]->get_Ns_pops_at_szgroup(0);
-   outc(cout << "check on the node side for the node 2580 " << endl);
+   outc(cout << "check on the node side for the node 2580 " << "\n");
     for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0_2580.size();  i++)
     {
        outc(cout << a_Ns_at_szgroup_pop0_2580[i] << " " );
     }
-   outc(cout << endl);
+   outc(cout << "\n");
 
     // check the update of a node (will be useful for the pop model and removals of catches)
     vector<int> names_on_node= nodes[2579]->get_pop_names_on_node();
-   outc(cout << "pop names on this node " << nodes[2579]->get_idx_node().toIndex() << endl);
+   outc(cout << "pop names on this node " << nodes[2579]->get_idx_node().toIndex() << "\n");
     for (unsigned int i=0; i<names_on_node.size(); i++)
     {
        outc(cout << names_on_node[i] << " ");
     }
-   outc(cout << endl);
+   outc(cout << "\n");
 
     // check the tacs
     for (unsigned int i=0; i<simModel->populations().size(); i++)
     {
         cout << " the tac for this pop is " <<
-             simModel->populations().at(i)->get_tac()->get_current_tac() << " " << endl;
+             simModel->populations().at(i)->get_tac()->get_current_tac() << " " << "\n";
 
         cout << " the tac percent_for_simulated_vessels for this pop is " <<
-             simModel->populations().at(i)->get_tac()->get_percent_for_simulated_vessels() << endl;;
+             simModel->populations().at(i)->get_tac()->get_percent_for_simulated_vessels() << "\n";;
     }
 
     // check the removals (should be at 0!)
     vector <double> N_at_szgroup_at_month_start= nodes.at(186)->get_Ns_pops_at_szgroup_at_month_start(1);
     vector <double> removals_per_szgroup= nodes.at(186)->get_removals_pops_at_szgroup(1);
 
-   outc(cout << "N_at_szgroup_at_month_start" << endl);
+   outc(cout << "N_at_szgroup_at_month_start" << "\n");
     for(int i=0; i<N_at_szgroup_at_month_start.size(); i++)
     {
-       outc(cout << N_at_szgroup_at_month_start.at(i) << endl);
+       outc(cout << N_at_szgroup_at_month_start.at(i) << "\n");
     }
-   outc(cout << "removals_per_szgroup" << endl);
+   outc(cout << "removals_per_szgroup" << "\n");
     for(int i=0; i<removals_per_szgroup.size(); i++)
     {
-       outc(cout << removals_per_szgroup.at(i) << endl);
+       outc(cout << removals_per_szgroup.at(i) << "\n");
     }
     */
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " FISHING CREDITS-RELATED   " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " FISHING CREDITS-RELATED   " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
 
     // TO DO: compute the composite tariff also from the benthos and risk of bycatch on localities?
@@ -1027,10 +1027,10 @@ int app_main(int argc, char const* argv[])
            for (unsigned int a_idx = 0; a_idx < simModel->nodes().size(); a_idx++)
            {
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
-                " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << endl);
+                " has tariffs 0 " << simModel->nodes().at(a_idx)->get_tariffs().at(0) << "\n");
 
             dout(cout << "this node " << simModel->nodes().at(a_idx)->get_idx_node() <<
-                " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << endl);
+                " has tariffs 1 " << simModel->nodes().at(a_idx)->get_tariffs().at(1) << "\n");
            }
         }
     }
@@ -1043,13 +1043,13 @@ int app_main(int argc, char const* argv[])
     }
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " SIZE-SPECTRA STUFFS       " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " SIZE-SPECTRA STUFFS       " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
-    cout << "initiate size-spectra-related objects..." << endl;
+    cout << "initiate size-spectra-related objects..." << "\n";
     vector<vector<double> > Ws_at_szgroup(simModel->config().nbpops, vector<double>(NBSZGROUP));
     vector<vector<vector<vector<double> > > > predKernel(simModel->config().nbpops,
         vector<vector<vector<double>>>(NBSZGROUP,
@@ -1070,7 +1070,7 @@ int app_main(int argc, char const* argv[])
     vector<int> mat_cats(simModel->config().nbpops, 0);
 
     if (scenario.dyn_pop_sce.option(Options::sizeSpectra)) {
-        cout << "sizeSpectra option is on..." << endl;
+        cout << "sizeSpectra option is on..." << "\n";
 
         // compute a predKernel and a searchVol
         // predKernel.at(j).at(kprey).at(k).at(name_pop)
@@ -1082,44 +1082,44 @@ int app_main(int argc, char const* argv[])
             folder_name_parameterization, inputfolder, scenario.biolsce);
 
 
-        cout << "compute Ws_at_szgroup..." << endl;
+        cout << "compute Ws_at_szgroup..." << "\n";
         for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
             vector<double> W_this_pop = simModel->populations().at(j)->get_weight_at_szgroup();
             for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                 Ws_at_szgroup.at(j).at(k) = W_this_pop.at(k);
-                //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
+                //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << "\n";
             }
         }
 
-        cout << "initialize PredKernel..." << endl;
+        cout << "initialize PredKernel..." << "\n";
         for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
                 for (unsigned int k = 0; k < NBSZGROUP; ++k) {  // loop over predator sizes
                     for (unsigned int kprey = 0; kprey < NBSZGROUP; ++kprey) {  // loop over prey sizes
                         predKernel.at(j).at(kprey).at(k).at(prey) = Ws_at_szgroup.at(j).at(k); // init
-                        //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                        //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << "\n";
                     }
                 }
             }
         }
 
         // check:
-        //  cout << "check some initial values of PredKernel..." << endl;
-        //  cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
-        //  cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
-        //  cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
-        //  cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+        //  cout << "check some initial values of PredKernel..." << "\n";
+        //  cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << "\n";
+        //  cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << "\n";
+        //  cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << "\n";
+        //  cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << "\n";
 
         if (predKernel.at(0).at(1).at(0).at(0) !=
             predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {
             int a;
-            cout << "1: nan detected" << endl;
+            cout << "1: nan detected" << "\n";
             cout << "1: nan detected in initial predKernel...Pause: type a number to continue";
             cin >> a;
         }
 
-        cout << "compute PredKernel..." << endl;
+        cout << "compute PredKernel..." << "\n";
         vector<double> sigma(simModel->config().nbpops,
             1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
         //vector<double> beta (simModel->config().nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
@@ -1144,13 +1144,13 @@ int app_main(int argc, char const* argv[])
                             predKernel.at(j).at(kprey).at(k).at(prey) =
                                 exp(-pow(log((beta_this_pop.at(k) * Ws_at_szgroup.at(prey).at(kprey)) /
                                     Ws_at_szgroup.at(j).at(k)), 2) / (2 * pow(sigma.at(prey), 2)));
-                            //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                            //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << "\n";
                         }
                         else {
                             predKernel.at(j).at(kprey).at(k).at(prey) =
                                 exp(-pow(log((beta_this_pop.at(k) * Ws_at_szgroup.at(prey).at(kprey)) /
                                     Ws_at_szgroup.at(j).at(k)), 2) / (2 * pow(4*sigma.at(prey), 2)));
-                            //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                            //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << "\n";
                         }
                     }
                 }
@@ -1158,17 +1158,17 @@ int app_main(int argc, char const* argv[])
         }
 
         // check:
-        // cout << "check some values of PredKernel..." << endl;
-        // cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
-        // cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
-        // cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
-        // cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+        // cout << "check some values of PredKernel..." << "\n";
+        // cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << "\n";
+        // cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << "\n";
+        // cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << "\n";
+        // cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << "\n";
 
         if (predKernel.at(0).at(1).at(0).at(0) !=
             predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {
             int a;
-            cout << "1: nan detected" << endl;
+            cout << "1: nan detected" << "\n";
             cout << "1: nan detected in predKernel...Pause: type a number to continue";
             cin >> a;
         }
@@ -1182,12 +1182,12 @@ int app_main(int argc, char const* argv[])
         ifstream is;
         is.open(filename.c_str());
         if (is.fail()) {
-            cout << "Fail to open the file " << filename << endl;
+            cout << "Fail to open the file " << filename << "\n";
             open_file_error(filename);
             return false;
         }
 
-        cout << "import a few parameters ..." << endl;
+        cout << "import a few parameters ..." << "\n";
         std::vector<std::tuple<string, double, double, double, double,
             double, double, double, double,
             double, double, double, double,
@@ -1204,7 +1204,7 @@ int app_main(int argc, char const* argv[])
         //stock	Winf	k	Linf	K	t0	a	b	L50	alpha	beta	r_age	tac_tons	fbar_age_min	fbar_age_max	F_target	F_percent	TAC_percent	B_trigger	FMSY	fbar_assessment	ssb_assessment	mls_cat	mls	size_bin_cm	unit_sizebin	CV_recru	mat	mat_cat	etha_m	kappa	q	n	fzeroest	species
 
         // parameters to compute the search volume (volumetric search rate)
-        cout << "read few parameters ..." << endl;
+        cout << "read few parameters ..." << "\n";
         //auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6); //TODO: AVOID HARDCODING FOR THESE BUNCH OF PARAMS
         //double kappa  = std::get<0>(param);
         //double q      = std::get<1>(param);     // Scaling of search volume
@@ -1212,7 +1212,7 @@ int app_main(int argc, char const* argv[])
         //double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
 
 
-        cout << "compute the searchVolMat..." << endl;
+        cout << "compute the searchVolMat..." << "\n";
         for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
 
 
@@ -1226,11 +1226,11 @@ int app_main(int argc, char const* argv[])
             mat_cats.at(prey) = mat_cat;
 
             double lambda = 2 + q - n;
-            cout << " reading kappa is " << kappa << endl;
-            cout << " reading q is " << q << endl;
-            cout << " reading n is " << n << endl;
-            cout << " reading f0est is " << f0est << endl;
-            cout << " reading lambda is " << lambda << endl;
+            cout << " reading kappa is " << kappa << "\n";
+            cout << " reading q is " << q << "\n";
+            cout << " reading n is " << n << "\n";
+            cout << " reading f0est is " << f0est << "\n";
+            cout << " reading lambda is " << lambda << "\n";
 
 
             for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
@@ -1239,8 +1239,8 @@ int app_main(int argc, char const* argv[])
                     double alphae = sqrt(2 * PI) * sigma.at(prey) * pow(beta_this_pop.at(k), (lambda - 2)) *
                         exp(pow(lambda - 2, 2) * pow(sigma.at(prey), 2) / 2);
 
-                    //cout << " this prey " << prey << " alphae is " << alphae << endl;
-                    //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta_this_pop.at(k) is " << beta_this_pop.at(k) << " lambda is " << lambda << endl;
+                    //cout << " this prey " << prey << " alphae is " << alphae << "\n";
+                    //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta_this_pop.at(k) is " << beta_this_pop.at(k) << " lambda is " << lambda << "\n";
 
                     // loop over predator sizes
                     double Wk = get<2>(biological_traits_params.at(j));
@@ -1248,12 +1248,12 @@ int app_main(int argc, char const* argv[])
                     double h = (3 / 0.36) * Wk * pow(Winf, (0.25)) * pow(eta_m, (-0.333333333)); // Calculate h from K
                     if (h <= 15) { h = 15; }
                     double gamma = (f0est * h / (alphae * kappa * 0.5 * (1 - f0est)));
-                    //cout << "j: " << j << " k: " << k << endl;
-                    //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
-                    //cout << "h: " << h << " gamma: " << gamma << endl;
-                    //cout << "q: " << q  << " f0est:" << f0est << endl;
+                    //cout << "j: " << j << " k: " << k << "\n";
+                    //cout << "Wk: " << Wk << " Winf: " << Winf << "\n";
+                    //cout << "h: " << h << " gamma: " << gamma << "\n";
+                    //cout << "q: " << q  << " f0est:" << f0est << "\n";
                     searchVolMat.at(j).at(k) = gamma * pow(Ws_at_szgroup.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
-                    //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
+                    //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << "\n";
                 }
             }
 
@@ -1268,7 +1268,7 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        cout << "Read in the diet preference..." << endl;
+        cout << "Read in the diet preference..." << "\n";
         for (unsigned int j = 0; j < simModel->config().nbpops; ++j) {  // loop over predators
             multimap<int, double>::iterator lower_ia = adults_diet_preference_per_stock_allstks.lower_bound(j);
             multimap<int, double>::iterator upper_ia = adults_diet_preference_per_stock_allstks.upper_bound(j);
@@ -1281,10 +1281,10 @@ int app_main(int argc, char const* argv[])
             for (multimap<int, double>::iterator pos = lower_ij; pos != upper_ij; pos++)
                 juv_diet_pref.push_back(pos->second);
             if (ad_diet_pref.size() != simModel->config().nbpops) {
-                cout << "error dim in input file for adults diet preference" << endl;
+                cout << "error dim in input file for adults diet preference" << "\n";
             }
             if (juv_diet_pref.size() != simModel->config().nbpops) {
-                cout << "error dim in input file for juveniles diet preference" << endl;
+                cout << "error dim in input file for juveniles diet preference" << "\n";
             }
 
             for (unsigned int prey = 0; prey < simModel->config().nbpops; ++prey) {  // loop over prey
@@ -1299,14 +1299,14 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        cout << "Initial objects for sizeSpectra option...ok" << endl;
+        cout << "Initial objects for sizeSpectra option...ok" << "\n";
     }
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " METIER-RELATED STUFFS     " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " METIER-RELATED STUFFS     " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     modelLoader->loadMetiers(1, simModel->month(), simModel->quarter(), simModel->semester());
     
@@ -1325,19 +1325,19 @@ int app_main(int argc, char const* argv[])
     }
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " SHIP-RELATED STUFFS       " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " SHIP-RELATED STUFFS       " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     modelLoader->loadShips();
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " VESSEL-RELATED STUFFS     " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " VESSEL-RELATED STUFFS     " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -1354,25 +1354,25 @@ int app_main(int argc, char const* argv[])
 
 #if 0
     //check vessel specifications
-    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specific harbours:" << endl);
+    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specific harbours:" << "\n");
     auto harbs = vessels[0]->get_harbours();
     for (unsigned int i = 0; i < harbs.size(); i++) {
-        outc(cout << harbs[i] << " " << endl);
+        outc(cout << harbs[i] << " " << "\n");
     }
 
     //check vessel specifications
-    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specfic grounds:" << endl);
+    outc(cout << " vessel" << vessels[0]->get_idx() << " have the specfic grounds:" << "\n");
     auto grds = vessels[0]->get_fgrounds();
     for (unsigned int i = 0; i < grds.size(); i++) {
-        outc(cout << grds[i] << " " << endl);
+        outc(cout << grds[i] << " " << "\n");
     }
 
     //check vessel specifications
     outc(cout << " vessel" << vessels[0]->get_idx() << " have a max speed of "
-              << vessels[0]->get_speed() << " " << endl);
+              << vessels[0]->get_speed() << " " << "\n");
 
     cout << " vessel" << vessels[0]->get_idx() << " have a kW of "
-         << vessels[0]->get_KW() << " " << endl;
+         << vessels[0]->get_KW() << " " << "\n";
 
 
     /*  //check movement
@@ -1382,19 +1382,19 @@ int app_main(int argc, char const* argv[])
       Node* p_node = new Node(1588, graph_coord_x, graph_coord_y, graph_coord_harbour, simModel->config().nbpops, 5);
       vessels[0]->move_to(p_node);
       dout << "move vessel "<< vessels[0]->get_idx() <<" on "
-      << vessels[0]->get_loc()->get_x() << " " << vessels[0]->get_loc()->get_y() << endl;
+      << vessels[0]->get_loc()->get_x() << " " << vessels[0]->get_loc()->get_y() << "\n";
       vessels[0]->move_to(nodes[old_node]);
       dout << "move vessel "<< vessels[0]->get_idx() <<" on "
-      << vessels[0]->get_loc()->get_x() << " " << vessels[0]->get_loc()->get_y() << endl;
+      << vessels[0]->get_loc()->get_x() << " " << vessels[0]->get_loc()->get_y() << "\n";
 
       // check the update of a node (will be useful for the pop model and removals of catches)
       vector<int> tab2= nodes[old_node]->get_vid();
-      dout(cout  << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node().toIndex() << endl);
+      dout(cout  << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node().toIndex() << "\n");
       for (int i=0; i<tab2.size(); i++)
       {
           dout(cout  << tab2[i] << " ");
       }
-      dout(cout  << endl);
+      dout(cout  << "\n");
 
     */
 
@@ -1474,11 +1474,11 @@ int app_main(int argc, char const* argv[])
 
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " FIRM-RELATED STUFFS       " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " FIRM-RELATED STUFFS       " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     // read general firm features
     vector<int> all_firm_ids;
@@ -1493,7 +1493,7 @@ int app_main(int argc, char const* argv[])
     }
 
 
-    cout << "find out vessels_of_the_firm for firm " << endl;
+    cout << "find out vessels_of_the_firm for firm " << "\n";
 
 
     vector<Firm *> firms(all_firm_ids.size());
@@ -1502,7 +1502,7 @@ int app_main(int argc, char const* argv[])
         // vector <Vessel*> vessels_of_the_firm(vessels.size());
         vector<Vessel *> vessels_of_the_firm;
 
-        cout << "vessels_of_the_firm with " << vessels_of_the_firm.size() << " vessels..." << endl;
+        cout << "vessels_of_the_firm with " << vessels_of_the_firm.size() << " vessels..." << "\n";
 
 
         // select from a vector of objects
@@ -1513,19 +1513,19 @@ int app_main(int argc, char const* argv[])
                 boost::bind(test_not_belong_to_firm, _1, all_firm_ids[i]));
 
 
-        cout << "create firm " << all_firm_ids[i] << endl;
-        cout << "with " << vessels_of_the_firm.size() << " vessels..." << endl;
+        cout << "create firm " << all_firm_ids[i] << "\n";
+        cout << "with " << vessels_of_the_firm.size() << " vessels..." << "\n";
 
         firms[i] = new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
                             some_longs[i], some_lats[i], vessels_of_the_firm);
         firms[i]->set_idx_firm(all_firm_ids[i]);
 
-        cout << "at (" << firms[i]->get_x() << "," << firms[i]->get_y() << ") " << endl;
-        //   cout<<" one of the vessel of this firm is " << firms[i]->get_bunch_of_vessels().at(0)->get_name()    << endl;
+        cout << "at (" << firms[i]->get_x() << "," << firms[i]->get_y() << ") " << "\n";
+        //   cout<<" one of the vessel of this firm is " << firms[i]->get_bunch_of_vessels().at(0)->get_name()    << "\n";
 
 
     }
-    cout << "Number of firms created: " << firms.size() << endl;
+    cout << "Number of firms created: " << firms.size() << "\n";
 
 
 #ifdef PROFILE
@@ -1533,11 +1533,11 @@ int app_main(int argc, char const* argv[])
 #endif
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " TEST GRAPH-RELATED STUFFS " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " TEST GRAPH-RELATED STUFFS " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
     /* input data, graph connections and distance */
     // CAUTION INDEXATION C++ from 0 to n while in R from 1 to n+1
@@ -1569,12 +1569,12 @@ int app_main(int argc, char const* argv[])
     // col 1
     for (unsigned int i = 0; i < graph_idx_dep.size(); i++) {
         adjacency_map[graph_idx_dep[i]].push_back(edge(graph_idx_arr[i], graph_dist_km[i]));
-        //dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl);
+        //dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << "\n");
     }
     // col 2
     for (unsigned int i = 0; i < graph_idx_dep.size(); i++) {
         adjacency_map[graph_idx_arr[i]].push_back(edge(graph_idx_dep[i], graph_dist_km[i]));
-        //dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl);
+        //dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << "\n");
     }
 
     // then need to remove the duplicates if any.....
@@ -1594,11 +1594,11 @@ int app_main(int argc, char const* argv[])
     // create a shop of paths
 
 
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << " BUILD A PATHS_SHOP        " << endl);
-    dout(cout << "---------------------------" << endl);
-    dout(cout << "---------------------------" << endl);
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << " BUILD A PATHS_SHOP        " << "\n");
+    dout(cout << "---------------------------" << "\n");
+    dout(cout << "---------------------------" << "\n");
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -1607,25 +1607,25 @@ int app_main(int argc, char const* argv[])
     // bound the two vectors
     // copy
     if (!load_relevant_nodes(folder_name_parameterization, inputfolder, relevant_nodes)) {
-        cerr << "*** cannot load file." << endl;
+        cerr << "*** cannot load file." << "\n";
         return -1;
     }
 
 
     // check
-    outc(cout << "relevant nodes: " << endl);
+    outc(cout << "relevant nodes: " << "\n");
     for (unsigned int i = 0; i < relevant_nodes.size(); i++) {
         outc(cout << relevant_nodes.at(i).toIndex() << " ");
     }
-    outc(cout << endl);
+    outc(cout << "\n");
 
 
     if (!use_static_paths) {
         cout
                 << "In Simulation Setup, you have chosen not to use pre-defined static paths... The computation of the paths on the fly might take more time"
-                << endl;
+                << "\n";
     } else {
-        cout << "reading pre-existing paths shop....wait" << endl;
+        cout << "reading pre-existing paths shop....wait" << "\n";
 
         // for-loop over potential departure nodes
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
@@ -1642,7 +1642,7 @@ int app_main(int argc, char const* argv[])
         mLoadGraphProfileResult = mLoadProfile.elapsed_ms();
 #endif
 
-        cout << "reading pre-existing paths shop....ok" << endl;
+        cout << "reading pre-existing paths shop....ok" << "\n";
 
 
     }
@@ -1650,11 +1650,11 @@ int app_main(int argc, char const* argv[])
     int init_verbosity = verbosity;
 
 
-    dout(cout << "---------------------------------" << endl);
-    dout(cout << "---------------------------------" << endl);
-    dout(cout << " THE FOR-LOOP OVER TIME STEPS    " << endl);
-    dout(cout << "---------------------------------" << endl);
-    dout(cout << "---------------------------------" << endl);
+    dout(cout << "---------------------------------" << "\n");
+    dout(cout << "---------------------------------" << "\n");
+    dout(cout << " THE FOR-LOOP OVER TIME STEPS    " << "\n");
+    dout(cout << "---------------------------------" << "\n");
+    dout(cout << "---------------------------------" << "\n");
 
     //	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
     //	vmslike.open(filename.c_str());
@@ -1882,17 +1882,17 @@ int app_main(int argc, char const* argv[])
 
     // a check
     vector<double> here_some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();
-    cout << "check here" << endl;
+    cout << "check here" << "\n";
     for (unsigned int i = 0; i < here_some_Ns_at_szgroup.size(); i++)
     {
         cout << here_some_Ns_at_szgroup[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 
     // a check
     // nb of nodes for this pop this quarter:
     int nb_of_nodes_this_pop_this_quarter = simModel->populations().at(0)->get_list_nodes().size();
-    cout << "nb_of_nodes_this_pop_this_quarter " << nb_of_nodes_this_pop_this_quarter << endl;
+    cout << "nb_of_nodes_this_pop_this_quarter " << nb_of_nodes_this_pop_this_quarter << "\n";
 
 
     // write down initial pop number in popdyn
@@ -1909,7 +1909,7 @@ int app_main(int argc, char const* argv[])
             // output in thousands of individuals
             popdyn_N << tot_N_at_szgroup.at(sz) / 1000 << " ";
         }
-        popdyn_N << " " << endl;
+        popdyn_N << " " << "\n";
     }
 
     popdyn_N.flush();
@@ -1924,12 +1924,12 @@ int app_main(int argc, char const* argv[])
 
     // a check
     vector<double> there_some_Ns_at_szgroup = simModel->populations().at(0)->get_tot_N_at_szgroup();
-    cout << "... and there" << endl;
+    cout << "... and there" << "\n";
     for (unsigned int i = 0; i < there_some_Ns_at_szgroup.size(); i++)
     {
         cout << there_some_Ns_at_szgroup[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 
 
 
@@ -2003,20 +2003,20 @@ int app_main(int argc, char const* argv[])
             mLoopProfile.start();
 #endif
 
-        dout(cout << endl);
-        dout(cout << endl);
-        dout(cout << "---------------" << endl);
+        dout(cout << "\n");
+        dout(cout << "\n");
+        dout(cout << "---------------" << "\n");
 
         guiSendCurrentStep(simModel->timestep());
 
         if (!use_gui) {
-            cout << "tstep: " << simModel->timestep() << endl;
+            cout << "tstep: " << simModel->timestep() << "\n";
         }
         ostringstream os;
-        os << "tstep " << simModel->timestep() << endl;
+        os << "tstep " << simModel->timestep() << "\n";
         guiSendTerminalMessage(os.str());
 
-        dout(cout << "---------------" << endl);
+        dout(cout << "---------------" << "\n");
 
         //----------------------------------------//
         //----------------------------------------//
@@ -2115,10 +2115,10 @@ int app_main(int argc, char const* argv[])
             // so a relevant proxy could actually be (the inverse of) full_avai_szgroup_nodes_with_pop
             // converted in a point porportion field....
             for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
-                outc(cout << "...pop " << sp << endl;)
+                outc(cout << "...pop " << sp << "\n";)
                 if (!binary_search(simModel->config().implicit_pops.begin(),
                                    simModel->config().implicit_pops.end(), sp)) {
-                    outc(cout << "......pop " << sp << endl;)
+                    outc(cout << "......pop " << sp << "\n";)
                     simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
                 }
             }
@@ -2156,11 +2156,11 @@ int app_main(int argc, char const* argv[])
 
 
         }
-        //cout << "a_year " << a_year << endl;
+        //cout << "a_year " << a_year << "\n";
 
 
 
-        dout(cout << "RE-READ DATA----------" << endl);
+        dout(cout << "RE-READ DATA----------" << "\n");
         multimap<string, double> reloaded_fcredits;
 
         // RE-READ DATA FOR EVENT => change of month
@@ -2190,12 +2190,12 @@ int app_main(int argc, char const* argv[])
 
             // vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(1)->get_tot_N_at_szgroup();
             // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-            //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+            //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << "\n";
 
             // this month, re-read for vessel-related data
             if (scenario.dyn_alloc_sce.option(Options::area_monthly_closure)) {
                 cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter()
-                     << ", simModel->semester():" << simModel->semester() << endl;
+                     << ", simModel->semester():" << simModel->semester() << "\n";
 
                 for (auto vessel: simModel->vessels()) {
                     vessel->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
@@ -2228,11 +2228,11 @@ int app_main(int argc, char const* argv[])
                 }
                 
                 // check for myfish graph1
-                // cout << " isMetierBanned   "  << nodes.at(13)->isMetierBanned(vessels.at(v)->get_metier()->get_name()) << endl;
-                // cout << " isVsizeBanned   " << nodes.at(13)->isVsizeBanned(vessels.at(v)->get_length_class()) << endl;
+                // cout << " isMetierBanned   "  << nodes.at(13)->isMetierBanned(vessels.at(v)->get_metier()->get_name()) << "\n";
+                // cout << " isVsizeBanned   " << nodes.at(13)->isVsizeBanned(vessels.at(v)->get_length_class()) << "\n";
 
 
-                cout << "re-read area closure setting this month....OK" << endl;
+                cout << "re-read area closure setting this month....OK" << "\n";
             }
 
 
@@ -2268,7 +2268,7 @@ int app_main(int argc, char const* argv[])
             }
 
 
-            cout << "re-read oth_land_nodes setting this month....OK" << endl;
+            cout << "re-read oth_land_nodes setting this month....OK" << "\n";
 
 
         }
@@ -2279,15 +2279,15 @@ int app_main(int argc, char const* argv[])
             //   if(simModel->timestep()==3 || simModel->timestep()==4) // use this to start from another quarter if test...
         {
 
-            cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << endl;
+            cout << "a_month: " << simModel->month() << ", a_quarter: " << simModel->quarter() << ", a_semester:" << simModel->semester() << "\n";
             //...but first compute and track the past experience
             int y = simModel->year() -1;
             int q = simModel->quarter() - 1;
             // caution with q from 1...nbyearquarters. given hardcoded limit in horizon time i.e. see "nbyearquarters"
             for (auto vessel : simModel->vessels())
             {
-                //cout << "heho q" << q << endl;
-                //cout << "heho y" << y << endl;
+                //cout << "heho q" << q << "\n";
+                //cout << "heho y" << y << "\n";
                 if (simModel->scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
                     if (!vessel->compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(y, q)) {
                         throw std::runtime_error("this went wrong with compute_experiencedcpue_fgrounds_per_yearquarter_per_pop: quitting");
@@ -2308,9 +2308,9 @@ int app_main(int argc, char const* argv[])
             modelLoader->loadVessels(a_year, simModel->month(), simModel->quarter(), simModel->semester(), selected_vessels_only);
 
             // RE-read for metiers
-            cout << "re-read metiers..." << endl;
+            cout << "re-read metiers..." << "\n";
             modelLoader->loadMetiers(a_year, simModel->month(), simModel->quarter(), simModel->semester());
-            cout << "re-read metiers...OK" << endl;
+            cout << "re-read metiers...OK" << "\n";
         } // END RE-READ DATA FOR VESSEL AND METIER...
 
 
@@ -2344,15 +2344,15 @@ int app_main(int argc, char const* argv[])
         if (redispatch_the_pop)     // EVENT => re-read pop data
         {
 
-            cout << "Reload population data" << endl;
+            cout << "Reload population data" << "\n";
 
             modelLoader->loadPopulations(a_quarter_i);
 
 
             // a check (pop2 only)
-                cout << " " << endl;
-                cout << "-----------------------------------------" << endl;
-                cout << "after re-loading the population data" << endl;
+                cout << " " << "\n";
+                cout << "-----------------------------------------" << "\n";
+                cout << "after re-loading the population data" << "\n";
                 simModel->populations().at(2)->aggregate_N_display_for_check();
             
 
@@ -2375,7 +2375,7 @@ int app_main(int argc, char const* argv[])
                         // output in thousands of individuals
                         popdyn_test  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
                     }
-                    popdyn_test << " " <<  endl;
+                    popdyn_test << " " <<  "\n";
                 }
             }
             */
@@ -2404,7 +2404,7 @@ int app_main(int argc, char const* argv[])
                     vector<double> freq_fgrounds;
 
                     if (vids_on_harbours.size() > 0) {
-                        dout(cout << "there are some vids on " << simModel->nodes().at(i)->get_name() << endl);
+                        dout(cout << "there are some vids on " << simModel->nodes().at(i)->get_name() << "\n");
                         for (unsigned int vi = 0; vi < vids_on_harbours.size(); ++vi) {
                             auto some_grounds = simModel->vessels().at(vids_on_harbours.at(vi))->get_fgrounds();
                             auto some_cpues = simModel->vessels().at(
@@ -2449,7 +2449,7 @@ int app_main(int argc, char const* argv[])
                                 sum += (*it).second;
                             }
                             dout(cout << "average for: " << fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt
-                                      << endl);
+                                      << "\n");
                             cpue_fgrounds.push_back(sum / cnt);
                         }
                         //  ...and scale to 1 to transform into probas
@@ -2470,7 +2470,7 @@ int app_main(int argc, char const* argv[])
                         // remember to make sure size() of fgrounds == size() of freq_fgrounds
                         //ASSERT(fgrounds.size()==freq_fgrounds.size())
 
-                        // cout << "assume equal probas "  << endl;
+                        // cout << "assume equal probas "  << "\n";
                         // vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());
                         // for (unsigned int gr=0; gr<equal_proba.size(); ++gr)
                         //    {
@@ -2483,7 +2483,7 @@ int app_main(int argc, char const* argv[])
 
 
                     } else {
-                        dout(cout << "there are NO vids on " << simModel->nodes().at(i)->get_name() << endl);
+                        dout(cout << "there are NO vids on " << simModel->nodes().at(i)->get_name() << "\n");
                         fgrounds.push_back(types::NodeId(
                                 i)); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                         //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
@@ -2491,7 +2491,7 @@ int app_main(int argc, char const* argv[])
 
                     // update the harbour
                     dout(cout << "update the harbour for grounds (node: " << simModel->nodes().at(i)->get_name()
-                              << endl);
+                              << "\n");
                     simModel->nodes().at(i)->set_usual_fgrounds(fgrounds);
                     simModel->nodes().at(i)->set_freq_usual_fgrounds(freq_fgrounds);
 
@@ -2501,13 +2501,13 @@ int app_main(int argc, char const* argv[])
 
                     // a check
                     /*
-               cout << "Harbour " <<  nodes.at(i)->get_name() << " has the usual grounds: " << endl;
+               cout << "Harbour " <<  nodes.at(i)->get_name() << " has the usual grounds: " << "\n";
                vector <int> usual_grounds =  nodes.at(i)->get_usual_fgrounds();
                for (unsigned int ii=0; ii<usual_grounds.size(); ++ii)
                    {
                    cout << usual_grounds.at(ii) << " " ;
                    }
-               cout << endl;
+               cout << "\n";
                */
 
 
@@ -2526,7 +2526,7 @@ int app_main(int argc, char const* argv[])
                     if (!grds.empty()) {
                         int idx_max = max_element(freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
                         auto ground = grds.at(idx_max);
-                        cout << vessel->get_name() << ": ground is " << ground << endl;
+                        cout << vessel->get_name() << ": ground is " << ground << "\n";
 
 
                         //2. get possible metiers on this ground
@@ -2546,7 +2546,7 @@ int app_main(int argc, char const* argv[])
                         auto harbs = vessel->get_harbours();
                         auto freq_harbs = vessel->get_freq_harbours();
                         if (freq_harbs.empty()) {
-                            cout << "check why..." << endl;
+                            cout << "check why..." << "\n";
                         }
 
                         int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
@@ -2555,9 +2555,9 @@ int app_main(int argc, char const* argv[])
                              << simModel->nodes().at(a_node.toIndex())->get_idx_node()
                              << " is in harb?`" <<
                              simModel->nodes().at(a_node.toIndex())->get_is_harbour()
-                             << " ...cause the decision is taken in harbour..." << endl;
+                             << " ...cause the decision is taken in harbour..." << "\n";
                         int current_metier = vessel->get_metier()->get_name();
-                        cout << vessel->get_name() << ": current_metier is " << current_metier << endl;
+                        cout << vessel->get_name() << ": current_metier is " << current_metier << "\n";
                         int nbpops = simModel->nodes().at(a_node.toIndex())->get_nbpops();
                         // TO DO:
                         auto grounds_from_harbours = simModel->nodes().at(
@@ -2591,11 +2591,11 @@ int app_main(int argc, char const* argv[])
                                     std::make_pair(grounds_from_harbours.at(gr), 1.0));
                         }
 
-                        cout << vessel->get_name() << ": grounds_from_harbours is " << endl;
+                        cout << vessel->get_name() << ": grounds_from_harbours is " << "\n";
                         for (unsigned int a_gr = 0; a_gr < grounds_from_harbours.size(); ++a_gr) {
                             cout << grounds_from_harbours.at(a_gr) << " ";
                         }
-                        cout << endl;
+                        cout << "\n";
 
                         // 4- create randomized cpues on grounds known from the harbours for
                         // experiencedcpue_fgrounds
@@ -2677,7 +2677,7 @@ int app_main(int argc, char const* argv[])
                         vessel->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
                     } else {
                         // otherwise, no activity this vessel this quarter
-                        cout << " --> no activity for " << vessel->get_name() << endl;
+                        cout << " --> no activity for " << vessel->get_name() << "\n";
 
 
                     }
@@ -2700,7 +2700,7 @@ int app_main(int argc, char const* argv[])
 
    
         
-   dout(cout << "THE TARIFF MAP UPDATE----------" << endl);
+   dout(cout << "THE TARIFF MAP UPDATE----------" << "\n");
    // compute tarif map update      
    if (scenario.dyn_alloc_sce.option(Options::fishing_credits)) {
 
@@ -2733,12 +2733,12 @@ int app_main(int argc, char const* argv[])
 
 
 
-        dout(cout << "THE WINDFARM LOOP----------" << endl);
+        dout(cout << "THE WINDFARM LOOP----------" << "\n");
         for (unsigned int i = 0; i < simModel->windmills().size(); i++) {
 
             if (simModel->windmills().at(i)->get_is_active() == 1) {
                 simModel->windmills().at(i)->compute_kWproduction_in_farm(); // discrete event
-                //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
+                //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << "\n";
                 if (export_hugefiles) {
                     simModel->windmills().at(i)->export_windmills_indicators(windmillslogs,
                                                                              simModel->timestep()); // export event to file...
@@ -2761,11 +2761,11 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        dout(cout << "THE SHIP LOOP----------" << endl);
+        dout(cout << "THE SHIP LOOP----------" << "\n");
         for (auto ship : simModel->ships()) {
             if (ship->get_is_active() == 1) {
                 ship->compute_emissions_in_ship(); // discrete event
-                //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
+                //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << "\n";
                 if (export_hugefiles) {
                     ship->export_ships_indicators(shipslogs, simModel->timestep()); // export event to file...
                 }
@@ -2786,7 +2786,7 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        dout(cout << "THE FISHFARM LOOP----------" << endl);
+        dout(cout << "THE FISHFARM LOOP----------" << "\n");
         for (auto fishfarm : simModel->fishfarms()) {
 
             if (fishfarm->get_is_active() == 1) {
@@ -2795,7 +2795,7 @@ int app_main(int argc, char const* argv[])
                 if ((int) ((simModel->timestep() + 1) / 24 - (8762.0 / 24 * (a_year - 1))) == end &&
                     fishfarm->get_is_running() == 1) {
                     fishfarm->compute_profit_in_farm(); // discrete event
-                    //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
+                    //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << "\n";
                     fishfarm->export_fishfarms_indicators(fishfarmslogs,
                                                           simModel->timestep()); // export event to file...
 
@@ -2819,8 +2819,8 @@ int app_main(int argc, char const* argv[])
 
                         //...environmental impact
                         fishfarm->compute_discharge_on_farm(simModel->timestep());
-                        //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
-                        //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
+                        //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << "\n";
+                        //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << "\n";
 
                         if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
 
@@ -2849,7 +2849,7 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        dout(cout << "THE VESSEL LOOP----------" << endl);
+        dout(cout << "THE VESSEL LOOP----------" << "\n");
         // get a random order for acting vessels
         // random permutation
 
@@ -2863,10 +2863,10 @@ int app_main(int argc, char const* argv[])
             for (unsigned int i = 0; i < ve.size(); i++) {
                 bool is_harbour = simModel->vessels()[i]->get_loc()->get_is_harbour();
                 cout << simModel->vessels()[i]->get_name() << " departure from an harbour? " << is_harbour
-                     << " idx node: " << simModel->vessels()[i]->get_loc()->get_idx_node() << endl;
+                     << " idx node: " << simModel->vessels()[i]->get_loc()->get_idx_node() << "\n";
 
 
-                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< "\n";
                 OutputExporter::instance().exportVmsLike(simModel->timestep(),
                                                          simModel->vessels()[i]); // at simModel->timestep()=0
 
@@ -2956,10 +2956,10 @@ int app_main(int argc, char const* argv[])
 
 
      //   if (simModel->timestep()==8761) {
-     //       cout << "COUCOU THERE!! 8761" << endl;
+     //       cout << "COUCOU THERE!! 8761" << "\n";
      //   }
      //   if (simModel->timestep() == 8762) {
-     //       cout << "COUCOU THERE!! 8762" << endl;
+     //       cout << "COUCOU THERE!! 8762" << "\n";
      //   }
 
 
@@ -2973,7 +2973,7 @@ int app_main(int argc, char const* argv[])
 
             for (unsigned int pop = 0; pop < simModel->populations().size(); pop++) {
 
-                outc(cout << "...pop " << pop << endl;)
+                outc(cout << "...pop " << pop << "\n";)
                 if (!binary_search(simModel->config().implicit_pops.begin(), simModel->config().implicit_pops.end(),
                                    pop)) {
 
@@ -2989,13 +2989,13 @@ int app_main(int argc, char const* argv[])
                         outSqlite->exportPopQuotas(simModel->populations().at(pop), pop, simModel->timestep());
                     }
 
-                    //cout <<"pop "<< pop << ": simModel->globalQuotasUptake() is " << simModel->globalQuotasUptake().at(pop) << endl;
+                    //cout <<"pop "<< pop << ": simModel->globalQuotasUptake() is " << simModel->globalQuotasUptake().at(pop) << "\n";
 
                     // export in file
                     quotasuptake << setprecision(6) << fixed;
                     quotasuptake << simModel->timestep() << " " << pop << " " <<
                                  simModel->globalQuotasUptake().at(pop) << " " <<
-                                 simModel->populations().at(pop)->get_tac()->get_current_tac() << endl;
+                                 simModel->populations().at(pop)->get_tac()->get_current_tac() << "\n";
 
 
 
@@ -3176,7 +3176,7 @@ int app_main(int argc, char const* argv[])
             std::unique_lock<std::mutex> m(listVesselMutex);
             if (export_hugefiles) {
                 for (unsigned int idx = 0; idx < listVesselIdForVmsLikeToExport.size(); idx++) {
-                    //cout << "simModel->timestep(): "<< simModel->timestep() << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+                    //cout << "simModel->timestep(): "<< simModel->timestep() << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< "\n";
 
                     OutputExporter::instance().exportVmsLike(simModel->timestep(),
                                                              simModel->vessels()[listVesselIdForVmsLikeToExport.at(
@@ -3204,7 +3204,7 @@ int app_main(int argc, char const* argv[])
 
 
             for (unsigned int idx = 0; idx < listVesselIdForLogLikeToExport.size(); idx++) {
-                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                //cout << "simModel->timestep(): "<< simModel->timestep() << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< "\n";
                  OutputExporter::instance().exportLogLike(simModel->timestep(),
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
                                                          simModel->populations(), simModel->config().implicit_pops, 
@@ -3278,7 +3278,7 @@ int app_main(int argc, char const* argv[])
     ss << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
 
     memInfo.update();
-    ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
+    ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << "\n";
 
     if (use_gui) {
         guiSendTerminalMessage(ss.str());
@@ -3360,7 +3360,7 @@ int app_main(int argc, char const* argv[])
                                                                                                                             #ifdef _WIN32
     if(use_gnuplot)
     {
-       outc(cout << "type a char to close" << endl);
+       outc(cout << "type a char to close" << "\n");
         getchar();				 //This line keeps the gnuplot window open after the code runs through.
         pclose(pipe2);
         pclose(pipe3);

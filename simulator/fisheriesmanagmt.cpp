@@ -88,27 +88,27 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
     // 1- annual tariff HCR (currently pooling all tariff pops together)
     // (note that beside this, vessel total credits (spe_fishing_credits) have been re-loaded in reloadVessels() the first day of the year)
     if (isFirstDayOfYear) {
-        cout << "Annual tariff HCR... " << endl;
+        cout << "Annual tariff HCR... " << "\n";
         double fbar_py_allpopav = 0.0;
         double ftarget_allpopav = 0.0;
         double change_per_year = tariff_annual_hcr_percent_change / 100;
-        cout << "...change_per_year is " << change_per_year << endl;
+        cout << "...change_per_year is " << change_per_year << "\n";
         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
             vector<double> fbar_ages_min_max = populations.at(
                 tariff_pop.at(ipop))->get_fbar_ages_min_max();
             double ftarget = fbar_ages_min_max.at(2);
-            cout << "...the ftarget at y-1 for this pop is " << ftarget << endl;
+            cout << "...the ftarget at y-1 for this pop is " << ftarget << "\n";
             ftarget_allpopav += ftarget; // cumul...
             cout << "...get fbar to help deciding in the annual tariff HCR...for pop" << tariff_pop.at(ipop)
-                << endl;
+                << "\n";
             double fbar_py = populations.at(tariff_pop.at(ipop))->get_fbar_type1();
             fbar_py_allpopav += fbar_py; // cumul...
-            cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
+            cout << "...the fbar at y-1 for this pop is " << fbar_py << "\n";
         }
         ftarget_allpopav = ftarget_allpopav / tariff_pop.size(); // ...then average
         fbar_py_allpopav = fbar_py_allpopav / tariff_pop.size(); // ...then average
 
-        cout << "...decide on the fmultiplier " << endl;
+        cout << "...decide on the fmultiplier " << "\n";
         double fmultiplier = 1.0;
         if (fbar_py_allpopav > ftarget_allpopav) {
             // harvest rate is too high, we need more restrictive categories
@@ -119,12 +119,12 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
         }
         cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
             " given the target F " << ftarget_allpopav << "  and the assessed F averaged over tariff pops "
-            << fbar_py_allpopav << endl;
-        cout << "arbitary_breaks_for_tariff.size() is " << arbitary_breaks_for_tariff.size() << endl;
+            << fbar_py_allpopav << "\n";
+        cout << "arbitary_breaks_for_tariff.size() is " << arbitary_breaks_for_tariff.size() << "\n";
         for (unsigned int icl = 0; icl < arbitary_breaks_for_tariff.size(); icl++) {
             arbitary_breaks_for_tariff.at(icl)* fmultiplier;
         }
-        cout << "The fmultiplier has been applied ok" << endl;
+        cout << "The fmultiplier has been applied ok" << "\n";
 
        
     }
@@ -133,7 +133,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
 
     // timing (update at 7 a.m.)
     int do_update = 0;
-    //cout << "freq_update_tariff_code is " << freq_update_tariff_code  << endl;
+    //cout << "freq_update_tariff_code is " << freq_update_tariff_code  << "\n";
     switch (freq_update_tariff_code) {
     case 0:
         if ((tstep % 24) == 7) { do_update = 1; }
@@ -157,13 +157,13 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
     }
 
     if (do_update) {
-        cout << " Update the tariff map....at " << tstep << endl;
+        cout << " Update the tariff map....at " << tstep << "\n";
 
         // obtain the list of idx relevant nodes for these tariff pops
         vector<types::NodeId> list_nodes_idx;
         for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
             dout(cout << "Get the list of nodes for the tariff pop "
-                << populations.at(tariff_pop.at(ipop))->get_name() << endl);
+                << populations.at(tariff_pop.at(ipop))->get_name() << "\n");
             vector<Node*> a_list_nodes = populations.at(tariff_pop.at(ipop))->get_list_nodes();
             for (unsigned int inode = 0; inode < a_list_nodes.size(); ++inode) {
                 list_nodes_idx.push_back(a_list_nodes.at(inode)->get_idx_node());
@@ -174,26 +174,26 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
         remove_dups(list_nodes_idx);
 
         // check
-        //cout << "nodes for the lpue computation are:" << endl;
+        //cout << "nodes for the lpue computation are:" << "\n";
         //for(int i=0; i<list_nodes_idx.size();++i)
         //{
         //    cout << list_nodes_idx.at(i) << " ";
         //}
-        //cout << endl;
+        //cout << "\n";
 
 
         // loop over to find out the mean pue
         double cumcatches = 0, cumdiscards = 0, cumeffort = 0, mean_pue;
         for (unsigned int inode = 0; inode < list_nodes_idx.size(); ++inode) {
             if (update_tariffs_based_on_lpue_or_dpue_code == 1) {
-                dout(cout << "Updating tariffs based on lpue" << endl);
+                dout(cout << "Updating tariffs based on lpue" << "\n");
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                     cumcatches += nodes[list_nodes_idx.at(
                         inode).toIndex()]->get_cumcatches_per_pop().at(tariff_pop.at(ipop));
                 }
             }
             if (update_tariffs_based_on_lpue_or_dpue_code == 2) {
-                dout(cout << "Updating tariffs based on dpue" << endl);
+                dout(cout << "Updating tariffs based on dpue" << "\n");
                 for (unsigned int ipop = 0; ipop < tariff_pop.size(); ++ipop) {
                     cumdiscards += nodes[list_nodes_idx.at(
                         inode).toIndex()]->get_cumdiscards_per_pop().at(tariff_pop.at(ipop));
@@ -202,12 +202,12 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
 
             cumeffort += nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
         }
-        //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
-        //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
+        //cout << " cumcatches of reference for the update is.... " << cumcatches << "\n";
+        //cout << " cumeffort of reference for the update is.... " << cumeffort << "\n";
         if (cumeffort != 0) {
             if (update_tariffs_based_on_lpue_or_dpue_code == 1) { mean_pue = cumcatches / cumeffort; }
             if (update_tariffs_based_on_lpue_or_dpue_code == 2) { mean_pue = cumdiscards / cumeffort; }
-            dout(cout << " mean_pue of reference for the update is.... " << mean_pue << endl);
+            dout(cout << " mean_pue of reference for the update is.... " << mean_pue << "\n");
 
             if (dyn_alloc_sce.option(Options::averageCPUEsPerRectangle)) {
                 // average the tariff per rectangle
@@ -253,7 +253,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                     double sum = 0;
                     for (it = ret1.first; it != ret1.second; ++it)
                         sum += (*it).second;
-                    //cout << "average for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    //cout << "average for: " << it2->first << " is => " << setprecision(3) << sum / cnt << "\n";
                     mymap_lookup_effort.insert(pair<double, double>(it2->first, sum / cnt));
                 }
              
@@ -264,7 +264,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                     double sum = 0;
                     for (it4 = ret2.first; it4 != ret2.second; ++it4)
                         sum += (*it4).second;
-                    //cout << "average for: " << it3->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    //cout << "average for: " << it3->first << " is => " << setprecision(3) << sum / cnt << "\n";
                     mymap_lookup_catches.insert(pair<double, double>(it3->first, sum / cnt));
                 }
 
@@ -284,9 +284,9 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                                 updated_cpue = 0;
                             }
                             nodes[list_nodes_idx.at(inode).toIndex()]->set_cpue_per_pop_per_met_this_month(ipop, a_met, updated_cpue);
-                            //cout << "mymap_lookup_catches[rect_this_node] is: " << mymap_lookup_catches[rect_this_node] << updated_cpue << endl;
-                            //cout << "mymap_lookup_effort[rect_this_node] is: " << mymap_lookup_effort[rect_this_node] << endl;
-                            //cout << "updated_cpue for this node "<< list_nodes_idx.at(inode).toIndex() <<" is: " << updated_cpue << endl;
+                            //cout << "mymap_lookup_catches[rect_this_node] is: " << mymap_lookup_catches[rect_this_node] << updated_cpue << "\n";
+                            //cout << "mymap_lookup_effort[rect_this_node] is: " << mymap_lookup_effort[rect_this_node] << "\n";
+                            //cout << "updated_cpue for this node "<< list_nodes_idx.at(inode).toIndex() <<" is: " << updated_cpue << "\n";
                         }
                     }
                 }
@@ -324,8 +324,8 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                             // note: be cautious with where cpue_per_pop_per_met_this_month is being re-init
                         }
                         node_pue = node_pue / nbpops;
-                        //cout << " mean_pue for the update is.... " << mean_pue << endl;
-                        //cout << " node_pue for the update is.... " << node_pue << endl;
+                        //cout << " mean_pue for the update is.... " << mean_pue << "\n";
+                        //cout << " node_pue for the update is.... " << node_pue << "\n";
                         nb_times_diff = node_pue / mean_pue;
                     }
 
@@ -334,7 +334,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                         nb_times_diff = node_pue / mean_pue;
                     }
 
-                    //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
+                    //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << "\n";
 
 
 
@@ -348,7 +348,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
 
                     // constraint +/-1 category
                     double updated_tariff;
-                    //cout << "...tariff_this_node is "  << tariff_this_node << endl;
+                    //cout << "...tariff_this_node is "  << tariff_this_node << "\n";
                     unsigned int count2 = 0;
                     while (tariff_this_node > arbitary_breaks_for_tariff.at(count2)) {
                         if ((count2) >= arbitary_breaks_for_tariff.size() - 1) { break; }
@@ -366,7 +366,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                     if (effort_on_this_node != 0) {
                         nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(a_met, updated_tariff);
                     }
-                    //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
+                    //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << "\n";
 
 
                 }
@@ -402,7 +402,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                     double sum = 0;
                     for (it = ret.first; it != ret.second; ++it)
                         sum += (*it).second;
-                    //cout << "average tariff for: " << it2->first << " is => " << setprecision(3) << sum / cnt << endl;
+                    //cout << "average tariff for: " << it2->first << " is => " << setprecision(3) << sum / cnt << "\n";
                     mymap_lookup.insert(pair<double, double>(it2->first, sum / cnt));
                 }
 
@@ -415,7 +415,7 @@ bool computeTariffMapUpdate(const DynAllocOptions& dyn_alloc_sce,
                         rect_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_icesrectanglecode();
                         updated_tariff = mymap_lookup[rect_this_node];
                         nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(a_met, updated_tariff);
-                        //cout << "updated_tariff for this node is: " << updated_tariff << endl;
+                        //cout << "updated_tariff for this node is: " << updated_tariff << "\n";
                     }
                 }
             }
@@ -437,7 +437,7 @@ bool computeEffortMultiplier(vector<Population* >& populations,
     double effort_multiplier=1.0;
     vector<double> effort_multipliers;
 
-    cout << "EffortControl: HCR in use is HCR" << HCR << endl;
+    cout << "EffortControl: HCR in use is HCR" << HCR << "\n";
 
     for(int sp=0; sp<populations.size();++sp)
     {
@@ -449,7 +449,7 @@ bool computeEffortMultiplier(vector<Population* >& populations,
         {
            vector<double> fbar_ages_min_max =populations.at(sp)-> get_fbar_ages_min_max();
            double FMSY = fbar_ages_min_max.at(6);
-           cout << "EffortControl: fbar_py this pop "<< sp << " is " <<fbar_py << ", while FMSY is " << FMSY << endl;
+           cout << "EffortControl: fbar_py this pop "<< sp << " is " <<fbar_py << ", while FMSY is " << FMSY << "\n";
 
            if(nb_y_left_to_tgrt_year!=0)
            {
@@ -481,7 +481,7 @@ bool computeEffortMultiplier(vector<Population* >& populations,
          vessels[ i ]->set_effort_multiplier(effort_multiplier);
       }
 
-    cout << "Effort control for next y: effort_multiplier set to " << effort_multiplier << endl;
+    cout << "Effort control for next y: effort_multiplier set to " << effort_multiplier << "\n";
 
 return true;
 }
@@ -492,29 +492,29 @@ return true;
 bool computeTAC(vector<Population* >& populations, int sp, int tstep, 
      double multiOnTACconstraint, double multiOnF, int HCR)
 {
-    dout(cout<< "------------" << endl);
-    dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year for pop " << populations.at(sp)->get_name() << endl);
+    dout(cout<< "------------" << "\n");
+    dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year for pop " << populations.at(sp)->get_name() << "\n");
     vector<double> fbar_ages_min_max =populations.at(sp)-> get_fbar_ages_min_max();
     int age_min = fbar_ages_min_max.at(0);
-    dout(cout<< "age min:" << age_min << endl);
+    dout(cout<< "age min:" << age_min << "\n");
     int age_max = fbar_ages_min_max.at(1);
-    dout(cout<< "age_max:" <<age_max << endl);
+    dout(cout<< "age_max:" <<age_max << "\n");
     double ftarget = fbar_ages_min_max.at(2);
-    dout(cout<< "ftarget:" << ftarget << endl);
+    dout(cout<< "ftarget:" << ftarget << "\n");
     double Fpercent = fbar_ages_min_max.at(3);
-    dout(cout<< "Fpercent:" << Fpercent << endl);
+    dout(cout<< "Fpercent:" << Fpercent << "\n");
     double TACpercent = fbar_ages_min_max.at(4);
-    dout(cout<< "TACpercent:" << TACpercent << endl);
+    dout(cout<< "TACpercent:" << TACpercent << "\n");
     double Btrigger = fbar_ages_min_max.at(5);
-    dout(cout<< "TACpercent:" << Btrigger << endl);
+    dout(cout<< "TACpercent:" << Btrigger << "\n");
     double FMSY = fbar_ages_min_max.at(6) * multiOnF;
-    dout(cout<< "FMSY:" << FMSY << endl);
+    dout(cout<< "FMSY:" << FMSY << "\n");
     //double FMSYdown = fbar_ages_min_max.at(7);
     double FMSYdown=FMSY*0.9; // TO BE REMOVED WHEN INPUT DATA
-    dout(cout<< "FMSYdown:" << FMSY << endl);
+    dout(cout<< "FMSYdown:" << FMSY << "\n");
     //double FMSYup = fbar_ages_min_max.at(8);
     double FMSYup=FMSY*1.1; // TO BE REMOVED WHEN INPUT DATA
-    dout(cout<< "FMSYup:" << FMSY << endl);
+    dout(cout<< "FMSYup:" << FMSY << "\n");
 
     int nbages=populations.at(sp)->get_nb_ages();
     int nbszgroups=populations.at(sp)->get_nb_szgroups();
@@ -527,12 +527,12 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
     // 1. compute previous fbar
                                  // at the end of the last year, then for last year py...
-    dout(cout<< "when computing TAC, first compute fbar for pop..." << populations.at(sp)->get_name() << endl);
+    dout(cout<< "when computing TAC, first compute fbar for pop..." << populations.at(sp)->get_name() << "\n");
     double fbar_py=1.0;
     if(tstep==0) // THIS CODE BLOCK IS NOT USED IN NORMAL MODE, THIS IS JUST FOR DEBUGGING (Options::DEBUG) TO AVOID WAITING THE FULL Y TO LOOK AT TAC NUMBERS...
     {
         fbar_py=FMSY; // in case the tac is computed at start (for debugging) then use FMSY, because by nature perceived_F does not exist yet
-        cout << "fbar_py is " << fbar_py << endl;
+        cout << "fbar_py is " << fbar_py << "\n";
         // but first apply size percent_szgroup_per_age_matrix to finds out N & co IN AGE!
         tot_N_at_sz_end_previous_y                 = populations.at(sp)->get_tot_N_at_szgroup_month_minus_1();
         vector <double> a_weight_at_szgroup        =populations.at(sp)->get_weight_at_szgroup();
@@ -569,7 +569,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
         maturity_at_age_y_plus_1    = populations.at(sp)->get_tot_Mat_at_age();
     }
     populations.at(sp)->set_fbar_type1(fbar_py);
-    dout(cout << "the fbar at y-1 for this pop is " << fbar_py << endl);
+    dout(cout << "the fbar at y-1 for this pop is " << fbar_py << "\n");
 
 
 
@@ -580,7 +580,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
        if(fbar_py>2)
        {
         fbar_py=2; // a safeguard to avoid non-sense computation of TAC change
-        cout << "fbar_py set to 2 for pop " << populations.at(sp)->get_name() << endl;
+        cout << "fbar_py set to 2 for pop " << populations.at(sp)->get_name() << "\n";
        }
 
 
@@ -598,21 +598,21 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
         fmultiplier = 1.0 + (Fpercent/100);
        }
     cout << "HCR type 1: the fmultiplier for this pop " << populations.at(sp)->get_name() <<" is then " << fmultiplier <<
-        " given the target F " <<  ftarget << " in the plan..." << endl;
+        " given the target F " <<  ftarget << " in the plan..." << "\n";
 
     // 3. perform a short-term forecast on N with F * fmultipier * fmultiplier
 
     //a. for year y from y-1
-    dout(cout << "the  N by age at the end of  y is " << endl);
+    dout(cout << "the  N by age at the end of  y is " << "\n");
     tot_N_at_age_end_previous_y = populations.at(sp)->get_perceived_tot_N_at_age(); // perceived
 
     for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
     {
-        cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
+        cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << "\n";
     }
 
 
-    dout(cout << "the forecast F by age for y (from y-1) is " << endl);
+    dout(cout << "the forecast F by age for y (from y-1) is " << "\n");
     vector <double> tot_F_at_age_end_previous_y = populations.at(sp)->get_tot_F_at_age_running_average();
     vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
     for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
@@ -622,18 +622,18 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     }
     for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
     {
-        cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
+        cout << "tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << "\n";
     }
 
 
-    dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+    dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
     vector <double> tot_M_at_age_y = populations.at(sp)->get_tot_M_at_age();
     for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
     {
-        cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
+        cout << "tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << "\n";
     }
 
-    dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+    dout(cout << "the forecast N by age for y (from y-1) is " << "\n");
                                  // init
     vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
@@ -642,7 +642,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     double recruits = populations.at(sp)->get_tot_N_at_age0();
     forecast_tot_N_at_age_end_y.at(0)=recruits;
 
-    dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
+    dout(cout << "then, the forecast N by age for y (from y-1) is " << "\n");
     for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
     {
         forecast_tot_N_at_age_end_y.at(i) =
@@ -654,7 +654,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
     {
-        cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+        cout << "forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << "\n";
     }
 
     // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
@@ -662,11 +662,11 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     // TAC per age and then sum over ages....
     if(tstep==8761)
     {
-       cout << "FOR YEAR y i.e. year 2" << endl;
+       cout << "FOR YEAR y i.e. year 2" << "\n";
         double contribution_this_age=0.0;
        for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
        {
-        if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+        if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
         contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
             forecast_tot_N_at_age_end_y.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -674,15 +674,15 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
        if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
        tac_y+= contribution_this_age;
-       cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
+       cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << "\n";
        }
-       cout << "tac_y in kg is: " << tac_y << endl;
+       cout << "tac_y in kg is: " << tac_y << "\n";
        tac_y= tac_y/1000;   // convert in tons;
     }
 
 
     //b. for year y+1 from y
-    dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+    dout(cout << "the forecast F by age for y+1 (from y) is " << "\n");
                                  //init
     vector <double> forecast_tot_N_at_age_end_y_plus_1 (forecast_tot_N_at_age_end_y.size());
                                  //init
@@ -694,21 +694,21 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     }
     for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
     {
-        cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
+        cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << "\n";
     }
 
-    dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+    dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
     vector <double> tot_M_at_age_y_plus_1 = populations.at(sp)->get_tot_M_at_age();
     for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
     {
-        cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
+        cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << "\n";
     }
 
-    dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+    dout(cout << "and the forecast W by age for y+1 (from y) is " << "\n");
     tot_W_at_age_y_plus_1 = populations.at(sp)->get_tot_W_at_age();
     for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
     {
-        cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
+        cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << "\n";
     }
 
 
@@ -717,7 +717,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     recruits = populations.at(sp)->get_tot_N_at_age0();
     forecast_tot_N_at_age_end_y_plus_1.at(0) = recruits;
 
-    dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+    dout(cout << "then, the forecast N by age for y+1 (from y) is " << "\n");
     for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
     {
         forecast_tot_N_at_age_end_y_plus_1.at(i) =
@@ -729,16 +729,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
     {
-        cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+        cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << "\n";
     }
 
     // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
     // TAC per age and then sum over ages....
-    cout << "compute TAC from contributions of age classes---" << endl;
+    cout << "compute TAC from contributions of age classes---" << "\n";
     double contribution_this_age=0.0;
     for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
     {
-        if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+        if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
        contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
             forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -748,9 +748,9 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
        tac_y_plus_1+= contribution_this_age;
 
 
-       cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
+       cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << "\n";
    }
-    cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
+    cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << "\n";
    tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
 
@@ -771,7 +771,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
         tac_y_plus_1=tac_y* (1-(TACpercent/100));
     }
     cout << "but actually the TAC for y+1 will be " << tac_y_plus_1 <<
-        " to comply with the TAC limits..." << endl;
+        " to comply with the TAC limits..." << "\n";
 
 
 
@@ -785,19 +785,19 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
         // 1. perform a short-term forecast on N with F * fmultiplier
 
          //a. for year y from y-1
-         dout(cout << "the  N by age at the end of  y is " << endl);
+         dout(cout << "the  N by age at the end of  y is " << "\n");
          tot_N_at_age_end_previous_y = populations.at(sp)->get_perceived_tot_N_at_age(); // perceived
          for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
          {
-             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
+             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << "\n";
          }
 
          for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << "\n";
          }
 
-         dout(cout << "the forecast F by age for y (from y-1) is " << endl);
+         dout(cout << "the forecast F by age for y (from y-1) is " << "\n");
          vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
@@ -806,23 +806,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << "\n";
          }
 
 
-         dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
          vector <double> tot_M_at_age_y = populations.at(sp)->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << "\n";
          }
 
-         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+         dout(cout << "the forecast N by age for y (from y-1) is " << "\n");
                                       // init
          vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
-         dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
+         dout(cout << "then, the forecast N by age for y (from y-1) is " << "\n");
          for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
              forecast_tot_N_at_age_end_y.at(i) =
@@ -848,17 +848,17 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          if (param_sr[3] < 1)
          {
              recruits = (param_sr[0] * ssb_py_computed_from_ages * exp(-param_sr[1] * ssb_py_computed_from_ages)) * 1000;
-             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", Ricker model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", Ricker model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << "\n";
          }
              // B&H ((alpha*ssb)/(1+beta*ssb)):
          if (param_sr[3] == 1) {
              recruits = (param_sr[0] * ssb_py_computed_from_ages) / (1 + param_sr[1] * ssb_py_computed_from_ages) * 1000;
-             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+             cout << "In HCR: pop" << populations.at(sp)->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << "\n";
          }
          // fixed recruits:
          if (param_sr[3] == 2) {
              recruits = (param_sr[0]) * 1000;
-             cout << "In HCR pop" << populations.at(sp)->get_name() << ", fixed recruits model, New recruits are " << recruits << endl;
+             cout << "In HCR pop" << populations.at(sp)->get_name() << ", fixed recruits model, New recruits are " << recruits << "\n";
          }
 
          forecast_tot_N_at_age_end_y.at(0)=recruits * exp( -((tot_F_at_age_y.at(0)) + tot_M_at_age_y.at(0)) );
@@ -866,7 +866,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << "\n";
          }
 
          // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
@@ -874,11 +874,11 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          // TAC per age and then sum over ages....
          if(tstep==8761)
          {
-            cout << "FOR YEAR y i.e. year 2" << endl;
+            cout << "FOR YEAR y i.e. year 2" << "\n";
              double contribution_this_age=0.0;
             for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
             {
-             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
              contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
                  forecast_tot_N_at_age_end_y.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -886,23 +886,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
             if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
             tac_y+= contribution_this_age;
-            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
+            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << "\n";
             }
-            cout << "tac_y in kg is: " << tac_y << endl;
+            cout << "tac_y in kg is: " << tac_y << "\n";
             tac_y= tac_y/1000;   // convert in tons;
          }
 
 
          //b. for year y+1 from y
 
-         cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << endl;
+         cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << "\n";
          double fbar_y=0;
          vector<double>fbar_ages_min_max =populations.at(sp)->get_fbar_ages_min_max();
          int age_min =fbar_ages_min_max.at(0);
          int age_max =fbar_ages_min_max.at(1);
          if(age_max==0 || (age_max < age_min))
          {
-             dout(cout << "age_max at 0 for this pop??" << endl);
+             dout(cout << "age_max at 0 for this pop??" << "\n");
              age_max=5;
          }
          for(int a = age_min; a < age_max; a++)
@@ -912,22 +912,22 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
                                       // then do the average...
          fbar_y=fbar_y/((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) +1);
-         cout<< "forecasted fbar y is..." << fbar_y  << endl;
+         cout<< "forecasted fbar y is..." << fbar_y  << "\n";
          if(fbar_y>2)
          {
           fbar_y=2; // a safeguard to avoid non-sense computation of TAC change
-          cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << endl;
+          cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << "\n";
          }
 
          // 1. check B trigger
-         cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << endl;
+         cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << "\n";
          double ssb_y_computed_from_ages =0.0;
          for (unsigned int a=0; a < forecast_tot_N_at_age_end_y.size(); a++)
          {
              ssb_y_computed_from_ages+= forecast_tot_N_at_age_end_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
          }
          ssb_y_computed_from_ages= ssb_y_computed_from_ages/1000; // SSB in tons
-         cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << endl;
+         cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << "\n";
 
 
          double fmultiplier=1;
@@ -936,14 +936,14 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
            if(ssb_y_computed_from_ages<Btrigger)
            {
            fmultiplier = 1.0 *FMSY*(ssb_y_computed_from_ages/Btrigger) /fbar_y;
-           cout << "so...Btrigger applies! " << endl;
+           cout << "so...Btrigger applies! " << "\n";
            }
 
           cout << "HCR type 2: the fmultiplier for this pop " << populations.at(sp)->get_name() <<" is then " << fmultiplier <<
-             " given the target F " <<  FMSY << " in the plan..." << " while fbar_y is " << fbar_y << endl;
+             " given the target F " <<  FMSY << " in the plan..." << " while fbar_y is " << fbar_y << "\n";
 
 
-         dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+         dout(cout << "the forecast F by age for y+1 (from y) is " << "\n");
                                       //init
          vector <double> forecast_tot_N_at_age_end_y_plus_1 (forecast_tot_N_at_age_end_y.size());
                                       //init
@@ -955,26 +955,26 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
          for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << "\n";
          }
 
-         dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
          vector <double> tot_M_at_age_y_plus_1 = populations.at(sp)->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << "\n";
          }
 
-         dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast W by age for y+1 (from y) is " << "\n");
          tot_W_at_age_y_plus_1 = populations.at(sp)->get_tot_W_at_age();
          for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << "\n";
          }
 
 
 
-         dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+         dout(cout << "then, the forecast N by age for y+1 (from y) is " << "\n");
          for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
              forecast_tot_N_at_age_end_y_plus_1.at(i) =
@@ -999,16 +999,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << "\n";
          }
 
          // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
          // TAC per age and then sum over ages....
-         cout << "compute TAC from contributions of age classes---" << endl;
+         cout << "compute TAC from contributions of age classes---" << "\n";
          double contribution_this_age=0.0;
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
             contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                  forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1018,9 +1018,9 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
             tac_y_plus_1+= contribution_this_age;
 
 
-            cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
+            cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << "\n";
         }
-         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
+         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << "\n";
         tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
    } // end HCR type 2
@@ -1033,19 +1033,19 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          // 1. perform a short-term forecast on N with F * fmultiplier
 
          //a. for year y from y-1
-         dout(cout << "the  N by age at the end of  y is " << endl);
+         dout(cout << "the  N by age at the end of  y is " << "\n");
          tot_N_at_age_end_previous_y = populations.at(sp)->get_perceived_tot_N_at_age(); // perceived
          for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
          {
-             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
+             cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << "\n";
          }
 
          for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << "\n";
          }
 
-         dout(cout << "the forecast F by age for y (from y-1) is " << endl);
+         dout(cout << "the forecast F by age for y (from y-1) is " << "\n");
          vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
@@ -1054,23 +1054,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
          for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << "\n";
          }
 
 
-         dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
          vector <double> tot_M_at_age_y = populations.at(sp)->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << "\n";
          }
 
-         dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+         dout(cout << "the forecast N by age for y (from y-1) is " << "\n");
                                       // init
          vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
-         dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
+         dout(cout << "then, the forecast N by age for y (from y-1) is " << "\n");
          for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
              forecast_tot_N_at_age_end_y.at(i) =
@@ -1103,7 +1103,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
-             cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+             cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << "\n";
          }
 
          // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
@@ -1111,11 +1111,11 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          // TAC per age and then sum over ages....
          if(tstep==8761)
          {
-            cout << "FOR YEAR y i.e. year 2" << endl;
+            cout << "FOR YEAR y i.e. year 2" << "\n";
              double contribution_this_age=0.0;
             for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
             {
-             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
              contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
                  forecast_tot_N_at_age_end_y.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1123,23 +1123,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
             if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
             tac_y+= contribution_this_age;
-            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
+            cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << "\n";
             }
-            cout << "tac_y in kg is: " << tac_y << endl;
+            cout << "tac_y in kg is: " << tac_y << "\n";
             tac_y= tac_y/1000;   // convert in tons;
          }
 
 
          //b. for year y+1 from y
 
-         cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << endl;
+         cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << "\n";
          double fbar_y=0;
          vector<double>fbar_ages_min_max =populations.at(sp)->get_fbar_ages_min_max();
          int age_min =fbar_ages_min_max.at(0);
          int age_max =fbar_ages_min_max.at(1);
          if(age_max==0 || (age_max < age_min))
          {
-             dout(cout << "age_max at 0 for this pop??" << endl);
+             dout(cout << "age_max at 0 for this pop??" << "\n");
              age_max=5;
          }
          for(int a = age_min; a < age_max; a++)
@@ -1149,22 +1149,22 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
                                       // then do the average...
          fbar_y=fbar_y/((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) +1);
-         cout<< "forecasted fbar y is..." << fbar_y  << endl;
+         cout<< "forecasted fbar y is..." << fbar_y  << "\n";
          if(fbar_y>2)
          {
           fbar_y=2; // a safeguard to avoid non-sense computation of TAC change
-          cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << endl;
+          cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << "\n";
          }
 
          // 1. check B trigger
-         cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << endl;
+         cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << "\n";
          double ssb_y_computed_from_ages =0.0;
          for (unsigned int a=0; a < forecast_tot_N_at_age_end_y.size(); a++)
          {
              ssb_y_computed_from_ages+= forecast_tot_N_at_age_end_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
          }
          ssb_y_computed_from_ages= ssb_y_computed_from_ages/1000; // SSB in tons
-         cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << endl;
+         cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << "\n";
 
 
          double fmultiplier=1;
@@ -1175,14 +1175,14 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
            if(ssb_y_computed_from_ages<Btrigger)
            {
            fmultiplier = 1.0 *FMSY*(ssb_y_computed_from_ages/Btrigger) /fbar_py;
-           cout << "so...Btrigger applies! " << endl;
+           cout << "so...Btrigger applies! " << "\n";
            }
 
            cout << "HCR type 3: the fmultiplier for this pop " << populations.at(sp)->get_name() <<" is then " << fmultiplier <<
-             " given the target F " <<  FMSY << " in the plan..." << " while fbar_y is " << fbar_y << endl;
+             " given the target F " <<  FMSY << " in the plan..." << " while fbar_y is " << fbar_y << "\n";
 
 
-         dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+         dout(cout << "the forecast F by age for y+1 (from y) is " << "\n");
                                       //init
          vector <double> forecast_tot_N_at_age_end_y_plus_1 (forecast_tot_N_at_age_end_y.size());
                                       //init
@@ -1194,26 +1194,26 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
          }
          for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << "\n";
          }
 
-         dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
          vector <double> tot_M_at_age_y_plus_1 = populations.at(sp)->get_tot_M_at_age();
          for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << "\n";
          }
 
-         dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+         dout(cout << "and the forecast W by age for y+1 (from y) is " << "\n");
          tot_W_at_age_y_plus_1 = populations.at(sp)->get_tot_W_at_age();
          for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
          {
-             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
+             cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << "\n";
          }
 
 
 
-         dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+         dout(cout << "then, the forecast N by age for y+1 (from y) is " << "\n");
          for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
          {
              forecast_tot_N_at_age_end_y_plus_1.at(i) =
@@ -1238,16 +1238,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+             cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << "\n";
          }
 
          // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
          // TAC per age and then sum over ages....
-         cout << "compute TAC from contributions of age classes---" << endl;
+         cout << "compute TAC from contributions of age classes---" << "\n";
          double contribution_this_age=0.0;
          for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
          {
-             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+             if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
             contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                  forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1257,9 +1257,9 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
             tac_y_plus_1+= contribution_this_age;
 
 
-            cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
+            cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << "\n";
         }
-         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
+         cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << "\n";
         tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
 
@@ -1268,24 +1268,24 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
    if(HCR==4){ //  statuquo TAC
 
-             cout << "Statuquo TAC definition for next year... " << endl;
+             cout << "Statuquo TAC definition for next year... " << "\n";
              double fmultiplier=1.0;
              // 1. perform a short-term forecast on N with F * fmultiplier
 
               //a. for year y from y-1
-              dout(cout << "the  N by age at the end of  y is " << endl);
+              dout(cout << "the  N by age at the end of  y is " << "\n");
               tot_N_at_age_end_previous_y = populations.at(sp)->get_perceived_tot_N_at_age(); // perceived
               for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
               {
-                  cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
+                  cout << "tot_N_at_age_end_previous_y age" << i << ": " << tot_N_at_age_end_previous_y.at(i) << "\n";
               }
 
               for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
               {
-                  cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << endl;
+                  cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_end_previous_y age" << i << ": " << tot_F_at_age_end_previous_y.at(i) << "\n";
               }
 
-              dout(cout << "the forecast F by age for y (from y-1) is " << endl);
+              dout(cout << "the forecast F by age for y (from y-1) is " << "\n");
               vector <double> tot_F_at_age_y(tot_F_at_age_end_previous_y.size());
               for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
               {
@@ -1294,23 +1294,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               }
               for (unsigned int i=0; i < tot_F_at_age_y.size(); i++)
               {
-                  cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << endl;
+                  cout << "pop" << populations.at(sp)->get_name() << ": tot_F_at_age_y age" << i << ": " << tot_F_at_age_y.at(i) << "\n";
               }
 
 
-              dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+              dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
               vector <double> tot_M_at_age_y = populations.at(sp)->get_tot_M_at_age();
               for (unsigned int i=0; i < tot_M_at_age_y.size(); i++)
               {
-                  cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << endl;
+                  cout << "pop" << populations.at(sp)->get_name() << ": tot_M_at_age_y age" << i << ": " << tot_M_at_age_y.at(i) << "\n";
               }
 
-              dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+              dout(cout << "the forecast N by age for y (from y-1) is " << "\n");
                                            // init
               vector <double> forecast_tot_N_at_age_end_y(tot_N_at_age_end_previous_y.size());
 
 
-              dout(cout << "then, the forecast N by age for y (from y-1) is " << endl);
+              dout(cout << "then, the forecast N by age for y (from y-1) is " << "\n");
               for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
               {
                   forecast_tot_N_at_age_end_y.at(i) =
@@ -1344,7 +1344,7 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
               for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
               {
-                  cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << endl;
+                  cout << "pop" << populations.at(sp)->get_name() << ": forecast_tot_N_at_age_end_y at age" << i << ": " << forecast_tot_N_at_age_end_y.at(i) << "\n";
               }
 
               // CAUTION in YEAR 2 compute the TAC y (in tons) BECAUSE THIS INTERMEDIATE YEAR IS MISSING!
@@ -1352,11 +1352,11 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               // TAC per age and then sum over ages....
               if(tstep==8761)
               {
-                 cout << "FOR YEAR y i.e. year 2" << endl;
+                 cout << "FOR YEAR y i.e. year 2" << "\n";
                   double contribution_this_age=0.0;
                  for (unsigned int i=0; i < forecast_tot_N_at_age_end_y.size(); i++)
                  {
-                  if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+                  if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
                   contribution_this_age=  (tot_F_at_age_y.at(i)/((tot_F_at_age_y.at(i))+tot_M_at_age_y.at(i))) *
                       forecast_tot_N_at_age_end_y.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1364,23 +1364,23 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
                  if(!isfinite(contribution_this_age)) contribution_this_age=0.0;
                  tac_y+= contribution_this_age;
-                 cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << endl;
+                 cout << "ADDING the contribution of age" << i << ", tac_y in kg is now   : " << tac_y << "\n";
                  }
-                 cout << "tac_y in kg is: " << tac_y << endl;
+                 cout << "tac_y in kg is: " << tac_y << "\n";
                  tac_y= tac_y/1000;   // convert in tons;
               }
 
 
               //b. for year y+1 from y
 
-              cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << endl;
+              cout<< "pop" << populations.at(sp)->get_name() << ": compute forecasted fbar y..." << "\n";
               double fbar_y=0;
               vector<double>fbar_ages_min_max =populations.at(sp)->get_fbar_ages_min_max();
               int age_min =fbar_ages_min_max.at(0);
               int age_max =fbar_ages_min_max.at(1);
               if(age_max==0 || (age_max < age_min))
               {
-                  dout(cout << "age_max at 0 for this pop??" << endl);
+                  dout(cout << "age_max at 0 for this pop??" << "\n");
                   age_max=5;
               }
               for(int a = age_min; a < age_max; a++)
@@ -1390,31 +1390,31 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               }
                                            // then do the average...
               fbar_y=fbar_y/((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) + 1);
-              cout<< "forecasted fbar y is..." << fbar_y  << endl;
+              cout<< "forecasted fbar y is..." << fbar_y  << "\n";
               if(fbar_y>2)
               {
                fbar_y=2; // a safeguard to avoid non-sense computation of TAC change
-               cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << endl;
+               cout << "fbar_y set to 2 for pop " << populations.at(sp)->get_name() << "\n";
               }
 
               // 1. check B trigger
-              cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << endl;
+              cout << "pop" << populations.at(sp)->get_name() << ": F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << "\n";
               double ssb_y_computed_from_ages =0.0;
               for (unsigned int a=0; a < forecast_tot_N_at_age_end_y.size(); a++)
               {
                   ssb_y_computed_from_ages+= forecast_tot_N_at_age_end_y.at(a)* tot_W_at_age_y_plus_1.at(a) * maturity_at_age_y_plus_1.at(a); // SSB
               }
               ssb_y_computed_from_ages= ssb_y_computed_from_ages/1000; // SSB in tons
-              cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << endl;
+              cout << "forecast SSB y pop"<< populations.at(sp)->get_name() <<" in tons is " << ssb_y_computed_from_ages << "  for this stock...(when computed from ages (perceived)) " << "\n";
 
 
               fmultiplier=1.0; // STATU QUO
 
                cout << "HCR type 4: the fmultiplier for this pop " << populations.at(sp)->get_name() <<
-                       " is then " << fmultiplier << " while fbar_y is " << fbar_y << endl;
+                       " is then " << fmultiplier << " while fbar_y is " << fbar_y << "\n";
 
 
-              dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+              dout(cout << "the forecast F by age for y+1 (from y) is " << "\n");
                                            //init
               vector <double> forecast_tot_N_at_age_end_y_plus_1 (forecast_tot_N_at_age_end_y.size());
                                            //init
@@ -1426,26 +1426,26 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
               }
               for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
               {
-                  cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
+                  cout << "tot_F_at_age_y_plus_1 age" << i << ": " << tot_F_at_age_y_plus_1.at(i) << "\n";
               }
 
-              dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+              dout(cout << "and the forecast M by age for y+1 (from y) is " << "\n");
               vector <double> tot_M_at_age_y_plus_1 = populations.at(sp)->get_tot_M_at_age();
               for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
               {
-                  cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
+                  cout << "tot_M_at_age_y_plus_1 age" << i << ": " << tot_M_at_age_y_plus_1.at(i) << "\n";
               }
 
-              dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+              dout(cout << "and the forecast W by age for y+1 (from y) is " << "\n");
               tot_W_at_age_y_plus_1 = populations.at(sp)->get_tot_W_at_age();
               for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
               {
-                  cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
+                  cout << "tot_W_at_age_y_plus_1 age" << i << ": " << tot_W_at_age_y_plus_1.at(i) << "\n";
               }
 
 
 
-              dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+              dout(cout << "then, the forecast N by age for y+1 (from y) is " << "\n");
               for (unsigned int i=1; i < forecast_tot_N_at_age_end_y.size(); i++)
               {
                   forecast_tot_N_at_age_end_y_plus_1.at(i) =
@@ -1470,16 +1470,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
               for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
               {
-                  cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << endl;
+                  cout << "forecast_tot_N_at_age_end_y_plus_1 age" << i << ": " << forecast_tot_N_at_age_end_y_plus_1.at(i) << "\n";
               }
 
               // 4. compute the TAC y+1 (in tons) according to the forecast N (Baronovs equation)
               // TAC per age and then sum over ages....
-              cout << "compute TAC from contributions of age classes---" << endl;
+              cout << "compute TAC from contributions of age classes---" << "\n";
               double contribution_this_age=0.0;
               for (unsigned int i=0; i < forecast_tot_N_at_age_end_y_plus_1.size(); i++)
               {
-                  if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+                  if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << "\n";
 
                  contribution_this_age=  (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                       forecast_tot_N_at_age_end_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1489,9 +1489,9 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
                  tac_y_plus_1+= contribution_this_age;
 
 
-                 cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << endl;
+                 cout << "ADDING the contribution of age" << i << ", tac_y_plus_1 in kg is now   : " << tac_y_plus_1 << "\n";
              }
-              cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << endl;
+              cout << "tac_y_plus_1 in kg is: " << tac_y_plus_1 << "\n";
              tac_y_plus_1= tac_y_plus_1/1000;   // convert in tons;
 
 
@@ -1505,16 +1505,16 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
 
     if(tac_y==0 || !isfinite(tac_y))
     {
-        cout << "WARNING: TACs Option is active but TAC y for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-        cout << "a fake, non binding value is filled in for now" << endl;
+        cout << "WARNING: TACs Option is active but TAC y for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << "\n";
+        cout << "a fake, non binding value is filled in for now" << "\n";
 
         tac_y =100000; // in tons, and not limiting the fisheries
     }
 
      if(tac_y_plus_1==0 || !isfinite(tac_y_plus_1))
      {
-         cout << "WARNING: TACs Option is active but TAC y+1 for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << endl;
-         cout << "a fake, non binding value is filled in for now" << endl;
+         cout << "WARNING: TACs Option is active but TAC y+1 for this species found to go to 0.... Consider informing a initial TAC value for this pop..." << "\n";
+         cout << "a fake, non binding value is filled in for now" << "\n";
 
          tac_y_plus_1 =100000; // in tons, and not limiting the fisheries
      }
@@ -1524,10 +1524,10 @@ bool computeTAC(vector<Population* >& populations, int sp, int tstep,
     if(tstep==8761) {
         populations.at(sp)->get_tac()->add_tac_to_ts(tac_y, 1);
         populations.at(sp)->get_tac()->add_tac_to_ts(tac_y_plus_1, -1);
-        cout << "so, the TAC (in tons) for y will be " << tac_y << endl;
-        cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
+        cout << "so, the TAC (in tons) for y will be " << tac_y << "\n";
+        cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << "\n";
     } else{
-        cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
+        cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << "\n";
         populations.at(sp)->get_tac()->add_tac_to_ts(tac_y_plus_1, -1);
     }
 

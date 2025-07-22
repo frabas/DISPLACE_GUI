@@ -154,7 +154,7 @@ multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_na
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (types::helpers::toValueIdMultimap<types::NodeId>(fgrounds));
@@ -191,7 +191,7 @@ read_fgrounds_init(string a_quarter, string folder_name_parameterization, string
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (types::helpers::toValueIdMultimap<types::NodeId>(fgrounds_init));
@@ -226,7 +226,7 @@ multimap<string, types::NodeId> read_harbours(string a_quarter, string folder_na
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (types::helpers::toValueIdMultimap<types::NodeId>(harbours));
@@ -261,7 +261,7 @@ multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
 
@@ -297,7 +297,7 @@ read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, s
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
 
@@ -333,7 +333,7 @@ multimap<string, double> read_freq_harbours(string a_quarter, string folder_name
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (freq_harbours);
@@ -368,7 +368,7 @@ multimap<string, double> read_vessels_betas(string a_semester, string folder_nam
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (vessels_betas);
@@ -408,7 +408,7 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
     {
         cout << pos->second << " ";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return (vessels_tacs);
@@ -442,7 +442,7 @@ multimap<string, double> read_initial_fishing_credits(string folder_name_paramet
     {
         cout << pos->second << " ";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return (initial_fishing_credits);
@@ -482,7 +482,7 @@ read_possible_metiers(string a_quarter, string a_vessel, string folder_name_para
         {
             dout(cout << pos->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 
@@ -522,7 +522,7 @@ read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name
         {
             dout(cout << pos2->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 
@@ -562,7 +562,7 @@ read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name
         {
             dout(cout << pos2->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 
@@ -603,7 +603,7 @@ read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string fold
         {
             dout(cout << pos2->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 
@@ -644,7 +644,7 @@ read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string fold
         {
             dout(cout << pos2->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 

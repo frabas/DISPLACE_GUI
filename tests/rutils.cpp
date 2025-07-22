@@ -62,16 +62,16 @@ BOOST_AUTO_TEST_CASE( RUtils_do_Sample )
         auto r = callDoSample(tv);
 
 #if 0
-        std::cout << "Test num: " << testnum << " : " << r.size() << " results. " << std::endl;
+        std::cout << "Test num: " << testnum << " : " << r.size() << " results. " << "\n";
         int c = 1;
         for (auto s : r) {
 
             std::cout << s << ",";
             if ((c % 10) == 0)
-                std::cout << std::endl;
+                std::cout << "\n";
             ++c;
         }
-        std::cout << std::endl;
+        std::cout << "\n";
 #endif
 
         auto &exp = std::get<4>(tv);

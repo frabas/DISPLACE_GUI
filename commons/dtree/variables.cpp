@@ -37,6 +37,7 @@ const char *const VariableNames::names[] = {
         "fishPriceTargetStockIs",      // goFishing
         "fuelPriceIs",                  // goFishing
         "todayIs",                      // goFishing
+        "dayIs",                      // goFishing
         "monthIs",                      // goFishing
         "stockTargetIs",                      // goFishing
         "riskOfBycatchAvoidedStksNowIs", // goFishing
@@ -98,6 +99,7 @@ const char *const VariableNames::bins[][40] = {
         {"low",             "medium",      "high",   0},
         {"low",             "medium",      "high",   0},  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targeted stock(s)
         {"week start",      "week ending", 0},
+        {"first week day",      "other days", 0},
         {"Jan",             "Feb",         "Mar",    "Apr",    "May",  "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 0}, // current_month
         {"0",               "1",           "2",      "3",      "4",    "5",   "6",   "7",   "8",   "9",
                                                                                                           "10",  "11",  "12", "13", "14", "15", "16", "17", "18", "19",

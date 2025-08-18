@@ -647,6 +647,8 @@ void Vessel::init()
         mStateEvaluators[dtree::windSpeedIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
         mStateEvaluators[dtree::todayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
+        mStateEvaluators[dtree::dayIs] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselDayIsStateEvaluator);
         mStateEvaluators[dtree::monthIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchAvoidedStksNowIs] =

@@ -81,6 +81,22 @@ public:
     }
 };
 
+class VesselDayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    static constexpr double FirstWorkDay = 0.0;
+    static constexpr double RestOfTheWeekDay = 1.0;
+
+    VesselDayIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel* vessel) const {
+        int wday = (tstep / 24) % 7;
+            if (wday < 1)
+                return FirstWorkDay;
+            return RestOfTheWeekDay;
+    }
+};
+
+
 class VesselMonthIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:

@@ -17,6 +17,7 @@ enum Variable {
     fishPriceTargetStockIs,      // goFishing
     fuelPriceIs,                  // goFishing
     todayIs,                      // goFishing
+    dayIs,                      // goFishing
     monthIs,                      // goFishing
     stockTargetIs,                // goFishing
     riskOfBycatchAvoidedStksNowIs, // goFishing

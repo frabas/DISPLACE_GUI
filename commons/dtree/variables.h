@@ -52,6 +52,7 @@ enum Variable {
     catchVolumeIs, // StopFishing
     fuelTankIs, // StopFishing
     endOfTheDayIs, // StopFishing
+    fridayIs, // StopFishing
     nbOfDaysAtSeaSoFarIs, // StopFishing
     moreThan3DaysAfterFirstCatchIs, // StopFishing
 //    windSpeedIs, // goFishing and StopFishing

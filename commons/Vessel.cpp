@@ -688,7 +688,9 @@ void Vessel::init()
             std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselMoreThan3DaysAfterFirstCatchIsStateEvaluator);
         mStateEvaluators[dtree::endOfTheDayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
-        
+        mStateEvaluators[dtree::fridayIs] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselFridayIsStateEvaluator);
+
 
         // chooseGround
         mStateEvaluators[dtree::smartCatch] =

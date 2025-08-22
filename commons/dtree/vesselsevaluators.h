@@ -96,6 +96,20 @@ public:
     }
 };
 
+class VesselFridayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    static constexpr double Friday = 0.0;
+    static constexpr double RestOfTheWeekDay = 1.0;
+
+    VesselFridayIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel* vessel) const {
+        int wday = (tstep / 24) % 7;
+        if (wday ==4)
+            return Friday;
+        return RestOfTheWeekDay;
+    }
+};
 
 class VesselMonthIsStateEvaluator : public dtree::StateEvaluator {
 private:

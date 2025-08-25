@@ -28,7 +28,7 @@
 #include <modelobjects/harbourdata.h>
 #include <utils/displaceexception.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDebug>
 
 InputFileParser::InputFileParser()
@@ -244,16 +244,18 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
 
 bool InputFileParser::pathParseRelevantNodes(const QString &refpath, QString &fnodePath, QString &harbPath)
 {
-    QRegExp regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+    QRegularExpression regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+    QRegularExpressionMatch match = regexp.match(refpath);
 
-    if (regexp.indexIn(refpath) == -1) {
+    if (!match.hasMatch())
+    {
         return false;
     }
 
     fnodePath = QString("%1/vesselsspe_fgrounds_quarter%2.dat")
-            .arg(regexp.cap(1)).arg("%1");
+                .arg(match.captured(1)).arg("%1");
     harbPath = QString("%1/vesselsspe_harbours_quarter%2.dat")
-            .arg(regexp.cap(1)).arg("%1");
+               .arg(match.captured(1)).arg("%1");
 
     return true;
 
@@ -282,7 +284,7 @@ bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
+        QStringList fields = line.split(QRegularExpression("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
         if (fields.size() < 2) {
             qDebug() << "Cannot read relevant nodes. " << file << "at line " << linenum;
             return false;
@@ -316,8 +318,9 @@ bool InputFileParser::parseRelevantInterNodes(const QString &file, QVector<int> 
 
     bool ok;
     int linenum = 1;
-    while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
+    while (!(line = stream.readLine()).isNull())
+    {
+        QStringList fields = line.split(QRegularExpression("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
         if (fields.size() < 2) {
             qDebug() << "Cannot read relevant nodes. " << file << "at line " << linenum;
             return false;
@@ -354,8 +357,8 @@ bool InputFileParser::parseStockNamesFile(const QString &path, QMap<QString, int
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(QRegExp("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
-       // int nd = fields[1].toInt(&ok);
+        QStringList fields = line.split(QRegularExpression("\\s+"), Qt::SplitBehaviorFlags::SkipEmptyParts);
+        // int nd = fields[1].toInt(&ok);
         int nd = fields[0].toInt(&ok);
         if (!ok) {
             (new displace::DisplaceException(QObject::tr("Failed to parse field #2"), path, linenum))->raise();

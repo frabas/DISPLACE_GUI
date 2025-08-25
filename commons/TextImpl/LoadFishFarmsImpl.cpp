@@ -132,7 +132,7 @@ bool TextfileModelLoader::loadFishFarmsImpl()
     vector<Fishfarm *> fishfarms(all_fishfarms_ids.size());
     for (unsigned int i = 0; i < all_fishfarms_ids.size(); i++) {
 
-        cout << "create fishfarm num: " << i << endl;
+        cout << "create fishfarm num: " << i << "\n";
 
         fishfarms[i] = new Fishfarm(
                 all_fishfarms_ids.at(i),
@@ -197,14 +197,14 @@ bool TextfileModelLoader::loadFishFarmsImpl()
         model().nodes().at(idx_nodes.at(i))->set_ff_names_on_node(
                 all_fishfarms_ids.at(i));
 
-        cout << fishfarms[i]->get_name() << endl;
+        cout << fishfarms[i]->get_name() << "\n";
         cout << "on node " << idx_nodes.at(i) << " put ffarm "
              << model().nodes().at(idx_nodes.at(i))->get_ff_names_on_node().at(0)
-             << endl;
-        cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << endl;
+             << "\n";
+        cout << "at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y() << ") " << "\n";
         cout << "end for harvest at " << end_day_harvests.at(i) << " given "
              << fishfarms[i]->get_end_day_harvest()
-             << endl;
+             << "\n";
     }
     model().setFishFarms(std::move(fishfarms));
 

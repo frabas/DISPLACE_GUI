@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5)
 project(displace VERSION 1.0 LANGUAGES C CXX)
 
 set(VCPKG_MANIFEST_INSTALL OFF)

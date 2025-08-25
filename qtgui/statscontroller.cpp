@@ -56,7 +56,7 @@ StatsController::StatsController(QObject *parent)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
 
-    cout << "Stats controller is created" << endl;
+    cout << "Stats controller is created" << "\n";
 }
 
 void StatsController::setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller)

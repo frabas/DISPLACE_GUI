@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include <QMessageBox>
 
@@ -675,11 +676,13 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             v.mCatches.push_back(value);
         }
 
-        QRegExp r(R"%(M(\((\d+)\))?.*)%");
-        if (r.indexIn(fields[10+pop]) != -1) {
+        QRegularExpression r(R"%(M(\((\d+)\))?.*)%");
+        QRegularExpressionMatch match = r.match(fields[10 + pop]);
+        if (match.hasMatch())
+        {
             // metier id
             bool ok;
-            v.metierId = r.cap(2).toInt(&ok);
+            v.metierId = match.captured(2).toInt(&ok);
             if (!ok)
                 v.metierId = -1;
         }

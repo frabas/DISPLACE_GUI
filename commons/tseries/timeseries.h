@@ -25,7 +25,7 @@ public:
     int evaluateThresholds (int idx) {
         int i;
         for (i = 0; i < (int)mThresholds.size(); ++i) {
-         //std::cout << "in evaluateThresholds(), current data is " <<  mData.at(idx) << ", compared to threshold " << i << ": " << mThresholds[i] << std::endl;
+         //std::cout << "in evaluateThresholds(), current data is " <<  mData.at(idx) << ", compared to threshold " << i << ": " << mThresholds[i] << "\n";
             if (std::isnan(mThresholds[i]) || mData.at(idx) < mThresholds[i])
                 return i;
         }

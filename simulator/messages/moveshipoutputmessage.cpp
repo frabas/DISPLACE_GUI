@@ -27,7 +27,7 @@ bool MoveShipOutputMessage::send(ostream &strm)
         << data.idx << " "
         << setprecision(6) << fixed << data.x << " "
         << setprecision(6) << fixed << data.y << " "
-        << setprecision(2) << fixed << data.course << endl;
+        << setprecision(2) << fixed << data.course << "\n";
 
     return true;
 }

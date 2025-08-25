@@ -18,6 +18,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+// This is required to avoid `error C2039: 'byte': is not a member of 'std'`
+#include <cstddef>
+
+
 #include "displacemodel.h"
 #include "utils/safe_strerror.h"
 #include "readvesseldata.h"
@@ -38,8 +42,7 @@
 #include <readdata.h>
 
 #include <qdebug.h>
-#include <QtAlgorithms>
-#include <QtDebug>
+#include <QRegularExpression>
 
 #include "storage/sqliteoutputstorage.h"
 #include "msqlitecpp/v1/sqlitestorage.h"
@@ -251,7 +254,7 @@ bool DisplaceModel::load(QString path, ModelType type)
         return false;
     }
 
-    cout << "load...ok" << endl;
+    cout << "load...ok" << "\n";
     mModelType = type;
     return true;
 }
@@ -259,16 +262,17 @@ bool DisplaceModel::load(QString path, ModelType type)
 bool DisplaceModel::parse(const QString &path, QString *basepath, QString *inputname, QString *outputname)
 {
     // parse this form:  inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput+".dat";
+    QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    QRegularExpressionMatch match = regexp.match(path);
 
-    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
-
-    if (regexp.indexIn(path) == -1) {
+    if (!match.hasMatch())
+    {
         return false;
     }
 
-    *basepath = regexp.cap(1);
-    *inputname = regexp.cap(2);
-    *outputname = regexp.cap(3);
+    *basepath = match.captured(1);
+    *inputname = match.captured(2);
+    *outputname = match.captured(3);
 
     return true;
 }
@@ -1273,7 +1277,7 @@ bool DisplaceModel::exportGraph(const QString &path)
     QTextStream strm(&file);
             foreach (std::shared_ptr<NodeData> nd, mNodes) {
             if (!nd->isDeleted()) {
-                strm << nd->get_x() << " " << nd->get_y() << " " << nd->get_harbour() << endl;
+                strm << nd->get_x() << " " << nd->get_y() << " " << nd->get_harbour() << "\n";
             }
         }
 
@@ -2308,12 +2312,12 @@ bool DisplaceModel::loadNodes()
             double a_muliplier_on_fish_price = 1.0;
             if (a_name != "none" && a_point == inode) {
 
-                cout << "load prices for port " << a_name << " which is point " << a_point << endl;
+                cout << "load prices for port " << a_name << " which is point " << a_point << "\n";
                 //int er = read_prices_per_harbour(a_point, a_quarter, prices, mName.toStdString());
                 read_prices_per_harbour_each_pop_per_cat(a_point, a_quarter, fishprices_each_species_per_cat,
                                                          mInputName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
-                cout << "....OK" << endl;
+                cout << "....OK" << "\n";
            
                 if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishprice_plus100percent"))
                 {
@@ -2334,12 +2338,12 @@ bool DisplaceModel::loadNodes()
 
                 cout << a_point
                      << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)"
-                     << endl;
+                     << "\n";
                 //int er = read_prices_per_harbour(a_port, "1", prices, mName.toStdString()); // delete later on when final parameterisation
-                cout << "then go for the port: " << a_port << " instead" << endl;
+                cout << "then go for the port: " << a_port << " instead" << "\n";
                 read_prices_per_harbour_each_pop_per_cat(a_port, "1", fishprices_each_species_per_cat,
                                                          mInputName.toStdString(), mBasePath.toStdString());
-                cout << "....OK" << endl;
+                cout << "....OK" << "\n";
 
             }
 
@@ -2370,7 +2374,7 @@ bool DisplaceModel::loadNodes()
                     cout << pos->first << " " << pos->second;
             }
                 
-                cout << "...OK" << endl;
+                cout << "...OK" << "\n";
             
             //stringstream out;
             //out << i;
@@ -2385,7 +2389,7 @@ bool DisplaceModel::loadNodes()
             vector<double> freq_usual_fgrounds;
             freq_usual_fgrounds.push_back(1.0);
 
-            cout << "create an harbour..." << endl;
+            cout << "create an harbour..." << "\n";
             std::shared_ptr<Harbour> h(new Harbour(types::NodeId(i),
                                                    graph_coord_x[i],
                                                    graph_coord_y[i],
@@ -2442,7 +2446,7 @@ bool DisplaceModel::loadNodes()
             n->setHarbourId(mHarbours.size() - 1);
             mNodes.push_back(n);
         } else {
-            //cout << "create a node..." << endl;
+            //cout << "create a node..." << "\n";
             std::shared_ptr<Node> nd(new Node(types::NodeId(i),
                                               graph_coord_x[i],
                                               graph_coord_y[i],
@@ -2500,7 +2504,7 @@ bool DisplaceModel::loadNodes()
 
     // read nodes in polygons for area-based management
 #if 0
-    cout << "read node in polygons..." << endl;
+    cout << "read node in polygons..." << "\n";
     string a_graph_name="a_graph";
     a_graph_name=a_graph_name+a_graph_s;
     multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
@@ -2527,7 +2531,7 @@ bool DisplaceModel::loadNodes()
             mNodes.at(a_idx)->setAreaType(0);
            }
         }
-    cout << "OK for in polygons..." << endl;
+    cout << "OK for in polygons..." << "\n";
 #endif
 
 
@@ -2613,7 +2617,7 @@ bool DisplaceModel::loadVessels()
     vector<int> firm_ids;
     vector<VesselCalendar> calendar;
 
-    cout << "read_vessels_features() in loadVessels()" << endl;
+    cout << "read_vessels_features() in loadVessels()" << "\n";
 
     //qDebug() << "Read in for vessel for graph "  << QString::fromStdString(a_graph_name) << "..ok";
 
@@ -2651,7 +2655,7 @@ bool DisplaceModel::loadVessels()
 
     qDebug() << "Read in read_vessels_economic_features..";
 
-    cout << "read_vessels_economic_features() in loadVessels()" << endl;
+    cout << "read_vessels_economic_features() in loadVessels()" << "\n";
     if (!read_vessels_economics_features(
             vesselids,
             this_vessel_nb_crews,
@@ -2674,41 +2678,41 @@ bool DisplaceModel::loadVessels()
 
     qDebug() << "Read in read_vessels_economic_features..ok";
 
-    cout << "fill in multimaps in loadVessels()" << endl;
+    cout << "fill in multimaps in loadVessels()" << "\n";
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-    cout << "read_fgrounds in loadVessels()" << endl;
+    cout << "read_fgrounds in loadVessels()" << "\n";
     auto fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
-    cout << "read_fgrounds_init in loadVessels()" << endl;
+    cout << "read_fgrounds_init in loadVessels()" << "\n";
     auto fgrounds_init = read_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
-    cout << "read_harbours in loadVessels()" << endl;
+    cout << "read_harbours in loadVessels()" << "\n";
     auto harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
-    cout << "read_freq_fgrounds in loadVessels()" << endl;
+    cout << "read_freq_fgrounds in loadVessels()" << "\n";
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(),
                                                                 mBasePath.toStdString());
-    cout << "read_freq_fgrounds_init in loadVessels()" << endl;
+    cout << "read_freq_fgrounds_init in loadVessels()" << "\n";
     multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, mInputName.toStdString(),
                                                                           mBasePath.toStdString());
-    cout << "read_freq_harbours in loadVessels()" << endl;
+    cout << "read_freq_harbours in loadVessels()" << "\n";
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mInputName.toStdString(),
                                                                 mBasePath.toStdString());
-    cout << "read_vessels_betas in loadVessels()" << endl;
+    cout << "read_vessels_betas in loadVessels()" << "\n";
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mInputName.toStdString(),
                                                                 mBasePath.toStdString());
-    cout << "read_vessels_tacs in loadVessels()" << endl;
+    cout << "read_vessels_tacs in loadVessels()" << "\n";
     multimap<string, double> vessels_tacs = read_vessels_tacs(a_semester, mInputName.toStdString(),
                                                               mBasePath.toStdString());
 
     // debug
     if (fgrounds.size() != freq_fgrounds.size()) {
-        cout << "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
+        cout << "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << "\n";
         // int tmp;
         // cin >> tmp;				 // pause
     }
     if (harbours.size() != freq_harbours.size()) {
-        cout << "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
+        cout << "please correct .dat files so that harbours and freq_harbours have same size!!!" << "\n";
         // int tmp;
         // cin >> tmp;				 // pause
     }
@@ -2739,7 +2743,7 @@ bool DisplaceModel::loadVessels()
 
     //here
     for (size_t i = 0; i < vesselids.size(); i++) {
-        cout << "create vessel " << i << endl;
+        cout << "create vessel " << i << "\n";
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
         possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mInputName.toStdString(),
@@ -2758,7 +2762,7 @@ bool DisplaceModel::loadVessels()
         // debug
         if (possible_metiers.size() != freq_possible_metiers.size()) {
             cout << "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
-                 << "for the vessel " << vesselids[i] << endl;
+                 << "for the vessel " << vesselids[i] << "\n";
             // int tmp;
             // cin >> tmp;			 // pause
         }
@@ -2766,7 +2770,7 @@ bool DisplaceModel::loadVessels()
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
         spe_fgrounds = find_entries(fgrounds, vesselids[i]);
-        cout << " nb of grounds for this vessel is " << spe_fgrounds.size() << endl;
+        cout << " nb of grounds for this vessel is " << spe_fgrounds.size() << "\n";
         spe_fgrounds_init = find_entries(fgrounds_init, vesselids[i]);
         spe_freq_fgrounds = find_entries(freq_fgrounds, vesselids[i]);
         spe_freq_fgrounds_init = find_entries(freq_fgrounds_init, vesselids[i]);
@@ -2817,12 +2821,12 @@ bool DisplaceModel::loadVessels()
             start_harbour = one_harbour[0];
         } else {
             // if missing info for a given vessel for this quarter
-            cout << "no specified harbour in this quarter for this vessel..." << endl;
+            cout << "no specified harbour in this quarter for this vessel..." << "\n";
             // CAUTION: LIKE A MAGIC NUMBER HERE!!!
             start_harbour = find_entries(harbours, vesselids[0])[0];
             spe_harbours.push_back(start_harbour);
             spe_freq_harbours.push_back(1);
-            cout << "then take node: " << start_harbour << endl;
+            cout << "then take node: " << start_harbour << "\n";
         }
 
         std::shared_ptr<Vessel> v(new Vessel(mNodes.at(start_harbour.toIndex())->mNode.get(),
@@ -2888,15 +2892,15 @@ bool DisplaceModel::loadVessels()
         // check
         cout << "create vessel " << v->get_idx() << " " << v->get_name() << " " << v->get_nationality() << " on "
              << v->get_loc()->get_idx_node().toIndex() << " with coordinates "
-             << v->get_loc()->get_x() << " " << v->get_loc()->get_y() << endl;
-        //   << " and metier " << v->get_metier()->get_name() <<  endl;
+             << v->get_loc()->get_x() << " " << v->get_loc()->get_y() << "\n";
+        //   << " and metier " << v->get_metier()->get_name() <<  "\n";
         //vector<double> a_ogive = v->get_metier()->get_selectivity_ogive() ;
-        //cout << "with selectivity ogive " << endl;
+        //cout << "with selectivity ogive " << "\n";
         //for (int i=0; i<a_ogive.size(); i++)
         //{
         //    cout  << " " << a_ogive[i] << " " ;
         //}
-        //cout << endl; // well...nothing there because a metier is still not assigned at this stage...
+        //cout << "\n"; // well...nothing there because a metier is still not assigned at this stage...
 
 
 
@@ -3005,7 +3009,7 @@ bool DisplaceModel::initShips()
 
 
     for (unsigned int i = 0; i < shipids.size(); i++) {
-        cout << "create ship " << shipids[i] << endl;
+        cout << "create ship " << shipids[i] << "\n";
 
         lats = find_entries_i_d(shiplanes_lat, lane_ids[i]);
         longs = find_entries_i_d(shiplanes_lon, lane_ids[i]);
@@ -3023,7 +3027,7 @@ bool DisplaceModel::initShips()
         std::shared_ptr<ShipData> shd(new ShipData(sh));
         mShips.push_back(shd);
 
-        cout << "....OK " << endl;
+        cout << "....OK " << "\n";
 
     }
 
@@ -3151,7 +3155,7 @@ bool DisplaceModel::initFishfarm()
 
 
     for (size_t id = 0; id < all_fishfarms_ids.size(); ++id) {
-        cout << "create fishfarms " << all_fishfarms_ids.at(id) << endl;
+        cout << "create fishfarms " << all_fishfarms_ids.at(id) << "\n";
 
         auto node = mNodes.at(idx_nodes.at(id));
         auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id), node->mNode.get(), 0,
@@ -3199,7 +3203,7 @@ bool DisplaceModel::initWindmill()
     map<int, double> init_size_per_windmill = read_size_per_windmill(mInputName.toStdString(), mBasePath.toStdString());
 
     for (auto iter : init_size_per_windmill) {
-        cout << "create windmill " << iter.first << endl;
+        cout << "create windmill " << iter.first << "\n";
 
         auto node = mNodes.at(iter.first);
         auto wm = std::make_shared<Windmill>(iter.first, "a_windfarm_name", node->mNode.get(), iter.second, 1, 500, 1);
@@ -3229,7 +3233,7 @@ bool DisplaceModel::initFirm()
 
 
     for (size_t id = 0; id < all_firm_ids.size(); ++id) {
-        cout << "create firm " << all_firm_ids.at(id) << endl;
+        cout << "create firm " << all_firm_ids.at(id) << "\n";
 
 
         // TO DO: FIX THIS BELOW CODE
@@ -3259,7 +3263,7 @@ bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
 
-    cout << "create benthos" << endl;
+    cout << "create benthos" << "\n";
 
             foreach (std::shared_ptr<NodeData> nd, mNodes) {
             int bm = nd->get_marine_landscape();
@@ -3290,7 +3294,7 @@ bool DisplaceModel::initBenthos()
 
 bool DisplaceModel::initPopulations()
 {
-    cout << "init pop" << endl;
+    cout << "init pop" << "\n";
 
     QList<int> imp = mConfig.implicit_pops();
     std::sort(imp.begin(),imp.end());
@@ -3335,7 +3339,7 @@ bool DisplaceModel::initPopulations()
 
 bool DisplaceModel::initNations()
 {
-    cout << "init nation" << endl;
+    cout << "init nation" << "\n";
 
     // nations are read from vessels.
     QMultiMap<QString, std::shared_ptr<VesselData> > nationSet;

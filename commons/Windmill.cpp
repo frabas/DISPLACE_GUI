@@ -118,7 +118,7 @@ void Windmill::compute_kWproduction_in_farm()
 void Windmill::export_windmills_indicators(ofstream& windmillslogs, int tstep)
 {
 
-    dout(cout  << "export windmills indicators...." << endl);
+    dout(cout  << "export windmills indicators...." << "\n");
     // note that this file will also be used by the ui for displaying the statistics in stat windows
 
 
@@ -128,7 +128,7 @@ void Windmill::export_windmills_indicators(ofstream& windmillslogs, int tstep)
     // tstep(0) / node(1) / long(2) / lat(3) / windfarmtype(4) / windfarmid(5) / kWh(6) / kW_production(7)
 
     windmillslogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
-        this->get_type() << " " << this->get_idx() << " " << this->get_kWh() << " " << this->get_kW_production() << " " << endl;
+        this->get_type() << " " << this->get_idx() << " " << this->get_kWh() << " " << this->get_kW_production() << " " << "\n";
 
 
 }

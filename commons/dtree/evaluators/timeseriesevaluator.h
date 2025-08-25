@@ -49,7 +49,7 @@ public:
         for (size_t i=0; i<trgts.size(); i++)
         {
             adim = trgts.at(i);
-            cout << v->get_name() << " look at the price of the target -> stock " << adim << endl;
+            cout << v->get_name() << " look at the price of the target -> stock " << adim << "\n";
             displace::simulation::TimeSeries *a_ts = displace::simulation::Simulation::instance()->getTimeSeries(displace::simulation::TimeSeriesManager::Fishprice,  v->get_loc()->get_code_area(), adim);
             values.push_back (a_ts->evaluateThresholds((tstep / 24) % 365));
         }

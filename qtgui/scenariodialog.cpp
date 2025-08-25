@@ -29,6 +29,7 @@
 #include <QMessageBox>
 
 #include <QDebug>
+#include <QRegularExpression>
 
 static const char *dyn_alloc_options[] = {
     "baseline",
@@ -255,12 +256,14 @@ void ScenarioDialog::on_apply_clicked()
         return;
     }
 
-    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    QRegularExpressionMatch match = regexp.match(mScenarioPath);
 
-    if (regexp.indexIn(mScenarioPath) == -1) {
+    if (!match.hasMatch())
+    {
         QMessageBox::warning(this, tr("Wrong Scenario name/path"),
                              tr("The scenario name must fit the following template:\n"
-                                ".../simusspe_*/*.dat"));
+                                 ".../simusspe_*/*.dat"));
         return;
     }
 
@@ -285,14 +288,17 @@ void ScenarioDialog::on_graphBrowse_clicked()
     if (dlg.exec() == QDialog::Accepted) {
         QString nm = dlg.selectedFiles()[0];
 
-        QRegExp r("graph([0-9]+).dat");
-        if (r.indexIn(nm) == -1) {
+        QRegularExpression r("graph([0-9]+).dat");
+        QRegularExpressionMatch match = r.match(nm);
+        if (!match.hasMatch())
+        {
             QMessageBox::warning(this, tr("Wrong Graph file name"),
-                    tr("The graph file you selected cannot be parsed correctly, and the graph code cannot be retrieved."));
+                                 tr(
+                                     "The graph file you selected cannot be parsed correctly, and the graph code cannot be retrieved."));
             return;
         }
 
-        int nmv = r.cap(1).toInt();
+        int nmv = match.captured(1).toInt();
         ui->agraph->setValue(nmv);
 
         QFileInfo info(nm);

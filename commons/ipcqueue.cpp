@@ -63,11 +63,11 @@ IpcQueue::~IpcQueue()
 bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 {
     scoped_lock<interprocess_mutex> lock (mManager->mutex);
-    //    std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << std::endl;
+    //    std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << "\n";
     while (space_available() < len + sizeof(type) + sizeof(len)) {
-        //        std::cout<<"Wait for space"<< std::endl;
+        //        std::cout<<"Wait for space"<< "\n";
         mManager->cond_notfull.wait(lock);
-        //        std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << std::endl;
+        //        std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << "\n";
     }
 
     for (size_t i = 0; i < sizeof(type); ++i) {
@@ -82,7 +82,7 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
         push(*(reinterpret_cast<char *>(buffer) + i));
     }
 
-    //    std::cout << "At end Available: " << space_available() << std::endl;
+    //    std::cout << "At end Available: " << space_available() << "\n";
     mManager->cond_notempty.notify_one();
 
     return true;
@@ -90,13 +90,13 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 
 IpcMessageTypes IpcQueue::pickOrWait(void *buffer, size_t maxlen, size_t *len)
 {
-    //    std::cout << "pick" << std::endl;
+    //    std::cout << "pick" << "\n";
 
     boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mManager->mutex);
     if (empty()) {
-        //        std::cout << "Wait,data" << std::endl;
+        //        std::cout << "Wait,data" << "\n";
         mManager->cond_notempty.wait(lock);
-        //        std::cout << "Got data" << std::endl;
+        //        std::cout << "Got data" << "\n";
     }
 
     IpcMessageTypes type;

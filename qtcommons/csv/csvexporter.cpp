@@ -17,7 +17,7 @@ bool CsvExporter::exportFile(QString filename, const QList<QStringList> &list)
 
     QTextStream stream (&file);
     foreach (QStringList l, list) {
-        stream << l.join(mSeparator) << Qt::endl;
+        stream << l.join(mSeparator) << "\n";
     }
 
     file.close();

@@ -430,34 +430,34 @@ void Ship::move()
 
     // update tracking
     this->set_fuel_use_litre(get_fuel_use_litre() + get_fueluse()); // assuming no shut down of the engine so far
-    //cout <<  "accumulated fuel use for this ship "<< this->get_name() << " is " << this->get_fuel_use_litre() << endl;
+    //cout <<  "accumulated fuel use for this ship "<< this->get_name() << " is " << this->get_fuel_use_litre() << "\n";
 
 	// movement for a ship
 	set_course( bearing(get_x(), get_y(), get_end_point_x(), get_end_point_y()) );
 	vector<double> a_move = destB (get_x(), get_y(), get_course(), get_vcruise()* PING_RATE * NAUTIC);
 
-    dout(cout  << "should the ship move to (" << a_move[0] << "," << a_move[1] << ") ?" << endl);
+    dout(cout  << "should the ship move to (" << a_move[0] << "," << a_move[1] << ") ?" << "\n");
 	int is_pt = is_pt_lying_on_segment(get_x(), a_move[0], get_end_point_x(),
 		get_y(), a_move[1], get_end_point_y());
 	// test if the next move (on the same segment) is acceptable
 	if(!is_pt)
 	{
 
-        dout(cout  << "yes..." << endl);
+        dout(cout  << "yes..." << "\n");
 		set_xy(a_move);			 // YES, keep this move
 	}
 	else
 	{
-        dout(cout  << "no..." << endl);
+        dout(cout  << "no..." << "\n");
 		vector <double> this_longs = get_longs();
-        dout(cout  << "end point x is "  << endl);
-        dout(cout  <<  get_end_point_x() << endl);
-        dout(cout  << "dist to end of the lane is "  << endl);
-        dout(cout  << fabs(this_longs.at(this_longs.size()-1) - get_end_point_x()) << endl);
+        dout(cout  << "end point x is "  << "\n");
+        dout(cout  <<  get_end_point_x() << "\n");
+        dout(cout  << "dist to end of the lane is "  << "\n");
+        dout(cout  << fabs(this_longs.at(this_longs.size()-1) - get_end_point_x()) << "\n");
 								 // the end of the lane reached...
 		if( fabs(this_longs[this_longs.size()-1] - get_end_point_x())<1)
 		{
-            dout(cout  << "end of the lane..." << endl);
+            dout(cout  << "end of the lane..." << "\n");
 			vector <double> the_longs = get_longs();
 			vector <double> the_lats = get_lats();
 			reverse(the_longs.begin(), the_longs.end());
@@ -467,21 +467,21 @@ void Ship::move()
 		}
 		else
 		{
-            dout(cout  << "compute a move on the next segment then..." << endl);
+            dout(cout  << "compute a move on the next segment then..." << "\n");
 			// compute a move (on the next segment)
 			double dist_to_end_pt         = dist (get_x(), get_y(), get_end_point_x(), get_end_point_y());
 			double dist_km_to_be_traveled = get_vcruise()* PING_RATE * NAUTIC;
 			double dist_on_next_segment   = dist_km_to_be_traveled-dist_to_end_pt;
-            dout(cout  << "dist_on_next_segment..." << dist_on_next_segment << endl);
+            dout(cout  << "dist_on_next_segment..." << dist_on_next_segment << "\n");
 			set_count(get_count () + 1);
 			int idx=(1+this->get_count());
 			double end_point_x =get_longs().at(idx);
 			double end_point_y =get_lats().at(idx);
-            dout(cout  << "end_point_x is..." << end_point_x << endl);
-            dout(cout  << "end_point_y is..." << end_point_y << endl);
+            dout(cout  << "end_point_x is..." << end_point_x << "\n");
+            dout(cout  << "end_point_y is..." << end_point_y << "\n");
 			set_course( bearing(get_end_point_x(), get_end_point_y(), end_point_x, end_point_y) );
 			vector<double> a_move = destB (this->get_end_point_x(), this->get_end_point_y(), this->get_course(), dist_on_next_segment);
-            dout(cout  << "move to (" << a_move[0] << "," << a_move[1] << ") " << endl);
+            dout(cout  << "move to (" << a_move[0] << "," << a_move[1] << ") " << "\n");
 
 			// update
 			this->set_end_point_xy(end_point_x, end_point_y);
@@ -510,7 +510,7 @@ void Ship::compute_emissions_in_ship()
 void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)
 {
 
-    dout(cout  << "export ships indicators...." << endl);
+    dout(cout  << "export ships indicators...." << "\n");
     // note that this file will also be used by the ui for displaying the statistics in stat windows
 
 
@@ -526,7 +526,7 @@ void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)
         this->get_NOxEmission_gperKWh() << " " << this->get_SOxEmission_percentpertotalfuelmass() << " " <<
         this->get_GHGEmission_gperKWh() << " " << this->get_PMEEmission_gperKWh() << " " <<
         this->get_fuel_use_litre() << " " <<
-        this->get_NOxEmission() << " " << this->get_SOxEmission() << " " << this->get_GHGEmission() << " " <<  this->get_PMEEmission() << endl;
+        this->get_NOxEmission() << " " << this->get_SOxEmission() << " " << this->get_GHGEmission() << " " <<  this->get_PMEEmission() << "\n";
 
 
 }

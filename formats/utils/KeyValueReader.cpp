@@ -51,7 +51,7 @@ bool KeyValueReader::importFromStream(std::istream &is)
         std::string line;
         std::getline(is, line);
 
-        //std::cout << "Line: " << line << std::endl;
+        //std::cout << "Line: " << line << "\n";
 
         boost::trim(line);
         if (line.empty() || line[0] == '#')
@@ -65,7 +65,7 @@ bool KeyValueReader::importFromStream(std::istream &is)
         auto value = std::get<1>(kv);
         boost::trim(value);
 
-        //std::cout << "parse: " << key << "|" << value << std::endl;
+        //std::cout << "parse: " << key << "|" << value << "\n";
 
         if (key.empty())
             return false;
@@ -88,7 +88,7 @@ bool KeyValueReader::exportToStream(std::ostream &os) const
         return false;
 
     for (auto kv : mConfig) {
-        os << kv.first << " = " << kv.second << std::endl;
+        os << kv.first << " = " << kv.second << "\n";
     }
 
     return true;

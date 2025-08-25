@@ -62,7 +62,7 @@ Firm::Firm(int idx, int a_idx_firm, std::string a_name, int a_nb_vessels, double
     x=lon;
     y=lat;
     bunch_of_vessels=a_bunch_of_vessels;
-    dout(cout <<"firm creator...OK" << endl);
+    dout(cout <<"firm creator...OK" << "\n");
     init();
 }
 

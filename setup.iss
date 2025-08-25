@@ -2,10 +2,12 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "1.3.1"
+#define MyAppVersion "1.3.5"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
+
+#define ProjectDir "build"
 
 ; to debug:
 ;#define Build "debug"
@@ -17,15 +19,15 @@
 #define Build "release"
 #define QT_DEBUG ""
 
+#define QT_DIR "C:\Qt\6.8.3\msvc2022_64"
+#define QT_PLUGINS_DIR "C:\Qt\6.8.3\msvc2022_64\plugins"
+#define SDK_DIR ProjectDir + "\vcpkg_installed\x64-windows"
+
 #if FileExists("local.iss")
-#include "local.iss"
-#else
-#define QT_DIR "C:\Qt\5.15.2\msvc2019_64"
-#define QT_PLUGINS_DIR "C:\Qt\5.15.2\msvc2019_64\plugins"
-#define SDK_DIR "C:\DISPLACE-vcpkg\installed\x64-windows"
+ #include "local.iss"
 #endif
 
- [Setup]
+[Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -52,71 +54,40 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-;Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-
-;;QtCreator
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\build-DISPLACE_GUI-Desktop_Qt_5_12_0_MSVC2017_64bit-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-
-;;MSV2019
-Source: "build\x64-Release\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\QMapControl{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectDir}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
-Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_atomic-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_chrono-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_container-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_context-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_coroutine-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_date_time-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_filesystem-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_graph-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_iostreams-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "{#SDK_DIR}\bin\boost_locale-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_log_setup-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_log-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99f-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99l-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1f-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1l-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_prg_exec_monitor-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_program_options-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_random-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_regex-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_thread-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_serialization-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_atomic-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_chrono-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_container-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_context-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_coroutine-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_date_time-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_filesystem-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_graph-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_iostreams-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_locale-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log_setup-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_prg_exec_monitor-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_program_options-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_random-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_thread-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_serialization-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ;Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\libexpat.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -144,7 +115,7 @@ Source: "{#SDK_DIR}\bin\iconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\spatialite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\freexl.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\freexl-1.dll"; DestDir: "{app}"; Flags: ignoreversion
       
 
 ;Source: "{#SDK_DIR}\bin\libcharset.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -162,31 +133,34 @@ Source: "{#SDK_DIR}\bin\mpfr-6.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#SDK_DIR}\bin\msqlitecpp.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\openjp2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\proj.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\proj_9.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\webp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libwebp.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\webpmux.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\Lerc.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\minizip.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libsharpyuv.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Gui{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Network{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5OpenGL{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5PrintSupport{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Sql{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Widgets{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Gui{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Network{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6OpenGL{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6PrintSupport{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Sql{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Widgets{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: {#QT_DIR}\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion
 
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 ;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+;Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
@@ -197,7 +171,71 @@ Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 
 [Run]
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
-Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
+Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}; Check: not IsVCRedistInstalled
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
 
+[Code]
+// Verifica se è installato il VC++ 2015-2022 (x64)
+function IsVCRedistInstalled: Boolean;
+var
+  Val: Cardinal;
+begin
+  Result := False;
+  // Chiave standard a 64 bit
+  if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', Val) then
+    Result := (Val = 1);
+  // Fallback su WOW6432Node nel caso la vista del registro porti altrove
+  if not Result then
+    if RegQueryDWordValue(HKLM, 'SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', Val) then
+      Result := (Val = 1);
+end;
+
+function DownloadFile(const URL, DestFile: string): Boolean;
+var
+  Http: Variant;
+  Stream: Variant;
+begin
+  Result := False;
+  try
+    Http := CreateOleObject('WinHttp.WinHttpRequest.5.1');
+    Http.Open('GET', URL, False);
+    Http.Send();
+    if Http.Status = 200 then
+    begin
+      Stream := CreateOleObject('ADODB.Stream');
+      Stream.Type_ := 1; // adTypeBinary
+      Stream.Open;
+      Stream.Write(Http.ResponseBody);
+      // 2 = adSaveCreateOverWrite
+      Stream.SaveToFile(DestFile, 2);
+      Stream.Close;
+      Result := True;
+    end;
+  except
+    // Ignora: ritornerà False
+  end;
+end;
+
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  Url, Dest: string;
+begin
+  if (CurStep = ssInstall) and (not IsVCRedistInstalled) then
+  begin
+    // URL ufficiale "evergreen" per VC++ 2015-2022 x64
+    Url := 'https://aka.ms/vs/17/release/vc_redist.x64.exe';
+    Dest := ExpandConstant('{tmp}\vc_redist.x64.exe');
+
+    if not FileExists(Dest) then
+    begin
+      WizardForm.StatusLabel.Caption := 'Download di Microsoft Visual C++ Redistributable...';
+      if not DownloadFile(Url, Dest) then
+      begin
+        MsgBox('Impossibile scaricare il pacchetto VC++ Redistributable. Verifica la connessione e riprova.', mbError, MB_OK);
+        // Non interrompiamo l’installazione dell’app; l’esecuzione del redistributable è già condizionata dal Check
+      end;
+    end;
+  end;
+end;
 

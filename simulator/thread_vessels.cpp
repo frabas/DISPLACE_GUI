@@ -458,17 +458,20 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         // note: no traveled_dist_this_trip cumulated here...might be changed.
                         model->vessels()[index_v]->set_state(1);
                         double cumfuelcons;
+                        double fuel_per_h_scaling_a = model->vessels()[index_v]->get_fuelcons() / pow(model->vessels()[index_v]->get_speed(), 3);
+                        double actual_speed = model->vessels()[index_v]->get_speed(); // for now actusl speed is the same as the max speed. so the litre_fuel will be max cons... TODO: change it.
+                        double litre_fuel = fuel_per_h_scaling_a * pow(actual_speed, 3); // cubic law
                         if (model->vessels()[index_v]->get_metier()->get_metier_type() == 1) {
                             //trawling (type 1)
                             cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
-                                          model->vessels()[index_v]->get_fuelcons() * PING_RATE *
+                                             litre_fuel * PING_RATE *
                                           model->vessels()[index_v]->get_mult_fuelcons_when_fishing();
                             outc(cout << "fuel cons for trawlers (metier "
                                       << model->vessels()[index_v]->get_metier()->get_name() << ")" << endl);
                         } else {
                             // gillnetting, seining (type 2)
                             cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
-                                          model->vessels()[index_v]->get_fuelcons() * PING_RATE *
+                                            litre_fuel * PING_RATE *
                                           model->vessels()[index_v]->get_mult_fuelcons_when_inactive();
                             outc(cout << "fuel cons for gillnetters or seiners (metier "
                                       << model->vessels()[index_v]->get_metier()->get_name() << ")" << endl);

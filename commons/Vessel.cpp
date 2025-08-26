@@ -2725,11 +2725,15 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 
         // update
         //cout << "returning_to_harbour (0/1) here is at " << returning_to_harbour << endl;
+        double fuel_per_h_scaling_a = this->get_fuelcons() / pow(this->get_speed(), 3);
+        double actual_speed = this->get_speed(); // for now actusl speed is the same as the max speed. so the litre_fuel will be max cons... TODO: change it.
+        double litre_fuel = fuel_per_h_scaling_a * pow(actual_speed, 3); // cubic law
+
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << endl);
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		
+            set_cumfuelcons( get_cumfuelcons() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+            set_consotogetthere( get_consotogetthere() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
             // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
@@ -2740,8 +2744,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         else
         {
             dout(cout << "steaming to" << endl);
-            set_cumfuelcons(get_cumfuelcons() + (get_fuelcons() * PING_RATE * get_mult_fuelcons_when_steaming()));
-            set_consotogetthere(get_consotogetthere() + (get_fuelcons() * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_cumfuelcons(get_cumfuelcons() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_consotogetthere(get_consotogetthere() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
             // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;

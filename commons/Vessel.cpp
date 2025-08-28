@@ -667,7 +667,10 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator);
         mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksHereIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::otherVesselFishingHere] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselotherVesselFishingHereStateEvaluator);
 
+        
 
         // ChangeGround
         mStateEvaluators[dtree::feelingForCatchingElsewhere] =

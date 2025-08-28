@@ -83,7 +83,7 @@ public:
 private:
     static COMMONSSHARED_EXPORT const char *const names[];
 
-    static COMMONSSHARED_EXPORT const char *const bins[][40];
+    static COMMONSSHARED_EXPORT const char *const bins[][50];
 };
 
 }

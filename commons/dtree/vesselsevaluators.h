@@ -436,6 +436,20 @@ public:
 };
 
 
+class VesselotherVesselFishingHereStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselotherVesselFishingHereStateEvaluator() {}
+    double evaluate(int fground, Vessel* v) const {
+        vector<int> vids_already_fishing_there = v->get_loc()->get_vid();
+        //        cout << "nb vessels already fishing there is " << min_quota_left_among_avoided_stks;
+        return  vids_already_fishing_there.size() > 3 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+    }
+};
+
+
+
+
 // ChangeGround
 class VesselFeelingForCatchingElsewhereStateEvaluator : public dtree::StateEvaluator {
 private:

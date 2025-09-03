@@ -314,38 +314,38 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
 
     QTextStream stream (&file);
 
-    stream << "# dyn_alloc_sce"<< endl;
+    stream << "# dyn_alloc_sce"<< "\n";
     foreach (QString a, dyn_alloc_sce)
         stream << a << " ";
-    stream << endl;
+    stream << "\n";
 
-    stream <<"# dyn_pop_sce"<< endl;
+    stream <<"# dyn_pop_sce"<< "\n";
     foreach (QString a, dyn_pop_sce)
         stream << a << " ";
-    stream << endl;
+    stream << "\n";
 
-    stream << "# biolsce\n" << biolsce << endl;
-    stream << "# fleetsce\n" << fleetsce << endl;
-    stream << "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_do_growth << endl;
-    stream << "# Frequency to redispatch the pop (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_redispatch_the_pop << endl;
-    stream << "# a_graph\n" << graph << endl;
-    stream << "# nrow_coord\n" << nrow_coord << endl;
-    stream << "# nrow_graph\n" << nrow_graph << endl;
-    stream << "# a_port\n" << a_port.toIndex() << endl;
-    stream << "# grid res km\n" << endl;
+    stream << "# biolsce\n" << biolsce << "\n";
+    stream << "# fleetsce\n" << fleetsce << "\n";
+    stream << "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_do_growth << "\n";
+    stream << "# Frequency to redispatch the pop (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_redispatch_the_pop << "\n";
+    stream << "# a_graph\n" << graph << "\n";
+    stream << "# nrow_coord\n" << nrow_coord << "\n";
+    stream << "# nrow_graph\n" << nrow_graph << "\n";
+    stream << "# a_port\n" << a_port.toIndex() << "\n";
+    stream << "# grid res km\n" << "\n";
     foreach (QString a, graph_res)
         stream << a << " ";
-    stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << endl;
-    stream << "#  check all stocks before going fishing (otherwise, explicit pops only)\n" << check_all_stocks_before_going_fishing << endl;
+    stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << "\n";
+    stream << "#  check all stocks before going fishing (otherwise, explicit pops only)\n" << check_all_stocks_before_going_fishing << "\n";
 
-    stream << "# Go Fishing DTree\n" << mDtGoFishing << endl;
-    stream << "# Choose Ground DTree\n" << mDtChooseGround<< endl;
-    stream << "# Start Fishing DTree\n" << mDtStartFishing<< endl;
-    stream << "# Change Ground DTree\n" << mDtChangeGround<< endl;
-    stream << "# Stop Fishing DTree\n" << mDtStopFishing<< endl;
-    stream << "# Change Port DTree\n" << mDtChangePort<< endl;
+    stream << "# Go Fishing DTree\n" << mDtGoFishing << "\n";
+    stream << "# Choose Ground DTree\n" << mDtChooseGround<< "\n";
+    stream << "# Start Fishing DTree\n" << mDtStartFishing<< "\n";
+    stream << "# Change Ground DTree\n" << mDtChangeGround<< "\n";
+    stream << "# Stop Fishing DTree\n" << mDtStopFishing<< "\n";
+    stream << "# Change Port DTree\n" << mDtChangePort<< "\n";
 
-    stream << "# Use Dtrees\n" << (use_dtrees ? "1" : "0") << endl;
+    stream << "# Use Dtrees\n" << (use_dtrees ? "1" : "0") << "\n";
     file.close();
     return true;
 }

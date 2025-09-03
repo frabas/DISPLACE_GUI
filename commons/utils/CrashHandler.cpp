@@ -47,11 +47,11 @@ bool CrashHandler::initialize()
     sa.sa_flags = SA_RESTART | SA_SIGINFO;
 
     if (sigaction(SIGSEGV, &sa, nullptr) != 0) {
-        std::cerr << "Cannot set signal handler for SIGSEGV." << std::endl;
+        std::cerr << "Cannot set signal handler for SIGSEGV." << "\n";
         return false;
     }
     if (sigaction(SIGABRT, &sa, nullptr) != 0) {
-        std::cerr << "Cannot set signal handler for SIGABRT." << std::endl;
+        std::cerr << "Cannot set signal handler for SIGABRT." << "\n";
         return false;
     }
     return true;
@@ -67,12 +67,12 @@ void CrashHandler::UncaughtExceptionHandler()
     size = backtrace(array, 50);
 
     messages = backtrace_symbols(array, size);
-    ss << "*** Unhandled exception detected " << std::endl;
+    ss << "*** Unhandled exception detected " << "\n";
 
     DoBacktrace(messages, size, ss);
 
     DoSaveCrashdump(ss.str());
-    std::cerr << ss.str() << std::endl;
+    std::cerr << ss.str() << "\n";
 
     free(messages);
 
@@ -109,7 +109,7 @@ void CrashHandler::CritErrHandler(int sig_num, siginfo_t * info, void * ucontext
 
     std::ostringstream ss;
 
-    ss << "*** Critical Signal detected " << std::endl;
+    ss << "*** Critical Signal detected " << "\n";
 
     ss << boost::str(boost::format {"signal %d (%s), address is %p from %p\n" }
             % sig_num % strsignal(sig_num) % info->si_addr
@@ -125,7 +125,7 @@ void CrashHandler::CritErrHandler(int sig_num, siginfo_t * info, void * ucontext
     DoBacktrace(messages, size, ss);
 
     DoSaveCrashdump(ss.str());
-    std::cerr << ss.str() << std::endl;
+    std::cerr << ss.str() << "\n";
 
     free(messages);
 
@@ -175,7 +175,7 @@ void CrashHandler::DoBacktrace(char **messages, size_t size, std::ostream &ss)
             {
                 ss << "   (" << i << ") " << messages[i] << " : "
                 << real_name << "+" << offset_begin << offset_end
-                << std::endl;
+                << "\n";
 
             }
                 // otherwise, output the mangled function name
@@ -183,7 +183,7 @@ void CrashHandler::DoBacktrace(char **messages, size_t size, std::ostream &ss)
             {
                 ss << "   (" << i << ") " << messages[i] << " : "
                 << mangled_name << "+" << offset_begin << offset_end
-                << std::endl;
+                << "\n";
             }
             free(real_name);
         }
@@ -202,7 +202,7 @@ void CrashHandler::DoSaveCrashdump(const std::string &msg)
     auto logpath1 = ss.str();
 
     std::ofstream fs(logpath1, std::ios::out | std::ios::app);
-    fs << msg << std::endl;
+    fs << msg << "\n";
     fs.close();
 }
 

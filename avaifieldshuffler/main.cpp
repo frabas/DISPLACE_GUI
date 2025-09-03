@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
 
-    cout << "Calling avai field shuffler..." << endl;
+    cout << "Calling avai field shuffler..." << "\n";
 
 
     // casting a_pop into a string
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 
         full_avai_szgroup_nodes_with_pop.insert(make_pair(key,val));
     }
-    //cout  << "read the availability at szgroup...ok " << endl;
+    //cout  << "read the availability at szgroup...ok " << "\n";
     file_full_avai_szgroup_nodes_with_pop.close();
 
     /*do
@@ -129,19 +129,19 @@ int main(int argc, char* argv[])
         file_avai_szgroup_nodes_with_pop >> val;
         avai_szgroup_nodes_with_pop.insert(make_pair(key,val));
     }
-    cout  << "read the availability at szgroup...ok " << endl;
+    cout  << "read the availability at szgroup...ok " << "\n";
     file_avai_szgroup_nodes_with_pop.close();
     */
 
 
-    //cout << "normalisation_sum " << normalisation_sum_before/11 << endl;
+    //cout << "normalisation_sum " << normalisation_sum_before/11 << "\n";
     // here, normalize after the altered reading.
     for (multimap<int, double>::iterator pos=full_avai_szgroup_nodes_with_pop.begin(); pos != full_avai_szgroup_nodes_with_pop.end(); pos++)
     {
 
-        //cout <<  " pos->second "  <<  pos->second << endl;
+        //cout <<  " pos->second "  <<  pos->second << "\n";
         (pos->second) = (pos->second) /(normalisation_sum_after/normalisation_sum_before);
-        //cout <<  " pos->second after"  <<  pos->second << endl;
+        //cout <<  " pos->second after"  <<  pos->second << "\n";
     }
 
 
@@ -152,12 +152,12 @@ int main(int argc, char* argv[])
             "spe_full_avai_szgroup_nodes_"+a_semester+"_shuffled.dat";
     avaiField.open(filename_full_avai_file_out.c_str());
 
-    avaiField << "idx_node" << " " << "avai" << endl;
+    avaiField << "idx_node" << " " << "avai" << "\n";
     for (multimap<int, double>::iterator pos=full_avai_szgroup_nodes_with_pop.begin(); pos != full_avai_szgroup_nodes_with_pop.end(); pos++)
     {
         avaiField << setprecision(6) << fixed;
             avaiField << pos->first << " " << pos->second << " ";
-            avaiField << " " <<  endl;
+            avaiField << " " <<  "\n";
     }
     avaiField.close();
 
@@ -167,19 +167,19 @@ int main(int argc, char* argv[])
             "spe_avai_szgroup_nodes_"+a_semester+"_shuffled.dat";
     avaiFieldSelected.open(filename_avai_file_out.c_str());
 
-    avaiFieldSelected << "idx_node" << " " << "avai" << endl;
+    avaiFieldSelected << "idx_node" << " " << "avai" << "\n";
     for (multimap<int, double>::iterator pos=avai_szgroup_nodes_with_pop.begin(); pos != avai_szgroup_nodes_with_pop.end(); pos++)
     {
         avaiFieldSelected << setprecision(6) << fixed;
             avaiFieldSelected << pos->first << " " << pos->second << " ";
-            avaiFieldSelected << " " <<  endl;
+            avaiFieldSelected << " " <<  "\n";
     }
     */
     // avaiFieldSelected.close();
 
 
 
-    cout  << "export back the availability at szgroup field...ok " << endl;
+    cout  << "export back the availability at szgroup field...ok " << "\n";
 
     return 0;
 }

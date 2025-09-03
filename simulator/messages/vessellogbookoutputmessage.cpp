@@ -55,7 +55,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
        }
 
     //if(v->get_name()=="GRK_KERK57_1_51" && pop==4){
-    //    cout << " The trip end NOW: the kg catches for this  pop "<< pop << "  is " << cumul.at(pop) << endl;
+    //    cout << " The trip end NOW: the kg catches for this  pop "<< pop << "  is " << cumul.at(pop) << "\n";
      //}
 
     }
@@ -178,7 +178,7 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     ss  << logbook.NetPresentValue << " " ;
     ss  << logbook.numTrips << " " ;
 
-    ss  << " " << std::endl;
+    ss  << " " << "\n";
 
     std::cout << "=v" << ss.str();
 

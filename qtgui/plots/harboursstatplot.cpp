@@ -289,6 +289,6 @@ HarboursStatPlot::getData(DisplaceModel *model, displace::plot::HarboursStat sta
             break;
     }
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    QVector<double> kd(dt.t.begin(), dt.t.end()), vd(dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }

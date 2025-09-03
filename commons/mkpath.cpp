@@ -38,7 +38,7 @@
 
 /* on mingw/windows there's no such function, so ignore permission */
 static int __cdecl mkdir(const char *const path, int permissions) {
-    return mkdir(path);
+    return _mkdir(path);
 }
 
 #else

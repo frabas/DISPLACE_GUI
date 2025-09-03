@@ -129,26 +129,26 @@ Run DISPLACE with e.g. displacegui
 By default the Model Objects is set to 4. If you want to run a scenario, first make sure your Model Objects is set to [0].
 
 
-![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_select_model_0.png)
+![alt text](./docs/images/quickstart_select_model_0.png)
 
 
 If yes then in the main menu do a "File">"Load a Scenario Model, 
 
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_scenario_file.png)
+ ![alt text](./docs/images/quickstart_load_scenario_file.png)
 
 
 and choose a scenario file (a .dat file) you´ll find in the\simusspe subfolder of your DISPLACE dataset.
 Select the file, click Ok and wait to see the DISPLACE graph plotted on the map.
 
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_scenario_file_is.png)
+ ![alt text](./docs/images/quickstart_scenario_file_is.png)
 
 
 You can now click Start in the DISPLACE command panel for a DISPLACE simulation to start:
 
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_click_start.png)
+ ![alt text](./docs/images/quickstart_click_start.png)
 
 After some object creation and initialization the time step window will shortly update and the simulation run to the end time step. 
 By default, 8762 hourly time steps will be simulated which is approx. the number of hours in one year.
@@ -159,7 +159,7 @@ Automated shell scripts to run many DISPLACE simulations in parallel on a HPC cl
  ## Simulation output formats
 
 
-Look at the [description](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation. 
+Look at the [description](./docs/output_fileformats.md) of the list of files produced by a DISPLACE simulation. 
 A [displaceplot](https://github.com/frabas/displaceplot/releases) R package has been developed to handle these output text files and produced some plots out of them. 
 Simulation outcomes are also exported as a SQLite database which can be re-loaded within DISPLACE in a Replay mode. The internal structure and simulated data
 can be further retrieved from the database when using an external SQLite DB browser. 
@@ -168,15 +168,15 @@ To load a result database into DISPLACE:
 
 
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_db_menu.png)
+ ![alt text](./docs/images/quickstart_load_db_menu.png)
 
 Select a DISPLACE db file:
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_load_db_file.png)
+ ![alt text](./docs/images/quickstart_load_db_file.png)
 
 Once loaded, the simulation can be replayed with the Replay command:
 
- ![alt text](https://github.com/frabas/DISPLACE_GUI/blob/master/docs/quickstart_replay_command.png)
+ ![alt text](./docs/images/quickstart_replay_command.png)
 
 
 

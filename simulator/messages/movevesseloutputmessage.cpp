@@ -33,7 +33,7 @@ bool MoveVesselOutputMessage::send(ostream &strm)
         << setprecision(6) << fixed << data.y << " "
         << setprecision(2) << fixed << data.course << " "
         << setprecision(0) << fixed << data.cumfuelcons << " "
-        << data.state <<  endl;
+        << data.state <<  "\n";
 
     return true;
 }

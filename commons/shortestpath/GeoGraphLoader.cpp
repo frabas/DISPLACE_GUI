@@ -49,13 +49,13 @@ void GeoGraphLoader::loadNodes(GeoGraph &graph, std::istream &in)
     linenum = 0;
     for (auto &line: lines) {
         if (linenum < nrow) {
-            double val = boost::lexical_cast<double>(line);
+            auto val = boost::lexical_cast<float>(line);
             details[linenum].x = val;
         } else if (linenum < 2 * nrow) {
-            double val = boost::lexical_cast<double>(line);
+            auto val = boost::lexical_cast<float>(line);
             details[linenum - nrow].y = val;
         } else if (linenum < 3 * nrow) {
-            int val = boost::lexical_cast<int>(line);
+            auto val = boost::lexical_cast<int>(line);
             details[linenum - 2*nrow].harb =  val;
         } else {
             break;  // finish.

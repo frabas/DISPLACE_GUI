@@ -36,7 +36,7 @@ class VesselSizeStateEvaluator : public dtree::StateEvaluator {
 public:
     VesselSizeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-      //cout << vessel->get_name() << " with length " << vessel->get_length() << " is of length class " <<  (double)vessel->get_length_class() << endl;
+      //cout << vessel->get_name() << " with length " << vessel->get_length() << " is of length class " <<  (double)vessel->get_length_class() << "\n";
       return static_cast<float>(vessel->get_length_class()) / VariableNames::variableBinCount(Variable::vesselSizeIs);
     }
 };
@@ -149,10 +149,10 @@ private:
 public:
     VesselRiskOfBycatchAvoidedStksNowIsStateEvaluator() {}
     double evaluate(int, Vessel *v) const {
-        //cout << "vessel specific risk of bycatch being evaluated before trip start..." << endl;
+        //cout << "vessel specific risk of bycatch being evaluated before trip start..." << "\n";
         vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
         double average_prop_bycatch= std::accumulate( prop_bycatch.begin(), prop_bycatch.end(), 0.0)/prop_bycatch.size();
-        //cout << "...the average discard ratio for this vessel is: " << average_prop_bycatch << endl;
+        //cout << "...the average discard ratio for this vessel is: " << average_prop_bycatch << "\n";
         return  average_prop_bycatch > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };
@@ -255,7 +255,7 @@ public:
           auto lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
           auto it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), types::NodeId(fground));
           bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
-          //cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
+          //cout << "isinareaclosure on this ground evaluated at "  << isIt << "\n";
           return  isIt ? 1.0 : 0.0; // Is yes or no in closed area?
 
         }
@@ -268,7 +268,7 @@ public:
     VesselSmartCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isSmart= (types::NodeId(fground)==v->get_smartcatch());
-        //cout << "smartcatch on this ground evaluated at " <<  isSmart << endl;
+        //cout << "smartcatch on this ground evaluated at " <<  isSmart << "\n";
         return  isSmart ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the tested ground a smart catch?
         }
 };
@@ -280,7 +280,7 @@ public:
     VesselHighPotentialCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isHighPotential=(types::NodeId(fground)==v->get_highpotentialcatch());
-        //cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< endl;
+        //cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< "\n";
         return   isHighPotential ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
         }
 };
@@ -291,7 +291,7 @@ public:
     VesselNotThatFarStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isNotFar = (types::NodeId(fground)==v->get_notthatfar());
-        //cout << "notthatfar on this ground evaluated at " << isNotFar << endl;
+        //cout << "notthatfar on this ground evaluated at " << isNotFar << "\n";
         return  isNotFar ? 1.0 : 0.0; // Is yes or no the closest ground?
         }
 };
@@ -302,7 +302,7 @@ public:
     VesselKnowledgeOfThisGroundStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isWellKnown = (types::NodeId(fground)==v->get_mosthistoricallyused());
-        //cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << endl;
+        //cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << "\n";
         return  isWellKnown ? 1.0 : 0.0; // Is yes or no the ground has been the most historically frequent?
         }
 };
@@ -314,9 +314,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         auto the_grds = v->get_fgrounds();
         int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        //cout << "risk of bycatch on this ground being evaluated..." << endl;
+        //cout << "risk of bycatch on this ground being evaluated..." << "\n";
         vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
-        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << "\n";
         return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };
@@ -329,9 +329,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         auto the_grds = v->get_fgrounds();
         int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        //cout << "risk of bycatch on this ground being evaluated..." << endl;
+        //cout << "risk of bycatch on this ground being evaluated..." << "\n";
         vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
-        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << "\n";
         return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };
@@ -363,7 +363,7 @@ public:
     VesselLowestTariffStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool LowestTariff = (types::NodeId(fground)==v->get_lowesttariff());
-        //cout << "lowesttariff on this ground evaluated at " << LowestTariff << endl;
+        //cout << "lowesttariff on this ground evaluated at " << LowestTariff << "\n";
         return  LowestTariff ? 1.0 : 0.0; // Is yes or no the closest ground?
         }
 
@@ -376,9 +376,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         //auto the_grds = v->get_fgrounds();
         //int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        //cout << "Tariff on this ground being evaluated..." << endl;
+        //cout << "Tariff on this ground being evaluated..." << "\n";
         vector <double> tariffs_over_layers = v->get_map_of_nodes().at(fground)->get_tariffs(); // using the superpower of omniscience (which is anyway quite expected on tariffs!)
-        //cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << endl;
+        //cout << "...the overall tariff for that ground is: " << tariffs_over_layers.at(0) << "\n";
         return  tariffs_over_layers.at(0) >= 5 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)  somewhat high tariff on this ground?
     }
 };
@@ -394,9 +394,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         auto the_grds = v->get_fgrounds();
         int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
-        //cout << "risk of bycatch on this ground being evaluated..." << endl;
+        //cout << "risk of bycatch on this ground being evaluated..." << "\n";
         vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
-        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << "\n";
         return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };

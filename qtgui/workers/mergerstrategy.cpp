@@ -61,11 +61,11 @@ bool MergerStrategy::saveOutput(QString out)
 
     QTextStream outstream(&outfile);
 
-    outstream << mFields.join(mOwner->separator()) << endl;
+    outstream << mFields.join(mOwner->separator()) << "\n";
 
     int row = 0;
     foreach (QString line, mResults) {
-        outstream << line << endl;
+        outstream << line << "\n";
         ++row;
 
         if (mOwner->mustExit()) {

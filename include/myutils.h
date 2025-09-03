@@ -44,7 +44,12 @@
 #include <cmath>
 #include <math.h>
 
+#if !defined(_HAS_STD_BYTE)
+#define _HAS_STD_BYTE 0
+#endif
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 #include <pathshop.h>
 
 #include <numeric>
@@ -86,7 +91,7 @@ vector<size_t> sort_indexes_ascending(const vector<T> &v) {
 }
 // usage:
 //for (auto i: sort_indexes(v)) {
-//  cout << v[i] << endl;
+//  cout << v[i] << "\n";
 //}
 template <typename T>
 vector<size_t> sort_indexes_descending(const vector<T> &v) {

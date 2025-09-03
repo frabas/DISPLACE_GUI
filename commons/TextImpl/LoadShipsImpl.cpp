@@ -18,7 +18,7 @@ using namespace std;
 
 void TextfileModelLoader::loadShips()
 {
-    cout << "Loading ships features" << endl;
+    cout << "Loading ships features" << "\n";
 
     // read general ship features (incl. their specific lanes)
     vector<string> shipids;
@@ -58,7 +58,7 @@ void TextfileModelLoader::loadShips()
 
     auto ships = vector<Ship *>(shipids.size());
     for (unsigned int i = 0; i < shipids.size(); i++) {
-        cout << "create ship " << shipids.at(i) << endl;
+        cout << "create ship " << shipids.at(i) << "\n";
 
         vector<double> longs = find_entries_i_d(shiplanes_lon, lane_ids.at(i));
         vector<double> lats = find_entries_i_d(shiplanes_lat, lane_ids.at(i));
@@ -86,10 +86,10 @@ void TextfileModelLoader::loadShips()
                             lats);
         ships[i]->set_idx_ship(i);
 
-        cout << "at (" << ships[i]->get_x() << "," << ships[i]->get_y() << ") " << endl;
+        cout << "at (" << ships[i]->get_x() << "," << ships[i]->get_y() << ") " << "\n";
 
     }
-    cout << "Number of ships created: " << ships.size() << endl;
+    cout << "Number of ships created: " << ships.size() << "\n";
 
     model().setShips(std::move(ships));
 }

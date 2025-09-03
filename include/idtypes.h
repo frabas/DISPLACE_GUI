@@ -2,7 +2,12 @@
 #define IDTYPES_H
 
 #include <iostream>
+
+#if !defined(_HAS_STD_BYTE)
+#define _HAS_STD_BYTE 0
+#endif
 #include <cstdint>
+#undef _HAS_STD_BYTE
 
 #include <boost/lexical_cast.hpp>
 

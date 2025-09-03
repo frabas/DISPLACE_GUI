@@ -63,7 +63,7 @@ Alternatively, install JetBrains CLion, but the smooth edition of ui files will 
 But remember to set et up CLion in Menu>File> settings
 For amd64 architecture because we are working in 64bits.
 
-![alt text](./set_CLion_for_amd64.png)
+![alt text](./images/set_CLion_for_amd64.png)
 
 Install CMake on your computer.
 
@@ -84,11 +84,11 @@ if something goes wrong.
 
 In QtCreator:
 
-![alt text](./set_CMAKE_TOOLCHAIN_FILE_in_QtCreator.png)
+![alt text](./images/set_CMAKE_TOOLCHAIN_FILE_in_QtCreator.png)
 
 In CLion:
 
-![alt text](./set_CMAKE_TOOLCHAIN_FILE_in_CLion.png)
+![alt text](./images/set_CMAKE_TOOLCHAIN_FILE_in_CLion.png)
 
 Clear or reset cache and re-run CMake
 

@@ -12,6 +12,7 @@
 #include "msqlitecpp/v1/sqlitetable.h"
 
 #include <memory>
+#include <functional>
 
 class Fishfarm;
 

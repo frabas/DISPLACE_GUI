@@ -65,9 +65,9 @@ std::vector<std::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 vector<double> compute_distance_fgrounds_on_the_fly(vector<Node* >& nodes, types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
-    outc (cout  << "look at the distances on the fly" << endl);
+    outc (cout  << "look at the distances on the fly" << "\n");
 
-    outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
+    outc (cout  << "look at the distances from node " <<   from.toIndex() << "\n");
 
     vector <double> distance_fgrounds(grounds.size(), 0);
     for (unsigned int i=0; i<grounds.size(); i++)
@@ -81,7 +81,7 @@ vector<double> compute_distance_fgrounds_on_the_fly(vector<Node* >& nodes, types
         if(grounds.at(i).toIndex()==from.toIndex()) distance_fgrounds.at(i)=1000; // avoid finding the lowest dist with itself
       }
 
-    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
+    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< "\n");
 
  return(distance_fgrounds);
 }
@@ -189,7 +189,7 @@ Vessel::Vessel(Node* p_location,
     course=0;
     name = a_name;
 
-    cout << "in Vessel() creator: Creating this vessel " << a_name << endl;
+    cout << "in Vessel() creator: Creating this vessel " << a_name << "\n";
 
     this->set_spe_possible_metiers(_possible_metiers);
     this->set_spe_freq_possible_metiers(_freq_possible_metiers);
@@ -281,7 +281,7 @@ Vessel::Vessel(Node* p_location,
     nationality_idx = 0; // default 0 is "all nations"
     nationality_idx = nationality_indices[nationality];
 
-    //cout << "Creating this vessel " << a_name << "first steps done" << endl;
+    //cout << "Creating this vessel " << a_name << "first steps done" << "\n";
 
     // init individual tac
     for(int i = 0; i < nbpops; i++)
@@ -294,7 +294,7 @@ Vessel::Vessel(Node* p_location,
     }
 
     // init at 0 the matrix of catches
-    dout(cout  << "init matrix of catches" << endl);
+    dout(cout  << "init matrix of catches" << "\n");
     vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));// trip based landings...
     vector< vector<double> > init_ping_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups)); // ...instantaneous catches (land+disc)
     vector< vector<double> > init_discards_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
@@ -346,7 +346,7 @@ Vessel::Vessel(Node* p_location,
     opportunity_interest_rate= _opportunity_interest_rate;
     annual_discount_rate= _annual_discount_rate;
 
-    //cout << "Creating this vessel " << a_name << "second steps done" << endl;
+    //cout << "Creating this vessel " << a_name << "second steps done" << "\n";
 
     // a particular setters for the CPUE STUFF...
     // for implicit pops or "out of range" fishing: create cpue_nodes_species
@@ -364,7 +364,7 @@ Vessel::Vessel(Node* p_location,
     auto it = std::unique(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
     gshape_name_nodes_with_cpue.resize(std::distance(gshape_name_nodes_with_cpue.begin(), it));
 
-    //cout << "Creating this vessel, third steps done " << endl;
+    //cout << "Creating this vessel, third steps done " << "\n";
 
     // init cpue_nodes_species for this vessel
     int nbnodes = gshape_name_nodes_with_cpue.size();
@@ -385,7 +385,7 @@ Vessel::Vessel(Node* p_location,
         }
     }
 
-    //cout << "Creating this vessel, fourth steps done " << endl;
+    //cout << "Creating this vessel, fourth steps done " << "\n";
     
     // need to compute expected cpue (averaged over node but cumulated over species)
     // for this particular vessel, in order to scale the prior guess (see below)
@@ -394,13 +394,13 @@ Vessel::Vessel(Node* p_location,
     vector<vector<double> > gscale_cpue_nodes_species = this->get_gscale_cpue_nodes_species();
     const auto &fgrounds = this->get_fgrounds();
 
-    //cout << "fgrounds.size() is " << fgrounds.size() <<  endl;
-    //cout << "while gshape_cpue_nodes_species.size() is " << gshape_cpue_nodes_species.size() << endl;
+    //cout << "fgrounds.size() is " << fgrounds.size() <<  "\n";
+    //cout << "while gshape_cpue_nodes_species.size() is " << gshape_cpue_nodes_species.size() << "\n";
 
     vector<double> expected_cpue_this_pop(nbpops);
     for (int pop = 0; pop < nbpops; pop++) {
         
-        //cout << "pop is " << pop << endl;
+        //cout << "pop is " << pop << "\n";
 
         vector<double> cpue_per_fground(fgrounds.size());
         // init
@@ -408,7 +408,7 @@ Vessel::Vessel(Node* p_location,
 
         // compute cpue on nodes
         for (unsigned int f = 0; f < fgrounds.size(); f++) {
-            //cout << "f is " << f << endl;
+            //cout << "f is " << f << "\n";
             
             // look into the vector of vector....
             double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
@@ -418,21 +418,21 @@ Vessel::Vessel(Node* p_location,
             // a dangerous fix:
             if (a_shape < 0 || a_scale < 0) {
 
-                //  cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                //  cout << "Something weird with the Gamma parameters: some negative values loaded...." << "\n";
                 //for(size_t f = 0; f < fgrounds.size(); ++f)
                 //{
-                //cout <<  " this vessel is is: " << vessels.at(i)->get_name() << endl;
-                //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-                //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                //cout <<  " this vessel is is: " << vessels.at(i)->get_name() << "\n";
+                //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << "\n";
+                //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << "\n";
                 //}
                 a_shape = 1;
                 a_scale = 0;
             }
 
             cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
-            //if( vessels[i]->get_idx() ==2) dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
+            //if( vessels[i]->get_idx() ==2) dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << "\n");
 
-            //dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
+            //dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << "\n");
         }
         // compute the average cpue for this pop across all nodes
         for (unsigned int f = 0; f < fgrounds.size(); f++) {
@@ -447,12 +447,12 @@ Vessel::Vessel(Node* p_location,
         expected_cpue += expected_cpue_this_pop.at(pop);
     }
 
-    dout(cout << "expected_cpue for this vessel is " << expected_cpue << endl);
-    //cout << "expected_cpue for this vessel is " << expected_cpue << endl;
+    dout(cout << "expected_cpue for this vessel is " << expected_cpue << "\n");
+    //cout << "expected_cpue for this vessel is " << expected_cpue << "\n";
 
     // init at 0 cumcatch and cumeffort per trip,
     // init at best guest the experiencedcpue_fgrounds
-    dout(cout << "init dynamic object related to fgrounds" << endl);
+    dout(cout << "init dynamic object related to fgrounds" << "\n");
     const vector<double> &freq_fgrounds = this->get_freq_fgrounds();
     vector<double> init_for_fgrounds(fgrounds.size());
     vector<double> cumeffort_per_trip_per_fgrounds = init_for_fgrounds;
@@ -510,9 +510,9 @@ Vessel::Vessel(Node* p_location,
         // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
         // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
 
-        //dout(cout  << "experienced_bycatch_prop_on_fgrounds[f]"  <<experienced_bycatch_prop_on_fgrounds[f] << endl);
-        //dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl);
-        //dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
+        //dout(cout  << "experienced_bycatch_prop_on_fgrounds[f]"  <<experienced_bycatch_prop_on_fgrounds[f] << "\n");
+        //dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << "\n");
+        //dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << "\n");
 
         // init the ones per pop
         for (int pop = 0; pop < nbpops; pop++)
@@ -580,8 +580,8 @@ Vessel::Vessel(Node* p_location,
     // the expected_cpue is to scale to the encountered cpue i.e. freq of visit will decrease if experienced cpue < expected cpue
     // and vice versa...
 
-    cout << "vessel creator...OK" << endl;
-    dout(cout << "vessel creator...OK" << endl);
+    cout << "vessel creator...OK" << "\n";
+    dout(cout << "vessel creator...OK" << "\n");
     init();
 }
 
@@ -1301,7 +1301,7 @@ double Vessel::get_min_prop_remaining_global_quotas_on_avoided_stks ()
     // for looking for the min prop of quota left but only within the avoided_stocks subset...
     vector<double> prop_remaining_global_quotas_for_avoided_stks;
     for (int stk=0; stk<prop_remaining_global_quotas.size();++stk){
-//cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << endl;
+//cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << "\n";
           if(avoided_stocks.at(stk)) prop_remaining_global_quotas_for_avoided_stks.push_back(prop_remaining_global_quotas.at(stk));
     }
 
@@ -1498,7 +1498,7 @@ void Vessel::addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, dou
 
 void Vessel::reinitDaysSpentInRestrictedAreaThisMonthtoZero()
 {
-   //cout << "the daysSpentInRestrictedAreaThisMonth size is " << daysSpentInRestrictedAreaThisMonth.size() << endl;
+   //cout << "the daysSpentInRestrictedAreaThisMonth size is " << daysSpentInRestrictedAreaThisMonth.size() << "\n";
     for (int i=0; i<daysSpentInRestrictedAreaThisMonth.size();++i)
         daysSpentInRestrictedAreaThisMonth.at(i)=0.0;
 }
@@ -1742,7 +1742,7 @@ void Vessel::init_cpue_nodes_species(int nbnodes, int nbspecies)
 {
 
     // init at 0 the matrix of cpues
-    dout(cout  << "init matrix of cpues" << endl);
+    dout(cout  << "init matrix of cpues" << "\n");
     vector< vector<double> > init_cpue_nodes_species(nbnodes, vector<double>(nbspecies));
     cpue_nodes_species= init_cpue_nodes_species;
     for(int i = 0; i < nbnodes; i++)
@@ -1754,7 +1754,7 @@ void Vessel::init_cpue_nodes_species(int nbnodes, int nbspecies)
             cpue_nodes_species.at(i).at(j) = 0;
             //dout(cout  << cpue_nodes_species[i][j] << " ");
         }
-        //dout(cout  << endl);
+        //dout(cout  << "\n");
     }
 
 }
@@ -1764,7 +1764,7 @@ void Vessel::init_gshape_cpue_nodes_species(int nbnodes, int nbspecies)
 {
 
     // init at 0 the matrix of cpues
-    dout(cout  << "init matrix of gshape cpues" << endl);
+    dout(cout  << "init matrix of gshape cpues" << "\n");
     vector< vector<double> > init_gshape_cpue_nodes_species(nbnodes, vector<double>(nbspecies));
     gshape_cpue_nodes_species= init_gshape_cpue_nodes_species;
     for(int i = 0; i < nbnodes; i++)
@@ -1776,7 +1776,7 @@ void Vessel::init_gshape_cpue_nodes_species(int nbnodes, int nbspecies)
             gshape_cpue_nodes_species.at(i).at(j) = 0;
             //dout(cout  << gshape_cpue_nodes_species[i][j] << " ");
         }
-        //dout(cout  << endl);
+        //dout(cout  << "\n");
     }
 
 }
@@ -1786,7 +1786,7 @@ void Vessel::init_gscale_cpue_nodes_species(int nbnodes, int nbspecies)
 {
 
     // init at 0 the matrix of cpues
-    dout(cout  << "init matrix of gscale cpues" << endl);
+    dout(cout  << "init matrix of gscale cpues" << "\n");
     vector< vector<double> > init_gscale_cpue_nodes_species(nbnodes, vector<double>(nbspecies));
     gscale_cpue_nodes_species= init_gscale_cpue_nodes_species;
     for(int i = 0; i < nbnodes; i++)
@@ -1798,7 +1798,7 @@ void Vessel::init_gscale_cpue_nodes_species(int nbnodes, int nbspecies)
             gscale_cpue_nodes_species.at(i).at(j) = 0;
             //dout(cout  << gscale_cpue_nodes_species[i][j] << " ");
         }
-        //dout(cout  << endl);
+        //dout(cout  << "\n");
     }
 
 }
@@ -2098,7 +2098,7 @@ void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int t
              " from global tac " << global_tac_this_pop <<
              " percent_simulated_tac_this_pop " << percent_simulated_tac_this_pop <<
              " percent_tac_per_pop " << percent_tac_per_pop.at(pop) <<
-             " relative key " << relative_key[this->get_nationality()] << endl);
+             " relative key " << relative_key[this->get_nationality()] << "\n");
 
         // inform if this vessel is actually linked with the management under investigation...
         // (if not then the vessel will not be forced to stay on quayside when TACs exhausted)
@@ -2113,7 +2113,7 @@ void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int t
                                   this->get_name() << " " <<
                                   pop << " " <<
                                   individual_tac_per_pop.at(pop) << " " <<
-                                  discard_all << endl;
+                                  discard_all << "\n";
 
     }
     else
@@ -2134,7 +2134,7 @@ void Vessel::set_individual_tac_this_pop(ofstream &export_individual_tacs, int t
                                       this->get_name() << " " <<
                                       pop << " " <<
                                       a_tac << " " << // tac at 0
-                                      discard_all << endl;
+                                      discard_all << "\n";
 
             // e.g. if discard for this vessel this pop then force a 0:
             individual_tac_per_pop.at(pop) = 0;
@@ -2163,7 +2163,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
                                    const DynAllocOptions &dyn_alloc_sce)
 {
 
-    outc(cout << "...updateTripsStatistics()" << endl);
+    outc(cout << "...updateTripsStatistics()" << "\n");
 
     double cumProfit = avgProfit * numTrips;
     double cumRevenues = avgRevenues * numTrips;
@@ -2187,7 +2187,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
         vector<int> comcat_at_szgroup =   populations.at(pop)->get_comcat_at_szgroup();
 
-        outc(cout  << "...for pop " << pop << endl);
+        outc(cout  << "...for pop " << pop << "\n");
 
 
         // assuming a hardcoded price flexibility at 25% for all stocks
@@ -2208,7 +2208,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
               amount_fish_per_y= populations.at(pop)->get_landings_at_end_of_years();
               a_unit=1; // because landings in kilo
            }
-           //cout << "amount_fish_per_y.size() is " << amount_fish_per_y.size() << endl;
+           //cout << "amount_fish_per_y.size() is " << amount_fish_per_y.size() << "\n";
            double amount_to= amount_fish_per_y.at(0)*a_unit;
            double numerator=0.0;
            double denominator=0.0;
@@ -2219,13 +2219,13 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
               denominator += pow(amount_to, -0.25);
            }
            price_multiplier=numerator/denominator;
-           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
+           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << "\n");
            if(!isfinite(price_multiplier))
            {
-               dout(cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << endl);
+               dout(cout << "ouch...for this pop " << pop << ", price_multiplier is corrected to 1 " << "\n");
                price_multiplier=1.0; // extra precaution if any unexpected NaN.
            }
-           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << endl);
+           dout(cout << "for this pop " << pop << ", price_multiplier is "<< price_multiplier << "\n");
         }
 
 
@@ -2233,7 +2233,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
-           // outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
+           // outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << "\n");
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] *
                                  get_loc()->get_prices_per_cat(pop, comcat_this_size) * price_multiplier *
                                   (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
@@ -2261,18 +2261,18 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
     // AER economic indicators, updated along the trip level;
     TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent)/100;
- // cout << "TotLandingIncome is "<< TotLandingIncome << endl;
+ // cout << "TotLandingIncome is "<< TotLandingIncome << "\n";
     TotHoursAtSea    += get_cumsteaming();            // cumsteaming gives cumul for this trip. cumsteaming is reset to 0 after each trip
- // cout << "TotHoursAtSea is "<< TotHoursAtSea << endl;
+ // cout << "TotHoursAtSea is "<< TotHoursAtSea << "\n";
     TotFuelCosts     += fuelcost;
- // cout << "TotFuelCosts is "<< TotFuelCosts << endl;
+ // cout << "TotFuelCosts is "<< TotFuelCosts << "\n";
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
- //   cout << "this->other_variable_costs_per_unit_effort is "<< this->other_variable_costs_per_unit_effort << " this vessel " << this->get_name() <<  endl;
- //   cout << "get_cumsteaming() "<< get_cumsteaming() << endl;
- //  cout << "TotVarCosts is "<< TotVarCosts << endl;
+ //   cout << "this->other_variable_costs_per_unit_effort is "<< this->other_variable_costs_per_unit_effort << " this vessel " << this->get_name() <<  "\n";
+ //   cout << "get_cumsteaming() "<< get_cumsteaming() << "\n";
+ //  cout << "TotVarCosts is "<< TotVarCosts << "\n";
     GVA               = (TotLandingIncome+(annual_other_income* (double)tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs* (double)tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
- //  cout << "GVA is "<< GVA << endl;
+ //  cout << "GVA is "<< GVA << "\n";
 
     if(annual_other_income==0) {
     annual_other_income=1;
@@ -2287,26 +2287,26 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
 
 
-//    cout << "GVAPerRevenue is "<< GVAPerRevenue << endl;
+//    cout << "GVAPerRevenue is "<< GVAPerRevenue << "\n";
     GrossProfit       =  (GVA*(100.0-crewshare_and_unpaid_labour_costs_percent)/100.0) ;
                                                // AER indicator - gross cash flow
-//  cout << "GrossProfit is "<< GrossProfit << endl;
+//  cout << "GrossProfit is "<< GrossProfit << "\n";
 
 
 
     double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * this_vessel_nb_crew *  TotHoursAtSea;
-// cout << "LabourOpportunityCosts is "<< LabourOpportunityCosts << endl;
+// cout << "LabourOpportunityCosts is "<< LabourOpportunityCosts << "\n";
     LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent/100.0) -
                                       ((annual_insurance_costs_per_crew * (double)tstep / 8761) * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
-// cout << "LabourSurplus is "<< LabourSurplus << endl;
+// cout << "LabourSurplus is "<< LabourSurplus << "\n";
 
     double CapitalOpportunityCosts = (vessel_value * opportunity_interest_rate/100.0) * (double)tstep/8761;
-// cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
+// cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << "\n";
 
     if(vessel_value<0) vessel_value=0;
     NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (1-((100.0-annual_depreciation_rate)/100.0)) * (double)tstep/8761);
-// cout << "NetProfit is "<< NetProfit << endl;
+// cout << "NetProfit is "<< NetProfit << "\n";
 
 
    double divider=(TotLandingIncome+(annual_other_income* (double)tstep/8761));
@@ -2319,7 +2319,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
        NetProfitMargin=0;
    }
     // AER indicator (in %)
-// cout << "NetProfitMargin is "<< NetProfitMargin << endl;
+// cout << "NetProfitMargin is "<< NetProfitMargin << "\n";
 
    // overwrite input with a harcoded value to avoid confusion in informing this bit. What is needed here is the max hours worked that correspond to one unit of FTE 
    // i.e. 8 hours per day x 5 work days per week x 52 weeks per year = 2080
@@ -2340,14 +2340,14 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
     {
     RoFTA             =0;
     }
-// cout << "RoFTA is "<< RoFTA << endl;
+// cout << "RoFTA is "<< RoFTA << "\n";
 
     BER = 0;
    if(GVA>0) BER               = ((other_annual_fixed_costs * (double)tstep / 8761) + CapitalOpportunityCosts + (vessel_value * ((100.0 - annual_depreciation_rate) / 100.0) * (double)tstep / 8761)) /
        (1 - (((GVA * crewshare_and_unpaid_labour_costs_percent / 100.0) + TotFuelCosts + TotVarCosts) / TotLandingIncome));
    // Break-Even Revenue
 
-  // cout << "BER is "<< BER << endl;
+  // cout << "BER is "<< BER << "\n";
   
     if(BER>0){
     CRBER             = (TotLandingIncome + (annual_other_income* (double)tstep/8761)) / BER;
@@ -2356,13 +2356,13 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
     CRBER             =0;
     }
 
-// cout << "CRBER is "<< CRBER << endl;
+// cout << "CRBER is "<< CRBER << "\n";
 
     if(GVA>0)   NetPresentValue = GVA* (1/pow((1+annual_discount_rate/100.0),(ceil((double)tstep / 8761))));
                                                // annual_discount_rate is in percent
-// cout << "NetPresentValue is "<< NetPresentValue << endl;
+// cout << "NetPresentValue is "<< NetPresentValue << "\n";
 
-    outc(cout  << "...updateTripsStatistics()...OK" << endl);
+    outc(cout  << "...updateTripsStatistics()...OK" << "\n");
 
 }
 
@@ -2378,21 +2378,21 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
     std::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
         if (node->getChildrenCount() == 0) { // is a leaf node
-                       // std::cout << "Node Value= " << node->value() << std::endl;
+                       // std::cout << "Node Value= " << node->value() << "\n";
             return node->value();
         }
 
         value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
-           // cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
+           // cout << "vessel " << this->get_name() << " evaluation gets back " << value << "\n";
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
 
         bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));
 
-       // std::cout << "value=" << value << " bin=" << bin << std::endl;
+       // std::cout << "value=" << value << " bin=" << bin << "\n";
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;
@@ -2517,7 +2517,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 {
     if(roadmap.size()==0)
     {
-        cout << "DEBUG !! " << this->get_name() << endl;
+        cout << "DEBUG !! " << this->get_name() << "\n";
     return;
     }
 
@@ -2527,11 +2527,11 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
     list<types::NodeId>::iterator pos2 = roadmap.end();
 
     bool returning_to_harbour= nodes[(*(--pos2)).toIndex()]->get_is_harbour();
-    dout(cout  <<  " returning_to_harbour " << returning_to_harbour  << endl);
+    dout(cout  <<  " returning_to_harbour " << returning_to_harbour  << "\n");
 
     if(roadmap.size()==0)
     {
-        cout << "DEBUG !! " << endl;
+        cout << "DEBUG !! " << "\n";
     }
 
     if(roadmap.size()==1)
@@ -2541,13 +2541,13 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         dout (cout << "JUMP?? FROM NODE " << this->get_loc()->get_idx_node().toIndex()
               << " " << this->get_loc()->get_x() << " " << this->get_loc()->get_y()
               <<  " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex()
-                << " " << nodes[(*pos).toIndex()]->get_x() << " " << nodes[(*pos).toIndex()]->get_y()  << endl);
+                << " " << nodes[(*pos).toIndex()]->get_x() << " " << nodes[(*pos).toIndex()]->get_y()  << "\n");
 
         double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
         double dist_next_node = dist(this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
         if(dist_for_one_ping > dist_next_node)
         {
-            dout(cout  << "YES: JUMP!!" << endl);
+            dout(cout  << "YES: JUMP!!" << "\n");
             this->move_to(nodes[(*pos).toIndex()]);
             next_x= this->get_loc()->get_x();
             next_y= this->get_loc()->get_y();
@@ -2558,7 +2558,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
         else
         {
-            dout(cout  << "NO: APPROACH!!" << endl);
+            dout(cout  << "NO: APPROACH!!" << "\n");
             double b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
             vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
             this->set_xy(xy[0], xy[1]);
@@ -2597,31 +2597,31 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
 
         dout ( cout << "in find_next_point_on_the_graph: distance prev pt: " << dist_next_node
-               << ", conso to get there: " << get_consotogetthere() << endl);
+               << ", conso to get there: " << get_consotogetthere() << "\n");
 
     }
     else
     {
-        dout(cout  << "SEMI-CONTINUOUS MOVE...from here " << this->get_loc()->get_idx_node().toIndex() << endl);
-        dout(cout  << " to NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << endl);
+        dout(cout  << "SEMI-CONTINUOUS MOVE...from here " << this->get_loc()->get_idx_node().toIndex() << "\n");
+        dout(cout  << " to NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << "\n");
         bool flag = false;
         // travel on the graph as long as dist_traveled is reached.
         dout(cout << "SEMI-CONTINUOUS MOVE...FROM NODE " << this->get_loc()->get_idx_node().toIndex()
-             << " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node() << endl);
+             << " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node() << "\n");
         next_x= nodes[(*pos).toIndex()]->get_x();
         next_y= nodes[(*pos).toIndex()]->get_y();
-        dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << endl);
+        dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << "\n");
         double dist_next_node = dist(x, y, next_x, next_y);
         double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
         //this->set_distprevpos(dist_next_node) ;
         this->set_distprevpos(0) ;
         double b = bearing (x, y, next_x, next_y);
         this->set_course(b);
-        dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);
-        dout(cout  << "START BEARING " << this->get_course() <<endl);
+        dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << "\n");
+        dout(cout  << "START BEARING " << this->get_course() <<"\n");
 
         dout(cout << "distance to next node (before moving): " << dist_next_node
-             << ", dist to be traveled: " << dist_traveled  << endl);
+             << ", dist to be traveled: " << dist_traveled  << "\n");
 
         double dist_sauv;		 // required to get the remaining dist
         while(dist_traveled > dist_next_node)
@@ -2633,7 +2633,6 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             set_distprevpos(get_distprevpos() + min(dist_next_node, dist_traveled));
             dist_traveled = dist_traveled - dist_next_node;
             dout(cout  << "dist_traveled  " << dist_traveled << endl);
-            
             // system("pause");
             if(dist_traveled <=0.0)
             {
@@ -2643,13 +2642,13 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             }
             // change the current node
             // this->move_to(nodes[*pos]);
-            // dout(cout  << "pass through node " << nodes[*pos]->get_idx_node().toIndex() << endl);
+            // dout(cout  << "pass through node " << nodes[*pos]->get_idx_node().toIndex() << "\n");
             //  x = next_x;
             // y = next_y;
             if(roadmap.size()>1)
             {
                 this->move_to(nodes[(*pos).toIndex()]);
-                dout(cout  << "pass through node " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << endl);
+                dout(cout  << "pass through node " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << "\n");
                 x = next_x;
                 y = next_y;
                 // erode
@@ -2663,7 +2662,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                 if(dist_for_one_ping > dist_next_node)
                 {
 
-                    dout(cout  << "YES: JUMP TO THE FINAL NODE" << endl);
+                    dout(cout  << "YES: JUMP TO THE FINAL NODE" << "\n");
                     // JUMP
                     this->move_to(nodes[(*pos).toIndex()]);
                     next_x= this->get_loc()->get_x();
@@ -2680,7 +2679,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                 }
                 else
                 {
-                    dout(cout  << "NO: APPROACH THE FINAL NODE" << endl);
+                    dout(cout  << "NO: APPROACH THE FINAL NODE" << "\n");
                     b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
                     vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
                     this->set_xy(xy[0], xy[1]);
@@ -2697,12 +2696,12 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         if(!flag)
         {
             pos= roadmap.begin();
-            dout(cout << "x " << x << " y " << y << " next_x " << next_x << " next_y " << next_y << endl);
+            dout(cout << "x " << x << " y " << y << " next_x " << next_x << " next_y " << next_y << "\n");
             
             
             // USELESS CODE DEACTIVATE IN MARCH 2023...WAS INDUCING THE DISANCHORING SYMPTOM IN THE MEESO APP HAVING LONG LINKS.... 
             /*b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);       
+            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << "\n");
             if (b != this->get_course()) {
                 int aa;
                 cin >> aa;
@@ -2710,17 +2709,17 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             this->set_course(b);
             */
 
-            dout(cout  << "END BEARING " <<  this->get_course() <<endl);
+            dout(cout  << "END BEARING " <<  this->get_course() <<"\n");
             vector<double> xy = destB(x, y, course, dist_traveled);
             this->set_xy(xy[0], xy[1]);
             set_distprevpos(get_distprevpos() + dist_traveled);
             set_state(2);
-            dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << endl);
+            dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << "\n");
             
 
             if (is_fishing_credits && (a_tstep % 2))
             {
-                //cout << a_tstep << endl;
+                //cout << a_tstep << "\n";
                 // pay the tariff every two steps only, and at steaming as well
                 double tariff_this_cell = this->get_loc()->get_tariffs().at(this->get_metier()->get_name()) * 
                                              this->get_metier()->get_met_multiplier_on_arbitary_breaks_for_tariff(); // tariff per (2) hour(s) * multiplier to account for hours per day specific to the met
@@ -2728,11 +2727,11 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                 // check
                 dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when transiting through node " <<
                     this->get_loc()->get_idx_node().toIndex() << ", with metier " << this->get_metier()->get_name() <<
-                      " the tariff paid is " << tariff_this_cell << endl);
+                      " the tariff paid is " << tariff_this_cell << "\n");
                 fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell;
                 this->set_fishing_credits(fishing_credits);
                 dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
-                    " has remaining credits " << this->get_fishing_credits().at(0) << endl);
+                    " has remaining credits " << this->get_fishing_credits().at(0) << "\n");
             }
 
         }
@@ -2778,8 +2777,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 
     //if(this->get_x()>8 && this->get_x()<10 && this->get_y()<52 )
     //{
-    //    dout(cout  << "x "<< this->get_x() << " y "<< this->get_y() << endl);
-    //    dout(cout  << "DEBUG!! VESSEL "<< this->get_name() << " TRYING TO REACH " << "BY LAND!!" << endl); // detect to correct the straight line symptom
+    //    dout(cout  << "x "<< this->get_x() << " y "<< this->get_y() << "\n");
+    //    dout(cout  << "DEBUG!! VESSEL "<< this->get_name() << " TRYING TO REACH " << "BY LAND!!" << "\n"); // detect to correct the straight line symptom
     // }
 }
 
@@ -2815,8 +2814,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 {
     lock();
 
-    dout(cout << "BEGIN do_catch()" << endl);
-    dout(cout << "vessel " << this->get_name() <<endl);
+    dout(cout << "BEGIN do_catch()" << "\n");
+    dout(cout << "vessel " << this->get_name() <<"\n");
 
 
     // read in
@@ -2824,24 +2823,24 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     vector <vector<double>> ping_catch_pop_at_szgroup = this->get_ping_catch_pop_at_szgroup();
 
     // check the matrix of catches
-    //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << endl);
+    //dout(cout  << "in do_catch(): before: CATCH PER NBSZGROUP" << "\n");
     //for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
     //{
     //    for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
     //    {
     //        dout(cout  << catch_pop_at_szgroup[i][j] << " ");
     //    }
-    //    dout(cout  << endl);
+    //    dout(cout  << "\n");
     //}
 
     //auto  idx= this->get_loc()->get_idx_node();
     // if(idx.toIndex()==5706){
-    //        cout  << "WHAT? I CANNOT CHANGE FOR " << idx << " WHERE I AM... " << endl;
-    //        cout << "isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(idx.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
-    //        cout << "isVsizeBanned(this->get_length_class()) is "<< nodes.at(idx.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
-    //        cout << "isNationBanned(0) is "<< nodes.at(idx.toIndex())->isNationBanned(0)  << endl;
-    //        cout << "(nodes.at(idx)->isNationBanned(0) || nodes.at(idx)->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(idx.toIndex())->isNationBanned(0) || nodes.at(idx.toIndex())->isNationBanned(this->get_nationality_idx())) << endl;
-    //        cout << endl;
+    //        cout  << "WHAT? I CANNOT CHANGE FOR " << idx << " WHERE I AM... " << "\n";
+    //        cout << "isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(idx.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+    //        cout << "isVsizeBanned(this->get_length_class()) is "<< nodes.at(idx.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
+    //        cout << "isNationBanned(0) is "<< nodes.at(idx.toIndex())->isNationBanned(0)  << "\n";
+    //        cout << "(nodes.at(idx)->isNationBanned(0) || nodes.at(idx)->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(idx.toIndex())->isNationBanned(0) || nodes.at(idx.toIndex())->isNationBanned(this->get_nationality_idx())) << "\n";
+    //        cout << "\n";
     // }
      
 
@@ -2896,7 +2895,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width
          << "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
          << ", swept area this fishing event is then:" << swept_area
-         << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << endl ;);
+         << " compared to the cell area which is " << graph_res.at(0)*graph_res.at(1) << "\n" ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
     this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
@@ -2965,7 +2964,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
         }
         else
         { // impact on biomass instead...
-            if(loss_after_1_passage_per_func_group.size()==0) cout << "check inconsistent input files for metier-benthos..." << endl;
+            if(loss_after_1_passage_per_func_group.size()==0) cout << "check inconsistent input files for metier-benthos..." << "\n";
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_bio                    = this->get_loc()->get_benthos_tot_biomass(funcid);
             double next_bio                       = (area_ratio1*current_bio) + (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
@@ -2974,7 +2973,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
         outc (cout << "for this func " << funcid << " the loss_after_1_passage_per_func_group is "
               << loss_after_1_passage_per_func_group.at(funcid) << " for this landscape "<< a_landscape
               << ", then decrease_factor_on_benthos_funcgroup this fishing event is: "
-              << decrease_factor_on_benthos_funcgroup << endl);
+              << decrease_factor_on_benthos_funcgroup << "\n");
 
         dout(cout  << "after " << this->get_loc()->get_benthos_tot_biomass(funcid));
         //}
@@ -2990,7 +2989,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     auto the_grds = this->get_fgrounds();
     // relative node index to this vessel
     int idx_node_r= find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
-    dout(cout << "the_grds.size() is  " << the_grds.size() << "and should never be equal to the idx_node_r, which is "<< idx_node_r << endl);
+    dout(cout << "the_grds.size() is  " << the_grds.size() << "and should never be equal to the idx_node_r, which is "<< idx_node_r << "\n");
 
     // VARIABLES VALID FOR THIS FISHING EVENT ONLY
     double totLandThisEvent=1;
@@ -3009,11 +3008,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
         dout(cout << "at " << a_tstep << ", this vessel " << this->get_name() << ", when fishing here, with metier "<< this->get_metier()->get_name() << " the tariff paid is " <<
-             tariff_this_cell << endl);
+             tariff_this_cell << "\n");
         fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell;
         this->set_fishing_credits(fishing_credits);
         dout(cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
-                " has remaining credits " << this->get_fishing_credits().at(0) << endl);
+                " has remaining credits " << this->get_fishing_credits().at(0) << "\n");
     }
 
 
@@ -3077,7 +3076,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     for (unsigned int pop=0; pop< nbpops; pop++)
     {
         int namepop = populations[pop]->get_name();
-        //outc(cout << "check this pop " << populations.at(pop)->get_name() << endl);
+        //outc(cout << "check this pop " << populations.at(pop)->get_name() << "\n");
         
         // init
         vector <double>landings_per_szgroup(NBSZGROUP, 0);
@@ -3090,7 +3089,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
             // is this pop present on this node?
             if (binary_search (pop_names.begin(), pop_names.end(),  namepop  ))
             {
-                dout(cout  << "this pop " << populations.at(pop)->get_name() << " is present on this node... " << endl);
+                dout(cout  << "this pop " << populations.at(pop)->get_name() << " is present on this node... " << "\n");
 
 
                 /*
@@ -3101,9 +3100,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
                     vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
 
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "N_at_szgroup at the start of do_catch sz " <<  N_at_szgroup.at(sz) << endl;
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "removals_at_szgroup at the start of do_catch sz " <<  removals_at_szgroup.at(sz) << endl;
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "at_month_start at the start of do_catch sz " <<  at_month_start.at(sz) << endl;
+                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "N_at_szgroup at the start of do_catch sz " <<  N_at_szgroup.at(sz) << "\n";
+                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "removals_at_szgroup at the start of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n";
+                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "at_month_start at the start of do_catch sz " <<  at_month_start.at(sz) << "\n";
 
                 }
                 */
@@ -3178,17 +3177,17 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                     if (all_biomass[szgroup] < 0)
                     {
-                        cout << "Negative biomass detected! in all_biomass[szgroup] ...set to 0!" << endl;
+                        cout << "Negative biomass detected! in all_biomass[szgroup] ...set to 0!" << "\n";
                         all_biomass[szgroup] = 0;
                     }
 
 
                   /*if(this->get_name()=="FIN000020014"){
-                      cout  << "-------------------------" << endl;
-                      cout  << "pop" << pop << endl;
-                      cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << endl;
-                      cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << endl;
-                      cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << endl;
+                      cout  << "-------------------------" << "\n";
+                      cout  << "pop" << pop << "\n";
+                      cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << "\n";
+                      cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << "\n";
+                      cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << "\n";
                     }
                   */
 
@@ -3201,16 +3200,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                        // tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
                         tot_avai_for_disc= tot_avai_for_disc+avail_biomass[szgroup];
                     }
-                    dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
-                    dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << endl);
-                    dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
+                    dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << "\n");
+                    dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << "\n");
+                    dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << "\n");
                 }
 
                 //if(this->get_name()=="POL022500003" && pop==31){
-                //    cout  << "tot biomass available on this node " << tot << endl;
+                //    cout  << "tot biomass available on this node " << tot << "\n";
                 //}
 
-                dout(cout  << "tot biomass available on this node " << tot << endl);
+                dout(cout  << "tot biomass available on this node " << tot << "\n");
 
                 // by the way, if no biomass at all then update the spatial pop distribution!
                 if(tot2 <=1.0) this->get_loc()->remove_pop_names_on_node(namepop);
@@ -3218,7 +3217,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 //if(tot!=tot)  // c++ trick for like testing for is.nan
                 //{
                 //    int a;
-                //    cout << "1: nan detected" << endl;
+                //    cout << "1: nan detected" << "\n";
                 //    cout << "1: nan detected...Pause: type a number to continue";
                 //    cin >> a;
                 //}
@@ -3268,21 +3267,21 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     //    cout << "tot_catch_per_pop kg for harbour porpoise, given this vessel effect "<< v_betas_per_pop[pop] <<
                     //          " and this pop avai  "<< avai_pops_at_selected_szgroup.at(0) << " and avai_betas "<< avai_betas <<
                     //            " and avai_beta_param "<< populations[pop]->get_avai0_beta() <<
-                    //            " and selectivity " << selectivity_per_stock[pop][selected_szgroups.at(0)] << ", is " << tot_catch_per_pop[pop] << endl;
+                    //            " and selectivity " << selectivity_per_stock[pop][selected_szgroups.at(0)] << ", is " << tot_catch_per_pop[pop] << "\n";
                     //  }
 
 
 
-                    dout(cout  << "-------------------------" << endl);
-                    dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
-                    dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl);
+                    dout(cout  << "-------------------------" << "\n");
+                    dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << "\n");
+                    dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << "\n");
 
                     
                       /*if(this->get_name()=="POL022500003"){
-                       cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
-                       cout  << "explicit: given  that avai biomass is " << tot << endl;
-                       cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << endl;
-                       cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << endl;
+                       cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << "\n";
+                       cout  << "explicit: given  that avai biomass is " << tot << "\n";
+                       cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << "\n";
+                       cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << "\n";
                       }
                       */
 
@@ -3292,7 +3291,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
                     //for(int i = 0; i < cumcatch_fgrounds.size(); i++){
-                    //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
+                    //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << "\n";
                     //}
 
 
@@ -3302,7 +3301,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << "\n";
                     }
                     int inter=0;
                     int a_szgroup=0;
@@ -3310,19 +3309,19 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         inter = a_szgroup;
                         a_szgroup+=1;
                     }
-//                    dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << endl;)
+//                    dout(if(inter>Ns_at_szgroup_pop_scaled.size()) cout<< "MLS categories cannot be > 13" << "\n";)
                     double left_to_MLS=0;
                     double right_to_MLS=0;
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << "\n";
                     if(selectivity_per_stock[pop].at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
                         left_to_MLS  = trapezoidal(0, inter, selectivity_per_stock[pop]) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
                         right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " here" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " here" << "\n";
 
                     } else{
                         left_to_MLS  = trapezoidal(0, MLS_cat, selectivity_per_stock[pop]); // discards
                         right_to_MLS = trapezoidal(MLS_cat, inter, selectivity_per_stock[pop])+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " there" << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << " there" << "\n";
 
                     }
 
@@ -3337,9 +3336,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
 
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << "\n";
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << "\n";
+// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....and discardfactor is " << discardfactor << "\n";
 
                     // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
                     //  AND CONVERT INTO REMOVALS IN NUMBER
@@ -3362,14 +3361,14 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 alloc_key.at(szgroup)=0;
                             }
 
-                            dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
+                            dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << "\n");
                             // disaggregate total catch (in weight) for this pop according to the alloc key
                             landings_per_szgroup[szgroup]= tot_landings_this_pop*alloc_key[szgroup];
 
                             outc(cout << " sz " << szgroup <<
                                  " pop " << pop <<
                                  " tot landings this pop " << tot_landings_this_pop <<
-                                 " landings per sz "      <<  landings_per_szgroup[szgroup] << endl
+                                 " landings per sz "      <<  landings_per_szgroup[szgroup] << "\n"
                                  );
 
                             //catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
@@ -3387,7 +3386,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 alloc_key[szgroup]=0;
                             }
 
-                            dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
+                            dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << "\n");
                             // disaggregate total catch (in weight) for this pop according to the alloc key
                             discards_per_szgroup[szgroup]= tot_discards_this_pop*alloc_key[szgroup];
 
@@ -3395,28 +3394,28 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                         cout << " sz " << szgroup <<
                                         " pop " << pop <<
                                         " tot discards this pop " << tot_discards_this_pop <<
-                                        " discards per sz "      << discards_per_szgroup[szgroup] << endl
+                                        " discards per sz "      << discards_per_szgroup[szgroup] << "\n"
                                         );
 
                             // TRUE CATCHES:
                             catch_per_szgroup[szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup];
                             dout(cout  << " sz " << szgroup <<
-                                 " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
+                                 " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << "\n");
 
                             // then get the removals in terms of N
                             removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/wsz[szgroup];
                             if(removals_per_szgroup[szgroup]!=removals_per_szgroup[szgroup])
                             {
-                                cout <<"nan detected! in removals_per_szgroup[szgroup] ... "<< endl;
+                                cout <<"nan detected! in removals_per_szgroup[szgroup] ... "<< "\n";
                             }
                             if (removals_per_szgroup[szgroup] <0)
                             {
-                                cout << "Negative removals detected! in removals_per_szgroup[szgroup] ...set to 0!" << endl;
+                                cout << "Negative removals detected! in removals_per_szgroup[szgroup] ...set to 0!" << "\n";
                                 removals_per_szgroup[szgroup] = 0;
                             }
 
-                            dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
-                            //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
+                            dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << "\n");
+                            //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << "\n");
 
                             // finally, impact the N...
                             // ...but do not allow negative abundance!
@@ -3435,7 +3434,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 dout (cout << "the szgroup " << szgroup <<
                                       "for this pop " << pop << " is fully depleted on this node " <<
                                       idx_node << "! catch is "<<
-                                      catch_per_szgroup[szgroup] << endl);
+                                      catch_per_szgroup[szgroup] << "\n");
                                 // everything is caught...
                                 removals_per_szgroup[szgroup]=Ns_at_szgroup_pop[szgroup];
                                 // nothing left!
@@ -3450,30 +3449,30 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                                 if (new_Ns_at_szgroup_pop[szgroup] < 0)
                                 {
-                                    cout << "Negative Ns detected in do_catch() new_Ns_at_szgroup_pop! ...set to 0!" << endl;
+                                    cout << "Negative Ns detected in do_catch() new_Ns_at_szgroup_pop! ...set to 0!" << "\n";
                                     new_Ns_at_szgroup_pop[szgroup] = 0;
                                 }
 
                                 /*
                                 // check (before)
                                 vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-                                dout(cout << "a_avai bef: " << endl);
+                                dout(cout << "a_avai bef: " << "\n");
                                 for(int it=0; it<a_avai_bef.size(); it++)
                                 {
-                                    dout(cout  << a_avai_bef.at(it) << " " << endl);
+                                    dout(cout  << a_avai_bef.at(it) << " " << "\n");
                                 }
 
                                 // check (before)
-                                dout(cout  << "removals_per_szgroup bef: " << endl);
-                                dout(cout  << removals_per_szgroup.at(szgroup) << " " << endl);
+                                dout(cout  << "removals_per_szgroup bef: " << "\n");
+                                dout(cout  << removals_per_szgroup.at(szgroup) << " " << "\n");
 
                                 // check (before)
-                                dout(cout  << "Ns_at_szgroup_pop bef: " << endl);
-                                dout(cout  << Ns_at_szgroup_pop.at(szgroup) << " " << endl);
+                                dout(cout  << "Ns_at_szgroup_pop bef: " << "\n");
+                                dout(cout  << Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
 
                                 // check (before)
-                                dout(cout  << "new_Ns_at_szgroup_pop bef: " << endl);
-                                dout(cout  << new_Ns_at_szgroup_pop.at(szgroup) << " " << endl);
+                                dout(cout  << "new_Ns_at_szgroup_pop bef: " << "\n");
+                                dout(cout  << new_Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
                                 */
 
                                 // update the availability key accounting for the current extraction (hourly feedback loop on the pop dynamics)
@@ -3495,14 +3494,14 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 /*
 
                                 // check (after)
-                                dout(cout << "a val " << val << " for this szgroup  " << szgroup << endl);
+                                dout(cout << "a val " << val << " for this szgroup  " << szgroup << "\n");
 
                                 // check (after)
                                 vector <double> a_avai_aft = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-                                dout(cout << "a_avai aft: " << endl);
+                                dout(cout << "a_avai aft: " << "\n");
                                 for(int it=0; it<a_avai_aft.size(); it++)
                                 {
-                                    dout(cout << a_avai_aft.at(it) << " " << endl);
+                                    dout(cout << a_avai_aft.at(it) << " " << "\n");
                                 }
                                 */
 
@@ -3511,11 +3510,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
                             removals_per_szgroup[szgroup]+=cumul_removals_at_szgroup_pop[szgroup];
 
-                            //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
+                            //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << "\n");
 
                             // caution: cumul landings at the trip level
-//if(this->get_name()=="FIN000020014") cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << endl;
-//if(this->get_name()=="FIN000020014") cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << endl;
+//if(this->get_name()=="FIN000020014") cout << "....discards_pop_at_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << discards_pop_at_szgroup[pop][szgroup] << "\n";
+//if(this->get_name()=="FIN000020014") cout << "....landings_per_szgroup[pop][szgroup] szgroup " << szgroup <<" is " << landings_per_szgroup[szgroup] << "\n";
                             // CUMUL PER TRIP FOR THIS VESSEL (note that catch_pop_at_szgroup is LANDINGS)
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
@@ -3523,7 +3522,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         }
                         else
                         {
-                            dout(cout  << "no biomass for this szgroup to fish there! " << endl);
+                            dout(cout  << "no biomass for this szgroup to fish there! " << "\n");
                             new_Ns_at_szgroup_pop[szgroup]=0;
                             catch_per_szgroup[szgroup]=0;
                             landings_per_szgroup[szgroup]=0;
@@ -3537,7 +3536,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             catch_pop_at_szgroup[pop][szgroup] += 0; // in weight
                             discards_pop_at_szgroup[pop][szgroup] += 0;// in weight
                             ping_catch_pop_at_szgroup[pop][szgroup] = 0;
-                            dout(cout << "no biomass for this szgroup to fish there! fill out with 0s" << endl);
+                            dout(cout << "no biomass for this szgroup to fish there! fill out with 0s" << "\n");
                
 
                         }
@@ -3558,15 +3557,15 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
                         vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
 
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << endl);
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << endl);
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << endl);
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << "\n");
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n");
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << "\n");
 
                         for(int sz=0; sz<N_at_szgroup.size(); sz++)
                         {
                             if(removals_at_szgroup.at(sz)>at_month_start.at(sz))
                             {
-                                dout(cout << "something wrong here!..." << endl);
+                                dout(cout << "something wrong here!..." << "\n");
                                 int xx;
                                 cin >>xx;
                             }
@@ -3624,11 +3623,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             // 2. compare (AT THE VESSEL SCALE)
                             if(a_cumul_weight_this_pop_this_vessel>remaining_individual_tac_this_pop)
                             {
-                                dout(cout  << this->get_name()  << ": individual quota is "<< remaining_individual_tac_this_pop << " for this pop: overshooted" << endl);
+                                dout(cout  << this->get_name()  << ": individual quota is "<< remaining_individual_tac_this_pop << " for this pop: overshooted" << "\n");
 
                                 // reaction = discard
                                 dout (cout << "...then this vessel (with quota " << remaining_individual_tac_this_pop << ") now discards all (" <<
-                                      a_cumul_weight_this_pop_this_vessel <<") for this pop " << pop << "!!! " << endl);
+                                      a_cumul_weight_this_pop_this_vessel <<") for this pop " << pop << "!!! " << "\n");
 
                                 // force a zero quota on this pop. (and export discards)
                                 a_cumul_weight_this_pop_this_vessel=0.0; // discard all!
@@ -3647,7 +3646,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             }
                             else
                             {
-                                dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
+                                dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << "\n");
                                 this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
                                                                   remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
 
@@ -3665,9 +3664,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                         string a_nation = this->get_nationality();
                         map<string, double> landings_so_far_per_nation = populations.at(pop)->get_landings_so_far_per_nation();
                         if (landings_so_far_per_nation.count(a_nation) == 0) {
-                            cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability " << endl;
-                            cout << "This vessel nationality is "<< a_nation << endl;
-                            cout << "relative stability key is " << endl;
+                            cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability " << "\n";
+                            cout << "This vessel nationality is "<< a_nation << "\n";
+                            cout << "relative stability key is " << "\n";
                             for (map<string, double >::const_iterator it = landings_so_far_per_nation.begin();
                                 it != landings_so_far_per_nation.end(); ++it)
                             {
@@ -3680,7 +3679,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                         int a_length_class = this->get_length_class();
                         map<int, double> landings_so_far_per_vessel_length_class = populations.at(pop)->get_landings_so_far_per_vessel_length_class();
-                        if (landings_so_far_per_vessel_length_class.count(a_length_class) == 0) cout << "Not found: mismatch in length class coding in vessel length class TAC percentages " << endl;
+                        if (landings_so_far_per_vessel_length_class.count(a_length_class) == 0) cout << "Not found: mismatch in length class coding in vessel length class TAC percentages " << "\n";
                         double so_far_this_vessel_length_class = landings_so_far_per_vessel_length_class.at(a_length_class) +
                             a_cumul_weight_this_pop_this_vessel;
                         populations.at(pop)->set_landings_so_far_this_vessel_length_class(a_length_class, so_far_this_vessel_length_class);
@@ -3688,7 +3687,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                         // note that oth_land (per node) are also added to landings_so_far but at the start of each month.
 
-                        dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << endl);
+                        dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << "\n");
                         dout(cout  << "landings so far for pop " << pop << ", AFTER: " << populations.at(pop)->get_landings_so_far());
 
                         if(is_grouped_tacs)
@@ -3720,23 +3719,23 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                            
                               
-                                dout(cout << "landings so far in tons is " << so_far / 1000 << endl);
-                                dout(cout << "so_far_this_nation is (in tons) " << so_far_this_nation / 1000 << endl);
-                                dout(cout << "...compared to the quotas accessible to this nation "<< a_nation <<" on this pop " << pop <<", which is: " << populations.at(pop)->get_tac()->get_tac_per_nation(a_nation) * prop_tac_up_to_this_month << " as described by the relative stability" << endl);
-                                dout(cout << "landings so far this vessel class is (in tons) " << so_far_this_vessel_length_class / 1000 << endl);
-                                dout(cout << "...compared to the quotas accessible to this vessel length class, which is: " << populations.at(pop)->get_tac()->get_tac_accessible_per_vessel_length_class(this->get_length_class()) << endl);
-                                dout(cout << "global_quotas.at(pop) is " << global_quotas.at(pop) << endl);
-                                dout(cout << "prop tac_cumul_over_months_key this month  " << a_month << " is " << prop_tac_up_to_this_month << " (should not exceed 1)" << endl);
+                                dout(cout << "landings so far in tons is " << so_far / 1000 << "\n");
+                                dout(cout << "so_far_this_nation is (in tons) " << so_far_this_nation / 1000 << "\n");
+                                dout(cout << "...compared to the quotas accessible to this nation "<< a_nation <<" on this pop " << pop <<", which is: " << populations.at(pop)->get_tac()->get_tac_per_nation(a_nation) * prop_tac_up_to_this_month << " as described by the relative stability" << "\n");
+                                dout(cout << "landings so far this vessel class is (in tons) " << so_far_this_vessel_length_class / 1000 << "\n");
+                                dout(cout << "...compared to the quotas accessible to this vessel length class, which is: " << populations.at(pop)->get_tac()->get_tac_accessible_per_vessel_length_class(this->get_length_class()) << "\n");
+                                dout(cout << "global_quotas.at(pop) is " << global_quotas.at(pop) << "\n");
+                                dout(cout << "prop tac_cumul_over_months_key this month  " << a_month << " is " << prop_tac_up_to_this_month << " (should not exceed 1)" << "\n");
 
                                 dout(cout << "Therefore, the prop of the overall tac used so far (max is 1): " <<
                                         prop_remaining_global_quotas.at(pop) <<
                                         "  given the allowed global quota up to this month is " << global_quotas.at(pop) * prop_tac_up_to_this_month <<
-                                        " this pop: this is overshoot..." << endl);
+                                        " this pop: this is overshoot..." << "\n");
 
 
                                 // reaction
-                                dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
-                                dout(cout  << "...I declare I am choked by " << pop << "!!! " << endl);
+                                dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << "\n");
+                                dout(cout  << "...I declare I am choked by " << pop << "!!! " << "\n");
                                 this->set_is_choked(pop, 1);
                                 populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
                                 // => back correction (disable if you want to know the discarded part in annual_indic.
@@ -3744,21 +3743,21 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 // what a waste !!...
 
                                 /* CHECK so_far!!
-                                cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+                                cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
                                 double land_so_far    = 0;
                                 vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
                                 for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
                                 {
                                    land_so_far+=C_at_szgroup.at(sz);
                                 }
-                                cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << endl;
+                                cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << "\n";
                                 */
 
                                 a_cumul_weight_this_pop_this_vessel=0;// discard all!
 
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
-                                    dout(cout << "tac exhausted for pop "<< pop << ": discards all !!!!  because " << "(" << so_far << "/1000) > (" << global_quotas.at(pop) << ")" << endl);
+                                    dout(cout << "tac exhausted for pop "<< pop << ": discards all !!!!  because " << "(" << so_far << "/1000) > (" << global_quotas.at(pop) << ")" << "\n");
                                     double unwantedcatchfactor = 0.1; // caution: hardcoded, back-correction assuming a certain level of stock avoidance have been tried 
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup]*unwantedcatchfactor;// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all! => no landings
@@ -3773,7 +3772,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                             {
                                 dout (cout << "used " <<
                                       (so_far/1000) / (global_quotas.at(pop))*100  <<
-                                      " % global quota of " << global_quotas.at(pop) << " this pop: ok." << endl);
+                                      " % global quota of " << global_quotas.at(pop) << " this pop: ok." << "\n");
                             }
 
                         }			 // end individual TAC management
@@ -3846,18 +3845,18 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                          if(new_Ns_at_szgroup_pop[i]!=new_Ns_at_szgroup_pop[i])  // c++ trick for like testing for is.nan
                          {
                              int a;
-                             dout(cout << "namepop " <<namepop << endl);
-                             dout(cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << endl);
-                             dout(cout << "wsz[szgroup] " <<wsz[i] << endl);
-                             dout(cout << "sel_ogive[szgroup] " <<sel_ogive[i] << endl);
-                             dout(cout << "avail_biomass[szgroup] " <<avail_biomass[i] << endl);
-                             dout(cout << "alloc_key[szgroup] " <<alloc_key[i] << endl);
-                             dout(cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << endl);
-                             dout(cout << " weight_per_szgroup[szgroup] " << wsz[i] << endl);
-                             dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << endl);
-                             dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << endl);
+                             dout(cout << "namepop " <<namepop << "\n");
+                             dout(cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << "\n");
+                             dout(cout << "wsz[szgroup] " <<wsz[i] << "\n");
+                             dout(cout << "sel_ogive[szgroup] " <<sel_ogive[i] << "\n");
+                             dout(cout << "avail_biomass[szgroup] " <<avail_biomass[i] << "\n");
+                             dout(cout << "alloc_key[szgroup] " <<alloc_key[i] << "\n");
+                             dout(cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << "\n");
+                             dout(cout << " weight_per_szgroup[szgroup] " << wsz[i] << "\n");
+                             dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << "\n");
+                             dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << "\n");
 
-                             dout(cout << "here: nan detected" << endl);
+                             dout(cout << "here: nan detected" << "\n");
                              dout(cout << "here: nan detected...Pause: type a number to continue");
                              cin >> a;
                          }
@@ -3875,7 +3874,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 }
                 else
                 {
-                    dout(cout  << "tot biomass available on this node is 0 => no catch, sorry... " << endl);
+                    dout(cout  << "tot biomass available on this node is 0 => no catch, sorry... " << "\n");
                 }
 
                 // check for consistency i.e. no gain in N !!
@@ -3885,9 +3884,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 //    {
                 //        cout << "inconsistency in vessel->do_catch() for this pop " << populations.at(pop)->get_name() <<
                 //             " on this node " << idx_node <<
-                //            " for this szgroup " <<  szgroup <<endl;
-                //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl);
-                //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl);
+                //            " for this szgroup " <<  szgroup <<"\n";
+                //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << "\n");
+                //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << "\n");
                 //        int a_int;
                 //        cin >> a_int; // pause
                 //    }
@@ -3896,7 +3895,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
             }
             else
             {
-                dout(cout  << "no indiv of this pop " << populations[pop]->get_name() << " on this node... " << endl);
+                dout(cout  << "no indiv of this pop " << populations[pop]->get_name() << " on this node... " << "\n");
             }
 
 
@@ -3910,7 +3909,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 {
                     cumul = cumul + catch_pop_at_szgroup[pop][sz];
                 }
-            cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << endl;
+            cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << "\n";
             }
             */
 
@@ -3923,14 +3922,14 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
            {
 
 
-            dout(cout  << "this pop " << populations.at(pop)->get_name() << " is implicit (or outside the range)...catch knowing cpue only! " << endl);
+            dout(cout  << "this pop " << populations.at(pop)->get_name() << " is implicit (or outside the range)...catch knowing cpue only! " << "\n");
             // tips: put tot catch into the first bin...we don´t care which szgroup here...
             //vector<double> cpues = find_entries_i_d (cpue_per_stk_on_nodes, idx_node);
             auto grds = this->get_fgrounds();
             // relative node index to this vessel
             int idx_node_v= find(grds.begin(), grds.end(), idx_node) - grds.begin();
             //if((this->get_name())=="FIN000020014")cout <<this->get_name() << ": the first guess cpue for this implicit pop " << populations.at(pop)->get_name()
-            //        << " on this node "<< idx_node << endl;
+            //        << " on this node "<< idx_node << "\n";
 
             //double cpue = cpue_nodes_species.at(idx_node_v).at(pop); // look into the vector of vector....
             // replaced by:
@@ -3950,11 +3949,11 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 if(a_shape<=0 || a_scale <0)
                 {
 
-                    //cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                    //cout << "Something weird with the Gamma parameters: some negative values loaded...." << "\n";
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
-                    //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-                    //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                    //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << "\n";
+                    //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << "\n";
                     //}
                     a_shape=1;
                     a_scale=1; //  check with hist(rgamma(100, shape=1, scale=1))
@@ -3975,12 +3974,12 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 if(a_shape<0 || a_scale <0)
                 {
 
-                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << "\n";
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
-                    //cout <<  " this vessel is is: " << this->get_name() << endl;
-                    //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-                    //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                    //cout <<  " this vessel is is: " << this->get_name() << "\n";
+                    //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << "\n";
+                    //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << "\n";
                     //}
                     a_shape=1;
                     a_scale=0;
@@ -3988,8 +3987,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 cpue = rgamma(a_shape, a_scale) * populations[pop]->get_cpue_multiplier() * tech_creeping_multiplier;
 
             }
-            outc(cout << "implicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier()  << endl);
-            outc(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
+            outc(cout << "implicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier()  << "\n");
+            outc(cout  << "implicit: cpue for pop " << pop << " is " << cpue << "\n");
 
             // TAC management effect for implicit species
             if(tstep>1 && is_tacs && is_individual_vessel_quotas)
@@ -3999,18 +3998,18 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 int remaining_individual_tac_this_pop = this->get_individual_tac(pop);
                 if(remaining_individual_tac_this_pop <=0)
                 {
-                    dout(cout  << this->get_name() << ": individual quota this IMPLICIT pop"<< pop << " EXHAUSTED! " << endl);
+                    dout(cout  << this->get_name() << ": individual quota this IMPLICIT pop"<< pop << " EXHAUSTED! " << "\n");
                     cpue = 0; // quota exhausted for this implicit stock: no catch
                 }
                 else
                 {
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
-                         " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << endl);
+                         " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << "\n");
                     a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
                     this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
                                                       remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
-                         " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << endl);
+                         " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << "\n");
                 }
             }
 
@@ -4018,9 +4017,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
             //if((this->get_name())=="BEL000071985") cout<<this->get_name() << ": the final cpue for this implicit pop " << populations.at(pop)->get_name()
-            //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl;
+            //              << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  "\n";
             outc (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
-                  << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  endl);
+                  << " on this node "<< idx_node << " is " << cpue << " given " << a_shape << " " << a_scale <<  "\n");
 
             if(cpue!=0)
             {
@@ -4040,16 +4039,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                 if (tstep > 1 && is_tacs && !is_individual_vessel_quotas) {
                     string a_nation = this->get_nationality();
-                    //cout << "this vessel name " << this->get_name() << endl;
-                    //cout << "a_nation is " << a_nation << endl;
-                    //cout << "pop is " << pop << endl;
+                    //cout << "this vessel name " << this->get_name() << "\n";
+                    //cout << "a_nation is " << a_nation << "\n";
+                    //cout << "pop is " << pop << "\n";
                     double so_far_this_nation = 0.0;
                     map<string,double> sof =populations.at(pop)->get_landings_so_far_per_nation();
                     //for (auto it = sof.cbegin(); it != sof.cend(); ++it)
                     //{
                     //    std::cout << it->first << " " << it->second << " " << "\n";
                     //}
-                    if (sof.find(a_nation) == sof.end()) cout << "debug "<< a_nation << ": check for inconsistent 3 - letters naming for nations between e.g.vessel names and relative_stability nations" << endl;
+                    if (sof.find(a_nation) == sof.end()) cout << "debug "<< a_nation << ": check for inconsistent 3 - letters naming for nations between e.g.vessel names and relative_stability nations" << "\n";
                     so_far_this_nation = sof.at(a_nation) + cpue * PING_RATE;
                     populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
@@ -4134,14 +4133,14 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
         /* CHECK so_far!! i.e. should return the exact same value...
-        cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << endl;
+        cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
         double land_so_far    = 0;
         vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
         for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
         {
            land_so_far+=C_at_szgroup.at(sz);
         }
-        cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << endl;
+        cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << "\n";
         */
 
     } // end pop
@@ -4154,8 +4153,8 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
     // contribute to accumulated catches on this node
-    outc(cout << "cumcatch_fgrounds this node is " << cumcatch_fgrounds.at(idx_node_r) << endl);
-    outc(cout << "cumdiscard_fgrounds is " << cumdiscard_fgrounds.at(idx_node_r) << endl);
+    outc(cout << "cumcatch_fgrounds this node is " << cumcatch_fgrounds.at(idx_node_r) << "\n");
+    outc(cout << "cumdiscard_fgrounds is " << cumdiscard_fgrounds.at(idx_node_r) << "\n");
     this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
     this->get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
     double discratio =  this->get_loc()->get_cumdiscards() / (this->get_loc()->get_cumdiscards()+this->get_loc()->get_cumcatches());
@@ -4165,7 +4164,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
     // check the matrix of catches
     /*double a_cumul = 0;
-    outc(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << endl);
+    outc(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << "\n");
     for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
     {
         for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
@@ -4173,7 +4172,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
             outc(cout  << catch_pop_at_szgroup[i][j] << " ");
             a_cumul +=catch_pop_at_szgroup[i][j];
         }
-        outc(cout  << endl);
+        outc(cout  << "\n");
     }
     */
 
@@ -4193,9 +4192,9 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
     // check the name of the active metier (ground specific)
     //int met = this->get_metier()->get_name();
-    //dout(cout  << "the active metier is " << met << endl);
+    //dout(cout  << "the active metier is " << met << "\n");
 
-    dout(cout  << "END do_catch()" << endl);
+    dout(cout  << "END do_catch()" << "\n");
 
     unlock();
 }
@@ -4203,7 +4202,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 void Vessel::clear_catch_pop_at_szgroup()
 {
-    dout(cout  << "clear catches..." << endl);
+    dout(cout  << "clear catches..." << "\n");
     for(unsigned int i = 0; i < catch_pop_at_szgroup.size(); i++)
     {
         for(unsigned int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
@@ -4215,7 +4214,7 @@ void Vessel::clear_catch_pop_at_szgroup()
 
 void Vessel::clear_ping_catch_pop_at_szgroup()
 {
-    dout(cout  << "clear catches..." << endl);
+    dout(cout  << "clear catches..." << "\n");
     for(unsigned int i = 0; i < ping_catch_pop_at_szgroup.size(); i++)
     {
         for(unsigned int j = 0; j < ping_catch_pop_at_szgroup[i].size(); j++)
@@ -4229,7 +4228,7 @@ void Vessel::clear_ping_catch_pop_at_szgroup()
 
 void Vessel::clear_discards_pop_at_szgroup()
 {
-    dout(cout  << "clear catches..." << endl);
+    dout(cout  << "clear catches..." << "\n");
     for(unsigned int i = 0; i < discards_pop_at_szgroup.size(); i++)
     {
         for(unsigned int j = 0; j < discards_pop_at_szgroup[i].size(); j++)
@@ -4252,16 +4251,16 @@ void Vessel::compute_experiencedcpue_fgrounds()
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full a guesses !
     // but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    outc(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
+    outc(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << "\n");
     for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
     {
         // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
         if(cumeffort_per_trip_per_fgrounds.at(a_node)!=0)
         {
-            //outc(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << endl);
-            //outc(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds.at(a_node) << endl);
+            //outc(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << "\n");
+            //outc(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds.at(a_node) << "\n");
             experiencedcpue_fgrounds.at(a_node)= cumcatch_fgrounds.at(a_node) / cumeffort_per_trip_per_fgrounds.at(a_node);
-            //outc(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << endl);
+            //outc(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << "\n");
         }
         // cumul to scale to 1 (just below)
         cum_cpue +=experiencedcpue_fgrounds.at(a_node);
@@ -4279,10 +4278,10 @@ void Vessel::compute_experiencedcpue_fgrounds()
         for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
         {
             freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
-            //outc(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << endl);
+            //outc(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << "\n");
         }
     }
-    outc(cout  << "compute experienced cpue on grounds...OK" << endl);
+    outc(cout  << "compute experienced cpue on grounds...OK" << "\n");
 }
 
 
@@ -4293,7 +4292,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
     // but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    outc(cout  << "compute experienced cpue on grounds per pop and clear cum effort and catch..." << endl);
+    outc(cout  << "compute experienced cpue on grounds per pop and clear cum effort and catch..." << "\n");
     for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
     {
         cum_cpue_over_pop.push_back(0);
@@ -4303,10 +4302,10 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
             // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
             if (cumeffort_per_trip_per_fgrounds.at(a_node) != 0)
             {
-                //dout(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
+                //dout(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds_per_pop.at(a_node).at(pop) << "\n");
+                //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << "\n");
                 experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) = cumcatch_fgrounds_per_pop.at(a_node).at(pop) / cumeffort_per_trip_per_fgrounds.at(a_node);
-                //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << "\n");
             }
             // cumul to scale to 1 (just below)
             cum_cpue_over_pop.at(a_node) += experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
@@ -4317,15 +4316,15 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
                 for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
                 {
                     freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
-                    //dout(cout << "scaled experienced cpue on node " << a_node << " this pop " << pop << " is then " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                    //cout << "scaled experienced cpue on node " << a_node << " this pop " << pop << " is then " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl;
+                    //dout(cout << "scaled experienced cpue on node " << a_node << " this pop " << pop << " is then " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << "\n");
+                    //cout << "scaled experienced cpue on node " << a_node << " this pop " << pop << " is then " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << "\n";
                 }
         }
 
        
 
     }
-    outc(cout  << "experienced cpue on grounds per pop...OK" << endl);
+    outc(cout  << "experienced cpue on grounds per pop...OK" << "\n");
 
 }
 
@@ -4337,7 +4336,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
     // but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    outc(cout << "compute experienced cpue on grounds per pop per met..." << endl);
+    outc(cout << "compute experienced cpue on grounds per pop per met..." << "\n");
     for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_met_per_pop.dimension(0); a_node++) {
         cum_cpue_over_met_pop.push_back(vector<double>(0));
 
@@ -4349,8 +4348,8 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
 
                 // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
                 if (cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) != 0) {
-                    //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << endl);
-                    //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << endl);
+                    //dout(cout  << "on the grounds of this vessel cumcatch this pop and met is " << cumcatch_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(a_pop) << "\n");
+                    //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_per_trip_per_fgrounds_per_met.at(a_node).at(a_met) << "\n");
 
                     if (cumcatch_fgrounds_per_met_per_pop.hasValue(a_node, a_met, a_pop)) {
                         experiencedcpue_fgrounds_per_met_per_pop(a_node, a_met, a_pop) =
@@ -4360,7 +4359,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
                         experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, a_pop);
                     }
 
-                    //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                    //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << "\n");
                     //TODO: a running average putting more weight on the more recent trips.....
                 }
                 // cumul to scale to 1 (just below)
@@ -4376,7 +4375,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
                     // if the tac is exhausted on this pop, then do not include this pop in the cpue that will be later used to decide on fishing grounds frequency of visit
                     if (this->get_individual_tac(pop) <= 0) {
                         experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, pop);
-                        //cout << "The individual tac of "<<  this->get_name() << " is exhausted on this pop " << pop << ": remove from the CPUE calculation : " << experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) << endl;
+                        //cout << "The individual tac of "<<  this->get_name() << " is exhausted on this pop " << pop << ": remove from the CPUE calculation : " << experiencedcpue_fgrounds_per_met_per_pop.value(a_node, a_met, pop) << "\n";
                     }
 
                     if (freq_experiencedcpue_fgrounds_per_met_per_pop.hasValue(a_node, a_met, pop)) {
@@ -4388,8 +4387,8 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
                     } else {
                         freq_experiencedcpue_fgrounds_per_met_per_pop.zero(a_node, a_met, pop);
                     }
-                    //dout(cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl);
-                    //cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << endl;
+                    //dout(cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << "\n");
+                    //cout  << "scaled experienced cpue on node " << a_node << " this met " << a_met << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_met_per_pop.at(a_node).at(a_met).at(pop) << "\n";
                 }
             }
 
@@ -4397,7 +4396,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_met_per_pop()
         }
 
     }
-    outc(cout << "experienced cpue on grounds per pop...OK" << endl);
+    outc(cout << "experienced cpue on grounds per pop...OK" << "\n");
 
 }
 
@@ -4411,24 +4410,24 @@ bool Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
     // but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    outc(cout << "compute experienced cpue on grounds per pop per met..." << endl);
+    outc(cout << "compute experienced cpue on grounds per pop per met..." << "\n");
     for (unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_yearquarter_per_pop.size(); a_node++)
     {
         cum_cpue_over_pop.push_back(0);
-        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on node i " << a_node << endl;
+        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on node i " << a_node << "\n";
         int a_quarter = (the_year * 4) + (the_quarter);
         int last_quarter = a_quarter - 1;
-        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "in this year " << the_year << " current quarter idx is " << a_quarter << " last quarter idx is " << last_quarter << " last year quarter for current quarter is " << a_quarter + 1 - 5 << endl;
+        //if (this->get_name() == "POL022500003" && the_year > 0) cout << "in this year " << the_year << " current quarter idx is " << a_quarter << " last quarter idx is " << last_quarter << " last year quarter for current quarter is " << a_quarter + 1 - 5 << "\n";
         for (unsigned int a_pop = 0; a_pop < experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).size(); a_pop++)
             {
-            //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on pop i " << a_pop << endl;
+            //if (this->get_name() == "POL022500003" && the_year > 0) cout << "hi there! I am on pop i " << a_pop << "\n";
 
                 // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
                 if (the_year>0)
                 {
                     // do a weighted average of past cpues looking at the similar quarter in past years
                     vector<double> cpues;
-                    //if (this->get_name() == "POL022500003" && the_year > 0) cout << "size is " << cumeffort_per_yearquarter_per_fgrounds.size() << endl;
+                    //if (this->get_name() == "POL022500003" && the_year > 0) cout << "size is " << cumeffort_per_yearquarter_per_fgrounds.size() << "\n";
                     // caution: fgrounds need to be the same over quarter for this to work.....
                     if (cumeffort_per_yearquarter_per_fgrounds.at(a_node) > 0) 
                     {
@@ -4466,13 +4465,13 @@ bool Vessel::compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_ye
                 for (unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).size(); pop++)
                 {
                     freq_experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) = experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) / cum_cpue_over_pop.at(a_node);
-                    //dout(cout  << "scaled experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << endl);
-                    //cout  << "scaled experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << endl;
-                    //cout  << "scaled freq experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << freq_experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << endl;
+                    //dout(cout  << "scaled experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << "\n");
+                    //cout  << "scaled experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << "\n";
+                    //cout  << "scaled freq experienced cpue on node " << a_node << " this quarter " << a_quarter << " this pop "<< pop << " is then " << freq_experiencedcpue_fgrounds_per_yearquarter_per_pop.at(a_node).at(a_quarter).at(pop) << "\n";
                 }
             }   
     }
-    outc(cout << "experienced cpue on grounds per yearquarter per pop...OK" << endl);
+    outc(cout << "experienced cpue on grounds per yearquarter per pop...OK" << "\n");
     return true;
 }
 
@@ -4517,7 +4516,7 @@ void Vessel::clear_cumeffort_per_yearquarter()
 void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes_in_polygons)
 {
 
-    dout(cout  << "BEGIN alter_freq_fgrounds_for_nodes_in_polygons" << endl);
+    dout(cout  << "BEGIN alter_freq_fgrounds_for_nodes_in_polygons" << "\n");
 
     vector<int> polygons;
     vector<int> polygon_nodes;
@@ -4526,7 +4525,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
     {
         polygons.push_back(pos->first);
         polygon_nodes.push_back(pos->second);
-        dout(cout  << " a polygon node is " << pos->second << endl);
+        dout(cout  << " a polygon node is " << pos->second << "\n");
     }
     // essential to be used with binary.search!!
     sort (polygon_nodes.begin(), polygon_nodes.end());
@@ -4547,16 +4546,16 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
     double cumul=0;
     unsigned int count=0;
     // should be equal...otherwise check the input files!
-    dout(cout  << "the_grds.size() " << the_grds.size() << "the_freq_grds.size() " << the_freq_grds.size() << endl);
+    dout(cout  << "the_grds.size() " << the_grds.size() << "the_freq_grds.size() " << the_freq_grds.size() << "\n");
 
     for(unsigned int n=0; n<the_grds.size(); n++)
     {
-        dout(cout  << "the ground? " << the_grds.at(n) << endl);
+        dout(cout  << "the ground? " << the_grds.at(n) << "\n");
 
         if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), the_grds.at(n).toIndex()))
         {
             the_freq_grds.at(n)=0.00000000000001;
-            dout(cout  << "change frequency to 0.0001 for the ground " << the_grds.at(n) << endl);
+            dout(cout  << "change frequency to 0.0001 for the ground " << the_grds.at(n) << "\n");
             count=count+1;
         }
         cumul += the_freq_grds.at(n);
@@ -4564,7 +4563,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
     }
 
     if(count==the_grds.size()) {
-        dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl);
+        dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << "\n");
     }
     // => then this vessel will still fish on those grounds (with equal proba by the way), assuming non-compliance...
     // TO DO: need to think to an alternative model here....
@@ -4579,7 +4578,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
     // ....output
     this-> set_spe_freq_fgrounds (the_freq_grds);
 
-    dout(cout  << "change the frequencies...done" << endl);
+    dout(cout  << "change the frequencies...done" << "\n");
 }
 
 
@@ -4600,7 +4599,7 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
     freq_cpue << tstep << " " << idx_v << " ";
     for(unsigned int ii = 0; ii < past_freq_cpue_grds.size(); ii++)
     {
-        dout(cout   << "observed frequency:" << past_freq_cpue_grds.at(ii) << " " << endl);
+        dout(cout   << "observed frequency:" << past_freq_cpue_grds.at(ii) << " " << "\n");
         a_sum+= (past_freq_cpue_grds.at(ii)*freq_grds.at(ii));
         freq_cpue << past_freq_cpue_grds.at(ii) << " " ;
     }
@@ -4609,7 +4608,7 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
 
     for(unsigned int ii = 0; ii < freq_grds.size(); ii++)
     {
-        dout(cout   << "prior frequency:" << freq_grds.at(ii) << " " << endl);
+        dout(cout   << "prior frequency:" << freq_grds.at(ii) << " " << "\n");
         freq_cpue << freq_grds.at(ii) << " " ;
     }
 
@@ -4619,13 +4618,13 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
     {
         // update freq with the bayes'formula P(H1/D)=P(D/H1)*P(H1) / (P(D/H1)*P(H1)  +  P(D/H2)*P(H2) + ....)
         past_freq_cpue_grds.at(ii)= (past_freq_cpue_grds.at(ii)*freq_grds.at(ii)) / a_sum;
-        dout(cout   << "updated frequency:" << past_freq_cpue_grds.at(ii) << " " << endl);
+        dout(cout   << "updated frequency:" << past_freq_cpue_grds.at(ii) << " " << "\n");
         a_sum2+=past_freq_cpue_grds.at(ii);
         freq_cpue << past_freq_cpue_grds.at(ii) << " " ;
 
     }
-    dout(cout   << "a_sum2:" << a_sum2 << " " << endl);
-    freq_cpue << endl;
+    dout(cout   << "a_sum2:" << a_sum2 << " " << "\n");
+    freq_cpue << "\n";
 
     // update the prior for the next time (iterative bayesian process)
     // ...output
@@ -4642,8 +4641,8 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
                                                   const DynAllocOptions& dyn_alloc_sce)
 {
 
-    outc(cout << "compute expected profit on grounds " << endl);
-//cout << "compute expected profit on grounds " << endl;
+    outc(cout << "compute expected profit on grounds " << "\n");
+//cout << "compute expected profit on grounds " << "\n";
     double price_multiplier = 1.0;
 
     vector<double> freq_grds = this->get_freq_fgrounds();
@@ -4657,12 +4656,12 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
     vector<vector<vector<double> > > past_freq_cpue_grds_pops_yquarters;
     vector<vector<vector<double> > > past_freq_cpue_grds_targts_yquarters;
     int a_met = this->get_metier()->get_name();
-    //cout << "a year is " << simModel.year() << endl;
-    //cout << "a quarter is " << simModel.quarter() << endl;
+    //cout << "a year is " << simModel.year() << "\n";
+    //cout << "a quarter is " << simModel.quarter() << "\n";
     int a_yquarter = ((simModel.year() - 1) * 4) + simModel.quarter() - 1;
     if (simModel.timestep() < 745) { a_yquarter = 0; } // caution bc year=0 for first month
-    //cout << "a_yquarter is " << a_yquarter << endl;
-    //cout  << endl;
+    //cout << "a_yquarter is " << a_yquarter << "\n";
+    //cout  << "\n";
 
     if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
         past_freq_cpue_grds_pops_mets = this->copy_freq_experiencedcpue_fgrounds_per_met_per_pop();
@@ -4791,10 +4790,10 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         if (tot_revenue == 0) // we shouldn´t expect this...
         {
 
-            // cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
+            // cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << "\n";
             outc(cout << this->get_name()
                       << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "
-                      << endl);
+                      << "\n");
             if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                 for (unsigned int pop = 0; pop < past_freq_cpue_grds_pops_mets.dimension(2); ++pop) {
                     revenue_per_fgrounds.at(gr) +=
@@ -4832,22 +4831,22 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         }
 
 
- //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
- //cout << "ground " << gr << endl;
+ //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << "\n";
+ //cout << "ground " << gr << "\n";
 
         //2. compute the expected cost when steaming
         // time given the shortest distance divided by the speed...
         double time_for_steaming=0;
         // *2 because WE NEED TO GO BACK TO PORT!
- //cout << "size of distance_fgrounds " << distance_fgrounds.size() << endl;
+ //cout << "size of distance_fgrounds " << distance_fgrounds.size() << "\n";
         time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
- //cout << "the expected time to reach this ground is " << time_for_steaming << endl;
- //cout << "fuel price " << this->get_loc()->get_fuelprices(length_class) << endl;
- //cout << "this->get_mult_fuelcons_when_steaming() " << this->get_mult_fuelcons_when_steaming()<< endl;
- //cout << "fuel cons " <<  this->get_fuelcons() << endl;
+ //cout << "the expected time to reach this ground is " << time_for_steaming << "\n";
+ //cout << "fuel price " << this->get_loc()->get_fuelprices(length_class) << "\n";
+ //cout << "this->get_mult_fuelcons_when_steaming() " << this->get_mult_fuelcons_when_steaming()<< "\n";
+ //cout << "fuel cons " <<  this->get_fuelcons() << "\n";
 
  scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
- //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
+ //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << "\n";
 
         //3. compute the expected cost when fishing
         time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -4855,7 +4854,7 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         if(cpue_this_node!=0)
         {
             time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
-//cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl;
+//cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << "\n";
         }
         else
         {
@@ -4865,25 +4864,25 @@ vector<double> Vessel::expected_profit_on_grounds(const SimModel& simModel,
         double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
                                                   ( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
                 (this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
-//cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl;
+//cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << "\n";
 
         double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
-//cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl;
+//cout << "then, the expected time for fishing on this ground is " << time_for_fishing << "\n";
 
         fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
-//cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
+//cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << "\n";
 
         //4. then compute the expected profit for this ground
         profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
                 scost_per_fgrounds.at(gr) -
                 fcost_per_fgrounds.at(gr);
- //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
+ //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << "\n";
 
     }
 
 
- //cout << "compute expected profit on grounds...OK " << endl;
-    outc(cout << "compute expected profit on grounds...OK " << endl);
+ //cout << "compute expected profit on grounds...OK " << "\n";
+    outc(cout << "compute expected profit on grounds...OK " << "\n");
 
     return(profit_per_fgrounds);
 
@@ -4916,19 +4915,19 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
         for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
         {
             double tariff_this_cell_this_met = nodes.at(the_grounds.at(a_node).toIndex())->get_tariffs().at(a_met); // tariff per hour because visit (no more) one site per hour
-            //cout << "tariff_this_cell_this_met " << tariff_this_cell_this_met << endl;
-            //cout << "profit_per_fgrounds.at(a_node) " << profit_per_fgrounds.at(a_node) << endl;
+            //cout << "tariff_this_cell_this_met " << tariff_this_cell_this_met << "\n";
+            //cout << "profit_per_fgrounds.at(a_node) " << profit_per_fgrounds.at(a_node) << "\n";
             if (tariff_this_cell_this_met > 0)
             {
                 a_sum += profit_per_fgrounds.at(a_node) / tariff_this_cell_this_met;
 
             }
         }
-        //cout << "a_sum is " << a_sum << endl;
+        //cout << "a_sum is " << a_sum << "\n";
 
      
         vector<double> opportunity_costs(profit_per_fgrounds.size(), 0.0);
-        //cout << "opportunity_costs  per node this vessel " << this->get_name() << " this met" << a_met << endl;
+        //cout << "opportunity_costs  per node this vessel " << this->get_name() << " this met" << a_met << "\n";
         for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
         {
             double tariff_this_cell_this_met = nodes.at(the_grounds.at(a_node).toIndex())->get_tariffs().at(a_met); // tariff per hour because visit (no more) one site per hour
@@ -4937,16 +4936,16 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
                 opportunity_costs.at(a_node) = (profit_per_fgrounds.at(a_node) / tariff_this_cell_this_met) -
                     exp(log(a_sum) / profit_per_fgrounds.size());
             }
-          //  cout << opportunity_costs.at(a_node) << endl;
+          //  cout << opportunity_costs.at(a_node) << "\n";
         }
 
-        //cout << "Utility  per node  this met" << a_met << endl;
+        //cout << "Utility  per node  this met" << a_met << "\n";
         // then, substract the opportunity costs to the expected profits on node to follow the utility function
         for (unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
         {
             profit_per_fgrounds.at(a_node) -= opportunity_costs.at(a_node);
             if (profit_per_fgrounds.at(a_node) <= 0  || opportunity_costs.at(a_node)<=0) profit_per_fgrounds.at(a_node) = 0;
-          //  cout << profit_per_fgrounds.at(a_node) << endl;
+          //  cout << profit_per_fgrounds.at(a_node) << "\n";
             // opportunity_costs.at(a_node) at 0 means the node should not be used because the opp costs cannot actually be calculated given it is infinite.
         }
     }
@@ -4956,7 +4955,7 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
 
-    // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << endl);
+    // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << "\n");
 
     //  finally, scale to 1
     double cum_profit=0;
@@ -4967,7 +4966,7 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     for(unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
     {
         profit_per_fgrounds.at(a_node)= profit_per_fgrounds.at(a_node) / cum_profit;
-        //if(tstep>1) dout(cout << "scaled expected profit per ground is then " << profit_per_fgrounds.at(a_node) << endl);
+        //if(tstep>1) dout(cout << "scaled expected profit per ground is then " << profit_per_fgrounds.at(a_node) << "\n");
     }
 
     // the update procedure...
@@ -4978,7 +4977,7 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     //freq_profit << tstep << " " << idx_v << " ";
     for(unsigned int ii = 0; ii < profit_per_fgrounds.size(); ii++)
     {
-        //if(tstep>1) dout(cout  << "observed frequency:" << profit_per_fgrounds.at(ii) << " " << endl);
+        //if(tstep>1) dout(cout  << "observed frequency:" << profit_per_fgrounds.at(ii) << " " << "\n");
         a_sum+= (profit_per_fgrounds.at(ii)*freq_grds.at(ii));
         //freq_profit << profit_per_fgrounds.at(ii) << " " ;
     }
@@ -4987,7 +4986,7 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
 
     for(unsigned int ii = 0; ii < freq_grds.size(); ii++)
     {
-        //if(tstep>1) dout(cout  << "prior frequency:" << freq_grds.at(ii) << " " << endl);
+        //if(tstep>1) dout(cout  << "prior frequency:" << freq_grds.at(ii) << " " << "\n");
         //freq_profit << freq_grds.at(ii) << " " ;
     }
 
@@ -4997,14 +4996,14 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     {
         // update freq with the bayes'formula P(H1/D)=P(D/H1)*P(H1) / (P(D/H1)*P(H1)  +  P(D/H2)*P(H2) + ....)
         profit_per_fgrounds.at(ii)= (profit_per_fgrounds.at(ii)*freq_grds.at(ii)) / a_sum;
-        //if(tstep>1) dout(cout  << "updated frequency:" << profit_per_fgrounds.at(ii) << " " << endl);
+        //if(tstep>1) dout(cout  << "updated frequency:" << profit_per_fgrounds.at(ii) << " " << "\n");
         a_sum2+=profit_per_fgrounds.at(ii);
         //freq_profit << profit_per_fgrounds.at(ii) << " " ;
 
     }
     // should return 1...
-    dout(cout   << "a_sum2:" << a_sum2 << " " << endl);
-    //freq_profit << endl;
+    dout(cout   << "a_sum2:" << a_sum2 << " " << "\n");
+    //freq_profit << "\n";
 
     // update the prior for the next time (iterative bayesian process)
     // ...output
@@ -5070,7 +5069,7 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
         int id3 = max_element (freq_grds.begin(),freq_grds.end()) - freq_grds.begin();
 
         dout(cout  << "vessel " << this->get_name() << " ");
-        dout(cout  << "before: pg1 is " <<pg1 << " pg2 is " << pg2 << " pg3 is " << pg3 << endl);
+        dout(cout  << "before: pg1 is " <<pg1 << " pg2 is " << pg2 << " pg3 is " << pg3 << "\n");
 
         // the distances
         double dg1= distance_fgrounds.at(id1);
@@ -5087,7 +5086,7 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
         // the targeted conso is:
         double new_conso = expected_conso * (1- (percent_increase_fuel_price/100));
 
-        dout(cout  << "the expected_conso is " <<expected_conso << "the new_conso is " << new_conso  <<  " the max_proba is " << max_proba << endl);
+        dout(cout  << "the expected_conso is " <<expected_conso << "the new_conso is " << new_conso  <<  " the max_proba is " << max_proba << "\n");
 
         // brute search along range of probas.
         // using a varying threshold to account for larger (defined as 5% of the conso)
@@ -5103,12 +5102,12 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
                     p1 = i*0.01;
                     p2 = j*0.01;
                     p3 = k*0.01;
-                    //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << endl;
+                    //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << "\n";
                     if((p1+p2+p3)==(max_proba/100))
                     {
                         departure = abs( ((p1 * dg1 *conso_per_nm) + (p2 * dg2 *conso_per_nm) + (p3 * dg3 *conso_per_nm)) -  new_conso );
                         if(departure <min_departure) min_departure=departure;
-                        dout(cout  << departure << endl);
+                        dout(cout  << departure << "\n");
                     }
                     // early stop
                     if(departure <threshold_to_break) break;
@@ -5133,12 +5132,12 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
                         p1 = i*0.01;
                         p2 = j*0.01;
                         p3 = k*0.01;
-                        //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << endl;
+                        //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << "\n";
                         if((p1+p2+p3)==(max_proba/100))
                         {
                             departure = abs( ((p1 * dg1 *conso_per_nm) + (p2 * dg2 *conso_per_nm) + (p3 * dg3 *conso_per_nm)) -  new_conso );
                             if(departure <min_departure) min_departure=departure;
-                            dout(cout  << departure << endl);
+                            dout(cout  << departure << "\n");
                         }
                         // early stop
                         if(departure <threshold_to_break) break;
@@ -5157,11 +5156,11 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
             new_freq_per_fgrounds.at(id1)=p1;
             new_freq_per_fgrounds.at(id2)=p2;
             new_freq_per_fgrounds.at(id3)=p3;
-            dout(cout  << "after: p1 is " <<p1 << " p2 is " << p2 << " p3 is " << p3 << endl);
+            dout(cout  << "after: p1 is " <<p1 << " p2 is " << p2 << " p3 is " << p3 << "\n");
         }
         else
         {
-            dout(cout  << "fuel saving impossible for this occurrence! min_departure is " << min_departure << endl);
+            dout(cout  << "fuel saving impossible for this occurrence! min_departure is " << min_departure << "\n");
         }
 
         // then rescale to sum to 1 because of the rounding approx.
@@ -5177,7 +5176,7 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
             // dout(cout << " " << new_freq_per_fgrounds.at(ii) );
 
         }
-        // dout(cout << endl);
+        // dout(cout << "\n");
 
         // update the prior for the next time (iterative bayesian process)
         // ...output
@@ -5248,7 +5247,7 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
     freq_distance << tstep << " " << idx_v << " ";
     for(unsigned int ii = 0; ii < freq_distance_fgrounds.size(); ii++)
     {
-        dout(cout   << "observed frequency:" << freq_distance_fgrounds.at(ii) << " " << endl);
+        dout(cout   << "observed frequency:" << freq_distance_fgrounds.at(ii) << " " << "\n");
         a_sum3+= (freq_distance_fgrounds.at(ii)*freq_grds.at(ii));
         freq_distance << freq_distance_fgrounds.at(ii) << " " ;
     }
@@ -5257,7 +5256,7 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
 
     for(unsigned int ii = 0; ii < freq_grds.size(); ii++)
     {
-        dout(cout   << "prior frequency:" << freq_grds.at(ii) << " " << endl);
+        dout(cout   << "prior frequency:" << freq_grds.at(ii) << " " << "\n");
         freq_distance << freq_grds.at(ii) << " " ;
     }
 
@@ -5267,12 +5266,12 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
     {
         // update freq with the bayes'formula P(H1/D)=P(D/H1)*P(H1) / (P(D/H1)*P(H1)  +  P(D/H2)*P(H2) + ....)
         freq_distance_fgrounds.at(ii)= (freq_distance_fgrounds.at(ii)*freq_grds.at(ii)) / a_sum3;
-        dout(cout   << "updated frequency:" << freq_distance_fgrounds.at(ii) << " " << endl);
+        dout(cout   << "updated frequency:" << freq_distance_fgrounds.at(ii) << " " << "\n");
         a_sum4+=freq_distance_fgrounds.at(ii);
         freq_distance << freq_distance_fgrounds.at(ii) << " " ;
     }
-    dout(cout   << "a_sum4:" << a_sum4 << " " << endl);
-    freq_distance << endl;
+    dout(cout   << "a_sum4:" << a_sum4 << " " << "\n");
+    freq_distance << "\n";
 
     // update the prior for the next time (iterative bayesian process)
     // ...output
@@ -5297,28 +5296,28 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
     if(grds.size()==0)
     {
-        cout << " DEBUG !! " << this->get_name() << " is likely missing vessel in fgrounds.dat " << endl;
+        cout << " DEBUG !! " << this->get_name() << " is likely missing vessel in fgrounds.dat " << "\n";
     }
 
 
     // check
-    //cout << "which_metier_should_i_go_for says possible grds for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says possible grds for " << this->get_name() << " are " << "\n";
 
     //for (int gr=0; gr<grds.size(); ++gr) cout << grds.at(gr) << '\t';
-    //cout << endl;
+    //cout << "\n";
 
     // check
-    //cout << "which_metier_should_i_go_for says possible freq_grds for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says possible freq_grds for " << this->get_name() << " are " << "\n";
     //for (int gr=0; gr<freq_grds.size(); ++gr) cout << freq_grds.at(gr) << '\t';
-    //cout << endl;
+    //cout << "\n";
 
-    //cout << "do_sample 2 " << freq_grds.size() << " " << grds.size() << " " << this->get_name() << endl;
+    //cout << "do_sample 2 " << freq_grds.size() << " " << grds.size() << " " << this->get_name() << "\n";
     auto grounds = do_sample(1, grds.size(), grds, freq_grds);
     auto ground=grounds[0];
-    //cout << "end do_sample 2" << endl;
+    //cout << "end do_sample 2" << "\n";
 
     // check
-    //cout << "which_metier_should_i_go_for says current looked ground for " << this->get_name() << " is " << ground << endl;
+    //cout << "which_metier_should_i_go_for says current looked ground for " << this->get_name() << " is " << ground << "\n";
 
     //2. get possible metiers on this ground
     const auto &poss_met        = this->get_possible_metiers();
@@ -5328,43 +5327,43 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     // need to convert in array, see myRutils.cpp
 
     // check
-    //cout << "which_metier_should_i_go_for says possible metiers for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says possible metiers for " << this->get_name() << " are " << "\n";
     //for ( std::multimap< types::NodeId, int, std::less< int > >::const_iterator iter =poss_met.begin();
     //      iter != poss_met.end(); ++iter )
     //      cout << iter->first << '\t' << iter->second << '\n';
-    //cout << endl;
+    //cout << "\n";
 
     // check
-    //cout << "which_metier_should_i_go_for says freq possible metiers for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says freq possible metiers for " << this->get_name() << " are " << "\n";
     //for ( std::multimap< types::NodeId, double, std::less< int > >::const_iterator iter =freq_poss_met.begin();
     //      iter != freq_poss_met.end(); ++iter )
     //      cout << iter->first << '\t' << iter->second << '\n';
-    //cout << endl;
+    //cout << "\n";
 
     // check
-    //cout << "which_metier_should_i_go_for says possible metiers_on_grd for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says possible metiers_on_grd for " << this->get_name() << " are " << "\n";
     //for (int gr=0; gr<metiers_on_grd.size(); ++gr) cout << metiers_on_grd.at(gr) << '\t';
-    //cout << endl;
+    //cout << "\n";
 
     // check
-    //cout << "which_metier_should_i_go_for says possible freq_metiers_on_grd for " << this->get_name() << " are " << endl;
+    //cout << "which_metier_should_i_go_for says possible freq_metiers_on_grd for " << this->get_name() << " are " << "\n";
     //for (int gr=0; gr<freq_metiers_on_grd.size(); ++gr) cout << freq_metiers_on_grd.at(gr) << '\t';
-    //cout << endl;
+    //cout << "\n";
 
     if(metiers_on_grd.size()!=0)
     {
         vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
-        dout(cout << "a_met from do_sample is " << a_met.at(0) << " and size of metiers is " << metiers.size() << endl);
+        dout(cout << "a_met from do_sample is " << a_met.at(0) << " and size of metiers is " << metiers.size() << "\n");
         this->set_metier(  metiers.at(a_met.at(0))  );
     }
     else
     {
 
-        dout(cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl);
+        dout(cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << "\n");
         this->set_metier(  metiers[ 0 ]  ); // dangerous fix
     }
 
-    //cout << this->get_name() << ", which_metier_should_i_go_for says metier " << this->get_metier()->get_name() << endl;
+    //cout << this->get_name() << ", which_metier_should_i_go_for says metier " << this->get_metier()->get_name() << "\n";
 
 
 }
@@ -5389,7 +5388,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                                             )
 {
 
-    outc(cout << " choose a ground and go fishing " << endl);
+    outc(cout << " choose a ground and go fishing " << "\n");
 
     this->set_tstep_dep(tstep);	 // store departure date
 
@@ -5402,7 +5401,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
 
-        outc(cout << " should i choose this ground" << endl);
+        outc(cout << " should i choose this ground" << "\n");
         ground=this->should_i_choose_this_ground(simModel,
                                                  tstep,
                                                  use_static_paths,
@@ -5414,8 +5413,8 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
         if(ground==types::special::InvalidNodeId)
         {
-            dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
-            //cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << endl;
+            dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << "\n");
+            //cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << "\n";
             return (1); // do_nothing i.e. stay on quayside
         }
     } else{
@@ -5424,7 +5423,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         if (dyn_alloc_sce.option(Options::focus_on_high_previous_cpue))
         {
 
-            outc(cout << " alloc on high previous cpue" << endl);
+            outc(cout << " alloc on high previous cpue" << "\n");
             this->alloc_on_high_previous_cpue(simModel,
                                               tstep,
                                               freq_cpue);
@@ -5434,7 +5433,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         if (dyn_alloc_sce.option(Options::focus_on_high_profit_grounds))
         {
 
-            outc(cout << " alloc on high profit grounds" << endl);
+            outc(cout << " alloc on high profit grounds" << "\n");
             this->alloc_on_high_profit_grounds(simModel,
                                                tstep,
                                                use_static_paths,
@@ -5454,7 +5453,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             if(from!=this->get_previous_harbour_idx())
             {
 
-                outc(cout << " alloc while saving fuel" << endl);
+                outc(cout << " alloc while saving fuel" << "\n");
                 this->alloc_while_saving_fuel(simModel,
                                               tstep,
                                               use_static_paths,
@@ -5464,7 +5463,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             }
             else
             {
-                dout(cout  << "not looking for more saving here..." << endl);
+                dout(cout  << "not looking for more saving here..." << "\n");
             }
 
         }
@@ -5473,7 +5472,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         // ****************closer_grounds**********************************//
         if (dyn_alloc_sce.option(Options::closer_grounds))		 // dyn sce.
         {
-            outc(cout << " alloc on closer grounds" << endl);
+            outc(cout << " alloc on closer grounds" << "\n");
             this->alloc_on_closer_grounds(simModel,
                                           tstep,
                                           use_static_paths,
@@ -5490,7 +5489,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
             // compliance => 0.0001
             // replaced by:
-            outc(cout << " alloc accounting for area closures" << endl);
+            outc(cout << " alloc accounting for area closures" << "\n");
             const auto &grds = this->get_fgrounds();
             for (int i=0; i<grds.size();++i)
             {
@@ -5506,31 +5505,31 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         if (dyn_alloc_sce.option(Options::area_monthly_closure))
         {
             const auto &grds = this->get_fgrounds();
-            outc(cout << " alloc accounting for monthly area closures" << endl);
+            outc(cout << " alloc accounting for monthly area closures" << "\n");
 
             vector<double> init_freq = this->get_freq_fgrounds_init();
 
             int met_idx = this->get_metier()->get_name();
 
-            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << endl);
+            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << "\n");
 
             double nbDaysSpent=0.0;
             double nbOpenedDays=0.0;
-            outc(cout << " getDaysSpentInRestrictedAreaThisMonth() " << endl);
-            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().at(0) is: " << this->daysSpentInRestrictedAreaThisMonth.at(0) << endl);
-            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().size() is: " << this->daysSpentInRestrictedAreaThisMonth.size() << endl);
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth() " << "\n");
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().at(0) is: " << this->daysSpentInRestrictedAreaThisMonth.at(0) << "\n");
+            outc(cout << " getDaysSpentInRestrictedAreaThisMonth().size() is: " << this->daysSpentInRestrictedAreaThisMonth.size() << "\n");
             nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
-            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << " nbDaysSpent: " << nbDaysSpent << endl);
+            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << " nbDaysSpent: " << nbDaysSpent << "\n");
           
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
                
-                //outc(cout << "scrutinize grounds " << a_grd.toIndex() << endl);
-                //outc(cout << "metier is closed on this ground? " << nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) << endl);
-                //outc(cout << "vsize is closed on this ground? " << nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) << endl);
+                //outc(cout << "scrutinize grounds " << a_grd.toIndex() << "\n");
+                //outc(cout << "metier is closed on this ground? " << nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) << "\n");
+                //outc(cout << "vsize is closed on this ground? " << nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) << "\n");
                 //bool is_nation_banned = nodes.at(a_grd.toIndex())->isNationBanned(0) || nodes.at(a_grd.toIndex())->isNationBanned(this->get_nationality_idx());
-                //outc(cout << "nation is closed on this ground? " << is_nation_banned << endl);
+                //outc(cout << "nation is closed on this ground? " << is_nation_banned << "\n");
 
                 if (nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) &&
                         nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()) &&
@@ -5540,15 +5539,15 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                 {
                     nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
-                    dout(cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl);
+                    dout(cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << "\n");
 
                    // if (tstep > 2000) {
-                   //     cout << endl;
+                   //     cout << "\n";
                    // }
 
                   if(nbDaysSpent >= nbOpenedDays)
                     {
-                      //cout << this->get_name() << " CANNOT FISH HERE! " << endl;
+                      //cout << this->get_name() << " CANNOT FISH HERE! " << "\n";
                       set_spe_freq_fground(i, 1e-8);
                     }
                   else
@@ -5560,12 +5559,12 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                 // check for myfish graph1
                 //if(this->get_name()=="DNK000038349")
                 // {
-                //    cout << " isMetierBanned   "  << nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) << endl;
-                //    cout << " isVsizeBanned   " << nodes.at(a_grd)->isVsizeBanned(this->get_length_class()) << endl;
+                //    cout << " isMetierBanned   "  << nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) << "\n";
+                //    cout << " isVsizeBanned   " << nodes.at(a_grd)->isVsizeBanned(this->get_length_class()) << "\n";
                 // }
 
             }
-           outc(cout << " alloc accounting for monthly area closures.....ok" << endl);
+           outc(cout << " alloc accounting for monthly area closures.....ok" << "\n");
 
         }
 
@@ -5579,12 +5578,12 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         for (int i=0; i<freq_grds.size(); ++i) sum_probas+=freq_grds.at(i);
         if(sum_probas<1e-5)
         {
-            //if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
+            //if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << "\n";
             return(1); // do_nothing
         }
 
 
-        //cout << "do_sample 3" << endl;
+        //cout << "do_sample 3" << "\n";
         auto grounds = do_sample(1, grds.size(), grds, freq_grds);
         ground= types::NodeId(grounds[0]);
 
@@ -5592,7 +5591,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         {
             int idxmax = max_element(std::begin(freq_grds), std::end(freq_grds)) - std::begin(freq_grds);
             ground = types::NodeId(grds.at(idxmax));
-            //cout << "ground is " << ground << endl;
+            //cout << "ground is " << ground << "\n";
         }
 
     }
@@ -5608,27 +5607,27 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             )
         {
         this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
-        //cout << "ADDING 1 DAY HERE" << endl;
-        //cout << this->get_name() << " SO HERE nbDaysSpent: " << this->getDaysSpentInRestrictedAreaThisMonth(met_idx) << endl;
+        //cout << "ADDING 1 DAY HERE" << "\n";
+        //cout << this->get_name() << " SO HERE nbDaysSpent: " << this->getDaysSpentInRestrictedAreaThisMonth(met_idx) << "\n";
         }
     }
 
 
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     //int ground=grds[0];
-    outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl);
+    outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << "\n");
 
     /*if(ground.toIndex()==12132) {
-        cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl;
-        cout << "nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
-        cout << "nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
-        cout << "nbOpenedDays on this ground this met is " <<  (31- nodes.at(ground.toIndex())->getNbOfDaysClosed(this->get_metier()->get_name())) << endl;
+        cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << "\n";
+        cout << "nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+        cout << "nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
+        cout << "nbOpenedDays on this ground this met is " <<  (31- nodes.at(ground.toIndex())->getNbOfDaysClosed(this->get_metier()->get_name())) << "\n";
         const auto &somefreqgrds = this->get_freq_fgrounds();
         for (int i=0; i<somefreqgrds.size();++i)
         {
             cout << somefreqgrds.at(i) << " ";
         }
-        cout << endl;
+        cout << "\n";
     }
     */
 
@@ -5650,19 +5649,19 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), ground.toIndex());
         aStarMutex.unlock();
-        //cout << from.toIndex() << " test the a-star...ok" <<endl;
+        //cout << from.toIndex() << " test the a-star...ok" <<"\n";
 
         /*
          * if(path.size()<=1)
         { // a edge case we should avoid!
-            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having chosen a ground?" <<endl;
+            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having chosen a ground?" <<"\n";
             list<types::NodeId>::iterator road_iter = path.begin();
             dout(cout << "path: ");
             for( ; road_iter != path.end(); road_iter++)
             {
                dout(cout << *road_iter << " " );
             }
-            dout(cout << endl);
+            dout(cout << "\n");
         }
         */
 
@@ -5679,17 +5678,17 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         }
         else
         {
-            cout << from.toIndex() << " not found in the relevant nodes!! find a path on the fly and add to the pathshops" <<endl;
+            cout << from.toIndex() << " not found in the relevant nodes!! find a path on the fly and add to the pathshops" <<"\n";
             relevant_nodes.push_back(from);
             spp::sparse_hash_map <vertex_t, vertex_t> previous;
             spp::sparse_hash_map <vertex_t, weight_t> min_distance;
             DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-            cout << from.toIndex() << " add to the pathshops...ok" <<endl;
+            cout << from.toIndex() << " add to the pathshops...ok" <<"\n";
         }
 
-        outc(cout  << "find path to fishing ground " << ground.toIndex() <<endl);
-        outc(cout  << "from the current_path_shop of node " << relevant_nodes.at(idx).toIndex() <<endl);
-        outc(cout  << "starting from the node " << from.toIndex() <<endl);
+        outc(cout  << "find path to fishing ground " << ground.toIndex() <<"\n");
+        outc(cout  << "from the current_path_shop of node " << relevant_nodes.at(idx).toIndex() <<"\n");
+        outc(cout  << "starting from the node " << from.toIndex() <<"\n");
 
         path = DijkstraGetShortestPathTo(ground, curr_path_shop);
     }
@@ -5713,7 +5712,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
             {
               cout << *road_iter << " " ;
             }
-            cout << endl;
+            cout << "\n";
         */
 
         bool is_fishing_credits = false;
@@ -5727,7 +5726,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
         double a_shape = this-> get_resttime_par1();
         double a_scale = this-> get_resttime_par2()  *calib;
-        dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << endl);
+        dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << "\n");
 
         this-> set_timeforrest( rgamma(a_shape, a_scale) );
 
@@ -5745,7 +5744,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         // need to convert in array, see myRutils.cpp
         if(metiers_on_grd.size()!=0)
         {
-            //cout << "do_sample 4" << endl;
+            //cout << "do_sample 4" << "\n";
             vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
             this->set_metier(  metiers[ a_met.at(0) ]  );
         }
@@ -5757,7 +5756,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         //this->set_metier(  metiers[ metiers_on_grd[0] ]  );
 
         // make a pause and check...
-        // dout(cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << endl);
+        // dout(cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << "\n");
         // int a;
         //dout(cout  << "Pause: type a number to continue");
         //cin >> a;
@@ -5765,7 +5764,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
     }
     else
     {
-        outc(cout << "pble calculating from " << from << " to " << ground << " in choose_a_ground_and_go_fishing()"<< endl);
+        outc(cout << "pble calculating from " << from << " to " << ground << " in choose_a_ground_and_go_fishing()"<< "\n");
         this->move_to(nodes.at(from.toIndex())) ;
         // no path found: assume the vessel stucks at its current location
     }
@@ -5805,7 +5804,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     // with the list of intermediate nodes
     vector <double> dist_to_others;
     auto from = this->get_loc()->get_idx_node();
-    outc(cout  << "current node: " << from.toIndex() << endl);
+    outc(cout  << "current node: " << from.toIndex() << "\n");
     //min_distance.clear();
     //previous.clear();
     PathShop curr_path_shop;
@@ -5832,7 +5831,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     {
 
         types::NodeId vx = types::NodeId(grds.at(i));// destination
-        //dout(cout  << "test the other ground "<< vx.toIndex() << endl);
+        //dout(cout  << "test the other ground "<< vx.toIndex() << "\n");
 
 
         // check for area_closure
@@ -5849,14 +5848,14 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                   {
                   int idx_met= this->get_metier()->get_name();
                   this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(idx_met, 1/24); // because ping_rate is one hour
-                  //cout << "ADDING 1/24 DAY HERE" << endl;
+                  //cout << "ADDING 1/24 DAY HERE" << "\n";
 
                   if(this->getDaysSpentInRestrictedAreaThisMonth(idx_met) >=
                       (31- nodes.at(from.toIndex())->getNbOfDaysClosed(idx_met)))
                      {
 
 
-                      outc(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
+                      outc(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  "\n");
                       double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
                                                  nodes.at(from.toIndex())->get_y(),
                                                  nodes.at(vx.toIndex())->get_x(),
@@ -5870,13 +5869,13 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                         // looking around in a radius of 200 km among the grounds I know...
                         &&  dist_to_this_node < 200 )
                 {
-                    outc(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << endl);
+                    outc(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << "\n");
                     // force to steam away by assigning a very low distance
                     dist_to_others.push_back(1);
                 }
                 else
                 {
-                    outc(cout  << "this other ground is also part of the closed area!!!" << endl);
+                    outc(cout  << "this other ground is also part of the closed area!!!" << "\n");
                     dist_to_others.push_back(950);
 
                 }
@@ -5905,7 +5904,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                         (nodes.at(vx.toIndex())->isNationBanned(0) || nodes.at(vx.toIndex())->isNationBanned(this->get_nationality_idx()))
               )
             {
-               dout(cout  << "this other ground is also part of the closed area!!!" << endl);
+               dout(cout  << "this other ground is also part of the closed area!!!" << "\n");
                dist_to_others.push_back(950);
             }
             else
@@ -5945,7 +5944,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             }
         }
         next_ground = types::NodeId(grds[idx_scdlowest]);
-        outc(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << endl);
+        outc(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << "\n");
 
         // check for area_closure
         if ( dyn_alloc_sce.option(Options::area_monthly_closure)  &&
@@ -5960,7 +5959,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             //if(nodes.at(next_ground)->evaluateAreaType()!=1)
             if (nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
             {
-                outc(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << endl);
+                outc(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << "\n");
                 finally_I_should_go_for_the_closest = true;
                 // the closest might also be inside the closed area but at least we will oscillate back to outside
 
@@ -5973,19 +5972,19 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     {
         next_ground = types::NodeId(grds[idx_lowest]);
 
-        outc(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << endl);
+        outc(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << "\n");
     }
 
     if (from.toIndex() == next_ground.toIndex() ||
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
-        outc(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl);
+        outc(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n");
        /* if(next_ground.toIndex()==5706){
-            cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << endl;
-            cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
-            cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
-            cout << "nodes.at(from.toIndex())->isNationBanned(0) is "<< nodes.at(from.toIndex())->isNationBanned(0)  << endl;
-            cout << "(nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) << endl;  
+            cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n";
+            cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+            cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
+            cout << "nodes.at(from.toIndex())->isNationBanned(0) is "<< nodes.at(from.toIndex())->isNationBanned(0)  << "\n";
+            cout << "(nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) is "<< (nodes.at(from.toIndex())->isNationBanned(0) || nodes.at(from.toIndex())->isNationBanned(this->get_nationality_idx())) << "\n";
          }
        */
         unlock();
@@ -6009,19 +6008,19 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), next_ground.toIndex());
         aStarMutex.unlock();
-        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<"\n";
 
         /*
          * if(path.size()<=1)
         { // a edge case we should avoid!
-            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having decided to change ground?" <<endl;
+            cout << this->get_name() <<" on "<< from.toIndex() << "...the a-star returning an empty path after having decided to change ground?" <<"\n";
             list<types::NodeId>::iterator road_iter = path.begin();
             dout(cout << "path: ");
             for( ; road_iter != path.end(); road_iter++)
             {
                dout(cout << *road_iter << " " );
             }
-            dout(cout << endl);
+            dout(cout << "\n");
         }
         */
 
@@ -6042,7 +6041,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         for(unsigned int i=0; i<grds.size(); i++)
         {
             next_ground =  types::NodeId(grds[i]);
-            outc(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
+            outc(cout << "then try to change for this new ground: " << next_ground.toIndex() << "\n");
 
             if(!use_static_paths)
             {
@@ -6050,7 +6049,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
                 aStarMutex.lock();
                  path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), next_ground.toIndex());
                 aStarMutex.unlock();
-                //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+                //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<"\n";
             }
             else
             {
@@ -6062,7 +6061,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             if(!path.empty()) path.pop_front();	 // delete the first node (departure) because we are lying in...
             if(path.size()>1)
             {
-                dout(cout << "this one is all right." << endl);
+                dout(cout << "this one is all right." << "\n");
                 break;
             }
         }
@@ -6071,7 +6070,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     if(path.size()==0)
     {
         // still empty!!
-        outc(cout << "pble calculating from " << from.toIndex() << " to " << next_ground.toIndex() << endl);
+        outc(cout << "pble calculating from " << from.toIndex() << " to " << next_ground.toIndex() << "\n");
         this->move_to(nodes.at(from.toIndex())) ;
         // no path found: assume the vessel stucks at its current location
     } else{
@@ -6079,21 +6078,21 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     }
 
 
-    outc(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
+    outc(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << "\n");
     /*if(next_ground.toIndex()==12132){
-        cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl;
-        cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl;
-        cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << endl;
-        cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << endl;
+        cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << "\n";
+        cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << "\n";
+        cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+        cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
      }
      */
 
      /*if(path.size()==0) {
-         cout << "Path is empty!!!" << endl;
+         cout << "Path is empty!!!" << "\n";
      }
      else
      {
-         cout << "Path is not empty! "<< path.size() << endl;
+         cout << "Path is not empty! "<< path.size() << "\n";
      }
      list<types::NodeId>::iterator road_iter = path.begin();
      dout(cout << "path: ");
@@ -6101,11 +6100,11 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
      {
         dout(cout << *road_iter << " " );
      }
-     dout(cout << endl);
+     dout(cout << "\n");
     */
 
 
-    outc(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
+    outc(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << "\n");
 
     // for this vessel, select the metier specific to this particular fishing ground
     // according to the observed frequency in data
@@ -6117,7 +6116,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
     if(metiers_on_grd.size()!=0)
     {
-        //cout << "do_sample 5" << endl;
+        //cout << "do_sample 5" << "\n";
         vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
         this->set_metier(  metiers[ a_met[0] ]  );
     }
@@ -6138,7 +6137,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     {
         outc(cout << (*pos).toIndex() << " ");
     }
-    outc(cout << endl);
+    outc(cout << "\n");
     */
 
     // find.next.pt.on.the.graph()
@@ -6246,13 +6245,13 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     {
         vector <double> freq_harbs = this->get_freq_harbours();
         // need to convert in array, see myRutils.cpp
-        //cout << "do_sample 6" << endl;
+        //cout << "do_sample 6" << "\n";
         auto harbours = do_sample(1, harbs.size(), harbs, freq_harbs);
         arr = types::NodeId(harbours[0]);
     }
 
-    dout(cout  << "from " << from.toIndex() << endl);
-    dout(cout  << "choose " << arr.toIndex() << endl);
+    dout(cout  << "from " << from.toIndex() << "\n");
+    dout(cout  << "choose " << arr.toIndex() << "\n");
 
     list<types::NodeId> path;
     if(!use_static_paths)
@@ -6261,7 +6260,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
         aStarMutex.lock();
          path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), arr.toIndex());
         aStarMutex.unlock();
-        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<endl;
+        //cout << from.toIndex() << " test the a-star for antoher ground...ok" <<"\n";
     }
     else
     {
@@ -6277,7 +6276,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     //{
     //    dout(cout << (*pos).toIndex() << " ");
     //}
-    //cout << endl;
+    //cout << "\n";
 
     if(path.size()==1)			 // i.e no path has been found...
     {
@@ -6294,7 +6293,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
             aStarMutex.lock();
              path = aStarPathFinder.findShortestPath(simModel.geoGraph(), from.toIndex(), arr.toIndex());
             aStarMutex.unlock();
-            //cout << from.toIndex() << " test the a-star for this situation...ok" <<endl;
+            //cout << from.toIndex() << " test the a-star for this situation...ok" <<"\n";
         }
         else
         {
@@ -6316,7 +6315,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
         //{c
         //    dout(cout << *pos << " ");
         //}
-        //cout << endl;
+        //cout << "\n";
         // CAUTION => THIS IS ONLY A FIX!
     }
     bool print_out=false;
@@ -6324,7 +6323,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     {
         // still no path!....
         dout (cout << "still no path found in shop for vessel " << this->get_name() <<
-              " going to arr " << arr.toIndex() << " from " << from.toIndex() << " then compute it..." << endl);
+              " going to arr " << arr.toIndex() << " from " << from.toIndex() << " then compute it..." << "\n");
 
 
         this->move_to(nodes.at(from.toIndex())) ;
@@ -6346,7 +6345,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
         {
             dout(cout << (*pos).toIndex() << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 
     // update
@@ -6365,7 +6364,7 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
 
 void Vessel::reinit_after_a_trip()
 {
-    outc(cout << "reinit after a trip..." << endl);
+    outc(cout << "reinit after a trip..." << "\n");
     // clear for this vessel
     this-> clear_catch_pop_at_szgroup();
     this-> clear_discards_pop_at_szgroup();
@@ -6393,7 +6392,7 @@ void Vessel::reinit_after_a_trip()
     this->set_tstep_dep(0);
     this->reset_message();
     //this->set_reason_to_go_back(0);
-    outc(cout << "reinit after a trip...OK" << endl);
+    outc(cout << "reinit after a trip...OK" << "\n");
 }
 
 
@@ -6430,7 +6429,7 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
         loglike_prop_met  << i->first << ":" << freq ;
 
     }
-    loglike_prop_met << " " << endl;
+    loglike_prop_met << " " << "\n";
 
 }
 
@@ -6461,9 +6460,9 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
     // NOTE THAT IDEALLY check_all_stocks_before_going_fishing SHOULD BE 1 IF ALL POPS ARE IMPLICIT!
     // OTHERWISE MOST OF THE VESSELS WILL STAY ON QUAYSIDE....
 
-    dout(cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl);
-    dout(cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl);
-    //if (this->get_name() == "EST010126047") cout << "COUCOU!" << endl;
+    dout(cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << "\n");
+    dout(cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << "\n");
+    //if (this->get_name() == "EST010126047") cout << "COUCOU!" << "\n";
     int still_some_quotas;
     if(is_individual_vessel_quotas)
     {
@@ -6482,7 +6481,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
                 if(indiv_quota!=0)
                 {
                     still_some_quotas=1;
-                    dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << endl);
+                    dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << "\n");
                      // => by default, continue if not all stks quotas are exhausted.....
                 }
                 if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
@@ -6505,7 +6504,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
         if(this->get_targeting_non_tac_pop_only())
             still_some_quotas=1;
 
-        dout(cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl);
+        dout(cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << "\n");
     }
     else
     {
@@ -6523,14 +6522,14 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
             string a_nation=this->get_nationality();
             vector<int>  trgts = this->get_metier()->get_metier_target_stocks();
-            // cout << "a_nation this vessel is " << a_nation << endl;
+            // cout << "a_nation this vessel is " << a_nation << "\n";
             
             for (unsigned int tg = 0; tg < trgts.size(); ++tg)
             {
                      int a_pop = trgts.at(tg);
                      double tac_this_species_this_nation= populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation);
-                     //if (this->get_name() == "EST010126047") cout << " here: land so far in tons this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) / 1000 << endl;
-                     //if (this->get_name() == "EST010126047") cout << " here: tacs this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation) << endl;
+                     //if (this->get_name() == "EST010126047") cout << " here: land so far in tons this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation) / 1000 << "\n";
+                     //if (this->get_name() == "EST010126047") cout << " here: tacs this pop " << a_pop << " and nation is  " << populations.at(a_pop)->get_tac()->get_tac_per_nation(a_nation) << "\n";
                      if  (tac_this_species_this_nation>0 // first, check if this stock is really a target for this vessel/nation
                            && ((populations.at(a_pop)->get_tac()->get_is_tac_exhausted() ||  // then, check global tac
                              populations.at(a_pop)->get_landings_so_far_per_nation().at(a_nation)/1000 > tac_this_species_this_nation) && // ...or check quota this nation
@@ -6538,7 +6537,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
                      {
                          still_some_quotas = 0;
                          // => will stay on quayside because exhausted tac on at least one targeted stock
-                         dout(cout << this->get_name() << " will stay on quayside because choked by target pop " << a_pop << "!" << endl);
+                         dout(cout << this->get_name() << " will stay on quayside because choked by target pop " << a_pop << "!" << "\n");
                          this->set_is_choked(a_pop, 1);
                      }
             }
@@ -6548,7 +6547,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
          {
             if(dyn_alloc_sce.option(Options::fishing_credits))
             {
-                dout(cout << "What this vessel " << this->get_name() <<" has for remaining credits ? " << this->get_fishing_credits().at(0) << endl);
+                dout(cout << "What this vessel " << this->get_name() <<" has for remaining credits ? " << this->get_fishing_credits().at(0) << "\n");
                 if(this->get_fishing_credits().at(0) <=0) still_some_quotas=0; // here, quota means credits
             }
             else
@@ -6558,9 +6557,9 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
          }
    }
 
-    dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
+    dout(cout << "still_some_quotas is" <<still_some_quotas << "\n");
 
-    //if (this->get_name() == "EST010126047") cout << "COUCOU2! still_some_quotas is " << still_some_quotas << " at tstep " << tstep << endl;
+    //if (this->get_name() == "EST010126047") cout << "COUCOU2! still_some_quotas is " << still_some_quotas << " at tstep " << tstep << "\n";
 
 
     if( still_some_quotas)
@@ -6580,7 +6579,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
                 std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
                 double the_value = traverseDtree(tstep, tree.get());
-                //cout <<"the value returned by traverseDtree is "<< the_value << endl;
+                //cout <<"the value returned by traverseDtree is "<< the_value << "\n";
 
                 // draw a random number [0,1) and compare with the value
 
@@ -6589,11 +6588,11 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
 
                 if(unif_rand()<the_value) {
                     unlock();     // GO!
-                    //if (this->get_name() == "EST010126047") cout << "GO!" << endl;
+                    //if (this->get_name() == "EST010126047") cout << "GO!" << "\n";
                     return(1);
                 } else {
                     unlock();
-                    //if (this->get_name() == "EST010126047") cout << "DON´T GO!"  << endl;
+                    //if (this->get_name() == "EST010126047") cout << "DON´T GO!"  << "\n";
 
 
                     return(0);	  // DON'T GO!
@@ -6603,7 +6602,7 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
             else
             {
                 unlock();
-                //if (this->get_name() == "EST010126047") cout << "DON´T DECIDE NOW!" << endl;
+                //if (this->get_name() == "EST010126047") cout << "DON´T DECIDE NOW!" << "\n";
                 return(0);		  // DON'T DECIDE NOW!
             }
 
@@ -6628,8 +6627,8 @@ int Vessel::should_i_go_fishing(int tstep, std::vector<Population *> &population
     }
     else
     {
-        dout(cout  << "no quota or credit left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
-        //if (this->get_name() == "EST010126047") cout << "no quota or credit left for this vessel " << endl;
+        dout(cout  << "no quota or credit left for this vessel " << this->get_name() << "...stay on quayside!" << "\n");
+        //if (this->get_name() == "EST010126047") cout << "no quota or credit left for this vessel " << "\n";
         unlock();
         return(0);
     }
@@ -6695,14 +6694,14 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                {
                   if(grds_in_closure.size()>0)
                   {
-                      cout << " with ChooseGround tree, isMetierBanned   "  << nodes.at(grds.at(i))->isMetierBanned(this->get_metier()->get_name()) << endl;
-                      cout << " with ChooseGround tree,  isVsizeBanned   " << nodes.at(grds.at(i))->isVsizeBanned(this->get_length_class()) << endl;
-                      cout << " so the list of fgrounds in closure is updated to : " << endl;
+                      cout << " with ChooseGround tree, isMetierBanned   "  << nodes.at(grds.at(i))->isMetierBanned(this->get_metier()->get_name()) << "\n";
+                      cout << " with ChooseGround tree,  isVsizeBanned   " << nodes.at(grds.at(i))->isVsizeBanned(this->get_length_class()) << "\n";
+                      cout << " so the list of fgrounds in closure is updated to : " << "\n";
                       for(int j=0; j <grds_in_closure.size(); ++j)
                       {
                          cout << " " << grds_in_closure.at(j);
                       }
-                      cout << endl;
+                      cout << "\n";
                   }
 
               }
@@ -6716,11 +6715,11 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         // Nevertheless, if all nodes for this vessel are in the closed areas,
         // then give a chance for using shared_harbour knowledge to find a ground outside, 
         // otherwise the vessel would not comply with the closure...
-        //cout << this->get_name() << endl;
-        //cout << ": " << grds.size() << " : " << grds_in_closure.size() << endl;
+        //cout << this->get_name() << "\n";
+        //cout << ": " << grds.size() << " : " << grds_in_closure.size() << "\n";
         if (grds.size() == grds_in_closure.size())
         {
-            cout << "all the " << this->get_name() << " nodes are within the closed area...look at the harbour knowledge to find alternatives" << endl;
+            cout << "all the " << this->get_name() << " nodes are within the closed area...look at the harbour knowledge to find alternatives" << "\n";
             auto harbs = this->get_harbours();
             auto freq_harbs = this->get_freq_harbours();
             int idx_max2 = max_element(freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
@@ -6803,12 +6802,12 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     // (the trick is to avoid screening the ChooseGround tree with all the grounds randomly)
     // check
     /*
-           cout << this->get_name() << " has ground in closure ? " << endl;
+           cout << this->get_name() << " has ground in closure ? " << "\n";
           for (unsigned int i=0; i<grds_in_closure.size();++i)
              {
              cout << grds_in_closure.at(i) << " ";
              }
-          cout << endl;
+          cout << "\n";
          */
 
 
@@ -6816,7 +6815,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::smartCatch) == true)
     {
-        outc(cout << "compute smartCatchGround"  << endl);
+        outc(cout << "compute smartCatchGround"  << "\n");
 
       
         vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(simModel,
@@ -6842,7 +6841,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         {
 
             // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
-            dout(cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;)
+            dout(cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << "\n";)
             // => Then, imagine a mean to expand the range of these vessels....
 /*
             // e.g. look at what use to do some vessels sharing the same departure harbour!
@@ -6862,7 +6861,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
             if(grounds_from_harbours.at(0)!=a_node)
             {
-                //cout << this->get_name() << "check size for do_sample() " << grounds_from_harbours.size() << " " << freq_grounds_from_harbours.size() << endl;
+                //cout << this->get_name() << "check size for do_sample() " << grounds_from_harbours.size() << " " << freq_grounds_from_harbours.size() << "\n";
                 this->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                 this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                 this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
@@ -6883,9 +6882,9 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
             }
             else
             {
-                cout << this->get_name() << " says: no info from the harbour...hopeless! " << endl;
+                cout << this->get_name() << " says: no info from the harbour...hopeless! " << "\n";
             }
-            cout << this->get_name() << "...look at knowledge from " << nodes.at(a_node.toIndex())->get_name() << endl;
+            cout << this->get_name() << "...look at knowledge from " << nodes.at(a_node.toIndex())->get_name() << "\n";
             // then, assume:
             expected_profit_per_ground = freq_grounds_from_harbours;
 
@@ -6930,7 +6929,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         } else{
             this->set_smartcatch(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "smartCatchGround is " << smartCatchGround.toIndex() << endl);
+        outc(cout << "smartCatchGround is " << smartCatchGround.toIndex() << "\n");
     }
 
 
@@ -6939,7 +6938,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::highPotentialCatch) == true)
     {
-        outc(cout << "compute highPotentialCatchGround"  << endl);
+        outc(cout << "compute highPotentialCatchGround"  << "\n");
 
         vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop(); // (experiencedcpue is computed after each trip)
         vector <double> past_freq_cpue_grds (grds.size());
@@ -6947,14 +6946,14 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
 
         // only look at the targeted stocks
-        //cout << "there are xx grounds: .." << grds.size() << endl;
+        //cout << "there are xx grounds: .." << grds.size() << "\n";
         for(unsigned int gr=0; gr<grds.size(); ++gr)
         {
-            //cout << "gr is: .." << gr << endl;
+            //cout << "gr is: .." << gr << "\n";
             for(unsigned int i=0; i<trgts.size(); ++i)
             {
                 int a_trgt=trgts.at(i);
-                //cout << "pop target is: .." << a_trgt << endl;
+                //cout << "pop target is: .." << a_trgt << "\n";
                 past_freq_cpue_grds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt);
             }
         }
@@ -6992,13 +6991,13 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         } else{
             this->set_highpotentialcatch(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "highPotentialCatchGround is " << highPotentialCatchGround.toIndex() << endl);
+        outc(cout << "highPotentialCatchGround is " << highPotentialCatchGround.toIndex() << "\n");
 
     }
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::knowledgeOfThisGround) == true)
     {
-        outc(cout << "compute knowledgeOfThisGround" << endl);
+        outc(cout << "compute knowledgeOfThisGround" << "\n");
         vector <double> freq_grounds = this->get_freq_fgrounds();
 
         // keep only the grds out the closed areas...
@@ -7033,13 +7032,13 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         } else{
             this->set_mosthistoricallyused(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround.toIndex() << endl);
+        outc(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround.toIndex() << "\n");
 
     }
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::notThatFar) == true)
     {
-        outc(cout << "compute notThatFarGround"  << endl);
+        outc(cout << "compute notThatFarGround"  << "\n");
 
         auto from = this->get_loc()->get_idx_node();
 
@@ -7090,13 +7089,13 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         } else{
             this->set_notthatfar(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "notThatFarGround is " << notThatFarGround.toIndex() << endl);
+        outc(cout << "notThatFarGround is " << notThatFarGround.toIndex() << "\n");
     }
 
 
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::lowestTariff) == true)
     {
-        outc(cout << "compute lowestTariff"  << endl);
+        outc(cout << "compute lowestTariff"  << "\n");
 
 
         vector <double> tariff_per_ground;
@@ -7137,7 +7136,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         } else{
             this->set_lowesttariff(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "lowestTariffGround is " << lowestTariffGround.toIndex() << endl);
+        outc(cout << "lowestTariffGround is " << lowestTariffGround.toIndex() << "\n");
     }
 
 
@@ -7151,7 +7150,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     types::NodeId ground= types::special::InvalidNodeId;
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
         ground=relevant_grounds_to_evaluate.at(it);
-        outc(cout << "Evaluate for ground... "<< ground.toIndex() << endl);
+        outc(cout << "Evaluate for ground... "<< ground.toIndex() << "\n");
 
         // Caution with a logical leaks: each ground is evaluated once and only once,
         // meanwhile the smartCatch ground can be likely the same than the highPotentialCatch, notThatFar, etc.
@@ -7174,14 +7173,14 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         // tariffThisGroundIs  // ChooseGround               => relevant only if fishing_credits Option is active
         //=> TO DO: add the corresponding dtree evaluators...
 
-        // cout << "traverse tree for ground " << ground << endl;
+        // cout << "traverse tree for ground " << ground << "\n";
         double the_value = traverseDtree(ground.toIndex(), tree.get());
 
 
         //CHOOSE THAT GROUND!
         if(unif_rand()<the_value) {
             unlock();
-            //cout << "END1 should_i_choose_this_ground for ..." << this->get_name() << endl;
+            //cout << "END1 should_i_choose_this_ground for ..." << this->get_name() << "\n";
             return(ground); // EXIT: WE FOUND A SUITABLE GROUND!
         }
         //  else // CONTINUE SEARCHING AMONG RELEVANT SPECIAL NODE GROUNDS
@@ -7196,7 +7195,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     // (because of 1- a *non-complete* tree;
     // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
     // or (e.g. 3- when all nodes are in closed areas)
-    dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
+    dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << "\n");
 
     //for the last node....caution. Check if rand>last_value if yes then go to freq_fgrounds use...otherwise do nothing
     // SO IT IS LIKELY THAT MOST OF THE TIME WE WANT THIS PARTICULAR PROBA NODE TO BE AT 1.00: CHECK YOUR ChooseGround dtree!
@@ -7208,7 +7207,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
     if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
          unlock();
-         //cout << "END2 should_i_choose_this_ground for ..." << this->get_name() << endl;
+         //cout << "END2 should_i_choose_this_ground for ..." << this->get_name() << "\n";
         return (types::special::InvalidNodeId); // EXIT: do_nothing, likely because all grounds in closed areas or last leaf value !=1.00
     }
 
@@ -7268,7 +7267,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
     
-    //cout << this->get_name() << endl;
+    //cout << this->get_name() << "\n";
     for (unsigned int n = 0; n < grds.size(); n++)
     {
             if ( nodes.at(grds.at(n).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
@@ -7290,11 +7289,11 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     }
    
     // then sample...
-    dout(cout << "Possible crash here if grounds.size() " << grds.size() << " is different from freq_grds.size() " << freq_grds.size() << endl);
+    dout(cout << "Possible crash here if grounds.size() " << grds.size() << " is different from freq_grds.size() " << freq_grds.size() << "\n");
     auto grounds = do_sample(1, grds.size(), grds, freq_grds); // caution: will return empty vector if something wrong in input....then make a crash
     ground= types::NodeId(grounds[0]);
 
-    //cout << "ground is " << ground.toIndex() << endl;
+    //cout << "ground is " << ground.toIndex() << "\n";
 
     
     /* CHECK
@@ -7303,13 +7302,13 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
         nodes.at(ground.toIndex())->isNationBanned(this->get_nationality_idx())
         )
     {
-        cout << "this node " << ground.toIndex() << " is inside the closed area!" << endl;
+        cout << "this node " << ground.toIndex() << " is inside the closed area!" << "\n";
     }
     */
 
 
     unlock();
-    // cout << "END3 should_i_choose_this_ground for ..." << this->get_name() << endl;
+    // cout << "END3 should_i_choose_this_ground for ..." << this->get_name() << "\n";
     return(ground);
 
 }
@@ -7335,7 +7334,7 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
         std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StartFishing);
 
         auto from = this->get_loc()->get_idx_node();
-        dout(cout  << "current node: " << from.toIndex() << endl);
+        dout(cout  << "current node: " << from.toIndex() << "\n");
 
         double the_value = traverseDtree(from.toIndex(), tree.get());
 
@@ -7365,7 +7364,7 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
         std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChangeGround);
 
         auto from = this->get_loc()->get_idx_node();
-        dout(cout  << "current node: " << from.toIndex() << endl);
+        dout(cout  << "current node: " << from.toIndex() << "\n");
 
         double the_value = traverseDtree(from.toIndex(), tree.get());
 
@@ -7440,7 +7439,7 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
 
-    outc (cout<< "should I  stop fishing??" << endl);
+    outc (cout<< "should I  stop fishing??" << "\n");
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
     {
@@ -7451,8 +7450,8 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
 
         //STOP FISHING!
         if(unif_rand()<the_value) {
-            //cout << "Current reason is: " << this->get_reason_to_go_back() << endl;
-            //cout << "STOP!" << endl;
+            //cout << "Current reason is: " << this->get_reason_to_go_back() << "\n";
+            //cout << "STOP!" << "\n";
             return(1);
         } else {
             return(0);		 // DON´T STOP!
@@ -7508,7 +7507,7 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
 
             vector<double>::iterator where = min_element (dist_to_ports.begin(), dist_to_ports.end());
             a_min_dist = *where;
-            dout(cout  << "minimum dist to port is " << *where << endl);
+            dout(cout  << "minimum dist to port is " << *where << "\n");
 
         }
 
@@ -7517,7 +7516,7 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
                 this->get_timeatsea() >=12 &&
                 this->get_timeatsea() < 20)
         {
-            //cout << "tstep with detection at "  << tstep << endl;
+            //cout << "tstep with detection at "  << tstep << "\n";
             // boolean for capturing the daily trips (3 hours at full speed of the nearest port)
             //MAGIC NUMBER HERE!
             flag1 =  !(a_min_dist < this->get_speed() * NAUTIC * 3);
@@ -7532,23 +7531,23 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
         bool flag3 = this->get_cumcatches() < this->get_carrycapacity();
         // boolean for knowing if we may change of grounds
         // boolean for knowing if we will change of grounds
-        dout(cout  << "flag 1 is " <<flag1 << endl);
-        dout(cout  << "flag 2 is " <<flag2 << endl);
-        dout(cout  << "flag 3 is " <<flag3 << endl);
+        dout(cout  << "flag 1 is " <<flag1 << "\n");
+        dout(cout  << "flag 2 is " <<flag2 << "\n");
+        dout(cout  << "flag 3 is " <<flag3 << "\n");
 
         if(!flag1)
         {
-            dout(cout  << "no more time..." << endl);
+            dout(cout  << "no more time..." << "\n");
             this->set_reason_to_go_back(1);
         }
         if(!flag2)
         {
-            dout(cout  << "no enough fuel to go on..." << endl);
+            dout(cout  << "no enough fuel to go on..." << "\n");
             this->set_reason_to_go_back(2);
         }
         if(!flag3)
         {
-            dout(cout  << "no enough room to fish more..." << endl);
+            dout(cout  << "no enough room to fish more..." << "\n");
             this->set_reason_to_go_back(3);
         }
 

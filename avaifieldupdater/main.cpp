@@ -42,7 +42,7 @@ bool fill_from_coord (istream& in, vector<double>& graph_coord_x,
     }
 
     cout << "read coord with "
-         << graph_coord_x.size() << " nodes" << endl << flush;
+         << graph_coord_x.size() << " nodes" << "\n" << flush;
 return true;
 }
 
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
             }
             optind++;
         }
-    //cout << "option -tstep in avaifieldupdater is " << tstep << " and shepard_p is " << shepard_p<< endl;
+    //cout << "option -tstep in avaifieldupdater is " << tstep << " and shepard_p is " << shepard_p<< "\n";
 
     stringstream out;
     out << graph;
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
     if(coord_graph.fail())
     {
         open_file_error(filename_graph.c_str());
-        cout << "failing opening the graph file" << endl;
+        cout << "failing opening the graph file" << "\n";
         return 1;
     }
     vector<double> graph_coord_x;
@@ -170,13 +170,13 @@ int main(int argc, char* argv[])
     {
         open_file_error(filename_displace_input_for_data_merger.c_str());
         //return 1;
-        cout << "error when opening the displace_input_for_data_merger file..." << endl;
+        cout << "error when opening the displace_input_for_data_merger file..." << "\n";
     int aa;
     cin >> aa;
     }
 
 
-    cout << "Calling avai field updater..." << endl;
+    cout << "Calling avai field updater..." << "\n";
 
 
 
@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
 
             std::string line;
             std::getline(in, line);
-//cout << "new line read..." << endl;
+//cout << "new line read..." << "\n";
             //  Survey / Year/ ShootLon / ShootLat / Stock / StockId / nb_indiv0 / nb_indiv1 /...
             in >> Survey;
             Surveys.push_back(Survey);
@@ -261,10 +261,10 @@ int main(int argc, char* argv[])
             nb_indiv12s.push_back(nb_indiv12);
             in >> nb_indiv13;
             nb_indiv13s.push_back(nb_indiv13);
- //cout <<  Survey << " " << Year << " " << ShootLon  << " " <<   ShootLat << " " <<   Stock << " " <<   StockId << " " <<   nb_indiv0  << " " <<   nb_indiv1 << " " <<   nb_indiv13 << endl;
+ //cout <<  Survey << " " << Year << " " << ShootLon  << " " <<   ShootLat << " " <<   Stock << " " <<   StockId << " " <<   nb_indiv0  << " " <<   nb_indiv1 << " " <<   nb_indiv13 << "\n";
     ++linenum;
     }
-    cout  << "read the input file...ok " << endl;
+    cout  << "read the input file...ok " << "\n";
     in.close();
 
 
@@ -291,7 +291,7 @@ int main(int argc, char* argv[])
     vector <vector<double> > idw13 (graph_coord_x.size(), vector<double>(max_idx_stock));
 
 
-    cout  << "populate all with 0s... " << endl;
+    cout  << "populate all with 0s... " << "\n";
 
     double a_dist;
     vector<vector<int> > idx_n_in_range(max_idx_stock);
@@ -326,7 +326,7 @@ int main(int argc, char* argv[])
       }
     }
 
-    cout  << "init for idw...ok " << endl;
+    cout  << "init for idw...ok " << "\n";
 
 
     double coord_x =0, coord_y =0, shoot_x =0, shoot_y =0;
@@ -341,7 +341,7 @@ int main(int argc, char* argv[])
            if(abs(coord_x-shoot_x)<0.5 && abs(coord_y-shoot_y)<0.5){ // filtering to save time...
 
               a_dist = greatcircledistance(coord_x, coord_y, shoot_x, shoot_y);
-              //cout  << "a_dist... " << a_dist << endl;
+              //cout  << "a_dist... " << a_dist << "\n";
 
 
             if (a_dist < dist_km && a_dist > 1e-5) {
@@ -357,7 +357,7 @@ int main(int argc, char* argv[])
           }
        }
      }
- cout  << "weights in idw computed...ok " << endl;
+ cout  << "weights in idw computed...ok " << "\n";
 
 
 
@@ -368,7 +368,7 @@ for(int i=0; i<listStockIds.size(); i++){
     sort( idx_n_in_range.at(st).begin(), idx_n_in_range.at(st).end() ) ;
     idx_n_in_range.at(st).erase( unique( idx_n_in_range.at(st).begin(), idx_n_in_range.at(st).end() ), idx_n_in_range.at(st).end() ) ;
 
-    cout  << "nb nodes this stock " << st << " within the km range is... " <<  idx_n_in_range.at(st).size() << endl;
+    cout  << "nb nodes this stock " << st << " within the km range is... " <<  idx_n_in_range.at(st).size() << "\n";
 
     }
 
@@ -387,14 +387,14 @@ for(int i=0; i<listStockIds.size(); i++){
      vector<double> totidw12 (max_idx_stock, 0);
      vector<double> totidw13 (max_idx_stock, 0);
        for (int pt=0; pt<ShootLons.size(); pt++) {
-         //cout <<" process line "<< pt << endl;
+         //cout <<" process line "<< pt << "\n";
            int st=StockIds.at(pt);
            if(sum_weights.at(pt).at(st)>1e-5){
              for (int n=0; n<idx_n_in_range.at(st).size(); n++) {
                int n2=idx_n_in_range.at(st).at(n);
                if(weights.at(n2).at(pt)>1e-5){
-               //cout  << "for line " << pt << "sum_weights  this node " << n2 << " is... " <<  sum_weights.at(n2) << endl;
-                      //cout  << "st is " << st << "given size of idw0.at(n2) " << idw0.at(n2).size() << endl;
+               //cout  << "for line " << pt << "sum_weights  this node " << n2 << " is... " <<  sum_weights.at(n2) << "\n";
+                      //cout  << "st is " << st << "given size of idw0.at(n2) " << idw0.at(n2).size() << "\n";
                       idw0.at(n2).at(st) += (nb_indiv0s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
                       idw1.at(n2).at(st) += (nb_indiv1s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
                       idw2.at(n2).at(st) += (nb_indiv2s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
@@ -416,7 +416,7 @@ for(int i=0; i<listStockIds.size(); i++){
        }
 
 
-     cout  << "idw computed...ok " << endl;
+     cout  << "idw computed...ok " << "\n";
 
 
      // get the sum for normalisation to 1
@@ -443,14 +443,14 @@ for(int i=0; i<listStockIds.size(); i++){
            totidw13.at(st) += idw13.at(n2).at(st);
        }
      }
- cout  << "sum for normalisation completed...ok " << endl;
+ cout  << "sum for normalisation completed...ok " << "\n";
 
 
     // export back
      for (int i=0; i<listStockIds.size(); i++)
      {
      int a_pop = listStockIds.at(i);
-     cout  << "export for a_pop... " << a_pop << endl;
+     cout  << "export for a_pop... " << a_pop << "\n";
 
      stringstream out;
      out << a_pop;
@@ -466,8 +466,8 @@ for(int i=0; i<listStockIds.size(); i++){
             "spe_avai_szgroup_nodes_"+a_semester+"_updated.dat";
      avaiField2.open(filename_avai_file_out.c_str());
 
-     avaiField << "idx_node" << " " << "avai" << endl;
-     avaiField2 << "idx_node" << " " << "avai" << endl;
+     avaiField << "idx_node" << " " << "avai" << "\n";
+     avaiField2 << "idx_node" << " " << "avai" << "\n";
      for (int n=0; n<idx_n_in_range.at(a_pop).size(); n++)
      {
          int n2=idx_n_in_range.at(a_pop).at(n);
@@ -479,126 +479,126 @@ for(int i=0; i<listStockIds.size(); i++){
          } else {
             avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw0.at(a_pop)>1e-5){
             avaiField2 << setprecision(9) << fixed << n2  << " " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop);
          } else {
             avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField2 << " " <<  endl;
+         avaiField2 << " " <<  "\n";
 
          if(totidw1.at(a_pop)>1e-5){
                avaiField << setprecision(9) << fixed << n2  << " " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop);
          } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw2.at(a_pop)>1e-5){
                avaiField << setprecision(9) << fixed << n2  << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
          } else {
             avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw2.at(a_pop)>1e-5){
                   avaiField2 << setprecision(9) << fixed << n2  << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
          } else {
                avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField2 << " " <<  endl;
+         avaiField2 << " " <<  "\n";
 
          if(totidw3.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw4.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw5.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw5.at(a_pop)>1e-5){
                   avaiField2 << setprecision(9) << fixed << n2  << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
          } else {
               avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField2 << " " <<  endl;
+         avaiField2 << " " <<  "\n";
 
          if(totidw6.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw7.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
          } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw7.at(a_pop)>1e-5){
                   avaiField2 << setprecision(9) << fixed << n2  << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
          } else {
                avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField2 << " " <<  endl;
+         avaiField2 << " " <<  "\n";
 
          if(totidw8.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw8.at(n2).at(a_pop)/totidw8.at(a_pop);
          } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw9.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw9.at(n2).at(a_pop)/totidw9.at(a_pop);
          } else {
             avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw10.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw10.at(n2).at(a_pop)/totidw10.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw11.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw11.at(n2).at(a_pop)/totidw11.at(a_pop);
          } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw12.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw12.at(n2).at(a_pop)/totidw12.at(a_pop);
          } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
 
          if(totidw13.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw13.at(n2).at(a_pop)/totidw13.at(a_pop);
          } else {
                 avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
          }
-         avaiField << " " <<  endl;
+         avaiField << " " <<  "\n";
     }
     avaiField.close();
     avaiField2.close();
@@ -609,19 +609,19 @@ for(int i=0; i<listStockIds.size(); i++){
             "spe_avai_szgroup_nodes_"+a_semester+"_shuffled.dat";
     avaiFieldSelected.open(filename_avai_file_out.c_str());
 
-    avaiFieldSelected << "idx_node" << " " << "avai" << endl;
+    avaiFieldSelected << "idx_node" << " " << "avai" << "\n";
     for (multimap<int, double>::iterator pos=avai_szgroup_nodes_with_pop.begin(); pos != avai_szgroup_nodes_with_pop.end(); pos++)
     {
         avaiFieldSelected << setprecision(6) << fixed;
             avaiFieldSelected << pos->first << " " << pos->second << " ";
-            avaiFieldSelected << " " <<  endl;
+            avaiFieldSelected << " " <<  "\n";
     }
     */
     // avaiFieldSelected.close();
 
     } // end pop
 
-    cout  << "export back the availability at szgroup field...ok " << endl;
+    cout  << "export back the availability at szgroup field...ok " << "\n";
 
 
     return 0;

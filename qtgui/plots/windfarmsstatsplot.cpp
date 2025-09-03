@@ -159,7 +159,7 @@ void WindfarmsStatsPlot::update(QCustomPlot *plot)
             data = table->getStatData(statType, aggregType, grp);
 
         graphs.push_back(graph);
-        graphs[igraph]->setData(QVector<double>::fromStdVector(data.t), QVector<double>::fromStdVector(data.v));
+        graphs[igraph]->setData(QVector<double>(data.t.begin(), data.t.end()), QVector<double>(data.v.begin(), data.v.end()));
     }
 
     switch (lastStat) {

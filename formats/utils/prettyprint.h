@@ -5,7 +5,10 @@
 #ifndef DISPLACE_PRETTYPRINT_H
 #define DISPLACE_PRETTYPRINT_H
 
+#define _HAS_STD_BYTE 0
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 #include <iterator>
 #include <memory>
 #include <ostream>
@@ -356,7 +359,7 @@ namespace utils
 
 
     // A wrapper for a C-style array given as pointer-plus-size.
-    // Usage: std::cout << pretty_print_array(arr, n) << std::endl;
+    // Usage: std::cout << pretty_print_array(arr, n) << "\n";
 
     template<typename T>
     struct array_wrapper_n
@@ -375,7 +378,7 @@ namespace utils
 
 
     // A wrapper for hash-table based containers that offer local iterators to each bucket.
-    // Usage: std::cout << bucket_print(m, 4) << std::endl;  (Prints bucket 5 of container m.)
+    // Usage: std::cout << bucket_print(m, 4) << "\n";  (Prints bucket 5 of container m.)
 
     template <typename T>
     struct bucket_print_wrapper

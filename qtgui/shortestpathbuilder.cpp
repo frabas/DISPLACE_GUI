@@ -58,8 +58,8 @@ struct ShortestPathBuilder::Impl {
         QTextStream strm_min(&mindist_file);
         QTextStream strm_prev(&prev_file);
 
-        strm_prev << " key  value" << endl;
-        strm_min << " key  value" << endl;
+        strm_prev << " key  value" << "\n";
+        strm_min << " key  value" << "\n";
 
         vector<int> mem(2, 0);
 
@@ -69,8 +69,8 @@ struct ShortestPathBuilder::Impl {
         }
 
         algo->saveRelevantNodes(relevantNodes,[&strm_prev, &strm_min](types::NodeId node, types::NodeId pred, double dist){
-            strm_prev << node.toIndex() << " " << pred.toIndex() << endl;
-            strm_min << node.toIndex() << " " << dist << endl;
+            strm_prev << node.toIndex() << " " << pred.toIndex() << "\n";
+            strm_min << node.toIndex() << " " << dist << "\n";
         });
 
         mindist_file.close();

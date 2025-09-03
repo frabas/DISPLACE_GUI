@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QRegExp>
+#include <QRegularExpression>
 
 RunDialog::RunDialog(QWidget *parent) :
     QDialog(parent),
@@ -56,15 +56,15 @@ void RunDialog::on_cmdBrowseModel_clicked()
 
 bool RunDialog::parsePathParts(const QString &path, QString &basepath, QString &inputname, QString &outputname)
 {
-    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
-
-    if (regexp.indexIn(path) == -1) {
+    QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    auto match = regexp.match(path);
+    if (match.hasMatch()) {
         return false;
     }
 
-    basepath = regexp.cap(1);
-    inputname = regexp.cap(2);
-    outputname = regexp.cap(3);
+    basepath = match.captured(1);
+    inputname = match.captured(2);
+    outputname = match.captured(3);
 
     return true;
 }

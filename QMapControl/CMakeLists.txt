@@ -24,7 +24,7 @@ cpack_add_component(examples
         )
 
 
-find_package(Qt5 5.6 COMPONENTS Widgets Core Concurrent Sql Xml PrintSupport Network REQUIRED)
+find_package(Qt6 6.8 COMPONENTS Widgets Core Concurrent Sql Xml PrintSupport Network REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -56,8 +56,8 @@ target_compile_definitions(QMapControl
 
 target_link_libraries(QMapControl
         ${LIBRARIES}
-        Qt5::Widgets
-        Qt5::Network
+        Qt6::Widgets
+        Qt6::Network
         )
 
 target_include_directories(QMapControl

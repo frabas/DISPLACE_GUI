@@ -43,7 +43,7 @@ QModelIndex ShipEntity::index(int row, int column, const QModelIndex &parent) co
     Q_UNUSED(parent);
 
     ObjectTreeEntity * entity = new ShipEntity(model, row);
- // std::cout << "id (row) is assigned here and is " << row << endl;
+ // std::cout << "id (row) is assigned here and is " << row << "\n";
     return model->createEntity(row, column, entity);
 }
 

@@ -232,8 +232,8 @@ read_avai_betas(string a_semester, string szgroup, string folder_name_parameteri
     ifstream avai_betas_file;
     avai_betas_file.open(filename.c_str());
     if (avai_betas_file.fail()) {
-        cout << "Unfortunately the /avaiXX_betas_semesterXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the /avaiXX_betas_semesterXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -264,8 +264,8 @@ read_init_pops_per_szgroup(string folder_name_parameterization, string inputfold
         file_init_pops_per_szgroup.open(filename.c_str());
     }
     if (file_init_pops_per_szgroup.fail()) {
-        cout << "Unfortunately the init_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_pops_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -286,7 +286,7 @@ read_init_pops_per_szgroup(string folder_name_parameterization, string inputfold
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_pops_per_szgroup);
@@ -310,8 +310,8 @@ read_adults_diet_preference_per_stock_allstks(string folder_name_parameterizatio
     }
     if (file_adults_diet_preference_per_stock_allstks.fail()) {
         cout << "Unfortunately the adults_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed "
-             << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+             << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -333,7 +333,7 @@ read_adults_diet_preference_per_stock_allstks(string folder_name_parameterizatio
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (adults_diet_preference_per_stock_allstks);
@@ -358,8 +358,8 @@ read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameteriza
     }
     if (file_juveniles_diet_preference_per_stock_allstks.fail()) {
         cout << "Unfortunately the juveniles_diet_preference_per_stock_allstks_biolsceXX.dat vector is not informed "
-             << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+             << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -381,7 +381,7 @@ read_juveniles_diet_preference_per_stock_allstks(string folder_name_parameteriza
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (juveniles_diet_preference_per_stock_allstks);
@@ -405,8 +405,8 @@ read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization, st
         file_init_prop_migrants_pops_per_szgroup.open(filename.c_str());
     }
     if (file_init_prop_migrants_pops_per_szgroup.fail()) {
-        cout << "Unfortunately the init_prop_migrants_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_prop_migrants_pops_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -428,7 +428,7 @@ read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization, st
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_prop_migrants_pops_per_szgroup);
@@ -451,8 +451,8 @@ read_init_maturity_per_szgroup(string folder_name_parameterization, string input
         file_init_maturity_per_szgroup.open(filename.c_str());
     }
     if (file_init_maturity_per_szgroup.fail()) {
-        cout << "Unfortunately the init_maturity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_maturity_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -471,7 +471,7 @@ read_init_maturity_per_szgroup(string folder_name_parameterization, string input
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_maturity_per_szgroup);
@@ -495,8 +495,8 @@ read_init_fecundity_per_szgroup(string folder_name_parameterization, string inpu
         file_init_fecundity_per_szgroup.open(filename.c_str());
     }
     if (file_init_fecundity_per_szgroup.fail()) {
-        cout << "Unfortunately the init_fecundity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_fecundity_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -515,7 +515,7 @@ read_init_fecundity_per_szgroup(string folder_name_parameterization, string inpu
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_fecundity_per_szgroup);
@@ -538,8 +538,8 @@ read_init_weight_per_szgroup(string folder_name_parameterization, string inputfo
         file_init_weight_per_szgroup.open(filename.c_str());
     }
     if (file_init_weight_per_szgroup.fail()) {
-        cout << "Unfortunately the init_weight_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_weight_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -558,7 +558,7 @@ read_init_weight_per_szgroup(string folder_name_parameterization, string inputfo
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_weight_per_szgroup);
@@ -574,8 +574,8 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
     ifstream file_comcat_per_szgroup;
     file_comcat_per_szgroup.open(filename.c_str());
     if (file_comcat_per_szgroup.fail()) {
-        cout << "Unfortunately the comcat_per_szgroup_done_by_hand.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the comcat_per_szgroup_done_by_hand.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -594,7 +594,7 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
     {
         cout << pos->second << " ";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return (comcat_per_szgroup);
@@ -615,8 +615,8 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
         file_init_M_per_szgroup.open(filename.c_str());
     }
     if (file_init_M_per_szgroup.fail()) {
-        cout << "Unfortunately the init_M_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_M_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -635,7 +635,7 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_M_per_szgroup);
@@ -657,8 +657,8 @@ read_beta_ssm_szgroup(string folder_name_parameterization, string inputfolder, s
         file_beta_ssm_per_szgroup.open(filename.c_str());
     }
     if (file_beta_ssm_per_szgroup.fail()) {
-        cout << "Unfortunately the beta_ssm_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the beta_ssm_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -679,7 +679,7 @@ read_beta_ssm_szgroup(string folder_name_parameterization, string inputfolder, s
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (beta_ssm_per_szgroup);
@@ -701,8 +701,8 @@ read_background_mortality_szgroup(string folder_name_parameterization, string in
         file_background_mortality_per_szgroup.open(filename.c_str());
     }
     if (file_background_mortality_per_szgroup.fail()) {
-        cout << "Unfortunately the background_mortality_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the background_mortality_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "Required by the dyn sizeSpectra Option. If this option is activated, you´ll have to fix this problem: stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -723,7 +723,7 @@ read_background_mortality_szgroup(string folder_name_parameterization, string in
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (background_mortality_per_szgroup);
@@ -747,8 +747,8 @@ read_init_proprecru_per_szgroup(string folder_name_parameterization, string inpu
         file_init_proprecru_per_szgroup.open(filename.c_str());
     }
     if (file_init_proprecru_per_szgroup.fail()) {
-        cout << "Unfortunately the init_proprecru_per_szgroup_biolsceXX.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the init_proprecru_per_szgroup_biolsceXX.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -767,7 +767,7 @@ read_init_proprecru_per_szgroup(string folder_name_parameterization, string inpu
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (init_proprecru_per_szgroup);
@@ -794,8 +794,8 @@ read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterizatio
     ifstream file_lst_idx_nodes_per_pop;
     file_lst_idx_nodes_per_pop.open(filename.c_str());
     if (file_lst_idx_nodes_per_pop.fail()) {
-        cout << "Unfortunately the lst_idx_nodes_per_pop_.dat vector is not informed  " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the lst_idx_nodes_per_pop_.dat vector is not informed  " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -814,7 +814,7 @@ read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterizatio
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     // TODO (fba#5#): remove possible replicates in the list of nodes per pop
@@ -833,8 +833,8 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
     ifstream file_the_selected_szgroups;
     file_the_selected_szgroups.open(filename.c_str());
     if (file_the_selected_szgroups.fail()) {
-        cout << "Unfortunately the the_selected_szgroups.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the the_selected_szgroups.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -853,7 +853,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
     {
         cout << pos->second << " ";
     }
-    cout << endl;*/
+    cout << "\n";*/
 
     return (the_selected_szgroups);
 }
@@ -868,8 +868,8 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
     ifstream file_tac_percent_simulated;
     file_tac_percent_simulated.open(filename.c_str());
     if (file_tac_percent_simulated.fail()) {
-        cout << "Unfortunately the percent_landings_from_simulated_vessels.dat vector is not informed" << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the percent_landings_from_simulated_vessels.dat vector is not informed" << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -882,7 +882,7 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
 #ifdef VERBOSE
     // check input
     for ( map<int,int>::iterator it=tac_percent_simulated.begin() ; it != tac_percent_simulated.end(); it++ )
-        dout(cout << (*it).first << " => " << (*it).second << endl);
+        dout(cout << (*it).first << " => " << (*it).second << "\n");
 #endif
 
     return (tac_percent_simulated);
@@ -898,8 +898,8 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
     ifstream file_hyperstability_param;
     file_hyperstability_param.open(filename.c_str());
     if (file_hyperstability_param.fail()) {
-        cout << "Unfortunately the hyperstability_param.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the hyperstability_param.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -912,7 +912,7 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
 #ifdef VERBOSE
     // check input
     for ( map<int,double>::iterator it=hyperstability_param.begin() ; it != hyperstability_param.end(); it++ )
-        dout(cout << (*it).first << " => " << (*it).second << endl);
+        dout(cout << (*it).first << " => " << (*it).second << "\n");
 #endif
 
     return (hyperstability_param);
@@ -941,8 +941,8 @@ read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, strin
     file_oth_land.open(filename.c_str());
     if (file_oth_land.fail()) {
         cout << "Unfortunately the spe_stecf_oth_land_per_month_per_node_ vector is not informed for stock " << a_pop_s
-             << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+             << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -955,12 +955,12 @@ read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, strin
 #ifdef VERBOSE
     // check input
     map<int,double>::iterator pos;
-    dout(cout << " oth_land " << endl);
+    dout(cout << " oth_land " << "\n");
     for (pos=oth_land.begin(); pos != oth_land.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (oth_land);
@@ -982,7 +982,7 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
     string filename;
     filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/other_landings_on_node_per_met_pop/" + a_pop_s +
             "spe_oth_land_met" + a_met_s + "_month" + a_month + "_fleetsce" + fleetsce + ".dat";
-    //cout << "looking for ..." << filename << endl;
+    //cout << "looking for ..." << filename << "\n";
 
     ifstream file_oth_land;
     file_oth_land.open(filename.c_str());
@@ -993,17 +993,17 @@ int read_oth_land_map_per_met_on_nodes(map<types::NodeId, double>& oth_land, str
     fill_from_oth_land(file_oth_land, oth_land);
     file_oth_land.close();
 
-    //cout << "closing ..." << filename << endl;
+    //cout << "closing ..." << filename << "\n";
 
 #ifdef VERBOSE
     // check input
     map<int, double>::iterator pos;
-    dout(cout << " oth_land " << endl);
+    dout(cout << " oth_land " << "\n");
     for (pos = oth_land.begin(); pos != oth_land.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (0);
@@ -1024,8 +1024,8 @@ vector<vector<double> > read_selectivity_per_stock_ogives_for_oth_land(int nbpop
     file_selectivity_per_stock_ogives_for_oth_land.open(filename.c_str());
     if (file_selectivity_per_stock_ogives_for_oth_land.fail()) {
         vector<vector<double> > selectivity_per_stock_ogives_for_oth_land;
-        cout << "Unfortunately the selectivity_per_stock_ogives_for_oth_land is not informed..."  << endl;
-        cout << "You´ll have to stop the simu, correct input in metiersspe and re-run. " << endl;
+        cout << "Unfortunately the selectivity_per_stock_ogives_for_oth_land is not informed..."  << "\n";
+        cout << "You´ll have to stop the simu, correct input in metiersspe and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
         exit(-1);
@@ -1063,11 +1063,11 @@ read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_p
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "overall_migration_fluxes_semester" + a_semester + "_biolsce1.dat";
         file_overall_migration_fluxes.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_overall_migration_fluxes.fail()) {
-        cout << "Unfortunately the overall_migration_fluxes_ vector is not informed for stock " << a_pop_s << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the overall_migration_fluxes_ vector is not informed for stock " << a_pop_s << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -1080,12 +1080,12 @@ read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_p
 #ifdef VERBOSE
     // check input
     multimap<int,double>::iterator pos;
-    dout(cout << " overall_migration_fluxes " << endl);
+    dout(cout << " overall_migration_fluxes " << "\n");
     for (pos=overall_migration_fluxes.begin(); pos != overall_migration_fluxes.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (overall_migration_fluxes);
@@ -1125,12 +1125,12 @@ read_relative_stability_keys(string a_semester, int a_pop, string folder_name_pa
 #ifdef VERBOSE
     // check input
     map<string,double>::iterator pos;
-    dout(cout << " relative_stability " << endl);
+    dout(cout << " relative_stability " << "\n");
     for (pos=relative_stability.begin(); pos != relative_stability.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (relative_stability);
@@ -1182,12 +1182,12 @@ read_percent_tac_per_vessel_length_class(string a_semester, int a_pop, string fo
 #ifdef VERBOSE
     // check input
     map<string, double>::iterator pos;
-    dout(cout << " percent_tac_per_vessel_length_class " << endl);
+    dout(cout << " percent_tac_per_vessel_length_class " << "\n");
     for (pos = percent_tac_per_vessel_length_class.begin(); pos != percent_tac_per_vessel_length_class.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (percent_tac_per_vessel_length_class);
@@ -1249,12 +1249,12 @@ read_percent_tac_cumul_over_months_keys(string a_semester, int a_pop, string fol
 #ifdef VERBOSE
     // check input
     map<string, double>::iterator pos;
-    dout(cout << " percent_tac_cumul_over_months_key " << endl);
+    dout(cout << " percent_tac_cumul_over_months_key " << "\n");
     for (pos = percent_tac_cumul_over_months_key.begin(); pos != percent_tac_cumul_over_months_key.end(); pos++)
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     return (percent_tac_cumul_over_months_key);
@@ -1274,7 +1274,7 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     string a_pop_s = out.str();
 
     string a_type_of_avai_field_to_read = type_of_avai_field_to_read.at(a_pop);
-    //cout << "a_type_of_avai_field_to_read is " << a_type_of_avai_field_to_read << endl;
+    //cout << "a_type_of_avai_field_to_read is " << a_type_of_avai_field_to_read << "\n";
 
     string filename;
     if (str_rand_avai_file == "baseline") {
@@ -1288,14 +1288,14 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     ifstream file_avai_szgroup_nodes_with_pop;
     file_avai_szgroup_nodes_with_pop.open(filename.c_str());
     if (file_avai_szgroup_nodes_with_pop.fail()) {
-        cout << "Unfortunately the availability vector is not informed for stock " << a_pop_s << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the availability vector is not informed for stock " << a_pop_s << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         cout
                 << "This could happen if the stock is missing in the displace_input_for_data_merger_xx.dat along the avai_updater_on Option"
-                << endl;
+                << "\n";
         cout
                 << "this might also result from an attempt to use an empty vmslikefpingsonly.dat file (empty if no ref. vessels defined)"
-                << endl;
+                << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -1315,7 +1315,7 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     {
         dout(cout << pos->second << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 #endif
 
     // TODO (fba#5#): check avai sum to 1 for a given szgroup
@@ -1368,8 +1368,8 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     
     }
 
-    dout(cout << "filename for pop  " << a_pop << " is " << filename << endl;)
-    cout << "filename for pop " << a_pop << " avai is " << filename << endl;
+    dout(cout << "filename for pop  " << a_pop << " is " << filename << "\n";)
+    cout << "filename for pop " << a_pop << " avai is " << filename << "\n";
 
     multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop(file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop)) {
@@ -1385,7 +1385,7 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     //{
     //    cout << iter->first.toIndex() <<" : " << iter->second << " - ";
     //}
-    //cout << endl;
+    //cout << "\n";
     // TODO (fba#5#): check avai sum to 1 for a given szgroup
 
     return (full_avai_szgroup_nodes_with_pop);
@@ -1445,7 +1445,7 @@ read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string 
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "spe_percent_szgroup_per_age_biolsce1.dat";
         file_percent_szgroup_per_age_matrix.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_percent_szgroup_per_age_matrix.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1482,7 +1482,7 @@ read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string 
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "spe_percent_age_per_szgroup_biolsce1.dat";
         file_percent_age_per_szgroup_matrix.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_percent_age_per_szgroup_matrix.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1519,7 +1519,7 @@ read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_param
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "spe_size_transition_matrix_biolsce1.dat";
         file_size_transition_matrix.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_size_transition_matrix.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1556,7 +1556,7 @@ read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "preferences_for_species_matrix_biolsce1.dat";
         file_preferences_for_species.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_preferences_for_species.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1589,7 +1589,7 @@ read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_
         filename = inputfolder + "/popsspe_" + folder_name_parameterization +
                    "/species_interactions_mortality_proportion_matrix_biolsce1.dat";
         file_species_interactions.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_species_interactions.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1625,7 +1625,7 @@ vector<double> read_param_sr(int a_pop, string folder_name_parameterization, str
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "spe_SSB_R_parameters_biolsce1.dat";
         file_param_sr.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_param_sr.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1687,7 +1687,7 @@ read_fbar_ages_min_max_and_ftarget(int a_pop, string folder_name_parameterizatio
         filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/" + a_pop_s +
                    "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
         file_fbar_ages_min_max.open(filename.c_str());
-        cout << "biolsce ignored for " << filename << endl;
+        cout << "biolsce ignored for " << filename << "\n";
     }
     if (file_fbar_ages_min_max.fail()) {
         string error_msg = "error opening file " + filename;
@@ -1754,41 +1754,41 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
     // read other stuffs...
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
-    cout << "Do the pop files init_pops_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_pops_per_szgroup need a check?" << "\n";
     multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(p->folder_name_parameterization,
                                                                              p->inputfolder,
                                                                              model().scenario().biolsce);
-    cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << "\n";
     multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(
             p->folder_name_parameterization, p->inputfolder, model().scenario().biolsce);
-    cout << "Do the pop files init_fecundity_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_fecundity_per_szgroup need a check?" << "\n";
     multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(p->folder_name_parameterization,
                                                                                        p->inputfolder,
                                                                                        model().scenario().biolsce);
-    cout << "Do the pop files init_maturity_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_maturity_per_szgroup need a check?" << "\n";
     multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(p->folder_name_parameterization,
                                                                                      p->inputfolder,
                                                                                      model().scenario().biolsce);
-    cout << "Do the pop files init_weight_per_szgroupneed a check?" << endl;
+    cout << "Do the pop files init_weight_per_szgroupneed a check?" << "\n";
     multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(p->folder_name_parameterization,
                                                                                  p->inputfolder,
                                                                                  model().scenario().biolsce);
-    cout << "Do the pop files init_comcat_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_comcat_per_szgroup need a check?" << "\n";
     multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(p->folder_name_parameterization,
                                                                               p->inputfolder);
-    cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_M_per_szgroup need a check?" << "\n";
     multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(p->folder_name_parameterization, p->inputfolder,
                                                                        model().scenario().biolsce);
-    cout << "Do the pop files init_proprecru_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_proprecru_per_szgroup need a check?" << "\n";
     multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(p->folder_name_parameterization,
                                                                                        p->inputfolder,
                                                                                        model().scenario().biolsce);
-    //cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
+    //cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << "\n";
     multimap<int, types::NodeId> lst_idx_nodes_per_pop = read_lst_idx_nodes_per_pop(semester,
                                                                                     p->folder_name_parameterization,
                                                                                     p->inputfolder, str_rand_avai_file);
 
-   //cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
+   //cout << "Do the pop files init_M_per_szgroup need a check?" << "\n";
    // additional params for the size spectra modelling
     multimap<int, double> init_beta_ssm_per_szgroup = read_beta_ssm_szgroup(p->folder_name_parameterization, p->inputfolder,
         model().scenario().biolsce);
@@ -1797,7 +1797,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         model().scenario().biolsce);
 
     
-    cout << "Do the pop files selected_szgroups need a check?" << endl;
+    cout << "Do the pop files selected_szgroups need a check?" << "\n";
     multimap<int, int> selected_szgroups = read_selected_szgroups_per_pop(p->folder_name_parameterization,
                                                                           p->inputfolder);
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
@@ -1814,14 +1814,14 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     }
 
 
-    cout << "Does the pop file tac_percent_simulated need a check?" << endl;
+    cout << "Does the pop file tac_percent_simulated need a check?" << "\n";
     map<int, int> tac_percent_simulated = read_tac_percent_simulated(p->folder_name_parameterization, p->inputfolder);
-    cout << "Does the pop file hyperstability_param need a check?" << endl;
+    cout << "Does the pop file hyperstability_param need a check?" << "\n";
     map<int, double> hyperstability_param = read_hyperstability_param(p->folder_name_parameterization, p->inputfolder);
 
 
     // input data, read proportion of natural mortality from other species when spatial co-occurences on node
-    cout << "Do the species_interactions_mortality_proportion_matrix creation  need a check?" << endl;
+    cout << "Do the species_interactions_mortality_proportion_matrix creation  need a check?" << "\n";
     vector<vector<double> > species_interactions_mortality_proportion_matrix = read_species_interactions_mortality_proportion_matrix(
             iparam1, p->folder_name_parameterization, p->inputfolder, model().scenario().biolsce);
 
@@ -1830,17 +1830,17 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     // get the name of the pops
     // copy only unique elements of init_pops_per_szgroup into name_pops
     // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
-    cout << "Do the name_pops creation  need a check?" << endl;
+    cout << "Do the name_pops creation  need a check?" << "\n";
     vector<int> name_pops;
     for (multimap<int, double>::iterator iter = init_pops_per_szgroup.begin(); iter != init_pops_per_szgroup.end();
          iter = init_pops_per_szgroup.upper_bound(iter->first)) {
         name_pops.push_back(iter->first);
-        cout << "pop " << iter->first << endl;
+        cout << "pop " << iter->first << "\n";
 
     }
-    cout << "nb pops: " << name_pops.size() << endl;
+    cout << "nb pops: " << name_pops.size() << "\n";
     cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "
-         << endl;
+         << "\n";
 
 
 
@@ -1888,10 +1888,10 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
     for (unsigned int sp = 0; sp < iparam1; sp++) 
     {
-        dout(cout << endl);
+        dout(cout << "\n");
 
         popnames.at(sp) = pop_names[sp];
-        cout << "pop_name: " << sp << ": " << popnames.at(sp) << endl;
+        cout << "pop_name: " << sp << ": " << popnames.at(sp) << "\n";
 
 
         // avai0 beta for this particular pop
@@ -1943,7 +1943,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
                 vect_of_init_tot_N_per_szgroup_vov.at(sp).push_back(pos->second * 1000);
             // !!!! CONVERT FROM THOUSANDS TO ABSOLUTE NUMBERS N  !!!!
-            cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << endl;
+            cout << "Caution: we remind you that DISPLACE expects input initial N in THOUSANDS...Did you check? " << "\n";
         }
 
         // initial prop_migrants for this particular pop
@@ -2058,19 +2058,19 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                     outtstep << model().timestep();
                     string atstep = outtstep.str();
 #if defined(_WIN32)
-                    cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
+                    cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << "\n";
                     //a_command_for_R = "Rscript .\\interactiverscripts\\lgnb-displace_coupling_script2.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
                     a_command_for_R = "Rscript " + p->inputfolder + "\\interactiverscripts\\lgnb-displace_coupling_script2.r " + a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
-                    cout << "executing " << a_command_for_R << endl;
+                    cout << "executing " << a_command_for_R << "\n";
                     system(a_command_for_R.c_str());
 #else
-                    cout << "try the lgnb-displace_coupling..." << endl;
+                    cout << "try the lgnb-displace_coupling..." << "\n";
                     // caution with HPC, annoying lower cases in file names and paths required! 
                     a_command_for_R =
                         "Rscript  " + p->inputfolder + "/interactiverscripts/lgnb-displace_coupling_script2.r " +
                         a_pop + " " + atstep + " " + p->folder_name_parameterization + " " + model().nameSimu() +
                         " " + model().scenario().a_graph_name;
-                    cout << "lgnb-displace_coupling...done" << endl;
+                    cout << "lgnb-displace_coupling...done" << "\n";
 
 		    // alternatively, if the module load for this R version fails on HPC (see in base_script_ui.txt bash file), use a hardcoding path to Rscript like /appl/R/bin/Rscript-3.6.3-mkl and recompile DISPLACE
 
@@ -2114,20 +2114,20 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                         // caution with HPC, annoying lower cases in file names and paths required!
                         cout
                             << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?"
-                            << endl;
+                            << "\n";
                         a_command_for_R =
                             "Rscript .\\interactiverscripts\\input2avaiupdater.r " + a_pop + " " + atstep +
                             " " + p->folder_name_parameterization + " " + model().nameSimu() + " " + model().scenario().a_graph_name;
                         //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
-                        cout << "look after " << a_command_for_R << endl;
+                        cout << "look after " << a_command_for_R << "\n";
                         cout << "This supposes StockId " << a_pop
-                            << " is informed in displace_input_for_data_merger.csv input file" << endl;
+                            << " is informed in displace_input_for_data_merger.csv input file" << "\n";
                         system(a_command_for_R.c_str());
                         a_command = "avaifieldupdater.exe -tstep " + atstep + " -f " + p->folder_name_parameterization + " -a " +
                             p->inputfolder + " -s " + std::to_string(model().semester()) + " -graph " +
                             model().scenario().a_graph_name + " -nr " + a_nrow_coord + " -dist 15 -shepard_p 0.5";
                         cout << "look after " << a_command
-                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                            << "\n"; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                         system(a_command.c_str());
                     }
                     if (model().scenario().dyn_pop_sce.option(Options::avai_shuffler_on)) {
@@ -2135,7 +2135,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                         a_command = "avaifieldshuffler.exe -f " + p->folder_name_parameterization + " -s " +
                             std::to_string(model().semester()) + " -p " + a_pop;
                         cout << "look after " << a_command
-                            << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                            << "\n"; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                         system(a_command.c_str());
                     }
 #else
@@ -2161,7 +2161,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                             std::to_string(model().semester()) + " -p " + a_pop;
                         system(a_command.c_str());
                     }
-                    cout << "avaifieldshuffler...done" << endl;
+                    cout << "avaifieldshuffler...done" << "\n";
 #endif
 
                 }
@@ -2184,7 +2184,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
 
         // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
-        outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
+        outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << "\n");
         auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
         auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
         for (multimap<int, types::NodeId>::iterator a_pos = lower_pop; a_pos != upper_pop; a_pos++) {
@@ -2196,7 +2196,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         if (year == 1 && model().month() == 1)
         {
             if (model().scenario().dyn_pop_sce.option(Options::diffusePopN)) {
-                cout << "read_field_of_coeff_diffusion_this_pop ..." << endl;
+                cout << "read_field_of_coeff_diffusion_this_pop ..." << "\n";
                 vect_of_field_of_coeff_diffusion_this_pop_mmap.at(sp) = read_field_of_coeff_diffusion_this_pop(semester, sp,
                     p->folder_name_parameterization,
                     p->inputfolder,
@@ -2214,7 +2214,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         
             // ...or oth_land on node per pop per met
             if (model().scenario().dyn_alloc_sce.option(Options::otherLandPerMetPerPop)) {                   
-                cout << "Looking for oth_land on node per pop per met dat files" << endl;
+                cout << "Looking for oth_land on node per pop per met dat files" << "\n";
                 int met = -1, er= 0;
                 do{
                     met += 1;
@@ -2250,7 +2250,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 p->folder_name_parameterization,
                 p->inputfolder);
 
-            //cout << "check relative_stability_key when loading: " << endl;
+            //cout << "check relative_stability_key when loading: " << "\n";
             //for (auto elem : vect_of_relative_stability_key_map.at(sp))
             //{
             //    std::cout << elem.first << " " << elem.second << "\n";
@@ -2306,27 +2306,27 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         if (year == 1 && model().month() == 1)
         {
             vect_of_tac_this_pop.at(sp) = read_initial_tac(sp, p->folder_name_parameterization, p->inputfolder);
-            cout << "initial tac has been read correctly" << endl;
+            cout << "initial tac has been read correctly" << "\n";
         }
 
         if (year == 1 && model().month() == 1)
         {
             if (model().scenario().dyn_alloc_sce.option(Options::TACs) && vect_of_tac_this_pop.at(sp).at(0) == 0) {
                 cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp
-                    << "and potentially other pops..." << endl;
-                cout << "a fake, non binding value is filled in for now" << endl;
+                    << "and potentially other pops..." << "\n";
+                cout << "a fake, non binding value is filled in for now" << "\n";
                 vect_of_tac_this_pop.at(sp).at(0) = 100000; // tons
             }
         }
 
 
         // input data, read migration fluxes in proportion per size group (if any)
-        dout(cout << "read overall migration..." << endl);
+        dout(cout << "read overall migration..." << "\n");
         vect_of_overall_migration_fluxes_mmap.at(sp) = read_overall_migration_fluxes(semester, sp,
                                                                                      p->folder_name_parameterization,
                                                                                      p->inputfolder,
                                                                                      model().scenario().biolsce);
-        dout(cout << "overall migration has been read correctly" << endl);
+        dout(cout << "overall migration has been read correctly" << "\n");
 
 
         if (year == 1 && model().month() == 1)
@@ -2406,10 +2406,10 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
         vector<double> global_quotas_uptake;
 
         for (unsigned int sp = 0; sp < populations.size(); sp++) {
-            dout(cout << endl);
+            dout(cout << "\n");
 
 
-            cout << " create pop... " << endl;
+            cout << " create pop... " << "\n";
             populations[sp] = new Population(sp,
                 loadedData.vectsparam1.at(sp),
                 loadedData.vectdparam1.at(sp),
@@ -2449,7 +2449,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
             );
 
 
-            cout << " Population creator()...done " << endl;
+            cout << " Population creator()...done " << "\n";
 
             global_quotas_uptake.push_back(0.0);
 
@@ -2457,11 +2457,11 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
                 if (loadedData.vovd12.at(sp).size() != NBSZGROUP)
                 {
-                    cout << "check beta_ssm for pop" << sp << ": some missing szgroups...." << endl; 
+                    cout << "check beta_ssm for pop" << sp << ": some missing szgroups...." << "\n";
                 }
                 if (loadedData.vovd13.at(sp).size() != NBSZGROUP)
                 {
-                    cout << "check background_mortality for pop" << sp << ": some missing szgroups...." << endl;
+                    cout << "check background_mortality for pop" << sp << ": some missing szgroups...." << "\n";
                 }
                 populations.at(sp)->set_beta_ssm_at_szgroup(loadedData.vovd12.at(sp)); // beta_ssm
                 populations.at(sp)->set_background_mortality_at_szgroup(loadedData.vovd13.at(sp));   // background_M
@@ -2470,9 +2470,9 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
 
             if (!binary_search(model().config().implicit_pops.begin(), model().config().implicit_pops.end(), sp)) {
-                outc(cout << "inform avai on nodes " << endl);
+                outc(cout << "inform avai on nodes " << "\n");
 
-                outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
+                outc(cout << "...then attach avai to each node for this pop (this quarter)" << "\n");
                 // init avai on each node (we know the presence...) for this pop for selected szgroup
                 vector<types::NodeId> nodes_with_presence = loadedData.vovn1.at(sp);
                 multimap<types::NodeId, double> avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(sp);
@@ -2503,29 +2503,29 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
                 // check
                 /*
-               outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl); // used in do_catch != the one used in distributeN()
+               outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << "\n"); // used in do_catch != the one used in distributeN()
                 vector<double> avai_pops_at_selected_szgroup = nodes[792]->get_avai_pops_at_selected_szgroup(sp);
                 vector<double>::iterator szgroup = avai_pops_at_selected_szgroup.begin();
                 for( ; szgroup != avai_pops_at_selected_szgroup.end(); szgroup++)
                 {
                    outc(cout << *szgroup << " " );
                 }
-               outc(cout << endl);
+               outc(cout << "\n");
 
                 // check
-               outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl);
+               outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << "\n");
                 vector<double> tot_N_at_szgroup = populations[sp]->get_tot_N_at_szgroup();
                 vector<double>::iterator szgroup2 = tot_N_at_szgroup.begin();
                 for( ; szgroup2 != tot_N_at_szgroup.end(); szgroup2++)
                 {
                    outc(cout << *szgroup << " " );
                 }
-               outc(cout << endl);
+               outc(cout << "\n");
                 */
 
                 outc(cout
                     << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "
-                    << endl);
+                    << "\n");
             }                         // end implicit pop
         }                             // end pop
 
@@ -2542,7 +2542,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     {
 
 
-        cout << "redispatch the population over its spatial extent...." << endl;
+        cout << "redispatch the population over its spatial extent...." << "\n";
 
         // aggregate from nodes to set the tot_N_at_szgroup per pop
         for (unsigned int sp = 0; sp < model().populations().size(); sp++) {
@@ -2554,7 +2554,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 if(sp==1){
                     vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
                     for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                     cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                     cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << "\n";
                 }
                 */
                 // get total N from summing up N over nodes
@@ -2564,25 +2564,25 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 if(sp==1){
                     vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(sp)->get_tot_N_at_szgroup();
                     for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                     cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                     cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << "\n";
                 }
                 */
 
             }
         }
-        cout << "aggregate_N over all pops....done" << endl;
+        cout << "aggregate_N over all pops....done" << "\n";
 
         
 
         // then, clean up all nodes before changing of spatial avai
         // (necessary to remove any fish in now wrong locations)
-        cout << "clear pops on nodes" << endl;
+        cout << "clear pops on nodes" << "\n";
         for (unsigned int i = 0; i < model().nodes().size(); i++) {
             model().nodes().at(i)->clear_pop_names_on_node();
             model().nodes().at(i)->clear_Ns_pops_at_szgroup();
             model().nodes().at(i)->clear_avai_pops_at_selected_szgroup();
         }
-        cout << "clear pops on nodes...done" << endl;
+        cout << "clear pops on nodes...done" << "\n";
 
         // RE-read for simModel->populations()
         for (unsigned int i = 0; i < model().populations().size(); i++) {
@@ -2591,7 +2591,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
             cout << "RE-read for population " << model().populations().at(i)->get_name() << " from " <<
                 p->folder_name_parameterization << " " << p->inputfolder << " " << type_of_avai_field_to_read.at(i)
-                << endl;
+                << "\n";
 
             auto full_avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(i);
             model().populations().at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
@@ -2619,9 +2619,9 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 model().nodes()[iter->first.toIndex()]->set_pop_names_on_node(i);
                 //   check per node
                 //   vector <int> pop_names = nodes[ iter->first ]->get_pop_names_on_node();
-                //   cout << "Node " << iter->first << endl;
+                //   cout << "Node " << iter->first << "\n";
                 //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
-                //   cout << endl;
+                //   cout << "\n";
             }
             model().populations().at(i)->set_list_nodes(list_nodes);
 
@@ -2631,7 +2631,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
             /*if( simModel->populations().at(i)->get_name()==1){
                 vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
                 for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                   cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                   cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << "\n";
             */
 
 
@@ -2639,7 +2639,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
                 dout(cout << list_nodes[n]->get_idx_node().toIndex() << " ");
             }
-            dout(cout << endl);
+            dout(cout << "\n");
 
             // distribute tot_N_at_szgroup on nodes knowing the avai spatial key
             // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
@@ -2651,7 +2651,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 //if(simModel->populations().at(i)->get_name()==1){
                 //    vector <double> a_tot_N_at_szgroup_here = simModel->populations().at(i)->get_tot_N_at_szgroup();
                 //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << "\n";
                 //}
 
                 //...and compute the Ns on nodes at the start of this month!
@@ -2693,7 +2693,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
         }
 
-        dout(cout << "re-read data for this period...OK" << endl);
+        dout(cout << "re-read data for this period...OK" << "\n");
 
 
 

@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
+#include <QRegularExpression>
 
 #include <QDebug>
 
@@ -44,14 +45,17 @@ void MainWindow::on_action_Add_triggered()
 
         auto &d = dlg.get();
         QString sim = d.getSimulationName();
-        QRegExp r("(.*)\\[([0-9]+)-([0-9]+)\\]");
-        if (r.indexIn(sim) == -1) {
+        QRegularExpression r("(.*)\\[([0-9]+)-([0-9]+)\\]");
+
+        auto match = r.match(sim);
+
+        if (!match.hasMatch()) {
             lsim << sim;
         } else {
             bool ok1, ok2;
-            QString pat = r.cap(1);
-            int first = r.cap(2).toInt(&ok1);
-            int last = r.cap(3).toInt(&ok2);
+            QString pat = match.captured(1);
+            int first = match.captured(2).toInt(&ok1);
+            int last = match.captured(3).toInt(&ok2);
 
             if (ok1 && ok2 && first <= last) {
                 while (first <= last) {

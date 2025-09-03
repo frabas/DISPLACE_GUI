@@ -2969,7 +2969,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                         if (n == -1) {
                             n = snodes.count();
                         } else {
-                            n = min(snodes.count(), dlg.getMaxLinks());
+                            n = min(snodes.count(), static_cast<qsizetype>(dlg.getMaxLinks()));
                         }
                         for (int i = 0; i < n; ++i) {
                             auto nodeid = snodes[i].node->get_idx_node();
@@ -3047,20 +3047,20 @@ void MainWindow::on_cmdProfileSave_clicked()
         }
 
         QTextStream strm(&f);
-        strm << Qt::endl << Qt::endl << "--------" << Qt::endl;
-        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << Qt::endl;
+        strm << "\n" << "\n" << "--------" << "\n";
+        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << "\n";
         strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName()
-             << Qt::endl;
-        strm << models[0]->getSimulationSteps() << " total steps" << Qt::endl;
-        strm << "Linked database: " << models[0]->linkedDatabase() << Qt::endl;
+             << "\n";
+        strm << models[0]->getSimulationSteps() << " total steps" << "\n";
+        strm << "Linked database: " << models[0]->linkedDatabase() << "\n";
 #ifdef DEBUG
-        strm << "Debug version" << Qt::endl;
+        strm << "Debug version" << "\n";
 #else
-        strm << "Release version" << Qt::endl;
+        strm << "Release version" << "\n";
 #endif
-        strm << Qt::endl;
+        strm << "\n";
         strm << ui->profilingOutput->toPlainText();
-        strm << Qt::endl;
+        strm << "\n";
 
         f.close();
 
@@ -3308,7 +3308,7 @@ void MainWindow::on_actionRemove_isolated_subgraphs_triggered()
         mMapController->clearNodeSelection(currentModelIdx);
         mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
 
-        qDebug() << "Nb nodes to remove " << isn.size() << Qt::endl;
+        qDebug() << "Nb nodes to remove " << isn.size() << "\n";
         mMapController->delSelectedNodes(currentModelIdx);
 
     } else {

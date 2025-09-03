@@ -103,7 +103,7 @@ bool read_config_file(std::shared_ptr<msqlitecpp::v2::Storage> indb,
         return true;
     } else {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
-    std::cout << "Reading config file from " << filename << std::endl;
+    std::cout << "Reading config file from " << filename << "\n";
 
     std::ifstream fstream (filename.c_str(), std::ios_base::in);
     return read_config_file(fstream, nbpops, nbmets, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, nbcp_coupling_pops, calib_oth_landings,
@@ -163,13 +163,13 @@ bool read_config_file(std::istream &stream,
             }
         } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
-        cerr << x.what() << endl;
+        cerr << x.what() << "\n";
 #endif
         return false;
     }
 
 #ifdef VERBOSE_ERRORS
-    cout << "read config file...OK" << endl << flush;
+    cout << "read config file...OK" << "\n" << flush;
 #endif
 
     return true;
@@ -246,16 +246,16 @@ bool importScenario(Reader &reader, displace::commons::Scenario &scenario)
 
     } catch (displace::formats::FormatException &x) {
 #ifdef VERBOSE_ERRORS
-        cerr << x.what() << endl;
+        cerr << x.what() << "\n";
 #else
         (void) x;
 #endif
         return false;
     }
 #ifdef VERBOSE_ERRORS
-    cout << "read scenario config file...OK" <<  endl << flush;
-    cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
-    cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;
+    cout << "read scenario config file...OK" <<  "\n" << flush;
+    cout << "...e.g. graph is " << scenario.a_graph <<  "\n" << flush;
+    cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  "\n" << flush;
 #endif
 
     // Update the internals when needed
@@ -282,7 +282,7 @@ bool read_scenario_config_file(std::shared_ptr<msqlitecpp::v2::Storage> db,
         return importScenario(table, scenario);
     } else {
         string filename = inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput + ".dat";
-        std::cout << "Reading Scenario file from " << filename << std::endl;
+        std::cout << "Reading Scenario file from " << filename << "\n";
 
         std::ifstream f(filename.c_str(), std::ios_base::in);
         return read_scenario_config_file(f, scenario);
@@ -346,12 +346,12 @@ vector <int> read_tsteps_quarters(string folder_name_parameterization, string in
 
     /*
     // check
-    cout << "tsteps_quarters: " << endl;
+    cout << "tsteps_quarters: " << "\n";
     for(unsigned int i=0; i<tsteps_quarters.size(); i++)
     {
-        cout << tsteps_quarters[i] << " " << endl;
+        cout << tsteps_quarters[i] << " " << "\n";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return(tsteps_quarters);
@@ -392,12 +392,12 @@ vector <int> read_tsteps_semesters(string folder_name_parameterization, string i
 
     /*
     // check
-    cout << "tsteps_semesters: " << endl;
+    cout << "tsteps_semesters: " << "\n";
     for(unsigned int i=0; i<tsteps_semesters.size(); i++)
     {
-        cout << tsteps_semesters[i] << " " << endl;
+        cout << tsteps_semesters[i] << " " << "\n";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return(tsteps_semesters);
@@ -438,12 +438,12 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 
     /*
     // check
-    cout << "tsteps_months: " << endl;
+    cout << "tsteps_months: " << "\n";
     for(unsigned int i=0; i<tsteps_months.size(); i++)
     {
-        cout << tsteps_months[i] << " " << endl;
+        cout << tsteps_months[i] << " " << "\n";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return(tsteps_months);
@@ -483,12 +483,12 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
     /*
     // check
-    cout << "tsteps_years: " << endl;
+    cout << "tsteps_years: " << "\n";
     for(unsigned int i=0; i<tsteps_years.size(); i++)
     {
-        cout << tsteps_years[i] << " " << endl;
+        cout << tsteps_years[i] << " " << "\n";
     }
-    cout << endl;
+    cout << "\n";
     */
 
     return(tsteps_years);
@@ -555,7 +555,7 @@ multimap<types::NodeId, string> read_harbour_names(string folder_name_parameteri
     {
         cout << pos->second << " ";
     }
-    cout << endl;*/
+    cout << "\n";*/
 
     return(types::helpers::toKeyIdMultimap<types::NodeId>(harbour_names));
 }
@@ -575,7 +575,7 @@ int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, 
     fish_prices_per_harbour.open(filename.c_str());
     if(fish_prices_per_harbour.fail())
     {
-        cout << "fail to load the file for price per met per pop for this port" << endl;
+        cout << "fail to load the file for price per met per pop for this port" << "\n";
         open_file_error(filename.c_str());
 
         return -1;
@@ -593,7 +593,7 @@ int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, 
         //{
         //    dout << pos->second << " ";
         //}
-        //dout << endl;
+        //dout << "\n";
 
         return(0);
     }
@@ -616,14 +616,14 @@ void read_fuel_prices_per_vsize(types::NodeId i, string a_quarter,
     file_fuel_prices_per_vsize.open(filename.c_str());
     if(file_fuel_prices_per_vsize.fail())
     {
-        cout << "fail to load the file for fuel price per vsize for this port...search in vesselspe instead..." << endl;
+        cout << "fail to load the file for fuel price per vsize for this port...search in vesselspe instead..." << "\n";
 
        // by default:
        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
        file_fuel_prices_per_vsize.open(filename.c_str());
        if(file_fuel_prices_per_vsize.fail())
        {
-           cout << "fail to load the file for fuel price in vesselspe..." << endl;
+           cout << "fail to load the file for fuel price in vesselspe..." << "\n";
            open_file_error(filename.c_str());
 
        }
@@ -652,7 +652,7 @@ int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
     fish_prices_per_harbour.open(filename.c_str());
     if(fish_prices_per_harbour.fail())
     {
-        cout << "fail to load the file for price per pop per cat for this port" << endl;
+        cout << "fail to load the file for price per pop per cat for this port" << "\n";
         open_file_error(filename.c_str());
 
         return -1;
@@ -670,7 +670,7 @@ int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
         //{
         //    dout << pos->second << " ";
         //}
-        //dout << endl;
+        //dout << "\n";
 
         return(0);
     }
@@ -713,7 +713,7 @@ multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name
         {
             dout(cout << pos2->second << " ");
         }
-        dout(cout << endl);
+        dout(cout << "\n");
     }
 #endif
 
@@ -724,7 +724,7 @@ multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name
 
 spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
-    //dout(cout <<"BEGIN: read map previous" << endl);
+    //dout(cout <<"BEGIN: read map previous" << "\n");
 
     stringstream out;
     out << source.toIndex();
@@ -740,22 +740,22 @@ spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previou
             return true;
         });
     } catch (std::exception &x) {
-        cerr << "Exception : " << x.what() << endl;
+        cerr << "Exception : " << x.what() << "\n";
         r = false;
     }
 
     if (!r) {
-        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << endl;
+        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << "\n";
         throw std::runtime_error("Error loading graph file " + filename + " " + safe_strerror(errno));
     }
-    //dout(cout <<"END: read map previous" << endl);
+    //dout(cout <<"END: read map previous" << "\n");
 
     return previous;
 }
 
 spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
 {
-    //dout(cout <<"BEGIN: read min_distance" << endl);
+    //dout(cout <<"BEGIN: read min_distance" << "\n");
 
     stringstream out;
     out << source.toIndex();
@@ -771,31 +771,31 @@ spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId s
             return true;
         });
     } catch (std::exception &x) {
-        cerr << "Exception : " << x.what() << endl;
+        cerr << "Exception : " << x.what() << "\n";
         r = false;
     }
 
     if (!r) {
-        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << endl;
+        cerr << "Error loading graph file " << filename << " " << safe_strerror(errno) << "\n";
         throw std::runtime_error("Error loading graph file " + filename + " " + safe_strerror(errno));
     }
 
 
-    //dout(cout <<"END: read min_distance" << endl);
+    //dout(cout <<"END: read min_distance" << "\n");
 
     return min_distance;
 }
 
 PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
-    //dout(cout <<"BEGIN: read map previous" << endl);
+    //dout(cout <<"BEGIN: read map previous" << "\n");
 
     stringstream out1;
     out1 << source.toIndex();
     string source_s1 = out1.str();
     string filename_previous= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s1+".bin";
 
-    //dout(cout <<"BEGIN: read min_distance" << endl);
+    //dout(cout <<"BEGIN: read min_distance" << "\n");
 
     stringstream out2;
     out2 << source.toIndex();
@@ -806,8 +806,8 @@ PathShop read_graph_details(types::NodeId source, string namesimu,  string input
      return   PathShop::readFromFiles(filename_previous, filename_weight);
     //    return a_shop;
     } catch (std::exception &x) {
-        cout << " for node " << source_s1 << "," << endl;
-        cerr << " Error in reading graphsspe\\shortPaths_ .bin files : " << x.what() << endl;
+        cout << " for node " << source_s1 << "," << "\n";
+        cerr << " Error in reading graphsspe\\shortPaths_ .bin files : " << x.what() << "\n";
         throw;
     }
 }
@@ -832,12 +832,12 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
     // check input
     //multimap<int,int>::iterator lower = nodes_in_polygons.lower_bound();
     //multimap<int,int>::iterator upper = nodes_in_polygons.upper_bound();
-    //dout << " nodes_in_polygons " << endl;
+    //dout << " nodes_in_polygons " << "\n";
     //for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
     //{
     //    dout << pos->second << " ";
     //}
-    //dout << endl;
+    //dout << "\n";
 
     return(nodes_in_polygons);
 }
@@ -906,8 +906,8 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
                 ++count;
                 //if (info.nodeId.toIndex() == 9268) 
                 //{
-                //    cout << "Is metier banned for id "<< id  << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(id) << endl;
-                //    cout << "Is metier 5 banned " << 5 << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(5) << endl;
+                //    cout << "Is metier banned for id "<< id  << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(id) << "\n";
+                //    cout << "Is metier 5 banned " << 5 << "  " << nodes.at(info.nodeId.toIndex())->isMetierBanned(5) << "\n";
                 //}
             }
 
@@ -1120,7 +1120,7 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
 
     // TODO: FOR NOW, more or less ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
 
-    cout << "Reading biological_traits_params..." << endl;
+    cout << "Reading biological_traits_params..." << "\n";
 
     std::string dummystring;
     getline (stream, dummystring); // eat the heading
@@ -1185,9 +1185,9 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
             std::get<34>(a_tuple)=boost::lexical_cast<string>(sr[34]);
 
             // check
-            //cout << "0: " << std::get<0>(a_tuple) << endl;
-            //cout << "1: " << std::get<1>(a_tuple) << endl;
-            //cout << "2: " << std::get<2>(a_tuple) << endl;
+            //cout << "0: " << std::get<0>(a_tuple) << "\n";
+            //cout << "1: " << std::get<1>(a_tuple) << "\n";
+            //cout << "2: " << std::get<2>(a_tuple) << "\n";
 
             // TO DO: other params...
             biological_traits_params.push_back(a_tuple);
@@ -1195,7 +1195,7 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
 
             ++linenum;
         }
-        cout << "Reading biological_traits_params...ok" << endl;
+        cout << "Reading biological_traits_params...ok" << "\n";
 
     } catch (boost::bad_lexical_cast &ex) {
         cerr << "Bad Conversion on biological_traits_params file line " << linenum <<
@@ -1215,7 +1215,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
     //"nitrogen_norm"         "nitrogen_alpha"        "phosphorus"            "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"
     //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry" "shippingdensity" "siltfraction"
 
-    cout << "Reading environment_on_coord..." << endl;
+    cout << "Reading environment_on_coord..." << "\n";
 
     std::string dummystring;
     getline (stream, dummystring); // eat the heading
@@ -1235,7 +1235,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
 
             EnvironmentDataRecord a_tuple;
             
-            if (sr.size() != 33) cout << "Some missing field(s) in the input data environment_on_coord.txt" << endl;
+            if (sr.size() != 33) cout << "Some missing field(s) in the input data environment_on_coord.txt" << "\n";
             a_tuple.x=boost::lexical_cast<double>(sr[0]);
             a_tuple.y=boost::lexical_cast<double>(sr[1]);
             a_tuple.harb=boost::lexical_cast<int>(sr[2]);
@@ -1271,10 +1271,10 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
             a_tuple.icesrectanglecode = boost::lexical_cast<double>(sr[32]);
 
             // check
-            //cout << "reading  environment_on_coord: " << endl;
-            //cout << "0: " << std::get<0>(a_tuple) << endl;
-            //cout << "1: " << std::get<1>(a_tuple) << endl;
-            //cout << "2: " << std::get<2>(a_tuple) << endl;
+            //cout << "reading  environment_on_coord: " << "\n";
+            //cout << "0: " << std::get<0>(a_tuple) << "\n";
+            //cout << "1: " << std::get<1>(a_tuple) << "\n";
+            //cout << "2: " << std::get<2>(a_tuple) << "\n";
 
             // TO DO: other params...
             environment_on_coord.push_back(a_tuple);
@@ -1282,7 +1282,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator, st
 
             ++linenum;
         }
-        cout << "Reading environment_on_coord...ok" << endl;
+        cout << "Reading environment_on_coord...ok" << "\n";
 
     } catch (boost::bad_lexical_cast &ex) {
         cerr << "Bad Conversion on environment_on_coord file line " << linenum <<
@@ -1315,13 +1315,13 @@ void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
         // convert N from size to age
         vector<double> tot_N_at_szgroup=populations.at( stock_numbers.at(i) )->get_tot_N_at_szgroup();
         vector<double> tot_N_at_age(some_max_nb_ages.at(i));
-        dout(cout << "-- st" << stock_numbers.at(i)  << endl);
+        dout(cout << "-- st" << stock_numbers.at(i)  << "\n");
         for(unsigned int sz=0; sz<tot_N_at_szgroup.size(); sz++)
         {
             for(int a=0; a<some_max_nb_ages.at(i); a++)
             {
                 tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * tot_N_at_szgroup[sz] ;
-                dout(cout << tot_N_at_age[a] << "= " << percent_szgroup_per_age_matrix[sz][a] << " * " << tot_N_at_szgroup[sz] << endl);
+                dout(cout << tot_N_at_age[a] << "= " << percent_szgroup_per_age_matrix[sz][a] << " * " << tot_N_at_szgroup[sz] << "\n");
             }
         }
 
@@ -1332,7 +1332,7 @@ void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
         {
             SMS_N_in  << tot_N_at_age.at(a) / some_units.at(i) << " " ;
         }
-        SMS_N_in << endl;
+        SMS_N_in << "\n";
 
     }
     dout(cout << "OK...\n");
@@ -1345,7 +1345,7 @@ void write_SMS_OP_F_in_file(ofstream& SMS_F_in,
                             vector<int> stock_numbers)
 {
 
-    SMS_F_in << "# quarter: xx "<< endl;
+    SMS_F_in << "# quarter: xx "<< "\n";
     int nb_ages_in_sms=8;		 // MAGIC NUMBER
 
     for (unsigned int i=0; i<stock_numbers.size(); i++)
@@ -1371,7 +1371,7 @@ void write_SMS_OP_F_in_file(ofstream& SMS_F_in,
         {
             SMS_F_in  << tot_F_at_age.at(a) << " " ;
         }
-        SMS_F_in << endl;
+        SMS_F_in << "\n";
     }
 
 }
@@ -1437,7 +1437,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
             }
         }
     }
-    dout(cout << "read SMS op_n.out...OK" << endl << flush);
+    dout(cout << "read SMS op_n.out...OK" << "\n" << flush);
 
     // caution: SMS OP provides 8 age classes while DISPLACE deals with NBAGE (e.g. 11 age classes)
     // so, adjustment needed:
@@ -1453,7 +1453,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
     {
         a_vector_line4.push_back(0);
     }
-    dout(cout << "make nb of age classes consistent...OK" << endl << flush);
+    dout(cout << "make nb of age classes consistent...OK" << "\n" << flush);
 
     // assign to the population objects
     for (unsigned int i=0; i<stock_numbers.size(); i++)
@@ -1481,8 +1481,8 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
                 /*
                 if(i==0)
                 {
-                    dout(cout << "age" << a << " sz" << sz << endl);
-                    dout(cout << N_at_szgroup[sz] << "+= " << percent_age_per_szgroup_matrix[sz][a] << " * " << tot_N_at_age[a] << endl);
+                    dout(cout << "age" << a << " sz" << sz << "\n");
+                    dout(cout << N_at_szgroup[sz] << "+= " << percent_age_per_szgroup_matrix[sz][a] << " * " << tot_N_at_age[a] << "\n");
                 }*/
             }
         }
@@ -1491,7 +1491,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
         populations.at(stock_numbers.at(i))->set_tot_N_at_szgroup(N_at_szgroup);
 
     }
-    dout(cout << "set Ns at szgroup from the SMS outcomes...OK" << endl << flush);
+    dout(cout << "set Ns at szgroup from the SMS outcomes...OK" << "\n" << flush);
 
 }
 
@@ -1638,14 +1638,14 @@ map<int, double> read_gear_widths_param_a(string folder_name_parameterization, s
         exit(-1);
     }
 
-    //cout << "here:" << filename << endl;
+    //cout << "here:" << filename << "\n";
 
     map<int, double> gear_widths_param_a;
     fill_map_from_specifications_i_d(metier_gear_widths_param_a, gear_widths_param_a, folder_name_parameterization);
     metier_gear_widths_param_a.close();
 
-    //cout << "here:" << gear_widths_param_a[0] << endl;
-    //cout << "here:" << gear_widths_param_a[1] << endl;
+    //cout << "here:" << gear_widths_param_a[0] << "\n";
+    //cout << "here:" << gear_widths_param_a[1] << "\n";
     //=> do not forget the heading in input files given first line is skipped
 
 

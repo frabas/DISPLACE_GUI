@@ -4,6 +4,11 @@
 
 To build on Windows you need to install vcpkg.
 
+Since 1.3.2, we added a custom overlay to build the dependencies that are not in the official vcpkg distribution.
+
+They can be found in the `vcpkg-overlay` subdirectory.
+
+
 ### Setting up vcpkg
 
 ```
@@ -28,38 +33,25 @@ PS ...> $env:VCPKG_DEFAULT_TRIPLET = "x64-Windows"
 
 As an alternative, just add the option: `--triplet x46-windows` to every command.
 
-## Install the required dependencies
+## Build
 
-This is a list of the packages that must be explicitly installed from vcpkg:
+Vcpkg has been integrated into the cmake workflow by adding a custom profile. In the root of this
+project there are two files: `CMakePresets.json` and `CMakeUserPresets.json.sample`.
 
-- GeographicLib 
-- cgal 
-- gdal 
-- sparsepp 
-- boost-date-time 
-- boost-filesystem 
-- boost-system 
-- boost-thread 
-- boost-program-options 
-- boost-log 
-- boost-test
-- msqlitecpp
+The latter is just a template, and it should be copied on `CMakeUserPresets.json` in case user want to adjust the
+settings. Since the content is host-specific, it should never be committed into the repository.
 
-msqlitecpp is not provided with vcpkg, so you need to copy the vcpkg/msqlitecpp from the msqlitecpp source tree directory in the ports directory of the vcpkg source tree.
+Copy the .sample file into .json, and adjust it. In particular, fix the `"VCPKG_ROOT": "C:/vcpkg"` line with the
+path to the vcpkg directory that fits your host.
 
-So for each package, build and install it:
+After that, before configuring cmake, select the profile named `default` or `vcpkg` if the version provided by 
+the project is ok.
 
 ```
-PS ...> .\vcpkg.exe install GeographicLib
+cmake --preset=default
 ```
 
-and so on for all packages.
-
-We provide the vcpkg-setup.bat file. Simply copy it into the root of the vcpkg directory, and run it:
-
-```
-PS ...> .\vcpkg-setup.bat build
-```
+Then configure and build the project as normal. 
 
 
 ## Export the SDK package

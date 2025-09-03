@@ -214,17 +214,17 @@ void TsEditorWindow::updateKeys()
         adim.insert(mData->at(i).at(colADim));
     }
 
-    QStringList vl(var.toList());
+    QStringList vl(var.begin(), var.end());
     vl.sort();
     ui->varSelect->clear();
     ui->varSelect->addItems(vl);
 
-    vl = area.toList();
+    vl = QStringList(area.begin(), area.end());
     vl.sort();
     ui->areaSelect->clear();
     ui->areaSelect->addItems(vl);
 
-    vl = adim.toList();
+    vl = QStringList(adim.begin(), adim.end());
     vl.sort();
     ui->adimSelect->clear();
     ui->adimSelect->addItems(vl);
@@ -354,7 +354,7 @@ void TsEditorWindow::generateAll(QString outpath)
     connect (this, SIGNAL(exportProgress(int)), mExporterWorkerDialog, SLOT(setValue(int)));
     connect (this, SIGNAL(exportTotalChanged(int)), mExporterWorkerDialog, SLOT(setMaximum(int)));
 
-    mExportWorker = QtConcurrent::run(this, &TsEditorWindow::generateAllWorker, outpath);
+    mExportWorker = QtConcurrent::run(&TsEditorWindow::generateAllWorker, this, outpath);
     connect (&mExportWorkerWatcher, SIGNAL(finished()), this, SLOT(exportFinished()));
 
     mExportWorkerWatcher.setFuture(mExportWorker);

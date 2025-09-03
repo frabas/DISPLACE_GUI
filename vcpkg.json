@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    "boost-geometry",
+    "boost-interprocess",
+    "boost-program-options",
+    "cgal",
+    "gdal",
+    "msqlitecpp",
+    "sparsepp",
+    "geographiclib"
+  ]
+}

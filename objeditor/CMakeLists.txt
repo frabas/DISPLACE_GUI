@@ -32,7 +32,7 @@ target_link_libraries(objeditor
         commons
         formats
         qtcommons
-        Qt5::Widgets
+        Qt6::Widgets
         QMapControl
         )
 

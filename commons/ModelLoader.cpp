@@ -39,7 +39,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
     auto loadedDataBenthos = loadBenthosData(dyn_pop_sce, dyn_alloc_sce, biolsce, fleetsce);
 
     // find the vector of landscapes
-    cout << "landscape codes are:" << endl;
+    cout << "landscape codes are:" << "\n";
     vector<int> v;
     for (auto it = loadedDataBenthos.meanWeightPerFuncGroupPerNode.begin(), end = loadedDataBenthos.meanWeightPerFuncGroupPerNode.end();
         it != end;
@@ -47,7 +47,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         )
     {
         v.push_back(it->first);
-        cout << it->first << endl;
+        cout << it->first << "\n";
     }
     model().set_graph_point_code_landscape(std::move(v));
     int nbland = model().graph_point_code_landscape_unique().size();
@@ -57,7 +57,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
     // creation of a vector of benthos shared (one benthos shared per landscape)
     auto benthoss = vector<Benthos *>(nbland);
 
-    cout << "nb of marine landscapes " << nbland << endl;
+    cout << "nb of marine landscapes " << nbland << "\n";
 
     // LOOP OVER BENTHOS OBJECT
     for (int landscape = 0; landscape < nbland; landscape++) {
@@ -72,7 +72,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
 
         int a_marine_landscape = model().graph_point_code_landscape_unique().at(landscape);
 
-        outc(cout << "a marine landscape " << a_marine_landscape << endl);
+        outc(cout << "a marine landscape " << a_marine_landscape << "\n");
 
         if (dyn_pop_sce.option(Options::modelBenthosInLongevity)) {
             multimap<int, double>::iterator lower_it_lgy = loadedDataBenthos.longevityClassesConditionPerFuncGroupPerNode.lower_bound(
@@ -89,7 +89,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
             if (a_vector.size() != model().config().nbbenthospops) {
                 cout << "on node 0: " << " nb longevity class is " << a_vector.size() <<
                      ": error for benthos file: check the dims in longevity_classes_condition_per_node input file. kill, correct and re-run."
-                     << endl;
+                     << "\n";
                 int aa;
                 cin >> aa;
             }
@@ -99,7 +99,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
             multimap<int, double>::iterator upper_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.upper_bound(
                     a_marine_landscape);
             for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
-                outc(cout << pos->second << endl);
+                outc(cout << pos->second << "\n");
                 // logistic recovery rates for this group specific to this landscape
                 init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
             }
@@ -110,7 +110,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 multimap<int, double>::iterator upper_land = loadedDataBenthos.numberPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_land; pos != upper_land; pos++) {
-                    outc(cout << pos->second << endl);
+                    outc(cout << pos->second << "\n");
                     // biomass per cell for this group specific to this landscape
                     init_prop_funcgr_number_per_node.push_back(pos->second);
                 }
@@ -120,7 +120,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 multimap<int, double>::iterator upper_landddd = loadedDataBenthos.carryingCapNumberPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landddd; pos != upper_landddd; pos++) {
-                    outc(cout << pos->second << endl);
+                    outc(cout << pos->second << "\n");
                     // logistic recovery rates for this group specific to this landscape
                     init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
                 }
@@ -134,7 +134,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                         a_marine_landscape);
 
                 for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
-                    outc(cout << "check this: " << pos->second << endl);
+                    outc(cout << "check this: " << pos->second << "\n");
                     // biomass per cell for this group specific to this landscape
                     init_prop_funcgr_biomass_per_node.push_back(pos->second);
                 }
@@ -143,7 +143,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 if (init_prop_funcgr_biomass_per_node.size() != model().config().nbbenthospops) {
                     cout << a_marine_landscape << " nb funcgr is " << init_prop_funcgr_biomass_per_node.size() <<
                          ": error for benthos file: the file is likely to get an extra blank space here. stop, remove and rerun."
-                         << endl;
+                         << "\n";
                     int aa;
                     cin >> aa;
                 }
@@ -153,7 +153,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                 multimap<int, double>::iterator upper_landdd = loadedDataBenthos.carryingCapBiomassPerFuncGroupPerNode.upper_bound(
                         a_marine_landscape);
                 for (multimap<int, double>::iterator pos = lower_landdd; pos != upper_landdd; pos++) {
-                    outc(cout << pos->second << endl);
+                    outc(cout << pos->second << "\n");
                     // logistic recovery rates for this group specific to this landscape
                     init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
                 }
@@ -168,7 +168,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         multimap<int, double>::iterator upper_land3 = loadedDataBenthos.meanWeightPerFuncGroupPerNode.upper_bound(
                 a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land3; pos != upper_land3; pos++) {
-            outc(cout << pos->second << endl);
+            outc(cout << pos->second << "\n");
             // biomass per cell for this group specific to this landscape
             init_meanw_funcgr_per_node.push_back(pos->second);
         }
@@ -179,7 +179,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         multimap<int, double>::iterator upper_landd = loadedDataBenthos.recoveryRatePerFuncGroupPerNode.upper_bound(
                 a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_landd; pos != upper_landd; pos++) {
-            outc(cout << pos->second << endl);
+            outc(cout << pos->second << "\n");
             // logistic recovery rates for this group specific to this landscape
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
@@ -189,7 +189,7 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
         multimap<int, double>::iterator upper_land2 = loadedDataBenthos.hBetasPerFuncGroupPerNode.upper_bound(
                 a_marine_landscape);
         for (multimap<int, double>::iterator pos = lower_land2; pos != upper_land2; pos++) {
-            outc(cout << pos->second << endl);
+            outc(cout << pos->second << "\n");
             // habitat_deltas_per_pop specific to this landscape
             init_h_betas_per_pop.push_back(pos->second);
         }
@@ -215,8 +215,8 @@ std::vector<Benthos *> ModelLoader::loadBenthos(PopSceOptions const &dyn_pop_sce
                                           init_h_betas_per_pop,
                                           loadedDataBenthos.longevityClassesConditionPerFuncGroupPerNode
         );
-        //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
-        //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
+        //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << "\n");
+        //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << "\n");
 
     }
 
@@ -232,12 +232,12 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
     // check
     for (unsigned int a_idx = 0; a_idx < p->model->nodes().size(); a_idx++) {
         dout(cout << "this node " << p->model->nodes().at(a_idx)->get_idx_node().toIndex() <<
-                  " nb func. gr. " << p->model->nodes().at(a_idx)->get_benthos_tot_biomass().size() << endl);
+                  " nb func. gr. " << p->model->nodes().at(a_idx)->get_benthos_tot_biomass().size() << "\n");
 
         if (p->model->nodes().at(a_idx)->get_benthos_tot_biomass().size() != model().config().nbbenthospops) {
             cout
                     << "something wrong for benthos_tot_biomass here!...kill displace.exe and check consistency in landscape coding and benthos input files before trying again"
-                    << endl;
+                    << "\n";
             throw ConsistencyTestFailed("benthos_tot_biomass");
         }
     }
@@ -245,27 +245,27 @@ void ModelLoader::doBenthosConsistencyTest(std::vector<Benthos *> const &benthos
     // check the area distribution for benthos shared 0
     //vector<Node* > some_nodes= benthoss.at(0)-> get_list_nodes();
     //for(int a_idx=0; a_idx<some_nodes.size(); a_idx++){
-    //    cout << some_nodes.at(a_idx)->get_idx_node() << endl;
+    //    cout << some_nodes.at(a_idx)->get_idx_node() << "\n";
     //}
 
     // check the biomasses
     vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_biomass_per_node();
-    outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
+    outc(cout << "check biomass per func. gr. for benthos shared 0  " << "\n");
     for (unsigned int gr = 0; gr < a_prop_funcgr_per_node.size(); gr++) {
         outc(cout << a_prop_funcgr_per_node[gr] << " ");
     }
-    outc(cout << endl);
+    outc(cout << "\n");
 
     // check the biomasses for benthos shared 0 on the first node for the
     // first functional group
     //cout <<"...and the biomass this node this func. grp is "  <<
-    //     benthoss.at(0)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl;
+    //     benthoss.at(0)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << "\n";
 
     //cout <<"...and the biomass this node this func. grp is "  <<
-    //     benthoss.at(0)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
+    //     benthoss.at(0)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << "\n";
 
     //cout <<"...and the biomass this node this func. grp is "  <<
-    //     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
+    //     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << "\n";
 
 }
 

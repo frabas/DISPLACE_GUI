@@ -101,16 +101,6 @@ public:
         virtual QString getName(int idx) const = 0;
     };
 
-    class WidgetUserData : public QObjectUserData {
-    private:
-        std::shared_ptr<qmapcontrol::GeometryWidget> mWidget;
-    public:
-        WidgetUserData(std::shared_ptr<qmapcontrol::GeometryWidget> w)
-            : QObjectUserData(), mWidget(w) {}
-
-        std::shared_ptr<qmapcontrol::GeometryWidget> widget() const { return mWidget; }
-    };
-
     class WidgetAncillaryData : public qmapcontrol::Geometry::AncillaryData {
     private:
         MapObject *mObject;
@@ -431,6 +421,7 @@ private:
 
     /* Selection handling */
 
+    QHash<QWidget*, std::shared_ptr<qmapcontrol::GeometryWidget>> mWidgetMap;
     QSet<EdgeMapObject *> mEdgeSelection[MainWindow::MAX_MODELS];
     QSet<NodeMapObject *> mNodeSelection[MainWindow::MAX_MODELS];
 };

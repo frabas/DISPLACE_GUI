@@ -168,7 +168,7 @@ bool Palette::saveToFile(QIODevice *device)
     }
 
     QTextStream stream (device);
-    stream.setCodec("UTF-8");
+    stream.setEncoding(QStringConverter::Utf8);
 
     doc.save(stream, 0, QDomNode::EncodingFromTextStream);
     return true;

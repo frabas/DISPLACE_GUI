@@ -18,7 +18,7 @@ bool TextfileModelLoader::loadWindmillsImpl()
 {
     map<int, double> init_size_per_windmill = read_size_per_windmill(
             p->folder_name_parameterization, p->inputfolder);
-    cout << "Does the size_per_windmill need a check?" << endl;
+    cout << "Does the size_per_windmill need a check?" << "\n";
 
     //TODO: extend variables in read_size_per_windmill() e.g. read kWh from files etc.
 

@@ -253,37 +253,37 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         auto nd = currentModel->getNodesList()[i];
         if (nd) {
             double x = nd->get_x();
-            cstrm << x << endl;
+            cstrm << x << "\n";
             if (acfile.isOpen())
-                acstream << x << endl;
+                acstream << x << "\n";
             if (bfile.isOpen())
-                bstream << nd->get_init_benthos_biomass() << endl;
+                bstream << nd->get_init_benthos_biomass() << "\n";
             if (bnbfile.isOpen())
-                bnbstream << nd->get_init_benthos_number() << endl;
+                bnbstream << nd->get_init_benthos_number() << "\n";
             if (landfile.isOpen())
-                landstream << nd->get_marine_landscape() << endl;
+                landstream << nd->get_marine_landscape() << "\n";
             if (windfile.isOpen())
-                windstream << nd->get_wind() << endl;
+                windstream << nd->get_wind() << "\n";
             if (sstfile.isOpen())
-                sststream << nd->get_sst() << endl;
+                sststream << nd->get_sst() << "\n";
             if (salinityfile.isOpen())
-                salinitystream << nd->get_salinity() << endl;
+                salinitystream << nd->get_salinity() << "\n";
             if (Nitrogenfile.isOpen())
-                Nitrogenstream << nd->get_Nitrogen() << endl;
+                Nitrogenstream << nd->get_Nitrogen() << "\n";
             if (Phosphorusfile.isOpen())
-                Phosphorusstream << nd->get_Phosphorus() << endl;
+                Phosphorusstream << nd->get_Phosphorus() << "\n";
             if (Oxygenfile.isOpen())
-                Oxygenstream << nd->get_Oxygen() << endl;
+                Oxygenstream << nd->get_Oxygen() << "\n";
             if (DissolvedCarbonfile.isOpen())
-                DissolvedCarbonstream << nd->get_DissolvedCarbon() << endl;
+                DissolvedCarbonstream << nd->get_DissolvedCarbon() << "\n";
             if (bathymetryfile.isOpen())
-                bathymetrystream << nd->get_bathymetry() << endl;
+                bathymetrystream << nd->get_bathymetry() << "\n";
             if (shippingdensityfile.isOpen())
-                shippingdensitystream << nd->get_shippingdensity() << endl;
+                shippingdensitystream << nd->get_shippingdensity() << "\n";
             if (siltfractionfile.isOpen())
-                siltfractionstream << nd->get_siltfraction() << endl;
+                siltfractionstream << nd->get_siltfraction() << "\n";
             if (icesrectanglecodefile.isOpen())
-                icesrectanglecodestream << nd->get_icesrectanglecode() << endl;
+                icesrectanglecodestream << nd->get_icesrectanglecode() << "\n";
 
 
         }
@@ -292,17 +292,17 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         auto nd = currentModel->getNodesList()[i];
         if (nd) {
             double y = nd->get_y();
-            cstrm << y << endl;
+            cstrm << y << "\n";
             if (acfile.isOpen())
-                acstream << y << endl;
+                acstream << y << "\n";
         }
     }
     for (int i = 0; i < n; ++i) {
         auto nd = currentModel->getNodesList()[i];
         if (nd) {
-            cstrm << nd->get_harbour() << endl;
+            cstrm << nd->get_harbour() << "\n";
             if (acfile.isOpen())
-                acstream << nd->get_code_area() << endl;
+                acstream << nd->get_code_area() << "\n";
             }
     }
 
@@ -338,7 +338,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             if (nd) {
                 int m = nd->getAdiacencyCount();
                 for (int j = 0; j < m; ++j) {
-                    gstrm << nd->get_idx_node().toIndex() << endl;
+                    gstrm << nd->get_idx_node().toIndex() << "\n";
                 }
             }
         }
@@ -349,7 +349,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 for (int j = 0; j < m; ++j) {
                     std::shared_ptr<NodeData> n = nd->getAdiacencyByIdx(j)->target.lock();
                     if (n.get() != nullptr)
-                        gstrm << n->get_idx_node().toIndex() << endl;
+                        gstrm << n->get_idx_node().toIndex() << "\n";
                 }
             }
         }
@@ -358,8 +358,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             if (nd) {
                 int m = nd->getAdiacencyCount();
                 for (int j = 0; j < m; ++j) {
-                    //gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
-                    gstrm << currentModel->getNodesList()[i]->getAdiacencyWeight(j) << endl;
+                    //gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << "\n";
+                    gstrm << currentModel->getNodesList()[i]->getAdiacencyWeight(j) << "\n";
                 }
             }
         }

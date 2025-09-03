@@ -76,21 +76,21 @@ bool Simulation::loadTimeSeries(std::string path, std::string tsscenario)
                 try {
                     res = readTsFile (path + "/" + name);
                 } catch (std::exception &x) {
-                    std::cerr << "Exception thrown form readFile(" << path << "/" << name << ") : " << x.what() << std::endl;
+                    std::cerr << "Exception thrown form readFile(" << path << "/" << name << ") : " << x.what() << "\n";
                     res = false;
                 }
 
                 if (res) {
                     ++nr;
                 } else {
-                    std::cerr << "Can't read " << dirent->d_name << std::endl;
+                    std::cerr << "Can't read " << dirent->d_name << "\n";
                 }
             }
         }
 
         closedir(dir);
     } else {
-        std::cerr << "Can't open " << path << std::endl;
+        std::cerr << "Can't open " << path << "\n";
         return false;
     }
 
@@ -104,7 +104,7 @@ TimeSeries *Simulation::getTimeSeries(TimeSeriesManager::Variables var, int zone
 
 bool Simulation::readTsFile (std::string filename)
 {
-    std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;
+    std::cout << "@DEBUG: Reading TimeSeries file " << filename << "\n";
 
     int f = filename.find_last_of("/");
     int e = filename.find_last_of(".");
@@ -117,7 +117,7 @@ bool Simulation::readTsFile (std::string filename)
     std::cout << "@DEBUG: " << fields.size();
     for (int i = 0; i < fields.size(); ++i)
         std::cout << " " << fields[i];
-    std::cout << std::endl;
+    std::cout << "\n";
 
     displace::simulation::TimeSeriesManager::Variables var;
     if (fields[0] == "fishprice")
@@ -127,7 +127,7 @@ bool Simulation::readTsFile (std::string filename)
     else if (fields[0] == "wspeed")
         var = displace::simulation::TimeSeriesManager::WSpeed;
     else {
-        std::cerr << "Cannot parse file: variable field unknown " << fields[0] << std::endl;
+        std::cerr << "Cannot parse file: variable field unknown " << fields[0] << "\n";
         return false;
     }
 

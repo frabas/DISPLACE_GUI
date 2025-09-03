@@ -241,7 +241,7 @@ std::tuple<QVector<double>, QVector<double> > ShipsStatsPlot::getData(DisplaceMo
     dt = db->getShipsStatData(stattype, aggtype, shipid, shiptypeid);
     //stats::runningSum(dt.v);
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    QVector<double> kd(dt.t.begin(), dt.t.end()), vd(dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }
 

@@ -43,7 +43,7 @@ QModelIndex WindmillEntity::index(int row, int column, const QModelIndex &parent
     Q_UNUSED(parent);
 
     ObjectTreeEntity * entity = new WindmillEntity(model, row);
-  //   std::cout << "id (row) is assigned here and is " << row << endl;
+  //   std::cout << "id (row) is assigned here and is " << row << "\n";
     return model->createEntity(row, column, entity);
 }
 

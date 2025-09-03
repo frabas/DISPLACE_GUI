@@ -56,7 +56,7 @@ void print( vector <string> & v )
 {
     for (size_t n = 0; n < v.size(); n++)
         cout << "\"" << v[ n ] << "\"\n";
-    cout << endl;
+    cout << "\n";
 }
 
 
@@ -64,7 +64,7 @@ void print_d( vector <double> & v )
 {
     for (size_t n = 0; n < v.size(); n++)
         cout << "\"" << v[ n ] << "\"\n";
-    cout << endl;
+    cout << "\n";
 }
 */
 
@@ -212,7 +212,7 @@ void SimplifyThePreviousMap(
         string a_graph_name,
         string inputfolder)
 {
-    std::cout << "size before: " << previous.size()  << std::endl;
+    std::cout << "size before: " << previous.size()  << "\n";
 
     std::list<vertex_t> paths;
 
@@ -234,10 +234,10 @@ void SimplifyThePreviousMap(
     // 3. remove potential replicates (caution: the container need to be orderered first)
     paths.unique();
 
-    //std::cout << "all nodes used: " << std::endl;
+    //std::cout << "all nodes used: " << "\n";
     //std::list<vertex_t>::iterator i;
     //for(i=paths.begin(); i != paths.end(); ++i) std::cout << *i << " ";
-    //std::cout << std::endl;
+    //std::cout << "\n";
 
     // 4. export but without the not used nodes (because they do not belong to at least one path)
     // export into a file
@@ -247,7 +247,7 @@ void SimplifyThePreviousMap(
     string source_s = out.str();
     std::string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
     a_previous_map.open(filename.c_str());
-    a_previous_map << " key " << " value " << std::endl;
+    a_previous_map << " key " << " value " << "\n";
 
     spp::sparse_hash_map<vertex_t, vertex_t>::iterator prev;
     for ( prev=previous.begin() ; prev != previous.end(); prev++ )
@@ -259,8 +259,8 @@ void SimplifyThePreviousMap(
         if(binary_search(paths.begin(), paths.end(), vertex) &&
                 binary_search(paths.begin(), paths.end(), vertex2))
         {
-            a_previous_map << vertex  <<" " << vertex2 << std::endl;
-            dout(cout  << "line " << vertex << " " << vertex2 << " is kept!" << endl);
+            a_previous_map << vertex  <<" " << vertex2 << "\n";
+            dout(cout  << "line " << vertex << " " << vertex2 << " is kept!" << "\n");
         }
 
     }
@@ -269,7 +269,7 @@ void SimplifyThePreviousMap(
     std::ofstream a_min_distance;
     std::string filename2= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
     a_min_distance.open(filename2.c_str());
-    a_min_distance << " key " << " value " << std::endl;
+    a_min_distance << " key " << " value " << "\n";
 
     spp::sparse_hash_map<vertex_t, weight_t>::iterator dis;
     for ( dis=min_distance.begin() ; dis != min_distance.end(); dis++ )
@@ -278,9 +278,9 @@ void SimplifyThePreviousMap(
         vertex_t distance = dis->second;
         if(binary_search(paths.begin(), paths.end(), vertex) )
         {
-            a_min_distance << vertex  <<" " << distance << std::endl;
+            a_min_distance << vertex  <<" " << distance << "\n";
         }
-        //std::cout << vertex << ": removed..." << std::endl;
+        //std::cout << vertex << ": removed..." << "\n";
 
     }
     a_min_distance.close();
@@ -918,16 +918,16 @@ bool fill_in_percent_szgroup_per_age_matrix(istream& in, vector< vector<double> 
             percent_szgroup_per_age_matrix[i][j] = val;
         }
     }
-    dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
+    dout(cout  << "read size matrix percent_age_per_szgroup"  << "\n" << flush);
     for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
     {
         for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
         {
             dout(cout  << percent_szgroup_per_age_matrix[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -948,16 +948,16 @@ bool fill_in_percent_age_per_szgroup_matrix(istream& in, vector< vector<double> 
             percent_age_per_szgroup_matrix[i][j] = val;
         }
     }
-    dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
+    dout(cout  << "read size matrix percent_age_per_szgroup"  << "\n" << flush);
     for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
     {
         for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
         {
             dout(cout  << percent_age_per_szgroup_matrix[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -978,16 +978,16 @@ bool fill_in_growth_transition(istream& in, vector< vector<double> >& growth_tra
             growth_transition[i][j] = val;
         }
     }
-    dout(cout  << "read size matrix transition"  << endl << flush);
+    dout(cout  << "read size matrix transition"  << "\n" << flush);
     for(unsigned int i = 0; i < growth_transition.size(); i++)
     {
         for(unsigned int j = 0; j < growth_transition[i].size(); j++)
         {
             dout(cout  << growth_transition[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -1012,16 +1012,16 @@ bool fill_in_preferences_for_species_matrix (istream& in, vector< vector<double>
     }
 
 
-    dout(cout  << "read preferences_for_species_matrix"  << endl << flush);
+    dout(cout  << "read preferences_for_species_matrix"  << "\n" << flush);
     for(unsigned int i = 0; i < preferences_for_species_matrix.size(); i++)
     {
         for(unsigned int j = 0; j < preferences_for_species_matrix[i].size(); j++)
         {
             dout(cout  << preferences_for_species_matrix[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -1043,16 +1043,16 @@ bool fill_in_species_interactions_mortality_proportion_matrix (istream& in, vect
             species_interactions_mortality_proportion_matrix[i][j] = val;
         }
     }
-    dout(cout  << "read species_interactions_mortality_proportion_matrix"  << endl << flush);
+    dout(cout  << "read species_interactions_mortality_proportion_matrix"  << "\n" << flush);
     for(unsigned int i = 0; i < species_interactions_mortality_proportion_matrix.size(); i++)
     {
         for(unsigned int j = 0; j < species_interactions_mortality_proportion_matrix[i].size(); j++)
         {
             dout(cout  << species_interactions_mortality_proportion_matrix[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -1076,16 +1076,16 @@ bool fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& select
             selectivity_per_stock[i][j] = val;
         }
     }
-    dout(cout  << "read size selectivity_per_stock matrix"  << endl << flush);
+    dout(cout  << "read size selectivity_per_stock matrix"  << "\n" << flush);
     for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
     {
         for(unsigned int j = 0; j < selectivity_per_stock[i].size(); j++)
         {
             dout(cout  << selectivity_per_stock[i][j] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -1118,13 +1118,13 @@ bool fill_in_param_sr(istream& in, vector<double>& param_sr)
 
     while(param_sr.size()<4) param_sr.emplace_back (0.0);
 
-    cout  << "read param_sr"  << endl;
+    cout  << "read param_sr"  << "\n";
 
     for(unsigned int i = 0; i < param_sr.size(); i++)
     {
         cout  << param_sr[i] << " ";
     }
-    cout  << endl;
+    cout  << "\n";
 
     return true;
 }
@@ -1142,13 +1142,13 @@ bool fill_in_initial_tac(istream& in, vector<double>& initial_tac)
         in>> val;
         initial_tac[i] = val;
     }
-    dout(cout  << "read initial_tac"  << endl << flush);
+    dout(cout  << "read initial_tac"  << "\n" << flush);
 
     for(unsigned int i = 0; i < initial_tac.size(); i++)
     {
         dout(cout  << initial_tac[i] << " ");
     }
-    dout(cout  << endl);
+    dout(cout  << "\n");
 
     return true;
 }
@@ -1173,13 +1173,13 @@ bool fill_in_fbar_ages_min_max(istream& in, vector<double>& fbar_ages_min_max)
         }
 
 #if 0
-        dout(cout  << "read fbar_ages_min_max"  << endl << flush);
+        dout(cout  << "read fbar_ages_min_max"  << "\n" << flush);
 
         for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
         {
             dout(cout  << fbar_ages_min_max[i] << " ");
         }
-        dout(cout  << endl);
+        dout(cout  << "\n");
 #endif
 
         return true;
@@ -1206,7 +1206,7 @@ bool fill_from_metier_specifications(istream& in, multimap<string, double>& info
         in >> val;
         infos.insert(make_pair(key,val));
     }
-    dout(cout  << "read and set up the metier ogive specification  " << endl << flush);
+    dout(cout  << "read and set up the metier ogive specification  " << "\n" << flush);
     return true;
 }
 
@@ -1253,7 +1253,7 @@ bool fill_from_vessels_specifications (istream& in,
             boost::split(fields, line, boost::is_any_of("|"));
 
             if (fields.size() < 22) {
-              cout << "missing fields when loading vessel features!!" << endl;
+              cout << "missing fields when loading vessel features!!" << "\n";
                 return false;   // all fields are MANDATORY.
             }
 
@@ -1262,7 +1262,7 @@ bool fill_from_vessels_specifications (istream& in,
             calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
             calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
 
-            tout(cout << "Reading vessel features for " << fields[0] << endl);
+            tout(cout << "Reading vessel features for " << fields[0] << "\n");
             names.push_back(fields[0]);
             vid_is_actives.push_back(boost::lexical_cast<int>(fields[1].c_str()));
             speeds.push_back(boost::lexical_cast<double>(fields[2].c_str()));
@@ -1288,7 +1288,7 @@ bool fill_from_vessels_specifications (istream& in,
         return false;
     }
 
-    tout(cout  << "read and set up the general features of each vessel...OK" << endl);
+    tout(cout  << "read and set up the general features of each vessel...OK" << "\n");
 
     return true;
 }
@@ -1351,7 +1351,7 @@ bool fill_from_vessels_economic_specifications (istream& in,
         return false;
     }
 
-    dout(cout  << "read and set up the general features of each vessel...OK" << endl);
+    dout(cout  << "read and set up the general features of each vessel...OK" << "\n");
 
     return true;
 }
@@ -1441,7 +1441,7 @@ bool fill_from_ships_specifications (istream& in,
         return false;
     }
 
-    dout(cout  << "read and set up the general features of each ship...OK" << endl << flush);
+    dout(cout  << "read and set up the general features of each ship...OK" << "\n" << flush);
 
     return true;
 }
@@ -1476,9 +1476,9 @@ bool fill_from_firms_specifications (istream& in,
 
             int id      = boost::lexical_cast<int>(fields[0]);
             string name = fields[1];
-            double nb   = boost::lexical_cast<int>(fields[2]);
-            double lon  = boost::lexical_cast<double>(fields[3]);
-            double lat  = boost::lexical_cast<double>(fields[4]);
+            auto nb   = boost::lexical_cast<int>(fields[2]);
+            auto lon  = boost::lexical_cast<double>(fields[3]);
+            auto lat  = boost::lexical_cast<double>(fields[4]);
             firm_ids.push_back(id);
             firm_names.push_back(name);
             nb_vessels.push_back(nb);
@@ -1489,7 +1489,7 @@ bool fill_from_firms_specifications (istream& in,
         return false;
     }
 
-    dout(cout << "read and set up the firm features of each firm...OK" << endl << flush);
+    dout(cout << "read and set up the firm features of each firm...OK" << "\n" << flush);
 
     return true;
 }
@@ -1829,7 +1829,7 @@ bool fill_from_fishfarms_specifications(istream &in,
         return false;
     }
 
-    dout(cout  << "read and set up the fishfarms features of each farm...OK" << endl << flush);
+    dout(cout  << "read and set up the fishfarms features of each farm...OK" << "\n" << flush);
 
     return true;
 }
@@ -1852,7 +1852,7 @@ bool fill_from_avai_nodes_with_pop(istream& in, map<int, double>& avai)
         in >> val;
         avai[key]=val;
     }
-    dout(cout  << "read pop avaibility per node " << endl << flush);
+    dout(cout  << "read pop avaibility per node " << "\n" << flush);
     return true;
 }
 
@@ -1882,7 +1882,7 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId,
         in >> val;
         coeffs.insert(make_pair(types::NodeId(key),val));
     }
-    dout(cout  << "read the coeff of diffusion at szgroup " << endl << flush);
+    dout(cout  << "read the coeff of diffusion at szgroup " << "\n" << flush);
     return true;
 }
 
@@ -1904,7 +1904,7 @@ bool fill_from_oth_land(istream& in, map<types::NodeId, double>& oth_land)
         in >> val;
         oth_land.insert(make_pair(types::NodeId(key),val));
     }
-    dout(cout  << "read oth land " << endl << flush);
+    dout(cout  << "read oth land " << "\n" << flush);
     return true;
 }
 
@@ -2005,7 +2005,7 @@ bool fill_from_nodes_in_polygons(istream& in, multimap<int, int>& nodes_in_polyg
         in >> val;
         nodes_in_polygons.insert(make_pair(key,val));
     }
-    dout(cout  << "read nodes_in_polygons " << endl << flush);
+    dout(cout  << "read nodes_in_polygons " << "\n" << flush);
 
     return true;
 }
@@ -2280,7 +2280,7 @@ vector<string> find_entries_i_s (multimap<int, string>& infos, int intg)
 
 void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval)
 {
-    dout(cout  << "set_entries_d...BEGIN" << endl);
+    dout(cout  << "set_entries_d...BEGIN" << "\n");
 
     multimap<int, double>::iterator lower
             = infos.lower_bound(itr);
@@ -2294,7 +2294,7 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
         pos->second = newval[i];
         i++;
     }
-    dout(cout  << "set_entries_d...END" << endl);
+    dout(cout  << "set_entries_d...END" << "\n");
 
 }
 
@@ -2304,12 +2304,12 @@ vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_n
                                          types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
-    outc (cout  << "look at the distances " << endl);
+    outc (cout  << "look at the distances " << "\n");
 
     vector<types::NodeId>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
     int idx = it - relevant_nodes.begin();
 
-    outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
+    outc (cout  << "look at the distances from node " <<   from.toIndex() << "\n");
 
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
@@ -2334,7 +2334,7 @@ vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_n
       }
     }
 
-    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
+    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< "\n");
 
  return(distance_fgrounds);
 }
@@ -2357,14 +2357,14 @@ vector<double> scale_a_vector_to_1(vector<double> a_vector)
     {
         for(unsigned int a_node = 0; a_node < a_vector.size(); a_node++)
         {
-            //if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << endl;
+            //if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << "\n";
             freq_a_vector.at(a_node)= a_vector.at(a_node) / cum_a_vector;
-            dout(cout  << "scaled a_vector is then " << freq_a_vector.at(a_node) << endl);
+            dout(cout  << "scaled a_vector is then " << freq_a_vector.at(a_node) << "\n");
         }
     }
     else
     {
-        //cout << "cum_a_vector = 0 !! " << endl;
+        //cout << "cum_a_vector = 0 !! " << "\n";
     }
     return(freq_a_vector);
 }
@@ -2380,11 +2380,11 @@ double decode_the_tree(string& tree, vector<string>& direction,
 
     vector<string> a_split_string;
 
-    //dout(cout  << tree << endl);
-    //dout(cout  << "the first delimiter is " << direction[0] << endl);
+    //dout(cout  << tree << "\n");
+    //dout(cout  << "the first delimiter is " << direction[0] << "\n");
     //if(direction.size() != (external_states.size()+internal_states.size()))
     //{
-    //    dout(cout  << "pble: check the reading_direction object..." << endl);
+    //    dout(cout  << "pble: check the reading_direction object..." << "\n");
     //}
     for (unsigned int i=0; i<direction.size(); i++)
     {
@@ -2400,9 +2400,9 @@ double decode_the_tree(string& tree, vector<string>& direction,
             // external not found, search for internal states instead.
             a_state = internal_states.find(a_delimiter)->second;
         }
-        //cout << "a tree " << tree << endl;
-        //cout << "a delimiter " << a_delimiter << endl;
-        //cout << "a state " << a_state << endl;
+        //cout << "a tree " << tree << "\n";
+        //cout << "a delimiter " << a_delimiter << "\n";
+        //cout << "a state " << a_state << "\n";
         // split the tree in 2 according to the driver
         split( a_split_string, tree, a_delimiter, splitX::no_empties);
         //print(a_split_string);
@@ -2410,9 +2410,9 @@ double decode_the_tree(string& tree, vector<string>& direction,
         // keep only one branch (0 left or 1 right) and loop...
         if (a_split_string.size() > 1) { tree = a_split_string[a_state]; }
 
-        //cout << "the tree is now reduced to " << tree << endl;
+        //cout << "the tree is now reduced to " << tree << "\n";
     }
-    //cout << "the found value is: " << tree << endl;
+    //cout << "the found value is: " << tree << "\n";
 
     return (atof(tree.c_str()));
 }
@@ -2469,8 +2469,8 @@ multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, st
     ifstream file_shipsspe_lanes_lat;
     file_shipsspe_lanes_lat.open(filename.c_str());
     if (file_shipsspe_lanes_lat.fail()) {
-        cout << "Unfortunately the /shipsspe_lanes_lat.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the /shipsspe_lanes_lat.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 
@@ -2492,8 +2492,8 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
     ifstream file_shipsspe_lanes_lon;
     file_shipsspe_lanes_lon.open(filename.c_str());
     if (file_shipsspe_lanes_lon.fail()) {
-        cout << "Unfortunately the /shipsspe_lanes_lon.dat vector is not informed " << endl;
-        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "Unfortunately the /shipsspe_lanes_lon.dat vector is not informed " << "\n";
+        cout << "You´ll have to stop the simu, correct input and re-run. " << "\n";
         string error_msg = "error opening file " + filename;
         cout << error_msg << "\n";
 

@@ -151,7 +151,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches (NodesStat CumCatches)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
-    mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70\% Threshold (NodesStat CumCathesThrshld)")).arg(model_n).toStdString()));
+    mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70% Threshold (NodesStat CumCathesThrshld)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatchesWithThreshold, mStatsLayerCumcatchesWithThreshold[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerCumdiscards[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Discards (NodesStat CumDiscards)")).arg(model_n).toStdString()));
@@ -390,9 +390,10 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
     mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::BottomLeft);
     mDetailsWidgetContainer->setVisible(true);
 
-    widget->setUserData(0, new WidgetUserData(mDetailsWidgetContainer));
+    mWidgetMap.insert(widget, mDetailsWidgetContainer);
     widget->setAttribute(Qt::WA_DeleteOnClose);
-    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(widgetClosed(QObject*)));
+
+    connect(widget, &QWidget::destroyed, this, &MapObjectsController::widgetClosed);
 
     mWidgetLayer->addGeometry(mDetailsWidgetContainer);
 }
@@ -839,14 +840,20 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
     }
 }
 
-void MapObjectsController::widgetClosed(QObject *widget)
+void MapObjectsController::widgetClosed(QObject *qobject)
 {
     if (mClosing)
         return;
-    WidgetUserData *obj = reinterpret_cast<WidgetUserData*>(widget->userData(0));
+    auto widget = qobject_cast<QWidget*>(qobject);
+    if (!widget)
+        return;
+
+    auto obj = mWidgetMap.value(widget);
     if (obj) {
-        mWidgetLayer->removeGeometry(obj->widget(), mClosing);
+        mWidgetLayer->removeGeometry(obj, mClosing);
     }
+
+    mWidgetMap.remove(widget);
 }
 
 void MapObjectsController::signalAppIsClosing()

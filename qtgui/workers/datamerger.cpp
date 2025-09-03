@@ -44,7 +44,7 @@ void DataMerger::start(QString in, QString out)
         connect (mWaitDialog, SIGNAL(aborted()), this, SLOT(aborted()));
     }
 
-    mWork = QtConcurrent::run(this, &DataMerger::doWork, in, out);
+    mWork = QtConcurrent::run(&DataMerger::doWork, this, in, out);
     mWatcher = new QFutureWatcher<bool>();
 
     mWatcher->setFuture(mWork);

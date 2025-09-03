@@ -73,7 +73,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
                                      bgi::rtree<  std::pair<point, int>, bgi::quadratic<16> >& rtree,
                                      double coeff)
 {
-    cout << "start diffusion for Nitrogen along gradients...." << endl;
+    cout << "start diffusion for Nitrogen along gradients...." << "\n";
 
 
      vector<types::NodeId> list_of_nodes_idx;
@@ -109,7 +109,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
          //for(const auto &r: nearest){
          //    std::cout << r.second << ' ' ;
          //}
-         //cout << endl;
+         //cout << "\n";
 
 
          // or:
@@ -121,7 +121,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
          for(const auto &r: result){
              std::cout << r.second << ' ' ;
          }
-         cout << endl;
+         cout << "\n";
          */
 
 
@@ -147,7 +147,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
 bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff)
 {
 
-   cout << "start diffusion for Nitrogen...." << endl;
+   cout << "start diffusion for Nitrogen...." << "\n";
 
     vector<types::NodeId> list_of_nodes_idx;
     for (int n=0; n<list_of_nodes.size(); ++n)
@@ -191,17 +191,17 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
          double depN=departure_Nitrogen;
 
          //if(idx_node.toIndex()==9006){
-         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << endl;
+         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << "\n";
          //    for(int i=0; i< neighbour_nodes.size();i++) cout <<  neighbour_nodes.at(i) << " ";
-         //    cout << endl;
+         //    cout << "\n";
          //}
                for (int nei=0; nei<count; ++nei)
                   {
                       double arrival_Nitrogen = list_of_nodes.at(neighbour_nodes.at(nei))->get_Nitrogen();
                       double exchanged       = ((coeff*depN)/count);
-                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Nitrogen is "<< arrival_Nitrogen << endl;
+                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Nitrogen is "<< arrival_Nitrogen << "\n";
                       arrival_Nitrogen       = arrival_Nitrogen + exchanged;
-                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Nitrogen is "<< arrival_Nitrogen << endl;
+                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Nitrogen is "<< arrival_Nitrogen << "\n";
                       departure_Nitrogen     = departure_Nitrogen - exchanged;
                       list_of_nodes.at(neighbour_nodes.at(nei))->setNitrogen(arrival_Nitrogen);//update arrival
                    }
@@ -209,13 +209,13 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
 
 
           //if(idx_node.toIndex()==9006){
-          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << endl;
-          //     cout << endl;
+          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << "\n";
+          //     cout << "\n";
           //}
 
       } // node by node
 
-  cout << "stop diffusion Nitrogen for this node...." << endl;
+  cout << "stop diffusion Nitrogen for this node...." << "\n";
 
   return 0;
 }
@@ -225,7 +225,7 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
 bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff)
 {
 
-   cout << "start diffusion for Nitrogen...." << endl;
+   cout << "start diffusion for Nitrogen...." << "\n";
 
     vector<types::NodeId> list_of_nodes_idx;
     for (int n=0; n<list_of_nodes.size(); ++n)
@@ -269,9 +269,9 @@ bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_
          vector<double> depB=departure_Benthos;
 
          //if(idx_node.toIndex()==9006){
-         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << endl;
+         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << "\n";
          //    for(int i=0; i< neighbour_nodes.size();i++) cout <<  neighbour_nodes.at(i) << " ";
-         //    cout << endl;
+         //    cout << "\n";
          //}
                for (int nei=0; nei<count; ++nei)
                   {
@@ -279,9 +279,9 @@ bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_
                       for (int gr=0; gr<depB.size(); ++gr)
                          {
                          double exchanged       = ((coeff*depB.at(gr))/count);
-                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << endl;
+                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << "\n";
                          arrival_Benthos.at(gr)       = arrival_Benthos.at(gr) + exchanged;
-                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << endl;
+                         //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Benthos.at(gr) is "<< arrival_Benthos.at(gr) << "\n";
                          departure_Benthos.at(gr)     = departure_Benthos.at(gr) - exchanged;
                         }
                       list_of_nodes.at(neighbour_nodes.at(nei))->set_benthos_biomass_per_funcgr(arrival_Benthos);//update arrival
@@ -290,13 +290,13 @@ bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_
 
 
           //if(idx_node.toIndex()==9006){
-          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << endl;
-          //     cout << endl;
+          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << "\n";
+          //     cout << "\n";
           //}
 
       } // node by node
 
-  cout << "stop diffusion Benthos for this node...." << endl;
+  cout << "stop diffusion Benthos for this node...." << "\n";
 
   return 0;
 }

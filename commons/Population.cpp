@@ -18,12 +18,17 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include<string>
+#include <string>
+#include <algorithm>
+#include <random>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include "Population.h"
 #include <helpers.h>
+
+static std::random_device rd;
+static std::mt19937 g(rd());
 
 Population::Population(int a_name,
                        string a_pop_name,
@@ -68,7 +73,7 @@ Population::Population(int a_name,
     name=a_name;
     pop_name=a_pop_name;
 
-    dout(cout << "create pop " << name << endl);
+    dout(cout << "create pop " << name << "\n");
 
 	full_spatial_availability= _full_spatial_availability;
 
@@ -88,12 +93,12 @@ Population::Population(int a_name,
     this->set_landings_so_far(0.0);
 
 	// init...
-    dout(cout << "init..." << name << endl);
+    dout(cout << "init..." << name << "\n");
 
     // a quick check
     if(init_tot_N_at_szgroup.empty() || init_tot_N_at_szgroup.size()==0)
      {
-        cout << "No N_at_szgroup found!! Check init_pops_per_szgroup. dat input file, correct and re-run..." << endl;
+        cout << "No N_at_szgroup found!! Check init_pops_per_szgroup. dat input file, correct and re-run..." << "\n";
         int aa;
         cin >> aa;
      }
@@ -136,7 +141,7 @@ Population::Population(int a_name,
 	}
 
     // for catch equation
-    dout(cout << "loading parameters for the catch equation" << name << endl);
+    dout(cout << "loading parameters for the catch equation" << name << "\n");
                                  // for the catch equation
 	this->set_selected_szgroups(_selected_szgroups);
 
@@ -160,7 +165,7 @@ Population::Population(int a_name,
                                  // set the pop-specific beta from glm for szgroup selected id4
 	this->set_avai7_beta(_avai7_beta);
 
-    dout(cout << "calib..." << name << endl);
+    dout(cout << "calib..." << name << "\n");
     // CALIB: if increased then improve the catch rate of the simulated vessels....
     // look at the config.dat for calibration values
 
@@ -168,7 +173,7 @@ Population::Population(int a_name,
 	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
 
 	// ...then fill in with start pop
-    dout(cout << "set the overall N_at_szgroup..." << name << endl);
+    dout(cout << "set the overall N_at_szgroup..." << name << "\n");
                                  // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup(init_tot_N_at_szgroup);
 
@@ -178,7 +183,7 @@ Population::Population(int a_name,
 
     // ...then fill in with start info
                                  // set the migrant prop
-    dout(cout << "set the prop_migrants..." << name << endl);
+    dout(cout << "set the prop_migrants..." << name << "\n");
     this->set_prop_migrants_in_tot_N_at_szgroup(init_prop_migrants_in_tot_N_at_szgroup);
 
     // ...then fill in with start pop
@@ -197,7 +202,7 @@ Population::Population(int a_name,
 	// CALIB: if decreased then smaller fish then higher F because numbers of fish for a given TAC increased....
     // look at the config.dat for calibration values
 
-    dout(cout << "calib the weight at szgroup..." << name << endl);
+    dout(cout << "calib the weight at szgroup..." << name << "\n");
     for(unsigned int i=0; i < nb_szgroups; i++)
     {
         init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
@@ -205,25 +210,25 @@ Population::Population(int a_name,
 
 	this->set_weight_at_szgroup(init_weight_at_szgroup);
 
-    dout(cout << "fill in with start pop..." << name << endl);
+    dout(cout << "fill in with start pop..." << name << "\n");
     // ...then fill in with start pop
-    dout(cout << "for comcat..." << name << endl);
+    dout(cout << "for comcat..." << name << "\n");
     this->set_comcat_at_szgroup(init_comcat_at_szgroup);
 
 	// ...then fill in with start pop
-    dout(cout << "for maturity..." << name << endl);
+    dout(cout << "for maturity..." << name << "\n");
     this->set_maturity_at_szgroup(init_maturity_at_szgroup);
 
 	// ...then fill in with start pop
-    dout(cout << "for fecundity..." << name << endl);
+    dout(cout << "for fecundity..." << name << "\n");
     this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
 
 	// ...then fill in with start pop
-    dout(cout << "for natural mortality..." << name << endl);
+    dout(cout << "for natural mortality..." << name << "\n");
   	this->set_M_at_szgroup(init_M_at_szgroup);
 
 	// ...then fill in with start pop
-    dout(cout << "for prop recru..." << name << endl);
+    dout(cout << "for prop recru..." << name << "\n");
     this->set_proprecru_at_szgroup(init_proprecru_at_szgroup);
 
 	// fill in the list of nodes specific to this particular pop
@@ -240,7 +245,7 @@ Population::Population(int a_name,
 		   list_nodes.push_back(p_spe_nodes[i]);
 	*/
 	// REPLACE BY: (TO ONLY USE THE NODES LISTED IN THE AVAI FILE...)
-    dout(cout << "set up the list of nodes for this pop" << name << endl);
+    dout(cout << "set up the list of nodes for this pop" << name << "\n");
 
     vector<Node* > p_spe_nodes;
     for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
@@ -248,7 +253,7 @@ Population::Population(int a_name,
 	{
         //cout << iter->first.toIndex() <<" : " << iter->second << " - ";
 
-        dout(if(iter->first.toIndex()>nodes.size()) cout << "error in the avai field: trying to push back node idx " << iter->first.toIndex() << " for max nb of nodes " << nodes.size() << endl);
+        dout(if(iter->first.toIndex()>nodes.size()) cout << "error in the avai field: trying to push back node idx " << iter->first.toIndex() << " for max nb of nodes " << nodes.size() << "\n");
         p_spe_nodes.push_back (nodes[  iter->first.toIndex()  ]);
         nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);
 
@@ -257,7 +262,7 @@ Population::Population(int a_name,
 		list_nodes.push_back(p_spe_nodes[i]);
 
 	// add these Ns to the multimap of the concerned nodes
-    dout(cout << " lst nodes: " << endl);
+    dout(cout << " lst nodes: " << "\n");
 	for(unsigned int i=0; i<list_nodes.size(); i++)
 	{
     //cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ";
@@ -266,10 +271,10 @@ Population::Population(int a_name,
         dout(cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ");
 	}
 
-    dout(cout << endl);
+    dout(cout << "\n");
 
 
-    dout(cout << "field_of_coeff_diffusion_this_pop " << name << endl);
+    dout(cout << "field_of_coeff_diffusion_this_pop " << name << "\n");
 
     // for diffusion of N per szgroup
     this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop);
@@ -287,7 +292,7 @@ Population::Population(int a_name,
 
 	}
 
-    dout(cout << "init tac " << name << endl);
+    dout(cout << "init tac " << name << "\n");
 
     // init tac
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key, 
@@ -307,14 +312,14 @@ Population::Population(int a_name,
     }
 
     // check
-    //cout << "check relative_stability_key " << endl;
+    //cout << "check relative_stability_key " << "\n";
     //for (auto elem : relative_stability_key)
     //{
     //    std::cout << elem.first << " " << elem.second << "\n";
     //}
 
     // check
-    //cout << "check landings_so_far_per_nation " << endl;
+    //cout << "check landings_so_far_per_nation " << "\n";
     //for (auto elem : landings_so_far_per_nation)
     //{
     //    std::cout << elem.first << " " << elem.second << "\n";
@@ -344,10 +349,10 @@ Population::Population(int a_name,
     for(int sz = 0; sz < nbsz; sz++)
     {
         tot_N_at_age0 +=  percent_szgroup_per_age_matrix[sz][0] * tot_N_at_szgroup[sz];
-        cout << "pop "<< this->get_name() << ": tot_N_at_szgroup[" << sz <<"] is " << tot_N_at_szgroup.at(sz) << endl;
-        cout << "pop "<< this->get_name() << ": percent_szgroup_per_age_matrix[" <<sz<< "][0] is " << percent_szgroup_per_age_matrix[sz][0] << endl;
+        cout << "pop "<< this->get_name() << ": tot_N_at_szgroup[" << sz <<"] is " << tot_N_at_szgroup.at(sz) << "\n";
+        cout << "pop "<< this->get_name() << ": percent_szgroup_per_age_matrix[" <<sz<< "][0] is " << percent_szgroup_per_age_matrix[sz][0] << "\n";
     }
-    cout << "pop "<< this->get_name() << ": tot_N_at_age0 is " << tot_N_at_age0 << endl;
+    cout << "pop "<< this->get_name() << ": tot_N_at_age0 is " << tot_N_at_age0 << "\n";
 
 
 }
@@ -1079,14 +1084,14 @@ void Population::set_landings_so_far_this_vessel_length_class(int vessel_class, 
 void Population::reset_landings_so_far_per_nation()
 {
     for (auto& p : landings_so_far_per_nation) p.second = 0;
-    cout << "reset_landings_so_far_per_nation this pop " << this->get_name() << endl;
+    cout << "reset_landings_so_far_per_nation this pop " << this->get_name() << "\n";
 
 }
 
 void Population::reset_landings_so_far_per_vessel_length_class()
 {
     for (auto& p : landings_so_far_per_vessel_length_class) p.second = 0;
-    cout << "reset_landings_so_far_per_vessel_length_class this pop " << this->get_name() << endl;
+    cout << "reset_landings_so_far_per_vessel_length_class this pop " << this->get_name() << "\n";
 
 }
 
@@ -1161,8 +1166,8 @@ void Population::set_list_nodes(vector<Node* > _list_nodes)
 void Population::distribute_N()
 {
 
-    dout (cout<< endl);
-    dout(cout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << endl);
+    dout (cout<< "\n");
+    dout(cout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << "\n");
     //vector<double> all_N_at_szgroup(14,0);
 
 	// save for later use i.e. in the erosion of the avai after each catch event
@@ -1184,16 +1189,16 @@ void Population::distribute_N()
 			avai_this_node.push_back(pos->second);
 
 		// check avai
-		//cout << "avai on node "<< idx_node<< ":" << endl;
+		//cout << "avai on node "<< idx_node<< ":" << "\n";
 		//for(int i=0; i<avai_this_node.size(); i++)
         //    dout(cout << avai_this_node[i] << " ");
-		//cout << endl;
+		//cout << "\n";
 
 		// check tot_N_at_szgroup
-		//cout << "tot_N_at_szgroup on node "<< idx_node<< ":" << endl;
+		//cout << "tot_N_at_szgroup on node "<< idx_node<< ":" << "\n";
 		//for(int i=0; i<tot_N_at_szgroup.size(); i++)
         //    dout(cout << tot_N_at_szgroup[i] << " ");
-		//cout << endl;
+		//cout << "\n";
 
 		// distribute on node applying avai
 		vector <double> N_at_szgroup;
@@ -1201,21 +1206,21 @@ void Population::distribute_N()
         {
             double a_N = tot_N_at_szgroup.at(i) * avai_this_node.at(i);
             if (a_N < 0) {
-                cout << "A negative a_N in distribute_N() detected for this pop " << this->get_name() << "!...set to 0" << endl;
-                cout << " check the avai_this_node.at(sz) value. currently: " << avai_this_node.at(i) << endl;
-                cout << endl;
+                cout << "A negative a_N in distribute_N() detected for this pop " << this->get_name() << "!...set to 0" << "\n";
+                cout << " check the avai_this_node.at(sz) value. currently: " << avai_this_node.at(i) << "\n";
+                cout << "\n";
             }
             N_at_szgroup.push_back(a_N);
         }
-        /*dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl;
+        /*dout(cout << "N at szgroup on the node "<< idx_node<< ":" << "\n";
         for(int i=0; i<N_at_szgroup.size(); i++)
            cout << N_at_szgroup[i] << " ";
-           cout << endl
+           cout << "\n"
          );
          */
 
 		// set the new Ns for this specific pop in the multimap of this node
-        //dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
+        //dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << "\n");
         list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
        // if(this->get_name()==1) for(int i=0; i<N_at_szgroup.size(); i++)
@@ -1226,8 +1231,8 @@ void Population::distribute_N()
      //if(this->get_name()==1)  for(int i=0; i<all_N_at_szgroup.size(); i++)
      //    cout << "in distribute_N: all_N_at_szgroup["<< i <<"] is " << all_N_at_szgroup[i];
 
-    dout(cout<< "END distribute_N()"<< endl);
-    dout(cout<< endl);
+    dout(cout<< "END distribute_N()"<< "\n");
+    dout(cout<< "\n");
 
 }
 
@@ -1235,8 +1240,8 @@ void Population::distribute_N()
 void Population::aggregate_N()
 {
 
-    dout(cout<< endl);
-    dout(cout<< "BEGIN aggregate_N(): aggregate from nodes for the pop " << name << endl);
+    dout(cout<< "\n");
+    dout(cout<< "BEGIN aggregate_N(): aggregate from nodes for the pop " << name << "\n");
 
 	// temporary objects
 	vector<double> agg_Ns_at_szgroup;
@@ -1271,30 +1276,30 @@ void Population::aggregate_N()
 	// check
 	//if(this->get_name()==10)
 	//{
-    //    dout(cout << "in aggregate(): tot N at szgroup for the pop "<< this->get_name() << " after aggregation:"  << endl);
+    //    dout(cout << "in aggregate(): tot N at szgroup for the pop "<< this->get_name() << " after aggregation:"  << "\n");
 	//    for(int i=0; i<tot_N_at_szgroup.size(); i++)
 	//    {
     //        dout(cout << tot_N_at_szgroup[i] << " ");
 	//    }
 	//}
 
-    dout(cout << endl);
+    dout(cout << "\n");
 
-    dout(cout<< "END aggregate_N()" << endl);
-    dout(cout<< endl);
+    dout(cout<< "END aggregate_N()" << "\n");
+    dout(cout<< "\n");
 }
 
 
 void Population::aggregate_N_display_for_check()
 { 
-    cout << "in aggregate_N_display_for_check(): tot N at szgroup for the pop " << this->get_name() << " before aggregation:" << endl;
+    cout << "in aggregate_N_display_for_check(): tot N at szgroup for the pop " << this->get_name() << " before aggregation:" << "\n";
     for (int i = 0; i < tot_N_at_szgroup.size(); i++)
     {
         cout << tot_N_at_szgroup[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 
-    cout << "in aggregate_N_display_for_check(): SSB at szgroup for the pop " << this->get_name() << " before aggregation:" << endl;
+    cout << "in aggregate_N_display_for_check(): SSB at szgroup for the pop " << this->get_name() << " before aggregation:" << "\n";
     vector <double> SSB_vect_before(tot_N_at_szgroup.size(), 0.0);
     for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
     {
@@ -1305,25 +1310,25 @@ void Population::aggregate_N_display_for_check()
         cout << sz << ": "<< SSB_vect_before.at(sz);
     }
     // check numbers
-    cout << endl;
-    cout << "given a_tot_N_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given a_tot_N_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << tot_N_at_szgroup.at(sz) << " ";
     }
-    cout << endl;
-    cout << "given maturity_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given maturity_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << this->get_maturity_at_szgroup().at(sz) << " ";
     }
-    cout << endl;
-    cout << "given weight_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given weight_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << this->get_weight_at_szgroup().at(sz) << "kg ";
     }
-    cout << endl;
+    cout << "\n";
     double tot_SSB_kg_before_agg = 0;
     double tot_N_before_agg = 0;
     for (int sz = 0; sz < SSB_vect_before.size(); sz++)
@@ -1331,8 +1336,8 @@ void Population::aggregate_N_display_for_check()
         tot_SSB_kg_before_agg += SSB_vect_before.at(sz);
         tot_N_before_agg += tot_N_at_szgroup.at(sz);
     }
-    cout << "===>tot_SSB_before_agg is " << tot_SSB_kg_before_agg/1e3 << " tonnes" << endl;
-    cout << "===>tot_N_before_agg is " << tot_N_before_agg / 1e3 << " thousands" << endl;
+    cout << "===>tot_SSB_before_agg is " << tot_SSB_kg_before_agg/1e3 << " tonnes" << "\n";
+    cout << "===>tot_N_before_agg is " << tot_N_before_agg / 1e3 << " thousands" << "\n";
 
 
 
@@ -1363,7 +1368,7 @@ void Population::aggregate_N_display_for_check()
     }							 // end for-loop over nodes
 
     // check
-    cout << "in aggregate_N_display_for_check(): SSB at szgroup for the pop " << this->get_name() << " if we were aggregating over nodes now:" << endl;
+    cout << "in aggregate_N_display_for_check(): SSB at szgroup for the pop " << this->get_name() << " if we were aggregating over nodes now:" << "\n";
     vector <double> SSB_vect(agg_Ns_at_szgroup.size(), 0.0);
     for (unsigned int sz = 0; sz < agg_Ns_at_szgroup.size(); sz++)
     {
@@ -1374,25 +1379,25 @@ void Population::aggregate_N_display_for_check()
         cout << sz << ": " << SSB_vect.at(sz);
     }
     // check numbers
-    cout << endl;
-    cout << "given a_tot_N_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given a_tot_N_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < agg_Ns_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << agg_Ns_at_szgroup.at(sz) << " ";
     }
-    cout << endl;
-    cout << "given maturity_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given maturity_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < agg_Ns_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << this->get_maturity_at_szgroup().at(sz) << " ";
     }
-    cout << endl;
-    cout << "given weight_at_szgroup: " << endl;
+    cout << "\n";
+    cout << "given weight_at_szgroup: " << "\n";
     for (unsigned int sz = 0; sz < agg_Ns_at_szgroup.size(); sz++)
     {
         cout << "sz" << sz << ": " << this->get_weight_at_szgroup().at(sz) << "kg ";
     }
-    cout << endl;
+    cout << "\n";
     double tot_SSB_kg_after_agg = 0;
     double tot_N_after_agg = 0;
     for (int sz = 0; sz < SSB_vect.size(); sz++)
@@ -1400,14 +1405,14 @@ void Population::aggregate_N_display_for_check()
         tot_SSB_kg_after_agg += SSB_vect.at(sz);
         tot_N_after_agg += agg_Ns_at_szgroup.at(sz);
     }
-    cout << "===>tot_SSB_after_agg is " << tot_SSB_kg_after_agg/ 1e3 << " tonnes" << endl;
-    cout << "===>tot_N_after_agg is " << tot_N_after_agg / 1e3 << " thousands" << endl;
+    cout << "===>tot_SSB_after_agg is " << tot_SSB_kg_after_agg/ 1e3 << " tonnes" << "\n";
+    cout << "===>tot_N_after_agg is " << tot_N_after_agg / 1e3 << " thousands" << "\n";
 
 
     
 
 
-    cout << endl;
+    cout << "\n";
 
 }
 
@@ -1416,12 +1421,11 @@ void Population::aggregate_N_display_for_check()
 
 void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 {
-
-   cout << "start diffusion for this pop...." << endl;
+   cout << "start diffusion for this pop...." << "\n";
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
     vector<types::NodeId> list_of_nodes_idx;
-    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
+    std::shuffle (list_of_nodes.begin(), list_of_nodes.end(), g);
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
@@ -1492,7 +1496,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
       } // node by node
 
-  cout << "stop diffusion for this pop...." << endl;
+  cout << "stop diffusion for this pop...." << "\n";
 }
 
 
@@ -1502,7 +1506,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 void Population::do_growth(int is_stochastic)
 {
-    dout(cout << "BEGIN do_growth() "  << endl );
+    dout(cout << "BEGIN do_growth() "  << "\n" );
 
 //	int namepop = this->get_name();
 
@@ -1512,7 +1516,7 @@ void Population::do_growth(int is_stochastic)
     double growth_error;
     if(is_stochastic)
     {
-        //cout << "before adding norm error on growth matrix:" << endl;
+        //cout << "before adding norm error on growth matrix:" << "\n";
 
         for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
         {
@@ -1520,10 +1524,10 @@ void Population::do_growth(int is_stochastic)
             {
                 //std::cout << growth_transition_matrix[i][j] << " ";
             }
-            //std::cout << std::endl;
+            //std::cout << "\n";
         }
  
-        //cout << "after adding norm error on growth matrix:" << endl;
+        //cout << "after adding norm error on growth matrix:" << "\n";
 
         double sd = 0.1;
         vector<double> marginal_col_sums(growth_transition_matrix[0].size(), 0);
@@ -1536,10 +1540,10 @@ void Population::do_growth(int is_stochastic)
                 marginal_col_sums.at(j) += growth_transition_matrix[i][j];
                 //std::cout << growth_transition_matrix[i][j] << " ";
             }
-            //std::cout << std::endl;
+            //std::cout << "\n";
         }
  
-        //cout << "then normalize it to sum to 1 in columns:" << endl;
+        //cout << "then normalize it to sum to 1 in columns:" << "\n";
 
         for (unsigned int i = 0; i < growth_transition_matrix.size(); i++)
         {
@@ -1548,12 +1552,12 @@ void Population::do_growth(int is_stochastic)
                 if(marginal_col_sums.at(j)>0) growth_transition_matrix[i][j] /= marginal_col_sums.at(j);
                 //std::cout << growth_transition_matrix[i][j] << " ";
             }
-            //std::cout << std::endl;
+            //std::cout << "\n";
         }
 
     }
 
-    cout << endl;
+    cout << "\n";
 
 	// size transition matrix:
 	// row i: output
@@ -1568,10 +1572,10 @@ void Population::do_growth(int is_stochastic)
 		{
 
 			//if(namepop==12) {
-            //     dout(cout << "i is "<< i  << endl);
-            //     dout(cout << "j is "<< j  << endl);
-            //     dout(cout << "growth[i,j] is "<< growth_transition_matrix[i][j]  << endl);
-            //     dout(cout << "tot_N_at_szgroup[i]  is "<< tot_N_at_szgroup[i]  << endl);
+            //     dout(cout << "i is "<< i  << "\n");
+            //     dout(cout << "j is "<< j  << "\n");
+            //     dout(cout << "growth[i,j] is "<< growth_transition_matrix[i][j]  << "\n");
+            //     dout(cout << "tot_N_at_szgroup[i]  is "<< tot_N_at_szgroup[i]  << "\n");
 			//}
 			new_tot_N_at_szgroup[i] +=  growth_transition_matrix[i][j] * tot_N_at_szgroup[j] ;
 		}
@@ -1582,21 +1586,21 @@ void Population::do_growth(int is_stochastic)
 
    
     //check
-    //cout << "Check the Ns:" << endl;
+    //cout << "Check the Ns:" << "\n";
     //for (unsigned int i = 0; i < new_tot_N_at_szgroup.size(); i++)
     //{
     //    std::cout << new_tot_N_at_szgroup[i] << " ";
     //}
-    //std::cout << std::endl;
+    //std::cout << "\n";
 
 
-    dout(cout << "END do_growth() "  << endl );
+    dout(cout << "END do_growth() "  << "\n" );
 }
 
 
 void Population::apply_overall_migration_fluxes(vector<Population* >& populations)
 {
-    dout(cout << "BEGIN overall_migration_fluxes() "  << endl );
+    dout(cout << "BEGIN overall_migration_fluxes() "  << "\n" );
     // caution: the current implementation is biased by the reading order of pops...
 
     multimap <int, double> migration_fluxes= this->get_overall_migration_fluxes();
@@ -1615,10 +1619,10 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
           double flux_prop =pos->second;
 
 
- cout << "departure pop is " << this->get_name() << endl;
- cout << "arrival_pop is " << arrival_pop << endl;
- cout << "sz is " << sz << endl;
- cout << "flux_prop is " << flux_prop << endl;
+ cout << "departure pop is " << this->get_name() << "\n";
+ cout << "arrival_pop is " << arrival_pop << "\n";
+ cout << "sz is " << sz << "\n";
+ cout << "flux_prop is " << flux_prop << "\n";
 
            // input
           vector<double> N_at_szgroup_this_pop = this->get_tot_N_at_szgroup();
@@ -1628,10 +1632,10 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
 
           if((sz+1)>=N_at_szgroup_this_pop.size()) sz = 0; // reinit because next pop
 
- cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
- cout << " before: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+ cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << "\n";
+ cout << " before: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << "\n";
 
- cout << " before: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;
+ cout << " before: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << "\n";
 
  // impact the Ns from emigration/immigration specified in the multimap
           double tot_before_in_arr = N_at_szgroup_arr_pop.at(sz);
@@ -1642,15 +1646,15 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
           N_at_szgroup_arr_pop.at(sz)  = tot_now_in_arr;
           N_at_szgroup_this_pop.at(sz) = tot_now_in_dep;
 
- cout << " after: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
- cout << " after: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+ cout << " after: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << "\n";
+ cout << " after: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << "\n";
 
 
           // do a weighted average of the weight
           if(tot_now_in_arr!=0) weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
                                                     (tot_before_in_arr/tot_now_in_arr)* weight_at_szgroup_this_pop.at(sz);
 
-cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;
+cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << "\n";
 
           // output this pop
           this->set_tot_N_at_szgroup(N_at_szgroup_this_pop);
@@ -1667,20 +1671,20 @@ cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr
        }
       } else{
 
-       dout(cout << "no migration for this pop" << this->get_name()  << endl );
+       dout(cout << "no migration for this pop" << this->get_name()  << "\n" );
 
 
     }
 
 
-    dout(cout << "END overall_migration_fluxes() "  << endl );
+    dout(cout << "END overall_migration_fluxes() "  << "\n" );
 }
 
 
 
 void Population::add_recruits_from_SR()
 {
-    dout(cout << "BEGIN add_recruits() form SR "  << endl );
+    dout(cout << "BEGIN add_recruits() form SR "  << "\n" );
 
 	// compute SSB
     // first of all, get the true N
@@ -1693,17 +1697,17 @@ void Population::add_recruits_from_SR()
 
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
-    dout(cout << "pop is " << this->get_name()  << " " << endl );
+    dout(cout << "pop is " << this->get_name()  << " " << "\n" );
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
        // reminder: tot_N_at_szgroup are in thousand in input file
        //  but in absolute numbers here because have been multiplied by 1000 when importing
        SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
-       dout(cout << "szgroup is " << i  << " " << endl );
-       cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
-       cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
-       cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
+       dout(cout << "szgroup is " << i  << " " << "\n" );
+       cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << "\n" ;
+       cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << "\n" ;
+       cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << "\n" ;
 
     }
 
@@ -1716,8 +1720,8 @@ void Population::add_recruits_from_SR()
 		SSB +=  SSB_per_szgroup.at(i);
 	}
     SSB= SSB/1000;			 //
-    cout << "SSB is " << SSB  << " tons" << endl ;
-    //dout(cout << "SSB is " << SSB  << " tons" << endl );
+    cout << "SSB is " << SSB  << " tons" << "\n" ;
+    //dout(cout << "SSB is " << SSB  << " tons" << "\n" );
 
 	// compute R from SSB-R relationship
 	// (caution: age dependent, e.g. SSB-R for cod 2532 is usually simulated for age2)...
@@ -1726,19 +1730,19 @@ void Population::add_recruits_from_SR()
     if (param_sr[3] < 1) 
     {
         recruits = (param_sr[0] * SSB * exp(-param_sr[1] * SSB)) * 1000;
-        cout << "pop" << this->get_name() << ", Ricker model with param alpha "<< param_sr[0]  << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+        cout << "pop" << this->get_name() << ", Ricker model with param alpha "<< param_sr[0]  << " and beta " << param_sr[1] << ": New recruits are " << recruits << "\n";
     }
     // B&H ((alpha*ssb)/(1+beta*ssb)):
     if (param_sr[3] == 1)
     {
         recruits = (param_sr[0] * SSB) / (1 + param_sr[1] * SSB) * 1000;
-        cout << "pop" << this->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << endl;
+        cout << "pop" << this->get_name() << ", B&H model with param alpha " << param_sr[0] << " and beta " << param_sr[1] << ": New recruits are " << recruits << "\n";
     }
     // fixed recruits:
     if (param_sr[3] == 2) 
     {
         recruits = (param_sr[0]) * 1000;
-        cout << "pop" << this->get_name() <<  ", Fixed recruits model: New recruits are " << recruits << endl;
+        cout << "pop" << this->get_name() <<  ", Fixed recruits model: New recruits are " << recruits << "\n";
     }
     
     // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
@@ -1748,8 +1752,8 @@ void Population::add_recruits_from_SR()
 	double rec_error=0;
 	rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
 	recruits= recruits * rec_error;
-    //dout(cout << "stochastic recruits are " << recruits  << endl );
-    cout << "stochastic recruits are " << recruits  << endl ;
+    //dout(cout << "stochastic recruits are " << recruits  << "\n" );
+    cout << "stochastic recruits are " << recruits  << "\n" ;
 
     // init
     vector <double> new_tot_N_at_szgroup (SSB_per_szgroup.size());
@@ -1759,8 +1763,8 @@ void Population::add_recruits_from_SR()
     for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
 	{
         new_tot_N_at_szgroup[i] =  a_tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp " << endl ;
-        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp " << "\n" ;
+        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << "\n" );
     }
 
 	//if(this->get_name()==29){
@@ -1774,12 +1778,12 @@ void Population::add_recruits_from_SR()
 	// redistribute on nodes
 	//distribute_N();
 
-    dout(cout << "END add_recruits() "  << endl );
+    dout(cout << "END add_recruits() "  << "\n" );
 }
 
 void Population::add_recruits_from_a_fixed_number()
 {
-    dout(cout << "BEGIN add_recruits() form SR "  << endl );
+    dout(cout << "BEGIN add_recruits() form SR "  << "\n" );
 
     // first of all, get the true N
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
@@ -1795,7 +1799,7 @@ void Population::add_recruits_from_a_fixed_number()
 
 
     double recruits =param_sr[0];
-    dout(cout << "New recruits are " << recruits  << endl );
+    dout(cout << "New recruits are " << recruits  << "\n" );
 
     // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
     // TO DO: use a stock-specific input there...
@@ -1804,15 +1808,15 @@ void Population::add_recruits_from_a_fixed_number()
     double rec_error=0;
     rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
     recruits= recruits * rec_error;
-    //dout(cout << "stochastic recruits are " << recruits  << endl );
-    cout << "stochastic recruits are " << recruits  << endl ;
+    //dout(cout << "stochastic recruits are " << recruits  << "\n" );
+    cout << "stochastic recruits are " << recruits  << "\n" ;
 
     // ...then distribute among szgroup
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
         new_tot_N_at_szgroup[i] =  a_tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << a_tot_N_at_szgroup.at(i) << endl ;
-        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << a_tot_N_at_szgroup.at(i) << "\n" ;
+        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << "\n" );
     }
 
     //if(this->get_name()==29){
@@ -1826,13 +1830,13 @@ void Population::add_recruits_from_a_fixed_number()
     // redistribute on nodes
     //distribute_N();
 
-    dout(cout << "END add_recruits() "  << endl );
+    dout(cout << "END add_recruits() "  << "\n" );
 }
 
 
 void Population::add_recruits_from_eggs()
 {
-    dout(cout << "BEGIN add_recruits() from eggs "  << endl );
+    dout(cout << "BEGIN add_recruits() from eggs "  << "\n" );
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -1862,13 +1866,13 @@ void Population::add_recruits_from_eggs()
 	// redistribute on nodes
 	//distribute_N();
 
-    dout(cout << "END add_recruits() "  << endl);
+    dout(cout << "END add_recruits() "  << "\n");
 }
 
 
 void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 {
-    dout(cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << endl) ;
+    dout(cout << "BEGIN compute_tot_N_and_F_and_W_at_age() for pop " << this->get_name()  << "\n") ;
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
     vector <double> tot_F_at_age_running_average = get_tot_F_at_age_running_average();
@@ -1917,13 +1921,13 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 			/*
 			if(this->get_name()==10 && sz<6)
 			{
-				dout << "pop "<< this->get_name()  << endl;
-				dout << "percent_szgroup_per_age_matrix.size() "<< percent_szgroup_per_age_matrix.size()  << endl;
-				dout << "a is "<< a  << endl;
-				dout << "sz is "<< sz  << endl;
-				dout << "percent_szgroup_per_age_matrix[sz,a] is "<< percent_szgroup_per_age_matrix[sz][a]  << endl;
-				dout << "tot_N_at_szgroup[sz]  is "<< tot_N_at_szgroup[sz]  << endl;
-				dout << "tot_N_at_szgroup_month_minus_1[sz]  is "<< tot_N_at_szgroup_month_minus_1[sz] << endl;
+				dout << "pop "<< this->get_name()  << "\n";
+				dout << "percent_szgroup_per_age_matrix.size() "<< percent_szgroup_per_age_matrix.size()  << "\n";
+				dout << "a is "<< a  << "\n";
+				dout << "sz is "<< sz  << "\n";
+				dout << "percent_szgroup_per_age_matrix[sz,a] is "<< percent_szgroup_per_age_matrix[sz][a]  << "\n";
+				dout << "tot_N_at_szgroup[sz]  is "<< tot_N_at_szgroup[sz]  << "\n";
+				dout << "tot_N_at_szgroup_month_minus_1[sz]  is "<< tot_N_at_szgroup_month_minus_1[sz] << "\n";
 			}
 			*/
 
@@ -1949,12 +1953,12 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 			/*
 			if(this->get_name()==10 && sz<6)
 			{
-				dout << "pop "<< this->get_name()  << endl;
-				dout << "percent_age_per_szgroup_matrix.size() "<< percent_age_per_szgroup_matrix.size()  << endl;
-                dout(cout << "a is "<< a  << endl);
-                dout(cout << "sz is "<< sz  << endl);
-                dout(cout << "percent_age_per_szgroup_matrix[sz,a] is "<< percent_age_per_szgroup_matrix[sz][a]  << endl);
-                dout(cout << "weight_at_szgroup[sz]  is "<< weight_at_szgroup[sz]  << endl);
+				dout << "pop "<< this->get_name()  << "\n";
+				dout << "percent_age_per_szgroup_matrix.size() "<< percent_age_per_szgroup_matrix.size()  << "\n";
+                dout(cout << "a is "<< a  << "\n");
+                dout(cout << "sz is "<< sz  << "\n");
+                dout(cout << "percent_age_per_szgroup_matrix[sz,a] is "<< percent_age_per_szgroup_matrix[sz][a]  << "\n");
+                dout(cout << "weight_at_szgroup[sz]  is "<< weight_at_szgroup[sz]  << "\n");
 			}
 			*/
             //tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
@@ -1966,7 +1970,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 		/*
 		if(this->get_name()==10)
 		{
-            dout(cout << "tot_W_at_age[a]  is "<< tot_W_at_age[a]  << endl);
+            dout(cout << "tot_W_at_age[a]  is "<< tot_W_at_age[a]  << "\n");
 		}
 		*/
 	}
@@ -2010,16 +2014,16 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
         if(tot_F_at_age_running_average.at(a)<0) tot_F_at_age_running_average.at(a)  =0.0;
 
 		// => cumul over months
-        dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
-        dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
-        dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
-        dout(cout << "tot_F_at_age_running_average[a]  is "<< tot_F_at_age_running_average[a]  << endl);
-        //dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
+        dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << "\n");
+        dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << "\n");
+        dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << "\n");
+        dout(cout << "tot_F_at_age_running_average[a]  is "<< tot_F_at_age_running_average[a]  << "\n");
+        //dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << "\n");
 
        // if(this->get_name()==1){
-       //     cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
-       //     cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
-       //     cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
+       //     cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << "\n";
+       //     cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << "\n";
+       //     cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << "\n";
        // }
 
 	}
@@ -2035,7 +2039,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 	this->set_tot_W_at_age(tot_W_at_age);
     this->set_tot_Mat_at_age(tot_Mat_at_age);
 
-    dout(cout << "END compute_tot_N_and_F_and_W_at_age() "  << endl);
+    dout(cout << "END compute_tot_N_and_F_and_W_at_age() "  << "\n");
 
 }
 
@@ -2044,7 +2048,7 @@ void Population::compute_tot_N_and_F_and_W_at_age(int a_month_i)
 
 void Population::compute_tot_M_at_age()
 {
-    dout(cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << endl);
+    dout(cout << "BEGIN compute_tot_M_at_age() for pop " << this->get_name()  << "\n");
 
     vector <double> tot_M_at_age = this->get_tot_M_at_age();
     vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
@@ -2059,20 +2063,20 @@ void Population::compute_tot_M_at_age()
     {
         for(int a = 0; a < nbages; a++)
         {
-//if(this->get_name() ==2)    cout << "FOR sz  " << sz << " and age " << a  << endl;
-//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup[sz]   " << a_tot_N_at_szgroup[sz]   << endl;
+//if(this->get_name() ==2)    cout << "FOR sz  " << sz << " and age " << a  << "\n";
+//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup[sz]   " << a_tot_N_at_szgroup[sz]   << "\n";
                   tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup[sz] ;
-//if(this->get_name() ==2)      cout << "FOR2 sz  " << sz << " and age " << a  << endl;
-//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup_before_applying_M[sz]   " << a_tot_N_at_szgroup_before_applying_M[sz]   << endl;
+//if(this->get_name() ==2)      cout << "FOR2 sz  " << sz << " and age " << a  << "\n";
+//if(this->get_name() ==2)      cout << "a_tot_N_at_szgroup_before_applying_M[sz]   " << a_tot_N_at_szgroup_before_applying_M[sz]   << "\n";
                   tot_N_at_age_before_M[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_before_applying_M[sz] ;
         }
     }
 
-//if(this->get_name() ==2)      cout << "comput the log " << endl;
+//if(this->get_name() ==2)      cout << "comput the log " << "\n";
 
      for(unsigned int a = 0; a < tot_M_at_age.size(); a++)
     {
-//if(this->get_name() ==2)        cout << "FOR age " << a  << endl;
+//if(this->get_name() ==2)        cout << "FOR age " << a  << "\n";
 
          if(tot_N_at_age_before_M.at(a) >0 && tot_N_at_age.at(a)>0)
         {
@@ -2082,9 +2086,9 @@ void Population::compute_tot_M_at_age()
         {
             tot_M_at_age.at(a)+= 0;
         }
-//if(this->get_name() ==2)  cout << " tot_M_at_age.at(a) is " <<  tot_M_at_age.at(a)  << endl;
+//if(this->get_name() ==2)  cout << " tot_M_at_age.at(a) is " <<  tot_M_at_age.at(a)  << "\n";
     }
-//if(this->get_name() ==2)    cout << "set the new M at age " << endl;
+//if(this->get_name() ==2)    cout << "set the new M at age " << "\n";
 
    this->set_tot_M_at_age(tot_M_at_age);
 
@@ -2093,7 +2097,7 @@ void Population::compute_tot_M_at_age()
      this->set_perceived_tot_N_at_age(tot_N_at_age);
      this->set_tot_N_at_age(tot_N_at_age);
 
-   dout(cout << "END compute_tot_M_at_age() "  << endl);
+   dout(cout << "END compute_tot_M_at_age() "  << "\n");
 }
 
 
@@ -2136,19 +2140,19 @@ void Population::clear_tot_D_at_szgroup()
 
 void Population::compute_fbar()
 {
-    dout(cout<< "compute fbar for pop..." << this->get_name() << endl);
+    dout(cout<< "compute fbar for pop..." << this->get_name() << "\n");
 
     vector <double> a_tot_F_at_age_1  = this->get_tot_F_at_age_running_average(); // perceived
     vector <double> a_tot_F_at_age_2 = this->get_tot_F_at_age();
 
 
-    dout(cout<< "compute fbar..." << endl);
+    dout(cout<< "compute fbar..." << "\n");
 	double fbar=0;
 	int age_min =this->fbar_ages_min_max.at(0);
 	int age_max =this->fbar_ages_min_max.at(1);
     if(age_max==0 || (age_max < age_min))
 	{
-        dout(cout << "age_max at 0 for this pop??" << endl);
+        dout(cout << "age_max at 0 for this pop??" << "\n");
 		age_max=5;
 	}
 
@@ -2166,16 +2170,16 @@ void Population::compute_fbar()
         fbar_type2 += a_tot_F_at_age_2[a];
     }
 								 // then do the average...
-    dout(cout<< "sum fbar..." << fbar << endl);
+    dout(cout<< "sum fbar..." << fbar << "\n");
     fbar_type1= fbar_type1 /((fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0)) +1);
     this->set_fbar_type1(fbar_type1);
 
     fbar_type2 = fbar_type2 / ((fbar_ages_min_max.at(1) - fbar_ages_min_max.at(0)) + 1);
     this->set_fbar_type2(fbar_type2);
 
-    dout(cout<< "fbar type 1..." << fbar_type1 << endl);
-    dout(cout << "fbar type 2..." << fbar_type2 << endl);
-    dout(cout<< "compute fbar...ok" << endl);
+    dout(cout<< "fbar type 1..." << fbar_type1 << "\n");
+    dout(cout << "fbar type 2..." << fbar_type2 << "\n");
+    dout(cout<< "compute fbar...ok" << "\n");
   
 }
 
@@ -2186,7 +2190,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
-    dout(cout << "compute SSB given pop is " << this->get_name()  << " " << endl);
+    dout(cout << "compute SSB given pop is " << this->get_name()  << " " << "\n");
     for (unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -2202,19 +2206,19 @@ vector<double> Population::compute_SSB()
     {
         cout << "sz" << i << " is " << a_tot_N_at_szgroup.at(i) << " ";
     }
-    cout << endl;
+    cout << "\n";
     cout << "given maturity_at_szgroup; " ;
     for (unsigned int i = 0; i < maturity_at_szgroup.size(); i++)
     {
         cout << "sz" << i << " is " << maturity_at_szgroup.at(i) << " ";
     }
-    cout << endl;
+    cout << "\n";
     cout << "given weight_at_szgroup; ";
     for (unsigned int i = 0; i < weight_at_szgroup.size(); i++)
     {
         cout << "sz" << i << " is " << weight_at_szgroup.at(i) << "kg ";
     }
-    cout << endl;
+    cout << "\n";
     */
     
 
@@ -2244,7 +2248,7 @@ double Population::compute_proportion_mature_fish()
 
 void Population::apply_natural_mortality()
 {
-    dout(cout << "BEGIN apply_natural_mortality() "  << endl);
+    dout(cout << "BEGIN apply_natural_mortality() "  << "\n");
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -2267,7 +2271,7 @@ void Population::apply_natural_mortality()
 	// redistribute on nodes
 	//distribute_N();
 
-    dout(cout << "END apply_natural_mortality() "  << endl);
+    dout(cout << "END apply_natural_mortality() "  << "\n");
 
 }
 
@@ -2285,7 +2289,7 @@ void Population::export_popdyn_N(ofstream& popdyn_N, int tstep)
 								 // output in thousands of individuals
 		popdyn_N  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
 	}
-	popdyn_N << " " <<  endl;
+	popdyn_N << " " <<  "\n";
 }
 
 
@@ -2301,7 +2305,7 @@ void Population::export_popdyn_F(ofstream& popdyn_F, int tstep)
 								 // output F in CUMUL over months, caution!
 		popdyn_F  << tot_F_at_age.at(a)  << " " ;
 	}
-	popdyn_F << " " <<  endl;
+	popdyn_F << " " <<  "\n";
 }
 
 void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
@@ -2316,7 +2320,7 @@ void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
                                  // output SSB
         popdyn_SSB  << SSB_at_szgroup.at(sz)  << " " ;
     }
-    popdyn_SSB << " " <<  endl;
+    popdyn_SSB << " " <<  "\n";
 }
 
 
@@ -2324,7 +2328,7 @@ void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
 void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce)
 {
 
-    dout(cout << "begin export_popdyn_annual_indic..."<< endl);
+    dout(cout << "begin export_popdyn_annual_indic..."<< "\n");
 
     popdyn_annual_indic << setprecision(4) << fixed;
 	// tstep / pop / F at szgroup / tot landings on pop i.e. including oth landings as well
@@ -2335,7 +2339,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 								 // output the annual multiplier
 	popdyn_annual_indic  << oth_mult << " " << cpue_mult << " ";
 
-    dout(cout<< "when exporting, get fbar for pop..." << this->get_name() << endl);
+    dout(cout<< "when exporting, get fbar for pop..." << this->get_name() << "\n");
     double fbar_type1_py= this->get_fbar_type1();
 	popdyn_annual_indic  << fbar_type1_py << " ";
     double fbar_type2_py = this->get_fbar_type2();
@@ -2371,7 +2375,7 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
     popdyn_annual_indic  << tot_SSB << " ";
 
 
-    dout(cout << "retrieve tacs if any..."<< endl);
+    dout(cout << "retrieve tacs if any..."<< "\n");
 
      double last_year_tac=0.0;
      if(dyn_alloc_sce.option(Options::TACs))
@@ -2408,8 +2412,8 @@ void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int t
 		popdyn_annual_indic  << M_at_age.at(a)  << " " ;
 	}
 
-	popdyn_annual_indic << " " <<  endl;
+	popdyn_annual_indic << " " <<  "\n";
 
-    dout(cout << "export_popdyn_annual_indic...ok"<< endl);
+    dout(cout << "export_popdyn_annual_indic...ok"<< "\n");
 
 }

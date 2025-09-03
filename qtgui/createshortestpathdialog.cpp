@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QIntValidator>
+#include <QRegularExpression>
 
 CreateShortestPathDialog::CreateShortestPathDialog(QWidget *parent) :
     QDialog(parent),
@@ -145,14 +146,14 @@ void CreateShortestPathDialog::on_ok_clicked()
 
     if (!isAllNodesAreRelevantChecked()) {
         QString refpath = ui->relevantFolder->text();
-        QRegExp regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+        QRegularExpression regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+        auto match = regexp.match(refpath);
 
-        if (regexp.indexIn(refpath) == -1) {
+        if (!match.hasMatch()) {
             QMessageBox::warning(this, tr("Relevant Nodes template check failed"),
                                  tr("The relevant nodes file name should fit the template: vesselsspe_XXX_YYY.dat.\n"
                                     "Please select a compliant file instead."));
             return;
-
         }
 
     }

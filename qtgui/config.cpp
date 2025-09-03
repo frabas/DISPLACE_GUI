@@ -172,50 +172,50 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
 
     QTextStream stream (&file);
 
-    stream << "# nbpops" << Qt::endl << nbpops << Qt::endl;
+    stream << "# nbpops" << "\n" << nbpops << "\n";
 
-    stream << "# nbbenthospops" << Qt::endl << nbbenthospops << Qt::endl;
+    stream << "# nbbenthospops" << "\n" << nbbenthospops << "\n";
 
-    stream << "# implicit stocks (i.e. with no pop dynamics)" << Qt::endl;
+    stream << "# implicit stocks (i.e. with no pop dynamics)" << "\n";
     foreach (int a, m_implicit_pops)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
     stream << "# calib the other landings per stock (a multiplier for landings other than from the simulated vessels)"
-           << Qt::endl;
+           << "\n";
     foreach (double a, m_calib_oth_landings)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# calib weight-at-szgroup per stock (a multiplier for w)" << Qt::endl;
+    stream << "# calib weight-at-szgroup per stock (a multiplier for w)" << "\n";
     foreach (double a, m_calib_weight_at_szgroup)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# calib the cpue multiplier per stock (a multiplier for w)" << Qt::endl;
+    stream << "# calib the cpue multiplier per stock (a multiplier for w)" << "\n";
     foreach (double a, m_calib_cpue_multiplier)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# Interesting harbours" << Qt::endl;
+    stream << "# Interesting harbours" << "\n";
     for (auto a : m_interesting_harbours)
         stream << a.toIndex() << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# implicit stocks_pops_level2 (...)" << Qt::endl;
+    stream << "# implicit stocks_pops_level2 (...)" << "\n";
     foreach (int a, m_implicit_pops_level2)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# grouped tacs (a group nb for each stock e.g. 1 1 2 2 3 4 if 6 stocks)" << Qt::endl;
+    stream << "# grouped tacs (a group nb for each stock e.g. 1 1 2 2 3 4 if 6 stocks)" << "\n";
     foreach (int a, m_grouped_tacs)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
-    stream << "# nbcp merging index pops (will be used if active Options::lgnbCoupling)" << Qt::endl;
+    stream << "# nbcp merging index pops (will be used if active Options::lgnbCoupling)" << "\n";
     foreach (int a, m_nbcp_coupling_pops)
         stream << a << " ";
-    stream << Qt::endl;
+    stream << "\n";
 
     file.close();
     return true;

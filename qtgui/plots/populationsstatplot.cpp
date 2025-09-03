@@ -240,7 +240,7 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 
     auto dt = db->getPopulationStatData(stattype, aggtype, popid, szid);
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    QVector<double> kd(dt.t.begin(), dt.t.end()), vd(dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }
 
@@ -265,7 +265,7 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
     // y
     auto dt2 = db->getPopulationStatData(stattype, aggtype, popid, szid);
 
-    QVector<double> vd1 = QVector<double>::fromStdVector(dt1.v), vd2 = QVector<double>::fromStdVector(dt2.v);
+    QVector<double> vd1(dt1.v.begin(), dt1.v.end()), vd2 (dt2.v.begin(), dt2.v.end());
     return std::make_tuple(vd1, vd2);
 }
 

@@ -72,7 +72,7 @@ bool DtCsvReader::readTree(QTextStream &stream, std::shared_ptr<dtree::DecisionT
             continue;
         }
 
-        QStringList fields = line.split(',', QString::KeepEmptyParts);
+        QStringList fields = line.split(',', Qt::KeepEmptyParts);
         int idx = fields[0].toInt(&ok);
         if (!ok) throw std::invalid_argument("invalid field");
 

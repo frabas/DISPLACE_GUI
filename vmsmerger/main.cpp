@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
     {
         open_file_error(filename_vmslike.c_str());
         //return 1;
-        cout << "error when opening the vmslike file..." << endl;
+        cout << "error when opening the vmslike file..." << "\n";
     int aa;
     cin >> aa;
     }
@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
     {
         open_file_error(filename_catches.c_str());
         //return 1;
-        cout << "error when opening the in_catch file..." << endl;
+        cout << "error when opening the in_catch file..." << "\n";
     int aa;
     cin >> aa;
     }
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 
 
 
-    cout << "Calling VMS merger..." << endl;
+    cout << "Calling VMS merger..." << "\n";
 
 
     //  open the output file
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
                     "catch_szgroup.3" << " " << "catch_szgroup.4" << " " << "catch_szgroup.5" << " " <<
                     "catch_szgroup.6" << " " << "catch_szgroup.7" << " " << "catch_szgroup.8" << " " <<
                      "catch_szgroup.9" << " " << "catch_szgroup.10" << " " << "catch_szgroup.11" << " " <<
-                     "catch_szgroup.12" << " " << "catch_szgroup.13" << endl;
+                     "catch_szgroup.12" << " " << "catch_szgroup.13" << "\n";
 
      int linenum = 0;
      int a_countpings = 1;
@@ -170,14 +170,14 @@ int main(int argc, char* argv[])
 
 
      // a first screening to get count pings
-     cout << "Getting nb of pings per trip between tstart "<< tstart << " and tend " << tend << "..." << endl;
+     cout << "Getting nb of pings per trip between tstart "<< tstart << " and tend " << tend << "..." << "\n";
      std::string line_in_vms;
      while (!std::getline(in_vms, line_in_vms).eof()) { // process line
-       //  cout << "Processing VMS line " << linenum << endl;
+       //  cout << "Processing VMS line " << linenum << "\n";
 
             std::istringstream iss(line_in_vms);
             if (!(iss  >> tstep_file1 >> vname_file1 >> tstep_dep_file1 >> lon >> lat >> course >> cumfuelcons >> state)) {
-                cout << "error at line " << linenum << ": fix the input VMS file for missing or mixed fields!!" << endl;
+                cout << "error at line " << linenum << ": fix the input VMS file for missing or mixed fields!!" << "\n";
                 in_vms.clear();
                 in_vms.seekg(0, ios::beg);
                 break; } // error
@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
              key_file1=vname_file1+"_"+tstep_dep_file1_s;
 
              count_pings[key_file1]+=1;
-             //cout << "key_file1 is " << key_file1 << " then count_pings[key_file1] is "  << count_pings[key_file1] <<  endl;
+             //cout << "key_file1 is " << key_file1 << " then count_pings[key_file1] is "  << count_pings[key_file1] <<  "\n";
             }
         ++linenum;
      }
@@ -200,21 +200,21 @@ int main(int argc, char* argv[])
      in_vms.seekg(0, ios::beg);
 
 
-     cout << "Getting nb of pings per trip...OK" << endl;
+     cout << "Getting nb of pings per trip...OK" << "\n";
 
 
 
      //...then a second screening
     linenum=0;
     std::vector<int> already_found (400000, 0);
-     cout << "Processing VMS line..." << endl;
+     cout << "Processing VMS line..." << "\n";
      while (!std::getline(in_vms, line_in_vms).eof()) { // process line
 
-         cout << "Processing VMS line " << linenum << endl;
+         cout << "Processing VMS line " << linenum << "\n";
 
             std::istringstream iss(line_in_vms);
             if (!(iss  >> tstep_file1 >> vname_file1 >> tstep_dep_file1 >> lon >> lat >> course >> cumfuelcons >> state)) {
-                cout << "error at line " << linenum << ": fix the input VMS file for missing or mixed fields!!" << endl;
+                cout << "error at line " << linenum << ": fix the input VMS file for missing or mixed fields!!" << "\n";
                 in_vms.clear();
                 in_vms.seekg(0, ios::beg);
                 break; } // error
@@ -242,15 +242,15 @@ int main(int argc, char* argv[])
 
             if(state==1) while (!std::getline(in_catches, line_in_catches).eof()  && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position (i.e. state =1)
 
-           //    cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << endl;
+           //    cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << "\n";
             //   if(!already_found[linenum2]){ // do not skip
 
                std::istringstream iss(line_in_catches);
                if (!(iss   >> tstep_file2 >> vname_file2 >> tstep_dep_file2 >> popid >> catch_szgroup0 >> catch_szgroup1 >> catch_szgroup2 >>
                         catch_szgroup3 >> catch_szgroup4 >> catch_szgroup5 >> catch_szgroup6 >> catch_szgroup7 >> catch_szgroup8 >>
                           catch_szgroup9 >> catch_szgroup10 >> catch_szgroup11 >> catch_szgroup12 >> catch_szgroup13)) {
-                                       cout << "error at line " << linenum2 << ": fix the input catch file for missing or mixed fields!!" << endl;
-                                       cout << "tstep_file2 is " << tstep_file2 << ", vname_file2 is " << vname_file2 << endl;
+                                       cout << "error at line " << linenum2 << ": fix the input catch file for missing or mixed fields!!" << "\n";
+                                       cout << "tstep_file2 is " << tstep_file2 << ", vname_file2 is " << vname_file2 << "\n";
                                        in_catches.clear();
                                        in_catches.seekg(0, ios::beg);
                                          break;
@@ -262,7 +262,7 @@ int main(int argc, char* argv[])
                 string tstep_dep_file2_s = out.str();
 
                 key_file2=vname_file2+"_"+tstep_dep_file2_s;
-                //cout << "key_file2 is " << key_file1  << " key_file2 is " << key_file2 << endl;
+                //cout << "key_file2 is " << key_file1  << " key_file2 is " << key_file2 << "\n";
 
                 // populate the merged file hereafter:
                if(key_file1==key_file2){
@@ -276,13 +276,13 @@ int main(int argc, char* argv[])
                             catch_szgroup3/a_countpings << " " << catch_szgroup4/a_countpings << " " << catch_szgroup5/a_countpings << " " <<
                             catch_szgroup6/a_countpings << " " << catch_szgroup7/a_countpings << " " << catch_szgroup8/a_countpings << " " <<
                             catch_szgroup9/a_countpings << " " << catch_szgroup10/a_countpings << " " << catch_szgroup11/a_countpings << " " <<
-                            catch_szgroup12/a_countpings << " " << catch_szgroup13/a_countpings  << endl;
+                            catch_szgroup12/a_countpings << " " << catch_szgroup13/a_countpings  << "\n";
              /* } else{
                     in_catches_temp2  << tstep_file2 << " " << vname_file2 << " " << tstep_dep_file2 << " " << popid << " " <<
                                          catch_szgroup0 << " " << catch_szgroup1 << " " << catch_szgroup2 <<" " <<
                                            catch_szgroup3 << " " << catch_szgroup4 << " " <<  catch_szgroup5 << " " << catch_szgroup6 << " " <<
                                             catch_szgroup7 << " " << catch_szgroup8 << " " <<
-                                             catch_szgroup9 << " " << catch_szgroup10 << " " << catch_szgroup11 << " " << catch_szgroup12 << " " << catch_szgroup13  << endl;
+                                             catch_szgroup9 << " " << catch_szgroup10 << " " << catch_szgroup11 << " " << catch_szgroup12 << " " << catch_szgroup13  << "\n";
              */
                }
            // }
@@ -296,7 +296,7 @@ int main(int argc, char* argv[])
       ++linenum;
      }
     mergedvms.close();
-    cout  << "Process VMS lines..ok " << endl;
+    cout  << "Process VMS lines..ok " << "\n";
 
 
 

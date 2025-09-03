@@ -1,7 +1,10 @@
 #ifndef MEMSTATS_H
 #define MEMSTATS_H
 
+#define _HAS_STD_BYTE 0
 #include <cstddef>
+#undef _HAS_STD_BYTE
+
 
 /** @brief Memory Statistics Collector
  * */

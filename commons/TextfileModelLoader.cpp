@@ -343,14 +343,14 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
 
     // overwriting for GRAPH ENVT FORCING VARIABLES
     if (dyn_pop_sce.option(Options::includeForcingLayers)) {
-        cout << "import environmental variables in one shoot..." << endl;
+        cout << "import environmental variables in one shoot..." << "\n";
         const string separator = ",";
         string filename = p->inputfolder + "/graphsspe/environment_on_coord" + a_graph_s + ".dat";
 
         ifstream is;
         is.open(filename.c_str());
         if (is.fail()) {
-            cout << "Fail to open the file " << filename << endl;
+            cout << "Fail to open the file " << filename << "\n";
             open_file_error(filename);
             return false;
         }
@@ -373,7 +373,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         //"siltfraction" 31 
         //"icesrect" 32
 
-        cout << "environment_on_coord.size() " << environment_on_coord.size() << endl;
+        cout << "environment_on_coord.size() " << environment_on_coord.size() << "\n";
         for (unsigned int n = 0; n < environment_on_coord.size(); n++) {
             graph_coord_x.at(n) = environment_on_coord.at(n).x; // #0
             graph_coord_y.at(n) = environment_on_coord.at(n).y; // #1
@@ -410,16 +410,16 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         }
 
         //check
-        cout << "prior check of environment_on_coord:" << endl;
+        cout << "prior check of environment_on_coord:" << "\n";
         cout << environment_on_coord.at(0).x << " " << environment_on_coord.at(0).y << " " <<
              environment_on_coord.at(0).harb << " " << environment_on_coord.at(0).code_area << " " <<
              environment_on_coord.at(0).landscapes_code << " " << environment_on_coord.at(0).wind << " " <<
              environment_on_coord.at(0).sst << " " << environment_on_coord.at(0).salinity << " " <<
              environment_on_coord.at(0).nitrogen << " " << environment_on_coord.at(0).phosphorus << " " <<
-             environment_on_coord.at(0).oxygen << " " << environment_on_coord.at(0).dissolvedcarbon << " " << endl;
+             environment_on_coord.at(0).oxygen << " " << environment_on_coord.at(0).dissolvedcarbon << " " << "\n";
 
 
-        cout << "posterior check of environment_on_coord:" << endl;
+        cout << "posterior check of environment_on_coord:" << "\n";
         cout << graph_coord_x.at(0) << " " << graph_coord_y.at(0) << " " << graph_coord_harbour.at(0) << " " <<
              graph_point_code_area.at(0) << " " << model().graph_point_code_landscape().at(0) << " "
              << graph_point_wind.at(0)
@@ -429,7 +429,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
              graph_point_Phosphorus.at(0) << " " << graph_point_Oxygen.at(0) << " "
              << graph_point_DissolvedCarbon.at(0)
              << " " <<
-             endl;
+             "\n";
     }
 
     // read harbour specific files
@@ -457,8 +457,8 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
             map<int, double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
             if (a_name != "none" && a_point == nId) {
-                outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
-                cout << "load prices for port " << a_name << " which is point " << a_point << endl;
+                outc(cout << "load prices for port " << a_name << " which is point " << a_point << "\n");
+                cout << "load prices for port " << a_name << " which is point " << a_point << "\n";
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point, quarterString(),
                                                                    fishprices_each_species_per_cat,
                                                                    p->folder_name_parameterization, p->inputfolder);
@@ -516,12 +516,12 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                     outc(cout << pos->first << " " << pos->second);
                 }
 
-                outc(cout << "....OK" << endl);
+                outc(cout << "....OK" << "\n");
             } else {
                 outc(cout << a_point
                           << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)"
-                          << endl);
-                outc(cout << "...then go for the port: " << model().scenario().a_port << " instead" << endl);
+                          << "\n");
+                outc(cout << "...then go for the port: " << model().scenario().a_port << " instead" << "\n");
                 int er2 = read_prices_per_harbour_each_pop_per_cat(model().scenario().a_port, "1",
                                                                    fishprices_each_species_per_cat,
                                                                    p->folder_name_parameterization,
@@ -619,7 +619,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
 
             dout(cout << "Harbour " << nodes[i]->get_name() << " " <<
                       nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
-                      nodes[i]->get_is_harbour() << " " << endl);
+                      nodes[i]->get_is_harbour() << " " << "\n");
         } else {
             nodes[i] = (new Node(types::NodeId(i),
                                  graph_coord_x[i],
@@ -664,7 +664,7 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                                  model().config().nbbenthospops,
                                  NBSZGROUP));
             dout(cout << nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
-                      << " " << nodes[i]->get_code_area() << endl);
+                      << " " << nodes[i]->get_code_area() << "\n");
 
         }
 
@@ -676,19 +676,19 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     for (unsigned int i = 0; i < graph_coord_harbour.size(); i++) {
         dout(cout << graph_coord_harbour[i] << " ");
     }
-    dout(cout << endl);
+    dout(cout << "\n");
 
     // check inputs
     for (unsigned int i = 0; i < graph_point_code_area.size(); i++) {
         outc(cout << graph_point_code_area[i] << " ");
     }
-    outc(cout << endl);
+    outc(cout << "\n");
 
     // fake to check
     types::NodeId from = nodes.at(0)->get_idx_node();
-    cout << "from is " << from.toIndex() << endl;
+    cout << "from is " << from.toIndex() << "\n";
     types::NodeId to = nodes.at(nodes.size()-1)->get_idx_node();
-    cout << "to is " << to.toIndex() << endl;
+    cout << "to is " << to.toIndex() << "\n";
 
 
     model().setNodes(std::move(nodes));
@@ -699,11 +699,11 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
         string filename_graph_test = p->inputfolder + "/graphsspe/graph" + a_graph_s + ".dat";
         GeoGraphLoader loader;
         loader.load(geoGraph, filename_graph, filename_graph_test);
-        cout << "Loading the graph " << filename_graph << " ...ok" << endl;
+        cout << "Loading the graph " << filename_graph << " ...ok" << "\n";
         AStarShortestPathFinder aStarPathFinder;
         list<types::NodeId> path = aStarPathFinder.findShortestPath(geoGraph, from.toIndex(), to.toIndex());
         //for (auto v : path) std::cout << v << "\n";
-        //cout << "Check a shortest path  ...ok" << endl;
+        //cout << "Check a shortest path  ...ok" << "\n";
         model().setGeoGraph(std::move(geoGraph));
 
     } catch (std::exception &x) {

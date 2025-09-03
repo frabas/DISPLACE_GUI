@@ -5919,7 +5919,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     int idx_lowest=0;
     for(unsigned int i=0; i<dist_to_others.size(); i++)
     {
-        if(dist_to_others[i]>1 && dist_to_others[i]<lowest )
+        if(dist_to_others[i]>0 && dist_to_others[i]<lowest )
         {
             lowest =dist_to_others[i];
             idx_lowest =i;
@@ -5937,7 +5937,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         int idx_scdlowest=0;
         for(unsigned int i=0; i<dist_to_others.size(); i++)
         {
-            if(dist_to_others[i]>1 && dist_to_others[i]<scdlowest )
+            if(dist_to_others[i]>0 && dist_to_others[i]<scdlowest )
             {
                 scdlowest =dist_to_others[i];
                 idx_scdlowest =i;
@@ -5979,7 +5979,10 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
         outc(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n");
-       /* if(next_ground.toIndex()==5706){
+        //cout << "from " << from.toIndex() << "\n";
+        //cout << "to next_ground " << next_ground.toIndex() << "\n";
+        //cout << "knowing " << nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+        /* if(next_ground.toIndex()==5706){
             cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n";
             cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
             cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
@@ -7403,6 +7406,10 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
                 this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
+
+        
+        //shall_I_change_to_another_ground = true; /////overruling: CAUTION!
+
 
      unlock();
      }

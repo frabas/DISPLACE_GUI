@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "1.3.8"
+#define MyAppVersion "1.4.0"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -20,9 +20,12 @@
 #if FileExists("local.iss")
 #include "local.iss"
 #else
-#define QT_DIR "C:\Qt\5.15.2\msvc2019_64"
-#define QT_PLUGINS_DIR "C:\Qt\5.15.2\msvc2019_64\plugins"
-#define SDK_DIR "C:\DISPLACE-vcpkg\installed\x64-windows"
+;#define QT_DIR "C:\Qt\5.15.2\msvc2019_64"
+;#define QT_PLUGINS_DIR "C:\Qt\5.15.2\msvc2019_64\plugins"
+;#define SDK_DIR "C:\DISPLACE-vcpkg\installed\x64-windows"
+#define QT_DIR "C:\Qt6\6.8.3\msvc2019_64"
+#define QT_PLUGINS_DIR "C:\Qt6\6.8.3\msvc2022_64\plugins"
+#define SDK_DIR "C:\vcpkg-export-20250826-132117\installed\x64-windows"
 #endif
 
  [Setup]
@@ -90,33 +93,33 @@ Source: "build\x64-Release\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreve
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
-Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_atomic-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_chrono-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_container-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_context-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_coroutine-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_date_time-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_filesystem-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_graph-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_iostreams-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_atomic-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_chrono-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_container-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_context-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_coroutine-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_date_time-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_filesystem-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_graph-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_iostreams-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\boost_locale-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_log_setup-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_log-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99f-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99l-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_c99-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1f-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1l-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_math_tr1-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_prg_exec_monitor-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_program_options-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_random-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_regex-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_system-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_thread-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\boost_serialization-vc142-mt-x64-1_79.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log_setup-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_log-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_c99f-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_c99l-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_c99-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_tr1f-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_tr1l-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_math_tr1-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_prg_exec_monitor-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_program_options-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_random-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\bin\boost_regex-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_system-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_thread-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\boost_serialization-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ;Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\libexpat.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -144,7 +147,7 @@ Source: "{#SDK_DIR}\bin\iconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\spatialite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\freexl.dll"; DestDir: "{app}"; Flags: ignoreversion
+;;Source: "{#SDK_DIR}\bin\freexl.dll"; DestDir: "{app}"; Flags: ignoreversion
       
 
 ;Source: "{#SDK_DIR}\bin\libcharset.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -162,10 +165,13 @@ Source: "{#SDK_DIR}\bin\mpfr-6.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#SDK_DIR}\bin\msqlitecpp.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\openjp2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\proj.dll"; DestDir: "{app}"; Flags: ignoreversion
+;;Source: "{#SDK_DIR}\bin\proj.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\proj_9.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 Source: "{#SDK_DIR}\bin\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\webp.dll"; DestDir: "{app}"; Flags: ignoreversion
+;;Source: "{#SDK_DIR}\bin\webp.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\webpmux.dll"; DestDir: "{app}"; Flags: ignoreversion

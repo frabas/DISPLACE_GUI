@@ -492,7 +492,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     if (is_not_possible_to_change && force_another_ground)
                     {
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " ...go elsewhere...  " << endl;
-                        outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << endl);
+                        outc(cout << "IMPOSSIBLE TO STAY FISHING HERE...RETURN TO PORT, NOW! " << "\n");
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " RETURN TO PORT, NOW!   " << endl;
                         glob_mutex.lock();
                       
@@ -504,7 +504,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             *model,
                             model->timestep(),
                             model->scenario().dyn_alloc_sce,
-                            use_static_paths,
+                            use_static_paths, 
                             pathshops,
                             adjacency_map,
                             relevant_nodes,

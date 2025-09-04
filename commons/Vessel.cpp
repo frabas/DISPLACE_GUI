@@ -2632,7 +2632,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             dist_sauv = dist_traveled;
             set_distprevpos(get_distprevpos() + min(dist_next_node, dist_traveled));
             dist_traveled = dist_traveled - dist_next_node;
-            dout(cout  << "dist_traveled  " << dist_traveled << endl);
+            dout(cout  << "dist_traveled  " << dist_traveled << "\n");
             // system("pause");
             if(dist_traveled <=0.0)
             {
@@ -2744,7 +2744,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 
         if(returning_to_harbour)
         {
-            dout(cout  << "returning" << endl);
+            dout(cout  << "returning" << "\n");
             set_cumfuelcons( get_cumfuelcons() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_consotogetthere( get_consotogetthere() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
@@ -2759,7 +2759,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
         else
         {
-            dout(cout << "steaming to" << endl);
+            dout(cout << "steaming to" << "\n");
             set_cumfuelcons(get_cumfuelcons() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
             set_consotogetthere(get_consotogetthere() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
             set_cumsteaming(get_cumsteaming() + PING_RATE);

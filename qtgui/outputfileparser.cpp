@@ -50,6 +50,7 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     qDebug() << "Parsing Output file: " << path ;
 
     if (!file.open(QFile::ReadOnly)) {
+            
         emit error(QString(QObject::tr("The file %1 cannot be read: %2"))
                    .arg(file.fileName())
                    .arg(file.errorString()));
@@ -738,11 +739,17 @@ void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *mo
     QTextStream strm (file);
     bool ok;
 
+    
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
+
+        //qDebug() << "fields size " << fields.size();
+        cout << "slowing down the interaction simulator-GUI with this console message!" << "\n";
+        static volatile unsigned char buffer[1000000];
+        for (unsigned i = 0; i < 1000; i++) for (unsigned j = 0; j < sizeof(buffer); buffer[j++] = i) { ; }
 
         if (last_step != -1 && last_step != step) {
             model->commitShipsStats(last_step);

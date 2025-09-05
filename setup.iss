@@ -121,6 +121,7 @@ Source: "{#SDK_DIR}\bin\boost_thread-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; F
 Source: "{#SDK_DIR}\bin\boost_unit_test_framework-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\boost_serialization-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 
+
 ;Source: "{#SDK_DIR}\bin\expat.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\libexpat.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\gdal204.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -148,6 +149,11 @@ Source: "{#SDK_DIR}\bin\hdf5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\spatialite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\hdf5_hl.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;;Source: "{#SDK_DIR}\bin\freexl.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\freexl-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\Lerc.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libwebp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\minizip.dll"; DestDir: "{app}"; Flags: ignoreversion     
+Source: "{#SDK_DIR}\bin\libsharpyuv.dll"; DestDir: "{app}"; Flags: ignoreversion
       
 
 ;Source: "{#SDK_DIR}\bin\libcharset.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -155,7 +161,7 @@ Source: "{#SDK_DIR}\bin\libcurl.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\libiconv.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\libpng16.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\libpq.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\LIBPQ.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\libxml2.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\lzma.dll"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -170,22 +176,22 @@ Source: "{#SDK_DIR}\bin\proj_9.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#SDK_DIR}\bin\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\bin\libwebp.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;;Source: "{#SDK_DIR}\bin\webp.dll"; DestDir: "{app}"; Flags: ignoreversion
-
-Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
+;;Source: "{#SDK_DIR}\bin\webpdecoder.dll"; DestDir: "{app}"; Flags: ignoreversion
+;;Source: "{#SDK_DIR}\bin\webpdemux.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\bin\webpmux.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Gui{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Network{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5OpenGL{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5PrintSupport{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Sql{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Widgets{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Gui{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Network{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6OpenGL{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6PrintSupport{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Sql{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Widgets{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt6Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: {#QT_DIR}\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion
 
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion

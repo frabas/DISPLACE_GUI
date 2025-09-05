@@ -54,6 +54,7 @@ class  Population
                    const vector<double> &selectivity_per_stock_ogives_for_oth_land,
                    const multimap<types::NodeId,double> &full_spatial_availability,
                    const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
+                   const map<int, int>& nbhours_for_distance_internodes_this_pop,
                    const map<types::NodeId,double> &oth_land,
                    const vector<map<types::NodeId, double> > &oth_land_map_per_met,
                    const multimap<int, double> &overall_migration_fluxes,
@@ -144,6 +145,7 @@ class  Population
 		vector< vector <double> >get_percent_age_per_szgroup_matrix() const;
         multimap<types::NodeId, double> get_full_spatial_availability() const;
         multimap<types::NodeId, double> get_field_of_coeff_diffusion_this_pop() const;
+        map<int, int> get_nbhours_for_distance_internodes_this_pop() const;
         multimap<int,double> get_overall_migration_fluxes() const;
         map<types::NodeId, double> get_oth_land() const;
         vector<map<types::NodeId, double> > get_oth_land_map_per_met() const;
@@ -215,6 +217,7 @@ class  Population
         void set_selectivity_per_stock_ogives_for_oth_land(const vector<double>& _selectivity_per_stock_ogives_for_oth_land);
         void set_full_spatial_availability(multimap<types::NodeId, double> _full_spatial_availability);
         void set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId, double> _field_of_coeff_diffusion_this_pop);
+        void set_nbhours_for_distance_internodes_this_pop(map<int, int> _field_of_coeff_diffusion_this_pop);
         void set_overall_migration_fluxes(multimap<int,double> _overall_migration_fluxes);
         void set_oth_land(map<types::NodeId,double> _oth_land);
         void set_oth_land_map_per_met (vector<map<types::NodeId, double> > _oth_land_map_per_met);
@@ -328,6 +331,7 @@ class  Population
 								 // for sharing the total N by node
         multimap<types::NodeId,double> full_spatial_availability;
         multimap<types::NodeId,double> field_of_coeff_diffusion_this_pop;
+        map<int, int> nbhours_for_distance_internodes_this_pop;
         multimap<int,double> overall_migration_fluxes;
         map<types::NodeId,double> oth_land;// for accounting for the depletion from non-described activities
         vector<map<types::NodeId, double> >oth_land_map_per_met; // other landings on this pop specified per met

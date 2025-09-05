@@ -1427,6 +1427,43 @@ multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_
 }
 
 
+map<int, int> read_vect_of_nbhours_for_distance_internodes_this_pop(string a_semester, int a_pop,
+    string folder_name_parameterization,
+    string inputfolder,
+    string biolsce)
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+
+    string filename;
+    filename = inputfolder + "/popsspe_" + folder_name_parameterization + "/static_avai/" + a_pop_s +
+        "spe_nbhours_for_distance_internodes_this_pop_semester" + a_semester + "_biolsce" + biolsce + ".dat";
+
+    ifstream file_nbhours_for_distance_internodes_this_pop;
+    file_nbhours_for_distance_internodes_this_pop.open(filename.c_str());
+    if (file_nbhours_for_distance_internodes_this_pop.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        exit(-1);
+    }
+    map<int, int> nbhours_for_distance_internodes_this_pop;
+    if (!fill_nbhours_for_distance_internodes_this_pop(file_nbhours_for_distance_internodes_this_pop,
+        nbhours_for_distance_internodes_this_pop)) {
+        throw std::runtime_error("Error while executing: fill_nbhours_for_distance_internodes_this_pop");
+    }
+
+    file_nbhours_for_distance_internodes_this_pop.close();
+
+
+    return (nbhours_for_distance_internodes_this_pop);
+}
+
+
+
+
 vector<vector<double> >
 read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization,
                                     string inputfolder, string biolsce)
@@ -1867,6 +1904,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     //vector <multimap<types::NodeId, double> > vect_of_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
     vector<multimap<types::NodeId, double> > vect_of_full_avai_szgroup_nodes_with_pop_mmap(name_pops.size());
     vector<multimap<types::NodeId, double> > vect_of_field_of_coeff_diffusion_this_pop_mmap(name_pops.size());
+    vector<map<int, int> > vect_of_nbhours_for_distance_internodes_this_pop_map(name_pops.size());
     vector<map<types::NodeId, double> > vect_of_oth_land_map(name_pops.size());
     vector<vector<double> > vect_of_selectivity_per_stock_ogives_for_oth_land(name_pops.size());
     vector<vector<map<types::NodeId, double> > > vect_of_vect_of_oth_land_map(name_pops.size());
@@ -2201,6 +2239,12 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                     p->folder_name_parameterization,
                     p->inputfolder,
                     model().scenario().biolsce);
+            
+                cout << "read_nbhours_for_distance_internodes_this_pop ..." << "\n";
+                vect_of_nbhours_for_distance_internodes_this_pop_map.at(sp) = read_vect_of_nbhours_for_distance_internodes_this_pop(semester, sp,
+                    p->folder_name_parameterization,
+                    p->inputfolder,
+                    model().scenario().biolsce);       
             }
         }
 
@@ -2361,6 +2405,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
     loadedData.vovd13 = vect_of_background_mortality_per_szgroup_vov;
     loadedData.vectmmapndparam1 = vect_of_full_avai_szgroup_nodes_with_pop_mmap;
     loadedData.vectmmapndparam2 = vect_of_field_of_coeff_diffusion_this_pop_mmap;
+    loadedData.vectmapiiparam1 = vect_of_nbhours_for_distance_internodes_this_pop_map;
     loadedData.vectmapndparam1 = vect_of_oth_land_map;
     loadedData.vovomapndparam1 = vect_of_vect_of_oth_land_map;  
     loadedData.vectmmapidparam1 = vect_of_overall_migration_fluxes_mmap;
@@ -2430,6 +2475,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 loadedData.vovd9.at(sp),
                 loadedData.vectmmapndparam1.at(sp),
                 loadedData.vectmmapndparam2.at(sp),
+                loadedData.vectmapiiparam1.at(sp),
                 loadedData.vectmapndparam1.at(sp),
                 loadedData.vovomapndparam1.at(sp), 
                 loadedData.vectmmapidparam1.at(sp),

@@ -2785,6 +2785,7 @@ int app_main(int argc, char const* argv[])
         if (use_gui) {
 
             if (simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
+                shipslogs << "+++\n";
                 shipslogs.flush();
                 guiSendUpdateCommand(shipslogs_filename, simModel->timestep());
             }

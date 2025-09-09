@@ -743,6 +743,10 @@ void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *mo
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
+
+        if (line.startsWith("+++"))
+            break;
+
         QStringList fields = line.split(" ", Qt::SplitBehaviorFlags::SkipEmptyParts);
         step = fields[0].toInt();
 

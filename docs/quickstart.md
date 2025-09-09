@@ -187,7 +187,9 @@ Notes:
 
 If you received dependencies as a vcpkg export (e.g., created with `vcpkg export --raw`), you can build without accessing vcpkg registries:
 
-1. Extract the export archive somewhere. It should contain an `installed/` layout.
+1. Extract the export archive somewhere. It should contain an `installed/` layout. The best location is `C:\vcpkg\`, so
+that no changes are required to the vcpkg toolchain file.
+NOTE: the root directory in the archive is named `vcpkg-export-something`, just rename it to `vcpkg`.
 
 2. Point CMake/vcpkg to the exported “installed” directory:
    - Set the environment variable or CMake cache entry:

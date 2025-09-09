@@ -48,3 +48,4 @@ cmake-build-*
 <<<<<<< HEAD
 CMakeUserPresets.json
 example_of.bat
+/vcpkg_installed

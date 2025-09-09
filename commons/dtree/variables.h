@@ -17,6 +17,7 @@ enum Variable {
     fishPriceTargetStockIs,      // goFishing
     fuelPriceIs,                  // goFishing
     todayIs,                      // goFishing
+    dayIs,                      // goFishing
     monthIs,                      // goFishing
     stockTargetIs,                // goFishing
     riskOfBycatchAvoidedStksNowIs, // goFishing
@@ -51,6 +52,7 @@ enum Variable {
     catchVolumeIs, // StopFishing
     fuelTankIs, // StopFishing
     endOfTheDayIs, // StopFishing
+    fridayIs, // StopFishing
     nbOfDaysAtSeaSoFarIs, // StopFishing
     moreThan3DaysAfterFirstCatchIs, // StopFishing
 //    windSpeedIs, // goFishing and StopFishing
@@ -81,7 +83,7 @@ public:
 private:
     static COMMONSSHARED_EXPORT const char *const names[];
 
-    static COMMONSSHARED_EXPORT const char *const bins[][40];
+    static COMMONSSHARED_EXPORT const char *const bins[][50];
 };
 
 }

@@ -81,6 +81,36 @@ public:
     }
 };
 
+class VesselDayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    static constexpr double FirstWorkDay = 0.0;
+    static constexpr double RestOfTheWeekDay = 1.0;
+
+    VesselDayIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel* vessel) const {
+        int wday = (tstep / 24) % 7;
+            if (wday < 1)
+                return FirstWorkDay;
+            return RestOfTheWeekDay;
+    }
+};
+
+class VesselFridayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    static constexpr double Friday = 0.0;
+    static constexpr double RestOfTheWeekDay = 1.0;
+
+    VesselFridayIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel* vessel) const {
+        int wday = (tstep / 24) % 7;
+        if (wday ==4)
+            return Friday;
+        return RestOfTheWeekDay;
+    }
+};
+
 class VesselMonthIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
@@ -404,6 +434,20 @@ public:
         return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
         }
 };
+
+
+class VesselotherVesselFishingHereStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselotherVesselFishingHereStateEvaluator() {}
+    double evaluate(int fground, Vessel* v) const {
+        vector<int> vids_already_fishing_there = v->get_loc()->get_vid();
+        //        cout << "nb vessels already fishing there is " << min_quota_left_among_avoided_stks;
+        return  vids_already_fishing_there.size() > 3 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+    }
+};
+
+
 
 
 // ChangeGround

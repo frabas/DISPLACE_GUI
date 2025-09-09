@@ -50,6 +50,7 @@ Population::Population(int a_name,
                        const vector<double> &_selectivity_per_stock_ogives_for_oth_land,
                        const multimap<types::NodeId, double> &_full_spatial_availability,
                        const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
+                       const map<int, int>& nbhours_for_distance_internodes_this_pop, // a map with one key for now, just in case we´d like to expand to szgroups in the future...
                        const map<types::NodeId, double> &_oth_land,
                        const vector<map<types::NodeId, double> >& _oth_land_map_per_met,
                        const multimap<int, double> &overall_migration_fluxes,
@@ -277,8 +278,9 @@ Population::Population(int a_name,
     dout(cout << "field_of_coeff_diffusion_this_pop " << name << "\n");
 
     // for diffusion of N per szgroup
-    this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop);
-
+    this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop); // a fraction from 0 to 1
+    this->set_nbhours_for_distance_internodes_this_pop(nbhours_for_distance_internodes_this_pop); // a nb of hours to set the pace of the diffusion
+    
 
 	// distribute tot_N_at_szgroup on nodes knowing the avai spatial key
 	// i.e. update the multimap Ns_pops_at_szgroup of the nodes
@@ -693,6 +695,13 @@ multimap<types::NodeId,double>  Population::get_field_of_coeff_diffusion_this_po
 {
     return(field_of_coeff_diffusion_this_pop);
 }
+
+map<int, int>  Population::get_nbhours_for_distance_internodes_this_pop() const
+{
+    return(nbhours_for_distance_internodes_this_pop);
+}
+
+
 
 multimap<int,double>  Population::get_overall_migration_fluxes() const
 {
@@ -1129,6 +1138,11 @@ void Population::set_full_spatial_availability(multimap<types::NodeId,double> _f
 void Population::set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId,double> _field_of_coeff_diffusion_this_pop)
 {
     field_of_coeff_diffusion_this_pop= _field_of_coeff_diffusion_this_pop;
+}
+
+void Population::set_nbhours_for_distance_internodes_this_pop(map<int, int> _nbhours_for_distance_internodes_this_pop)
+{
+    nbhours_for_distance_internodes_this_pop = _nbhours_for_distance_internodes_this_pop;
 }
 
 

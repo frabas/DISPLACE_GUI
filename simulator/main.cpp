@@ -2104,19 +2104,27 @@ int app_main(int argc, char const* argv[])
         }
 
 
-        if (scenario.dyn_pop_sce.option(Options::diffusePopN) &&
-            simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
-            // diffusion of pops on neighbour nodes
-            // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
-            // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
-            // so a relevant proxy could actually be (the inverse of) full_avai_szgroup_nodes_with_pop
-            // converted in a point porportion field....
+     //   if (scenario.dyn_pop_sce.option(Options::diffusePopN) &&
+     //       simModel->calendar().isFirstDayOfMonth(simModel->timestep())) {
+        if (scenario.dyn_pop_sce.option(Options::diffusePopN)
+     ) {
+            // diffusion of a fraction pops on neighbour nodes - This fraction can be chosen depending on various assumptions:
+            // see field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
+            // for example, we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
+            // so a relevant proxy could actually be set in full_avai_szgroup_nodes_with_pop
+            // by default in the R routine (still true in Aug 25), this is the other way around that is assumed, i.e. the hotspot areas diffuse more... 
+
+            // also remenber that the pace for the diffusion is species and scale-dependent on the graph internodes distance 
             for (unsigned int sp = 0; sp < simModel->populations().size(); sp++) {
                 outc(cout << "...pop " << sp << "\n";)
                 if (!binary_search(simModel->config().implicit_pops.begin(),
                                    simModel->config().implicit_pops.end(), sp)) {
-                    outc(cout << "......pop " << sp << "\n";)
-                    simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
+                    // apply a modulo to find out if the diffusion occurs now
+                    if (simModel->timestep() % simModel->populations().at(sp)->get_nbhours_for_distance_internodes_this_pop().at(0) == 0) {
+                        outc(cout << "......pop " << sp << "\n";)
+                            simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
+
+                    }
                 }
             }
         }

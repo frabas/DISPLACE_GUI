@@ -474,6 +474,7 @@ bool fill_from_firms_specifications(istream& in,
 bool  fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
 bool  fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<types::NodeId, double> &avai);
 bool  fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId, double> &coeffs);
+bool  fill_nbhours_for_distance_internodes_this_pop(istream& in, map<int, int> &nbhours);
 bool  fill_from_oth_land (istream& in, map<types::NodeId, double> &oth_land);
 bool  fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
 bool  fill_from_relative_stability(istream& in, map<string, double>& relative_stability);

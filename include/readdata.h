@@ -257,6 +257,10 @@ multimap<types::NodeId, double>
 read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization,
                                        string inputfolder, string biolsce);
 
+map<int, int>
+read_nbhours_for_distance_internodes_this_pop(string a_semester, int a_pop, string folder_name_parameterization,
+    string inputfolder, string biolsce);
+
 vector<vector<double> >
 read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder,
                               string biolsce);

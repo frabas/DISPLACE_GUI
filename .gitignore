@@ -45,4 +45,6 @@ cmake-build-*
 .idea/shelf
 .idea
 /CMakeLists.txt.user
-/CMakeUserPresets.json
+<<<<<<< HEAD
+CMakeUserPresets.json
+example_of.bat

@@ -509,8 +509,7 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         if (model.scenario().dyn_alloc_sce.option(Options::reduced_speed_10percent)) {
             // a decrease by 10%...
             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.9;
-            // corresponds to a decrease by 30% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.7;
+            // will correspond to a decrease by 30% in fuelcons calculation
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -519,7 +518,6 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             // a decrease of vessel speed by 20%...
             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.8;
             // corresponds to a decrease by 48.8% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.512;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }
@@ -528,7 +526,6 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             // a decrease by 30%...
             loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 0.7;
             // corresponds to a decrease by 65.7% in fuelcons
-            loadedDataVessels.vectdparam2.at(i) = loadedDataVessels.vectdparam2.at(i) * 0.343;
             // cubic law  c=v^3, see Ronen 1982
             // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
         }

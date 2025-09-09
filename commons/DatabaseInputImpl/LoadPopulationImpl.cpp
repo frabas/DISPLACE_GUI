@@ -56,6 +56,7 @@ bool DatabaseModelLoader::loadPopulations(int period)
                            
                                std::move(d.full_spatial_availability),
                                std::move(d.field_of_coeff_diffusion_this_pop),
+                               std::move(d.nbhours_for_distance_internodes_this_pop),
                                std::move(d.oth_land),
                                std::move(d.oth_land_map_per_met),
                                std::move(d.overall_migration_fluxes),

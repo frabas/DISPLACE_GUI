@@ -647,6 +647,8 @@ void Vessel::init()
         mStateEvaluators[dtree::windSpeedIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
         mStateEvaluators[dtree::todayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
+        mStateEvaluators[dtree::dayIs] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselDayIsStateEvaluator);
         mStateEvaluators[dtree::monthIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchAvoidedStksNowIs] =
@@ -665,7 +667,10 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator);
         mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksHereIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::otherVesselFishingHere] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselotherVesselFishingHereStateEvaluator);
 
+        
 
         // ChangeGround
         mStateEvaluators[dtree::feelingForCatchingElsewhere] =
@@ -686,7 +691,9 @@ void Vessel::init()
             std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselMoreThan3DaysAfterFirstCatchIsStateEvaluator);
         mStateEvaluators[dtree::endOfTheDayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
-        
+        mStateEvaluators[dtree::fridayIs] =
+            std::shared_ptr<dtree::StateEvaluator>(new dtree::vessels::VesselFridayIsStateEvaluator);
+
 
         // chooseGround
         mStateEvaluators[dtree::smartCatch] =
@@ -2566,14 +2573,29 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning()) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+             // cout << "while returning, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+            //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_next_node);
+            //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC << " to " <<
+            //    get_traveled_dist_this_trip() + dist_next_node << endl;
             set_state(2);
+
         }
         else
         {
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
-        set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
-        set_state(2);
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while steaming, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+           //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_next_node);
+           // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC << " to " <<
+           //     get_traveled_dist_this_trip() + dist_next_node << endl;
+            set_state(2);
+        }
+
         dout ( cout << "in find_next_point_on_the_graph: distance prev pt: " << dist_next_node
                << ", conso to get there: " << get_consotogetthere() << "\n");
 
@@ -2591,7 +2613,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << "\n");
         double dist_next_node = dist(x, y, next_x, next_y);
         double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
-        this->set_distprevpos(dist_next_node) ;
+        //this->set_distprevpos(dist_next_node) ;
+        this->set_distprevpos(0) ;
         double b = bearing (x, y, next_x, next_y);
         this->set_course(b);
         dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << "\n");
@@ -2607,6 +2630,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             next_y= nodes[(*pos).toIndex()]->get_y();
             double dist_next_node = dist(x, y, next_x, next_y);
             dist_sauv = dist_traveled;
+            set_distprevpos(get_distprevpos() + min(dist_next_node, dist_traveled));
             dist_traveled = dist_traveled - dist_next_node;
             dout(cout  << "dist_traveled  " << dist_traveled << "\n");
             // system("pause");
@@ -2648,6 +2672,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     // erode
                     roadmap.pop_front();
                     pos= roadmap.begin();
+                    set_distprevpos(dist_next_node);
                     set_state(2);
                     flag = true;
                     break;
@@ -2661,7 +2686,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     set_distprevpos(dist_for_one_ping) ;
                     set_state(2);
                     flag = true;
-
+                 
                 }
 
             }
@@ -2687,6 +2712,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             dout(cout  << "END BEARING " <<  this->get_course() <<"\n");
             vector<double> xy = destB(x, y, course, dist_traveled);
             this->set_xy(xy[0], xy[1]);
+            set_distprevpos(get_distprevpos() + dist_traveled);
             set_state(2);
             dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << "\n");
             
@@ -2711,25 +2737,42 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
 
         // update
+        //cout << "returning_to_harbour (0/1) here is at " << returning_to_harbour << endl;
+        double fuel_per_h_scaling_a = this->get_fuelcons() / pow(this->get_speed(), 3);
+        double actual_speed = this->get_speed(); // for now actusl speed is the same as the max speed. so the litre_fuel will be max cons... TODO: change it.
+        double litre_fuel = fuel_per_h_scaling_a * pow(actual_speed, 3); // cubic law
+
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << "\n");
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		
+            set_cumfuelcons( get_cumfuelcons() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+            set_consotogetthere( get_consotogetthere() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
+            if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + PING_RATE);
+            //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + get_distprevpos());
+           // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC << " to " <<
+           //     get_traveled_dist_this_trip() + get_distprevpos() << endl;
             set_state(2);
         }
         else
         {
-            dout(cout  << "steaming to" << "\n");
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
-        set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
-        set_timeatsea(get_timeatsea()+ PING_RATE);
+            dout(cout << "steaming to" << "\n");
+            set_cumfuelcons(get_cumfuelcons() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_consotogetthere(get_consotogetthere() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_cumsteaming(get_cumsteaming() + PING_RATE);
+            set_timeatsea(get_timeatsea() + PING_RATE);
+            // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;
         if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + PING_RATE);
-        set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+        //set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + get_distprevpos());
+        //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC << " to " <<
+        //    get_traveled_dist_this_trip() + get_distprevpos() << endl;
         set_state(2);
-        //		this->set_roadmap(roadmap);
+        }
+       
     }
 
     //if(this->get_x()>8 && this->get_x()<10 && this->get_y()<52 )
@@ -5876,7 +5919,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     int idx_lowest=0;
     for(unsigned int i=0; i<dist_to_others.size(); i++)
     {
-        if(dist_to_others[i]>1 && dist_to_others[i]<lowest )
+        if(dist_to_others[i]>0 && dist_to_others[i]<lowest )
         {
             lowest =dist_to_others[i];
             idx_lowest =i;
@@ -5894,7 +5937,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         int idx_scdlowest=0;
         for(unsigned int i=0; i<dist_to_others.size(); i++)
         {
-            if(dist_to_others[i]>1 && dist_to_others[i]<scdlowest )
+            if(dist_to_others[i]>0 && dist_to_others[i]<scdlowest )
             {
                 scdlowest =dist_to_others[i];
                 idx_scdlowest =i;
@@ -5936,7 +5979,10 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
             nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
     {
         outc(cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n");
-       /* if(next_ground.toIndex()==5706){
+        //cout << "from " << from.toIndex() << "\n";
+        //cout << "to next_ground " << next_ground.toIndex() << "\n";
+        //cout << "knowing " << nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
+        /* if(next_ground.toIndex()==5706){
             cout  << "WHAT? I CANNOT CHANGE FOR " <<   next_ground.toIndex() << " SO I STAY WHERE I AM... " << "\n";
             cout << "nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) is "<< nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()) << "\n";
             cout << "nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) is "<< nodes.at(next_ground.toIndex())->isVsizeBanned(this->get_length_class()) << "\n";
@@ -5951,11 +5997,11 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
     // in this case, get a time and fuel bonus for free! (i.e. note the MINUS sign!)
     // (in order to somehow correct for the discretisation creating jumps between sequential fgrounds)
-    this->set_timeatsea(this->get_timeatsea() - PING_RATE);
-    this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
-    double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
-    this->set_cumfuelcons(cumfuelcons);
-    this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
+    //this->set_timeatsea(this->get_timeatsea() - PING_RATE);
+    //this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+    //double cumfuelcons = this->get_cumfuelcons() - this->get_fuelcons()*PING_RATE;
+    //this->set_cumfuelcons(cumfuelcons);
+    //this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
 
 
     list<types::NodeId> path;
@@ -6168,25 +6214,35 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     //*************************closer_port**************************//
     if (dyn_alloc_sce.option(Options::closer_port))			 // dyn sce.
     {
-        for (unsigned int i =0; i< harbs.size(); i++)
+        
+        // TO REMOVE: because USELESS and misleading:
+        /*
+            for (unsigned int i =0; i< harbs.size(); i++)
         {
             // destination
+            cout << "i " << i << " while size harbs is " << harbs.size() << endl;
             types::NodeId vx = types::NodeId(harbs[i]);
-            dout(cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb[vx.toIndex()] << "\n");
-            dist_to_ports.push_back(distance_to_harb[vx.toIndex()]);
+            cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb.at(vx.toIndex()) << endl;
+            dist_to_ports.push_back(distance_to_harb.at(vx.toIndex()));
         }
+        */
+
+
         // init
-        double lowest =dist_to_ports[0];
+        double lowest = distance_to_harb[0];
         int idx_lowest=0;
-        for(unsigned int i=0; i<dist_to_ports.size(); i++)
+        for(unsigned int i=0; i< distance_to_harb.size(); i++)
         {
-            if(dist_to_ports[i]<lowest)
+            if(distance_to_harb[i]<lowest)
             {
-                lowest =dist_to_ports[i];
+                lowest = distance_to_harb[i];
                 idx_lowest =i;
+                //cout << "distance_to_harb[i]: " << distance_to_harb[i] << " i:" << i << endl;
             }
         }
         arr = types::NodeId(harbs[idx_lowest]); // destination: nearest port
+        //cout << "returning to closest port, which is:" << arr << "  " <<  endl;
+
     }
     else						 // ....otherwise (e.g. baseline), choose a harbour according to its frequency in data...
     {
@@ -6296,9 +6352,9 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     }
 
     // update
-    this->set_timeatsea(this->get_timeatsea()+ PING_RATE);
-    if(this->get_hasfishedatleastonce()) this->set_timeatseasincefirstcatch(this->get_timeatseasincefirstcatch() + PING_RATE);
-    this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
+    //this->set_timeatsea(this->get_timeatsea()+ PING_RATE);
+    //if(this->get_hasfishedatleastonce()) this->set_timeatseasincefirstcatch(this->get_timeatseasincefirstcatch() + PING_RATE);
+    //this->set_traveled_dist_this_trip(this->get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
 
 }
 
@@ -7350,6 +7406,10 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
                 this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
+
+        
+        //shall_I_change_to_another_ground = true; /////overruling: CAUTION!
+
 
      unlock();
      }

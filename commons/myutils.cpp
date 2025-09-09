@@ -1886,6 +1886,26 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId,
     return true;
 }
 
+/**
+fill in the avai attributes into a multimap
+@param the avai specification file, ...
+*/
+bool fill_nbhours_for_distance_internodes_this_pop(istream& in, map<int, int>& nbhours)
+{
+
+    string line;
+    while (!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        int val;
+        in >> val;
+        nbhours.insert(make_pair(key, val));
+    }
+    dout(cout << "read the nb of hours for internode distance to set the diffusion at szgroup " << "\n" << flush);
+    return true;
+}
+
 
 
 /**

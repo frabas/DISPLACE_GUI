@@ -1459,6 +1459,14 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         for (auto pos=lower; pos != upper; pos++)
             coeff.push_back(pos->second);
 
+        try {
+            if (coeff.size() == 0) {
+                throw -1;
+            }
+        }
+        catch (int e) {
+            cout << "inconsistency between popsspe\list_nodes and popsspe\static_avai\field_of_coeff_diffusion_this_pop nodes" << "\n";
+        }
 
         // get the N for this pop on this node
         vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(this->get_name());
@@ -1501,6 +1509,9 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
                   {
                    cout << "for neighbours node...." << list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_idx_node() << "\n";
                    vector <double> arrival_N = list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_Ns_pops_at_szgroup( this->get_name() );
+                   cout << "arrival_N.size() is...." << arrival_N.size() << "\n";
+                   cout << "departure_N.size() is...." << departure_N.size() << "\n";
+                   cout << "coeff.size() is...." << coeff.size() << "\n";
                    for (int sz=0; sz<arrival_N.size(); ++sz)
                       {
                       double exchanged       = ((coeff.at(sz)*depN.at(sz))/count);

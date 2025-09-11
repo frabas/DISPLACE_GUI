@@ -5,17 +5,7 @@ endif()
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS on)
 
-#add_definitions(-D_WINSOCKAPI_)
-
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    add_definitions(-D_HAS_ITERATOR_DEBUGGING=1 -D_ITERATOR_DEBUG_LEVEL=2 -DDEBUG)
-endif (CMAKE_BUILD_TYPE MATCHES Debug)
-if (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-    add_definitions(-D_HAS_ITERATOR_DEBUGGING=0 -D_ITERATOR_DEBUG_LEVEL=1 -DDEBUG)
-endif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
-
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")     # Visual studio
-    message("Apply MSVC fixups")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /permissive-")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
 
@@ -25,6 +15,8 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")     # Visual studio
 
     # Fix visual studio Bug with boo: error C2116: 'boost::interprocess::winapi::CreateDirectoryA'
     add_definitions(-DNOMINMAX)
+    add_definitions(-DWIN32_LEAN_AND_MEAN)
+    add_definitions(-D_WIN32_WINNT=0x0602)
 
     message("MSVC: ${CMAKE_CXX_FLAGS}")
 endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")

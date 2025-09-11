@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 project(GraphBuilderUsingGdal)
 
-set(CMAKE_CXX_STANDARD 11)
-
 if (APPLE)
     add_definitions(-DBUILD_MACOS -DHOME="$ENV{HOME}")
 elseif(UNIX)

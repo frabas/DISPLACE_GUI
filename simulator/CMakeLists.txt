@@ -1,9 +1,3 @@
-find_package(Boost REQUIRED
-        COMPONENTS program_options filesystem
-        )
-
-add_definitions(-DBOOST_PROGRAM_OPTIONS_DYN_LINK)
-
 set(SOURCES
         main.cpp
         thread_vessels.cpp

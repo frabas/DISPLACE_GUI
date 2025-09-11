@@ -47,3 +47,5 @@ cmake-build-*
 /CMakeLists.txt.user
 CMakeUserPresets.json
 example_of.bat
+/export/
+/vcpkg_installed/

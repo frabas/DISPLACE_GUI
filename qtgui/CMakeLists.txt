@@ -1,16 +1,4 @@
 
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/qtcommons
-        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/
-        ${CMAKE_BINARY_DIR}         # For UI headers
-        ${Sparsepp_INCLUDE_DIRS}
-        ${Qt5Widgest_INCLUDE_DIRS}
-        ${Qt5PrintSupport_INCLUDE_DIRS}
-)
-
 file(GLOB SOURCES *.cpp
         algo/*.cpp
         backgrounds/*.cpp
@@ -44,36 +32,6 @@ file(GLOB HEADERS *.h
 file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui)
 file(GLOB QRCS *.qrc)
 
-set(EXTRA_LIBRARIES
-        )
-if (WIN32)
-    link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
-    if (CMAKE_BUILD_TYPE MATCHES Release)
-        list(APPEND EXTRA_LIBRARIES
-                CGAL::CGAL
-                ${GeographicLib_LIBRARIES}
-                )
-    else (CMAKE_BUILD_TYPE MATCHES Release)
-        list(APPEND EXTRA_LIBRARIES
-                CGAL::CGAL
-                ${GeographicLib_LIBRARIES}
-                )
-    endif (CMAKE_BUILD_TYPE MATCHES Release)
-else (WIN32)
-    list(APPEND EXTRA_LIBRARIES
-            CGAL::CGAL
-            ${GeographicLib_LIBRARIES}
-            sqlite3
-            )
-endif (WIN32)
-
-if (NOT APPLE AND NOT WIN32)
-    list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp rt)
-endif (NOT APPLE AND NOT WIN32)
-
-if (APPLE)
-    list(APPEND EXTRA_LIBRARIES CGAL::CGAL gmp)
-endif ()
 
 add_executable(displacegui
         MACOSX_BUNDLE
@@ -97,13 +55,21 @@ target_link_libraries(displacegui
         Qt6::Xml
         Qt6::PrintSupport
         Qt6::Network
-
+        CGAL::CGAL
+        GDAL::GDAL
+        ${GeographicLib_LIBRARIES}
         ${EXTRA_LIBRARIES}
         )
 
 target_include_directories(displacegui
         PRIVATE
         ${GDAL_INCLUDE_DIRS}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${CMAKE_SOURCE_DIR}/qtcommons
+        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/
+        ${CMAKE_BINARY_DIR}         # For UI headers
         )
 
 add_dependencies(displacegui displace)

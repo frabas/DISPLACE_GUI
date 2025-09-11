@@ -1,11 +1,3 @@
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/qtcommons
-        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/QMapControl
-)
-
 file(GLOB SOURCES
         *.cpp
         )
@@ -39,6 +31,11 @@ target_link_libraries(objeditor
 target_include_directories(objeditor
         PRIVATE
         ${GDAL_INCLUDE_DIRS}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${CMAKE_SOURCE_DIR}/qtcommons
+        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/QMapControl
         )
 
 # Set target directory

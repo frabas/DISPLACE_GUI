@@ -2,14 +2,6 @@ find_package(Boost REQUIRED
         COMPONENTS unit_test_framework
         )
 
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
-        ${Qt5Core_INCLUDE_DIRS}
-)
-
 file(GLOB SOURCES
         *.cpp
         )
@@ -32,5 +24,12 @@ target_link_libraries(unittests
         qtcommons
         Boost::unit_test_framework
         )
+
+target_include_directories(unittests
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+)
 
 install(TARGETS unittests RUNTIME DESTINATION bin COMPONENT tests)

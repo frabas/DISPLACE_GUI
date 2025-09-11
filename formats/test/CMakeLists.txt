@@ -10,11 +10,6 @@ set(SOURCES
         linenumberreader.cpp
     )
 
-include_directories(
-        ../
-        ${Boost_INCLUDE_DIRS}
-)
-
 set(CMAKE_CXX_FLAGS "-fpermissive" )
 
 add_executable(test_formats
@@ -25,6 +20,12 @@ target_link_libraries(test_formats
         formats
         ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}
         )
+
+target_include_directories(test_formats
+        PRIVATE
+        ../
+        ${Boost_INCLUDE_DIRS}
+)
 
 # Set standard as c++11
 if (${CMAKE_MAJOR_VERSION} GREATER 2)

@@ -2,14 +2,6 @@ find_package(Boost REQUIRED
         COMPONENTS unit_test_framework
         )
 
-
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
-)
-
 file(GLOB SOURCES
         *.cpp
         )
@@ -32,5 +24,13 @@ target_link_libraries(commons_tests
         formats
         Boost::unit_test_framework
         )
+
+target_include_directories(commons_tests
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${Sparsepp_INCLUDE_DIRS}
+)
 
 install(TARGETS commons_tests RUNTIME DESTINATION bin COMPONENT tests)

@@ -1449,6 +1449,8 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
        {
         auto idx_node=list_of_nodes.at(n)->get_idx_node();
 
+        //cout << "On this node...." << idx_node  << "\n";
+
         // get coeff of diffusion per szgroup for this node
         auto field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
         vector<double> coeff;
@@ -1457,11 +1459,20 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         for (auto pos=lower; pos != upper; pos++)
             coeff.push_back(pos->second);
 
+        try {
+            if (coeff.size() == 0) {
+                throw -1;
+            }
+        }
+        catch (int e) {
+            cout << "inconsistency between popsspe static_avai avai.dat nodes and popsspe static_avai field_of_coeff_diffusion_this_pop.dat nodes" << "\n";
+        }
 
         // get the N for this pop on this node
         vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(this->get_name());
 
 
+        //cout << "get the list of neighbouring nodes for this node...." << "\n";
         // get the list of neighbouring nodes
         vector<types::NodeId> neighbour_nodes;
         vertex_t u = idx_node.toIndex();
@@ -1473,7 +1484,12 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
             neighbour_nodes.push_back(types::NodeId(edge_iter->target));
         }
 
-        std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
+        
+        // remove duplicates
+        std::sort(neighbour_nodes.begin(), neighbour_nodes.end()); // {1 1 2 3 4 4 5}
+        auto last = std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
+        neighbour_nodes.erase(last, neighbour_nodes.end());
+
 
         // check if neighbouring nodes belong to the spatial extent of this pop
         // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
@@ -1491,10 +1507,12 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
         if(count!=0){
 
-        // displace a proportion of N from departure node to neighbours nodes
+            //cout << "displace a proportion of N from departure node to neighbours nodes...." << "\n";
+            // displace a proportion of N from departure node to neighbours nodes
                vector <double> depN=departure_N;
                for (int nei=0; nei<count; ++nei)
                   {
+                   //cout << "for neighbours node...." << list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_idx_node() << "\n";
                    vector <double> arrival_N = list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_Ns_pops_at_szgroup( this->get_name() );
                    for (int sz=0; sz<arrival_N.size(); ++sz)
                       {
@@ -1508,7 +1526,8 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
        } // count!=0
 
-      } // node by node
+       // cout << "go to next node...." << "\n";
+    } // node by node
 
   cout << "stop diffusion for this pop...." << "\n";
 }

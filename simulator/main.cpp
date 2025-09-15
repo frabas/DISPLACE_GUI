@@ -2120,8 +2120,9 @@ int app_main(int argc, char const* argv[])
                 if (!binary_search(simModel->config().implicit_pops.begin(),
                                    simModel->config().implicit_pops.end(), sp)) {
                     // apply a modulo to find out if the diffusion occurs now
-                    if (simModel->timestep() % simModel->populations().at(sp)->get_nbhours_for_distance_internodes_this_pop().at(0) == 0) {
-                        outc(cout << "......pop " << sp << "\n";)
+                    if (simModel->timestep()>0 && simModel->timestep() % simModel->populations().at(sp)->get_nbhours_for_distance_internodes_this_pop().at(sp) == 0) {
+                        outc(cout << "diffusePopN for pop.... " << sp << "\n";)
+                            cout << "diffusePopN for pop.... " << sp << "\n";
                             simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
 
                     }

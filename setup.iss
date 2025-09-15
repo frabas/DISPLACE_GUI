@@ -3,12 +3,12 @@
 
 #define MyAppName "Displace"
 
-#define MyAppVersion "1.4.0"
+#define MyAppVersion "1.4.1"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
 
-#define ProjectDir "build"
+#define ProjectDir "build\Release"
 
 ; to debug:
 ;#define Build "debug"
@@ -32,7 +32,8 @@
 ;#define SDK_DIR "C:\DISPLACE-vcpkg\installed\x64-windows"
 #define QT_DIR "C:\Qt6\6.8.3\msvc2019_64"
 #define QT_PLUGINS_DIR "C:\Qt6\6.8.3\msvc2022_64\plugins"
-#define SDK_DIR "C:\vcpkg-export-20250826-132117\installed\x64-windows"
+;#define SDK_DIR "C:\vcpkg-export-20250826-132117\installed\x64-windows"
+#define SDK_DIR "C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\vcpkg_installed\x64-windows"
 #endif
 
 [Setup]

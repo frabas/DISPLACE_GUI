@@ -1,16 +1,3 @@
-find_package(Boost REQUIRED
-        COMPONENTS program_options filesystem
-        )
-
-add_definitions(-DBOOST_PROGRAM_OPTIONS_DYN_LINK)
-
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
-)
-
 set(SOURCES
         main.cpp
         thread_vessels.cpp
@@ -52,6 +39,13 @@ add_executable(displace
         ${SOURCES} ${HEADERS}
         )
 
+target_include_directories(displace
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${Sparsepp_INCLUDE_DIRS}
+        )
 
 target_link_libraries(displace
         commons

@@ -6,8 +6,16 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64"
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.3/msvc2022_64"
+      }
+    },
+    {
+      "name": "exported",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "VCPKG_EXPORT": "C:/vcpkg-export-20250826-132117",
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.3/msvc2022_64"
       }
     }
   ]

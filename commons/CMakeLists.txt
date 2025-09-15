@@ -7,13 +7,6 @@ if (WIN32)
     )
 endif (WIN32)
 
-include_directories(
-        ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_SOURCE_DIR}/include/
-        ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
-)
-
 set(SOURCES
         commons_global.h
         diffusion.cpp
@@ -177,11 +170,6 @@ if (NOT WIN32)
     list(APPEND LIBRARIES sqlite3)
 endif (NOT WIN32)
 
-if (WIN32)
-    list(APPEND LIBRARIES psapi)
-    include_directories( ${CMAKE_SOURCE_DIR}/commons/storage)
-endif (WIN32)
-
 if (NOT APPLE AND NOT WIN32)
     list(APPEND LIBRARIES rt)
 endif (NOT APPLE AND NOT WIN32)
@@ -189,6 +177,19 @@ endif (NOT APPLE AND NOT WIN32)
 add_library(commons SHARED
         ${SOURCES}
         )
+
+target_include_directories(commons
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_SOURCE_DIR}/include/
+        ${CMAKE_SOURCE_DIR}/formats
+        ${Sparsepp_INCLUDE_DIRS}
+        )
+
+if (WIN32)
+    list(APPEND LIBRARIES psapi)
+    target_include_directories(commons PRIVATE ${CMAKE_SOURCE_DIR}/commons/storage)
+endif (WIN32)
 
 target_link_libraries(commons
         formats

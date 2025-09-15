@@ -1,9 +1,5 @@
 add_definitions(-DFORMATS_LIBRARY)
 
-include_directories(
-        ${CMAKE_CURRENT_LIST_DIR}
-)
-
 set(SOURCES
         legacy/ConfigFileReader.cpp legacy/ConfigFileReader.h
         utils/KeyValueReader.cpp utils/KeyValueReader.h
@@ -15,6 +11,16 @@ set(SOURCES
 add_library(formats SHARED
         ${SOURCES}
         )
+
+target_include_directories(formats
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+        )
+
+target_link_libraries(formats
+        PUBLIC
+        Boost::boost
+)
 
 # Set target directory
 install(TARGETS formats

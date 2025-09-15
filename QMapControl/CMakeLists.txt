@@ -32,11 +32,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(
-        .
-        ${Qt5Widgets_INCLUDE_DIRS}
-)
-
 file(GLOB HEADERS QMapControl/src/QMapControl/*.h)
 file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 
@@ -63,6 +58,10 @@ target_link_libraries(QMapControl
 target_include_directories(QMapControl
         PRIVATE
         ${GDAL_INCLUDE_DIRS}
+        .
+        ${Qt5Widgets_INCLUDE_DIRS}
+        .
+        ${Qt5Widgets_INCLUDE_DIRS}
         )
 
 #add_subdirectory(QMapControl/Samples)

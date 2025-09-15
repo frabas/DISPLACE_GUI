@@ -1,9 +1,5 @@
 add_definitions(-DQTCOMMONS_LIBRARY -DQCUSTOMPLOT_COMPILE_LIBRARY)
 
-include_directories(
-        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/QMapControl/
-)
-
 file(GLOB SOURCES *.cpp
         csv/*.cpp graphics/*.cpp R/*.cpp
         )
@@ -18,6 +14,10 @@ add_library(qtcommons SHARED
         ${UIS} ${QRCS}
         )
 
+target_include_directories(qtcommons
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/QMapControl/QMapControl/src/QMapControl/
+        )
 
 target_link_libraries(qtcommons
         QMapControl

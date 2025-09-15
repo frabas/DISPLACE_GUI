@@ -1,7 +1,3 @@
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-)
-
 add_executable(vmsmerger
         main.cpp
         )
@@ -9,6 +5,11 @@ add_executable(vmsmerger
 target_link_libraries(vmsmerger
         commons
         )
+
+target_include_directories(vmsmerger
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+)
 
 # Set target directory
 install(TARGETS vmsmerger RUNTIME DESTINATION bin COMPONENT tools)

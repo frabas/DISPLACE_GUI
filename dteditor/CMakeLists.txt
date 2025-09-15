@@ -1,10 +1,3 @@
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/qtcommons
-)
-
 file(GLOB SOURCES
         *.cpp
         commands/*.cpp
@@ -22,6 +15,14 @@ add_executable(dteditor
         ${SOURCES} ${HEADERS}
         dteditor.rc
         ${UIS} ${QRCS}
+        )
+
+target_include_directories(dteditor
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${CMAKE_SOURCE_DIR}/qtcommons
         )
 
 if (WIN32)

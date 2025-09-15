@@ -1,10 +1,3 @@
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/commons
-        ${CMAKE_SOURCE_DIR}/formats
-        ${CMAKE_SOURCE_DIR}/qtcommons
-)
-
 file(GLOB SOURCES
         *.cpp
         )
@@ -20,6 +13,14 @@ add_executable(tseditor
         ${SOURCES} ${HEADERS}
         tseditor.rc
         ${UIS} ${QRCS}
+        )
+
+target_include_directories(tseditor
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/commons
+        ${CMAKE_SOURCE_DIR}/formats
+        ${CMAKE_SOURCE_DIR}/qtcommons
         )
 
 if (WIN32)

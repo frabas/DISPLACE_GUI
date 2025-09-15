@@ -13,24 +13,23 @@ file(GLOB HEADERS
 file(GLOB UIS *.ui)
 file(GLOB QRCS *.qrc)
 
-add_executable(commons_tests
+add_executable(unittests
         ${SOURCES} ${HEADERS}
-        ${UIS} ${QRCS}
-        )
+        ${UIS} ${QRCS} valuespermet_test.cpp)
 
 
-target_link_libraries(commons_tests
+target_link_libraries(unittests
         commons
         formats
+        qtcommons
         Boost::unit_test_framework
         )
 
-target_include_directories(commons_tests
+target_include_directories(unittests
         PRIVATE
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
         ${CMAKE_SOURCE_DIR}/formats
-        ${Sparsepp_INCLUDE_DIRS}
 )
 
-install(TARGETS commons_tests RUNTIME DESTINATION bin COMPONENT tests)
+install(TARGETS unittests RUNTIME DESTINATION bin COMPONENT tests)

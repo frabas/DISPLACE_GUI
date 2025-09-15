@@ -1,9 +1,10 @@
-include_directories(
-        ${CMAKE_SOURCE_DIR}/include
-)
-
 add_executable(avaifieldupdater
         main.cpp
+        )
+
+target_include_directories(avaifieldupdater
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
         )
 
 target_link_libraries(avaifieldupdater

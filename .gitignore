@@ -52,3 +52,4 @@ example_of.bat
 .quarto/
 docs/index_cache/
 docs/index_files/
+docs/_site/

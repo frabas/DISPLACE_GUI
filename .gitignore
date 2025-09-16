@@ -49,3 +49,6 @@ CMakeUserPresets.json
 example_of.bat
 /export/
 /vcpkg_installed/
+.quarto/
+docs/index_cache/
+docs/index_files/

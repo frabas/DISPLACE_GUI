@@ -1445,19 +1445,35 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
        }
 
+    vector<double> coeff(14);
+    //vector<double> coeff;
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
         auto idx_node=list_of_nodes.at(n)->get_idx_node();
+
+        double percent = (static_cast<double>(n+1) / list_of_nodes.size()) * 100;
+        cout << "Covered: " <<  percent << " % " << "\n";
+
+       // This takes quite some time. therefore 
+       //     # worth reducing a bit the dimensionality in the R input routine...
+       //     nodes_to_keep < -popsspe_coeffs_semester_this_pop[as.numeric(as.character(popsspe_coeffs_semester_this_pop$coeff)) > 0.1, "pt_graph"]
+       //     popsspe_coeffs_semester_this_pop < -popsspe_coeffs_semester_this_pop[popsspe_coeffs_semester_this_pop$pt_graph % in % nodes_to_keep, ]
+
+
 
         //cout << "On this node...." << idx_node  << "\n";
 
         // get coeff of diffusion per szgroup for this node
         auto field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
-        vector<double> coeff;
         auto lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
         auto upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
-        for (auto pos=lower; pos != upper; pos++)
-            coeff.push_back(pos->second);
+        int i=0;
+        for (auto pos = lower; pos != upper; pos++)
+        {
+            //  coeff.push_back(pos->second);
+            coeff[i] = pos->second;
+            i++;
+        }
 
         try {
             if (coeff.size() == 0) {
@@ -1483,7 +1499,8 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         {
             neighbour_nodes.push_back(types::NodeId(edge_iter->target));
         }
-
+        
+      
         
         // remove duplicates
         std::sort(neighbour_nodes.begin(), neighbour_nodes.end()); // {1 1 2 3 4 4 5}
@@ -1507,20 +1524,21 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
         if(count!=0){
 
-            //cout << "displace a proportion of N from departure node to neighbours nodes...." << "\n";
             // displace a proportion of N from departure node to neighbours nodes
                vector <double> depN=departure_N;
+               vector <double> arrival_N;
                for (int nei=0; nei<count; ++nei)
                   {
-                   //cout << "for neighbours node...." << list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_idx_node() << "\n";
-                   vector <double> arrival_N = list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_Ns_pops_at_szgroup( this->get_name() );
+                   auto a_node= list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei));
+                       //cout << "for neighbours node...." << list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_idx_node() << "\n";
+                   arrival_N = a_node->get_Ns_pops_at_szgroup( this->get_name() );
                    for (int sz=0; sz<arrival_N.size(); ++sz)
                       {
                       double exchanged       = ((coeff.at(sz)*depN.at(sz))/count);
                       arrival_N.at(sz)       = arrival_N.at(sz) + exchanged;
                       departure_N.at(sz)     = departure_N.at(sz) - exchanged;
                      }
-                   list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->set_Ns_pops_at_szgroup( this->get_name(), arrival_N );//update arrival
+                   a_node->set_Ns_pops_at_szgroup( this->get_name(), arrival_N );//update arrival
                    }
                list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), departure_N ); //update departure
 

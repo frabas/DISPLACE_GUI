@@ -6,7 +6,7 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.3/msvc2022_64"
+        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64"
       }
     },
     {
@@ -15,7 +15,7 @@
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "VCPKG_EXPORT": "C:/vcpkg-export-20250826-132117",
-        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.3/msvc2022_64"
+        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64"
       }
     }
   ]

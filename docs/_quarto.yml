@@ -1,0 +1,23 @@
+project:
+  type: book
+  output-dir: ./docs
+
+book:
+  title: "DISPLACE documentation"
+  author: Francois Bastardie (DTU) with UCSB
+  date: last-modified
+  date-format: "[Last Updated on] MMMM DD, YYYY"
+  chapters:
+    - index.qmd
+    - routines.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    toc: true          
+    toc_depth: 5
+execute:
+  cache: true
+editor: visual

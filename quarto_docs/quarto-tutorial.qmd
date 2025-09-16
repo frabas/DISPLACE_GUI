@@ -1,0 +1,29 @@
+---
+title: "DISPLACE docs"
+author: "Francois Bastardie"
+format: html
+---
+
+```{r}
+Sys.Date()
+```
+
+Using tools for reproducible research...
+Will be the support to describe the mechanics soon into a Quarto notebook to be put on a GitHub.io
+
+compile this script in cmd with: quarto render quarto-tutorial.qmd
+
+could also use: quarto preview quarto-tutorial.qmd
+
+# Quarto docs
+
+Follow the tuto on https://nbisweden.github.io/workshop-reproducible-research/pages/quarto.html
+
+# the basics of DISPLACE
+
+...
+
+# the advanced mode
+
+...
+

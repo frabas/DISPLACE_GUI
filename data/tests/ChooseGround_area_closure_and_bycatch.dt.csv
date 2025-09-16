@@ -1,8 +1,0 @@
-#TreeVersion: 6
-#TreeType: ChooseGround
-# id,variable,posx,posy,nchld,children...,value
-0,isInAreaClosure,2390,2319,2,1,0,2,1,0
-1,riskOfBycatchIs,2286,2440,2,3,0,4,1,0
-2,probability,2504,2439,0,0.1
-3,probability,2194,2536,0,0.8
-4,probability,2422,2538,0,0.1

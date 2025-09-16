@@ -1,7 +1,0 @@
-var searchData=
-[
-  ['quad',['Quad',['../d1/d52/classdisplace_1_1graphbuilders_1_1_simple_geodesic_line_graph_builder.html#a992a295d1a98448230c6402d901933c7a89af8505c759d2aeecc5b85de5f35be9',1,'displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad()'],['../dc/d1f/classdisplace_1_1graphbuilders_1_1_simple_planar_graph_builder.html#aedc525514a7c8f011cb4550c8e4addb7a37e892ed540fcf6c74ea358b02bf3d00',1,'displace::graphbuilders::SimplePlanarGraphBuilder::Quad()'],['../dd/d7e/classdeprecated_1_1_graph_builder.html#a7f373eeb62c478a200ab1f3cfa4ef6f3afaf282b4bdda0789ae5317bf7e5dc841',1,'deprecated::GraphBuilder::Quad()'],['../d0/d84/class_graph_builder.html#ad9125786780ea834b0368c7a599bb5d9af7d3b22f8acb9a63d63019b1fd8cdeb3',1,'GraphBuilder::Quad()']]],
-  ['quadtrivial',['QuadTrivial',['../dd/d7e/classdeprecated_1_1_graph_builder.html#a7f373eeb62c478a200ab1f3cfa4ef6f3aa04d6d2bca766d114ce518aeb8423fbe',1,'deprecated::GraphBuilder::QuadTrivial()'],['../d0/d84/class_graph_builder.html#ad9125786780ea834b0368c7a599bb5d9ade27312a13a0012bfda9e80451d0c195',1,'GraphBuilder::QuadTrivial()']]],
-  ['quotas',['Quotas',['../d5/d8a/namespacedisplace_1_1plot.html#a523612c6239ff69acc3e5b7c5b40b618afb0d8a1c841cd92afd4cb16ddedaeed5',1,'displace::plot']]],
-  ['quotasuptake',['QuotasUptake',['../d5/d8a/namespacedisplace_1_1plot.html#a523612c6239ff69acc3e5b7c5b40b618a07001a8acdacaf52580cd39f23ebf398',1,'displace::plot']]]
-];

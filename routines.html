@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Francois Bastardie (DTU) with UCSB">
 
-<title>DISPLACE documentation</title>
+<title>1&nbsp; R routines – DISPLACE documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -56,27 +55,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -86,7 +65,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./routines.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -138,7 +117,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routines.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R routines</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -167,13 +146,13 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./routines.html" class="sidebar-item-text sidebar-link">
+  <a href="./routines.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R routines</span></span></a>
   </div>
 </li>
@@ -182,44 +161,22 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
-  <li><a href="#working-environment" id="toc-working-environment" class="nav-link" data-scroll-target="#working-environment">Working environment</a></li>
-  <li><a href="#quick-setup-run" id="toc-quick-setup-run" class="nav-link" data-scroll-target="#quick-setup-run">Quick Setup &amp; Run</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">DISPLACE documentation</h1>
+<h1 class="title"><span id="sec-routines" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R routines</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francois Bastardie (DTU) with UCSB </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">Last Updated on September 16, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -229,42 +186,72 @@ div.csl-indent {
 </header>
 
 
-<section id="introduction" class="level1 unnumbered">
-<h1 class="unnumbered">Introduction</h1>
-<p>DISPLACE is an agent-based, spatially explicit bioeconomic modeling framework that represents individual fishing vessels as agents whose behavior is influenced by historical fishing behavior and spatial resource availability. The model captures how vessels adjust their fishing activity (i.e., when, where, what, and how to fish) in response to spatial, temporal, management, and economic constraints. The spatial domain of the model is represented by a network of nodes, where the extent is based on historical fishing locations. The model integrates three main modules (i.e., biological, fleet, and economic), which can be customized based on data availability. DISPLACE relies on fisheries-dependent data such as Vessel Monitoring Systems (VMS) and landing receipts to guide spatial fishing patterns, catch, and effort, resulting in realistic simulations of fishing behavior. The biological module includes species-specific life history traits and population dynamics, while the fleet and economic modules include vessel-specific characteristics (e.g., size, gear, fuel capacity) and economic parameters (e.g., fuel prices, ex-vessel values, labor costs). DISPLACE has the ability to model the redistribution of fishing effort at various disaggregated levels—from individual vessels to individual ports or individual gears— allowing for the assessment of distributional impacts of OSW development (<span class="citation" data-cites="bastardie2014displace">Bastardie, Nielsen, and Miethe (<a href="#ref-bastardie2014displace" role="doc-biblioref">2014</a>)</span>).</p>
-<p>UCSB used DISPLACE to evaluate the potential impacts of California’s Offshore Wind energy development lease areas on the DTS fisheries operating off the coast of California. This notebook summarizes the requirements, inputs, outputs, and processes for running DISPLACE and the associated R routines. Separate documentation about DISPLACE can be found on the <a href="https://displace-project.org/blog/">project website</a>.</p>
-<p>This repository includes an application example based on this Californian study. It does not use actual vessel or fisheries data, but rather example data that do not reflect any confidential fishing information. This allows for a complete test run of the parametrization and model, and provides an opportunity to become familiar with the processes and different model components.</p>
-<section id="working-environment" class="level2">
-<h2 class="anchored" data-anchor-id="working-environment">Working environment</h2>
-<p>The current project uses DISPLACE version 1.3.5 on Windows 11. You can download the installer <a href="https://displace-project.org/blog/download/">here</a>. The R routines run on R version 4.5.0 (on any platform or operating system). All required R packages are detailed in <code>r/config.R</code>.</p>
-<p>The <a href="https://github.com/emlab-ucsb/DISPLACE_California">repository</a> contains all the scripts required to prepare input data in the DISPLACE format, along with scripts for basic processing of outputs in the <code>r</code> and <code>routines</code> folders. It also includes example data in the <code>raw_inputs</code> folder, which serve as reference for data contents and structure when building a DISPLACE application.</p>
-<p>The <code>processed_inputs</code> folder is initially empty and is automatically populated when running the routines with <code>r/functions_routines.R</code>. To explore DISPLACE results, you will need to manually move the model output files into the <code>outputs</code> folder so they can be read by <code>r/functions_outputs.R</code>.</p>
-<pre><code>DISPLACE_California
-  |__ docs
-  |__ qmd
-  |__ raw_inputs
-  |__ processed_inputs
-  |__ outputs
-  |__ routines
-  |__ r</code></pre>
-</section>
-<section id="quick-setup-run" class="level2">
-<h2 class="anchored" data-anchor-id="quick-setup-run">Quick Setup &amp; Run</h2>
-<p>For a quick execution and model run to test whether it can run on your machine, execute:</p>
+<p>DISPLACE requires input files in a specific format for the modeling framework to read them correctly. The previous sections described the contents and structure of the raw inputs, which must then be transformed to meet these requirements. In this section, we walk through the R routines needed to adapt the inputs.</p>
+<p>The required DISPLACE inputs depend on the type of analysis being performed and the model modules being used. While other DISPLACE applications make use of additional routines to prepare such inputs (see the complete <a href="https://github.com/frabas/DISPLACE_R_inputs">routines repository</a> from François et al.), here we only include those relevant to our case study. These are divided into two main groups: routines for preparing data for the populations model and routines for preparing data for the fleet model. Additional routines are included to prepare the remaining data needed to run DISPLACE.</p>
+<p>In this repository, the routines are located in the <code>routines</code> folder, and the code to execute them sequentially can be found in <code>r/functions_routines.R</code>. Here we use R 4.5.0, and the packages included in <code>r/config.R</code>. Be aware that as describerd in some of the previous sections, some model inputs are hardcoded within this routines, so modify the code as needed for your case study.</p>
+<p>Routines for the population inputs located in <code>raw_inputs/POPULATIONS</code> are:</p>
+<ul>
+<li><code>01_GeneratePopulationsFeatures.R</code><br>
+</li>
+<li><code>02_GeneratePopulationsConfigFiles.R</code><br>
+</li>
+<li><code>03_RunPopulationsConfigFiles.R</code><br>
+</li>
+<li><code>04_GeneratePopulationsPreferencesPerSpeciesMatrix.R</code><br>
+</li>
+<li><code>05_GeneratePopulationsVariousFiles.R</code></li>
+</ul>
+<p>Routines for the fleet inputs in <code>raw_inputs/FISHERIES</code> are:</p>
+<ul>
+<li><code>06_GenerateVesselsConfigFiles.R</code><br>
+</li>
+<li><code>07_RunVesselsConfigFiles.R</code><br>
+</li>
+<li><code>08_GenerateVesselsEconomicsFile.R</code><br>
+</li>
+<li><code>09_GenerateOtherCatchesOnNodes.R</code><br>
+</li>
+<li><code>10_GenerateMetiersSelectivityPerStockFiles.R</code><br>
+</li>
+<li><code>11_GenerateMetiersVariousFiles.R</code></li>
+</ul>
+<p>The routine <code>09_GenerateOtherCatchesOnNodes.R</code> assigns additional fixed catches to the nodes beyond those of our modeled fleet. For instance, if other nations or fleets not explicitly characterized in the model exert fishing pressure on the populations defined in the analysis, the catch from these can be indicated in the file <code>OTHER/othercatchespercountry.csv</code> as fixed removals (in tonnes per year). While recruits are proportionally assigned based on coverage and density from SDM inputs, this routine assigns other catches evenly across the species’ coverage area, without accounting for species density. The routine can, however, be updated to weight other catches according to species distribution.</p>
+<p>Additional routines required to run DISPLACE are:</p>
+<ul>
+<li><p><code>12_GenerateHarboursFiles.R</code>: Prepares harbour files, including stock prices and fuel prices. Currently, the routine assigns the same prices across all ports, but it can be updated to reflect port-specific prices.</p></li>
+<li><p><code>13_GenerateShippingFiles.R</code>: Although we do not use this module (which models traffic lanes used by other vessels that might influence fishing vessel behavior), DISPLACE still requires two files with dummy data in the <code>raw_inputs/SHIPPING</code> folder and corresponding processed inputs, so the model can run even without using this feature.</p></li>
+<li><p><code>14_GenerateFishfarmsFiles.R</code>: Similarly, fish farm locations and features (defined by coordinates and size) can be included to condition vessel navigation and fishing. For this case study, we use dummy data in <code>raw_inputs/FISHFARMS</code> to allow DISPLACE to run, though this feature is not used in the analysis.</p></li>
+<li><p><code>15_GenerateWindmillsFiles.R</code>: Allows input of specific turbine distributions or single turbine positions. Dummy data are included in <code>raw_inputs/WINDMILLS</code> for this case study.</p></li>
+<li><p><code>16_GenerateFirmsFiles.R</code>: We do not use the firms feature. The input file in <code>raw_inputs/FIRMS</code> is populated with dummy data solely to satisfy DISPLACE requirements.</p></li>
+<li><p><code>17_GenerateSimulationsConfigFiles.R</code>: An important step, as it generates all files required to inform DISPLACE about the parameterization, characteristics, and inputs needed to execute a run. These files are stored in <code>processed_inputs/simusspe_california_example</code> after running all routines.</p></li>
+<li><p><code>18_GenerateBenthosLandscapeOnNodes.R</code>: DISPLACE includes an optional benthic module designed to evaluate fishing impacts on benthic habitats. This module is deactivated in our project, and the file in <code>raw_inputs/HABITATS</code> is filled with dummy data solely to prevent DISPLACE from crashing.</p></li>
+</ul>
+<p>The execution of <code>r/functions_routines.R</code> runs these routines sequentially and generates the contents of the <code>processed_inputs</code> folder (initially empty in this repository). To create its contents, simply execute this script.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"r/functions_routines.R"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"r/functions_routines.R"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Before executing, make sure to update the installer directory in the <code>directory</code> parameter of the <code>generate_dis_run_files</code> function in <code>functions_routines.R</code>. Running this script will populate the <code>processed_inputs</code> folder, whose contents then need to be moved to the machine where DISPLACE is run. This must be a Windows machine, and the inputs must be located in <code>C:/</code>. You should also create a folder named <code>DISPLACE_outputs</code> in <code>C:/</code>, where the outputs will be stored.</p>
-<p>We recommend reviewing the entire repository to understand the inputs and processes in more detail before executing.</p>
+<p>In addition to running the routines, <code>functions_routines.R</code> also:</p>
+<ul>
+<li>Updates <code>config.dat</code> to indicate the implicitly defined species.<br>
+</li>
+<li>Updates the <code>baseline.dat</code> file to set the baseline scenario using the <code>closer_port</code> feature, ensuring vessels return to the closest port among those historically fished (as part of our case study parametrization; this may differ depending on the application of DISPLACE).</li>
+</ul>
+<p>The script also includes the function <code>generate_dis_run_files</code>, which defines the <code>.bat</code> and <code>.dsf</code> files needed to run DISPLACE without using the GUI. This function allows the user to specify:</p>
+<ul>
+<li>The base directory for outputs.<br>
+</li>
+<li>The scenario being run.<br>
+</li>
+<li>The replicate name</li>
+<li>The number of replicates.</li>
+<li>The number of years analyzed.</li>
+<li>The number of years for which data are stored. By default, DISPLACE only saves 1 year of VMS-like data, but it can be set to save 7 or 10 years of simulated data.<br>
+</li>
+<li>The number of threads to run the model, depending on the machine’s cores.</li>
+</ul>
+<p>Once all processed inputs are generated (this can be done in Windows, macOS, or Linux using R), DISPLACE can be run from a Windows machine either via the GUI or by double-clicking the generated <code>.bat</code> file.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-bastardie2014displace" class="csl-entry" role="listitem">
-Bastardie, Francois, J Rasmus Nielsen, and Tanja Miethe. 2014. <span>“DISPLACE: A Dynamic, Individual-Based Model for Spatial Fishing Planning and Effort Displacement—Integrating Underlying Fish Population Models.”</span> <em>Canadian Journal of Fisheries and Aquatic Sciences</em> 71 (3): 366–86.
-</div>
-</div>
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -669,11 +656,11 @@ Bastardie, Francois, J Rasmus Nielsen, and Tanja Miethe. 2014. <span>“DISPLACE
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./routines.html" class="pagination-link" aria-label="R routines">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R routines</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

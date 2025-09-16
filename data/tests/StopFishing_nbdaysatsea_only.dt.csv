@@ -1,6 +1,0 @@
-#TreeVersion: 6
-#TreeType: StopFishing
-# id,variable,posx,posy,nchld,children...,value
-0,nbOfDaysAtSeaSoFarIs,2395,2395,2,1,0,2,1,0
-1,probability,2252,2567,0,0
-2,probability,2365,2564,0,1

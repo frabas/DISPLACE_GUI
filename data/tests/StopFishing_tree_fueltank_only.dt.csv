@@ -1,6 +1,0 @@
-#TreeVersion: 6
-#TreeType: StopFishing
-# id,variable,posx,posy,nchld,children...,value
-0,fuelTankIs,2466,2413,2,1,0,2,1,0
-1,probability,2370,2583,0,0
-2,probability,2554,2585,0,0.8

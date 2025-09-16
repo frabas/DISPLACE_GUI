@@ -1,9 +1,0 @@
-#TreeVersion: 6
-#TreeType: GoFishing
-# id,variable,posx,posy,nchld,children...,value
-0,vesselSizeIs,2438,2416,5,1,0,2,1,3,2,4,3,5,4,0
-1,probability,2370,2529,0,1
-2,probability,2488,2560,0,0
-3,probability,2590,2564,0,0
-4,probability,2630,2519,0,1
-5,probability,2760,2603,0,1

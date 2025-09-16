@@ -45,3 +45,12 @@ cmake-build-*
 .idea/shelf
 .idea
 /CMakeLists.txt.user
+CMakeUserPresets.json
+example_of.bat
+docs/.quarto/
+docs/_site/
+docs/index_cache/
+docs/index_files/
+local.iss
+vcpkg_installed/
+

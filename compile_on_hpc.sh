@@ -12,11 +12,18 @@ cd Build
 #cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="/appl/boost/1.64.0-gcc-6.3.0/" -DCMAKE_CXX_COMPILER="/appl/gcc/7.3.0/bin/g++" -DCMAKE_C_COMPILER="/appl/gcc/7.3.0/bin/gcc" -DGeographicLib_LIBRARIES="~//local/geographiclib-1.49/lib/libGeographic.so" -DGeographicLib_INCLUDE_DIRS="~//local/geographiclib-1.49/include/" -DGeographicLib_LIBRARY_DIRS="~//local/geographiclib-1.49/lib/"  -DCMAKE_MODULE_PATH="~//local/geographiclib-1.49/share/cmake/GeographicLib/" -DSPARSEPP_ROOT="~//ibm_vessels/DISPLACE_GUI/sparsepp/" -DCMAKE_PREFIX_PATH="/zhome/fe/8/43283/local/mSqliteCpp/usr/local/lib64/cmake/msqlitecpp/" -DWITHOUT_GUI=On
 
 #module load cmake/4.0.3
-module load cmake/3.27.9  
-cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="/appl/boost/1.83.0-gcc-10.5.0/" -DCMAKE_CXX_COMPILER="/appl/gcc/10.5.0-binutils-2.40/bin/g++" -DCMAKE_C_COMPILER="/appl/gcc/10.5.0-binutils-2.40/bin/gcc" -DGeographicLib_LIBRARIES="~//local/geographiclib-2.5.2/lib/libGeographicLib.so.26.1.3" -DGeographicLib_INCLUDE_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/include/" -DGeographicLib_LIBRARY_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/lib/"  -DCMAKE_MODULE_PATH="~//local/geographiclib-2.5.2/share/cmake/GeographicLib/" -DSPARSEPP_ROOT="/zhome/fe/8/43283/ibm_vessels/DISPLACE_GUI/sparsepp/" -DCMAKE_PREFIX_PATH="/zhome/fe/8/43283/local/mSqliteCpp/usr/local/lib64/cmake/msqlitecpp/" -DWITHOUT_GUI=On
+
+#module load cmake/3.27.9  
+#cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="/appl/boost/1.83.0-gcc-10.5.0/" -DCMAKE_CXX_COMPILER="/appl/gcc/10.5.0-binutils-2.40/bin/g++" -DCMAKE_C_COMPILER="/appl/gcc/10.5.0-binutils-2.40/bin/gcc" -DGeographicLib_LIBRARIES="~//local/geographiclib-2.5.2/lib/libGeographicLib.so.26.1.3" -DGeographicLib_INCLUDE_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/include/" -DGeographicLib_LIBRARY_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/lib/"  -DCMAKE_MODULE_PATH="~//local/geographiclib-2.5.2/share/cmake/GeographicLib/" -DSPARSEPP_ROOT="/zhome/fe/8/43283/ibm_vessels/DISPLACE_GUI/sparsepp/" -DCMAKE_PREFIX_PATH="/zhome/fe/8/43283/local/mSqliteCpp/usr/local/lib64/cmake/msqlitecpp/" -DWITHOUT_GUI=On
+# the linker fails for GeographicLib, probably because gcc 10 is too old?
       
+#module load cmake/4.0.3
+#cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="/appl/boost/1.81.0-gcc-12.2.0/" -DCMAKE_CXX_COMPILER="/appl/gcc/12.2.0-binutils-2.39/bin/g++" -DCMAKE_C_COMPILER="/appl/gcc/12.2.0-binutils-2.39/bin/gcc" -DGeographicLib_LIBRARIES="~//local/geographiclib-2.5.2/lib/libGeographicLib.so.26.1.3" -DGeographicLib_INCLUDE_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/include/" -DGeographicLib_LIBRARY_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/lib/"  -DCMAKE_MODULE_PATH="~//local/geographiclib-2.5.2/share/cmake/GeographicLib/" -DSPARSEPP_ROOT="/zhome/fe/8/43283/ibm_vessels/DISPLACE_GUI/sparsepp/" -DCMAKE_PREFIX_PATH="/zhome/fe/8/43283/local/mSqliteCpp/usr/local/lib64/cmake/msqlitecpp/" -DWITHOUT_GUI=On
+# the code fails to compile with this BOOST and gcc version
 
 
+module load cmake/4.0.3
+cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="/appl/boost/1.80.0-gcc-11.3.0/" -DCMAKE_CXX_COMPILER="/appl/gcc/11.3.0-binutils-2.38/bin/g++" -DCMAKE_C_COMPILER="/appl/gcc/11.3.0-binutils-2.38/bin/gcc" -DGeographicLib_LIBRARIES="~//local/geographiclib-2.5.2/lib/libGeographicLib.so.26.1.3" -DGeographicLib_INCLUDE_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/include/" -DGeographicLib_LIBRARY_DIRS="/zhome/fe/8/43283/local/geographiclib-2.5.2/lib/"  -DCMAKE_MODULE_PATH="~//local/geographiclib-2.5.2/share/cmake/GeographicLib/" -DSPARSEPP_ROOT="/zhome/fe/8/43283/ibm_vessels/DISPLACE_GUI/sparsepp/" -DCMAKE_PREFIX_PATH="/zhome/fe/8/43283/local/mSqliteCpp/usr/local/lib64/cmake/msqlitecpp/" -DWITHOUT_GUI=On
 
 
 

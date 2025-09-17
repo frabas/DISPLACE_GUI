@@ -25,6 +25,7 @@
 #include <helpers.h>
 
 #include <iostream>
+#include <functional>
 
 class QuitMessage : public OutputMessage {
 public:

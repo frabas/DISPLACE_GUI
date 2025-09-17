@@ -13,6 +13,11 @@ if (NOT WITHOUT_GUI)
     find_package(Qt6 6.8 COMPONENTS Widgets Core Concurrent Sql Xml PrintSupport Network REQUIRED)
 endif ()
 
+if (WITHOUT_GUI)
+    include_directories(${GeographicLib_INCLUDE_DIRS})
+endif ()
+# link_directories(${GeographicLib_LIBRARY_DIRS})
+
 find_package(GDAL REQUIRED 1.11)
 message("GDAL library: ${GDAL_LIBRARY}")
 message("GDAL include: ${GDAL_INCLUDE_DIR}")

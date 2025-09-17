@@ -601,7 +601,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
             if(export_vmslike == 1)  alogic = (model->timestep() <= 8762);
             if(export_vmslike == 7)  alogic = (model->timestep() >= 52610 && model->timestep() <= 61369);
             //if(export_vmslike == 10) alogic = (model->timestep() >= 78889 && model->timestep() <= 87673);
-            if(export_vmslike >= 10) alogic = TRUE;
+            if(export_vmslike >= 10) alogic = 1;
             //tstep start 7th year = 52610
             //tstep end 7th year = 61369
 

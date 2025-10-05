@@ -39,8 +39,7 @@ namespace qmapcontrol
     }
 
     MapAdapterYahoo::MapAdapterYahoo(QObject* parent)
-        ///: MapAdapterTile(QUrl("http://png.maps.yimg.com/png?v=3.1.0&x=%x&y=%y&z=%zoom"), { projection::EPSG::SphericalMercator }, 17, 0, 1, true, parent) @todo re-add once MSVC supports initializer lists.
-        : MapAdapterTile(QUrl("http://png.maps.yimg.com/png?v=3.1.0&x=%x&y=%y&z=%zoom"), supportedProjections(), 17, 0, 1, true, parent) /// @todo remove once MSVC supports initializer lists.
+        : MapAdapterTile(QUrl("https://png.maps.yimg.com/png?v=3.1.0&x=%x&y=%y&z=%zoom"), supportedProjections(), 17, 0, 1, true, parent) /// @todo remove once MSVC supports initializer lists.
     {
 
     }

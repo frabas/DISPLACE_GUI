@@ -16,7 +16,7 @@ namespace
 }
 
 MapAdapterOpenSeaMap::MapAdapterOpenSeaMap(QObject* parent)
-    : MapAdapterTile(QUrl("http://tiles.openseamap.org/seamark/%zoom/%x/%y.png"), supportedProjections(), 0, 17, 0, false, parent) /// @todo remove once MSVC supports initializer lists.
+    : MapAdapterTile(QUrl("https://tiles.openseamap.org/seamark/%zoom/%x/%y.png"), supportedProjections(), 0, 17, 0, false, parent) /// @todo remove once MSVC supports initializer lists.
 {
 }
 

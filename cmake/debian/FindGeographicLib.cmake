@@ -6,7 +6,7 @@
 #  GeographicLib_LIBRARIES = /usr/local/lib/libGeographic.so
 #  GeographicLib_LIBRARY_DIRS = /usr/local/lib
 
-find_library (GeographicLib_LIBRARIES Geographic
+find_library (GeographicLib_LIBRARIES GeographicLib
   PATHS "${CMAKE_INSTALL_PREFIX}/../GeographicLib/lib")
 
 if (GeographicLib_LIBRARIES)

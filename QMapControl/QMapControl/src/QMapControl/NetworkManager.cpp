@@ -190,7 +190,7 @@ namespace qmapcontrol
         else
         {
             // Check whether the url has already been processed...
-            bool continue_processing_image(false);
+            bool continue_processing_image = false;
             {
                 // Is the reply in the downloading image queue?
                 QMutexLocker lock(&m_mutex_downloading_image);

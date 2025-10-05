@@ -64,7 +64,8 @@ namespace qmapcontrol
           m_tile_size_px(tile_size_px),
           m_pixmap_loading(),
           m_batch_mode(false),
-          m_batch_initial_queue_size(0)
+          m_batch_initial_queue_size(0),
+          m_batch_had_downloads(false)
     {
         // Setup a loading pixmap.
         setupLoadingPixmap();
@@ -136,21 +137,28 @@ namespace qmapcontrol
                     m_pixmap_cache[hash] = return_pixmap;
                 } else {
                     qDebug() << "Url: " << url << " Requires download";
-                    if (m_batch_mode && !m_batch_urls.contains(url)) {
-                        m_batch_urls.append(url);
+                    if (m_batch_mode) {
+                        if (!m_batch_urls.contains(url)) {
+                            m_batch_urls.append(url);
+                        }
+                        m_batch_had_downloads = true;
                     }
                     emit downloadImage(url);
                 }
             } else {
                 // Emit that we need to download the image using the network manager.
-                if (m_batch_mode && !m_batch_urls.contains(url)) {
-                    m_batch_urls.append(url);
+                if (m_batch_mode) {
+                    if (!m_batch_urls.contains(url)) {
+                        m_batch_urls.append(url);
+                    }
+                    m_batch_had_downloads = true;
                 }
                 emit downloadImage(url);
             }
         } else if (m_batch_mode && !m_batch_urls.contains(url)) {
             // Image is already being downloaded, but track it for batch completion
             m_batch_urls.append(url);
+            m_batch_had_downloads = true;
         }
 
         // Default return the image.
@@ -198,8 +206,7 @@ namespace qmapcontrol
                          << "Queue:" << m_nm.downloadQueueSize();
 #endif
             }
-            // Note: Don't check for completion here, let endBatchDownload handle it
-            // to avoid race conditions
+            // Don't emit individual updates in batch mode, wait for batch completion
         } else {
             // Let the world know we have received an updated image.
             emit imageUpdated(url);
@@ -254,45 +261,69 @@ void ImageManager::beginBatchDownload()
     m_batch_mode = true;
     m_batch_urls.clear();
     m_batch_initial_queue_size = m_nm.downloadQueueSize();
+    m_batch_had_downloads = false;
 }
 
 void ImageManager::endBatchDownload()
 {
 #ifdef QMAP_DEBUG
     qDebug() << "ImageManager: Ending batch download mode. Pending URLs:" << m_batch_urls.size()
-             << "Queue size:" << m_nm.downloadQueueSize();
+             << "Queue size:" << m_nm.downloadQueueSize()
+             << "Had downloads:" << m_batch_had_downloads;
 #endif
 
-    // Check if batch is already complete
-    if (m_batch_urls.isEmpty() || m_nm.downloadQueueSize() == 0) {
+    // If no downloads were requested during this batch, just exit batch mode without emitting
+    if (!m_batch_had_downloads) {
 #ifdef QMAP_DEBUG
-        qDebug() << "ImageManager: Batch complete, emitting imageUpdated immediately";
+        qDebug() << "ImageManager: No downloads in this batch, exiting batch mode silently";
 #endif
         m_batch_mode = false;
         m_batch_urls.clear();
-        emit imageUpdated(QUrl());
+        return;
     }
-    // Otherwise batch mode stays active until downloadingFinished signal is received
+
+    // If we had downloads but batch URLs list is empty AND queue is empty,
+    // all tiles were downloaded very quickly (from disk cache probably)
+    if (m_batch_urls.isEmpty() && m_nm.downloadQueueSize() == 0) {
+#ifdef QMAP_DEBUG
+        qDebug() << "ImageManager: All tiles already downloaded/cached, emitting imageUpdated immediately";
+#endif
+        m_batch_mode = false;
+        m_batch_had_downloads = false;
+        emit imageUpdated(QUrl());
+        return;
+    }
+
+    // Otherwise, we have pending downloads - batch mode stays active
+    // until downloadingFinished signal is received or all URLs are downloaded
+#ifdef QMAP_DEBUG
+    qDebug() << "ImageManager: Waiting for downloads. Batch URLs:" << m_batch_urls.size()
+             << "Queue:" << m_nm.downloadQueueSize();
+#endif
 }
 
 void ImageManager::onDownloadingFinished()
 {
 #ifdef QMAP_DEBUG
     qDebug() << "ImageManager::onDownloadingFinished - Batch mode:" << m_batch_mode
-             << "Pending URLs:" << m_batch_urls.size();
+             << "Pending URLs:" << m_batch_urls.size()
+             << "Had downloads:" << m_batch_had_downloads;
 #endif
 
-    if (m_batch_mode) {
+    if (m_batch_mode && m_batch_had_downloads) {
         // All downloads finished, emit the batch complete signal
 #ifdef QMAP_DEBUG
         qDebug() << "ImageManager: Batch download finished, emitting imageUpdated";
 #endif
         m_batch_mode = false;
         m_batch_urls.clear();
+        m_batch_had_downloads = false;
         emit imageUpdated(QUrl());
     } else {
-        // Forward the signal as normal
-        emit downloadingFinished();
+        // Forward the signal as normal (only if not in batch mode or no downloads happened)
+        if (!m_batch_mode) {
+            emit downloadingFinished();
+        }
     }
 }
 

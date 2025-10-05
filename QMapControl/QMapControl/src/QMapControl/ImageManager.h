@@ -280,6 +280,7 @@ namespace qmapcontrol
     bool m_batch_mode;
     QList<QUrl> m_batch_urls;
     int m_batch_initial_queue_size;
+    bool m_batch_had_downloads;
 };
 }
 

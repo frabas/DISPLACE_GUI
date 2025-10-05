@@ -1,6 +1,7 @@
 #ifndef SCHEDULERJOB_H
 #define SCHEDULERJOB_H
 
+#include <list>
 #include <simulationrun.h>
 
 #include <QList>

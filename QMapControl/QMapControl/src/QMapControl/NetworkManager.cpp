@@ -89,7 +89,7 @@ namespace qmapcontrol
     {
         // Return whether we requested url is downloading image queue.
         QMutexLocker lock(&m_mutex_downloading_image);
-        return m_downloading_image.values().contains(url);
+        return m_images_being_downloaded.contains(url);
     }
 
     void NetworkManager::downloadImage(const QUrl& url)
@@ -103,7 +103,7 @@ namespace qmapcontrol
             QMutexLocker lock(&m_mutex_downloading_image);
 
             // Check this is a new request.
-            if(m_downloading_image.values().contains(url) == false)
+            if(!m_images_being_downloaded.contains(url))
             {
                 // Generate a new request.
                 QNetworkRequest request(url);
@@ -114,6 +114,7 @@ namespace qmapcontrol
 
                 // Store the request into the downloading image queue.
                 m_downloading_image[reply] = url;
+                m_images_being_downloaded.insert(url);
 
                 // Mark our success.
                 success = true;
@@ -202,8 +203,10 @@ namespace qmapcontrol
                     qDebug() << "Downloaded image '" << m_downloading_image[reply] << "'";
 #endif
 
+                    auto url = m_downloading_image[reply];
                     // Remove it from the downloading image queue.
                     m_downloading_image.remove(reply);
+                    m_images_being_downloaded.remove(url);
                 }
             }
 

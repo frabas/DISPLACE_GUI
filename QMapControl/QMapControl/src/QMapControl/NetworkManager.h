@@ -141,6 +141,7 @@ namespace qmapcontrol
 
         /// Downloading image queue.
         QMap<QNetworkReply*, QUrl> m_downloading_image;
+        QSet<QUrl> m_images_being_downloaded;
 
         /// Mutex protecting downloading image queue.
         mutable QMutex m_mutex_downloading_image;

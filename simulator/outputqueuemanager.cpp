@@ -78,7 +78,7 @@ void OutputQueueManager::start()
 {
     std::unique_lock<std::mutex> locker(mMutex);
     UNUSED(locker);
-    mThread = std::thread(std::bind(&OutputQueueManager::thread, this));
+    mThread = std::thread( [this]() { thread(); });
 }
 
 void OutputQueueManager::finish()

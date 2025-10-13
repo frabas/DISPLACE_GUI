@@ -156,6 +156,19 @@ namespace qmapcontrol
          */
         void setLoadingPixmap (const QPixmap &pixmap);
 
+        /*!
+         * Begin a batch download session. Tiles requested during a batch will not trigger
+         * individual imageUpdated signals. Instead, a single signal will be emitted when
+         * the batch is complete.
+         */
+        void beginBatchDownload();
+
+        /*!
+         * End a batch download session. If there are pending downloads, they will complete
+         * and trigger a single imageUpdated signal when all are done.
+         */
+        void endBatchDownload();
+
     signals:
         /*!
          * Signal emitted to schedule an image resource to be downloaded.
@@ -187,6 +200,11 @@ namespace qmapcontrol
          * @param pixmap The image.
          */
         void imageDownloaded(const QUrl& url, const QPixmap& pixmap);
+
+        /*!
+         * Slot to handle when all downloads are finished (queue is empty).
+         */
+        void onDownloadingFinished();
 
     private:
         //! Constructor.
@@ -257,6 +275,12 @@ namespace qmapcontrol
     QList<QUrl> m_prefetch_urls;
 
     std::unique_ptr<PersistentCache> m_disk_cache;
+
+    /// Batch download tracking
+    bool m_batch_mode;
+    QList<QUrl> m_batch_urls;
+    int m_batch_initial_queue_size;
+    bool m_batch_had_downloads;
 };
 }
 

@@ -86,6 +86,9 @@ namespace qmapcontrol
             }
             else
             {
+                // Begin batch download mode - collect all tile requests first
+                ImageManager::get().beginBatchDownload();
+
                 // The current tile size.
                 const QSizeF tile_size_px(ImageManager::get().tileSizePx(), ImageManager::get().tileSizePx());
 
@@ -154,6 +157,9 @@ namespace qmapcontrol
                         ImageManager::get().prefetchImage(m_mapadapter->tileQuery(prefetch_tile_right, j, controller_zoom));
                     }
                 }
+
+                // End batch download mode - now start downloads and wait for completion
+                ImageManager::get().endBatchDownload();
             }
         }
     }

@@ -27,6 +27,7 @@ target_link_libraries(unittests
 
 target_include_directories(unittests
         PRIVATE
+        ${Sparsepp_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
         ${CMAKE_SOURCE_DIR}/formats

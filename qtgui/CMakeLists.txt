@@ -63,6 +63,7 @@ target_link_libraries(displacegui
 
 target_include_directories(displacegui
         PRIVATE
+        ${Sparsepp_INCLUDE_DIRS}
         ${GDAL_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons

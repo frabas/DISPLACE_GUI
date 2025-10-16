@@ -64,7 +64,9 @@ public:
         return mGeometry;
     }
 
-    bool selected() const { return mGeometry->selected(); }
+    bool selected() const { return mGeometry && mGeometry->selected(); }
+
+    bool isValid() const { return mGeometry != nullptr && !mEdge->source.expired() && !mEdge->target.expired(); }
 
     std::shared_ptr<NodeData> node() const { return mEdge->source.lock(); }
     std::shared_ptr<NodeData> target() const { return mEdge->target.lock(); }

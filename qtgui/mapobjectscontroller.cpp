@@ -220,7 +220,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
     foreach (std::shared_ptr<VesselData> vsl, vessels) {
-        VesselMapObject *obj = new VesselMapObject(this,vsl.get());
+        auto obj = std::make_shared<VesselMapObject>(this,vsl.get());
         mVesselObjects[model_n].add(vsl->mVessel->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -228,7 +228,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<ShipData> > &ships = model->getShipList();
     foreach (std::shared_ptr<ShipData> sh, ships) {
-        ShipMapObject *obj = new ShipMapObject(this,sh.get());
+        auto obj = std::make_shared<ShipMapObject>(this,sh.get());
         mShipObjects[model_n].add(sh->mShip->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -236,7 +236,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<FishfarmData> > &fishfarms = model->getFishfarmList();
     foreach (std::shared_ptr<FishfarmData> ff, fishfarms) {
-        FishfarmMapObject *obj = new FishfarmMapObject(this,ff.get());
+        auto obj = std::make_shared<FishfarmMapObject>(this,ff.get());
         mFishfarmObjects[model_n].add(ff->mFishfarm->get_name(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -244,7 +244,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<WindmillData> > &windmills = model->getWindmillList();
     foreach (std::shared_ptr<WindmillData> ff, windmills) {
-        WindmillMapObject *obj = new WindmillMapObject(this,ff.get());
+        auto obj = std::make_shared<WindmillMapObject>(this,ff.get());
         mWindmillObjects[model_n].add(ff->mWindmill->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -263,32 +263,38 @@ void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel 
 
 void MapObjectsController::updateVesselPosition(int model, int idx)
 {
-    mVesselObjects[model].get(idx, 0)->vesselUpdated();
+    auto obj = mVesselObjects[model].get(idx, 0);
+    if (obj) obj->vesselUpdated();
 }
 
 void MapObjectsController::updateShipPosition(int model, int idx)
 {
-    mShipObjects[model].get(idx, 0)->shipUpdated();
+    auto obj = mShipObjects[model].get(idx, 0);
+    if (obj) obj->shipUpdated();
 }
 
 
 void MapObjectsController::updateFishfarmPosition(int model, int idx)
 {
-    mFishfarmObjects[model].get(idx, 0)->fishfarmUpdated();
+    auto obj = mFishfarmObjects[model].get(idx, 0);
+    if (obj) obj->fishfarmUpdated();
 }
 
 void MapObjectsController::updateWindmillPosition(int model, int idx)
 {
-    mWindmillObjects[model].get(idx, 0)->windmillUpdated();
+    auto obj = mWindmillObjects[model].get(idx, 0);
+    if (obj) obj->windmillUpdated();
 }
 
 void MapObjectsController::updateNodes(int model)
 {
     auto it = mNodeObjects[model].begin();
     while (!mNodeObjects[model].atEnd(it)) {
-        NodeMapObject *obj = mNodeObjects[model].get(it, NodeMapObject::GraphNodeRole);
-        obj->updateProperties();
-        obj->getGeometryEntity()->requestRedraw();
+        auto obj = mNodeObjects[model].get(it, NodeMapObject::GraphNodeRole);
+        if (obj) {
+            obj->updateProperties();
+            obj->getGeometryEntity()->requestRedraw();
+        }
 
         ++it;
     }
@@ -473,10 +479,12 @@ void MapObjectsController::clearNodeSelection(int model)
 void MapObjectsController::selectNodes(int model, QList<types::NodeId> nodes)
 {
     foreach (auto node, nodes) {
-        NodeMapObject *nmo = mNodeObjects[model].get(node, NodeMapObject::GraphNodeRole);
-        nmo->setSelection(true);
-        nodeSelectionHasChanged(nmo);
-        nmo->getGeometryEntity()->requestRedraw();
+        auto nmo = mNodeObjects[model].get(node, NodeMapObject::GraphNodeRole);
+        if (nmo) {
+            nmo->setSelection(true);
+            nodeSelectionHasChanged(nmo.get());
+            nmo->getGeometryEntity()->requestRedraw();
+        }
     }
 }
 
@@ -576,125 +584,125 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 
     auto idxnode = nd->get_idx_node();
 
-    NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
+    auto obj = std::make_shared<NodeMapObject>(this, model_n, NodeMapObject::GraphNodeRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
 
     mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     /* add here other roles */
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSubsurfaceSweptAreaRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumSubsurfaceSweptAreaRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumsubsurfacesweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumcatches[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesWithThresholdRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumCatchesWithThresholdRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumcatchesWithThreshold[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumDiscardsRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumDiscardsRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumdiscards[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumDiscardsRatioRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithCumDiscardsRatioRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumdiscardsratio[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithNbChokedRole, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithNbChokedRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerNbchoked[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopCumcatches, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithPopCumcatches, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumcatchesPerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosBiomass, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithBenthosBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosNumber, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithBenthosNumber, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosNumber[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosMeanweight, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithBenthosMeanweight, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosMeanweight[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs0, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithTariffs0, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerTariffMet0[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs1, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithTariffs1, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerTariffMet1[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs2, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithTariffs2, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerTariffMet2[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSalinity, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithSalinity, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerSalinity[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSST, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithSST, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerSST[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithWind, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithWind, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerWind[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithNitrogen, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithNitrogen, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerNitrogen[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPhosphorus, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithPhosphorus, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerPhosphorus[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithOxygen, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithOxygen, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerOxygen[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithDissolvedCarbon, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithDissolvedCarbon, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerDissolvedCarbon[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBathymetry, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithBathymetry, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBathymetry[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithShippingdensity, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithShippingdensity, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerShippingdensity[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSiltfraction, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n,NodeMapObject::GraphNodeWithSiltfraction, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerSiltfraction[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeWithIcesrectanglecode, nd);
+    obj = std::make_shared<NodeMapObject>(this, model_n, NodeMapObject::GraphNodeWithIcesrectanglecode, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerIcesrectanglecode[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
     
@@ -705,17 +713,17 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 
 void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge> _edge, bool disable_redraw)
 {
-    EdgeMapObject *edge = new EdgeMapObject(this, _edge);
+    auto edge = std::make_shared<EdgeMapObject>(this, _edge);
 
-    connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
+    connect (edge.get(), SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
     mEdgeObjects[model_n].add(-1, edge, 0);
-    mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
+    mEdgesLayer[model_n]->addEdge(edge.get(), disable_redraw);
 }
 
 void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
 {
-    HarbourMapObject *obj = new HarbourMapObject(this, mModels[model_n].get(), h.get());
+    auto obj = std::make_shared<HarbourMapObject>(this, mModels[model_n].get(), h.get());
     mHarbourObjects[model_n].add(h->mHarbour->get_idx_node(), obj, 0);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
@@ -769,7 +777,7 @@ void MapObjectsController::delSelectedEdges(int model)
 
 void MapObjectsController::delSelectedNodes(int model)
 {
-    QList<NodeMapObject *> deleteList;
+    QList<std::shared_ptr<NodeMapObject>> deleteList;
 
     foreach (NodeMapObject *node, mNodeSelection[model]) {
         std::shared_ptr<NodeData> nd = node->node();
@@ -790,14 +798,14 @@ void MapObjectsController::delSelectedNodes(int model)
         mModels[model]->removeNode(nd);
     }
 
-    foreach (NodeMapObject *obj, deleteList) {
+    foreach (auto obj, deleteList) {
         if (obj) {
             std::shared_ptr<qmapcontrol::Geometry> geom = obj->getGeometryEntity();
             qmapcontrol::LayerGeometry *layer = geom->layer();
             if (layer) {
                 layer->removeGeometry(geom);
             }
-            delete obj;
+            // No delete needed - shared_ptr manages memory automatically
         }
     }
 

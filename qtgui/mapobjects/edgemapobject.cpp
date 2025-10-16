@@ -47,6 +47,12 @@ EdgeMapObject::EdgeMapObject(MapObjectsController *controller, std::shared_ptr<N
     std::shared_ptr<NodeData> src = mEdge->source.lock();
     std::shared_ptr<NodeData> tgt = mEdge->target.lock();
 
+    // Check if the nodes are still valid
+    if (!src || !tgt) {
+        qWarning() << "EdgeMapObject: Cannot create edge with expired nodes";
+        return;
+    }
+
     std::vector<qmapcontrol::PointWorldCoord> line;
     line.push_back(qmapcontrol::PointWorldCoord(src->get_x(), src->get_y()));
     line.push_back(qmapcontrol::PointWorldCoord(tgt->get_x(), tgt->get_y()));

@@ -51,7 +51,7 @@ public:
     static void setPieSize(int w, int h);
 
 private:
-    static QSettings *settings;
+    static std::shared_ptr<QSettings> settings;
 };
 
 class NodeWithPopStatsGraphics : public NodeGraphics {

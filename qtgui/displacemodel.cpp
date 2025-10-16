@@ -1100,8 +1100,7 @@ void DisplaceModel::clearAllNodes()
     createFeaturesLayer();
 }
 
-bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
-{
+bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller) {
     if (mModelType != EditorModelType) {
         return false;
     }
@@ -1111,82 +1110,82 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     QList<types::NodeId> translated_nodes;
     int nodeidx = mNodes.count();
     int cntr = 0;
-            foreach(GraphBuilder::Node node, nodes) {
-            if (node.good) {
-//            int nodeid = mNodes.size();
+    foreach(GraphBuilder::Node const &node, nodes) {
+        if (node.good) {
+            //            int nodeid = mNodes.size();
 
-                OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
-                feature->SetField(FLD_TYPE, (int) OgrTypeNode);
-                feature->SetField(FLD_NODEID, nodeidx + cntr);     // was nodeid
+            OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+            feature->SetField(FLD_TYPE, (int) OgrTypeNode);
+            feature->SetField(FLD_NODEID, nodeidx + cntr); // was nodeid
 
-                OGRPoint pt;
-                pt.setX(node.point.x());
-                pt.setY(node.point.y());
+            OGRPoint pt;
+            pt.setX(node.point.x());
+            pt.setY(node.point.y());
 
-                feature->SetGeometry(&pt);
+            feature->SetGeometry(&pt);
 
-                mNodesLayer->CreateFeature(feature);
+            mNodesLayer->CreateFeature(feature);
 
-                std::shared_ptr<Node> nd;
+            std::shared_ptr<Node> nd;
 
-                translated_nodes.push_back(types::NodeId(nodeidx + cntr));
-                if (node.harbour) {
-                    std::shared_ptr<Harbour> h(
-                            new Harbour(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), node.harbour));
-                    nd = h;
-                    std::shared_ptr<HarbourData> hd(new HarbourData(h));
-                    mHarbours.push_back(hd);
-                    newharbours.push_back(hd);
-                } else {
-                    nd = std::shared_ptr<Node>(
-                            new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0));
-                }
-
-                std::shared_ptr<NodeData> nodedata(new NodeData(nd, this));
-
-                mNodes.push_back(nodedata);
-
-                if (!node.good) {
-                    nodedata->setDeleted(true);
-                }
-
-                newnodes.push_back(nodedata);
-                ++cntr;
+            translated_nodes.push_back(types::NodeId(nodeidx + cntr));
+            if (node.harbour) {
+                std::shared_ptr<Harbour> h(
+                    new Harbour(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), node.harbour));
+                nd = h;
+                std::shared_ptr<HarbourData> hd(new HarbourData(h));
+                mHarbours.push_back(hd);
+                newharbours.push_back(hd);
             } else {
-                translated_nodes.push_back(types::special::InvalidNodeId);
+                nd = std::shared_ptr<Node>(
+                    new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0));
             }
+
+            std::shared_ptr<NodeData> nodedata(new NodeData(nd, this));
+
+            mNodes.push_back(nodedata);
+
+            if (!node.good) {
+                nodedata->setDeleted(true);
+            }
+
+            newnodes.push_back(nodedata);
+            ++cntr;
+        } else {
+            translated_nodes.push_back(types::special::InvalidNodeId);
         }
+    }
 
     mScenario.setNrow_coord(cntr);
 
     cntr = 0;
     int numedges = 0;
-            foreach(GraphBuilder::Node node, nodes) {
-            if (node.good) {
-                std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
-                for (int i = 0; i < node.adiacencies.size(); ++i) {
-                    int adidx = node.adiacencies[i];
-                    if (nodes[adidx].good) {
-                        addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
-                    }
-                    ++numedges;
+    foreach(GraphBuilder::Node const &node, nodes) {
+        if (node.good) {
+            std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
+            for (int i = 0; i < node.adiacencies.size(); ++i) {
+                int adidx = node.adiacencies[i];
+                if (nodes[adidx].good) {
+                    addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
                 }
-                ++cntr;
+                ++numedges;
             }
+            ++cntr;
         }
+    }
 
     mScenario.setNrow_graph(numedges);
 
-            foreach(std::shared_ptr<NodeData> node, newnodes) {
-            if (!node->mNode->get_harbour()) {
-                controller->addNode(mIndex, node);
-            }
+    foreach(std::shared_ptr<NodeData> node, newnodes) {
+        if (!node->mNode->get_harbour()) {
+            controller->addNode(mIndex, node, true);
         }
-            foreach (std::shared_ptr<HarbourData> h, newharbours) {
-            controller->addHarbour(mIndex, h, true);
-        }
+    }
+    foreach(std::shared_ptr<HarbourData> h, newharbours) {
+        controller->addHarbour(mIndex, h, true);
+    }
 
     controller->redraw();
 

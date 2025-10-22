@@ -77,6 +77,8 @@ Source: "{#ProjectDir}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversio
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
+ 
+
 Source: "{#SDK_DIR}\bin\boost_system-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\boost_atomic-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\bin\boost_chrono-vc143-mt-x64-1_87.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -182,6 +184,11 @@ Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\p
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
 ;Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 ;Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+
+;added for Windows (Oct25)
+Source: "{#QT_PLUGINS_DIR}\tls\qcertonlybackend{#QT_DEBUG}.dll"; DestDir: "{app}\tls"; Flags: ignoreversion
+Source: "{#QT_PLUGINS_DIR}\tls\qschannelbackend{#QT_DEBUG}.dll"; DestDir: "{app}\tls"; Flags: ignoreversion
+
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 

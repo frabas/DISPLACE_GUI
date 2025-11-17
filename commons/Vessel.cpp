@@ -2805,6 +2805,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                       bool is_individual_vessel_quotas,
                       bool check_all_stocks_before_going_fishing,
                       bool is_discard_ban,
+                      bool is_realtime_closure,
                       bool is_grouped_tacs,
                       double tech_creeping_multiplier,
                       bool is_fishing_credits,
@@ -4151,6 +4152,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDiscThisEvent/(totLandThisEvent+totDiscThisEvent);
     experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r)= totAvoiStksDiscThisEvent/(totAvoiStksLandThisEvent+totAvoiStksDiscThisEvent);
 
+    if (is_realtime_closure)
+    {
+        // TODO: Test it and expand. Keep track of closed nodes?
+        if (experienced_bycatch_prop_on_fgrounds.at(idx_node_r)>0.8)
+        {
+            this->get_loc()->setBannedMetier(this->get_metier()->get_name());
+            //this->get_loc()->setBannedVsize(this->get_length_class());
+            //this->get_loc()->setBannedNation(this->get_nationality_idx());
+        }
+    }
 
     // contribute to accumulated catches on this node
     outc(cout << "cumcatch_fgrounds this node is " << cumcatch_fgrounds.at(idx_node_r) << "\n");

@@ -44,6 +44,7 @@ static const char *dyn_alloc_options[] = {
     "shared_harbour_knowledge",
     "TACs",
     "discard_ban",
+    "realtime_closure",
     "groupedTACs",
     "stopGoingFishingOnFirstChokedStock",
     "LTMP",

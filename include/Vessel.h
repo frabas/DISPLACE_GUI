@@ -519,6 +519,7 @@ public:
                   bool is_individual_vessel_quotas,
                   bool check_all_stocks_before_going_fishing,
                   bool is_discard_ban,
+                  bool is_realtime_closure,
                   bool is_grouped_tacs,
                   double tech_creeping_multiplier,
                   bool is_fishing_credits,

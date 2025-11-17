@@ -175,6 +175,8 @@ public:
 
     bool is_discard_ban() const;
 
+    bool is_realtime_closure() const;
+
     bool is_grouped_tacs() const;
 
     bool is_benthos_in_numbers() const;

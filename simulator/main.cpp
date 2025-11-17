@@ -3169,10 +3169,24 @@ int app_main(int argc, char const* argv[])
         if (simModel->calendar().isFirstDayOfYear(simModel->timestep())) {
             for (unsigned int i = 0; i < simModel->nodes().size(); i++) {
                 simModel->nodes().at(i)->set_nbchoked(0);
+            
+                if (scenario.dyn_alloc_sce.option(Options::realtime_closure))
+                {
+                    // cancel realtime closure at the end of the year
+                    simModel->nodes().at(i)->reinitBannedMetier();
+                }
+                
+
             }
         }
 
   
+
+      
+
+
+
+
         ///------------------------------///
         ///------------------------------///
         ///  EXPORTING TO DB             ///

@@ -38,6 +38,7 @@ struct SimModel::Impl {
     bool is_tacs;
     bool is_fishing_credits;
     bool is_discard_ban;
+    bool is_realtime_closure;
     bool is_grouped_tacs;
     bool is_benthos_in_numbers;
     bool is_benthos_in_longevity_classes;
@@ -116,6 +117,13 @@ void SimModel::setScenario(std::unique_ptr<displace::commons::Scenario> scenario
         p->is_discard_ban = 0;
     }
 
+    if (p->scenario->dyn_alloc_sce.option(Options::realtime_closure)) {
+        p->is_realtime_closure = 1;
+    }
+    else {
+        p->is_realtime_closure = 0;
+    }
+  
     if (p->scenario->dyn_alloc_sce.option(Options::groupedTACs)) {
         p->is_grouped_tacs = 1;
     } else {
@@ -402,6 +410,12 @@ bool SimModel::is_discard_ban() const
 {
     return p->is_discard_ban;
 }
+
+bool SimModel::is_realtime_closure() const
+{
+    return p->is_realtime_closure;
+}
+
 
 bool SimModel::is_grouped_tacs() const
 {

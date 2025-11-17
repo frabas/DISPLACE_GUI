@@ -32,6 +32,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,groupedTACs);
     O(mMap,stopGoingFishingOnFirstChokedStock);
     O(mMap,discard_ban);
+    O(mMap, realtime_closure);
     O(mMap,LTMP);
     O(mMap,FMSY);
     O(mMap,FMSYrange);

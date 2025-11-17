@@ -97,6 +97,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           ofstream &popnodes_cumdiscards,
                           ofstream &popnodes_cumdiscardsratio,
                           ofstream &popnodes_nbchoked,
+                          ofstream &popnodes_metrealtimeclosed,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
@@ -121,6 +122,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           const string & popnodes_cumdiscards_filename,
                           const string & popnodes_cumdiscardsratio_filename,
                           const string & popnodes_nbchoked_filename,
+                          const string& popnodes_metrealtimeclosed_filename,
                           const string & popnodes_tariffs_filename,
                           const string & popnodes_benthos_biomass_filename,
                           const string & popnodes_benthos_number_filename,
@@ -1519,6 +1521,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         nodes.at(n)->export_popnodes_cumdiscardsratio(popnodes_cumdiscardsratio, tstep);
         nodes.at(n)->export_popnodes_nbchoked(popnodes_nbchoked, tstep);
+        if (dyn_alloc_sce.option(Options::realtime_closure)) nodes.at(n)->export_popnodes_metrealtimeclosed(popnodes_metrealtimeclosed, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         // initially it was tstep == 34321 is 1st december 4th year. Now it is year 5
         if ((a_year_i == 3 || a_year_i == 8) && a_month_i == 12) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output
@@ -1627,6 +1630,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         guiSendUpdateCommand(popnodes_cumdiscards_filename, tstep);
         guiSendUpdateCommand(popnodes_cumdiscardsratio_filename, tstep);
         guiSendUpdateCommand(popnodes_nbchoked_filename, tstep);
+        guiSendUpdateCommand(popnodes_metrealtimeclosed_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_with_threshold_filename, tstep);
         guiSendUpdateCommand(popnodes_tariffs_filename, tstep);
 

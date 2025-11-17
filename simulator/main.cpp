@@ -1801,6 +1801,12 @@ int app_main(int argc, char const* argv[])
     popnodes_nbchoked.open(filename.c_str());
     std::string popnodes_nbchoked_filename = filename;
 
+    ofstream popnodes_metrealtimeclosed;
+    filename = outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_metrealtimeclosed_" +
+        namesimu + ".dat";
+    popnodes_metrealtimeclosed.open(filename.c_str());
+    std::string popnodes_metrealtimeclosed_filename = filename;
+    
     ofstream popnodes_tariffs;
     filename =
             outdir + "/DISPLACE_outputs/" + namefolderinput + "/" + namefolderoutput + "/popnodes_tariffs_" + namesimu +
@@ -2047,6 +2053,7 @@ int app_main(int argc, char const* argv[])
                                     popnodes_cumdiscards,
                                     popnodes_cumdiscardsratio,
                                     popnodes_nbchoked,
+                                    popnodes_metrealtimeclosed,
                                     popnodes_tariffs,
                                     export_individual_tacs,
                                     popnodes_end,
@@ -2071,6 +2078,7 @@ int app_main(int argc, char const* argv[])
                                     popnodes_cumdiscards_filename,
                                     popnodes_cumdiscardsratio_filename,
                                     popnodes_nbchoked_filename,
+                                    popnodes_metrealtimeclosed_filename,
                                     popnodes_tariffs_filename,
                                     popnodes_benthos_biomass_filename,
                                     popnodes_benthos_number_filename,

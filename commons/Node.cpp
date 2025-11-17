@@ -2137,6 +2137,24 @@ void Node::export_popnodes_nbchoked(ofstream& popnodes, int tstep)
 
 }
 
+void Node::export_popnodes_metrealtimeclosed(ofstream& popnodes, int tstep)
+{
+
+    dout(cout << "export realtime closed nodes for use in e.g. a GIS engine" << "\n");
+    // note that this file could also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  value
+    int i = 0;
+    int count = -1;
+    vector<bool> banned = this->mBannedMetiers;
+    while (i < banned.size()) {
+        count++;
+        if(banned.at(i)!=0) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " " <<
+            " " << this->get_x() << " " << this->get_y() << " " <<
+            count << " " << "\n";
+    }
+}
 
 void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 {

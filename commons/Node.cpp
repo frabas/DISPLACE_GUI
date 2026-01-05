@@ -2139,6 +2139,8 @@ void Node::export_popnodes_nbchoked(ofstream& popnodes, int tstep)
 
 void Node::export_popnodes_metrealtimeclosed(ofstream& popnodes, int tstep)
 {
+    // CAUTION: EXPORTING ALL CLOSED NODE FOR NOW.....I.E. NOT ONLY THE ONES TRIGGERED BY RTC....
+
 
     dout(cout << "export realtime closed nodes for use in e.g. a GIS engine" << "\n");
     // note that this file could also be used by the ui for displaying the statistics on node

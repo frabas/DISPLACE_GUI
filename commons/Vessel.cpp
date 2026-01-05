@@ -2234,9 +2234,15 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
            // outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << "\n");
-            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] *
-                                 get_loc()->get_prices_per_cat(pop, comcat_this_size) * price_multiplier *
-                                  (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
+            double tripRevenues= a_catch_pop_at_szgroup[pop][sz] *
+                get_loc()->get_prices_per_cat(pop, comcat_this_size)* price_multiplier*
+                (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
+            if (std::isnan(tripRevenues))
+            { // x is NaN
+                cout << "An issue found likely with input fish prices per cat for this pop " << pop << " on this harbour " << get_loc()->get_idx_node() << "\n";
+            }
+
+            lastTrip_revenues += tripRevenues;
         }
 
         int namepop = populations[pop]->get_name();

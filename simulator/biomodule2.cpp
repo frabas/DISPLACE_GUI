@@ -1624,6 +1624,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         popnodes_cumsweptarea.flush();
         popnodes_cumcatches.flush();
         popnodes_cumdiscards.flush();
+        popnodes_cumdiscardsratio.flush();
+        popnodes_nbchoked.flush();
+        popnodes_metrealtimeclosed.flush();
+        popnodes_cumcatches_with_threshold.flush();
+        popnodes_tariffs.flush();
         guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
         guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_filename, tstep);

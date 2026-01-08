@@ -539,9 +539,9 @@ public:
     void compute_experiencedcpue_fgrounds_per_met_per_pop();
     bool compute_experiencedcpue_fgrounds_per_yearquarter_per_pop(int the_year, int the_quarter);
 
-    void clear_cumcatch_and_cumeffort_per_trip();
+    void clear_cumcatch_and_cumeffort_per_trip(const DynAllocOptions& dyn_alloc_sce);
     void clear_cumeffort_per_yearquarter();
-    void reinit_after_a_trip();
+    void reinit_after_a_trip(const DynAllocOptions& dyn_alloc_sce);
 
 	void receive_message(int message);
 	void reset_message();

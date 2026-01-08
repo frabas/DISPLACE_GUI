@@ -3238,7 +3238,7 @@ int app_main(int argc, char const* argv[])
                                                          simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)],
                                                          simModel->populations(), simModel->config().implicit_pops, 
                                                          export_discards_in_logbooks);
-                simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip();
+                simModel->vessels()[listVesselIdForLogLikeToExport.at(idx)]->reinit_after_a_trip(scenario.dyn_alloc_sce);
             }
             listVesselIdForLogLikeToExport.clear();
 

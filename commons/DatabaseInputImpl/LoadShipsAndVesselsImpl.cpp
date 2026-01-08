@@ -60,8 +60,9 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
         int nbmets = 300; //TODO: include it from config()
         int nbszgroups = 14; // caution: magic number
 
+        vector<string> dyn_alloc_sce;
 
-        auto v = new Vessel(
+        auto v = new Vessel(dyn_alloc_sce,
                 a_location,        // a_location i.e start harbour node
                 idx_vessel,
                 vessel,         // name

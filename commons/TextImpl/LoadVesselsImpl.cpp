@@ -571,7 +571,13 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 
         cout << "Creating vessel " << i << "\n";
 
-        vessels[i] = new Vessel(model.nodes().at(start_harbour.toIndex()),
+        // bad coding but will work for now...
+        vector<string> dyn_alloc_sce;
+        if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) dyn_alloc_sce.push_back("experiencedCPUEsPerMet");
+        if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) dyn_alloc_sce.push_back("experiencedCPUEsPerYearQuarter");
+
+        vessels[i] = new Vessel(dyn_alloc_sce,
+                                model.nodes().at(start_harbour.toIndex()),
                                 i,
                                 loadedDataVessels.vectsparam1.at(i),
                                 model.config().nbpops,
@@ -904,6 +910,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
 
         // or per pop (new objects each quarter)
         vector<vector<double> > a_cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(model.config().nbpops));
+        // experiencedCPUEsPerMet Option  if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
         Vessel::ValueFgroundsPerMetPerPop a_cumcatch_fgrounds_per_met_per_pop(fgrounds.size(),
                                                                               model.config().nbmets,
                                                                               model.config().nbpops);
@@ -912,18 +919,21 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                                                                    vector<double>(model.config().nbpops));
 
         // or per met per pop (new objects each quarter)
+        // experiencedCPUEsPerMet Option
         Vessel::ValueFgroundsPerMetPerPop a_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
                                                                                      model.config().nbmets,
                                                                                      model.config().nbpops);
 
         vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop(fgrounds.size(),
                                                                         vector<double>(model.config().nbpops));
+        // experiencedCPUEsPerMet Option
         Vessel::ValueFgroundsPerMetPerPop a_freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(),
                                                                                           model.config().nbmets,
                                                                                           model.config().nbpops);
 
         // or per yearquarter per pop (CARRYING OVER QUARTERS - for Option experiencedCPUEsPerYearQuarter: THIS CANNOT WORK IF THE VESSEL HAS NOT STRICTLY THE SAME GROUND FOR EACH QUARTER)
         //initialisation of objects useful for if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter))
+        // experiencedCPUEsPerMet Option
         int nbyearquarters = 11 * 4;
         vector<vector<vector<double> > > a_cumcatch_fgrounds_per_yearquarter_per_pop = vessel->get_cumcatch_fgrounds_per_yearquarter_per_pop();
         vector<vector<vector<double> > > a_experiencedcpue_fgrounds_per_yearquarter_per_pop = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
@@ -958,6 +968,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
                     for (int met = 0; met < model.config().nbmets; met++)
                     {
                         a_cumeffort_per_trip_per_fgrounds_per_met[g][met] = 0;
+                        //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                         a_cumcatch_fgrounds_per_met_per_pop.zero(g, met, pop);
                         a_experiencedcpue_fgrounds_per_met_per_pop(g, met, pop) =
                                 a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop); // init is not metier-specific
@@ -1004,6 +1015,7 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
 
         // ...or per met per pop
         vessel->set_cumeffort_per_trip_per_fgrounds_per_met(a_cumeffort_per_trip_per_fgrounds_per_met);
+        //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
         vessel->set_cumcatch_fgrounds_per_met_per_pop(a_cumcatch_fgrounds_per_met_per_pop);
         vessel->set_experiencedcpue_fgrounds_per_met_per_pop(a_experiencedcpue_fgrounds_per_met_per_pop);
         vessel->set_freq_experiencedcpue_fgrounds_per_met_per_pop(a_freq_experiencedcpue_fgrounds_per_met_per_pop);

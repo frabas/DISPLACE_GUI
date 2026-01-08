@@ -28,7 +28,7 @@ NodeDetailsWidget::NodeDetailsWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->tool1->setVisible(false);
 
-    connect (ui->tool1, SIGNAL(clicked()), this, SIGNAL(toolButtonClicked()));
+    connect (ui->tool1, SIGNAL(clicked()), this, SIGNAL(toolButtonClicked()), Qt::QueuedConnection);
 }
 
 NodeDetailsWidget::~NodeDetailsWidget()
@@ -37,8 +37,13 @@ NodeDetailsWidget::~NodeDetailsWidget()
 }
 
 void NodeDetailsWidget::setText(QString text)
-{
-    ui->text->setText(text);
+{   
+    if (ui && ui->text) {
+        ui->text->setText(text);
+    }
+    else {
+        qWarning() << "NodeDetailsWidget::setText called but UI element missing";
+    }
 }
 
 void NodeDetailsWidget::showTool(bool display)

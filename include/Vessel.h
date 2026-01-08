@@ -211,7 +211,8 @@ public:
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name);
         Vessel(Node* a_location, int idx_vessel, std::string name);
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name, int nbpops, int nbszgroups, std::vector<int> harbours, std::vector<int> fgrounds,
-        Vessel(Node* a_location,
+        Vessel(vector<string> dyn_alloc_sce, 
+               Node* a_location,
                int idx_vessel,
                std::string name,
                int nbpops, int nbmets, int nbszgroups,

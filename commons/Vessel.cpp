@@ -126,7 +126,8 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 }
 
 
-Vessel::Vessel(Node* p_location,
+Vessel::Vessel(vector<string> dyn_alloc_sce, 
+               Node* p_location,
                int a_idx_vessel,
                string a_name,
                int nbpops,
@@ -470,6 +471,7 @@ Vessel::Vessel(Node* p_location,
     // or per pop
     vector<vector<double> > cumcatch_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
 
+    //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
     ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop(fgrounds.size(), nbmets, nbpops);
     vector<vector<double> > cumdiscard_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
     vector<vector<double> > experiencedcpue_fgrounds_per_pop(fgrounds.size(), vector<double>(nbpops));
@@ -481,6 +483,7 @@ Vessel::Vessel(Node* p_location,
     ValueFgroundsPerMetPerPop freq_experiencedcpue_fgrounds_per_met_per_pop(fgrounds.size(), nbmets, nbpops);
 
     // or per yearquarter per pop
+    //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
     int nbyearquarters = 13 * 4;
     vector<vector<vector<double> > > cumcatch_fgrounds_per_yearquarter_per_pop(fgrounds.size(),
                                                                                vector<vector<double>>(nbyearquarters,
@@ -521,6 +524,7 @@ Vessel::Vessel(Node* p_location,
             cumcatch_fgrounds_per_pop[f][pop] = 0;
             cumdiscard_fgrounds_per_pop[f][pop] = 0;
             experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
+            // if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
             for (int met = 0; met < nbmets; met++) {
                 cumeffort_per_trip_per_fgrounds_per_met[f][met] = 0;
                 cumcatch_fgrounds_per_met_per_pop.zero(f, met, pop);
@@ -539,6 +543,7 @@ Vessel::Vessel(Node* p_location,
                 experiencedcpue_fgrounds_per_yearquarter_per_pop[f][yquarter][pop] =
                     freq_fgrounds[f] * expected_cpue_this_pop.at(pop); // init 
             }
+
         }
     }
     // per total...
@@ -564,11 +569,13 @@ Vessel::Vessel(Node* p_location,
     // ...or per pop per met
     this->set_cumeffort_per_trip_per_fgrounds_per_met(cumeffort_per_trip_per_fgrounds_per_met);
     this->set_cumcatch_fgrounds_per_met_per_pop(cumcatch_fgrounds_per_met_per_pop);
+    // if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
     this->set_experiencedcpue_fgrounds_per_met_per_pop(experiencedcpue_fgrounds_per_met_per_pop);
     this->set_freq_experiencedcpue_fgrounds_per_met_per_pop(freq_experiencedcpue_fgrounds_per_met_per_pop);
     this->compute_experiencedcpue_fgrounds_per_met_per_pop();
 
     // ...or per yearquarter per pop
+    //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
     this->set_cumcatch_fgrounds_per_yearquarter_per_pop(cumcatch_fgrounds_per_yearquarter_per_pop);
     this->set_experiencedcpue_fgrounds_per_yearquarter_per_pop(experiencedcpue_fgrounds_per_yearquarter_per_pop);
     this->set_freq_experiencedcpue_fgrounds_per_yearquarter_per_pop(
@@ -3812,6 +3819,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     this->cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
                     this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += a_cumul_weight_this_pop_this_vessel;
+                    // if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                     this->cumcatch_fgrounds_per_met_per_pop(idx_node_r, met,
                                                             pop) += a_cumul_weight_this_pop_this_vessel;
                     int q = a_quarter - 1;
@@ -6787,11 +6795,13 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
                this->set_cumcatch_fgrounds(vector <double> (grds.size(), 1.0));// re-dimensioned
                this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+               // if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                ValueFgroundsPerMetPerPop cumcatch_fgrounds_per_met_per_pop(grds.size(), nbmets, nbpops);
                this->set_cumcatch_fgrounds_per_met_per_pop(cumcatch_fgrounds_per_met_per_pop);// re-dimensioned       
                this->set_cumdiscard_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
                this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                this->set_cumeffort_per_trip_per_fgrounds(vector <double>(grds.size(), 1.0));// re-dimensioned
+               //if (model.scenario().dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                this->set_cumeffort_per_trip_per_fgrounds_per_met(vector <vector <double> > (grds.size(), vector<double> (nbmets, 0)));// re-dimensioned              
                this->set_cumeffort_per_yearquarter_per_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned
                this->set_experiencedcpue_fgrounds(vector <double>(grds.size(), 1.0)); // re-dimensioned

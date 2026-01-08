@@ -2909,6 +2909,7 @@ bool DisplaceModel::loadVessels()
     return true;
 }
 
+/*
 bool DisplaceModel::loadGraphs()
 {
     struct data {
@@ -2958,13 +2959,252 @@ bool DisplaceModel::loadGraphs()
         ++linenum;
     }
 
-    /* file has been read. Now feed the data! */
+    // file has been read. Now feed the data! 
             foreach (data d, datas) {
             mNodes[d.from]->appendAdiancency(mNodes.at(d.to), d.weight);
         }
 
     return true;
 }
+*/
+
+/*
+bool DisplaceModel::loadGraphs()
+{
+    const QString filename =
+        mBasePath + "/graphsspe/graph" + QString::number(mScenario.getGraph()) + ".dat";
+
+    qDebug() << "Loading:" << filename << "with"
+        << mScenario.getNrow_graph() << "lines";
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly))
+        throw DisplaceException(file.errorString());
+
+    QTextStream ts(&file);
+    const int nRows = mScenario.getNrow_graph();
+
+    // -----------------------------------------------------------------
+    // Option 1 – keep an intermediate container (fast enough for most)
+    // -----------------------------------------------------------------
+    struct Edge { int from; int to; double weight; };
+    QVector<Edge> edges;
+    edges.reserve(nRows);
+
+    int lineNo = 0;
+    while (!ts.atEnd()) {
+        bool okFrom, okTo, okWeight;
+
+        // read three consecutive lines
+        QString sFrom = ts.readLine(); ++lineNo;
+        QString sTo = ts.readLine(); ++lineNo;
+        QString sWeight = ts.readLine(); ++lineNo;
+
+        if (sFrom.isNull() || sTo.isNull() || sWeight.isNull())
+            break; // incomplete record ... stop
+
+        int   from = sFrom.toInt(&okFrom);
+        int   to = sTo.toInt(&okTo);
+        double weight = sWeight.toDouble(&okWeight);
+
+        if (!okFrom || !okTo || !okWeight) {
+            throw DisplaceException(
+                QStringLiteral("Graph %1 parse error at line %2")
+                .arg(filename)
+                .arg(lineNo));
+        }
+
+        edges.append({ from, to, weight });
+    }
+
+    // -----------------------------------------------------------------
+    // Build adjacency list (single pass over the vector)
+    // -----------------------------------------------------------------
+    for (const Edge& e : edges) {
+        // Assuming mNodes[from] is never nullptr – add safety checks if needed
+        mNodes[e.from]->appendAdiancency(mNodes.at(e.to), e.weight);
+    }
+
+    return true;
+}
+*/
+
+bool DisplaceModel::loadGraphs()
+{
+    /* --------------------------------------------------------------
+       1?  Build the full file name and open the file
+       -------------------------------------------------------------- */
+    const QString filename =
+        mBasePath + "/graphsspe/graph" +
+        QString::number(mScenario.getGraph()) + ".dat";
+
+    qDebug() << "Loading:" << filename
+        << "expected rows =" << mScenario.getNrow_graph();
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly))
+        throw DisplaceException(file.errorString());
+
+    QTextStream ts(&file);
+    //ts.setCodec("UTF-8");                     // enforce a known encoding
+
+    const int   rowCount = mScenario.getNrow_graph();      // N
+    const qint64 totalLines = static_cast<qint64>(rowCount) * 3; // 3·N
+
+    /* --------------------------------------------------------------
+       2?  Quick line?count sanity check (helps spot truncated files)
+       -------------------------------------------------------------- */
+    qint64 actualLines = 0;
+    while (!ts.atEnd()) {
+        ts.readLine();
+        ++actualLines;
+    }
+    ts.seek(0);                               // rewind for real parsing
+
+    if (actualLines != totalLines) {
+        qWarning() << "Line?count mismatch:"
+            << "expected" << totalLines
+            << "found" << actualLines
+            << "(will continue, but malformed data may be ignored)";
+    }
+
+    /* --------------------------------------------------------------
+       3?  Allocate containers for the three blocks
+       -------------------------------------------------------------- */
+    QVector<int>    fromIds;
+    QVector<int>    toIds;
+    QVector<double> weights;
+
+    fromIds.reserve(rowCount);
+    toIds.reserve(rowCount);
+    weights.reserve(rowCount);
+
+    /* --------------------------------------------------------------
+       4?  Helper lambda – trims whitespace and removes a possible BOM
+       -------------------------------------------------------------- */
+    auto cleanLine = [](const QString& raw) -> QString {
+        QString s = raw;
+        // Remove a UTF?8 BOM if it appears later in the file
+        if (s.startsWith(QChar::ObjectReplacementCharacter))
+            s.remove(0, 1);
+        return s.trimmed();                  // strip spaces / CR / LF
+    };
+
+    /* --------------------------------------------------------------
+       5??  READ BLOCK?1 – all “from” ids
+       -------------------------------------------------------------- */
+    for (int i = 0; i < rowCount; ++i) {
+        if (ts.atEnd())
+            throw DisplaceException(
+                QStringLiteral("Unexpected end of file while reading FROM block (row %1)").arg(i));
+
+        QString line = cleanLine(ts.readLine());
+        if (line.isEmpty()) {
+            qWarning() << "Empty FROM line at row" << i << "— skipping";
+            --i;                               // stay on the same logical row
+            continue;
+        }
+
+        bool ok = false;
+        int  v = line.toInt(&ok);
+        if (!ok) {
+            qWarning() << "Cannot parse FROM value at row" << i << ":" << line;
+            throw DisplaceException(
+                QStringLiteral("Parse error in FROM block at line %1").arg(i + 1));
+        }
+        fromIds.append(v);
+    }
+
+    /* --------------------------------------------------------------
+       6??  READ BLOCK?2 – all “to” ids
+       -------------------------------------------------------------- */
+    for (int i = 0; i < rowCount; ++i) {
+        if (ts.atEnd())
+            throw DisplaceException(
+                QStringLiteral("Unexpected end of file while reading TO block (row %1)").arg(i));
+
+        QString line = cleanLine(ts.readLine());
+        if (line.isEmpty()) {
+            qWarning() << "Empty TO line at row" << i << "— skipping";
+            --i;
+            continue;
+        }
+
+        bool ok = false;
+        int  v = line.toInt(&ok);
+        if (!ok) {
+            qWarning() << "Cannot parse TO value at row" << i << ":" << line;
+            throw DisplaceException(
+                QStringLiteral("Parse error in TO block at line %1").arg(i + 1 + rowCount));
+        }
+        toIds.append(v);
+    }
+
+    /* --------------------------------------------------------------
+       7??  READ BLOCK?3 – all weights (double)
+       -------------------------------------------------------------- */
+    for (int i = 0; i < rowCount; ++i) {
+        if (ts.atEnd())
+            throw DisplaceException(
+                QStringLiteral("Unexpected end of file while reading WEIGHT block (row %1)").arg(i));
+
+        QString line = cleanLine(ts.readLine());
+        if (line.isEmpty()) {
+            qWarning() << "Empty WEIGHT line at row" << i << "— skipping";
+            --i;
+            continue;
+        }
+
+        bool ok = false;
+        double v = line.toDouble(&ok);
+        if (!ok) {
+            qWarning() << "Cannot parse WEIGHT value at row" << i << ":" << line;
+            throw DisplaceException(
+                QStringLiteral("Parse error in WEIGHT block at line %1")
+                .arg(i + 1 + 2 * rowCount));
+        }
+        weights.append(v);
+    }
+
+    /* --------------------------------------------------------------
+       8??  Sanity check – all three vectors must have the same size
+       -------------------------------------------------------------- */
+    if (fromIds.size() != rowCount ||
+        toIds.size() != rowCount ||
+        weights.size() != rowCount) {
+        qCritical() << "Internal size mismatch after reading file:"
+            << "from=" << fromIds.size()
+            << "to=" << toIds.size()
+            << "weight=" << weights.size();
+        throw DisplaceException("Inconsistent data sizes after parsing the graph file.");
+    }
+
+    /* --------------------------------------------------------------
+       9??  Build the adjacency list (single pass over the vectors)
+       -------------------------------------------------------------- */
+    for (int i = 0; i < rowCount; ++i) {
+        int   from = fromIds[i];
+        int   to = toIds[i];
+        double weight = weights[i];
+
+        // Optional safety guard – ensure the indices exist in mNodes
+        if (from < 0 || from >= mNodes.size() ||
+            to < 0 || to >= mNodes.size()) {
+            qWarning() << "Node index out of range at row" << i
+                << ": from=" << from << ", to=" << to;
+            continue;   // skip this malformed edge
+        }
+
+        mNodes[from]->appendAdiancency(mNodes.at(to), weight);
+    }
+
+    qDebug() << "Graph loading finished:"
+        << rowCount << "edges processed."
+        << "Skipped/invalid entries:" << 0;   // we abort on first fatal error
+
+    return true;
+}
+
 
 
 bool DisplaceModel::initShips()

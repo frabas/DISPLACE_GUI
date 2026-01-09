@@ -1,6 +1,4 @@
-//
-// Created by Federico Fuga on 13/07/18.
-//
+
 
 #include "GeoGraphLoader.h"
 #include "GeoGraph.h"
@@ -129,8 +127,10 @@ void GeoGraphLoader::loadEdges(GeoGraph &graph, std::istream &in)
     }
 }
 
+
 void GeoGraphLoader::load(GeoGraph &graph, std::string coordFileName, std::string graphFileName)
 {
+
     std::ifstream coordStream;
 
     coordStream.open(coordFileName, std::ios::in);
@@ -150,4 +150,5 @@ void GeoGraphLoader::load(GeoGraph &graph, std::string coordFileName, std::strin
     }
 
     loadEdges(graph, edgeStream);
-}
+
+ }

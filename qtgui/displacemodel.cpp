@@ -3080,7 +3080,7 @@ bool DisplaceModel::loadGraphs()
     weights.reserve(rowCount);
 
     /* --------------------------------------------------------------
-       4?  Helper lambda – trims whitespace and removes a possible BOM
+       4?  Helper lambda,  trims whitespace and removes a possible BOM
        -------------------------------------------------------------- */
     auto cleanLine = [](const QString& raw) -> QString {
         QString s = raw;
@@ -3091,7 +3091,7 @@ bool DisplaceModel::loadGraphs()
     };
 
     /* --------------------------------------------------------------
-       5??  READ BLOCK?1 – all “from” ids
+       5?  READ BLOCK?1  all -from- ids
        -------------------------------------------------------------- */
     for (int i = 0; i < rowCount; ++i) {
         if (ts.atEnd())

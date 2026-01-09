@@ -103,6 +103,8 @@ void MapObjectsController::removeModel(int model_n)
     // maybe we should reload everything...?
 }
 
+
+
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
     addStandardLayer(model_n, LayerMain, mMainLayer, true);
@@ -251,6 +253,251 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     }
 
 }
+
+
+
+/*
+// EXAMPLE OF POSSIBLE REFACTORING
+//...but repaint() does not work i.e. missing vessels harbour symbols, and no automitc repaint for cumcatch layer....
+
+void MapObjectsController::createMapObjectsFromModel(int model_n,
+    DisplaceModel* model)
+{
+    // --------------------------------------------------------------
+      1  Base layers 
+       -------------------------------------------------------------- //
+    addStandardLayer(model_n, LayerMain, mMainLayer, true);
+    addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer, true);
+
+    // --------------------------------------------------------------
+       2 Small helpers (now using plain ints and explicit casts)
+       -------------------------------------------------------------- //
+    auto makeGeomLayer = [&](const QString& suffix)
+        -> std::shared_ptr<qmapcontrol::LayerGeometry>
+    {
+        const QString name = QString(tr("#%1#%2")).arg(model_n).arg(suffix);
+        return std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
+    };
+
+    // Output?layer helper – cast the stored int to the proper enum.
+    auto addOutput = [&](int outId,
+        const std::shared_ptr<qmapcontrol::LayerGeometry>& layer,
+        bool visible = false)
+    {
+        const bool isLive = (model->modelType() == DisplaceModel::LiveModelType);
+        addOutputLayer(model_n,
+            static_cast<MapObjectsController::OutLayerIds>(outId),
+            layer,
+            isLive ? visible : false);
+    };
+
+    auto addEnv = [&](int envId,
+        const std::shared_ptr<qmapcontrol::LayerGeometry>& layer)
+    {
+        const bool isLive = (model->modelType() == DisplaceModel::LiveModelType);
+        addEnvLayer(model_n,
+            static_cast<MapObjectsController::EnvLayerIds>(envId),
+            layer,
+            isLive ? false : false);
+    };
+
+    auto addTariff = [&](int tariffId,
+        const std::shared_ptr<qmapcontrol::LayerGeometry>& layer)
+    {
+        const bool isLive = (model->modelType() == DisplaceModel::LiveModelType);
+        addTariffLayer(model_n,
+            static_cast<MapObjectsController::TariffLayerIds>(tariffId),
+            layer,
+            isLive ? false : false);
+    };
+
+    // --------------------------------------------------------------
+      3 Entity / graph / edge layers
+       -------------------------------------------------------------- //
+    mEntityLayer[model_n] = makeGeomLayer(QString("%1#Entities").arg(""));
+    mGraphLayer[model_n] = makeGeomLayer(QString("%1#Graph").arg(""));
+    mEdgesLayer[model_n] = std::make_shared<EdgeLayer>(this,
+        QString(tr("#%1#Graph Edges")).arg(model_n));
+
+    addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n], true);
+    addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer(), false);
+    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], false);
+
+    // --------------------------------------------------------------
+      4 Statistics layers
+       -------------------------------------------------------------- //
+    struct StatInfo {
+        int    outId;      // store the raw enum value as int
+        QString suffix;
+        bool   visible;
+    };
+
+    const std::vector<StatInfo> statLayers = {
+        { OutLayerPopStats,                "#Entities",               false },
+        { OutLayerBiomass,                 "#Biomass (PopValues TotalW)", false },
+        { OutLayerPopImpact,               "#Impact ((PopValues Impact)", false },
+        { OutLayerPopCumcatches,           "#Catches Per Pop (PopValues CumCatches)", false },
+        { OutLayerBenthosBiomass,          "#Benthos Biomass (FuncGroups bNTot)", false },
+        { OutLayerBenthosNumber,           "#Benthos Number (FuncGroups bB)", false },
+        { OutLayerBenthosMeanweight,       "#Benthos Mean Weight (FuncGroups bMeanW)", false },
+        { OutLayerCumFTime,                "#Fishing Effort (NodesStat CumFTime)", false },
+        { OutLayerCumSweptArea,            "#Swept Area (NodesStat CumSwA)", false },
+        { OutLayerCumSubsurfaceSweptArea,  "#Subsurface Swept Area (NodesStat CumSubSurfSwA)", false },
+        { OutLayerCumCatches,              "#Catches (NodesStat CumCatches)", true }, // visible only for live models
+        { OutLayerCumCatchesWithThreshold, "#Catches With 70% Threshold (NodesStat CumCathesThrshld)", false },
+        { OutLayerCumdiscards,             "#Discards (NodesStat CumDiscards)", false },
+        { OutLayerCumdiscardsRatio,        "#Discards Ratio (NodesStat CumDiscardsRatio)", false },
+        { OutLayerNbChoked,                "#Nb choked stocks (NodesStat NbChokedStks)", false }
+    };
+
+    for (const auto& info : statLayers) {
+        auto layer = makeGeomLayer(info.suffix);
+        addOutput(info.outId, layer, info.visible);   // cast happens inside addOutput
+
+        // (Optional) keep the original member?variable mapping
+        switch (static_cast<OutLayerIds>(info.outId)) {
+        case OutLayerPopStats:               mStatsLayerPop[model_n] = layer; break;
+        case OutLayerBiomass:                mStatsLayerBiomass[model_n] = layer; break;
+        case OutLayerPopImpact:              mStatsLayerImpact[model_n] = layer; break;
+        case OutLayerPopCumcatches:          mStatsLayerCumcatchesPerPop[model_n] = layer; break;
+        case OutLayerBenthosBiomass:         mStatsLayerBenthosBiomass[model_n] = layer; break;
+        case OutLayerBenthosNumber:          mStatsLayerBenthosNumber[model_n] = layer; break;
+        case OutLayerBenthosMeanweight:      mStatsLayerBenthosMeanweight[model_n] = layer; break;
+        case OutLayerCumFTime:               mStatsLayerCumftime[model_n] = layer; break;
+        case OutLayerCumSweptArea:           mStatsLayerCumsweptarea[model_n] = layer; break;
+        case OutLayerCumSubsurfaceSweptArea: mStatsLayerCumsubsurfacesweptarea[model_n] = layer; break;
+        case OutLayerCumCatches:             mStatsLayerCumcatches[model_n] = layer; break;
+        case OutLayerCumCatchesWithThreshold:mStatsLayerCumcatchesWithThreshold[model_n] = layer; break;
+        case OutLayerCumdiscards:            mStatsLayerCumdiscards[model_n] = layer; break;
+        case OutLayerCumdiscardsRatio:       mStatsLayerCumdiscardsratio[model_n] = layer; break;
+        case OutLayerNbChoked:               mStatsLayerNbchoked[model_n] = layer; break;
+        default: break;
+        }
+    }
+
+    // --------------------------------------------------------------
+      5 Environment layers
+       -------------------------------------------------------------- //
+    struct EnvInfo {
+        int    envId;   // raw enum value
+        QString suffix;
+    };
+
+    const std::vector<EnvInfo> envLayers = {
+        { EnvLayerWind,          "#Wind" },
+        { EnvLayerSST,           "#SST" },
+        { EnvLayerSalinity,      "#Salinity" },
+        { EnvLayerNitrogen,      "#Nitrogen" },
+        { EnvLayerPhosphorus,    "#Phosphorus" },
+        { EnvLayerOxygen,        "#Oxygen" },
+        { EnvLayerDissolvedCarbon, "#DissolvedCarbon" },
+        { EnvLayerBathymetry,    "#Bathymetry" },
+        { EnvLayerShippingdensity, "#Shippingdensity" },
+        { EnvLayerSiltfraction,  "#Siltfraction" },
+        { EnvLayerIcesrectanglecode, "#Icesrectanglecode" }
+    };
+
+    for (const auto& info : envLayers) {
+        auto layer = makeGeomLayer(info.suffix);
+        addEnv(info.envId, layer);   // cast inside addEnv
+
+        // Optional: preserve original member pointers
+        switch (static_cast<EnvLayerIds>(info.envId)) {
+        case EnvLayerWind:               mStatsLayerWind[model_n] = layer; break;
+        case EnvLayerSST:                mStatsLayerSST[model_n] = layer; break;
+        case EnvLayerSalinity:           mStatsLayerSalinity[model_n] = layer; break;
+        case EnvLayerNitrogen:           mStatsLayerNitrogen[model_n] = layer; break;
+        case EnvLayerPhosphorus:         mStatsLayerPhosphorus[model_n] = layer; break;
+        case EnvLayerOxygen:             mStatsLayerOxygen[model_n] = layer; break;
+        case EnvLayerDissolvedCarbon:    mStatsLayerDissolvedCarbon[model_n] = layer; break;
+        case EnvLayerBathymetry:         mStatsLayerBathymetry[model_n] = layer; break;
+        case EnvLayerShippingdensity:    mStatsLayerShippingdensity[model_n] = layer; break;
+        case EnvLayerSiltfraction:       mStatsLayerSiltfraction[model_n] = layer; break;
+        case EnvLayerIcesrectanglecode:  mStatsLayerIcesrectanglecode[model_n] = layer; break;
+        default: break;
+        }
+    }
+
+    // --------------------------------------------------------------
+       6 Tariff layers
+       -------------------------------------------------------------- //
+    struct TariffInfo {
+        int    tariffId;   // raw enum value
+        QString suffix;
+    };
+
+    const std::vector<TariffInfo> tariffLayers = {
+        { TariffLayerTariffMet0, "#Tariff Met0 (NodesTariffStat Tariff Met0)" },
+        { TariffLayerTariffMet1, "#Tariff Met1 (NodesTariffStat Tariff Met1)" },
+        { TariffLayerTariffMet2, "#Tariff Met2 (NodesTariffStat Tariff Met2)" }
+    };
+
+    for (const auto& info : tariffLayers) {
+        auto layer = makeGeomLayer(info.suffix);
+        addTariff(info.tariffId, layer);   // cast inside addTariff
+
+        // Optional: keep original members
+        if (info.tariffId == TariffLayerTariffMet0) mStatsLayerTariffMet0[model_n] = layer;
+        else if (info.tariffId == TariffLayerTariffMet1) mStatsLayerTariffMet1[model_n] = layer;
+        else if (info.tariffId == TariffLayerTariffMet2) mStatsLayerTariffMet2[model_n] = layer;
+    }
+
+    // --------------------------------------------------------------
+      7 Populate objects (harbours, nodes, vessels,  ...) 
+       -------------------------------------------------------------- //
+    const auto addObjects = [&](const auto& list, auto&& adder)
+    {
+        for (const auto& item : list) {
+            adder(item);
+        }
+    };
+
+    addObjects(model->getHarboursList(),
+        [&](const std::shared_ptr<HarbourData>& h) { addHarbour(model_n, h, true); });
+
+    addObjects(model->getNodesList(),
+        [&](const std::shared_ptr<NodeData>& nd) {
+            if (!nd->get_harbour())
+                addNode(model_n, nd, true);
+        });
+
+    addObjects(model->getVesselList(),
+        [&](const std::shared_ptr<VesselData>& vsl) {
+            auto obj = std::make_shared<VesselMapObject>(this, vsl.get());
+            mVesselObjects[model_n].add(vsl->mVessel->get_idx(), obj, 0);
+            mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        });
+
+    addObjects(model->getShipList(),
+        [&](const std::shared_ptr<ShipData>& sh) {
+            auto obj = std::make_shared<ShipMapObject>(this, sh.get());
+            mShipObjects[model_n].add(sh->mShip->get_idx(), obj, 0);
+            mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        });
+
+    addObjects(model->getFishfarmList(),
+        [&](const std::shared_ptr<FishfarmData>& ff) {
+            auto obj = std::make_shared<FishfarmMapObject>(this, ff.get());
+            mFishfarmObjects[model_n].add(ff->mFishfarm->get_name(), obj, 0);
+            mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        });
+
+    addObjects(model->getWindmillList(),
+        [&](const std::shared_ptr<WindmillData>& wm) {
+            auto obj = std::make_shared<WindmillMapObject>(this, wm.get());
+            mWindmillObjects[model_n].add(wm->mWindmill->get_idx(), obj, 0);
+            mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        });
+
+    if (mMap) {
+        mMap->update();   // schedule a paint event
+    }
+}
+
+*/
+
+
+
 
 void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel *model)
 {

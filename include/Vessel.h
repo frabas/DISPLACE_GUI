@@ -41,6 +41,8 @@
 #include <list>
 #include <map>
 
+#include <memory>
+#include <fstream>
 
 typedef types::NodeId::type vertex_t;
 
@@ -200,6 +202,133 @@ private:
         double effort_multiplier;  //for EffortControl HCR
 
         std::mutex mutex;
+
+        struct VesselStaticData {
+            double kw;                // vessel power (kW)
+            double length;            // LOA (m)
+            double beta;              // vessel?specific ? (used in catch equation)
+            std::vector<double> betas_per_pop;
+            std::vector<double> vsize_class;   // not used directly here but kept for completeness
+        };
+
+        struct MetierStaticData {
+            double fspeed;                     // speed (knots)
+            double gear_a, gear_b;             // parameters of the gear?width model
+            std::string gear_model;            // e.g. "a*(LOA^b)"
+            std::vector<std::vector<double>> selectivity; // [pop][sz]
+            std::vector<double> betas_per_pop;
+            std::vector<double> discardratio_limits;
+            std::vector<int>    mls_cat_per_pop;
+            double gear_width;                 // computed later
+        };
+
+        struct HabitatStaticData {
+            std::vector<double> betas_per_pop; // benthos ? for the current node
+        };
+
+        struct SweptAreaInfo {
+            double gear_width;          // km
+            double swept_area;          // km²
+            double subsurf_area;        // km² (penetration factor applied)
+        };
+
+        struct CatchResult {
+            std::vector<double> landings;   // per size group
+            std::vector<double> discards;   // per size group
+            std::vector<double> catchWeight; // landings+discards per size group
+            double totalLandings = 0.0;
+            double totalDiscards = 0.0;
+        };
+
+
+        // 1?  Collect static data from the vessel / metier / habitat
+        VesselStaticData   collect_vessel_static_data() const;
+        MetierStaticData   collect_metier_static_data() const;
+        HabitatStaticData  collect_habitat_static_data(
+            const std::vector<Benthos*>& benthoshabs) const;
+
+        // 2? Gear geometry & swept?area computation
+        SweptAreaInfo compute_swept_area(const VesselStaticData&,
+            const MetierStaticData&) const;
+        void          update_location_swept_area(const SweptAreaInfo&);
+
+        // 3?  Benthos loss / resuspension preparation
+        std::vector<double> prepare_benthos_losses(
+            bool directKill,
+            bool resuspension,
+            const VesselStaticData&,
+            const MetierStaticData&,
+            const HabitatStaticData&) const;
+
+        // 4?  Population?specific processing
+        void handle_explicit_population(
+            size_t popIdx,
+            std::vector<Population*> const& populations,
+            const VesselStaticData&,
+            const MetierStaticData&,
+            const HabitatStaticData&,
+            const SweptAreaInfo&,
+            const std::vector<double>& benthosLoss,
+            const std::vector<double>& graph_res,
+            const DynAllocOptions&,
+            const std::vector<Node*>& nodes,
+            int tstep,
+            int a_month,
+            int a_quarter,
+            bool is_tacs,
+            bool is_individual_vessel_quotas,
+            bool is_discard_ban,
+            bool is_grouped_tacs,
+            double tech_creeping_multiplier,
+            bool is_fishing_credits,
+            std::ofstream& export_individual_tacs,
+            std::vector<int> const& implicit_pops,
+            CatchResult& cr);
+
+
+
+        void handle_implicit_population(
+            size_t popIdx,
+            std::vector<Population*> const& populations,
+            const SweptAreaInfo&,
+            const DynAllocOptions&,
+            int tstep,
+            int a_month,
+            int a_quarter,
+            double tech_creeping_multiplier,
+            bool is_tacs,
+            bool is_individual_vessel_quotas,
+            bool is_grouped_tacs,
+            std::ofstream& export_individual_tacs,
+            std::vector<int> const& implicit_pops,
+            CatchResult& cr);
+
+        // 5  TAC / quota handling (extracted from the huge block)
+        void apply_tac_logic(size_t popIdx,
+            std::vector<Population*> const& populations,
+            CatchResult& cr,
+            bool is_tacs,
+            bool is_individual_vessel_quotas,
+            bool is_grouped_tacs,
+            int a_month,
+            int tstep,
+            std::ofstream& export_individual_tacs,
+            double tech_creeping_multiplier,
+            std::vector<int> const& implicit_pops);
+
+       // bool maybe_close_ground(int groundIdx,
+       //     const SweptAreaInfo& sweepInfo,
+       //     const GroundMetrics& popMetrics,
+       //     const TACs& tacState,
+       //     const ClosureOptions& closureOpts);
+
+
+        // 6? Final bookkeeping (cumulative stats, closures, logging)
+        void finalize_trip_statistics(CatchResult& cr, const std::vector<double>& graph_res,
+            int a_quarter, bool is_realtime_closure);
+
+        bool node_contains_pop(int popName) const;   // checks presence on node
+       
 
 protected:
         void init();
@@ -661,6 +790,7 @@ public:
     int should_i_choose_this_port(const SimModel& simModel, 
                                  std::map<std::string, int> &external_states,
                                  bool use_the_tree);
+
 
     void set_individual_tac_this_pop(std::ofstream &export_individual_tacs, int tstep,
                                      std::vector<Population *> const &populations, std::vector<int> implicit_pops,

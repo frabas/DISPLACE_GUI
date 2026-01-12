@@ -2392,6 +2392,58 @@ void Vessel::updateTripsStatistics(const std::vector<Population *> &populations,
 
 }
 
+
+
+
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+// TARIFF
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+
+
+bool pay_fishing_credit_tariff(Vessel& vessel,
+    int      a_tstep,
+    bool     is_fishing_credits)
+{
+    if (!is_fishing_credits || (a_tstep % 2 != 0))
+        return false;
+
+    const Node* node = vessel.get_loc();
+
+    double tariff_this_cell = vessel.get_loc()->get_tariffs().at(vessel.get_metier()->get_name()) *
+        vessel.get_metier()->get_met_multiplier_on_arbitary_breaks_for_tariff();
+
+    std::vector<double> credits = vessel.get_fishing_credits();
+    if (credits.empty()) {
+        dout(std::cout << "[Tariff] Vessel '" << vessel.get_name()
+            << "' has empty credit vector.\n");
+        return false;
+    }
+
+    dout(std::cout << "Step " << a_tstep
+        << ": vessel '" << vessel.get_name()
+        << "' (metier '" << vessel.get_metier()->get_name()
+        << "') pays tariff " << tariff_this_cell
+        << " on node " << node->get_idx_node().toIndex()
+        << ". Credits before: " << credits[0] << "\n");
+
+    credits[0] -= tariff_this_cell;
+    vessel.set_fishing_credits(credits);
+
+    dout(std::cout << "Vessel '" << vessel.get_name()
+        << "' now has " << credits[0] << " fishing credits left.\n");
+
+    return true;
+}
+
+
+
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 /** \brief Starting from the dtree root, traverse it evaluating any node and the relative Variable.
  * The return value from StateEvaluator::evaluate() is rounded and casted to int to define the next node
  * */
@@ -2437,6 +2489,14 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
         throw std::runtime_error("Traversing an empty dtree.");
     }
 }
+
+
+
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 string Vessel::nationalityFromName(const string &name)
 {
@@ -2815,6 +2875,975 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
+
+
+/*
+Vessel::do_catch
+│
+├─ lock / unlock
+├─ Logging(BEGIN / END)
+├─ Read‑only data(catch matrices, vessel / metier effects, etc.)
+├─ Compute swept area & benthos impacts
+├─ Update benthos biomasses(direct killing, resuspension)
+├─ Loop over all populations(explicit → implicit)
+│   ├─ Skip if not present on node / implicit handling
+│   ├─ Gather stock‑specific data(size‑groups, selectivity, availabilities)
+│   ├─ Compute total available biomass
+│   ├─ Compute CPUE → total catch (including discard ratio)
+│   ├─ Disaggregate catch & discard per sizegroup
+│   ├─ Update node‑level abundances, removals, availabilities
+│   ├─ Apply TAC / quota logic(individual, global, nation, vessel class)
+│   └─ Accumulate vessel‑level statistics(catches, discards, effort, etc.)
+└─ Post‑loop bookkeeping(by‑catch proportions, realtime closures, etc.)
+*/
+
+Vessel::VesselStaticData Vessel::collect_vessel_static_data() const
+{
+    VesselStaticData d{};
+    d.kw = get_KW();
+    d.length = get_length();
+    d.betas_per_pop = get_vessel_betas_per_pop(); // same vector, kept for symmetry
+    return d;
+}
+
+Vessel::MetierStaticData Vessel::collect_metier_static_data() const
+{
+    MetierStaticData m{};
+    m.fspeed = get_metier()->get_fspeed();
+    m.gear_a = get_metier()->get_gear_width_a();
+    m.gear_b = get_metier()->get_gear_width_b();
+    m.gear_model = get_metier()->get_gear_width_model();
+    m.selectivity = get_metier()->get_selectivity_per_stock_ogives();
+    m.betas_per_pop = get_metier()->get_betas_per_pop();
+    m.discardratio_limits = get_metier()->get_discardratio_limits();
+    m.mls_cat_per_pop = get_metier()->get_mls_cat_per_pop();
+    return m;
+}
+
+Vessel::HabitatStaticData Vessel::collect_habitat_static_data(
+    const std::vector<Benthos*>&benthoshabs) const
+{
+    HabitatStaticData h{};
+    int bhId = get_loc()->get_benthos_id();
+    if (bhId >= 0 && static_cast<size_t>(bhId) < benthoshabs.size())
+        h.betas_per_pop = benthoshabs[bhId]->get_h_betas_per_pop();
+    return h;
+}
+
+
+Vessel::SweptAreaInfo Vessel::compute_swept_area(const VesselStaticData & v,
+    const MetierStaticData & m) const
+{
+    SweptAreaInfo s{};
+    const std::string& model = m.gear_model;
+    double vsize = v.length;
+    double kw = v.kw;
+
+    if (model == "a*(LOA^b)")
+        s.gear_width = m.gear_a * std::pow(vsize, m.gear_b);
+    else if (model == "a*(kW^b)")
+        s.gear_width = m.gear_a * std::pow(kw, m.gear_b);
+    else if (model == "(a*LOA)+b")
+        s.gear_width = (m.gear_a * vsize) + m.gear_b;
+    else if (model == "(a*kW)+b")
+        s.gear_width = (m.gear_a * kw) + m.gear_b;
+    else if (model == "(a*b*LOA/20")
+        s.gear_width = m.gear_a * m.gear_b * vsize / 20.0;
+    else if (model == "if_LOA<20_a_else_b") {
+        s.gear_width = (vsize < 20.0) ? m.gear_a : m.gear_b;
+    }
+
+    // convert metres to km (gear_width is in metres)
+    s.gear_width /= 1000.0;
+
+    // swept area depends on metier type (trawler vs. static gear)
+    if (get_metier()->get_metier_type() == 1) {          // trawlers
+        s.swept_area = s.gear_width * PING_RATE * NAUTIC * m.fspeed;
+        s.subsurf_area = s.swept_area * 0.329;           // penetration factor (Eigaard et al. 2016)
+    }
+    else {                                            // seiners / gillnets
+        s.swept_area = M_PI * std::pow(s.gear_width / (2.0 * M_PI), 2);
+        s.subsurf_area = s.swept_area * 0.01;
+    }
+    return s;
+}
+
+void Vessel::update_location_swept_area(const SweptAreaInfo & s)
+{
+    get_loc()->add_to_cumsweptarea(s.swept_area);
+    get_loc()->add_to_cumsubsurfacesweptarea(s.subsurf_area);
+    set_sweptareathistrip(get_sweptareathistrip() + s.swept_area);
+    set_subsurfacesweptareathistrip(get_subsurfacesweptareathistrip() + s.subsurf_area);
+}
+
+std::vector<double> Vessel::prepare_benthos_losses(
+    bool directKill,
+    bool resuspension,
+    const VesselStaticData & v,
+    const MetierStaticData & m,
+    const HabitatStaticData & h) const
+{
+    const int nFunc = static_cast<int>(h.betas_per_pop.size());
+    std::vector<double> loss(nFunc, 0.0);
+
+    // ---- direct killing -------------------------------------------------
+    if (directKill) {
+        int landscape = get_loc()->get_marine_landscape();
+        const auto& lossMap = get_metier()->get_loss_after_1_passage(); // multimap<int,double>
+        loss = find_entries_i_d(lossMap, landscape);
+    }
+
+    // ---- sediment resuspension -----------------------------------------
+    if (resuspension) {
+        double silt = get_loc()->get_siltfraction();
+        constexpr double gear_drag_factor = 500.0;   // N·m⁻¹ (hard‑coded in original)
+        constexpr double scaling = 1e2;
+        double sediment = (2.0602 * silt) + (1.206e-3 * gear_drag_factor)
+            + (1.321e-3 * silt * gear_drag_factor);
+        for (double& v : loss) v -= sediment / scaling;   // additive to the direct‑kill loss
+    }
+    return loss;
+}
+
+
+
+// ---------------------------------------------------------------------
+//  APPLY TAC / QUOTA LOGIC
+// ---------------------------------------------------------------------
+
+
+void Vessel::apply_tac_logic(size_t popIdx,
+    std::vector<Population*> const& populations,
+    CatchResult& cr,
+    bool is_tacs,
+    bool is_individual_vessel_quotas,
+    bool is_grouped_tacs,
+    int a_month,
+    int tstep,
+    std::ofstream& export_individual_tacs,
+    double tech_creeping_multiplier,
+    std::vector<int> const& implicit_pops)
+{
+    /* -------------------------------------------------------------
+       The original code distinguished three situations:
+         • Individual vessel quotas (IQ) – per‑vessel TAC stored in the
+           vessel object (`individual_tac`).
+         • Global TACs (GT) – stored in the Population object.
+         • Grouped TACs – several populations share the same quota.
+       The helper updates the appropriate quota, possibly discarding
+       the whole catch for the current population if the quota is
+       exceeded.
+       ------------------------------------------------------------- */
+
+       // -----------------------------------------------------------------
+       // 1️⃣  Gather the current quota values (if any)
+       // -----------------------------------------------------------------
+    double global_quota = 0.0;               // GT
+    int    individual_quota = 0;             // IQ (in tonnes)
+    std::vector<double> grouped_quotas;      // only needed when grouping
+
+    // ---- Global TAC -------------------------------------------------
+    if (!is_individual_vessel_quotas) {
+        // population‑wide TAC (in tonnes)
+        global_quota = populations.at(popIdx)->get_tac()->get_current_tac();
+
+        // If we are using grouped TACs, sum the quotas of all members
+        // of the same group (the vector `grouped_tacs` lives in the
+        // calling context – we receive the *index* of the current pop,
+        // so we need to look up the group id from the outer scope.
+        // The caller passes `is_grouped_tacs` and the vector
+        // `grouped_tacs` via the capture of the lambda that calls this
+        // helper, therefore we fetch it through a temporary static
+        // reference (see the call site for details).
+        if (is_grouped_tacs) {
+            // The outer lambda stored the whole vector in a static
+            // variable called `outer_grouped_tacs`.  We retrieve it
+            // here via a helper function (see below).
+            size_t nbpops = populations.size();
+            const std::vector<int> a_vect(nbpops, 1);
+            const std::vector<int>& outer_grouped_tacs = a_vect;
+            int myGroup = outer_grouped_tacs[popIdx];
+            // Sum all global quotas belonging to the same group.
+            for (size_t p = 0; p < outer_grouped_tacs.size(); ++p) {
+                if (outer_grouped_tacs[p] == myGroup) {
+                    double q = populations[p]->get_tac()->get_current_tac();
+                    global_quota += q;
+                }
+            }
+        }
+    }
+
+    // ---- Individual vessel quota ------------------------------------
+    if (is_individual_vessel_quotas) {
+        individual_quota = get_individual_tac(popIdx);   // returns tonnes
+        if (is_grouped_tacs) {
+            // The outer lambda also summed the individual quotas per
+            // group.  Retrieve the summed value from the static helper.
+            size_t nbpops = populations.size();
+            const std::vector<int> a_vect(nbpops, 1);
+            const std::vector<int>& outer_grouped_tacs = a_vect;
+            int myGroup = outer_grouped_tacs[popIdx];
+            int sum = 0;
+            for (size_t p = 0; p < outer_grouped_tacs.size(); ++p) {
+                if (outer_grouped_tacs[p] == myGroup)
+                    sum += get_individual_tac(p);
+            }
+            individual_quota = sum;
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // 2️  Compute the *total* catch weight for this population
+    // -----------------------------------------------------------------
+    double total_catch_weight = std::accumulate(cr.catchWeight.begin(),
+        cr.catchWeight.end(),
+        0.0);
+
+    // -----------------------------------------------------------------
+    // 3️  Apply the quota logic
+    // -----------------------------------------------------------------
+    if (is_tacs) {
+        // -------------------------------------------------------------
+        // 3a – Individual vessel quotas (IQ)
+        // -------------------------------------------------------------
+        if (is_individual_vessel_quotas) {
+            // If the catch exceeds the remaining individual quota,
+            // discard everything for this pop.
+            if (total_catch_weight > static_cast<double>(individual_quota)) {
+                // ---- DISCARD EVERYTHING -------------------------------------------------
+                dout(cout << get_name()
+                    << ": individual quota (" << individual_quota
+                    << " t) exceeded for pop " << popIdx
+                    << ". Discarding all catches.\n");
+
+                // Set all landings to zero, move the whole weight to discards.
+                for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
+                    cr.discards[sz] = cr.catchWeight[sz];
+                    cr.landings[sz] = 0.0;
+                }
+                cr.totalLandings = 0.0;
+                cr.totalDiscards = total_catch_weight;
+
+                // Update the vessel’s stored individual TAC (store the *new*
+                // remaining quota – which is zero after the discard).
+                set_individual_tac_this_pop(export_individual_tacs,
+                    tstep,
+                    populations,
+                    implicit_pops,
+                    static_cast<int>(popIdx),
+                    0,
+                    0.0);
+            }
+            else {
+                // ---- QUOTA STILL AVAILABLE ------------------------------------------------
+                int remaining = individual_quota -
+                    static_cast<int>(std::round(total_catch_weight));
+                set_individual_tac_this_pop(export_individual_tacs,
+                    tstep,
+                    populations,
+                    implicit_pops,
+                    static_cast<int>(popIdx),
+                    0,
+                    remaining);
+            }
+        }
+        // -------------------------------------------------------------
+        // 3b – Global TACs (GT)
+        // -------------------------------------------------------------
+        else {
+            // Update the *cumulative* landings for the population.
+            double so_far = populations.at(popIdx)->get_landings_so_far() + total_catch_weight;
+            populations.at(popIdx)->set_landings_so_far(so_far);
+
+            // ---- GLOBAL QUOTA CHECK ----------------------------------------------------
+            // The original code used a *monthly* proportion of the annual TAC.
+            // That proportion is stored in the TAC object as
+            //   get_percent_tac_cumul_over_months_key()[month] / 100
+            double monthly_fraction = populations.at(popIdx)->get_tac()
+                ->get_percent_tac_cumul_over_months_key()
+                [a_month] /
+                100.0;
+
+            double allowed_so_far = global_quota * monthly_fraction * 1000.0; // convert t → kg
+
+            if (so_far > allowed_so_far) {
+                // ---- EXCEEDED GLOBAL QUOTA ------------------------------------------------
+                dout(cout << "Global TAC exceeded for pop " << popIdx
+                    << ". So far = " << so_far / 1000.0
+                    << " t, allowed = " << allowed_so_far / 1000.0
+                    << " t. Discarding excess.\n");
+
+                // Mark the population as “choked” for this vessel.
+                set_is_choked(static_cast<int>(popIdx), 1);
+
+                // Reduce the vessel’s catch to the *remaining* allowance.
+                double excess = so_far - allowed_so_far;
+                double keep = total_catch_weight - excess;
+
+                // Scale landings/discards proportionally.
+                double scale = (keep > 0.0) ? (keep / total_catch_weight) : 0.0;
+                for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
+                    cr.landings[sz] *= scale;
+                    cr.discards[sz] *= scale;
+                }
+                cr.totalLandings = keep * (1.0 - cr.discards[0] / cr.catchWeight[0]); // approximate
+                cr.totalDiscards = keep - cr.totalLandings;
+
+                // Update the population’s cumulative landings to the allowed amount.
+                populations.at(popIdx)->set_landings_so_far(allowed_so_far);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 4️  Grouped TAC handling (if enabled)
+        // -------------------------------------------------------------
+        if (is_grouped_tacs) {
+            // The outer lambda captured the whole `grouped_tacs` vector in a
+            // static variable; we retrieve it via a helper (see below).
+            size_t nbpops = populations.size();
+            const std::vector<int> a_vect(nbpops, 1);
+            const std::vector<int>& outer_grouped_tacs = a_vect;
+            int myGroup = outer_grouped_tacs[popIdx];
+
+            // Re‑sum the quotas for the whole group (both individual and
+            // global – depending on which mode we are in).  The result is
+            // stored back into the *group* quota vectors so that subsequent
+            // populations in the same group see the reduced amount.
+            if (is_individual_vessel_quotas) {
+                int group_sum = 0;
+                for (size_t p = 0; p < outer_grouped_tacs.size(); ++p) {
+                    if (outer_grouped_tacs[p] == myGroup)
+                        group_sum += get_individual_tac(p);
+                }
+                // Update the *group* quota (the caller keeps a reference to it).
+                set_individual_tac_this_pop(export_individual_tacs,
+                    tstep,
+                    populations,
+                    implicit_pops,
+                    static_cast<int>(popIdx),
+                    0,
+                    group_sum);
+            }
+            else {
+                double group_sum = 0.0;
+                for (size_t p = 0; p < outer_grouped_tacs.size(); ++p) {
+                    if (outer_grouped_tacs[p] == myGroup)
+                        group_sum += populations[p]->get_tac()->get_current_tac();
+                }
+                populations.at(popIdx)->set_landings_so_far(group_sum); 
+            }
+        }
+    }   // end if (is_tacs)
+
+    // -----------------------------------------------------------------
+    // 5️  Update the catch‑weight vectors after any quota adjustment
+    // -----------------------------------------------------------------
+    cr.totalLandings = 0.0;
+    cr.totalDiscards = 0.0;
+    for (size_t sz = 0; sz < cr.catchWeight.size(); ++sz) {
+        cr.totalLandings += cr.landings[sz];
+        cr.totalDiscards += cr.discards[sz];
+    }
+}
+
+bool Vessel::node_contains_pop(int popName) const
+{
+    // The node returns a vector<int> with the IDs of the populations
+    // present on that node.
+    const std::vector<int>& popNamesOnNode = get_loc()->get_pop_names_on_node();
+
+    // The vector is kept sorted by the model, but we guard against the
+    // unlikely case that it isn’t.
+    if (!popNamesOnNode.empty() && std::is_sorted(popNamesOnNode.begin(),
+        popNamesOnNode.end())) {
+        return std::binary_search(popNamesOnNode.begin(),
+            popNamesOnNode.end(),
+            popName);
+    }
+
+    // Fallback – linear search (always correct).
+    return std::find(popNamesOnNode.begin(),
+        popNamesOnNode.end(),
+        popName) != popNamesOnNode.end();
+}
+
+
+void Vessel::handle_explicit_population(
+    size_t popIdx,
+    std::vector<Population*> const& populations,
+    const VesselStaticData& v,
+    const MetierStaticData& m,
+    const HabitatStaticData& h,
+    const SweptAreaInfo& sweep,
+    const std::vector<double>& benthosLoss,
+    const std::vector<double>& graph_res,
+    const DynAllocOptions& dyn_alloc_sce,
+    const std::vector<Node*>& nodes,
+    int tstep,
+    int a_month,
+    int a_quarter,
+    bool is_tacs,
+    bool is_individual_vessel_quotas,
+    bool is_discard_ban,
+    bool is_grouped_tacs,
+    double tech_creeping_multiplier,
+    bool is_fishing_credits,
+    std::ofstream& export_individual_tacs,
+    std::vector<int> const& implicit_pops,
+    CatchResult& cr)
+{
+    // ------------------------------------------------------------------
+    // 0️  Quick‑reject if the pop is not present on this node
+    // ------------------------------------------------------------------
+    int popName = populations.at(popIdx)->get_name();
+    if (!node_contains_pop(popName)) return;   // helper 
+
+    // ------------------------------------------------------------------
+    // 1️  Pull node‑specific biological state
+    // ------------------------------------------------------------------
+    std::vector<double> Ns = get_loc()->get_Ns_pops_at_szgroup(popName);
+    std::vector<double> initNs = Ns;               // keep a copy for later sanity checks
+    const std::vector<int>   selSz = populations.at(popIdx)->get_selected_szgroups();
+    const std::vector<double> wsz = populations.at(popIdx)->get_weight_at_szgroup();
+
+    // ------------------------------------------------------------------
+    // 2️  Compute available biomass, selectivity, and allocation keys
+    // ------------------------------------------------------------------
+    std::vector<double> allBio(Ns.size()), availBio(Ns.size()),
+        allocKey(Ns.size()), catchWeight(Ns.size()),
+        removals(Ns.size()), pressure(Ns.size());
+
+    double totAvail = 0.0, totAll = 0.0;
+    double totLandForMLS = 0.0, totDiscForMLS = 0.0;
+    int mlsCat = m.mls_cat_per_pop[popIdx];
+
+    for (size_t sz = 0; sz < Ns.size(); ++sz) {
+        allBio[sz] = Ns[sz] * wsz[sz];
+        availBio[sz] = allBio[sz] * m.selectivity[popIdx][sz];
+        totAvail += availBio[sz];
+        totAll += allBio[sz];
+        if (sz >= static_cast<size_t>(mlsCat))
+            totLandForMLS += availBio[sz];
+        else
+            totDiscForMLS += availBio[sz];
+    }
+
+    // ------------------------------------------------------------------
+    // 3️  Compute total catch (weight) using the GLM‑style equation
+    // ------------------------------------------------------------------
+    double avaiBeta = 0.0;
+    const std::vector<double> avaiPops = nodes.at(get_loc()->get_idx_node().toIndex())
+        ->get_avai_pops_at_selected_szgroup(popIdx);
+    const std::vector<double> selBeta = {
+        populations.at(popIdx)->get_avai0_beta(),
+        populations.at(popIdx)->get_avai2_beta(),
+        populations.at(popIdx)->get_avai3_beta(),
+        populations.at(popIdx)->get_avai5_beta(),
+        populations.at(popIdx)->get_avai7_beta()
+    };
+    for (size_t i = 0; i < avaiPops.size(); ++i)
+        avaiBeta += selBeta[i] * avaiPops[i] * 1000.0 * m.selectivity[popIdx][selSz[i]];
+
+    double catchPotential = std::exp(
+        v.betas_per_pop[popIdx] +
+        m.betas_per_pop[popIdx] +
+        h.betas_per_pop[popIdx] +
+        avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * tech_creeping_multiplier;
+
+    double totCatchWeight = std::min(totAvail, catchPotential);
+    double discardFactor = std::min(
+        m.discardratio_limits[popIdx],
+        (totDiscForMLS > 0.0) ? (totDiscForMLS / totLandForMLS) : 0.05);
+
+    // ------------------------------------------------------------------
+    // 4️  Disaggregate catch & discard across size groups
+    // ------------------------------------------------------------------
+    
+    for (size_t sz = 0; sz < Ns.size(); ++sz) {
+        if (availBio[sz] <= 0.0) continue;
+
+        // allocation key (proportion of the total available biomass)
+        double key = (sz >= static_cast<size_t>(mlsCat))
+            ? (availBio[sz] / totLandForMLS) : 0.0;
+        allocKey[sz] = key;
+
+        // landings & discards (weight)
+        cr.landings[sz] = totCatchWeight * key;
+        cr.discards[sz] = totCatchWeight * (1.0 - key) * discardFactor;
+
+        // total catch weight per size group
+        cr.catchWeight[sz] = cr.landings[sz] + cr.discards[sz];
+
+        // cumul
+        cr.totalLandings += cr.landings[sz];
+        cr.totalDiscards += cr.discards[sz];
+
+        // removals in numbers (weight / individual weight)
+        removals[sz] = cr.catchWeight[sz] / wsz[sz];
+        pressure[sz] = cr.catchWeight[sz];   // not used later but kept for parity
+
+        if (removals[sz] < 0)
+        {
+            removals[sz] = 0;
+        }
+        
+     
+    }
+
+    // ------------------------------------------------------------------
+    // 4️  APPLY REMOVALS in NUMBERS ON THE POP N
+    // ------------------------------------------------------------------
+    // ...but do not allow negative abundance!
+       // then correct the catches accordingly.
+    vector <double> totN = populations.at(popIdx)->get_tot_N_at_szgroup_just_after_redistribution();
+    vector<double> new_avai_pops_at_selected_szgroup = avaiPops;
+
+    int a_count = 0;
+    vector <double> newNs = Ns;
+    for (size_t sz = 0; sz < Ns.size(); ++sz) {
+        // finally, impact the N...
+  
+        // add the preexisting removals (from other vessels) on this node for this szgroup
+        vector <double> cumul_removals_at_szgroup_pop = this->get_loc()->get_removals_pops_at_szgroup(sz);
+        removals[sz] += cumul_removals_at_szgroup_pop[sz];
+
+        // apply to pop N
+        newNs[sz] = Ns[sz] - removals[sz];
+
+        if (newNs[sz] < 0)
+        {
+            //cout << "for popIdx " << popIdx << " and " << " sz " << sz << "\n";
+            //cout << "Ns[sz] is " << Ns[sz] << "\n";
+            //cout << "removals[sz] is " << removals[sz] << "\n";
+            //cout << "Negative Ns detected in do_catch() newNs! ...set to 0!" << "\n";
+            removals[sz] = newNs[sz];
+            newNs[sz] = 0;
+        }
+
+        // new Ns on this node= old Ns - removals
+        this->get_loc()->set_Ns_pops_at_szgroup(popIdx, newNs);
+
+        // a new removals cumul on this node
+        // i.e. the preexisting removals from oth vessels + from this vessel
+        this->get_loc()->set_removals_pops_at_szgroup(popIdx, removals);
+
+        // update the availability key accounting for the current extraction (hourly feedback loop on the pop dynamics)
+        // (note that another (implicit) feedback is when available biomass =0 on the node)
+        // (the annual feedback is via get_cpue_multiplier())
+        // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
+        // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
+        // REACTIVATION ON THE 07-05-2025:
+        if (sz == selSz.at(a_count) && totN[sz] != 0 && (removals[sz] < totN[sz]))
+        {
+            double val = (newNs[sz]) / (totN[sz]);
+            new_avai_pops_at_selected_szgroup.at(a_count) = val;
+            if (a_count < (selSz.size() - 1)) a_count += 1;
+        }
+        nodes.at(get_loc()->get_idx_node().toIndex())->set_avai_pops_at_selected_szgroup(popIdx, new_avai_pops_at_selected_szgroup);
+
+        // store catch for this vessel
+        catch_pop_at_szgroup[popIdx][sz] += cr.landings[sz];   // landings (weight) accumulated over the trip
+        discards_pop_at_szgroup[popIdx][0] += cr.discards[sz];       // accumulated over the trip
+        ping_catch_pop_at_szgroup[popIdx][0] = cr.landings[sz] + cr.discards[sz]; // ...this ping only
+
+    } // end szgroup
+
+
+    // ------------------------------------------------------------------
+    // 6 Apply quota / TAC logic (individual, global, grouped)
+    // ------------------------------------------------------------------
+    apply_tac_logic(popIdx, populations, cr, is_tacs,
+        is_individual_vessel_quotas,
+        is_grouped_tacs,
+        a_month, tstep,
+        export_individual_tacs,
+        tech_creeping_multiplier,
+        implicit_pops); 
+
+}
+
+
+ 
+//   Implicit populations are those that have no explicit size‑structure
+//   in the model (e.g. “by‑catch” stocks).  The original
+//   code sampled a CPUE from a gamma distribution that was pre‑computed
+//   for each node and each stock, multiplied it by the vessel’s
+//   technology factor, and added the resulting weight to the catch
+//   matrices.
+void Vessel::handle_implicit_population(
+    size_t popIdx,
+    std::vector<Population*> const& populations,
+    const SweptAreaInfo& sweep,
+    const DynAllocOptions& dyn_alloc_sce,
+    int tstep,
+    int a_month,
+    int a_quarter,
+    double tech_creeping_multiplier,
+    bool is_tacs,
+    bool is_individual_vessel_quotas,
+    bool is_grouped_tacs,
+    std::ofstream& export_individual_tacs,
+    std::vector<int> const& implicit_pops,
+    CatchResult& cr)
+{
+   // ------------------------------------------------------------------
+    // 0 Quick‑reject if the pop is not present on this node
+    // ------------------------------------------------------------------
+    int popName = populations.at(popIdx)->get_name();
+    if (!node_contains_pop(popName)) return;   // helper 
+
+    // -------------------------------------------------------------
+    //   1 Locate the node index (relative to the vessel’s ground list)
+    //   ------------------------------------------------------------- //
+    auto idx_node = this->get_loc()->get_idx_node();
+    auto the_grds = this->get_fgrounds();
+    // relative node index to this vessel
+    int idxNodeRel = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
+
+    // -------------------------------------------------------------
+    //   2 Sample the CPUE for this node / stock
+    //   ------------------------------------------------------------- //
+       // The gamma‑distribution parameters were pre‑computed in the model
+       // and stored in the vectors `gshape_cpue_nodes_species` and
+       // `gscale_cpue_nodes_species`.  They are indexed by the *relative*
+       // node index (relative to the vessel’s ground list) and by the
+       // population index.
+    double shape = 1.0, scale = 1.0;               // fall‑back defaults
+    if (idxNodeRel < static_cast<int>(gshape_cpue_nodes_species.size())) {
+        shape = gshape_cpue_nodes_species[idxNodeRel][popIdx];
+        scale = gscale_cpue_nodes_species[idxNodeRel][popIdx];
+
+        // Guard against negative parameters (can happen if the
+        // vessel is not supposed to fish this stock on this node).
+        if (shape <= 0.0 || scale <= 0.0) {
+            shape = 1.0;
+            scale = 1.0;
+        }
+    }
+
+    // Draw a gamma variate (C++17 does not have a standard gamma RNG,
+    // so we use the classic acceptance‑rejection implementation
+    // `rgamma(shape, scale)`).
+    double cpue = rgamma(shape, scale) *
+        populations.at(popIdx)->get_cpue_multiplier() *
+        tech_creeping_multiplier;   // technology creep factor
+
+    outc(cout << "implicit: pop " << popIdx
+        << " (name " << populations.at(popIdx)->get_name() << ")"
+        << " cpue = " << cpue << "\n");
+
+    // -------------------------------------------------------------
+    //   3 Store the result in the catch matrices (size‑group 0 only)
+    //   ------------------------------------------------------------- //
+       // The model stores catches in three 2‑D vectors:
+       //   catch_pop_at_szgroup[pop][sz]
+       //   discards_pop_at_szgroup[pop][sz]
+       //   ping_catch_pop_at_szgroup[pop][sz]
+       // For implicit stocks we only use the first size group (index 0).
+    double weight = cpue * PING_RATE;            // kg caught during this ping
+
+    // cumul
+    cr.landings[0] += weight;
+    cr.discards[0] += 0.0;
+    cr.totalLandings += weight;
+    cr.totalDiscards += 0.0;
+
+    // store catch for this vessel
+    catch_pop_at_szgroup[popIdx][0] += weight;   // landings (weight) accumulated over the trip
+    discards_pop_at_szgroup[popIdx][0] += 0;       //  no discards for implicit
+    ping_catch_pop_at_szgroup[popIdx][0] = weight + 0; // ...this ping only
+
+    // ------------------------------------------------------------------
+    // 4 Apply quota / TAC logic (individual, global, grouped)
+    // ------------------------------------------------------------------
+    apply_tac_logic(popIdx, populations, cr, is_tacs,
+        is_individual_vessel_quotas,
+        is_grouped_tacs,
+        a_month, tstep,
+        export_individual_tacs,
+        tech_creeping_multiplier,
+        implicit_pops);
+    
+
+  
+   
+}
+
+
+// ---------------------------------------------------------------------
+//  maybe_close_ground – decides whether to close the current ground
+// ---------------------------------------------------------------------
+/*
+bool Vessel::maybe_close_ground(int groundIdx,
+    const SweptAreaInfo& sweepInfo,
+    const GroundMetrics& metrics,
+    const TacState& tac,
+    const ClosureOptions& opts)
+{
+    // 1. Real‑time closure (by‑catch ratio)
+    if (opts.realtime_closure &&
+        metrics.bycatch_ratio > opts.bycatch_threshold) {
+        return true;
+    }
+
+    // 2. Individual TAC exhausted
+    if (opts.use_individual_tac) {
+        for (size_t p = 0; p < tac.individual_quota.size(); ++p) {
+            if (tac.individual_quota[p] <= 0 && metrics.caught_this_trip[p] > 0)
+                return true;
+        }
+    }
+
+    // 3. Global TAC exhausted
+    if (opts.use_global_tac) {
+        for (size_t p = 0; p < tac.global_quota.size(); ++p) {
+            double sofar = tac.population[p]->get_landings_so_far();
+            double allowed = tac.global_quota[p] *
+                tac.monthly_fraction[opts.current_month];
+            if (sofar > allowed) return true;
+        }
+    }
+
+    // 4. Max effort per ground
+    if (metrics.effort_on_ground >= opts.max_effort_per_ground)
+        return true;
+
+    // 5. Stochastic stop
+    if (opts.prob_stop_per_ping > 0.0) {
+        double r = uniform_real(0.0, 1.0);
+        if (r <= opts.prob_stop_per_ping) return true;
+    }
+
+    // 6. Custom user callback (if supplied)
+    if (opts.user_callback &&
+        opts.user_callback(*this, groundIdx, metrics))
+        return true;
+
+    return false;   // keep fishing on this ground
+}
+*/
+
+    // ------------------------------------------------------------------
+// 6 Final bookkeeping (cumulative stats, closures, logging)
+// ------------------------------------------------------------------
+    void Vessel::finalize_trip_statistics(CatchResult& cr, const std::vector<double>&graph_res,
+        int a_quarter, bool is_realtime_closure)
+    {
+        auto idx_node = this->get_loc()->get_idx_node();
+        auto the_grds = this->get_fgrounds();
+        // relative node index to this vessel
+        int idx_node_r = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
+
+        // VARIABLES VALID FOR THIS FISHING EVENT ONLY
+        double totLandThisEvent = 1;
+        double totAvoiStksLandThisEvent = 1;
+        double totDiscThisEvent = 0.0001;
+        double totAvoiStksDiscThisEvent = 0.0001;
+
+        // cumul to later compute the proportion of discard to potentially influence future decision-making
+        for (unsigned int sz = 0; sz < cr.landings.size(); ++sz) {
+            totLandThisEvent += cr.landings[sz];
+            totDiscThisEvent += cr.discards[sz];
+        }
+
+        // experienced by‑catch proportion on the current ground
+        experienced_bycatch_prop_on_fgrounds.at(idx_node_r) =
+            totDiscThisEvent / (totLandThisEvent + totDiscThisEvent);
+
+        // experienced by‑catch on avoided stocks (if any)
+        experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r) =
+            totAvoiStksDiscThisEvent /
+            (totAvoiStksLandThisEvent + totAvoiStksDiscThisEvent);
+
+        // update node‑level cumulative catches/discards all pop pooled
+        get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
+        get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
+
+        // compute and store the discard‑to‑total ratio
+        double discratio = get_loc()->get_cumdiscards() /
+            (get_loc()->get_cumdiscards() + get_loc()->get_cumcatches());
+        discratio = (discratio > 0.0) ? discratio : 0.0;
+        get_loc()->set_cumdiscardsratio(discratio);
+
+        // optional realtime‑closure logic 
+        if (is_realtime_closure &&
+            experienced_bycatch_prop_on_fgrounds.at(idx_node_r) > 0.8) {
+            get_loc()->setBannedMetier(get_metier()->get_name());
+            // Uncomment if you also want to ban vessel size / nation:
+            // get_loc()->setBannedVsize(get_length_class());
+            // get_loc()->setBannedNation(get_nationality_idx());
+        }
+
+
+        // read out the accumulation that will be exported in loglike.dat (see exportLogLike () and output_fileformats.md)
+        this->set_catch_pop_at_szgroup(catch_pop_at_szgroup);
+
+        // add the metier for this ping
+        this->idx_used_metiers_this_trip.push_back(this->get_metier()->get_name());
+
+
+        // diagnostic output 
+        outc(cout << "cumcatch_fgrounds this node is "
+            << cumcatch_fgrounds.at(idx_node_r) << "\n");
+        outc(cout << "cumdiscard_fgrounds is "
+            << cumdiscard_fgrounds.at(idx_node_r) << "\n");
+    }
+
+    
+
+    void Vessel::do_catch(const DynAllocOptions & dyn_alloc_sce,
+        std::ofstream & export_individual_tacs,
+        int a_tstep, int a_month, int a_quarter,
+        const std::vector<Population*>&populations,
+        const std::vector<Node*>&nodes,
+        const std::vector<Benthos*>&benthoshabs,
+        const std::vector<int>&implicit_pops,
+        const std::vector<int>&grouped_tacs,
+        int tstep,
+        const std::vector<double>&graph_res,
+        bool is_tacs,
+        bool is_individual_vessel_quotas,
+        bool check_all_stocks_before_going_fishing,
+        bool is_discard_ban,
+        bool is_realtime_closure,
+        bool is_grouped_tacs,
+        double tech_creeping_multiplier,
+        bool is_fishing_credits,
+        bool direct_killing_on_benthos,
+        bool resuspension_effect_on_benthos,
+        bool is_benthos_in_numbers)
+    {
+        lock();
+        
+
+        // ------------------------------------------------------------------
+        // 1️  Gather static vessel / metier / habitat data
+        // ------------------------------------------------------------------
+        Vessel::VesselStaticData vdat = Vessel::collect_vessel_static_data();
+        MetierStaticData  mdat = collect_metier_static_data();
+        HabitatStaticData hdat = collect_habitat_static_data(benthoshabs);
+
+        // ------------------------------------------------------------------
+        // 2️  Compute swept area (gear geometry)
+        // ------------------------------------------------------------------
+        SweptAreaInfo sweep = compute_swept_area(vdat, mdat);
+        update_location_swept_area(sweep);
+
+        // ------------------------------------------------------------------
+        // 3️  Prepare benthos loss / resuspension vectors (if needed)
+        // ------------------------------------------------------------------
+        std::vector<double> loss_per_func = prepare_benthos_losses(
+            direct_killing_on_benthos,
+            resuspension_effect_on_benthos,
+            vdat,
+            mdat,
+            hdat);
+
+        // ------------------------------------------------------------------
+        // 3  tariff on loc
+        // ------------------------------------------------------------------
+        pay_fishing_credit_tariff(*this, // *this is a Vessel&
+            a_tstep,
+            is_fishing_credits);
+
+
+        // ------------------------------------------------------------------
+        // 4️  Loop over all populations (explicit + implicit)
+        // ------------------------------------------------------------------
+        CatchResult cr;
+        cr.landings.resize(NBSZGROUP, 0.0);
+        cr.discards.resize(NBSZGROUP, 0.0);
+        cr.catchWeight.resize(NBSZGROUP, 0.0);
+
+        for (size_t popIdx = 0; popIdx < populations.size(); ++popIdx) {
+            Population* pop = populations[popIdx];
+            bool isImplicit = std::binary_search(implicit_pops.begin(),
+                implicit_pops.end(),
+                pop->get_name());
+
+            if (isImplicit) {
+                handle_implicit_population(popIdx, populations, sweep, dyn_alloc_sce,
+                    tstep, a_month, a_quarter, tech_creeping_multiplier,
+                    is_tacs, is_individual_vessel_quotas, is_grouped_tacs,
+                    export_individual_tacs,
+                    implicit_pops,
+                    cr);
+            }
+            else {
+                handle_explicit_population(popIdx, populations, vdat, mdat, hdat,
+                    sweep, loss_per_func, graph_res,
+                    dyn_alloc_sce, nodes, tstep, a_month, a_quarter,
+                    is_tacs, is_individual_vessel_quotas,
+                    is_discard_ban, is_grouped_tacs,
+                    tech_creeping_multiplier,
+                    is_fishing_credits, export_individual_tacs,
+                    implicit_pops,
+                    cr);
+            }
+        
+        
+        
+            // Update vessel cumulative statistics
+           // on the node
+            get_loc()->add_to_cumcatches(cr.totalLandings); //=> to the GUI layer CumCatches
+            get_loc()->add_to_cumcatches_per_pop(cr.totalLandings, popIdx);
+            get_loc()->add_to_cumcatches_per_pop_this_month(cr.totalLandings, popIdx);
+            get_loc()->add_to_cumdiscards(cr.totalDiscards);
+            get_loc()->add_to_cumdiscards_per_pop(cr.totalDiscards, popIdx);
+            int met = this->get_metier()->get_name();
+            get_loc()->add_to_cumcatches_per_pop_per_met_this_month(cr.totalLandings, popIdx, met);
+            get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, popIdx, met);
+            get_loc()->compute_cpue_per_pop_per_met_this_month(popIdx, met); // i.e. cumcatch/cumeffort
+
+            // relative node index to this vessel
+            auto idx_node = this->get_loc()->get_idx_node();
+            auto the_grds = this->get_fgrounds();
+            int idx_node_r = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
+            
+            //catches per pop
+            this->cumcatch_fgrounds.at(idx_node_r) += cr.totalLandings;
+            this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(popIdx) += cr.totalLandings;
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet) || dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                this->cumcatch_fgrounds_per_met_per_pop(idx_node_r, met,
+                    popIdx) += cr.totalLandings;
+            }
+            int q = a_quarter - 1;
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                this->cumcatch_fgrounds_per_yearquarter_per_pop.at(idx_node_r).at(q).at(
+                    popIdx) += cr.totalLandings;
+            }
+            // effort
+            this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE;
+            }
+            if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet) || dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
+                this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
+            }
+
+        
+        }
+
+        // ------------------------------------------------------------------
+        // 5️  Final bookkeeping (cumulative stats, closures, logging)
+        // ------------------------------------------------------------------
+        finalize_trip_statistics(cr, graph_res, a_quarter, is_realtime_closure);
+        //maybe_close_ground(is_realtime_closure);
+        
+
+        unlock();
+    }
+
+    
+
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+// the catch process...
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+
+    /*
+
 void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                       std::ofstream &export_individual_tacs,
                       int a_tstep,
@@ -3119,20 +4148,20 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                 dout(cout  << "this pop " << populations.at(pop)->get_name() << " is present on this node... " << "\n");
 
 
-                /*
+                
                 // check
-                if(this->get_loc()->get_idx_node()==186 && namepop==3)
-                {
-                    vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
-                    vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
-                    vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
+                //if(this->get_loc()->get_idx_node()==186 && namepop==3)
+                //{
+                //    vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
+                //    vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
+                //    vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
 
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "N_at_szgroup at the start of do_catch sz " <<  N_at_szgroup.at(sz) << "\n";
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "removals_at_szgroup at the start of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n";
-                    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "at_month_start at the start of do_catch sz " <<  at_month_start.at(sz) << "\n";
+                //    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "N_at_szgroup at the start of do_catch sz " <<  N_at_szgroup.at(sz) << "\n";
+                //    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "removals_at_szgroup at the start of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n";
+                //    for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "at_month_start at the start of do_catch sz " <<  at_month_start.at(sz) << "\n";
 
-                }
-                */
+                //}
+                
 
                 // 1. COMPUTE TOTAL AVAILABLE BIOMASS
                 // ON THIS NODE FOR THIS POP
@@ -3146,27 +4175,26 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
                 // // // // // //
                 // HARDCODING SPECIFIC TO MYFISH MIG (TO BE REMOVED!!!)
-                /*if(pop==10 && this->get_loc()->get_x()<12)
-                {
-                    vector <double> initial_wsz;
-                    initial_wsz.push_back(0.0001266451);
-                    initial_wsz.push_back(0.004076539);
-                    initial_wsz.push_back(0.02048018);
-                    initial_wsz.push_back(0.05930595);
-                    initial_wsz.push_back(0.1312184);
-                    initial_wsz.push_back(0.2473941);
-                    initial_wsz.push_back(0.4194203);
-                    initial_wsz.push_back(0.6592298);
-                    initial_wsz.push_back(0.9790549);
-                    initial_wsz.push_back(1.391393);
-                    initial_wsz.push_back(1.90898);
-                    initial_wsz.push_back(2.544769);
-                    initial_wsz.push_back(3.311913);
-                    initial_wsz.push_back(4.223748);
-                    wsz=initial_wsz; // replace if sd22
-                }
-                */// // // // // //
-
+                //if(pop==10 && this->get_loc()->get_x()<12)
+                //{
+                //    vector <double> initial_wsz;
+                //    initial_wsz.push_back(0.0001266451);
+                //    initial_wsz.push_back(0.004076539);
+                //    initial_wsz.push_back(0.02048018);
+                //    initial_wsz.push_back(0.05930595);
+                //    initial_wsz.push_back(0.1312184);
+                //    initial_wsz.push_back(0.2473941);
+                //    initial_wsz.push_back(0.4194203);
+                //    initial_wsz.push_back(0.6592298);
+                //   initial_wsz.push_back(0.9790549);
+                //    initial_wsz.push_back(1.391393);
+                //    initial_wsz.push_back(1.90898);
+                //    initial_wsz.push_back(2.544769);
+                //    initial_wsz.push_back(3.311913);
+                //    initial_wsz.push_back(4.223748);
+                //    wsz=initial_wsz; // replace if sd22
+                //}
+                
 
 
 
@@ -3209,14 +4237,14 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     }
 
 
-                  /*if(this->get_name()=="FIN000020014"){
-                      cout  << "-------------------------" << "\n";
-                      cout  << "pop" << pop << "\n";
-                      cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << "\n";
-                      cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << "\n";
-                      cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << "\n";
-                    }
-                  */
+                  //if(this->get_name()=="FIN000020014"){
+                  //    cout  << "-------------------------" << "\n";
+                  //    cout  << "pop" << pop << "\n";
+                  //    cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << "\n";
+                  //    cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << "\n";
+                  //    cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << "\n";
+                  //  }
+                  
 
                     // cumul
                     tot = tot+avail_biomass[szgroup];
@@ -3304,13 +4332,13 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << "\n");
 
                     
-                      /*if(this->get_name()=="POL022500003"){
-                       cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << "\n";
-                       cout  << "explicit: given  that avai biomass is " << tot << "\n";
-                       cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << "\n";
-                       cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << "\n";
-                      }
-                      */
+                     //if(this->get_name()=="POL022500003"){
+                     //  cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << "\n";
+                     //  cout  << "explicit: given  that avai biomass is " << tot << "\n";
+                     //  cout << "explicit: v_betas_per_pop[pop] is " << v_betas_per_pop[pop] << "\n";
+                     //  cout << "explicit: populations[pop]->get_cpue_multiplier() is " << populations[pop]->get_cpue_multiplier() << "\n";
+                     // }
+                     
 
                     // REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
                     // BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)
@@ -3480,27 +4508,27 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                     new_Ns_at_szgroup_pop[szgroup] = 0;
                                 }
 
-                                /*
+                              
                                 // check (before)
-                                vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-                                dout(cout << "a_avai bef: " << "\n");
-                                for(int it=0; it<a_avai_bef.size(); it++)
-                                {
-                                    dout(cout  << a_avai_bef.at(it) << " " << "\n");
-                                }
+                              //  vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
+                              //  dout(cout << "a_avai bef: " << "\n");
+                              //  for(int it=0; it<a_avai_bef.size(); it++)
+                              //  {
+                              //      dout(cout  << a_avai_bef.at(it) << " " << "\n");
+                              //  }
 
                                 // check (before)
-                                dout(cout  << "removals_per_szgroup bef: " << "\n");
-                                dout(cout  << removals_per_szgroup.at(szgroup) << " " << "\n");
+                              //  dout(cout  << "removals_per_szgroup bef: " << "\n");
+                              //  dout(cout  << removals_per_szgroup.at(szgroup) << " " << "\n");
 
                                 // check (before)
-                                dout(cout  << "Ns_at_szgroup_pop bef: " << "\n");
-                                dout(cout  << Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
+                              //  dout(cout  << "Ns_at_szgroup_pop bef: " << "\n");
+                              //  dout(cout  << Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
 
                                 // check (before)
-                                dout(cout  << "new_Ns_at_szgroup_pop bef: " << "\n");
-                                dout(cout  << new_Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
-                                */
+                              //  dout(cout  << "new_Ns_at_szgroup_pop bef: " << "\n");
+                              //  dout(cout  << new_Ns_at_szgroup_pop.at(szgroup) << " " << "\n");
+                                
 
                                 // update the availability key accounting for the current extraction (hourly feedback loop on the pop dynamics)
                                 // (note that another (implicit) feedback is when available biomass =0 on the node)
@@ -3518,20 +4546,19 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
                                 // END RE-ACITIVATION
 
-                                /*
+                                
 
                                 // check (after)
-                                dout(cout << "a val " << val << " for this szgroup  " << szgroup << "\n");
+                               // dout(cout << "a val " << val << " for this szgroup  " << szgroup << "\n");
 
                                 // check (after)
-                                vector <double> a_avai_aft = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-                                dout(cout << "a_avai aft: " << "\n");
-                                for(int it=0; it<a_avai_aft.size(); it++)
-                                {
-                                    dout(cout << a_avai_aft.at(it) << " " << "\n");
-                                }
-                                */
-
+                              //  vector <double> a_avai_aft = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
+                              //  dout(cout << "a_avai aft: " << "\n");
+                              //  for(int it=0; it<a_avai_aft.size(); it++)
+                              //  {
+                              //      dout(cout << a_avai_aft.at(it) << " " << "\n");
+                              //  }
+                             
                             }
                             // add the preexisting removals (from other vessels) on this node for this szgroup
                             vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
@@ -3577,29 +4604,29 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                     // i.e. the preexisting removals from oth vessels + from this vessel
                     this->get_loc()->set_removals_pops_at_szgroup(  namepop, removals_per_szgroup);
 
-                    /*
-                    if(this->get_loc()->get_idx_node()==186 && namepop==3)
-                    {
-                        vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
-                        vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
-                        vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
+                   
+                   // if(this->get_loc()->get_idx_node()==186 && namepop==3)
+                   // {
+                   //     vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
+                   //     vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
+                   //     vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
 
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << "\n");
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n");
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << "\n");
+                  //      for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << "\n");
+                  //      for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << "\n");
+                  //      for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << "\n");
 
-                        for(int sz=0; sz<N_at_szgroup.size(); sz++)
-                        {
-                            if(removals_at_szgroup.at(sz)>at_month_start.at(sz))
-                            {
-                                dout(cout << "something wrong here!..." << "\n");
-                                int xx;
-                                cin >>xx;
-                            }
-                        }
+                  //      for(int sz=0; sz<N_at_szgroup.size(); sz++)
+                  //      {
+                  //          if(removals_at_szgroup.at(sz)>at_month_start.at(sz))
+                  //          {
+                  //              dout(cout << "something wrong here!..." << "\n");
+                  //              int xx;
+                  //              cin >>xx;
+                  //          }
+                  //      }
 
-                    }
-                    */
+                  //  }
+                    
 
                     // then, the vessel catches for this pop so far is...
                     // (indeed, this might not correspond to 'tot_catch_per_pop' when no biomass
@@ -3770,16 +4797,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
                                 // ...i.e. discarded = so_far - current_tac)
                                 // what a waste !!...
 
-                                /* CHECK so_far!!
-                                cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
-                                double land_so_far    = 0;
-                                vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
-                                for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
-                                {
-                                   land_so_far+=C_at_szgroup.at(sz);
-                                }
-                                cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << "\n";
-                                */
+                                // CHECK so_far!!
+                                //cout <<"4: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
+                                //double land_so_far    = 0;
+                                //vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+                                //for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+                                //{
+                                //   land_so_far+=C_at_szgroup.at(sz);
+                                //}
+                                //cout <<"4: pop" << pop << " land_so_far is "<< land_so_far << "\n";
+                                
 
                                 a_cumul_weight_this_pop_this_vessel=0;// discard all!
 
@@ -3870,29 +4897,29 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
       
                     // check
-                    /*
-                     for(int i=0; i<new_Ns_at_szgroup_pop.size(); i++)
-                     {
-                         if(new_Ns_at_szgroup_pop[i]!=new_Ns_at_szgroup_pop[i])  // c++ trick for like testing for is.nan
-                         {
-                             int a;
-                             dout(cout << "namepop " <<namepop << "\n");
-                             dout(cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << "\n");
-                             dout(cout << "wsz[szgroup] " <<wsz[i] << "\n");
-                             dout(cout << "sel_ogive[szgroup] " <<sel_ogive[i] << "\n");
-                             dout(cout << "avail_biomass[szgroup] " <<avail_biomass[i] << "\n");
-                             dout(cout << "alloc_key[szgroup] " <<alloc_key[i] << "\n");
-                             dout(cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << "\n");
-                             dout(cout << " weight_per_szgroup[szgroup] " << wsz[i] << "\n");
-                             dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << "\n");
-                             dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << "\n");
-
-                             dout(cout << "here: nan detected" << "\n");
-                             dout(cout << "here: nan detected...Pause: type a number to continue");
-                             cin >> a;
-                         }
-                     }
-                     */
+                    //
+                    // for(int i=0; i<new_Ns_at_szgroup_pop.size(); i++)
+                    // {
+                    //     if(new_Ns_at_szgroup_pop[i]!=new_Ns_at_szgroup_pop[i])  // c++ trick for like testing for is.nan
+                    //     {
+                    //         int a;
+                    //         dout(cout << "namepop " <<namepop << "\n");
+                    //         dout(cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << "\n");
+                    //         dout(cout << "wsz[szgroup] " <<wsz[i] << "\n");
+                    //         dout(cout << "sel_ogive[szgroup] " <<sel_ogive[i] << "\n");
+                    //         dout(cout << "avail_biomass[szgroup] " <<avail_biomass[i] << "\n");
+                    //         dout(cout << "alloc_key[szgroup] " <<alloc_key[i] << "\n");
+                    //         dout(cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << "\n");
+                    //         dout(cout << " weight_per_szgroup[szgroup] " << wsz[i] << "\n");
+                    //         dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << "\n");
+                    //         dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << "\n");
+                    //
+                    //         dout(cout << "here: nan detected" << "\n");
+                    //         dout(cout << "here: nan detected...Pause: type a number to continue");
+                    //         cin >> a;
+                    //     }
+                    // }
+                    
 
                     // check
                     //if(tot_catch_per_pop[pop]==0 || tot==0){
@@ -3933,16 +4960,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
             // CHECK
             // what is exported in loglike file for this pop is:
-            /*
-             * if(this->get_name()=="FIN000020014"){
-               double cumul=0.0;
-                for(size_t sz = 0; sz < catch_pop_at_szgroup[pop].size(); sz++)
-                {
-                    cumul = cumul + catch_pop_at_szgroup[pop][sz];
-                }
-            cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << "\n";
-            }
-            */
+            //
+            // if(this->get_name()=="FIN000020014"){
+            //   double cumul=0.0;
+            //    for(size_t sz = 0; sz < catch_pop_at_szgroup[pop].size(); sz++)
+            //    {
+            //        cumul = cumul + catch_pop_at_szgroup[pop][sz];
+            //    }
+            //cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << "\n";
+            //}
+            
 
        
 
@@ -4165,16 +5192,16 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
         populations.at(pop)->set_tot_D_at_szgroup(newTotD);
 
 
-        /* CHECK so_far!! i.e. should return the exact same value...
-        cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
-        double land_so_far    = 0;
-        vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
-        for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
-        {
-           land_so_far+=C_at_szgroup.at(sz);
-        }
-        cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << "\n";
-        */
+        // CHECK so_far!! i.e. should return the exact same value...
+        //cout <<" 2: pop" << pop << " so_far is "<< populations.at(pop)->get_landings_so_far() << "\n";
+        //double land_so_far    = 0;
+        //vector <double> C_at_szgroup= populations.at(pop)->get_tot_C_at_szgroup();
+        //for(unsigned int sz = 0; sz < C_at_szgroup.size(); sz++)
+        //{
+        //   land_so_far+=C_at_szgroup.at(sz);
+        //}
+        //cout <<" 2: pop" << pop << "  land_so_far is "<< land_so_far << "\n";
+        
 
     } // end pop
 
@@ -4206,18 +5233,18 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
 
 
     // check the matrix of catches
-    /*double a_cumul = 0;
-    outc(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << "\n");
-    for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
-    {
-        for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
-       {
-            outc(cout  << catch_pop_at_szgroup[i][j] << " ");
-            a_cumul +=catch_pop_at_szgroup[i][j];
-        }
-        outc(cout  << "\n");
-    }
-    */
+    //double a_cumul = 0;
+    //outc(cout  << "in do_catch(): after: CATCH PER NBSZGROUP" << "\n");
+    //for(int i = 0; i < catch_pop_at_szgroup.size(); i++)
+    //{
+    //    for(int j = 0; j < catch_pop_at_szgroup[i].size(); j++)
+    //   {
+    //        outc(cout  << catch_pop_at_szgroup[i][j] << " ");
+    //        a_cumul +=catch_pop_at_szgroup[i][j];
+    //    }
+    //    outc(cout  << "\n");
+    //}
+    
 
     // read out the accumulation that will be exported in loglike.dat (see exportLogLike () and output_fileformats.md)
     this->set_catch_pop_at_szgroup(catch_pop_at_szgroup);
@@ -4242,6 +5269,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     unlock();
 }
 
+*/
 
 void Vessel::clear_catch_pop_at_szgroup()
 {

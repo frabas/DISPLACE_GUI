@@ -449,7 +449,28 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
 
                         }
                         // update
-                        model->vessels()[index_v]->lock();
+                        if (!model) {
+                            std::cerr << "[FATAL] model pointer is null!\n";
+                            std::terminate();
+                        }
+
+                        auto& vessels = model->vessels();          // reference to the internal container
+                        if (index_v >= vessels.size()) {
+                            std::cerr << "[ERROR] index_v (" << index_v
+                                << ") >= vessels.size() (" << vessels.size() << ")\n";
+                            std::terminate();                     // or gracefully skip this vessel
+                        }
+
+                        auto& vesselPtr = vessels[index_v];
+                        if (!vesselPtr) {
+                            std::cerr << "[ERROR] vessels[" << index_v << "] is nullptr!\n";
+                            std::terminate();
+                        }
+
+                        // At this point we know vesselPtr is a valid object.
+                        vesselPtr->lock();   // <-- no crash any more
+
+
                         model->vessels()[index_v]->set_timeatsea(
                                 model->vessels()[index_v]->get_timeatsea() + PING_RATE);
                        // cout << "after do_catch, timeatsea is now uptaded to: " << model->vessels()[index_v]->get_timeatsea() << endl;

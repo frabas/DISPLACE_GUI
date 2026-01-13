@@ -2131,7 +2131,7 @@ int app_main(int argc, char const* argv[])
                     if (simModel->timestep()>0 && simModel->timestep() % simModel->populations().at(sp)->get_nbhours_for_distance_internodes_this_pop().at(sp) == 0) {
                         outc(cout << "diffusePopN for pop.... " << sp << "\n";)
                             cout << "diffusePopN for pop.... " << sp << "\n";
-                            simModel->populations().at(sp)->diffuse_N_from_field(adjacency_map); // per sz group
+                            simModel->populations().at(sp)->diffuse_N_from_field(simModel->nodes(), adjacency_map); // per sz group
 
                     }
                 }

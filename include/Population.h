@@ -24,12 +24,25 @@
 #include <commons_global.h>
 #include <vector>
 #include <map>
+#include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include <iostream>
 #include "myutils.h"
 #include "Node.h"
 #include "Tac.h"
 #include <options.h>
+
+using CoeffVector = std::vector<double>;          // coeff per size?group (fixed length)
+
+// provide a Hash functor for types::NodeId for unordered_map and unordered_set to work out
+struct NodeIdHash {
+    std::size_t operator()(const types::NodeId& nid) const noexcept {
+        return static_cast<std::size_t>(nid.toIndex());
+    }
+};
+
+using CoeffMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash >;
 
 class  Population
 {
@@ -227,7 +240,7 @@ class  Population
 		void aggregate_N();		 // aggregate from nodes
         void aggregate_N_display_for_check(); // just a tool to check numbers in console
 								 // do a cumul for F
-        void diffuse_N_from_field(adjacency_map_t& adjacency_map);
+        void diffuse_N_from_field(const vector<Node*>& nodes, adjacency_map_t& adjacency_map);
         void compute_tot_N_and_F_and_W_at_age(int a_month_i);
         void compute_tot_M_at_age();
 		void compute_fbar();
@@ -252,6 +265,8 @@ class  Population
         void export_popdyn_SSB(ofstream& popdyn_SSB, int tstep);
         void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce);
 
+        const CoeffMap& get_cached_coeff_map() const;
+       
 	protected:
 	private:
 		int name;
@@ -350,6 +365,10 @@ class  Population
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
         double tot_N_at_age0;
 
-
+        // -----------------------------------------------------------------         
+        // New helper used only by diffuse_N_from_field (private)
+        // -----------------------------------------------------------------
+    mutable CoeffMap cached_coeff_map_;   // mutable because we lazily fill it
+    void build_coeff_cache() const;       // fills cached_coeff_map_
 };
 #endif							 // POPULATION_H

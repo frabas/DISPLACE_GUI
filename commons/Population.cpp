@@ -30,6 +30,8 @@
 static std::random_device rd;
 static std::mt19937 g(rd());
 
+
+
 Population::Population(int a_name,
                        string a_pop_name,
                        double _avai0_beta,
@@ -1431,8 +1433,156 @@ void Population::aggregate_N_display_for_check()
 }
 
 
+//-------------------------------------------------------------------//
+//-------------diffusePopN Option------------------------------------//
+//-------------------------------------------------------------------//
 
 
+const CoeffMap& Population::get_cached_coeff_map() const
+{
+    if (cached_coeff_map_.empty())
+        build_coeff_cache();          // fill the map the first time we need it
+    return cached_coeff_map_;
+}
+
+void Population::build_coeff_cache() const
+{
+    if (!cached_coeff_map_.empty())
+        return;                       // already built
+
+    const auto& field = this->get_field_of_coeff_diffusion_this_pop(); // multimap<NodeId,double>
+    const size_t n_sz = this->get_tot_N_at_szgroup().size(); // number of size groups (e.g. 14)
+
+    // Walk through the multimap once and pack the coefficients per node
+    for (auto it = field.begin(); it != field.end(); ++it) {
+        const types::NodeId& nid = it->first;
+        const double coeff_val = it->second;
+
+        // Ensure a vector exists for this node
+        auto& vec = cached_coeff_map_[nid];
+        if (vec.empty())
+            vec.assign(n_sz, 0.0);   // allocate once with the correct size
+
+        // The multimap is ordered by node then by size‑group, so we can fill sequentially
+        // (the original code used a counter `i` – we mimic that here)
+        static size_t i = 0;
+        vec[i++] = coeff_val;
+        if (i == n_sz) i = 0;        // reset for the next node
+    }
+}
+
+
+
+
+void Population::diffuse_N_from_field(const vector<Node*>& nodes, adjacency_map_t& adjacency_map)
+{
+//#ifdef ENABLE_DIFFUSION_LOG
+    std::cout << "Start diffusion for this pop …\n";
+//#endif
+
+    // -----------------------------------------------------------------
+    // 1 Gather data that never changes inside the node loop
+    // -----------------------------------------------------------------
+    const std::vector<Node*>& node_list = this->get_list_nodes();   // already a vector of pointers
+    const size_t n_nodes = node_list.size();
+
+    // Build a fast‑lookup set of node ids that belong to this population
+
+    std::unordered_set<types::NodeId, NodeIdHash> pop_node_ids;
+    pop_node_ids.reserve(n_nodes * 2);
+    for (Node* nd : node_list)
+        pop_node_ids.insert(nd->get_idx_node());
+    // Shuffle the order *once* (the original code shuffled each iteration)
+    std::vector<Node*> shuffled_nodes = node_list;   // copy
+    std::shuffle(shuffled_nodes.begin(), shuffled_nodes.end(), g);
+
+    // Cached diffusion coefficients (node to vector of coeff per size‑group)
+    const auto& coeff_map = this->get_cached_coeff_map();
+
+    // -----------------------------------------------------------------
+    // 2️⃣  Temporary buffers (allocated once, reused)
+    // -----------------------------------------------------------------
+    std::vector<double> departure_N;          // will be resized per node
+    std::vector<double> arrival_N;            // reused for each neighbour
+    // consider using array for speed: if the number of size groups is known at compile time. This removes dynamic allocation for each node’s 
+    //std::array<double, 14> departure_N;          
+    //std::array<double, 14> arrival_N;            
+    std::vector<int>    neighbour_idxs;       // indices of neighbours that belong to the pop
+    neighbour_idxs.reserve(64);               // typical neighbourhood size
+
+    // -----------------------------------------------------------------
+    // 3️⃣  Main diffusion loop (node‑by‑node)
+    // -----------------------------------------------------------------
+    for (size_t n = 0; n < n_nodes; ++n) {
+        Node* cur_node = shuffled_nodes[n];
+        const types::NodeId cur_id = cur_node->get_idx_node();
+
+        // ---- progress report (optional) ---------------------------------
+//#ifdef ENABLE_DIFFUSION_LOG
+        if ((n & 0xFFF) == 0) { // every ~4096 nodes
+            double pct = 100.0 * (static_cast<double>(n) / n_nodes);
+            std::cout << "Diffusion progress: " << pct << "%\n";
+        }
+//#endif
+
+        // ---- 3.1  Get diffusion coefficients for this node ------------
+        auto coeff_it = coeff_map.find(cur_id);
+        if (coeff_it == coeff_map.end())
+            continue;   // no coefficients then nothing diffuses from this node
+
+        const std::vector<double>& some_coeffs = coeff_it->second; // already sized correctly
+
+        // ---- 3.2  Load the current N vector for this node ------------
+        departure_N = cur_node->get_Ns_pops_at_szgroup(this->get_name()); // copies the vector
+
+        // ---- 3.3  Find neighbours (graph adjacency) --------------------
+        const vertex_t u = cur_id.toIndex();
+        const std::list<edge>& edges = adjacency_map[u];
+
+        neighbour_idxs.clear();
+        for (const edge& e : edges) {
+            const types::NodeId neigh_id(e.target);
+            // keep only neighbours that belong to the spatial extent of the pop
+            if (pop_node_ids.find(neigh_id) != pop_node_ids.end())
+                neighbour_idxs.push_back(static_cast<int>(neigh_id.toIndex()));
+        }
+
+        const size_t n_neigh = neighbour_idxs.size();
+        if (n_neigh == 0)
+            continue;   // isolated node – nothing to diffuse
+
+        // ---- 3.4  Diffuse to each neighbour ---------------------------
+        const double inv_n_neigh = 1.0 / static_cast<double>(n_neigh);
+        for (int neigh_idx : neighbour_idxs) {
+            Node* neigh_node = nodes[neigh_idx];
+
+            arrival_N = neigh_node->get_Ns_pops_at_szgroup(this->get_name()); // copy
+
+            // ---- per‑size‑group exchange --------------------------------
+            const size_t n_sz = some_coeffs.size();   // number of size groups (e.g. 14)
+            for (size_t sz = 0; sz < n_sz; ++sz) {
+                const double exchanged = some_coeffs[sz] * departure_N[sz] * inv_n_neigh;
+                arrival_N[sz] += exchanged;
+                departure_N[sz] -= exchanged;
+            }
+
+            // ---- write back neighbour ------------------------------------
+            neigh_node->set_Ns_pops_at_szgroup(this->get_name(), arrival_N);
+        }
+
+        // ---- 3.5  Write back the updated departure node ----------------
+        cur_node->set_Ns_pops_at_szgroup(this->get_name(), departure_N);
+    }
+
+//#ifdef ENABLE_DIFFUSION_LOG
+    std::cout << "Stop diffusion for this pop …\n";
+//#endif
+
+
+}
+
+
+/*
 void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 {
    cout << "start diffusion for this pop...." << "\n";
@@ -1551,7 +1701,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 }
 
 
-
+*/
 
 
 

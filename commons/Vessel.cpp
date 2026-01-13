@@ -3404,7 +3404,7 @@ void Vessel::handle_explicit_population(
         // finally, impact the N...
   
         // add the preexisting removals (from other vessels) on this node for this szgroup
-        vector <double> cumul_removals_at_szgroup_pop = this->get_loc()->get_removals_pops_at_szgroup(sz);
+        vector <double> cumul_removals_at_szgroup_pop = this->get_loc()->get_removals_pops_at_szgroup(popIdx);
         removals[sz] += cumul_removals_at_szgroup_pop[sz];
 
         // apply to pop N

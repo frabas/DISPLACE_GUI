@@ -3155,6 +3155,38 @@ void Vessel::apply_tac_logic(size_t popIdx,
             double so_far = populations.at(popIdx)->get_landings_so_far() + total_catch_weight;
             populations.at(popIdx)->set_landings_so_far(so_far);
 
+
+            string a_nation = this->get_nationality();
+            map<string, double> landings_so_far_per_nation = populations.at(popIdx)->get_landings_so_far_per_nation();
+            if (landings_so_far_per_nation.size() == 0 || landings_so_far_per_nation.count(a_nation) == 0) {
+                cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability? " << "\n";
+                cout << "This vessel nationality is " << a_nation << "\n";
+                cout << "for this pop " << popIdx << "\n";
+                cout << "relative stability key is " << "\n";
+                for (map<string, double >::const_iterator it = landings_so_far_per_nation.begin();
+                    it != landings_so_far_per_nation.end(); ++it)
+                {
+                    std::cout << it->first << " " << it->second << "\n";
+                }
+            }
+            double so_far_this_nation = landings_so_far_per_nation.at(a_nation) +
+                total_catch_weight;
+            populations.at(popIdx)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+
+            int a_length_class = this->get_length_class();
+            map<int, double> landings_so_far_per_vessel_length_class = populations.at(popIdx)->get_landings_so_far_per_vessel_length_class();
+            if (landings_so_far_per_vessel_length_class.count(a_length_class) == 0) cout << "Not found: mismatch in length class coding in vessel length class TAC percentages " << "\n";
+            double so_far_this_vessel_length_class = landings_so_far_per_vessel_length_class.at(a_length_class) +
+                total_catch_weight;
+            populations.at(popIdx)->set_landings_so_far_this_vessel_length_class(a_length_class, so_far_this_vessel_length_class);
+
+
+            // note that oth_land (per node) are also added to landings_so_far but at the start of each month.
+
+
+
+
+
             // ---- GLOBAL QUOTA CHECK ----------------------------------------------------
             // The original code used a *monthly* proportion of the annual TAC.
             // That proportion is stored in the TAC object as
@@ -3164,7 +3196,12 @@ void Vessel::apply_tac_logic(size_t popIdx,
                 [a_month] /
                 100.0;
 
-            double allowed_so_far = global_quota * monthly_fraction * 1000.0; // convert t → kg
+            double allowed_so_far_all = global_quota * monthly_fraction * 1000.0; // convert t → kg
+            double allowed_so_far_this_nation = populations.at(popIdx)->get_tac()->get_tac_per_nation(a_nation) * monthly_fraction * 1000.0; // convert t → kg
+            double allowed_so_far_vessel_length_class = populations.at(popIdx)->get_tac()->get_tac_accessible_per_vessel_length_class(this->get_length_class()) * 1000.0; // convert t → kg
+
+            double allowed_so_far = std::min({ allowed_so_far_all, allowed_so_far_this_nation, allowed_so_far_vessel_length_class });
+        
 
             if (so_far > allowed_so_far) {
                 // ---- EXCEEDED GLOBAL QUOTA ------------------------------------------------
@@ -3175,6 +3212,7 @@ void Vessel::apply_tac_logic(size_t popIdx,
 
                 // Mark the population as “choked” for this vessel.
                 set_is_choked(static_cast<int>(popIdx), 1);
+                populations.at(popIdx)->get_tac()->set_is_tac_exhausted(1);
 
                 // Reduce the vessel’s catch to the *remaining* allowance.
                 double excess = so_far - allowed_so_far;

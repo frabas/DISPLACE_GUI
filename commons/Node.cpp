@@ -563,6 +563,10 @@ bool Node::get_is_harbour () const
 	return(is_harbour);
 }
 
+std::vector<double>& Node::get_Ns_pops_at_szgroup(int name_pop)
+{
+    return Ns_pops_at_szgroup[name_pop];
+}
 
 const vector<double> &Node::get_Ns_pops_at_szgroup(int name_pop) const
 {
@@ -1398,7 +1402,62 @@ void Node::clear_avai_pops_at_selected_szgroup()
 	}
 }
 
+void Node::apply_natural_mortality_at_node(
+    int               name_pop,
+    const std::vector<double>& M_at_szgroup,
+    const std::vector<double>& prop_M_from_species_interactions,
+    double            multiplier_on_M_background)
+{
+    // -----------------------------------------------------------------
+    // 0??  Early?out if there is nothing to do (empty vectors)
+    // -----------------------------------------------------------------
+    if (M_at_szgroup.empty() || prop_M_from_species_interactions.empty())
+        return;
 
+    // -----------------------------------------------------------------
+    // 1??  Grab a **reference** to the node’s N vector (no copy!)
+    // -----------------------------------------------------------------
+    std::vector<double>& Ns = get_Ns_pops_at_szgroup(name_pop);
+    const std::size_t n_sz = Ns.size();
+
+    // -----------------------------------------------------------------
+    // 2??  Pre?compute the weighted background mortality for each size?group
+    // -----------------------------------------------------------------
+    //   M_bg_i = ?_spp (prop_M[spp] * M_at_szgroup[i]) * multiplier
+    //   The inner sum does not depend on the population index, only on i.
+    // -----------------------------------------------------------------
+    std::vector<double> M_bg(n_sz, 0.0);
+    const double mult = multiplier_on_M_background;
+
+    // raw pointers for speed
+    const double* M_ptr = M_at_szgroup.data();
+    const double* prop_ptr = prop_M_from_species_interactions.data();
+    double* bg_ptr = M_bg.data();
+
+    for (std::size_t i = 0; i < n_sz; ++i) {
+        double sum = 0.0;
+        for (std::size_t s = 0; s < prop_M_from_species_interactions.size(); ++s) {
+            double v = prop_ptr[s] * M_ptr[i];
+            if (!std::isnan(v))          // keep the NaN?skip if required
+                sum += v;
+        }
+        bg_ptr[i] = sum * mult;
+    }
+
+    // -----------------------------------------------------------------
+    // 3??  Apply mortality to the N vector (in?place)
+    // -----------------------------------------------------------------
+    const double inv_month = 1.0 / 12.0;   // constant factor
+
+    for (std::size_t i = 0; i < n_sz; ++i) {
+        double mortality = bg_ptr[i];          // already includes species?interaction weighting
+        double newN = Ns[i] * std::exp(-mortality * inv_month);
+        Ns[i] = (newN < 0.0) ? 0.0 : newN;     // clamp negatives to zero
+    }
+}
+
+
+/*
 void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions, double multiplier_on_M_background)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << "\n");
@@ -1432,6 +1491,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 
     //dout(cout  << "END: apply_natural_mortality_at_node()" << "\n");
 }
+*/
 
 
 void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,

@@ -283,6 +283,8 @@ Population::Population(int a_name,
     this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop); // a fraction from 0 to 1
     this->set_nbhours_for_distance_internodes_this_pop(nbhours_for_distance_internodes_this_pop); // a nb of hours to set the pace of the diffusion
     
+    // After `full_spatial_availability` has been populated:
+    build_availability_cache();
 
 	// distribute tot_N_at_szgroup on nodes knowing the avai spatial key
 	// i.e. update the multimap Ns_pops_at_szgroup of the nodes
@@ -1179,6 +1181,60 @@ void Population::set_list_nodes(vector<Node* > _list_nodes)
 }
 
 
+
+// -----------------------------------------------------------------
+//  Build the cache from the multimap.
+//  After this call, `avail_cache[nid]` contains a vector whose length
+//  equals the number of size‑groups (the same length as `tot_N_at_szgroup`).
+// -----------------------------------------------------------------
+void Population::build_availability_cache()
+{
+    // Clear any previous data (important if you call this more than once)
+    avail_cache.clear();
+
+    // -----------------------------------------------------------------
+    // Walk the multimap once.  The multimap is ordered by key, then by
+    // insertion order, which matches the order of size‑groups in the
+    // original code.
+    // -----------------------------------------------------------------
+    for (const auto& kv : full_spatial_availability) {
+        const types::NodeId& nid = kv.first;
+        const double        val = kv.second;
+
+        // `operator[]` creates an empty vector the first time we see a node.
+        avail_cache[nid].push_back(val);
+    }
+
+    // -----------------------------------------------------------------
+    // (Optional) shrink‑to‑fit each vector if you want to free any
+    // over‑allocation that `push_back` may have caused.
+    // -----------------------------------------------------------------
+    for (auto& p : avail_cache) {
+        p.second.shrink_to_fit();
+    }
+
+    cache_ready = true;   // mark the cache as valid
+}
+
+const std::vector<double>& Population::get_availability(const types::NodeId& nid) const
+{
+    // Lazy‑initialise the cache the first time it is needed.
+    if (!cache_ready) {
+        // Note: this call is thread‑unsafe if two threads call it
+        // simultaneously for the first time.  In a typical DISPLACE run
+        // the cache is built once during model initialisation, so this
+        // path is never taken in parallel.  If you need true thread‑safe
+        // lazy init, protect it with a mutex or use `std::call_once`.
+        const_cast<Population*>(this)->build_availability_cache();
+    }
+
+    // `at()` throws if the node is not present – that would be a logic
+    // error, so we keep the exception semantics.
+    return avail_cache.at(nid);
+}
+
+
+
 void Population::distribute_N()
 {
 
@@ -1198,11 +1254,15 @@ void Population::distribute_N()
         auto idx_node = list_nodes[idx]->get_idx_node();
 
 		// get avai for this node
-		vector<double> avai_this_node;
-        auto lower = full_spatial_availability.lower_bound(idx_node);
-        auto upper = full_spatial_availability.upper_bound(idx_node);
-        for (auto pos=lower; pos != upper; pos++)
-			avai_this_node.push_back(pos->second);
+		//vector<double> avai_this_node;
+        //auto lower = full_spatial_availability.lower_bound(idx_node);
+        //auto upper = full_spatial_availability.upper_bound(idx_node);
+        //for (auto pos=lower; pos != upper; pos++)
+		//	avai_this_node.push_back(pos->second);
+        // because looking into the multimap is very time demanding, refactored and replaced by:
+         // Fast O(1) lookup of the availability vector
+        const std::vector<double>& avai_this_node = get_availability(idx_node); // search in avail_cache
+        // => Using a convert of the multimap(node → availability per size‑group) into a hash table that gives you the whole vector in O(1).
 
 		// check avai
 		//cout << "avai on node "<< idx_node<< ":" << "\n";

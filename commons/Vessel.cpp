@@ -3156,36 +3156,65 @@ void Vessel::apply_tac_logic(size_t popIdx,
             populations.at(popIdx)->set_landings_so_far(so_far);
 
 
-            string a_nation = this->get_nationality();
-            map<string, double> landings_so_far_per_nation = populations.at(popIdx)->get_landings_so_far_per_nation();
-            if (landings_so_far_per_nation.size() == 0 || landings_so_far_per_nation.count(a_nation) == 0) {
-                cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability? " << "\n";
-                cout << "This vessel nationality is " << a_nation << "\n";
-                cout << "for this pop " << popIdx << "\n";
-                cout << "relative stability key is " << "\n";
-                for (map<string, double >::const_iterator it = landings_so_far_per_nation.begin();
-                    it != landings_so_far_per_nation.end(); ++it)
-                {
-                    std::cout << it->first << " " << it->second << "\n";
-                }
-            }
-            double so_far_this_nation = landings_so_far_per_nation.at(a_nation) +
-                total_catch_weight;
-            populations.at(popIdx)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+            //string a_nation = this->get_nationality();
+            //map<string, double> landings_so_far_per_nation = populations.at(popIdx)->get_landings_so_far_per_nation();
+            //if (landings_so_far_per_nation.size() == 0 || landings_so_far_per_nation.count(a_nation) == 0) {
+            //    cout << "Not found: mismatch in 3-letters coding in vessel nationality vs relative_stability? " << "\n";
+            //    cout << "This vessel nationality is " << a_nation << "\n";
+            //    cout << "for this pop " << popIdx << "\n";
+            //    cout << "relative stability key is " << "\n";
+            //    for (map<string, double >::const_iterator it = landings_so_far_per_nation.begin();
+            //        it != landings_so_far_per_nation.end(); ++it)
+            //    {
+            //        std::cout << it->first << " " << it->second << "\n";
+            //    }
+            //}
+            //double so_far_this_nation = landings_so_far_per_nation.at(a_nation) +
+            //    total_catch_weight;
 
+            //populations.at(popIdx)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+
+            //int a_length_class = this->get_length_class();
+            //map<int, double> landings_so_far_per_vessel_length_class = populations.at(popIdx)->get_landings_so_far_per_vessel_length_class();
+            //if (landings_so_far_per_vessel_length_class.count(a_length_class) == 0) cout << "Not found: mismatch in length class coding in vessel length class TAC percentages " << "\n";
+            //double so_far_this_vessel_length_class = landings_so_far_per_vessel_length_class.at(a_length_class) +
+            //    total_catch_weight;
+            //populations.at(popIdx)->set_landings_so_far_this_vessel_length_class(a_length_class, so_far_this_vessel_length_class);
+
+
+            std::string a_nation = this->get_nationality();
+            auto& pop = *populations.at(popIdx);   // shorthand
+            
+            //std::cout << popIdx << "\n";
+            // ---- Landings so far per nation ----
+            double so_far_this_nation = util::safe_lookup(
+                pop.get_landings_so_far_per_nation(),
+                a_nation,
+                0.0,               // fallback → assume zero if missing
+                true);            // if not fatal we just warn, otherwise stop
+
+            so_far_this_nation += total_catch_weight;
+
+            // ---- Landings so far per vessel length class ----
             int a_length_class = this->get_length_class();
-            map<int, double> landings_so_far_per_vessel_length_class = populations.at(popIdx)->get_landings_so_far_per_vessel_length_class();
-            if (landings_so_far_per_vessel_length_class.count(a_length_class) == 0) cout << "Not found: mismatch in length class coding in vessel length class TAC percentages " << "\n";
-            double so_far_this_vessel_length_class = landings_so_far_per_vessel_length_class.at(a_length_class) +
-                total_catch_weight;
-            populations.at(popIdx)->set_landings_so_far_this_vessel_length_class(a_length_class, so_far_this_vessel_length_class);
+            double so_far_this_vessel_length_class = util::safe_lookup(
+                pop.get_landings_so_far_per_vessel_length_class(),
+                a_length_class,
+                0.0,
+                true);
+            so_far_this_vessel_length_class += total_catch_weight;
+
+            // ---- Update the population objects ----
+            pop.set_landings_so_far(so_far);
+            pop.set_landings_so_far_this_nation(a_nation, so_far_this_nation);
+            pop.set_landings_so_far_this_vessel_length_class(a_length_class,
+                so_far_this_vessel_length_class);
 
 
             // note that oth_land (per node) are also added to landings_so_far but at the start of each month.
 
 
-
-
+            
 
             // ---- GLOBAL QUOTA CHECK ----------------------------------------------------
             // The original code used a *monthly* proportion of the annual TAC.
@@ -3229,7 +3258,18 @@ void Vessel::apply_tac_logic(size_t popIdx,
 
                 // Update the population’s cumulative landings to the allowed amount.
                 populations.at(popIdx)->set_landings_so_far(allowed_so_far);
+                populations.at(popIdx)->set_landings_so_far_this_nation(a_nation, allowed_so_far);
+                populations.at(popIdx)->set_landings_so_far_this_vessel_length_class(a_length_class, allowed_so_far);
+
             }
+        }
+
+        map<string, double> landings_so_far_per_nation = populations.at(popIdx)->get_landings_so_far_per_nation();
+        if (landings_so_far_per_nation.empty()) {
+            // ------------------------
+            std::cout << "[WARN] landings_so_far_per_nation empty for pop "
+                << get_name() << "\n";
+            // landings_so_far stays 0.0
         }
 
         // -------------------------------------------------------------

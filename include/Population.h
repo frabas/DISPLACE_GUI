@@ -43,6 +43,7 @@ struct NodeIdHash {
 };
 
 using CoeffMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash >;
+using AvailMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash >;
 
 class  Population
 {
@@ -266,7 +267,20 @@ class  Population
         void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep, const DynAllocOptions &dyn_alloc_sce);
 
         const CoeffMap& get_cached_coeff_map() const;
+        mutable AvailMap avail_cache;          // `mutable` → can be built from a const method
+        mutable bool   cache_ready = false;    // lazy‑init flag
        
+        // -----------------------------------------------------------------         
+            // New helper on distribute_N()
+            // -----------------------------------------------------------------
+         //  Cache handling – public if you need to rebuild it from outside
+         /** Build (or rebuild) the availability cache from the multimap. */
+        void build_availability_cache();
+
+        /** Return a const reference to the cached vector for a node. */
+        const std::vector<double>& get_availability(const types::NodeId& nid) const;
+
+
 	protected:
 	private:
 		int name;
@@ -370,5 +384,7 @@ class  Population
         // -----------------------------------------------------------------
     mutable CoeffMap cached_coeff_map_;   // mutable because we lazily fill it
     void build_coeff_cache() const;       // fills cached_coeff_map_
+
+   
 };
 #endif							 // POPULATION_H

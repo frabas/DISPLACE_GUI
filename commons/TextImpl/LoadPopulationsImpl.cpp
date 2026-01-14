@@ -2669,6 +2669,10 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 //   for(int p=0;p<pop_names.size();p++) cout<< pop_names.at(p) << " ";
                 //   cout << "\n";
             }
+            
+            model().populations().at(i)->build_availability_cache();
+
+
             model().populations().at(i)->set_list_nodes(list_nodes);
 
             // add the current Ns to the vectors of vectors of the concerned nodes

@@ -1314,10 +1314,23 @@ void Population::set_node_availability(Node* node,
             << " (expected " << expected << ").\n";
     }
     
-    // 1 Update the node itself (original model code)
-    node->set_avai_pops_at_selected_szgroup(this->get_name(), new_avai);
+    // Update the avai on node
+    // on selected sz
+    const std::unordered_set<int> sel_set(selected_szgroups.begin(),
+        selected_szgroups.end());
+    vector<double> spat_avai_per_selected_szgroup; 
+    spat_avai_per_selected_szgroup.clear();
+    spat_avai_per_selected_szgroup.reserve(std::min(new_avai.size(),
+        static_cast<std::size_t>(sel_set.size())));
+    for (std::size_t i = 0; i < new_avai.size(); ++i) {
+        if (sel_set.find(static_cast<int>(i)) != sel_set.end())
+            spat_avai_per_selected_szgroup.push_back(new_avai[i]);   
+    }
+    node->set_avai_pops_at_selected_szgroup(get_name(), spat_avai_per_selected_szgroup);
 
-    // 2 Keep the multimap in sync (if you still need it)
+
+    // on all sz
+    // Keep the multimap in sync (if you still need it)
     const types::NodeId nid = node->get_idx_node();
     // Erase old entries for this node
     full_spatial_availability.erase(

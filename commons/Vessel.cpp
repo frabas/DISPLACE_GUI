@@ -3517,8 +3517,8 @@ void Vessel::handle_explicit_population(
 
         // store catch for this vessel
         catch_pop_at_szgroup[popIdx][sz] += cr.landings[sz];   // landings (weight) accumulated over the trip
-        discards_pop_at_szgroup[popIdx][0] += cr.discards[sz];       // accumulated over the trip
-        ping_catch_pop_at_szgroup[popIdx][0] = cr.landings[sz] + cr.discards[sz]; // ...this ping only
+        discards_pop_at_szgroup[popIdx][sz] += cr.discards[sz];       // accumulated over the trip
+        ping_catch_pop_at_szgroup[popIdx][sz] = cr.landings[sz] + cr.discards[sz]; // ...this ping only
 
     } // end szgroup
 

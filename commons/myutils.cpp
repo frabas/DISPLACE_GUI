@@ -1215,6 +1215,7 @@ bool fill_from_metier_specifications(istream& in, multimap<string, double>& info
 fill in the vessel attributes
 @param the vessel specification file, ...
 */
+/*
 bool fill_from_vessels_specifications (istream& in,
                                        vector<string>& names,
                                        vector<int>& vid_is_actives,
@@ -1292,7 +1293,252 @@ bool fill_from_vessels_specifications (istream& in,
 
     return true;
 }
+*/
 
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <charconv>          // std::from_chars (C++17)
+#include <cstdlib>           // std::strtod as fallback
+#include <cstring>           // std::strchr
+#include <algorithm>         // std::min, std::max
+#include <cstddef>           // std::size_t
+
+
+inline bool parse_int(const char* beg, const char* end, int& out)
+{
+#if defined(__cpp_lib_charconv) && __cpp_lib_charconv >= 201611L
+    auto [ptr, ec] = std::from_chars(beg, end, out);
+    return ec == std::errc();
+#else
+    char* tmp = nullptr;
+    long val = std::strtol(beg, &tmp, 10);
+    if (tmp != end) return false;
+    out = static_cast<int>(val);
+    return true;
+#endif
+}
+
+inline bool parse_double(const char* beg, const char* end, double& out)
+{
+#if defined(__cpp_lib_charconv) && __cpp_lib_charconv >= 201611L
+    // std::from_chars for floating point is only in C++17 (experimental) and C++20.
+    // We'll fall back to strtod for portability.
+    (void)beg; (void)end; (void)out;
+    return false;   // unreachable – we use the fallback below.
+#else
+    char* tmp = nullptr;
+    out = std::strtod(beg, &tmp);
+    return tmp == end;
+#endif
+}
+
+/* --------------------------------------------------------------
+   Fast line splitter that returns pointers into the original line.
+   No heap allocation, no std::string construction for each field.
+   -------------------------------------------------------------- */
+inline std::vector<std::pair<const char*, const char*>>
+split_fields(const std::string& line, char delim = '|')
+{
+    std::vector<std::pair<const char*, const char*>> parts;
+    const char* start = line.c_str();
+    const char* cur = start;
+
+    while (*cur) {
+        if (*cur == delim) {
+            parts.emplace_back(start, cur);
+            start = cur + 1;
+        }
+        ++cur;
+    }
+    // last field (or whole line if no delimiter found)
+    parts.emplace_back(start, cur);
+    return parts;
+}
+
+/* --------------------------------------------------------------
+   The rewritten loader – completely allocation‑free per line.
+   -------------------------------------------------------------- */
+bool fill_from_vessels_specifications(
+    std::istream& in,
+    std::vector<std::string>& names,
+    std::vector<int>& vid_is_actives,
+    std::vector<int>& vid_is_part_of_ref_fleets,
+    std::vector<double>& speeds,
+    std::vector<double>& fuelcons,
+    std::vector<double>& lengths,
+    std::vector<double>& vKWs,
+    std::vector<double>& carrycapacities,
+    std::vector<double>& tankcapacities,
+    std::vector<double>& nbfpingspertrips,
+    std::vector<double>& resttime_par1s,
+    std::vector<double>& resttime_par2s,
+    std::vector<double>& av_trip_duration,
+    std::vector<double>& mult_fuelcons_when_steaming,
+    std::vector<double>& mult_fuelcons_when_fishing,
+    std::vector<double>& mult_fuelcons_when_returning,
+    std::vector<double>& mult_fuelcons_when_inactive,
+    std::vector<int>& firm_ids,
+    std::vector<VesselCalendar>& calendars)
+{
+    std::string line;
+    std::size_t line_no = 0;
+
+    /* ----------------------------------------------------------
+       1️⃣  Estimate the number of vessels (optional but cheap).
+           If you know the file size you can do a quick pass to count
+           newline characters, then reserve all vectors once.
+       ---------------------------------------------------------- */
+       // Example: reserve 2000 entries (adjust to your data set)
+    const std::size_t reserve_estimate = 2000;
+    names.reserve(reserve_estimate);
+    vid_is_actives.reserve(reserve_estimate);
+    vid_is_part_of_ref_fleets.reserve(reserve_estimate);
+    speeds.reserve(reserve_estimate);
+    fuelcons.reserve(reserve_estimate);
+    lengths.reserve(reserve_estimate);
+    vKWs.reserve(reserve_estimate);
+    carrycapacities.reserve(reserve_estimate);
+    tankcapacities.reserve(reserve_estimate);
+    nbfpingspertrips.reserve(reserve_estimate);
+    resttime_par1s.reserve(reserve_estimate);
+    resttime_par2s.reserve(reserve_estimate);
+    av_trip_duration.reserve(reserve_estimate);
+    mult_fuelcons_when_steaming.reserve(reserve_estimate);
+    mult_fuelcons_when_fishing.reserve(reserve_estimate);
+    mult_fuelcons_when_returning.reserve(reserve_estimate);
+    mult_fuelcons_when_inactive.reserve(reserve_estimate);
+    firm_ids.reserve(reserve_estimate);
+    calendars.reserve(reserve_estimate);
+
+    /* ----------------------------------------------------------
+       2️⃣  Main parsing loop – one allocation per line only.
+       ---------------------------------------------------------- */
+    while (std::getline(in, line)) {
+        ++line_no;
+        // Trim leading/trailing whitespace (manual, no boost)
+        const char* beg = line.c_str();
+        while (*beg && std::isspace(static_cast<unsigned char>(*beg))) ++beg;
+        const char* end = beg + std::strlen(beg);
+        while (end > beg && std::isspace(static_cast<unsigned char>(*(end - 1)))) --end;
+        if (beg == end) continue;               // empty line
+
+        // Split into fields – returns pointers into the original line buffer
+        auto fields = split_fields(std::string(beg, end), '|');
+
+        if (fields.size() < 22) {
+            std::cerr << "Line " << line_no << ": missing fields (found "
+                << fields.size() << ")\n";
+            return false;
+        }
+
+        // ----- 3️⃣  Parse each field (no temporary std::string) -----
+        VesselCalendar cal{};
+        int  tmp_int;
+        double tmp_double;
+
+        // Helper lambda to avoid repetitive code
+        auto get_int = [&](std::size_t idx, int& out) -> bool {
+            const char* s = fields[idx].first;
+            const char* e = fields[idx].second;
+            return parse_int(s, e, out);
+        };
+        auto get_double = [&](std::size_t idx, double& out) -> bool {
+            const char* s = fields[idx].first;
+            const char* e = fields[idx].second;
+            // Use strtod (fast) – it stops at the first non‑numeric char.
+            char* tmp = nullptr;
+            out = std::strtod(s, &tmp);
+            return tmp == e;
+        };
+
+        // 0 – vessel name (copy into the names vector)
+        names.emplace_back(fields[0].first,
+            static_cast<std::size_t>(fields[0].second - fields[0].first));
+
+        // 1 – active flag
+        if (!get_int(1, tmp_int)) return false;
+        vid_is_actives.push_back(tmp_int);
+
+        // 2 – speed
+        if (!get_double(2, tmp_double)) return false;
+        speeds.push_back(tmp_double);
+
+        // 3 – fuel consumption
+        if (!get_double(3, tmp_double)) return false;
+        fuelcons.push_back(tmp_double);
+
+        // 4 – length
+        if (!get_double(4, tmp_double)) return false;
+        lengths.push_back(tmp_double);
+
+        // 5 – kW
+        if (!get_double(5, tmp_double)) return false;
+        vKWs.push_back(tmp_double);
+
+        // 6 – carry capacity
+        if (!get_double(6, tmp_double)) return false;
+        carrycapacities.push_back(tmp_double);
+
+        // 7 – tank capacity
+        if (!get_double(7, tmp_double)) return false;
+        tankcapacities.push_back(tmp_double);
+
+        // 8 – nb fpings per trips
+        if (!get_double(8, tmp_double)) return false;
+        nbfpingspertrips.push_back(tmp_double);
+
+        // 9 – rest time par1
+        if (!get_double(9, tmp_double)) return false;
+        resttime_par1s.push_back(tmp_double);
+
+        // 10 – rest time par2
+        if (!get_double(10, tmp_double)) return false;
+        resttime_par2s.push_back(tmp_double);
+
+        // 11 – avg trip duration
+        if (!get_double(11, tmp_double)) return false;
+        av_trip_duration.push_back(tmp_double);
+
+        // 12 – mult fuel cons steaming
+        if (!get_double(12, tmp_double)) return false;
+        mult_fuelcons_when_steaming.push_back(tmp_double);
+
+        // 13 – mult fuel cons fishing
+        if (!get_double(13, tmp_double)) return false;
+        mult_fuelcons_when_fishing.push_back(tmp_double);
+
+        // 14 – mult fuel cons returning
+        if (!get_double(14, tmp_double)) return false;
+        mult_fuelcons_when_returning.push_back(tmp_double);
+
+        // 15 – mult fuel cons inactive
+        if (!get_double(15, tmp_double)) return false;
+        mult_fuelcons_when_inactive.push_back(tmp_double);
+
+        // 16‑19 – calendar fields (ints)
+        if (!get_int(16, cal.weekEndStartDay))   return false;
+        if (!get_int(17, cal.weekEndEndDay))     return false;
+        if (!get_int(18, cal.workStartHour))     return false;
+        if (!get_int(19, cal.workEndHour))       return false;
+        calendars.push_back(cal);
+
+        // 20 – firm id
+        if (!get_int(20, tmp_int)) return false;
+        firm_ids.push_back(tmp_int);
+
+        // 21 – part‑of‑ref‑fleet flag
+        if (!get_int(21, tmp_int)) return false;
+        vid_is_part_of_ref_fleets.push_back(tmp_int);
+    }
+
+    // --------------------------------------------------------------
+    // 4️⃣  Success – all lines parsed
+    // --------------------------------------------------------------
+    std::cout << "Read " << names.size() << " vessel specifications – OK\n";
+    return true;
+}
 
 
 /**

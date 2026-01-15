@@ -335,7 +335,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     vector<multimap<types::NodeId, double> > vect_of_gshape_cpue_per_stk_on_nodes_mmap(vesselids.size());
     vector<multimap<types::NodeId, double> > vect_of_gscale_cpue_per_stk_on_nodes_mmap(vesselids.size());
 
-    //cout << "a data load loop over vessel " << "\n";
+    cout << "a data load loop over vessel " << "\n";
 
     for (unsigned int i = 0; i < vesselids.size(); i++) {
         outc(cout << "a data load loop over vessel " << i << "\n");
@@ -378,7 +378,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
 
     }
 
-    //cout << "a data load loop over vessel..ok " << "\n";
+    cout << "a data load loop over vessel..ok " << "\n";
 
     outc(cout << "export back the loaded vessel data to simulator.cpp " << "\n");
 

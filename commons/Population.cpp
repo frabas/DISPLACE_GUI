@@ -1308,19 +1308,18 @@ void Population::set_node_availability(Node* node,
 {
     const std::size_t expected = 14;   // or whatever constant you use
 
-    if (new_avai.size() != expected) {
-        std::cout << "[ERROR] Node " << node->get_idx_node()
-            << " received new_avai vector of size " << new_avai.size()
-            << " (expected " << expected << ").\n";
-    }
+   // if (new_avai.size() != expected) {
+   //     std::cout << "[ERROR] Node " << node->get_idx_node()
+   //         << " received new_avai vector of size " << new_avai.size()
+   //         << " (expected " << expected << ").\n";
+   // }
     
     // 3. Update the fast cache – exclusive lock
     {
     std::unique_lock<std::shared_mutex> lock(cache_mtx);
 
     // Update the avai on node
-    // ...on selected sz 
-    
+    // ...on selected sz  
     vector<double> spat_avai_per_selected_szgroup;
     std::vector<char> is_selected(expected, 0);
     for (int idx : selected_szgroups) {

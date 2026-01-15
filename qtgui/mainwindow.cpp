@@ -1684,6 +1684,7 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 
     m->setIndex(0);
     mMapController->setModel(model_idx, m);
+    qDebug() << "createMapObjectsFromModel()";
     mMapController->createMapObjectsFromModel(model_idx, m.get());
     ui->modelSelector->setCurrentIndex(model_idx);
     models[model_idx] = m;

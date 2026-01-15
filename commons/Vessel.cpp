@@ -3504,15 +3504,16 @@ void Vessel::handle_explicit_population(
         // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
         // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
         // REACTIVATION ON THE 07-05-2025:
+        std::vector<double>& new_avai_pops_at_selected_szgroup = 
+             populations.at(popIdx)->get_availability(this->get_loc()->get_idx_node()); // search in avail_cache
         if (sz == selSz.at(a_count) && totN[sz] != 0 && (removals[sz] < totN[sz]))
         {
             double val = (newNs[sz]) / (totN[sz]);
             new_avai_pops_at_selected_szgroup.at(a_count) = val;
-            if (a_count < (selSz.size() - 1)) a_count += 1;
-        }
-        nodes.at(get_loc()->get_idx_node().toIndex())->set_avai_pops_at_selected_szgroup(popIdx, new_avai_pops_at_selected_szgroup);
-        // Keep the cache consistent:
-        populations.at(popIdx)->update_cached_availability(this->get_loc()->get_idx_node(), new_avai_pops_at_selected_szgroup);
+        } //=> feedback on pop full avai. TODO: feedback on selected avai affecting the catch rates...
+        
+        // Keep the avai and cache consistent:
+       populations.at(popIdx)->set_node_availability(this->get_loc(), new_avai_pops_at_selected_szgroup);
 
         // store catch for this vessel
         catch_pop_at_szgroup[popIdx][sz] += cr.landings[sz];   // landings (weight) accumulated over the trip

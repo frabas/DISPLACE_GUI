@@ -1056,7 +1056,15 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
 
 void Node::set_Ns_pops_at_szgroup(int name_pop, const vector<double>& newval)
 {
-	for(unsigned int j = 0; j < Ns_pops_at_szgroup[name_pop].size(); j++)
+    const std::size_t expected = NBSZGROUP;   // or whatever constant you use
+
+    if (newval.size() != expected) {
+        std::cerr << "[ERROR] Node " << get_idx_node()
+            << " received Ns vector of size " << newval.size()
+            << " (expected " << expected << ").\n";
+    }
+    
+    for(unsigned int j = 0; j < Ns_pops_at_szgroup[name_pop].size(); j++)
 	{
 		Ns_pops_at_szgroup[name_pop][j]= newval[j];
 	}

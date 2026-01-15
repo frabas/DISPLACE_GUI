@@ -1216,34 +1216,126 @@ void Population::build_availability_cache()
     cache_ready = true;   // mark the cache as valid
 }
 
-const std::vector<double>& Population::get_availability(const types::NodeId& nid) const
+void Population::rebuild_availability_cache()
 {
-    // Lazy‑initialise the cache the first time it is needed.
-    if (!cache_ready) {
-        // Note: this call is thread‑unsafe if two threads call it
-        // simultaneously for the first time.  In a typical DISPLACE run
-        // the cache is built once during model initialisation, so this
-        // path is never taken in parallel.  If you need true thread‑safe
-        // lazy init, protect it with a mutex or use `std::call_once`.
-        const_cast<Population*>(this)->build_availability_cache();
+    // 1️⃣  Build a temporary map (no lock needed – local to this thread)
+    using TempMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash>;
+    TempMap temp;
+
+    // -------------------------------------------------------------
+    // 2️⃣  Fill the temporary map
+    // -------------------------------------------------------------
+    for (const auto& kv : full_spatial_availability) {
+        const types::NodeId& nid = kv.first;
+        const double        val = kv.second;
+        temp[nid].push_back(val);          // creates the vector on first use
     }
 
-    // `at()` throws if the node is not present – that would be a logic
-    // error, so we keep the exception semantics.
-    return avail_cache.at(nid);
+    // -------------------------------------------------------------
+    // 3️⃣  OPTIONAL: verify that every vector has the expected size
+    // -------------------------------------------------------------
+    const std::size_t expected_sz = 14;   // whatever your model uses
+    for (auto& p : temp) {
+        if (p.second.size() != expected_sz) {
+            std::cerr << "[WARN] Node " << p.first
+                << " has " << p.second.size()
+                << " availability entries (expected "
+                << expected_sz << "). Filling missing slots with 0.\n";
+            p.second.resize(expected_sz, 0.0);   // pad with zeros
+        }
+    }
+
+    // -------------------------------------------------------------
+    // 4️⃣  Swap the temporary map into the class member under exclusive lock
+    // -------------------------------------------------------------
+    {
+        std::unique_lock<std::shared_mutex> lock(cache_mtx);
+        avail_cache.swap(temp);            // O(1) pointer swap
+        cache_ready = true;
+    }
 }
 
-void Population::update_cached_availability(types::NodeId nid,
-    const std::vector<double>& new_vec)
+/*
+void Population::rebuild_availability_cache()
 {
-    // Ensure the cache exists (lazy init if needed)
-    if (!cache_ready)
-        build_availability_cache();
+    // Caller must hold exclusive access – we acquire it here.
+    std::unique_lock<std::shared_mutex> lock(cache_mtx); // exclusive
 
-    // Overwrite the cached entry
-    avail_cache[nid] = new_vec;   // copy (or move if you have an rvalue)
+    avail_cache.clear();
+    for (const auto& kv : full_spatial_availability) {
+        const types::NodeId& nid = kv.first;
+        const double        val = kv.second;
+        avail_cache[nid].push_back(val);
+    }
+    for (auto& p : avail_cache) p.second.shrink_to_fit();
+    cache_ready = true;
+}
+*/
+
+
+std::vector<double>& Population::get_availability(const types::NodeId& nid)
+{
+    // 1 Fast path – if the cache is already built, just read it.
+    {
+        std::shared_lock<std::shared_mutex> lock(cache_mtx);
+        if (cache_ready) {
+            // `at` throws if nid is truly missing – that's fine.
+            return avail_cache.at(nid);
+        }
+    }
+
+    // 2 Cache not ready – we need exclusive access to build it.
+    {
+        std::unique_lock<std::shared_mutex> lock(cache_mtx);
+        if (!cache_ready) {               // double‑checked (another thread may have built it)
+            // Build the whole cache (single‑threaded section)
+            avail_cache.clear();
+            for (const auto& kv : full_spatial_availability) {
+                const types::NodeId& id = kv.first;
+                const double val = kv.second;
+                avail_cache[id].push_back(val);
+            }
+            for (auto& p : avail_cache) p.second.shrink_to_fit();
+            cache_ready = true;
+        }
+        // Now the cache is ready – return the entry.
+        return avail_cache.at(nid);
+    }
 }
 
+void Population::set_node_availability(Node* node,
+    const std::vector<double>& new_avai)
+{
+    const std::size_t expected = 14;   // or whatever constant you use
+
+    if (new_avai.size() != expected) {
+        std::cerr << "[ERROR] Node " << node->get_idx_node()
+            << " received new_avai vector of size " << new_avai.size()
+            << " (expected " << expected << ").\n";
+    }
+    
+    // 1 Update the node itself (original model code)
+    node->set_avai_pops_at_selected_szgroup(this->get_name(), new_avai);
+
+    // 2 Keep the multimap in sync (if you still need it)
+    const types::NodeId nid = node->get_idx_node();
+    // Erase old entries for this node
+    full_spatial_availability.erase(
+        full_spatial_availability.lower_bound(nid),
+        full_spatial_availability.upper_bound(nid));
+    // Insert the new values
+    for (double v : new_avai)
+        full_spatial_availability.emplace(nid, v);
+
+    // 3. Update the fast cache – exclusive lock
+    {
+        std::unique_lock<std::shared_mutex> lock(cache_mtx);
+        // Option A – replace the whole vector (fast if you already have new_avai)
+        avail_cache[nid] = new_avai;   // copy or move
+        // Option B – just invalidate, let lazy rebuild handle it:
+        // avail_cache.erase(nid);
+    }
+}
 
 
 void Population::distribute_N()
@@ -1286,6 +1378,15 @@ void Population::distribute_N()
 		//for(int i=0; i<tot_N_at_szgroup.size(); i++)
         //    dout(cout << tot_N_at_szgroup[i] << " ");
 		//cout << "\n";
+
+        if (avai_this_node.size() != tot_N_at_szgroup.size()) {
+            std::cerr << "[ERROR] Size mismatch for node " << idx_node
+                << ": tot_N size = " << tot_N_at_szgroup.size()
+                << ", avai size = " << avai_this_node.size()
+                << ". STOP.\n";
+
+        }
+
 
 		// distribute on node applying avai
 		vector <double> N_at_szgroup;

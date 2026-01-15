@@ -2641,6 +2641,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
 
             auto full_avai_szgroup_nodes_with_pop = loadedData.vectmmapndparam1.at(i);
             model().populations().at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
+            model().populations().at(i)->rebuild_availability_cache();
 
 
             // read a other landings per node for this species (DEPRECATED - DONE AT MONTH TSTEP INSTEAD)
@@ -2670,8 +2671,7 @@ bool TextfileModelLoader::loadPopulations(int a_quarter)
                 //   cout << "\n";
             }
             
-            model().populations().at(i)->build_availability_cache();
-
+          
 
             model().populations().at(i)->set_list_nodes(list_nodes);
 

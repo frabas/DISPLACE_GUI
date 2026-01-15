@@ -33,6 +33,8 @@
 #include "Tac.h"
 #include <options.h>
 
+#include <shared_mutex>
+
 using CoeffVector = std::vector<double>;          // coeff per size‑group (fixed length)
 
 // provide a Hash functor for types::NodeId for unordered_map and unordered_set to work out
@@ -276,12 +278,13 @@ class  Population
          //  Cache handling – public if you need to rebuild it from outside
          /** Build (or rebuild) the availability cache from the multimap. */
         void build_availability_cache();
+        void rebuild_availability_cache(); // if habitat avai is changing
 
-        /** Return a const reference to the cached vector for a node. */
-        const std::vector<double>& get_availability(const types::NodeId& nid) const;
+        /** Return a const (or mutable) reference to the cached vector for a node. */
+        std::vector<double>& get_availability(const types::NodeId& nid) ;
+        void set_node_availability(Node* node, const std::vector<double>& new_avai);
 
-        void update_cached_availability(types::NodeId nid, const std::vector<double>& new_vec);
-
+        
 
 	protected:
 	private:
@@ -386,6 +389,7 @@ class  Population
         // -----------------------------------------------------------------
     mutable CoeffMap cached_coeff_map_;   // mutable because we lazily fill it
     void build_coeff_cache() const;       // fills cached_coeff_map_
+    mutable std::shared_mutex cache_mtx;
 
    
 };

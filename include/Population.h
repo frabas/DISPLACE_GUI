@@ -280,6 +280,8 @@ class  Population
         /** Return a const reference to the cached vector for a node. */
         const std::vector<double>& get_availability(const types::NodeId& nid) const;
 
+        void update_cached_availability(types::NodeId nid, const std::vector<double>& new_vec);
+
 
 	protected:
 	private:

@@ -1233,6 +1233,17 @@ const std::vector<double>& Population::get_availability(const types::NodeId& nid
     return avail_cache.at(nid);
 }
 
+void Population::update_cached_availability(types::NodeId nid,
+    const std::vector<double>& new_vec)
+{
+    // Ensure the cache exists (lazy init if needed)
+    if (!cache_ready)
+        build_availability_cache();
+
+    // Overwrite the cached entry
+    avail_cache[nid] = new_vec;   // copy (or move if you have an rvalue)
+}
+
 
 
 void Population::distribute_N()

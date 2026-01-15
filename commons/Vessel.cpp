@@ -3264,14 +3264,7 @@ void Vessel::apply_tac_logic(size_t popIdx,
             }
         }
 
-        map<string, double> landings_so_far_per_nation = populations.at(popIdx)->get_landings_so_far_per_nation();
-        if (landings_so_far_per_nation.empty()) {
-            // ------------------------
-            std::cout << "[WARN] landings_so_far_per_nation empty for pop "
-                << get_name() << "\n";
-            // landings_so_far stays 0.0
-        }
-
+       
         // -------------------------------------------------------------
         // 4️  Grouped TAC handling (if enabled)
         // -------------------------------------------------------------
@@ -3518,6 +3511,8 @@ void Vessel::handle_explicit_population(
             if (a_count < (selSz.size() - 1)) a_count += 1;
         }
         nodes.at(get_loc()->get_idx_node().toIndex())->set_avai_pops_at_selected_szgroup(popIdx, new_avai_pops_at_selected_szgroup);
+        // Keep the cache consistent:
+        populations.at(popIdx)->update_cached_availability(this->get_loc()->get_idx_node(), new_avai_pops_at_selected_szgroup);
 
         // store catch for this vessel
         catch_pop_at_szgroup[popIdx][sz] += cr.landings[sz];   // landings (weight) accumulated over the trip

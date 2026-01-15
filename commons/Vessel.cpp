@@ -3468,6 +3468,8 @@ void Vessel::handle_explicit_population(
        // then correct the catches accordingly.
     vector <double> totN = populations.at(popIdx)->get_tot_N_at_szgroup_just_after_redistribution();
     vector<double> new_avai_pops_at_selected_szgroup = avaiPops;
+    std::vector<double>& new_avai_pops =
+        populations.at(popIdx)->get_availability(this->get_loc()->get_idx_node()); // search in avail_cache
 
     int a_count = 0;
     vector <double> newNs = Ns;
@@ -3491,36 +3493,38 @@ void Vessel::handle_explicit_population(
             newNs[sz] = 0;
         }
 
-        // new Ns on this node= old Ns - removals
-        this->get_loc()->set_Ns_pops_at_szgroup(popIdx, newNs);
-
-        // a new removals cumul on this node
-        // i.e. the preexisting removals from oth vessels + from this vessel
-        this->get_loc()->set_removals_pops_at_szgroup(popIdx, removals);
-
+   
         // update the availability key accounting for the current extraction (hourly feedback loop on the pop dynamics)
         // (note that another (implicit) feedback is when available biomass =0 on the node)
         // (the annual feedback is via get_cpue_multiplier())
         // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
         // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
         // REACTIVATION ON THE 07-05-2025:
-        std::vector<double>& new_avai_pops = 
-             populations.at(popIdx)->get_availability(this->get_loc()->get_idx_node()); // search in avail_cache
         if (sz == selSz.at(a_count) && totN[sz] != 0 && (removals[sz] < totN[sz]))
         {
             double val = (newNs[sz]) / (totN[sz]);
             new_avai_pops.at(a_count) = val;
         } //=> feedback on both pop full avai and selected avai
         
-        // Keep the avai and cache consistent:
-       populations.at(popIdx)->set_node_availability(this->get_loc(), new_avai_pops);
-
+       
         // store catch for this vessel
         catch_pop_at_szgroup[popIdx][sz] += cr.landings[sz];   // landings (weight) accumulated over the trip
         discards_pop_at_szgroup[popIdx][sz] += cr.discards[sz];       // accumulated over the trip
         ping_catch_pop_at_szgroup[popIdx][sz] = cr.landings[sz] + cr.discards[sz]; // ...this ping only
 
     } // end szgroup
+
+    
+    // some updates on nodes and populations     
+    // new Ns on this node= old Ns - removals
+    this->get_loc()->set_Ns_pops_at_szgroup(popIdx, newNs);
+
+    // a new removals cumul on this node
+    // i.e. the preexisting removals from oth vessels + from this vessel
+    this->get_loc()->set_removals_pops_at_szgroup(popIdx, removals);
+    // Update the avai and keep the avai and cache consistent:
+    // REACTIVATION ON THE 07-05-2025:
+    populations.at(popIdx)->set_node_availability(this->get_loc(), new_avai_pops);
 
 
     // ------------------------------------------------------------------

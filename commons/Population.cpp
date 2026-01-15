@@ -1309,28 +1309,38 @@ void Population::set_node_availability(Node* node,
     const std::size_t expected = 14;   // or whatever constant you use
 
     if (new_avai.size() != expected) {
-        std::cerr << "[ERROR] Node " << node->get_idx_node()
+        std::cout << "[ERROR] Node " << node->get_idx_node()
             << " received new_avai vector of size " << new_avai.size()
             << " (expected " << expected << ").\n";
     }
     
+    // 3. Update the fast cache – exclusive lock
+    {
+    std::unique_lock<std::shared_mutex> lock(cache_mtx);
+
     // Update the avai on node
-    // on selected sz
-    const std::unordered_set<int> sel_set(selected_szgroups.begin(),
-        selected_szgroups.end());
-    vector<double> spat_avai_per_selected_szgroup; 
+    // ...on selected sz 
+    
+    vector<double> spat_avai_per_selected_szgroup;
+    std::vector<char> is_selected(expected, 0);
+    for (int idx : selected_szgroups) {
+        if (idx >= 0 && static_cast<std::size_t>(idx) < expected)
+            is_selected[static_cast<std::size_t>(idx)] = 1;
+    }
     spat_avai_per_selected_szgroup.clear();
-    spat_avai_per_selected_szgroup.reserve(std::min(new_avai.size(),
-        static_cast<std::size_t>(sel_set.size())));
-    for (std::size_t i = 0; i < new_avai.size(); ++i) {
-        if (sel_set.find(static_cast<int>(i)) != sel_set.end())
-            spat_avai_per_selected_szgroup.push_back(new_avai[i]);   
+    spat_avai_per_selected_szgroup.reserve(std::min(expected,
+        static_cast<std::size_t>(selected_szgroups.size())));
+
+    for (std::size_t i = 0; i < expected; ++i) {
+        if (is_selected[i])
+            spat_avai_per_selected_szgroup.push_back(new_avai[i]);
     }
     node->set_avai_pops_at_selected_szgroup(get_name(), spat_avai_per_selected_szgroup);
+    
 
-
-    // on all sz
-    // Keep the multimap in sync (if you still need it)
+   
+    // ...on all sz
+    // Keep the multimap in sync 
     const types::NodeId nid = node->get_idx_node();
     // Erase old entries for this node
     full_spatial_availability.erase(
@@ -1340,13 +1350,12 @@ void Population::set_node_availability(Node* node,
     for (double v : new_avai)
         full_spatial_availability.emplace(nid, v);
 
-    // 3. Update the fast cache – exclusive lock
-    {
-        std::unique_lock<std::shared_mutex> lock(cache_mtx);
         // Option A – replace the whole vector (fast if you already have new_avai)
         avail_cache[nid] = new_avai;   // copy or move
         // Option B – just invalidate, let lazy rebuild handle it:
         // avail_cache.erase(nid);
+    
+    
     }
 }
 

@@ -5909,13 +5909,7 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
     // get_experiencedcpue_fgrounds is scaled to 1
     vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds();
 
-    // apply the metier_mask
-    for (std::size_t i = 0; i < past_freq_cpue_grds.size(); ++i)
-    {
-        // cast the char (0/1) to double and multiply 
-        past_freq_cpue_grds[i] *= static_cast<double>(metier_mask[i]);
-    }
-
+    
     double a_sum =0;
     double a_sum2=0;
     int idx_v = this->get_idx();
@@ -6281,15 +6275,6 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
 
 
-     // apply the metier_mask
-    assert(freq_grds.size() == metier_mask.size());
-    for (std::size_t i = 0; i < freq_grds.size(); ++i)
-    {
-        // cast the char (0/1) to double and multiply 
-        freq_grds[i] *= static_cast<double>(metier_mask[i]);
-    }
-
-
     // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << "\n");
 
     //  finally, scale to 1
@@ -6363,15 +6348,7 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
     // input...
     vector <double> freq_grds = this->get_freq_fgrounds();
 
-    // apply the metier_mask
-    assert(freq_grds.size() == metier_mask.size());
-    for (std::size_t i = 0; i < freq_grds.size(); ++i)
-    {
-        // cast the char (0/1) to double and multiply 
-        freq_grds[i] *= static_cast<double>(metier_mask[i]);
-    }
-
-
+   
     // vessel specific conso per nm
     double conso_per_nm = this->get_fuelcons() /  this->get_speed();
 
@@ -6556,15 +6533,7 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
     // input...
     vector <double> freq_grds = this->get_freq_fgrounds();
 
-    // apply the metier_mask
-    assert(freq_grds.size() == metier_mask.size());
-    for (std::size_t i = 0; i < freq_grds.size(); ++i)
-    {
-        // cast the char (0/1) to double and multiply 
-        freq_grds[i] *= static_cast<double>(metier_mask[i]);
-    }
-
-
+  
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
 
@@ -6748,6 +6717,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
     std::vector<types::NodeId> grds = this->get_fgrounds(); 
 
+    // will be used to turn off all metiers but the active metier for this trip if the Option (e.g. aSingleMetierPerTrip) requires it
     this->prepare_metier_mask(dyn_alloc_sce);
    
    
@@ -6929,6 +6899,15 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         // then, draw a ground from the frequencies (altered or not)...
         vector <double> freq_grds = this->get_freq_fgrounds();
         // need to convert in array, see myRutils.cpp
+
+          // finally, apply the metier_mask 
+        assert(freq_grds.size() == metier_mask.size());
+        for (std::size_t i = 0; i < freq_grds.size(); ++i)
+        {
+            // cast the char (0/1) to double and multiply 
+            freq_grds[i] *= static_cast<double>(metier_mask[i]);
+        }
+
 
         // ...unless all probas at 0 (because all grounds are closed)
         double sum_probas=0.0;
@@ -8033,7 +8012,8 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     auto grds= this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
 
-    // apply the metier_mask
+    // apply the metier_mask 
+    // (btw, take care of making this change temporary i.e. not affecting the future grds, which is true whenever ->spe_freq_fgrounds(freq_grds) is not called with it)
     assert(freq_grds.size() == metier_mask.size());
     for (std::size_t i = 0; i < freq_grds.size(); ++i)
     {
@@ -8638,6 +8618,15 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
 
 
+    // apply the metier_mask (but maybe not required to repeat here)
+    assert(freq_grds.size() == metier_mask.size());
+    for (std::size_t i = 0; i < freq_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        freq_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
+
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
     
@@ -8656,6 +8645,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
             cumul += freq_grds.at(n);
     }
     
+
     // then re-scale to 1
     for(unsigned int n=0; n<grds.size(); n++)
     {

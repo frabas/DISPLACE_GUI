@@ -2575,8 +2575,6 @@ filter_fgrounds_by_current_metier(const Vessel& vessel)
  * @brief  Produce a boolean mask (same length as `all_grds`) indicating
  *         whether each ground supports the vessel’s current metier.
  *
- * @tparam Vessel   Must provide the same getters used in the original code.
- *
  * @param vessel   The vessel we are analysing.
  *
  * @return  A vector of `char` where `mask[i] == 1` ⇔ `all_grds[i]` is allowed,
@@ -2587,12 +2585,12 @@ std::vector<char>
 make_metier_mask(const Vessel& vessel)
 {
     // -----------------------------------------------------------------
-    // 1️⃣  Metier we are looking for
+    // 1 The current metier we are looking for
     // -----------------------------------------------------------------
     const int a_met = vessel.get_metier()->get_name();
 
     // -----------------------------------------------------------------
-    // 2️⃣  Collect every NodeId that is paired with a_met
+    // 2 Collect every NodeId that is paired with a_met
     // -----------------------------------------------------------------
     const std::multimap<types::NodeId, int>& poss_mets = vessel.get_possible_metiers();
 
@@ -2610,12 +2608,12 @@ make_metier_mask(const Vessel& vessel)
     }
 
     // -----------------------------------------------------------------
-    // 3️⃣  Sort the temporary vector – needed for binary search
+    // 3 Sort the temporary vector – needed for binary search
     // -----------------------------------------------------------------
     std::sort(matching_nodes.begin(), matching_nodes.end());
 
     // -----------------------------------------------------------------
-    // 4️⃣  Build the mask aligned with the full ground list
+    // 4 Build the mask aligned with the full ground list
     // -----------------------------------------------------------------
     const std::vector<types::NodeId>& all_grds = vessel.get_fgrounds();
 

@@ -148,6 +148,7 @@ enum Dyn_Alloc {
     otherLandAsMultiplierOnSp,
     doNotExportDiscardsInLogbooks,
     PickUpTheMostFrequentGroundEachTime,
+    aSingleMetierPerTrip,
 
     Dyn_Alloc_last
 };

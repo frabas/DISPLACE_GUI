@@ -257,6 +257,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         // the metier should help informing to which fish price time series the vessel will be look at
                         // if a decision on the fish price is used in the GoFishing dtree...
                         // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
+
                         // ***************make a dtree decision****************************
                         int go_fishing = model->vessels()[index_v]->should_i_go_fishing(model->timestep(),
                                                                                         model->populations(),

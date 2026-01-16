@@ -385,6 +385,8 @@ public:
         void lock() { mutex.lock(); }
         void unlock() { mutex.unlock(); }
 
+        std::vector<char> metier_mask;
+
 		int get_idx () const;
         std::string get_name () const;
         int get_vid_is_active () const;
@@ -674,6 +676,8 @@ public:
 
 	void receive_message(int message);
 	void reset_message();
+
+    void prepare_metier_mask(const DynAllocOptions& dyn_alloc_sce);
     
     void export_loglike_prop_met(std::ofstream& loglike_prop_met, int tstep, int nbpops);
     

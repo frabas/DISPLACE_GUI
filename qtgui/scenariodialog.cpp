@@ -65,6 +65,7 @@ static const char *dyn_alloc_options[] = {
     "otherLandAsMultiplierOnSp",
     "doNotExportDiscardsInLogbooks",
     "PickUpTheMostFrequentGroundEachTime",
+    "aSingleMetierPerTrip",
 
 };
 

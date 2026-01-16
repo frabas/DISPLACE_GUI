@@ -2490,7 +2490,172 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
     }
 }
 
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
+
+/**
+ * @brief  Return the subset of a vessel’s fishing grounds that support the
+ *         vessel’s current metier, together with the matching frequencies.
+ *
+ * @tparam Vessel   Any type that provides the five member functions used
+ *                  below (see the comment block inside the function).
+ *
+ * @param  vessel   The vessel we are analysing.
+ *
+ * @return  {kept_fgrounds , kept_freq_fgrounds}
+ *          – both vectors have the same length; element *i* of the first
+ *          corresponds to element *i* of the second.
+ */
+template <class Vessel>
+std::pair<std::vector<types::NodeId>, std::vector<double>>
+filter_fgrounds_by_current_metier(const Vessel& vessel)
+{
+   
+       // -----------------------------------------------------------------
+       //  Metier we are looking for
+       // -----------------------------------------------------------------
+    const int a_met = vessel.get_metier()->get_name();
+
+    // -----------------------------------------------------------------
+    // Collect every NodeId that is paired with a_met
+    // -----------------------------------------------------------------
+    const std::multimap<types::NodeId, int>& poss_mets = vessel.get_possible_metiers();
+
+    std::vector<types::NodeId> matching_nodes;
+    matching_nodes.reserve(poss_mets.size());   // upper bound, avoids reallocations
+
+    for (const auto& kv : poss_mets) {
+        if (kv.second == a_met)                 // value (metier) matches
+            matching_nodes.push_back(kv.first); // keep the NodeId
+    }
+
+    // If there is nothing that matches the metier we can return empty vectors
+    if (matching_nodes.empty())
+        return { {}, {} };
+
+    // -----------------------------------------------------------------
+    // 3️⃣  Sort the temporary vector – needed for binary search
+    // -----------------------------------------------------------------
+    std::sort(matching_nodes.begin(), matching_nodes.end());
+
+    // -----------------------------------------------------------------
+    // 4️⃣  Intersect with the vessel’s full list of grounds
+    // -----------------------------------------------------------------
+    const std::vector<types::NodeId>& all_grds = vessel.get_fgrounds();
+    const std::vector<double>& freq_all_grds = vessel.get_freq_fgrounds();
+
+    // The intersection cannot be larger than the smaller of the two inputs
+    const std::size_t max_res = std::min(all_grds.size(),
+        matching_nodes.size());
+
+    std::vector<types::NodeId> kept_fgrounds;
+    std::vector<double>       kept_freq_fgrounds;
+    kept_fgrounds.reserve(max_res);
+    kept_freq_fgrounds.reserve(max_res);
+
+    for (std::size_t i = 0; i < all_grds.size(); ++i) {
+        const types::NodeId& gid = all_grds[i];
+        // binary_search is O(log M) where M = matching_nodes.size()
+        if (std::binary_search(matching_nodes.begin(),
+            matching_nodes.end(),
+            gid))
+        {
+            kept_fgrounds.push_back(gid);
+            kept_freq_fgrounds.push_back(freq_all_grds[i]); // same index as gid
+        }
+    }
+
+    return { std::move(kept_fgrounds), std::move(kept_freq_fgrounds) };
+}
+
+/**
+ * @brief  Produce a boolean mask (same length as `all_grds`) indicating
+ *         whether each ground supports the vessel’s current metier.
+ *
+ * @tparam Vessel   Must provide the same getters used in the original code.
+ *
+ * @param vessel   The vessel we are analysing.
+ *
+ * @return  A vector of `char` where `mask[i] == 1` ⇔ `all_grds[i]` is allowed,
+ *          otherwise `mask[i] == 0`.  Length = `all_grds.size()`.
+ */
+template <class Vessel>
+std::vector<char>
+make_metier_mask(const Vessel& vessel)
+{
+    // -----------------------------------------------------------------
+    // 1️⃣  Metier we are looking for
+    // -----------------------------------------------------------------
+    const int a_met = vessel.get_metier()->get_name();
+
+    // -----------------------------------------------------------------
+    // 2️⃣  Collect every NodeId that is paired with a_met
+    // -----------------------------------------------------------------
+    const std::multimap<types::NodeId, int>& poss_mets = vessel.get_possible_metiers();
+
+    std::vector<types::NodeId> matching_nodes;
+    matching_nodes.reserve(poss_mets.size());   // upper bound, avoids reallocations
+
+    for (const auto& kv : poss_mets) {
+        if (kv.second == a_met)                 // value (metier) matches
+            matching_nodes.push_back(kv.first); // keep the NodeId
+    }
+
+    // If nothing matches we can early‑return a mask of all zeros.
+    if (matching_nodes.empty()) {
+        return std::vector<char>(vessel.get_fgrounds().size(), 0);
+    }
+
+    // -----------------------------------------------------------------
+    // 3️⃣  Sort the temporary vector – needed for binary search
+    // -----------------------------------------------------------------
+    std::sort(matching_nodes.begin(), matching_nodes.end());
+
+    // -----------------------------------------------------------------
+    // 4️⃣  Build the mask aligned with the full ground list
+    // -----------------------------------------------------------------
+    const std::vector<types::NodeId>& all_grds = vessel.get_fgrounds();
+
+    std::vector<char> mask;
+    mask.reserve(all_grds.size());
+
+    for (const types::NodeId& gid : all_grds) {
+        // binary_search is O(log M) where M = matching_nodes.size()
+        bool ok = std::binary_search(matching_nodes.begin(),
+            matching_nodes.end(),
+            gid);
+        mask.push_back(ok ? 1 : 0);
+    }
+
+    return mask;   // NRVO / move‑elision – no extra copy
+}
+
+
+void Vessel::prepare_metier_mask(const DynAllocOptions& dyn_alloc_sce)
+{
+    // Declare the mask **once** – it will be filled below.
+    std::vector<char> mask;                     // empty for now
+
+    // Fill it according to the scenario
+    if (dyn_alloc_sce.option(Options::aSingleMetierPerTrip))
+    {
+        // make_metier_mask returns a std::vector<char> of length
+        // get_fgrounds().size() with 0/1 values.
+        mask = make_metier_mask(*this);          // copy‑assign (NRVO / move‑elision)
+    }
+    else
+    {
+        // No restriction → every ground is allowed → fill with 1's.
+        const std::size_t n = this->get_fgrounds().size();
+        mask.assign(n, static_cast<char>(1));    // allocate n elements, all = 1
+    }
+
+    // 3️⃣  Store the result in the class member (move, no copy)
+    this->metier_mask = std::move(mask);
+}
 
 
 //----------------------------------------------------------------------------------------------
@@ -5744,6 +5909,13 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
     // get_experiencedcpue_fgrounds is scaled to 1
     vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds();
 
+    // apply the metier_mask
+    for (std::size_t i = 0; i < past_freq_cpue_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        past_freq_cpue_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
     double a_sum =0;
     double a_sum2=0;
     int idx_v = this->get_idx();
@@ -5777,6 +5949,7 @@ void Vessel::alloc_on_high_previous_cpue(const SimModel& simModel,
     }
     dout(cout   << "a_sum2:" << a_sum2 << " " << "\n");
     freq_cpue << "\n";
+
 
     // update the prior for the next time (iterative bayesian process)
     // ...output
@@ -6107,6 +6280,16 @@ void Vessel::alloc_on_high_profit_grounds(const SimModel& simModel,
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
 
+
+     // apply the metier_mask
+    assert(freq_grds.size() == metier_mask.size());
+    for (std::size_t i = 0; i < freq_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        freq_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
+
     // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << "\n");
 
     //  finally, scale to 1
@@ -6179,6 +6362,15 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
 
     // input...
     vector <double> freq_grds = this->get_freq_fgrounds();
+
+    // apply the metier_mask
+    assert(freq_grds.size() == metier_mask.size());
+    for (std::size_t i = 0; i < freq_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        freq_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
 
     // vessel specific conso per nm
     double conso_per_nm = this->get_fuelcons() /  this->get_speed();
@@ -6364,6 +6556,15 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
     // input...
     vector <double> freq_grds = this->get_freq_fgrounds();
 
+    // apply the metier_mask
+    assert(freq_grds.size() == metier_mask.size());
+    for (std::size_t i = 0; i < freq_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        freq_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
+
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
 
@@ -6544,8 +6745,12 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
 
     this->set_tstep_dep(tstep);	 // store departure date
 
-    // choose a fishing ground
-    const auto &grds = this->get_fgrounds();
+
+    std::vector<types::NodeId> grds = this->get_fgrounds(); 
+
+    this->prepare_metier_mask(dyn_alloc_sce);
+   
+   
 
     // choose the ground, dyn sce. vs. baseline
     types::NodeId ground = types::special::InvalidNodeId;
@@ -7828,6 +8033,15 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
     auto grds= this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
 
+    // apply the metier_mask
+    assert(freq_grds.size() == metier_mask.size());
+    for (std::size_t i = 0; i < freq_grds.size(); ++i)
+    {
+        // cast the char (0/1) to double and multiply 
+        freq_grds[i] *= static_cast<double>(metier_mask[i]);
+    }
+
+
     vector<double>  freq_grds_in_closure(0);
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
@@ -8240,7 +8454,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
             // ...and find the max
             idx = distance(distance_to_grounds_out.begin(),
-                           max_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
+                           min_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
             notThatFarGround = grds_out3.at(idx);
             this->set_notthatfar(notThatFarGround);
 

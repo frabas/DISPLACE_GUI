@@ -91,6 +91,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, otherLandAsMultiplierOnSp);
     O(mMap, doNotExportDiscardsInLogbooks);
     O(mMap, PickUpTheMostFrequentGroundEachTime);
+    O(mMap, aSingleMetierPerTrip);
 
 
 

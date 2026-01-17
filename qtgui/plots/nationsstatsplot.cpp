@@ -151,6 +151,10 @@ void NationsStatsPlot::update(QCustomPlot *plot, displace::plot::NationsStat sta
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("GVA (Euro)"));
         break;
+    case NationsStat::FuelCost:
+        plot->xAxis->setLabel(QObject::tr("Time(h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
+        break;
     case NationsStat::Vpuf:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
@@ -210,6 +214,10 @@ void NationsStatsPlot::update(QCustomPlot *plot, displace::plot::NationsStat sta
     case NationsStat::numTrips:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("#"));
+        break;
+    case NationsStat::ReasonToGoBack:
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Reason (1 to 4)"));
         break;
     }
     plot->rescaleAxes();
@@ -286,9 +294,15 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
     case NS::GrossProfit:
     case NS::NetProfit:
     case NS::NetPresentValue:
+    case NS::FuelCost:
         dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
+        break;     
+    case NS::ReasonToGoBack:
+        dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
+            SQLiteOutputStorage::Operation::Count);
+        stats::runningNoOp(dt.v);
         break;
     case NS::numTrips:
         dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
@@ -308,7 +322,7 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
         stats::runningAvg(dt.v);
         break;
     }
-
+   
     QVector<double> kd(dt.t.begin(), dt.t.end()), vd(dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }

@@ -130,6 +130,12 @@ void VesselData::setFuelCost(double value)
     fuelCost = value;
 }
 
+void VesselData::addFuelCost(double value)
+{
+    fuelCost = value;
+}
+
+
 double VesselData::getGav() const
 {
     return gav;
@@ -175,6 +181,7 @@ void VesselData::addVpuf(double value)
 {
     vpuf = value;
 }
+
 
 double VesselData::getGVA() const
 {
@@ -354,4 +361,9 @@ void VesselData::setNumTrips(int value)
 void VesselData::addNumTrips(int value)
 {
     numTrips = value;
+}
+
+void VesselData::setReasonToGoBack(int value)
+{
+    reasonToGoBack = value;
 }

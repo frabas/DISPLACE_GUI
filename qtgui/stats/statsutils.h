@@ -25,6 +25,15 @@ inline void runningAvg(Container<T, std::allocator<T>> &s)
     }
 }
 
+template <typename T, template<typename, typename> class Container>
+inline void runningNoOp(Container<T, std::allocator<T>>& s)
+{
+    T val = 0;
+    for (auto& v : s) {
+        val = v;
+        v = val;
+    }
+}
 
 }
 

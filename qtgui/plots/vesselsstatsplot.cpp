@@ -112,6 +112,10 @@ void VesselsStatsPlot::update(QCustomPlot *plot, displace::plot::VesselsStat sta
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("GVA (Euro)"));
         break;
+    case VesselsStat::FuelCost:
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
+        break;
     case VesselsStat::Vpuf:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
@@ -169,6 +173,10 @@ void VesselsStatsPlot::update(QCustomPlot *plot, displace::plot::VesselsStat sta
         plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case VesselsStat::numTrips:
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("#"));
+        break;
+    case VesselsStat::ReasonToGoBack:
         plot->xAxis->setLabel(QObject::tr("Time (h)"));
         plot->yAxis->setLabel(QObject::tr("#"));
         break;
@@ -251,9 +259,15 @@ std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(Displace
     case NS::GrossProfit:
     case NS::NetProfit:
     case NS::NetPresentValue:
+    case NS::FuelCost:
         dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
+        break;
+    case NS::ReasonToGoBack:
+        dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
+                                              SQLiteOutputStorage::Operation::Count);
+        stats::runningNoOp(dt.v);
         break;
     case NS::numTrips:
         dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
@@ -273,7 +287,7 @@ std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(Displace
         stats::runningAvg(dt.v);
         break;
     }
-
+   
     QVector<double> kd(dt.t.begin(), dt.t.end()), vd (dt.v.begin(), dt.v.end());
     return std::make_tuple(kd, vd);
 }

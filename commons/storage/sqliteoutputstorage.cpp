@@ -270,6 +270,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         case NationsStat::Gav:
             f = p->mVesselLoglikeTable->gav;
             break;
+        case NationsStat::FuelCost:
+            f = p->mVesselLoglikeTable->fuelCost;
+            break;
         case NationsStat::Vpuf:
             f = p->mVesselLoglikeTable->vpuf;
             break;
@@ -314,6 +317,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
             break;
         case NationsStat::numTrips:
             f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        case NationsStat::ReasonToGoBack:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("reasonToGoBack"); 
             break;
         default:
             throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
@@ -387,6 +393,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat statt
         case VesselsStat::Gav:
             f = p->mVesselLoglikeTable->gav;
             break;
+        case VesselsStat::FuelCost:
+            f = p->mVesselLoglikeTable->fuelCost;
+            break;
         case VesselsStat::Vpuf:
             f = p->mVesselLoglikeTable->vpuf;
             break;
@@ -431,6 +440,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat statt
             break;
         case VesselsStat::numTrips:
             f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+            break;
+        case VesselsStat::ReasonToGoBack:
+            f = sqlite::FieldDef<sqlite::FieldType::Real>("reasonToGoBack");
             break;
         default:
             throw std::runtime_error("getVesselLoglikeDataByVessel case not handled.");

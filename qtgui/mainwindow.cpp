@@ -3403,6 +3403,8 @@ void MainWindow::on_actionExportAllGraphics_triggered()
                    static_cast<int>(displace::plot::NationsStat::TimeAtSea), r);
         exportPlot(out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations,
                    static_cast<int>(displace::plot::NationsStat::Gav), r);
+        exportPlot(out + QString("/nations_fuelCost.%1").arg(r.format), StatsController::Nations,
+            static_cast<int>(displace::plot::NationsStat::FuelCost), r);
         exportPlot(out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations,
                    static_cast<int>(displace::plot::NationsStat::Vpuf), r);
         exportPlot(out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations,
@@ -3433,6 +3435,8 @@ void MainWindow::on_actionExportAllGraphics_triggered()
                    static_cast<int>(displace::plot::NationsStat::NetPresentValue), r);
         exportPlot(out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations,
                    static_cast<int>(displace::plot::NationsStat::numTrips), r);
+        exportPlot(out + QString("/nations_reasonToGoBack.%1").arg(r.format), StatsController::Nations,
+            static_cast<int>(displace::plot::NationsStat::ReasonToGoBack), r);
 
         exportPlot(out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours,
                    static_cast<int>(displace::plot::HarboursStat::H_Catches), r);

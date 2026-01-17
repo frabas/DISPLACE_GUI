@@ -105,11 +105,13 @@ public:
     int getNumTrips() const;
     void setNumTrips(int value);
     void addNumTrips(int value);
+    void setReasonToGoBack(int value);
 
 
 
     double getFuelCost() const;
     void setFuelCost(double value);
+    void addFuelCost(double value);
 
     void addVpuf(double value);
 
@@ -143,6 +145,7 @@ private:
     double CRBER;
     double NetPresentValue;
     int numTrips;
+    int reasonToGoBack;
 
 
     QList<double> mCatches;
@@ -182,7 +185,7 @@ public:
     double CRBER = 0;
     double NetPresentValue = 0;
     int numTrips=1;
-
+    
 
     QList<double> mCatches;
     QList<double> mDiscards;

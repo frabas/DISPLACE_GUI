@@ -1030,6 +1030,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->addCumFuelCons(stats.cumFuelCons);
         vessel->addSweptArea(stats.sweptArea);
         vessel->addRevenuePerSweptArea(stats.revenuePerSweptArea);
+        vessel->addFuelCost(stats.fuelCost);
         vessel->addVpuf(stats.vpuf);
         vessel->setGVA(stats.GVA);
         vessel->setGVAPerRevenue(stats.GVAPerRevenue);
@@ -1043,6 +1044,8 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->setCRBER(stats.CRBER);
         vessel->setNetPresentValue(stats.NetPresentValue);
         vessel->setNumTrips(stats.numTrips);
+        vessel->setReasonToGoBack(stats.reasonToGoBack);
+
 
 
         nat = vessel->getNationality();

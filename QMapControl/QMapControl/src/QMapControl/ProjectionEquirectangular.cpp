@@ -1,4 +1,4 @@
-/*
+﻿/*
 *
 * This file is part of QMapControl,
 * an open-source cross-platform map widget

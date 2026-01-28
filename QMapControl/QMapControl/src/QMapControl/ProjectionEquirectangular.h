@@ -79,6 +79,7 @@ namespace qmapcontrol
          * @return the converted world pixel point.
          */
         PointWorldPx toPointWorldPx(const PointWorldCoord& point_coord, const int& zoom) const final;
+        PointWorldPx toPointWorldPx(const PointWorldCoord& point_coord) const ;
 
         /*!
          * Converts a world pixel point into the coorindate point (longitude/latitude) for a given zoom.

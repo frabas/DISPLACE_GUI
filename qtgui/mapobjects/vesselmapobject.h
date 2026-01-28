@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
  * AND EFFORT DISPLACEMENT
  * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
@@ -28,6 +28,7 @@
 #include <mapobjects/nodedetailswidget.h>
 
 #include <QMapControl/GeometryPointShapeScaled.h>
+#include <QMapControl/GeometryLineString.h>   // or GeometryPolyLine.h
 
 #include <QBrush>
 
@@ -41,7 +42,7 @@ class VesselMapObject : public QObject, public MapObject
 {
     Q_OBJECT
 
-    class VesselGraphics : public qmapcontrol::GeometryPointShapeScaled {
+ /*   class VesselGraphics : public qmapcontrol::GeometryPointShapeScaled {
         static QBrush *color;
         static QBrush *statHarbour, *statSteaming, *statFishing;
 
@@ -52,7 +53,48 @@ class VesselMapObject : public QObject, public MapObject
         void updated();
     protected:
         virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+  
+
+
+
+   };
+   */
+
+   // Called by MapObjectsController when the vessel moves
+        void recordCurrentPosition();
+
+
+        class VesselGraphics : public qmapcontrol::GeometryPointShapeScaled
+    {
+    public:
+        explicit VesselGraphics(VesselData* vessel, MapObjectsController* controller);
+        
+       
+        void updated();
+        virtual void drawShape(QPainter& painter,
+            const qmapcontrol::RectWorldPx& rect);
+
+        // ---------- NEW ----------
+        /** Append the current position to the trajectory buffer. */
+        void pushPosition(const QPointF& worldPos);
+
+        /** Return a const reference for drawing. */
+        const QVector<QPointF>& trajectory() const { return mTrajectory; }
+
+    private:
+        VesselData* mVessel;
+        MapObjectsController* mController;
+        static QBrush* color;
+        static QBrush* statFishing;
+        static QBrush* statHarbour;
+        static QBrush* statSteaming;
+
+        /** Buffer that holds the last N world‑coordinates. */
+        QVector<QPointF> mTrajectory;
+        /** Maximum number of points kept – adjust to UI needs. */
+        static constexpr int kMaxPoints = 12;
     };
+
 
 public:
     VesselMapObject(MapObjectsController *controller, VesselData *vessel);
@@ -68,15 +110,23 @@ public:
 
     static QString vesselStateToString(int state);
 
+signals:
+    // Emitted from the simulation thread, delivered to the GUI thread
+    void positionReady(const QPointF& lonLat);
+
 private slots:
     void widgetClosed();
+
+private slots:
+    // Runs in the GUI thread – updates the map geometry safely
+   // void onPositionReady(const QPointF& lonLat);
 
 private:
     MapObjectsController *mController;
 
     VesselData *mVessel;
     std::shared_ptr<VesselGraphics> mGeometry;
-
+    std::shared_ptr<qmapcontrol::GeometryLineString> mTrajectory;
     NodeDetailsWidget *mWidget;
 };
 

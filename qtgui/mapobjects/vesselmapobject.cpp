@@ -63,7 +63,10 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
     mTrajectory->setPen(myPen);
     mTrajectory->setVisible(true);
 
-      
+    // Debug: after creation
+    qDebug() << "=== Constructor finished ===";
+    dumpDebugInfo(__FUNCTION__);
+
     // ---- Connect the thread‑safe bridge -------------------------
         // The connection type defaults to Qt::AutoConnection, which becomes
         // Qt::QueuedConnection because the sender (simulation thread) and the
@@ -78,6 +81,9 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 
 void VesselMapObject::ensureGeometriesAdded()
 {
+    qDebug() << ">>> ensureGeometriesAdded called";
+    dumpDebugInfo(__FUNCTION__); 
+    
     int modelIdx = mController->modelIndexForVessel(
         mVessel->mVessel->get_idx());
 
@@ -86,9 +92,6 @@ void VesselMapObject::ensureGeometriesAdded()
         return;
     }
 
-    // -------------------------------------------------
-    // 2️⃣  Grab the entity layer that the controller already added to the map
-    // -------------------------------------------------
     std::shared_ptr<qmapcontrol::LayerGeometry> entityLayer =
         mController->entityLayer(modelIdx);
 
@@ -98,27 +101,23 @@ void VesselMapObject::ensureGeometriesAdded()
     }
 
    
-    // -------------------------------------------------
-    // Add the geometries – only once
-    // -------------------------------------------------
-  
-    if (!mTrajectory->layer())
-    {
-        entityLayer->addGeometry(mTrajectory); // trajectory line
-        mTrajectory->setVisible(true);
-        // Optional: draw the line underneath the vessel
-        QGraphicsItem* item = dynamic_cast<QGraphicsItem*>(mTrajectory.get());
-        if (item) {
-            item->setZValue(-1.0);   // any value < vessel's Z (vessel defaults to 0)
-        }
-        else {
-            qWarning() << "Failed to cast GeometryLineString to QGraphicsItem";
-        }
+    // **Trajectory layer – separate from the entity layer**
+    auto trajLayer = mController->trajectoryLayer(modelIdx);
+    if (!trajLayer) {
+        qWarning() << "ensureGeometriesAdded: trajectory layer is null";
+        return;
     }
 
-    if (!mGeometry->layer())
-        entityLayer->addGeometry(mGeometry);   // vessel icon
+    // Add the line to the trajectory layer (drawn first → underneath)
+    if (!mTrajectory->layer()) {
+        trajLayer->addGeometry(mTrajectory);
+        mTrajectory->setVisible(true);   // safety
+        // No Z‑value needed – layer order guarantees it is behind the vessel
+    }
 
+    // Add the vessel icon to the normal entity layer
+    if (!mGeometry->layer())
+        entityLayer->addGeometry(mGeometry);
    }
 
 
@@ -254,10 +253,16 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
     // Replace the line's points
     std::vector<qmapcontrol::PointWorldCoord> vec(
         mTrajectoryBuffer.begin(), mTrajectoryBuffer.end());
+    
     mTrajectory->setPoints(vec);   // emits requestRedraw()
-  
-    qDebug() << "Trajectory now has"
-        << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
+    if (auto* map = mController->mapWidget())
+        map->requestRedraw();      // explicit repaint request
+
+    //qDebug() << "Trajectory now has"
+    //    << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
+
+    // Final dump – you should see a non‑null layer, visible = true, correct Z‑value
+    dumpDebugInfo(__FUNCTION__);
 
     // (Optional) keep the old QVector buffer for other uses
     //recordCurrentPosition();
@@ -272,6 +277,8 @@ void VesselMapObject::vesselUpdated()
     double lon = mVessel->mVessel->get_x();   // degrees
     double lat = mVessel->mVessel->get_y();   // degrees
 
+    qDebug() << ">>> vesselUpdated – emitting positionReady:" << lon << lat;
+    
     // Emit the signal – Qt queues the call to onPositionReady() on the GUI thread
     emit positionReady(QPointF(lon, lat));
 }
@@ -626,4 +633,65 @@ void VesselMapObject::VesselGraphics::drawShape(
 
     painter.rotate(-mVessel->mVessel->get_course());
 }
+
+
+
+void VesselMapObject::dumpDebugInfo(const char* where) const
+{
+    qDebug() << "=== DEBUG [" << where << "] ===";
+
+    // 1️⃣  Model index
+    int modelIdx = mController->modelIndexForVessel(mVessel->mVessel->get_idx());
+    qDebug() << "modelIdx =" << modelIdx;
+
+    // 2️⃣  Entity layer pointer & visibility
+    auto entityLayer = mController->entityLayer(modelIdx);
+    qDebug() << "entityLayer ptr =" << static_cast<void*>(entityLayer.get())
+        << "visible =" << (entityLayer ? entityLayer->isVisible() : false);
+
+    // 3️⃣  Trajectory geometry
+    if (mTrajectory) {
+        auto* map = mController->mapWidget();
+        qDebug() << "Trajectory ptr =" << static_cast<void*>(mTrajectory.get())
+            << "layer =" << static_cast<void*>(mTrajectory->layer())
+            << "visible =" << mTrajectory->isVisible(map->getCurrentZoom())
+            << "points =" << mTrajectory->points().size();
+        // Z‑value (requires cast to QGraphicsItem)
+        if (QGraphicsItem* gi = dynamic_cast<QGraphicsItem*>(mTrajectory.get())) {
+            qDebug() << "Trajectory Z‑value =" << gi->zValue();
+        }
+    }
+    else {
+        qDebug() << "Trajectory = nullptr!";
+    }
+
+    // 4️⃣  Vessel geometry
+    if (mGeometry) {
+        auto*  map = mController->mapWidget();
+        qDebug() << "Vessel ptr =" << static_cast<void*>(mGeometry.get())
+            << "layer =" << static_cast<void*>(mGeometry->layer())
+            << "visible =" << mGeometry->isVisible(map->getCurrentZoom())
+            << "coord =" << mGeometry->coord().longitude()
+            << mGeometry->coord().latitude();
+        if (QGraphicsItem* gi = dynamic_cast<QGraphicsItem*>(mGeometry.get())) {
+            qDebug() << "Vessel Z‑value =" << gi->zValue();
+        }
+    }
+    else {
+        qDebug() << "Vessel = nullptr!";
+    }
+
+    // 5️⃣  Map zoom
+    if (auto* map = mController->mapWidget()) {
+        qDebug() << "Map zoom =" << map->getCurrentZoom()
+            << "center =" << map->mapFocusPointCoord().longitude()
+            << map->mapFocusPointCoord().latitude();
+    }
+    else {
+        qDebug() << "Map widget = nullptr!";
+    }
+
+    qDebug() << "=== END DEBUG ===";
+}
+
 

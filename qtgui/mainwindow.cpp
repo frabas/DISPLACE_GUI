@@ -1693,6 +1693,7 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 
     emit modelStateChanged();
 
+
     return true;
 }
 

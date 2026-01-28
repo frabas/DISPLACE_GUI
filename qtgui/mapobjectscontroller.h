@@ -306,7 +306,7 @@ public:
     int modelIndexForVessel(int vesselId) const;
 
     std::shared_ptr<qmapcontrol::LayerGeometry> entityLayer(int modelIdx) const;
-
+    std::shared_ptr<qmapcontrol::LayerGeometry> trajectoryLayer(int modelIdx);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
@@ -401,6 +401,7 @@ private:
     QVector<LayerListImpl> mTariffsLayers;
     QVector<QList<std::shared_ptr<GDALDataset> > > mShapefiles;
     QVector<LayerVarListImpl<qmapcontrol::LayerESRIShapefile> > mShapefileLayers;
+    QVector<std::shared_ptr<qmapcontrol::LayerGeometry>> mTrajectoryLayer;
 
     EditorModes mEditorMode;
     bool mClosing;

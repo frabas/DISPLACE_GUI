@@ -60,6 +60,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mTariffsLayers(MainWindow::MAX_MODELS, LayerListImpl(TariffLayerMax)),
       mShapefiles(MainWindow::MAX_MODELS, QList<std::shared_ptr<GDALDataset> >()),
       mShapefileLayers(MainWindow::MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
+      mTrajectoryLayer(MainWindow::MAX_MODELS),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -70,9 +71,20 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     // create a layer with the mapadapter and type MapLayer
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
+    
+    
+    for (int i = 0; i < MainWindow::MAX_MODELS; ++i) {
+        QString name = QStringLiteral("#%1#Trajectory").arg(i);
+        mTrajectoryLayer[i] = std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
+        mMap->addLayer(mTrajectoryLayer[i]);   // <-- early insertion
+    }
+
+
     mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
     mEditorLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Editor"));
     mEditorLayer->setVisible(true);
+
+
 
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
@@ -983,6 +995,30 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
 }
+
+
+
+std::shared_ptr<qmapcontrol::LayerGeometry>
+MapObjectsController::trajectoryLayer(int modelIdx)
+{
+    if (modelIdx < 0 || modelIdx >= mTrajectoryLayer.size())
+        return nullptr;
+
+    if (!mTrajectoryLayer[modelIdx]) {
+        // Give the layer a helpful name for debugging
+        QString name = QStringLiteral("#%1#Trajectory").arg(modelIdx);
+        mTrajectoryLayer[modelIdx] =
+            std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
+
+        // Insert it *before* the entity layer – the map draws layers in
+        // insertion order, so this guarantees the trajectory is underneath.
+        // The entity layer will be added later via addStandardLayer().
+        mMap->addLayer(mTrajectoryLayer[modelIdx]);
+    }
+    return mTrajectoryLayer[modelIdx];
+}
+
+
 
 void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge> _edge, bool disable_redraw)
 {

@@ -135,6 +135,8 @@ private:
     // -------------------------------------------------
     static constexpr std::size_t kMaxTrajectoryPoints = 15;   // choose any limit
     std::deque<qmapcontrol::PointWorldCoord> mTrajectoryBuffer;
+
+    void dumpDebugInfo(const char* where) const;
 };
 
 #endif // VESSELMAPOBJECT_H

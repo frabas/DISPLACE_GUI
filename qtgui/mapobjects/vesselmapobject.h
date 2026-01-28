@@ -116,18 +116,19 @@ signals:
 
 private slots:
     void widgetClosed();
-
-private slots:
     // Runs in the GUI thread – updates the map geometry safely
-   // void onPositionReady(const QPointF& lonLat);
+    void onPositionReady(const QPointF& lonLat);
 
 private:
-    MapObjectsController *mController;
+    MapObjectsController *mController = nullptr;
 
-    VesselData *mVessel;
+    // Helper that makes sure the geometries are attached to a map layer
+    void ensureGeometriesAdded();
+
+    VesselData *mVessel = nullptr;
     std::shared_ptr<VesselGraphics> mGeometry;
     std::shared_ptr<qmapcontrol::GeometryLineString> mTrajectory;
-    NodeDetailsWidget *mWidget;
+    NodeDetailsWidget *mWidget = nullptr;
 };
 
 #endif // VESSELMAPOBJECT_H

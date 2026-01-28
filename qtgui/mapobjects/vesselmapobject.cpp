@@ -39,6 +39,10 @@
 #include <QPainter>
 #include <QDebug>
 
+class MapObjectsController;
+class VesselData;
+class NodeDetailsWidget;
+
 VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *vessel)
     : mController(controller),
       mVessel(vessel),
@@ -51,19 +55,80 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
     mTrajectory = std::make_shared<qmapcontrol::GeometryLineString>();
     mTrajectory->setPen(QPen(QColor(0, 120, 255, 180), 6));   // blue, 6 px
 
-
       
     // ---- Connect the thread‑safe bridge -------------------------
         // The connection type defaults to Qt::AutoConnection, which becomes
         // Qt::QueuedConnection because the sender (simulation thread) and the
         // receiver (this object) live in different threads.
-    //connect(this,
-    //    &VesselMapObject::positionReady,
-    //    this,
-    //    &VesselMapObject::onPositionReady,
-    //    Qt::QueuedConnection);   // <-- forces queuing regardless of thread affinity
+    connect(this,
+        &VesselMapObject::positionReady,
+        this,
+        &VesselMapObject::onPositionReady,
+        Qt::QueuedConnection);   // <-- forces queuing regardless of thread affinity
 
 }
+
+void VesselMapObject::ensureGeometriesAdded()
+{
+    int modelIdx = mController->modelIndexForVessel(
+        mVessel->mVessel->get_idx());
+
+    if (modelIdx < 0) {
+        qWarning() << "ensureGeometriesAdded: could not locate model index for vessel";
+        return;
+    }
+
+    // -------------------------------------------------
+    // 2️⃣  Grab the entity layer that the controller already added to the map
+    // -------------------------------------------------
+    std::shared_ptr<qmapcontrol::LayerGeometry> entityLayer =
+        mController->entityLayer(modelIdx);
+
+    if (!entityLayer) {
+        qWarning() << "ensureGeometriesAdded: entity layer is null";
+        return;
+    }
+
+    // -------------------------------------------------
+    // Obtain the default geometry layer (concrete LayerGeometry)
+    // -------------------------------------------------
+    /*qmapcontrol::LayerGeometry* geomLayer = nullptr;
+
+    // Prefer the direct accessor (some forks expose it)
+    const std::shared_ptr<qmapcontrol::Layer>& spBase = map->getLayer("#0#Entities");
+    // Extract the raw pointer (non‑const) – the object itself is not const
+    qmapcontrol::Layer* base = const_cast<qmapcontrol::Layer*>(spBase.get());
+    geomLayer = dynamic_cast<qmapcontrol::LayerGeometry*>(base);
+   
+    if (!geomLayer) {
+        const auto& layers = map->getLayers();              // const QList<Layer*>&
+        if (!layers.empty()) {
+            const std::shared_ptr<qmapcontrol::Layer>& spBase = layers.at(0);
+            // Extract the raw pointer (non‑const) – the object itself is not const
+            qmapcontrol::Layer* base = const_cast<qmapcontrol::Layer*>(spBase.get());
+            geomLayer = dynamic_cast<qmapcontrol::LayerGeometry*>(base);
+        }
+    }
+    
+
+
+    if (!geomLayer) {
+        qWarning() << "ensureGeometriesAdded: could not locate a LayerGeometry.";
+        return;
+    }
+    */
+
+    // -------------------------------------------------
+    // Add the geometries – only once
+    // -------------------------------------------------
+    if (!mGeometry->layer())
+        entityLayer->addGeometry(mGeometry);   // vessel icon
+
+    if (!mTrajectory->layer())
+        entityLayer->addGeometry(mTrajectory); // trajectory line
+
+   }
+
 
 bool VesselMapObject::showProperties()
 {
@@ -159,49 +224,49 @@ void VesselMapObject::recordCurrentPosition()
     mGeometry->updated();
 }
 
+// -------------------------------------------------------------------- -
+// Slot – runs on the GUI thread, updates the map objects
+// ---------------------------------------------------------------------
+void VesselMapObject::onPositionReady(const QPointF & lonLat)
+{
+    // -------------------------------------------------
+     // Make sure the geometries belong to a layer (lazy init)
+     // -------------------------------------------------
+    static bool attached = false;
+    if (!attached) {
+        ensureGeometriesAdded();
+        attached = true;
+    }
+    // 1️⃣  Move the vessel icon
+    mGeometry->setCoord(
+        qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
 
-//void VesselMapObject::onPositionReady(const QPointF& lonLat)
-//{
-//   }
+    // The vessel graphics class does not emit requestRedraw() in setCoord(),
+    // so we call its helper that does:
+    mGeometry->updated();          // emits requestRedraw() → map repaints
 
+    // 2️⃣  Append the new point to the trajectory line
+    if (mTrajectory) {
+        mTrajectory->addPoint(
+            qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
+        // addPoint() automatically emits requestRedraw()
+    }
 
+    // 3️⃣  (Optional) keep the old QVector buffer for other uses
+    recordCurrentPosition();
+}
+
+// ---------------------------------------------------------------------
+// Called from the simulation thread – just forward the data
+// ---------------------------------------------------------------------
 void VesselMapObject::vesselUpdated()
 {
-    qDebug() << "Thread:" << QThread::currentThreadId();
-
-    // This method is called **from the simulation thread**.
-        // Extract the new world coordinates (lon, lat) from your model:
+    // Extract the new world coordinates (lon, lat) from the model
     double lon = mVessel->mVessel->get_x();   // degrees
     double lat = mVessel->mVessel->get_y();   // degrees
 
-    qDebug() << "Thread:" << QThread::currentThreadId();
-
-    mGeometry->layer()->removeGeometry(mGeometry);
-    // 1️⃣  Update the vessel icon position
-    mGeometry->setCoord(
-        qmapcontrol::PointWorldCoord(lon, lat));
-    mGeometry->layer()->addGeometry(mGeometry);
-
-    // 2️⃣  Append the new point to the trajectory line
-
-   /* static bool firstCall = true;
-    if (firstCall) {
-            mTrajectory->layer()->addGeometry(mTrajectory);
-        firstCall = false;
-    }
-
-    if (mTrajectory) {
-        mTrajectory->layer()->removeGeometry(mTrajectory);
-        mTrajectory->addPoint(
-            qmapcontrol::PointWorldCoord(lon, lat));
-        // addPoint() automatically emits requestRedraw().
-        mTrajectory->layer()->addGeometry(mTrajectory);
-    }
-    */
-
-    // 3️⃣  (Optional) keep the old buffer for other purposes
-    //recordCurrentPosition();   // still fills your QVector<QPointF> if you need it
-
+    // Emit the signal – Qt queues the call to onPositionReady() on the GUI thread
+    emit positionReady(QPointF(lon, lat));
 }
 
 

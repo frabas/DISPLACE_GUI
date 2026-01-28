@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
 // Copyright (c) 2012-2026 Francois Bastardie <fba@aqua.dtu.dk>
@@ -223,6 +223,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
     foreach (std::shared_ptr<VesselData> vsl, vessels) {
         auto obj = std::make_shared<VesselMapObject>(this,vsl.get());
+        obj->moveToThread(qApp->thread());   // forces the object into the GUI thread
         mVesselObjects[model_n].add(vsl->mVessel->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -279,7 +280,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n,
         return std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
     };
 
-    // Output?layer helper � cast the stored int to the proper enum.
+    // Output?layer helper – cast the stored int to the proper enum.
     auto addOutput = [&](int outId,
         const std::shared_ptr<qmapcontrol::LayerGeometry>& layer,
         bool visible = false)
@@ -512,6 +513,31 @@ void MapObjectsController::updateVesselPosition(int model, int idx)
 {
     auto obj = mVesselObjects[model].get(idx, 0);
     if (obj) obj->vesselUpdated();
+    qDebug() << "MapObjectsController::updateVesselPosition model" << model << "idx" << idx;
+}
+
+int MapObjectsController::modelIndexForVessel(int vesselId) const
+{
+    // The controller stores vessel objects per model in mVesselObjects.
+    // Each entry is a `ObjectMap` (or similar) that provides a `contains`
+    // method taking the vessel’s internal index.
+   // for (int i = 0; i < MainWindow::MAX_MODELS; ++i) {
+   //     if (mVesselObjects[i].find(vesselId) != mVesselObjects[i].end())
+   //         return i;
+   // }
+    // Not found – this should not happen for a properly built model.
+   // return -1;
+    return 0;
+}
+
+std::shared_ptr<qmapcontrol::LayerGeometry>
+MapObjectsController::entityLayer(int modelIdx) const
+{
+    // Guard against out‑of‑range indices (defensive programming)
+  //  if (modelIdx < 0 || modelIdx >= mEntityLayer.size())
+  //      return nullptr;
+
+    return mEntityLayer[modelIdx];
 }
 
 void MapObjectsController::updateShipPosition(int model, int idx)

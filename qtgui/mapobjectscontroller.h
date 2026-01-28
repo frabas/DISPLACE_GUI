@@ -303,6 +303,11 @@ public:
 
     void delSelectedNodes(int model);
 
+    int modelIndexForVessel(int vesselId) const;
+
+    std::shared_ptr<qmapcontrol::LayerGeometry> entityLayer(int modelIdx) const;
+
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);

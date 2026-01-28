@@ -22,6 +22,7 @@
 #define VESSELMAPOBJECT_H
 
 #include <QObject>
+#include <deque>
 
 #include <mapobjects/mapobject.h>
 #include <modelobjects/vesseldata.h>
@@ -92,7 +93,7 @@ class VesselMapObject : public QObject, public MapObject
         /** Buffer that holds the last N world‑coordinates. */
         QVector<QPointF> mTrajectory;
         /** Maximum number of points kept – adjust to UI needs. */
-        static constexpr int kMaxPoints = 12;
+        static constexpr size_t kMaxPoints = 12;
     };
 
 
@@ -129,6 +130,11 @@ private:
     std::shared_ptr<VesselGraphics> mGeometry;
     std::shared_ptr<qmapcontrol::GeometryLineString> mTrajectory;
     NodeDetailsWidget *mWidget = nullptr;
+    // -------------------------------------------------
+    // FIFO buffer for the trajectory (option B)
+    // -------------------------------------------------
+    static constexpr std::size_t kMaxTrajectoryPoints = 15;   // choose any limit
+    std::deque<qmapcontrol::PointWorldCoord> mTrajectoryBuffer;
 };
 
 #endif // VESSELMAPOBJECT_H

@@ -52,8 +52,16 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 
-    mTrajectory = std::make_shared<qmapcontrol::GeometryLineString>();
-    mTrajectory->setPen(QPen(QColor(0, 120, 255, 180), 6));   // blue, 6 px
+    // ----Trajectory line – create with a wide zoom range------------ -
+        // The constructor (int zoom_min, int zoom_max) lets us specify the
+        // range of zoom levels at which the line is visible.
+        // 0 … 22 comfortably covers the whole typical DISPLACE zoom span.
+    mTrajectory = std::make_shared<qmapcontrol::GeometryLineString>(0, 22);
+    QPen myPen(QColor(0, 120, 255, 180));
+    myPen.setWidth(10);
+    myPen.setStyle(Qt::DashLine);   // example: dashed line
+    mTrajectory->setPen(myPen);
+    mTrajectory->setVisible(true);
 
       
     // ---- Connect the thread‑safe bridge -------------------------
@@ -89,43 +97,27 @@ void VesselMapObject::ensureGeometriesAdded()
         return;
     }
 
-    // -------------------------------------------------
-    // Obtain the default geometry layer (concrete LayerGeometry)
-    // -------------------------------------------------
-    /*qmapcontrol::LayerGeometry* geomLayer = nullptr;
-
-    // Prefer the direct accessor (some forks expose it)
-    const std::shared_ptr<qmapcontrol::Layer>& spBase = map->getLayer("#0#Entities");
-    // Extract the raw pointer (non‑const) – the object itself is not const
-    qmapcontrol::Layer* base = const_cast<qmapcontrol::Layer*>(spBase.get());
-    geomLayer = dynamic_cast<qmapcontrol::LayerGeometry*>(base);
    
-    if (!geomLayer) {
-        const auto& layers = map->getLayers();              // const QList<Layer*>&
-        if (!layers.empty()) {
-            const std::shared_ptr<qmapcontrol::Layer>& spBase = layers.at(0);
-            // Extract the raw pointer (non‑const) – the object itself is not const
-            qmapcontrol::Layer* base = const_cast<qmapcontrol::Layer*>(spBase.get());
-            geomLayer = dynamic_cast<qmapcontrol::LayerGeometry*>(base);
-        }
-    }
-    
-
-
-    if (!geomLayer) {
-        qWarning() << "ensureGeometriesAdded: could not locate a LayerGeometry.";
-        return;
-    }
-    */
-
     // -------------------------------------------------
     // Add the geometries – only once
     // -------------------------------------------------
+  
+    if (!mTrajectory->layer())
+    {
+        entityLayer->addGeometry(mTrajectory); // trajectory line
+        mTrajectory->setVisible(true);
+        // Optional: draw the line underneath the vessel
+        QGraphicsItem* item = dynamic_cast<QGraphicsItem*>(mTrajectory.get());
+        if (item) {
+            item->setZValue(-1.0);   // any value < vessel's Z (vessel defaults to 0)
+        }
+        else {
+            qWarning() << "Failed to cast GeometryLineString to QGraphicsItem";
+        }
+    }
+
     if (!mGeometry->layer())
         entityLayer->addGeometry(mGeometry);   // vessel icon
-
-    if (!mTrajectory->layer())
-        entityLayer->addGeometry(mTrajectory); // trajectory line
 
    }
 
@@ -237,7 +229,7 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
         ensureGeometriesAdded();
         attached = true;
     }
-    // 1️⃣  Move the vessel icon
+    // Move the vessel icon
     mGeometry->setCoord(
         qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
 
@@ -245,15 +237,30 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
     // so we call its helper that does:
     mGeometry->updated();          // emits requestRedraw() → map repaints
 
-    // 2️⃣  Append the new point to the trajectory line
-    if (mTrajectory) {
-        mTrajectory->addPoint(
-            qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
+    // Append the new point to the trajectory line
+    //if (mTrajectory) {
+    //    mTrajectory->addPoint(qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
+    //    qDebug() << "Trajectory now has"
+    //        << mTrajectory->points().size() << "points";
         // addPoint() automatically emits requestRedraw()
-    }
+    //}
 
-    // 3️⃣  (Optional) keep the old QVector buffer for other uses
-    recordCurrentPosition();
+    // ----- FIFO update -----
+    qmapcontrol::PointWorldCoord newPt(lonLat.x(), lonLat.y());
+    mTrajectoryBuffer.push_back(newPt);
+    if (mTrajectoryBuffer.size() > VesselMapObject::kMaxTrajectoryPoints)
+        mTrajectoryBuffer.pop_front();
+
+    // Replace the line's points
+    std::vector<qmapcontrol::PointWorldCoord> vec(
+        mTrajectoryBuffer.begin(), mTrajectoryBuffer.end());
+    mTrajectory->setPoints(vec);   // emits requestRedraw()
+  
+    qDebug() << "Trajectory now has"
+        << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
+
+    // (Optional) keep the old QVector buffer for other uses
+    //recordCurrentPosition();
 }
 
 // ---------------------------------------------------------------------
@@ -305,8 +312,8 @@ VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel, MapObjectsCo
 void VesselMapObject::VesselGraphics::updated()
 {
   
-    setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(),
-        mVessel->mVessel->get_y()));
+    //setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(),
+    //    mVessel->mVessel->get_y()));
     emit positionChanged(this);
     emit requestRedraw();
 }

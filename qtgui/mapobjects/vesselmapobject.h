@@ -103,6 +103,10 @@ public:
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
     }
+    std::shared_ptr<qmapcontrol::GeometryLineString> trajectoryGeometry() const
+    {
+        return mTrajectory;
+    }
 
     virtual bool showProperties();
     virtual void updateProperties();

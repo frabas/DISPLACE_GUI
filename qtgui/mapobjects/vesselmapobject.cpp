@@ -58,10 +58,13 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
         // 0 … 22 comfortably covers the whole typical DISPLACE zoom span.
     mTrajectory = std::make_shared<qmapcontrol::GeometryLineString>(0, 22);
     QPen myPen(QColor(0, 120, 255, 180));
-    myPen.setWidth(10);
-    myPen.setStyle(Qt::DashLine);   // example: dashed line
+    myPen.setWidth(14);
+    myPen.setStyle(Qt::SolidLine);   // example: dashed line
     mTrajectory->setPen(myPen);
     mTrajectory->setVisible(true);
+    connect(mTrajectory.get(), &qmapcontrol::Geometry::requestRedraw,
+        []() { qDebug() << ">>> Geometry requestRedraw received (trajectory)"; });
+
 
     // Debug: after creation
     qDebug() << "=== Constructor finished ===";

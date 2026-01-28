@@ -71,19 +71,9 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     // create a layer with the mapadapter and type MapLayer
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
-    
-    
-    for (int i = 0; i < MainWindow::MAX_MODELS; ++i) {
-        QString name = QStringLiteral("#%1#Trajectory").arg(i);
-        mTrajectoryLayer[i] = std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
-        mMap->addLayer(mTrajectoryLayer[i]);   // <-- early insertion
-    }
-
-
     mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
     mEditorLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Editor"));
     mEditorLayer->setVisible(true);
-
 
 
     mMap->addLayer(mMainLayer);
@@ -91,12 +81,22 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMap->addLayer(mWidgetLayer);
     mMap->addLayer(mEditorLayer);
 
+
+    for (int i = 0; i < MainWindow::MAX_MODELS; ++i) {
+        QString name = QStringLiteral("#%1#Trajectory").arg(i);
+        mTrajectoryLayer[i] = std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
+        mMap->addLayer(mTrajectoryLayer[i]);   // <-- early insertion
+    }
+
+
+
     displace::AppSettings appsettings;
     auto center = appsettings.getMapCenterPoint();
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     mMap->setZoom(appsettings.getMapZoom());
 
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
+
 }
 
 void MapObjectsController::setModel(int model_n, std::shared_ptr<DisplaceModel> model)
@@ -125,10 +125,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     DisplaceModel::ModelType type = model->modelType();
 
     mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Entities")).arg(model_n).toStdString()));
+    mTrajectoryLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Trajectories")).arg(model_n).toStdString()));
     mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Graph")).arg(model_n).toStdString()));
     mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(tr("#%1#Graph Edges")).arg(model_n)));
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n], true);
+    addStandardLayer(model_n, LayerTrajectories, mTrajectoryLayer[model_n], true);
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer(), false);
     addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], false);
 
@@ -239,6 +241,11 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         mVesselObjects[model_n].add(vsl->mVessel->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+
+        if (auto trajGeom = obj->trajectoryGeometry()) {
+            // The trajectory layer is a LayerGeometry, so we can add the line directly.
+            mTrajectoryLayer[model_n]->addGeometry(trajGeom);
+        }
     }
 
     const QList<std::shared_ptr<ShipData> > &ships = model->getShipList();
@@ -997,26 +1004,14 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 }
 
 
-
 std::shared_ptr<qmapcontrol::LayerGeometry>
-MapObjectsController::trajectoryLayer(int modelIdx)
+MapObjectsController::trajectoryLayer(int modelIdx) const
 {
     if (modelIdx < 0 || modelIdx >= mTrajectoryLayer.size())
         return nullptr;
-
-    if (!mTrajectoryLayer[modelIdx]) {
-        // Give the layer a helpful name for debugging
-        QString name = QStringLiteral("#%1#Trajectory").arg(modelIdx);
-        mTrajectoryLayer[modelIdx] =
-            std::make_shared<qmapcontrol::LayerGeometry>(name.toStdString());
-
-        // Insert it *before* the entity layer – the map draws layers in
-        // insertion order, so this guarantees the trajectory is underneath.
-        // The entity layer will be added later via addStandardLayer().
-        mMap->addLayer(mTrajectoryLayer[modelIdx]);
-    }
     return mTrajectoryLayer[modelIdx];
 }
+
 
 
 

@@ -167,7 +167,7 @@ private:
 public:
     enum LayerIds {
         LayerMain = 0, LayerSeamarks = 1,
-        LayerEntities = 2, LayerGraph = 3,
+        LayerEntities = 2, LayerTrajectories = 3, LayerGraph = 4,
         LayerEdges,
 
         LayerMax
@@ -306,7 +306,7 @@ public:
     int modelIndexForVessel(int vesselId) const;
 
     std::shared_ptr<qmapcontrol::LayerGeometry> entityLayer(int modelIdx) const;
-    std::shared_ptr<qmapcontrol::LayerGeometry> trajectoryLayer(int modelIdx);
+    std::shared_ptr<qmapcontrol::LayerGeometry> trajectoryLayer(int modelIdx) const;
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);

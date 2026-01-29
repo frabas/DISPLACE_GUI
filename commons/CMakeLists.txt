@@ -21,6 +21,7 @@ set(SOURCES
         Harbour.cpp
         Ship.cpp
         Vessel.cpp
+        VesselDebugHelper.cpp
         Metier.cpp
         Firm.cpp
         myRutils.cpp
@@ -69,6 +70,7 @@ set(SOURCES
         ../include/Harbour.h
         ../include/Ship.h
         ../include/Vessel.h
+        ../include/VesselDebugHelper.h
         ../include/Metier.h
         ../include/Firm.h
         ../include/myRutils.h
@@ -175,8 +177,7 @@ if (NOT APPLE AND NOT WIN32)
 endif (NOT APPLE AND NOT WIN32)
 
 add_library(commons SHARED
-        ${SOURCES}
-        )
+        ${SOURCES})
 
 target_include_directories(commons
         PRIVATE

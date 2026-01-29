@@ -36,6 +36,7 @@
 #include "Benthos.h"
 #include "Metier.h"
 
+
 #ifndef NO_IPC
 
 #include "outputqueuemanager.h"
@@ -447,6 +448,39 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             //        cout << "HERE RIGHT AFTER do_catch sz " <<  N_at_szgroup.at(sz) << "\n";
                             //    }
                             //}
+
+                            bool debug_compare = true;
+                            if (debug_compare) {
+                                std::ofstream dummy;
+                                bool ok = model->vessels()[index_v]->debug_compare_do_catch(model->scenario().dyn_alloc_sce,
+                                    export_individual_tacs,
+                                    model->timestep(),
+                                    model->month(),
+                                    model->quarter(),
+                                    model->populations(),
+                                    model->nodes(),
+                                    benthoss,
+                                    model->config().implicit_pops,
+                                    model->config().grouped_tacs,
+                                    model->timestep(), model->scenario().graph_res,
+                                    model->is_tacs(),
+                                    model->scenario().is_individual_vessel_quotas,
+                                    model->scenario().check_all_stocks_before_going_fishing,
+                                    model->is_discard_ban(),
+                                    model->is_realtime_closure(),
+                                    model->is_grouped_tacs(),
+                                    tech_creeping_multiplier,
+                                    model->is_fishing_credits(),
+                                    model->is_direct_killing_on_benthos(),
+                                    model->is_resuspension_effect_on_benthos(),
+                                    model->is_benthos_in_numbers());
+                                if (!ok) {
+                                    std::cerr << "do_catch vs do_catch_v150 differ – see above for details.\n";                                
+                                }
+                            }
+
+
+
 
                         }
                         // update

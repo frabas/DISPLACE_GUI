@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
 // Copyright (c) 2012-2026 Francois Bastardie <fba@aqua.dtu.dk>
@@ -44,6 +44,7 @@
 #include <memory>
 #include <fstream>
 
+
 typedef types::NodeId::type vertex_t;
 
 class Node;
@@ -62,6 +63,9 @@ public:
     using ValueFgroundsPerYearQuarterPerPop = std::vector<std::vector<std::vector<double> > >;
     using ValuePerFgroundPerPop = std::vector<std::vector<double> >;
     using CumEffortPerTripPerFgroundsPerMet = std::vector<std::vector<double> >;
+
+   
+
 
 private:
     std::string name;
@@ -228,8 +232,8 @@ private:
 
         struct SweptAreaInfo {
             double gear_width;          // km
-            double swept_area;          // km�
-            double subsurf_area;        // km� (penetration factor applied)
+            double swept_area;          // km²
+            double subsurf_area;        // km² (penetration factor applied)
         };
 
         struct CatchResult {
@@ -334,8 +338,9 @@ protected:
         void init();
         void find_next_point_on_the_graph_unlocked(std::vector<Node* >& nodes, int a_tstep, bool is_fishing_credits);
 
-public:
-        //Vessel(std::string name,  std::shared_ptr<Node> a_location);
+
+public: 
+       //Vessel(std::string name,  std::shared_ptr<Node> a_location);
         Vessel(std::string name,  Node *a_location);
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name);
         Vessel(Node* a_location, int idx_vessel, std::string name);
@@ -381,6 +386,8 @@ public:
             );
 		Vessel();
 		~Vessel();
+
+    
 
         void lock() { mutex.lock(); }
         void unlock() { mutex.unlock(); }
@@ -658,6 +665,65 @@ public:
                   bool direct_killing_on_benthos,
                   bool resuspension_effect_on_benthos,
                   bool is_benthos_in_numbers);
+
+    void do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
+        std::ofstream& export_individual_tacs,
+        int a_tstep,
+        int a_month,
+        int a_quarter,
+        std::vector<Population*> const& populations,
+        std::vector<Node*> const& nodes,
+        vector<Benthos*> const& benthoshabs,
+        std::vector<int> const& implicit_pops,
+        vector<int> const& grouped_tacs,
+        int tstep,
+        vector<double> const& graph_res,
+        bool is_tacs,
+        bool is_individual_vessel_quotas,
+        bool check_all_stocks_before_going_fishing,
+        bool is_discard_ban,
+        bool is_realtime_closure,
+        bool is_grouped_tacs,
+        double tech_creeping_multiplier,
+        bool is_fishing_credits,
+        bool direct_killing_on_benthos,
+        bool resuspension_effect_on_benthos,
+        bool is_benthos_in_numbers);
+
+    /**
+     * @brief Run the old and new catch routines on a *copy* of the current
+     *        simulation state and print a diff report to stdout.
+     *
+     * @param populations   All populations (the same vector you normally pass to do_catch).
+     * @param nodes         All nodes (same as for do_catch).
+     * @param benthoshabs   Benthos objects (same as for do_catch).
+     * @param dyn_alloc_sce Allocation options (same as for do_catch).
+     * @param export_individual_tacs Stream for individual‑TAC export (can be a dummy stream).
+     *
+     * @return true if the two runs match within the tolerances, false otherwise.
+     */
+    bool debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
+        std::ofstream& export_individual_tacs,
+        int a_tstep, int a_month, int a_quarter,
+        const std::vector<Population*>& populations,
+        const std::vector<Node*>& nodes,
+        const std::vector<Benthos*>& benthoshabs,
+        const std::vector<int>& implicit_pops,
+        const std::vector<int>& grouped_tacs,
+        int tstep,
+        const std::vector<double>& graph_res,
+        bool is_tacs,
+        bool is_individual_vessel_quotas,
+        bool check_all_stocks_before_going_fishing,
+        bool is_discard_ban,
+        bool is_realtime_closure,
+        bool is_grouped_tacs,
+        double tech_creeping_multiplier,
+        bool is_fishing_credits,
+        bool direct_killing_on_benthos,
+        bool resuspension_effect_on_benthos,
+        bool is_benthos_in_numbers);
+
 
     void clear_catch_pop_at_szgroup();
 

@@ -54,6 +54,9 @@
 #include <functional>
 #include <stdexcept>
 
+#include <VesselDebugHelper.h>
+
+
 
 std::mutex aStarMutex;
 AStarShortestPathFinder aStarPathFinder;
@@ -3039,6 +3042,95 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 //------------------------------------------------------------//
 
 
+bool Vessel::debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
+    std::ofstream& export_individual_tacs,
+    int a_tstep, int a_month, int a_quarter,
+    const std::vector<Population*>& populations,
+    const std::vector<Node*>& nodes,
+    const std::vector<Benthos*>& benthoshabs,
+    const std::vector<int>& implicit_pops,
+    const std::vector<int>& grouped_tacs,
+    int tstep,
+    const std::vector<double>& graph_res,
+    bool is_tacs,
+    bool is_individual_vessel_quotas,
+    bool check_all_stocks_before_going_fishing,
+    bool is_discard_ban,
+    bool is_realtime_closure,
+    bool is_grouped_tacs,
+    double tech_creeping_multiplier,
+    bool is_fishing_credits,
+    bool direct_killing_on_benthos,
+    bool resuspension_effect_on_benthos,
+    bool is_benthos_in_numbers)
+{
+    using namespace VesselDebug;
+
+    // 1️⃣  Save the original state
+    VesselDebug::VesselState original = capture_state(*this);
+
+    // 2️⃣  Run the *new* implementation
+    this->do_catch(dyn_alloc_sce,
+        export_individual_tacs,
+        a_tstep, a_month, a_quarter,
+        populations,
+        nodes,
+        benthoshabs,
+        implicit_pops,
+        grouped_tacs,
+        tstep,
+        graph_res,
+        is_tacs,
+        is_individual_vessel_quotas,
+        check_all_stocks_before_going_fishing,
+        is_discard_ban,
+        is_realtime_closure,
+        is_grouped_tacs,
+        tech_creeping_multiplier,
+        is_fishing_credits,
+        direct_killing_on_benthos,
+        resuspension_effect_on_benthos,
+        is_benthos_in_numbers);
+    VesselDebug::VesselState after_new = capture_state(*this);
+
+    // 3️⃣  Restore the original state
+    restore_state(*this, original);
+
+    // 4️⃣  Run the *old* implementation
+    this->do_catch_v150(dyn_alloc_sce,
+        export_individual_tacs,
+        a_tstep, a_month, a_quarter,
+        populations,
+        nodes,
+        benthoshabs,
+        implicit_pops,
+        grouped_tacs,
+        tstep,
+        graph_res,
+        is_tacs,
+        is_individual_vessel_quotas,
+        check_all_stocks_before_going_fishing,
+        is_discard_ban,
+        is_realtime_closure,
+        is_grouped_tacs,
+        tech_creeping_multiplier,
+        is_fishing_credits,
+        direct_killing_on_benthos,
+        resuspension_effect_on_benthos,
+        is_benthos_in_numbers);
+    VesselState after_old = capture_state(*this);
+
+    // 5️⃣  Report the differences
+    std::ofstream diff_log(R"(C:\do_catch_vs_v150.diff.txt)");
+    report_diff(after_new, after_old, diff_log, 1e-2, 1e-2);
+    diff_log.close();
+
+    std::cout << "Diff written to do_catch_vs_v150.diff.txt\n";
+
+
+    return 1;
+}
+
 
 /*
 Vessel::do_catch
@@ -4083,9 +4175,8 @@ bool Vessel::maybe_close_ground(int groundIdx,
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-    /*
 
-void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
+void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                       std::ofstream &export_individual_tacs,
                       int a_tstep,
                       int a_month,
@@ -5510,7 +5601,7 @@ void Vessel::do_catch(const DynAllocOptions& dyn_alloc_sce,
     unlock();
 }
 
-*/
+
 
 void Vessel::clear_catch_pop_at_szgroup()
 {

@@ -137,7 +137,7 @@ private:
     // -------------------------------------------------
     // FIFO buffer for the trajectory (option B)
     // -------------------------------------------------
-    static constexpr std::size_t kMaxTrajectoryPoints = 15;   // choose any limit
+    static constexpr std::size_t kMaxTrajectoryPoints = 5;   // choose any limit
     std::deque<qmapcontrol::PointWorldCoord> mTrajectoryBuffer;
 
     void dumpDebugInfo(const char* where) const;

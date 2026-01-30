@@ -57,8 +57,8 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
         // range of zoom levels at which the line is visible.
         // 0 … 22 comfortably covers the whole typical DISPLACE zoom span.
     mTrajectory = std::make_shared<qmapcontrol::GeometryLineString>(0, 22);
-    QPen myPen(QColor(0, 120, 255, 180));
-    myPen.setWidth(14);
+    QPen myPen(QColor(0, 120, 255, 150));
+    myPen.setWidth(1);
     myPen.setStyle(Qt::SolidLine);   // example: dashed line
     mTrajectory->setPen(myPen);
     mTrajectory->setVisible(true);
@@ -68,7 +68,7 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 
     // Debug: after creation
     qDebug() << "=== Constructor finished ===";
-    //dumpDebugInfo(__FUNCTION__);
+    dumpDebugInfo(__FUNCTION__);
 
     // ---- Connect the thread‑safe bridge -------------------------
         // The connection type defaults to Qt::AutoConnection, which becomes
@@ -85,7 +85,7 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 void VesselMapObject::ensureGeometriesAdded()
 {
     qDebug() << ">>> ensureGeometriesAdded called";
-    //dumpDebugInfo(__FUNCTION__); 
+    dumpDebugInfo(__FUNCTION__); 
     
     int modelIdx = mController->modelIndexForVessel(
         mVessel->mVessel->get_idx());
@@ -257,15 +257,23 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
     std::vector<qmapcontrol::PointWorldCoord> vec(
         mTrajectoryBuffer.begin(), mTrajectoryBuffer.end());
     
+    auto trajLayer = mController->trajectoryLayer(0);
+    trajLayer->removeGeometry(mTrajectory); // strange addition but it makes the redraw working...
     mTrajectory->setPoints(vec);   // emits requestRedraw()
-    if (auto* map = mController->mapWidget())
-        map->requestRedraw();      // explicit repaint request
+    // this does not work!
+    //if (auto* map = mController->mapWidget())
+    //    map->requestRedraw();      // explicit repaint request
+    // or this one as well does not work!
+    //if (auto map = mController->trajectoryLayer(0))
+    //    map->requestRedraw();      // explicit repaint request
+    trajLayer->addGeometry(mTrajectory);
+
 
     //qDebug() << "Trajectory now has"
     //    << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
 
     // Final dump – you should see a non‑null layer, visible = true, correct Z‑value
-    //dumpDebugInfo(__FUNCTION__);
+    dumpDebugInfo(__FUNCTION__);
 
     // (Optional) keep the old QVector buffer for other uses
     //recordCurrentPosition();
@@ -652,22 +660,11 @@ void VesselMapObject::dumpDebugInfo(const char* where) const
     qDebug() << "entityLayer ptr =" << static_cast<void*>(entityLayer.get())
         << "visible =" << (entityLayer ? entityLayer->isVisible() : false);
 
-    // 3️⃣  Trajectory geometry
-    if (mTrajectory) {
-        auto* map = mController->mapWidget();
-        qDebug() << "Trajectory ptr =" << static_cast<void*>(mTrajectory.get())
-            << "layer =" << static_cast<void*>(mTrajectory->layer())
-            << "visible =" << mTrajectory->isVisible(map->getCurrentZoom())
-            << "points =" << mTrajectory->points().size();
-        // Z‑value (requires cast to QGraphicsItem)
-        if (QGraphicsItem* gi = dynamic_cast<QGraphicsItem*>(mTrajectory.get())) {
-            qDebug() << "Trajectory Z‑value =" << gi->zValue();
-        }
-    }
-    else {
-        qDebug() << "Trajectory = nullptr!";
-    }
+    auto trajectoryLayer = mController->trajectoryLayer(modelIdx);
+    qDebug() << "trajectoryLayer ptr =" << static_cast<void*>(trajectoryLayer.get())
+        << "visible =" << (trajectoryLayer ? trajectoryLayer->isVisible() : false);
 
+    
     // 4️⃣  Vessel geometry
     if (mGeometry) {
         auto*  map = mController->mapWidget();
@@ -680,9 +677,28 @@ void VesselMapObject::dumpDebugInfo(const char* where) const
             qDebug() << "Vessel Z‑value =" << gi->zValue();
         }
     }
+
     else {
         qDebug() << "Vessel = nullptr!";
     }
+
+    // 3️⃣  Trajectory geometry
+    if (mTrajectory) {
+        auto* map = mController->mapWidget();
+        qDebug() << "Trajectory ptr =" << static_cast<void*>(mTrajectory.get())
+            << "layer =" << static_cast<void*>(mTrajectory->layer())
+            << "visible =" << mTrajectory->isVisible(map->getCurrentZoom())
+            << "points =" << mTrajectory->points().size();
+        // Z‑value (requires cast to QGraphicsItem)
+        if (QGraphicsItem* gi = dynamic_cast<QGraphicsItem*>(mTrajectory.get())) {
+            qDebug() << "Trajectory Z‑value =" << gi->zValue();
+        }
+
+    }
+    else {
+        qDebug() << "Trajectory = nullptr!";
+    }
+
 
     // 5️⃣  Map zoom
     if (auto* map = mController->mapWidget()) {

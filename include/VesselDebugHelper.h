@@ -27,12 +27,15 @@ namespace VesselDebug
         std::vector<double> cumdiscard_fgrounds;
         std::vector<double> experienced_bycatch_prop_on_fgrounds;
         std::vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds;
+        std::vector<double> cumeffort_per_trip_per_fgrounds;
 
         // ---- per‑population matrices ------------------------------------------
         std::vector<std::vector<double>> catch_pop_at_szgroup;
         std::vector<std::vector<double>> discards_pop_at_szgroup;
         std::vector<std::vector<double>> ping_catch_pop_at_szgroup;
-
+        
+        std::string vessel_name;   // human‑readable name
+        int         vessel_idx = -1;   // the index you use in the model
 
     };
 

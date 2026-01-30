@@ -3096,6 +3096,9 @@ bool Vessel::debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
     // 3️⃣  Restore the original state
     restore_state(*this, original);
 
+    // TODO caution: in an ideal, complicated world it would be good to 
+    //also restore Population and Node given they are being altered as passed as References to do_catch...
+
     // 4️⃣  Run the *old* implementation
     this->do_catch_v150(dyn_alloc_sce,
         export_individual_tacs,
@@ -3126,7 +3129,7 @@ bool Vessel::debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
     diff_log.close();
 
     std::cout << "Diff written to do_catch_vs_v150.diff.txt\n";
-
+// put a breakpoint here if you want to look at the file...
 
     return 1;
 }
@@ -4115,8 +4118,11 @@ bool Vessel::maybe_close_ground(int groundIdx,
             }
         
         
-        
             // Update vessel cumulative statistics
+            cumcatches += cr.totalLandings; // caution: confusing naming because what is called catches here is the retained catch...
+            cumdiscards += cr.totalDiscards; 
+            // Note: cumcatches indicator is used to compare with the vessel carrying capacity then possibly triggering a "return to port" event
+
            // on the node
             get_loc()->add_to_cumcatches(cr.totalLandings); //=> to the GUI layer CumCatches
             get_loc()->add_to_cumcatches_per_pop(cr.totalLandings, popIdx);

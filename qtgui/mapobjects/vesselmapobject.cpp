@@ -68,7 +68,7 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 
     // Debug: after creation
     qDebug() << "=== Constructor finished ===";
-    dumpDebugInfo(__FUNCTION__);
+    //dumpDebugInfo(__FUNCTION__);
 
     // ---- Connect the thread‑safe bridge -------------------------
         // The connection type defaults to Qt::AutoConnection, which becomes
@@ -85,7 +85,7 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
 void VesselMapObject::ensureGeometriesAdded()
 {
     qDebug() << ">>> ensureGeometriesAdded called";
-    dumpDebugInfo(__FUNCTION__); 
+    //dumpDebugInfo(__FUNCTION__); 
     
     int modelIdx = mController->modelIndexForVessel(
         mVessel->mVessel->get_idx());
@@ -265,7 +265,7 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
     //    << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
 
     // Final dump – you should see a non‑null layer, visible = true, correct Z‑value
-    dumpDebugInfo(__FUNCTION__);
+    //dumpDebugInfo(__FUNCTION__);
 
     // (Optional) keep the old QVector buffer for other uses
     //recordCurrentPosition();

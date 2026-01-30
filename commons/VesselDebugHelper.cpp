@@ -42,13 +42,16 @@ namespace VesselDebug
         // per‑ground vectors
         s.cumcatch_fgrounds = v.get_cumcatch_fgrounds();
         s.cumdiscard_fgrounds = v.get_cumdiscard_fgrounds();
+        s.cumeffort_per_trip_per_fgrounds = v.get_cumeffort_per_trip_per_fgrounds();
 
         // per‑population matrices
         s.catch_pop_at_szgroup = v.get_catch_pop_at_szgroup();
         s.discards_pop_at_szgroup = v.get_discards_pop_at_szgroup();
         s.ping_catch_pop_at_szgroup = v.get_ping_catch_pop_at_szgroup();
 
-
+        s.vessel_name = v.get_name();   // or whatever getter you have
+        s.vessel_idx = v.get_idx();    // the integer index used in the model
+        
         return s;
     }
 
@@ -65,6 +68,8 @@ namespace VesselDebug
         // per‑ground vectors
         v.set_cumcatch_fgrounds(s.cumcatch_fgrounds);
         v.set_cumdiscard_fgrounds(s.cumdiscard_fgrounds);
+        v.set_cumeffort_per_trip_per_fgrounds(s.cumeffort_per_trip_per_fgrounds);
+        
 
         // per‑population matrices
         std::vector<std::vector<double>> catchPop = s.catch_pop_at_szgroup; // copy
@@ -85,6 +90,10 @@ namespace VesselDebug
         double absTol,
         double relTol)
     {
+
+         out << "=== Diff for vessel '" << a.vessel_name
+             << "' (idx " << a.vessel_idx << ") ===\n";
+
         auto cmp = [&](const char* name, double av, double bv)
         {
             double diff = std::abs(av - bv);
@@ -123,6 +132,7 @@ namespace VesselDebug
 
         vec_cmp("cumcatch_fgrounds", a.cumcatch_fgrounds, b.cumcatch_fgrounds);
         vec_cmp("cumdiscard_fgrounds", a.cumdiscard_fgrounds, b.cumdiscard_fgrounds);
+        vec_cmp("cumeffort_per_trip_per_fgrounds", a.cumeffort_per_trip_per_fgrounds, b.cumeffort_per_trip_per_fgrounds);
 
         // matrices – flatten and reuse vec_cmp
         auto flatten = [](const std::vector<std::vector<double>>& mat)

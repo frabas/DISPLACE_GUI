@@ -3653,6 +3653,12 @@ void Vessel::handle_explicit_population(
     for (size_t sz = 0; sz < Ns.size(); ++sz) {
         allBio[sz] = Ns[sz] * wsz[sz];
         availBio[sz] = allBio[sz] * m.selectivity[popIdx][sz];
+
+       // std::cout << "[Pop: " << popIdx << " sz: " << sz << "] "
+       //     << "allBio: " << std::fixed << std::setprecision(4) << allBio[sz]
+       //     << " | availBio: " << availBio[sz] << std::endl;
+
+
         totAvail += availBio[sz];
         totAll += allBio[sz];
         if (sz >= static_cast<size_t>(mlsCat))
@@ -3683,7 +3689,12 @@ void Vessel::handle_explicit_population(
         h.betas_per_pop[popIdx] +
         avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * tech_creeping_multiplier;
 
+   
     double totCatchWeight = std::min(totAvail, catchPotential);
+    
+   // std::cout << "[Pop: " << popIdx << "] "
+   //     << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << std::endl;
+    
     double discardFactor = std::min(
         m.discardratio_limits[popIdx],
         (totDiscForMLS > 0.0) ? (totDiscForMLS / totLandForMLS) : 0.05);
@@ -3693,16 +3704,26 @@ void Vessel::handle_explicit_population(
     // ------------------------------------------------------------------
     
     for (size_t sz = 0; sz < Ns.size(); ++sz) {
-        if (availBio[sz] <= 0.0) continue;
+        if (availBio[sz] <= 0.0) {
+            cr.landings[sz] = 0.0;
+            cr.discards[sz] = 0.0;
+                continue;
+        }
 
         // allocation key (proportion of the total available biomass)
         double key = (sz >= static_cast<size_t>(mlsCat))
             ? (availBio[sz] / totLandForMLS) : 0.0;
         allocKey[sz] = key;
 
+       
         // landings & discards (weight)
         cr.landings[sz] = totCatchWeight * key;
         cr.discards[sz] = totCatchWeight * (1.0 - key) * discardFactor;
+
+      //  std::cout << "[Pop: " << popIdx << "] "
+      //      << "cr.landings["<< sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
+      //  std::cout << "[Pop: " << popIdx << "] "
+      //      << "cr.discards[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
 
         // total catch weight per size group
         cr.catchWeight[sz] = cr.landings[sz] + cr.discards[sz];
@@ -3710,6 +3731,7 @@ void Vessel::handle_explicit_population(
         // cumul
         cr.totalLandings += cr.landings[sz];
         cr.totalDiscards += cr.discards[sz];
+
 
         // removals in numbers (weight / individual weight)
         removals[sz] = cr.catchWeight[sz] / wsz[sz];
@@ -3788,6 +3810,12 @@ void Vessel::handle_explicit_population(
     // REACTIVATION ON THE 07-05-2025:
     populations.at(popIdx)->set_node_availability(this->get_loc(), new_avai_pops);
 
+    //for (size_t sz = 0; sz < Ns.size(); ++sz) {
+    //    std::cout << "[Pop: " << popIdx << "] "
+    //        << "cr.landings1[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
+    //    std::cout << "[Pop: " << popIdx << "] "
+    //        << "cr.discards1[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
+    //}
 
     // ------------------------------------------------------------------
     // 6 Apply quota / TAC logic (individual, global, grouped)
@@ -3800,7 +3828,15 @@ void Vessel::handle_explicit_population(
         tech_creeping_multiplier,
         implicit_pops); 
 
+    //for (size_t sz = 0; sz < Ns.size(); ++sz) {
+    //    std::cout << "[Pop: " << popIdx << "] "
+    //        << "cr.landings2[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
+    //    std::cout << "[Pop: " << popIdx << "] "
+    //        << "cr.discards2[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
+    //}
+
 }
+
 
 
  
@@ -3867,7 +3903,6 @@ void Vessel::handle_implicit_population(
     double cpue = rgamma(shape, scale) *
         populations.at(popIdx)->get_cpue_multiplier() *
         tech_creeping_multiplier;   // technology creep factor
-
     outc(cout << "implicit: pop " << popIdx
         << " (name " << populations.at(popIdx)->get_name() << ")"
         << " cpue = " << cpue << "\n");
@@ -4121,11 +4156,28 @@ bool Vessel::maybe_close_ground(int groundIdx,
                     cr);
             }
         
-        
+          //  std::cout << "[Pop: " << popIdx << "] "
+          //      << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
+          //  std::cout << "[Pop: " << popIdx << "] "
+          //      << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
+
+          //  for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
+          //      std::cout << "[Pop: " << popIdx << "] "
+          //          << "cr.landings3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
+          //      std::cout << "[Pop: " << popIdx << "] "
+          //          << "cr.discards3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
+          //  }
+
             // Update vessel cumulative statistics
             cumcatches += cr.totalLandings; // caution: confusing naming because what is called catches here is the retained catch...
             cumdiscards += cr.totalDiscards; 
             // Note: cumcatches indicator is used to compare with the vessel carrying capacity then possibly triggering a "return to port" event
+
+          //  std::cout << "[Pop: " << popIdx << "] "
+          //      << "cumcatches: " << std::fixed << std::setprecision(4) << cumcatches << std::endl;
+          //  std::cout << "[Pop: " << popIdx << "] "
+          //      << "cumdiscards: " << std::fixed << std::setprecision(4) << cumdiscards << std::endl;
+
 
            // on the node
             get_loc()->add_to_cumcatches(cr.totalLandings); //=> to the GUI layer CumCatches
@@ -4572,6 +4624,11 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
 
+                  //  std::cout << "[Pop: " << pop << " sz: " << szgroup << "] "
+                  //      << "all_biomass: " << std::fixed << std::setprecision(4) << all_biomass[szgroup]
+                  //      << " | avail_biomass: " << avail_biomass[szgroup] << std::endl;
+
+
                     if (all_biomass[szgroup] < 0)
                     {
                         cout << "Negative biomass detected! in all_biomass[szgroup] ...set to 0!" << "\n";
@@ -4657,6 +4714,8 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                                         // 'min' is there for not allowing catching more than available!
 
 
+                   // std::cout << "[Pop: " << pop << "] "
+                   //     << "tot_catch_per_pop: " << std::fixed << std::setprecision(4) << tot_catch_per_pop[pop] << std::endl;
 
                     // check edge cases:
                     //if(populations[pop]->get_pop_name()=="ZPO.2024")
@@ -4732,12 +4791,14 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                     // => caution: discard factor bounded to not exceed a value, otherwise high unrealistic disrcards will be produced when no adult left on zones
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
+              
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_landings_this_pop: " << std::fixed << std::setprecision(4) << tot_landings_this_pop << std::endl;
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_discards_this_pop: " << std::fixed << std::setprecision(4) << tot_discards_this_pop << std::endl;
 
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << "\n";
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << "\n";
-// if(this->get_name()=="DNK000011569" &&  pop==2) cout << "....and discardfactor is " << discardfactor << "\n";
 
-                    // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
+                   // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
                     //  AND CONVERT INTO REMOVALS IN NUMBER
                     vector <double> totN = populations[pop]->get_tot_N_at_szgroup_just_after_redistribution();
                     // init
@@ -4969,6 +5030,10 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
 
                   //  }
                     
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_landings_this_pop2: " << std::fixed << std::setprecision(4) << tot_landings_this_pop << std::endl;
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_discards_this_pop2: " << std::fixed << std::setprecision(4) << tot_discards_this_pop << std::endl;
 
                     // then, the vessel catches for this pop so far is...
                     // (indeed, this might not correspond to 'tot_catch_per_pop' when no biomass
@@ -5185,7 +5250,9 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
 
                     }
 
-                    
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_landings_this_pop3: " << std::fixed << std::setprecision(4) << a_cumul_weight_this_pop_this_vessel << std::endl;
+               
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     int met = this->get_metier()->get_name();
@@ -5224,6 +5291,11 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                         totLandThisEvent += landings_per_szgroup[sz];
                         totDiscThisEvent += discards_per_szgroup[sz];
                     }
+
+                  //  std::cout << "[Pop: " << pop << "] "
+                  //      << "tot_discards_this_pop3: " << std::fixed << std::setprecision(4) << totDiscThisEvent << std::endl;
+
+
                     this->cumdiscards+= totDiscThisEvent;
                     //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
                     this->get_loc()->add_to_cumdiscards_per_pop(totDiscThisEvent, pop);

@@ -48,6 +48,22 @@ namespace VesselDebug
         double relTol);
 
 
+
+    struct NodeState
+    {
+         std::vector<double> N_at_szgroup{ std::vector<double>(14, 0.0) };
+    };
+
+    // Returns a vector of snapshots – one entry per node in the same order.
+    std::vector<NodeState> capture_nodes_state(const std::vector<Node*>& nodes, int nb_pops);
+
+    // Restores the saved snapshots back into the nodes.
+    // The `nodes` vector must have the same size/order as the snapshot vector.
+    void restore_nodes_state(const std::vector<Node*>& nodes,
+        const std::vector<NodeState>& snapshots, int nb_pops);
+
+
+
 } // namespace VesselDebug
 
 #endif // VESSELDEBUGHELPER_H

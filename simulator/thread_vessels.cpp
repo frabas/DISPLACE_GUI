@@ -447,7 +447,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             //    }
                             //}
 
-                            bool debug_compare = false; // used to debug the refactoring of do_catch on version 1.5.3
+                            bool debug_compare = true; // used to debug the refactoring of do_catch on version 1.5.3
                             if (debug_compare) {
                                 std::ofstream dummy;
                                 bool ok = model->vessels()[index_v]->debug_compare_do_catch(model->scenario().dyn_alloc_sce,

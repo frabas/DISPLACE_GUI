@@ -257,17 +257,17 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
     std::vector<qmapcontrol::PointWorldCoord> vec(
         mTrajectoryBuffer.begin(), mTrajectoryBuffer.end());
     
-    auto trajLayer = mController->trajectoryLayer(0);
-    trajLayer->removeGeometry(mTrajectory); // strange addition but it makes the redraw working...
-    mTrajectory->setPoints(vec);   // emits requestRedraw()
-    // this does not work!
-    //if (auto* map = mController->mapWidget())
-    //    map->requestRedraw();      // explicit repaint request
-    // or this one as well does not work!
-    //if (auto map = mController->trajectoryLayer(0))
-    //    map->requestRedraw();      // explicit repaint request
+    auto trajLayer = mController->trajectoryLayer(mVessel->mVessel->get_idx());
+    trajLayer->removeGeometry(mTrajectory); // strange addition but it makes the redraw working as re-registration to QMapControl is then forced...
+    mTrajectory->setPoints(vec);   // emits requestRedraw() (but redraw does not work??!!)
     trajLayer->addGeometry(mTrajectory);
-
+    // replacing the below that does not work:
+    // If, for any reason, the geometry‑to‑map connection is missing,
+    // force a layer redraw as a safety net:
+    //if (auto trajLayer = mController->trajectoryLayer(
+    //    mController->modelIndexForVessel(mVessel->mVessel->get_idx()))) {
+    //    trajLayer->requestRedraw();
+    //}
 
     //qDebug() << "Trajectory now has"
     //    << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();

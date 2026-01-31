@@ -25,13 +25,13 @@
 
 namespace VesselDebug
 {
-    
-   
+
+
 
     // -----------------------------------------------------------------
     // 1️⃣  Capture the current state of a vessel
     // -----------------------------------------------------------------
-     VesselState capture_state(const Vessel& v)
+    VesselState capture_state(const Vessel& v)
     {
         VesselState s;
         // scalars
@@ -51,14 +51,14 @@ namespace VesselDebug
 
         s.vessel_name = v.get_name();   // or whatever getter you have
         s.vessel_idx = v.get_idx();    // the integer index used in the model
-        
+
         return s;
     }
 
     // -----------------------------------------------------------------
     // 2️⃣  Restore a previously saved state into a vessel
     // -----------------------------------------------------------------
-     void restore_state(Vessel& v, const VesselState& s)
+    void restore_state(Vessel& v, const VesselState& s)
     {
         // scalars
         v.set_cumcatches(s.cumcatches);      // you may need simple setters
@@ -69,7 +69,7 @@ namespace VesselDebug
         v.set_cumcatch_fgrounds(s.cumcatch_fgrounds);
         v.set_cumdiscard_fgrounds(s.cumdiscard_fgrounds);
         v.set_cumeffort_per_trip_per_fgrounds(s.cumeffort_per_trip_per_fgrounds);
-        
+
 
         // per‑population matrices
         std::vector<std::vector<double>> catchPop = s.catch_pop_at_szgroup; // copy
@@ -80,6 +80,35 @@ namespace VesselDebug
         v.set_ping_catch_pop_at_szgroup(PingCatchPop);
 
     }
+
+
+    std::vector<NodeState> capture_nodes_state(const std::vector<Node*>& nodes, int nb_pops)
+    {
+        // 1. Initialize vector with the total required size immediately
+        std::vector<NodeState> snaps(nodes.size() * nb_pops);
+
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            for (size_t popid = 0; popid < nb_pops; ++popid) {
+                // 2. Map 2D logic to the 1D flat vector: index = (row * width) + column
+                snaps[i * nb_pops + popid] = { nodes[i]->get_Ns_pops_at_szgroup(popid) };
+            }
+        }
+        return snaps;
+    }
+
+    void restore_nodes_state(const std::vector<Node*>& nodes,
+        const std::vector<NodeState>& snaps, int nb_pops)
+    {
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            for (size_t popid = 0; popid < nb_pops; ++popid) {
+                // Use the same indexing logic to retrieve state
+                nodes[i]->set_Ns_pops_at_szgroup(popid, snaps[i * nb_pops + popid].N_at_szgroup);
+            }
+        }
+    }
+
+
+
 
     // -----------------------------------------------------------------
     // 3️⃣  Very simple diff printer (writes to a file or stdout)
@@ -93,6 +122,9 @@ namespace VesselDebug
 
          out << "=== Diff for vessel '" << a.vessel_name
              << "' (idx " << a.vessel_idx << ") ===\n";
+
+         out << "timeatsea is: " << a.cumeffort
+             << " vs " << b.cumeffort << "\n";
 
         auto cmp = [&](const char* name, double av, double bv)
         {
@@ -153,5 +185,9 @@ namespace VesselDebug
 
 
     }
+
+
+
+
 
 }

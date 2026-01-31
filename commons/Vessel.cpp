@@ -3066,8 +3066,11 @@ bool Vessel::debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
 {
     using namespace VesselDebug;
 
-    // 1️⃣  Save the original state
+    // Save the original state
     VesselDebug::VesselState original = capture_state(*this);
+    int nb_pops = static_cast<int>(populations.size());
+    auto node_snapshots = VesselDebug::capture_nodes_state(nodes, nb_pops);
+
 
     // 2️⃣  Run the *new* implementation
     this->do_catch(dyn_alloc_sce,
@@ -3095,6 +3098,7 @@ bool Vessel::debug_compare_do_catch(const DynAllocOptions& dyn_alloc_sce,
 
     // 3️⃣  Restore the original state
     restore_state(*this, original);
+    restore_nodes_state(nodes, node_snapshots, nb_pops);
 
     // TODO caution: in an ideal, complicated world it would be good to 
     //also restore Population and Node given they are being altered as passed as References to do_catch...

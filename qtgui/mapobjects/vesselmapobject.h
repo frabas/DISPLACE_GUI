@@ -123,6 +123,8 @@ private slots:
     void widgetClosed();
     // Runs in the GUI thread – updates the map geometry safely
     void onPositionReady(const QPointF& lonLat);
+    void resetTrajectory();
+
 
 private:
     MapObjectsController *mController = nullptr;

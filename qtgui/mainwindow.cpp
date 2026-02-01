@@ -838,6 +838,7 @@ void MainWindow::on_cmdStart_clicked()
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->clearStats();
+        models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
         mSimulation->setOutDir(models[0]->getOutDir());
         mSimulation->setUseStaticPaths(models[0]->getUseStaticPaths());

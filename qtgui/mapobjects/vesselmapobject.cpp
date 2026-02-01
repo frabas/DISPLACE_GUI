@@ -113,7 +113,7 @@ void VesselMapObject::ensureGeometriesAdded()
 
     // Add the line to the trajectory layer (drawn first → underneath)
     if (!mTrajectory->layer()) {
-        trajLayer->addGeometry(mTrajectory);
+    trajLayer->addGeometry(mTrajectory);
         mTrajectory->setVisible(true);   // safety
         // No Z‑value needed – layer order guarantees it is behind the vessel
     }
@@ -221,6 +221,26 @@ void VesselMapObject::recordCurrentPosition()
 // -------------------------------------------------------------------- -
 // Slot – runs on the GUI thread, updates the map objects
 // ---------------------------------------------------------------------
+void VesselMapObject::resetTrajectory()
+{
+    // Detach from its layer (optional – you can also just clear points)
+    if (auto* layer = mTrajectory->layer())
+        layer->removeGeometry(mTrajectory);
+
+    // Clear the FIFO buffer
+    mTrajectoryBuffer.clear();
+
+    // Create a fresh empty line (or reuse the same object)
+    mTrajectory->setPoints({});   // empty vector → line disappears
+
+    // Re‑attach to the trajectory layer (once)
+    int modelIdx = mController->modelIndexForVessel(mVessel->mVessel->get_idx());
+    auto trajLayer = mController->trajectoryLayer(modelIdx);
+    if (trajLayer && !mTrajectory->layer())
+        trajLayer->addGeometry(mTrajectory);
+}
+
+
 void VesselMapObject::onPositionReady(const QPointF & lonLat)
 {
     // -------------------------------------------------
@@ -231,6 +251,8 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
         ensureGeometriesAdded();
         attached = true;
     }
+   
+ 
     // Move the vessel icon
     mGeometry->setCoord(
         qmapcontrol::PointWorldCoord(lonLat.x(), lonLat.y()));
@@ -258,17 +280,17 @@ void VesselMapObject::onPositionReady(const QPointF & lonLat)
         mTrajectoryBuffer.begin(), mTrajectoryBuffer.end());
     
     auto trajLayer = mController->trajectoryLayer(mVessel->mVessel->get_idx());
-    trajLayer->removeGeometry(mTrajectory); // strange addition but it makes the redraw working as re-registration to QMapControl is then forced...
+                      
+    // caution: remove and add is not thread-safe here:
+    //if (trajLayer) {
+    if (auto* layer = mTrajectory->layer()) {
+        layer->removeGeometry(mTrajectory, true); // strange addition but it makes the redraw working as re-registration to QMapControl is then forced...
     mTrajectory->setPoints(vec);   // emits requestRedraw() (but redraw does not work??!!)
-    trajLayer->addGeometry(mTrajectory);
-    // replacing the below that does not work:
-    // If, for any reason, the geometry‑to‑map connection is missing,
-    // force a layer redraw as a safety net:
-    //if (auto trajLayer = mController->trajectoryLayer(
-    //    mController->modelIndexForVessel(mVessel->mVessel->get_idx()))) {
-    //    trajLayer->requestRedraw();
-    //}
-
+    layer->addGeometry(mTrajectory, true);
+    }
+    
+    
+   
     //qDebug() << "Trajectory now has"
     //    << mTrajectory->points().size() << "points" << " and first lon " << mTrajectory->points().at(0).longitude() << " and lat " << mTrajectory->points().at(0).latitude();
 
@@ -506,6 +528,16 @@ static inline qmapcontrol::PointWorldPx worldToPixelEquirectangular(
 }
 
 
+inline QColor colour_for_length_class(int cls)
+{
+    // fallback to the fixed table if you prefer it:
+    // return VesselGraphicsColors::LengthClassColors.value(cls, QColor(0,0,0));
+
+    // otherwise use a hue‑sweep:
+    int hue = (cls * 40) % 360;          // 37° spacing → nice distribution
+    return QColor::fromHsv(hue, 200, 255);
+}
+
 
 void VesselMapObject::VesselGraphics::drawShape(
     QPainter& painter,
@@ -627,12 +659,20 @@ void VesselMapObject::VesselGraphics::drawShape(
     // 2️⃣  Existing vessel drawing 
     // -------------------------------------------------
 
+   
+    int lengthClass = mVessel->mVessel->get_length_class();
+    QColor hullColour = colour_for_length_class(lengthClass);
+
     painter.rotate(mVessel->mVessel->get_course());
-
-    painter.setBrush(*color);
+    
+    //painter.save();
+   
+    // ---- hull (main ellipse) ----
+    painter.setBrush(QBrush(hullColour));
+    //painter.setBrush(*color);
     painter.drawEllipse(-10, -20, 20, 40);
-
-    // State‑dependent “ears”
+   
+    // State‑dependent “deck”
     switch (mVessel->mVessel->get_state())
     {
     case 1: painter.setBrush(*statFishing);   break;
@@ -643,6 +683,9 @@ void VesselMapObject::VesselGraphics::drawShape(
     painter.drawEllipse(-6, -12, 12, 24);
 
     painter.rotate(-mVessel->mVessel->get_course());
+    
+    //painter.restore();
+ 
 }
 
 

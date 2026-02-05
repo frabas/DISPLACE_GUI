@@ -41,6 +41,7 @@ static const char *dyn_alloc_options[] = {
     "closer_port",
     "fuelprice_plus20percent",
     "reduced_speed_10percent",
+    "increased_speed_20percent",
     "shared_harbour_knowledge",
     "TACs",
     "discard_ban",
@@ -66,6 +67,9 @@ static const char *dyn_alloc_options[] = {
     "doNotExportDiscardsInLogbooks",
     "PickUpTheMostFrequentGroundEachTime",
     "aSingleMetierPerTrip",
+    "unlimitedTankCap",
+    "unlimitedCarryCap",
+
 
 };
 

@@ -2831,6 +2831,16 @@ bool DisplaceModel::loadVessels()
             cout << "then take node: " << start_harbour << "\n";
         }
 
+
+        // helper Options for debug
+        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "unlimitedCarryCap")) {
+            carrycapacities[i] = 10000000; // kg
+        }
+        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "unlimitedTankCap")) {
+            tankcapacities[i] = 10000000; // litres
+        }
+
+
         std::shared_ptr<Vessel> v(new Vessel(mScenario.getDyn_alloc_sce_asVector(),
                                              mNodes.at(start_harbour.toIndex())->mNode.get(),
                                              i,

@@ -553,6 +553,18 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         }
 
 
+        // helper Options for debug
+        if (model.scenario().dyn_alloc_sce.option(Options::unlimitedCarryCap)) {
+            loadedDataVessels.vectdparam5.at(i) = 10000000; // kg
+        }
+        if (model.scenario().dyn_alloc_sce.option(Options::unlimitedTankCap)) {
+            loadedDataVessels.vectdparam6.at(i) = 100000000; // litres
+        }
+        if (model.scenario().dyn_alloc_sce.option(Options::increased_speed_20percent)) {
+            loadedDataVessels.vectdparam1.at(i) = loadedDataVessels.vectdparam1.at(i) * 1.2;
+        }
+
+
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
         types::NodeId start_harbour;
         if (!spe_harbours.empty()) {

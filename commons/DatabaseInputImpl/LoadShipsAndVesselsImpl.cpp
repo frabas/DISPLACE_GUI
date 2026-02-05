@@ -62,6 +62,15 @@ void DatabaseModelLoader::loadVessels(int year, int month, int quarter, int seme
 
         vector<string> dyn_alloc_sce;
 
+        // helper Options for debug
+        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "unlimitedCarryCap")) {
+            vesselData->carrycapacity = 10000000; // kg
+        }
+        if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "unlimitedTankCap")) {
+            vesselData->tankcapacity = 10000000; // litres
+        }
+
+
         auto v = new Vessel(dyn_alloc_sce,
                 a_location,        // a_location i.e start harbour node
                 idx_vessel,

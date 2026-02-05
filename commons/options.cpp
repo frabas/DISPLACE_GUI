@@ -56,6 +56,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,reduced_speed_10percent);
     O(mMap,reduced_speed_20percent);
     O(mMap,reduced_speed_30percent);
+    O(mMap, increased_speed_20percent);
     O(mMap,multiOnFuelcons50percent);
     O(mMap,multiOnFuelcons100percent);
     O(mMap,gear_fuel_efficiency_gain_30percent);
@@ -92,7 +93,9 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, doNotExportDiscardsInLogbooks);
     O(mMap, PickUpTheMostFrequentGroundEachTime);
     O(mMap, aSingleMetierPerTrip);
-
+    O(mMap, unlimitedTankCap);
+    O(mMap, unlimitedCarryCap);
+  
 
 
 

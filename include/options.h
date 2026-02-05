@@ -113,6 +113,7 @@ enum Dyn_Alloc {
     reduced_speed_10percent,
     reduced_speed_20percent,
     reduced_speed_30percent,
+    increased_speed_20percent,
     multiOnFuelcons50percent,
     multiOnFuelcons100percent,
     gear_fuel_efficiency_gain_30percent,
@@ -149,6 +150,9 @@ enum Dyn_Alloc {
     doNotExportDiscardsInLogbooks,
     PickUpTheMostFrequentGroundEachTime,
     aSingleMetierPerTrip,
+    unlimitedTankCap,
+    unlimitedCarryCap,
+
 
     Dyn_Alloc_last
 };

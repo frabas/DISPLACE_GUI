@@ -3,7 +3,7 @@
 
 #define MyAppName "Displace"
 
-#define MyAppVersion "1.5.5"
+#define MyAppVersion "1.5.6"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"

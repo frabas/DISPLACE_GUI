@@ -3715,11 +3715,11 @@ void Vessel::handle_explicit_population(
             ? (availBio[sz] / totLandForMLS) : 0.0;
         allocKey[sz] = key;
 
-       
         // landings & discards (weight)
         cr.landings[sz] = totCatchWeight * key;
         cr.discards[sz] = totCatchWeight * (1.0 - key) * discardFactor;
 
+   
       //  std::cout << "[Pop: " << popIdx << "] "
       //      << "cr.landings["<< sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
       //  std::cout << "[Pop: " << popIdx << "] "
@@ -4126,11 +4126,23 @@ bool Vessel::maybe_close_ground(int groundIdx,
         // 4️  Loop over all populations (explicit + implicit)
         // ------------------------------------------------------------------
         CatchResult cr;
-        cr.landings.resize(NBSZGROUP, 0.0);
-        cr.discards.resize(NBSZGROUP, 0.0);
-        cr.catchWeight.resize(NBSZGROUP, 0.0);
+     
+        // relative node index to this vessel
+        auto idx_node = this->get_loc()->get_idx_node();
+        auto the_grds = this->get_fgrounds();
+        int idx_node_r = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
+
+        // VARIABLES VALID FOR THIS FISHING EVENT ONLY
+        double totLandThisEvent = 1;
+        double totAvoiStksLandThisEvent = 1;
+        double totDiscThisEvent = 0.0001;
+        double totAvoiStksDiscThisEvent = 0.0001;
 
         for (size_t popIdx = 0; popIdx < populations.size(); ++popIdx) {
+            cr.landings.assign(NBSZGROUP, 0.0);
+            cr.discards.assign(NBSZGROUP, 0.0);
+            cr.catchWeight.assign(NBSZGROUP, 0.0);
+
             Population* pop = populations[popIdx];
             bool isImplicit = std::binary_search(implicit_pops.begin(),
                 implicit_pops.end(),
@@ -4155,22 +4167,22 @@ bool Vessel::maybe_close_ground(int groundIdx,
                     implicit_pops,
                     cr);
             }
-        
-          //  std::cout << "[Pop: " << popIdx << "] "
-          //      << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
-          //  std::cout << "[Pop: " << popIdx << "] "
-          //      << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
 
-          //  for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
-          //      std::cout << "[Pop: " << popIdx << "] "
-          //          << "cr.landings3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
-          //      std::cout << "[Pop: " << popIdx << "] "
-          //          << "cr.discards3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
-          //  }
+            //  std::cout << "[Pop: " << popIdx << "] "
+            //      << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
+            //  std::cout << "[Pop: " << popIdx << "] "
+            //      << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
 
-            // Update vessel cumulative statistics
+            //  for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
+            //      std::cout << "[Pop: " << popIdx << "] "
+            //          << "cr.landings3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.landings[sz] << std::endl;
+            //      std::cout << "[Pop: " << popIdx << "] "
+            //          << "cr.discards3[" << sz << "]: " << std::fixed << std::setprecision(4) << cr.discards[sz] << std::endl;
+            //  }
+
+              // Update vessel cumulative statistics
             cumcatches += cr.totalLandings; // caution: confusing naming because what is called catches here is the retained catch...
-            cumdiscards += cr.totalDiscards; 
+            cumdiscards += cr.totalDiscards;
             // Note: cumcatches indicator is used to compare with the vessel carrying capacity then possibly triggering a "return to port" event
 
           //  std::cout << "[Pop: " << popIdx << "] "
@@ -4190,11 +4202,7 @@ bool Vessel::maybe_close_ground(int groundIdx,
             get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, popIdx, met);
             get_loc()->compute_cpue_per_pop_per_met_this_month(popIdx, met); // i.e. cumcatch/cumeffort
 
-            // relative node index to this vessel
-            auto idx_node = this->get_loc()->get_idx_node();
-            auto the_grds = this->get_fgrounds();
-            int idx_node_r = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
-            
+     
             //catches per pop
             this->cumcatch_fgrounds.at(idx_node_r) += cr.totalLandings;
             this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(popIdx) += cr.totalLandings;
@@ -4216,16 +4224,66 @@ bool Vessel::maybe_close_ground(int groundIdx,
                 this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
             }
 
-        
-        }
 
+            // cumul to later compute the proportion of discard to potentially influence future decision-making
+            for (unsigned int sz = 0; sz < cr.landings.size(); ++sz) {
+                totLandThisEvent += cr.landings[sz];
+                totDiscThisEvent += cr.discards[sz];
+            }
+
+
+        } // end pop
+
+        
         // ------------------------------------------------------------------
         // 5️  Final bookkeeping (cumulative stats, closures, logging)
         // ------------------------------------------------------------------
-        finalize_trip_statistics(cr, graph_res, a_quarter, is_realtime_closure);
-        //maybe_close_ground(is_realtime_closure);
-        
+          
+            // experienced by‑catch proportion on the current ground
+            experienced_bycatch_prop_on_fgrounds.at(idx_node_r) =
+                totDiscThisEvent / (totLandThisEvent + totDiscThisEvent);
 
+            // experienced by‑catch on avoided stocks (if any)
+            experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r) =
+                totAvoiStksDiscThisEvent /
+                (totAvoiStksLandThisEvent + totAvoiStksDiscThisEvent);
+
+            // update node‑level cumulative catches/discards all pop pooled
+            get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
+            get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
+
+            // compute and store the discard‑to‑total ratio
+            double discratio = get_loc()->get_cumdiscards() /
+                (get_loc()->get_cumdiscards() + get_loc()->get_cumcatches());
+            discratio = (discratio > 0.0) ? discratio : 0.0;
+            get_loc()->set_cumdiscardsratio(discratio);
+
+            // optional realtime‑closure logic 
+            if (is_realtime_closure &&
+                experienced_bycatch_prop_on_fgrounds.at(idx_node_r) > 0.8) {
+                get_loc()->setBannedMetier(get_metier()->get_name());
+                // Uncomment if you also want to ban vessel size / nation:
+                // get_loc()->setBannedVsize(get_length_class());
+                // get_loc()->setBannedNation(get_nationality_idx());
+           //maybe_close_ground(is_realtime_closure);
+            }
+
+
+            // read out the accumulation that will be exported in loglike.dat (see exportLogLike () and output_fileformats.md)
+            this->set_catch_pop_at_szgroup(catch_pop_at_szgroup);
+
+            // add the metier for this ping
+            this->idx_used_metiers_this_trip.push_back(this->get_metier()->get_name());
+
+
+            // diagnostic output 
+            outc(cout << "cumcatch_fgrounds this node is "
+                << cumcatch_fgrounds.at(idx_node_r) << "\n");
+            outc(cout << "cumdiscard_fgrounds is "
+                << cumdiscard_fgrounds.at(idx_node_r) << "\n");
+
+        
+      
         unlock();
     }
 

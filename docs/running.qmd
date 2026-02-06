@@ -1,0 +1,86 @@
+---
+title: "Running DISPLACE"
+---
+
+# Running DISPLACE Simulator {#sec-running}
+
+This chapter describes the command-line options available when running the DISPLACE simulator.
+
+## Command-Line Options
+
+The DISPLACE simulator accepts various command-line arguments to configure its behavior:
+
+### Database Options
+
+`--indb baseline.db`
+: Reads the data from the specified database file.
+
+### Output Options
+
+`--outdir C:`
+: Specifies the path where output folders will be created.
+
+`--disable-sqlite`
+: Disables output to SQLite database.
+
+### Working Directory
+
+`-a C:\...\DISPLACE_input_minitest`
+: Specifies the working directory (basepath) where input files are located.
+
+### Scenario Configuration
+
+`-f "fake"`
+: Specifies the first scenario parameter.
+
+`--f2 "baseline"`
+: Specifies the second scenario parameter (baseline scenario name).
+
+`-s "simu1"`
+: Sets the simulation name or seed number.
+
+### Simulation Parameters
+
+`-i 8761`
+: Number of simulation steps to run.
+
+`-p 0`
+: Parameter p (documentation needed).
+
+`-e 1`
+: Parameter e (documentation needed).
+
+`--huge 1`
+: Enables huge simulation mode.
+
+`-v 0`
+: Verbosity level for output messages (0 = minimal).
+
+`-V 1`
+: Alternative verbosity level flag.
+
+### Performance Options
+
+`--num_threads 4`
+: Number of threads to use for parallel execution.
+
+## Example Usage
+
+```bash
+# Basic simulation run
+displace --indb baseline.db \
+  --outdir C:\outputs \
+  -a C:\DISPLACE_input_minitest \
+  -f "fake" \
+  --f2 "baseline" \
+  -s "simu1" \
+  -i 8761 \
+  --num_threads 4
+```
+
+## See Also
+
+- @sec-quickstart for installation and setup
+- @sec-building for build instructions
+- @sec-output-formats for understanding simulation outputs
+

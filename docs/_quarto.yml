@@ -1,0 +1,40 @@
+project:
+  type: book
+  output-dir: ./docs
+
+book:
+  title: "DISPLACE Documentation"
+  author: Francois Bastardie (DTU) with UCSB
+  date: last-modified
+  date-format: "[Last Updated on] MMMM DD, YYYY"
+  chapters:
+    - index.qmd
+    - part: "Getting Started"
+      chapters:
+        - quickstart.qmd
+        - building.qmd
+        - running.qmd
+    - part: "User Guide"
+      chapters:
+        - routines.qmd
+        - output-formats.qmd
+  # Add more parts and chapters as needed:
+  # - part: "Advanced Topics"
+  #   chapters:
+  #     - your-new-chapter.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    toc: true          
+    toc_depth: 5
+    number-sections: true
+    number-depth: 3
+    code-fold: false
+    code-tools: true
+execute:
+  cache: true
+  freeze: auto
+editor: visual

@@ -1,0 +1,153 @@
+How to build under Linux
+========================
+
+At the time of writing, the following procedure is tested on Ubuntu 18.04 LTS.
+Any recent linux distribution that satisfies the prerequisites should be able to compile and run Displace without issues.
+
+Note: Since displace needs support for c++14, Qt 5.6 or later is required!
+
+Prerequisites
+-------------
+
+Displace must be compiled with a recent c++ compiler that supports c++14 and the relative standard library.
+gcc 4.8 and clang are compiling correctly.
+The following libraries, with development files (libraries and headers), are required to compile under linux:
+
+CGAL library version 4.6.1
+Gdal library version 2.3
+Boost 1.58 with the following components: Boost::Graph, Boost::RegEx
+GeographicLib 1.44
+
+To install prerequisites under Ubuntu 18.04 LTS:
+
+```
+$ sudo apt install libgdal20 libgdal-dev libcgal13 libcgal-dev libboost1.65-all-dev libgeographic17 libqt5gui5 libqt5widgets5 libqt5xml5
+```
+
+
+Since 0.9, Displace depends also from sparsepp and mSqliteCpp:
+
+```
+$ git clone git@github.com:studiofuga/mSqliteCpp.git
+$ git clone https://github.com/greg7mdp/sparsepp.git
+```
+
+Ubuntu 16.04 doesn't provide an official support to Qt5.6, so an external package is required.
+The following instructions installs qt562 for /opt Xenial ( https://launchpad.net/~beineri/+archive/ubuntu/opt-qt562-xenial )
+Add the repository:
+
+```
+sudo add-apt-repository ppa:beineri/opt-qt562-xenial
+sudo apt-get update
+```
+
+Then install the proper package:
+
+sudo apt-get install qt56-meta-full
+
+NOTE: it may happen that the `GL/gl.h` file is missing. In this case, install the proper package:
+
+```
+$ sudo apt-get install mesa-common-dev
+```
+
+* Building
+
+Under Debian/Ubuntu with the proper setup building system, it is possible to build the debian binary package.
+Run
+
+$ dpkg-buildpackage -uc -B -j8
+
+Please ensure that the system is properly setup, as described in the Debian's New Maintainer's guide
+( https://www.debian.org/doc/manuals/maint-guide/ )
+
+Note: During debug/development, use -nc to skip the cleaning phase of dpkg-buildpackage
+
+* Releasing sources for Debian
+
+It worth spending a few words about how to prepare the sources for deb package building.
+First, when a new version number is ready, it is needed to update the Changelog.
+It is a good practice to update it whenever ANY changes has been released, for example, bug fixing, feature implementation etc.
+Usually, you will update the changelog just before releasing the new version.
+
+To update the changelog with feature description, run
+
+dch -i
+
+This will increment the previous version number by one (appending ubuntu1).
+Them update the version number by running
+
+dch -v 0.9.0
+
+This will change the current "stanza" from, say, 0.8.8ubuntu1 to 0.9.0 UNRELEASED;
+"Unreleased" means that the package should be built for internal use. Any increment will be appended to the current version.
+When you have tested the new version and want to release it, run
+
+dch -r
+
+this will change "UNRELEASED" to "xenial" or whatever version of ubuntu you are building on.
+Now the source can be released, just run the release script with
+
+./release -v 0.9.0
+
+or tag the git version and run release without arguments (see -h for details).
+
+
+Compilation from the command line
+---------------------------------
+
+Using QtCreator is the simplest way: load the project file, configure the build directory and click on Build All.
+From QtCreator you can also run the application without any issue. Just be sure to select qtgui as run object.
+
+Using the command line is simple as well. Create a new directory to receive the objects files, and then run qmake and make from there:
+
+$ cd displace
+$ mkdir build-release
+$ cd build-release
+$ qmake ../
+$ make
+
+If you have a multicore cpu, you can add -jXXX where XXX is a proper number of threads (for example, -j8 for an eight-core cpu).
+
+Installing
+To install, use make this way:
+
+$ make install
+
+will install in the unix "local" path /usr/local
+to change prefix, use PREFIX variable:
+
+$ make PREFIX=/usr/
+
+will install in the package-reserved path /usr.
+Package Maintainer can use INSTALL_ROOT variable to deploy on a separate directory:
+
+$ make PREFIX=/usr/ INSTALL_ROOT=$PWD/install
+
+Make uninstall is used the same way. 
+
+NOTE: 
+Be sure to use qmake for Qt5. In case of Ubuntu 14.10, be sure to install qt5-default to automatically select qmake for qt5, otherwise qmake will point to the qt4 version.
+
+Compilation under HPC (without qt)
+==================================
+
+The simulator can be compiled without the Qt support, for example on HPC, to run simulations only.
+The following components, that depends only on stdc++ library and boost::regex.
+
+First loaded required tools:
+
+$ module load gcc\5.3.0
+
+Run the main makefile from the source root directory:
+
+$ make -f Makefile.hpc
+
+To install, simply use the "install" target. You can define a PREFIX (defualts to /usr/local) to install in a proper prefix location
+and DESTDIR to install out of the root (for packaging purpose, for example). you can also tweak BINDIR and LIBDIR - see Makefiles for
+more details.
+
+$ sudo make PREFIX=/usr/local -f Makefile.hpc install
+
+Use clean target to remove object files.
+

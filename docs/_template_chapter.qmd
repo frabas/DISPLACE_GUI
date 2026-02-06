@@ -1,0 +1,168 @@
+---
+title: "Chapter Title"
+# Optional: add other metadata
+# author: "Your Name"
+# date: last-modified
+---
+
+# Chapter Title {#sec-chapter-id}
+
+## Overview
+
+Provide a brief overview of what this chapter covers.
+
+## Section 1
+
+Add your content here using Markdown syntax.
+
+### Subsection 1.1
+
+You can create subsections as needed.
+
+## Code Examples
+
+You can include code blocks:
+
+```bash
+# Bash commands
+cd /path/to/directory
+ls -la
+```
+
+Or executable code chunks (requires appropriate engine installed):
+
+```{r}
+#| label: example-code
+#| echo: true
+#| eval: false
+
+# R code example
+library(ggplot2)
+data <- read.csv("data.csv")
+summary(data)
+```
+
+For Python:
+
+```{python}
+#| label: python-example
+#| echo: true
+#| eval: false
+
+# Python code example
+import pandas as pd
+df = pd.read_csv("data.csv")
+print(df.head())
+```
+
+## Images and Figures
+
+Include images stored in the `images/` directory:
+
+```markdown
+![Caption describing the image](images/your-image.png)
+```
+
+Or using knitr/quarto syntax for more control:
+
+```{r}
+#| label: fig-example
+#| fig-cap: "Figure caption"
+#| eval: false
+
+# Code to generate a figure
+plot(1:10)
+```
+
+## Cross-References
+
+Reference other sections:
+
+- See @sec-routines for R routines
+- See @sec-chapter-id (this chapter)
+
+## Lists
+
+### Unordered Lists
+
+- Item 1
+- Item 2
+  - Sub-item 2.1
+  - Sub-item 2.2
+- Item 3
+
+### Ordered Lists
+
+1. First step
+2. Second step
+3. Third step
+
+## Tables
+
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Value 1  | Value 2  | Value 3  |
+| Value 4  | Value 5  | Value 6  |
+
+Or using knitr for dynamic tables:
+
+```{r}
+#| label: tbl-example
+#| tbl-cap: "Table caption"
+#| eval: false
+
+knitr::kable(head(mtcars))
+```
+
+## Callout Blocks
+
+Quarto supports various callout types:
+
+::: {.callout-note}
+This is a note callout. Use it for additional information.
+:::
+
+::: {.callout-tip}
+This is a tip callout. Use it for helpful suggestions.
+:::
+
+::: {.callout-warning}
+This is a warning callout. Use it for important warnings.
+:::
+
+::: {.callout-important}
+This is an important callout. Use it for critical information.
+:::
+
+## Citations
+
+Cite references from `references.bib`:
+
+```markdown
+According to @bastardie2014displace, DISPLACE is...
+```
+
+## Summary
+
+Summarize the key points of the chapter.
+
+## Next Steps
+
+Point readers to related chapters or next steps:
+
+- For more information, see @sec-routines
+- To get started, refer to the quickstart guide
+
+---
+
+## Notes for Contributors
+
+When using this template:
+
+1. Replace the title and chapter ID in the YAML frontmatter
+2. Update the heading to match your title
+3. Fill in relevant sections
+4. Remove sections you don't need
+5. Add the file to `_quarto.yml` in the appropriate location
+6. Preview with `quarto preview` to check formatting
+7. Delete this "Notes for Contributors" section before finalizing

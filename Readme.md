@@ -10,6 +10,10 @@ This branch is a copy of master commit b37cac9, created on 08/04/2021. I will im
 Find your way with DISPLACE
 ======
 
+> **📚 New Documentation System Available!**  
+> We've created a comprehensive Quarto-based documentation system that makes it easy to expand and contribute documentation.  
+> **See [DOCUMENTATION.md](DOCUMENTATION.md) for the new documentation guide** or explore the `docs/` directory directly.
+
 ## Summary
 - [What is for?](#what-is-for)
 - [How to contribute](#how-to-contribute)

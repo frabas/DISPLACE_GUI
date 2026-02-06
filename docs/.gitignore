@@ -1,2 +1,6 @@
+# Quarto output and cache
 /.quarto/
 **/*.quarto_ipynb
+/docs/
+*_files/
+*.html

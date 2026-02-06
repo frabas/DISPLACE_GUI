@@ -2,11 +2,11 @@
 #define VERSION_H
 
 
-#define VERSION "1.5.7"
+#define VERSION "1.5.8"
 #define VERSION_BUILD 0
-#define VERSION_COMMA 1,5,7,VERSION_BUILD
+#define VERSION_COMMA 1,5,8,VERSION_BUILD
 
-#define VER_PRODUCTVERSION_STR      "1.5.7\0"
+#define VER_PRODUCTVERSION_STR      "1.5.8\0"
 
 
 #define VER_FILEVERSION             VERSION_COMMA

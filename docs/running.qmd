@@ -2,49 +2,85 @@
 title: "Running DISPLACE"
 ---
 
-# Running DISPLACE {#sec-running} Simulator
+# Running DISPLACE Simulator {#sec-running}
 
---indb baseline.db
+This chapter describes the command-line options available when running the DISPLACE simulator.
 
-The data will be read from the specified db
+## Command-Line Options
 
---outdir C: 
+The DISPLACE simulator accepts various command-line arguments to configure its behavior:
 
-Puts the output folders in the specified path
+### Database Options
 
--a C:\...\DISPLACE_input_minitest 
+`--indb baseline.db`
+: Reads the data from the specified database file.
 
-speicifies the working directory (basepath)
+### Output Options
 
--f "fake" 
+`--outdir C:`
+: Specifies the path where output folders will be created.
 
---f2 "baseline" 
+`--disable-sqlite`
+: Disables output to SQLite database.
 
--s "simu1" 
+### Working Directory
 
-Simulation / Seed number
+`-a C:\...\DISPLACE_input_minitest`
+: Specifies the working directory (basepath) where input files are located.
 
--i 8761 
+### Scenario Configuration
 
-Number of steps
+`-f "fake"`
+: Specifies the first scenario parameter.
 
--p 0 
+`--f2 "baseline"`
+: Specifies the second scenario parameter (baseline scenario name).
 
--e 1 
+`-s "simu1"`
+: Sets the simulation name or seed number.
 
---huge 1 
+### Simulation Parameters
 
--v 0 
+`-i 8761`
+: Number of simulation steps to run.
 
---disable-sqlite 
+`-p 0`
+: Parameter p (documentation needed).
 
-disable the output to sqlite
+`-e 1`
+: Parameter e (documentation needed).
 
--V 1 
+`--huge 1`
+: Enables huge simulation mode.
 
-Verbosity level
+`-v 0`
+: Verbosity level for output messages (0 = minimal).
 
---num_threads 4
+`-V 1`
+: Alternative verbosity level flag.
 
-number of threads
+### Performance Options
+
+`--num_threads 4`
+: Number of threads to use for parallel execution.
+
+## Example Usage
+
+```bash
+# Basic simulation run
+displace --indb baseline.db \
+  --outdir C:\outputs \
+  -a C:\DISPLACE_input_minitest \
+  -f "fake" \
+  --f2 "baseline" \
+  -s "simu1" \
+  -i 8761 \
+  --num_threads 4
+```
+
+## See Also
+
+- @sec-quickstart for installation and setup
+- @sec-building for build instructions
+- @sec-output-formats for understanding simulation outputs
 

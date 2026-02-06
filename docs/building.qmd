@@ -10,7 +10,7 @@ title: "Building with CMake"
 
 ## Building
 
-To build, simply create an out-of-tree folder, and launch cmake spacifying the path of the main CMakeLists.txt file:
+To build, simply create an out-of-tree folder, and launch cmake specifying the path of the main CMakeLists.txt file:
 
 ### Linux
 

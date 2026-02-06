@@ -3891,7 +3891,7 @@ void Vessel::handle_implicit_population(
 
         // Guard against negative parameters (can happen if the
         // vessel is not supposed to fish this stock on this node).
-        if (shape <= 0.0 || scale <= 0.0) {
+        if (shape < 0.0 || scale < 0.0) {
             shape = 1.0;
             scale = 1.0;
         }
@@ -3998,72 +3998,7 @@ bool Vessel::maybe_close_ground(int groundIdx,
 }
 */
 
-    // ------------------------------------------------------------------
-// 6 Final bookkeeping (cumulative stats, closures, logging)
-// ------------------------------------------------------------------
-    void Vessel::finalize_trip_statistics(CatchResult& cr, const std::vector<double>&graph_res,
-        int a_quarter, bool is_realtime_closure)
-    {
-        auto idx_node = this->get_loc()->get_idx_node();
-        auto the_grds = this->get_fgrounds();
-        // relative node index to this vessel
-        int idx_node_r = find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
-
-        // VARIABLES VALID FOR THIS FISHING EVENT ONLY
-        double totLandThisEvent = 1;
-        double totAvoiStksLandThisEvent = 1;
-        double totDiscThisEvent = 0.0001;
-        double totAvoiStksDiscThisEvent = 0.0001;
-
-        // cumul to later compute the proportion of discard to potentially influence future decision-making
-        for (unsigned int sz = 0; sz < cr.landings.size(); ++sz) {
-            totLandThisEvent += cr.landings[sz];
-            totDiscThisEvent += cr.discards[sz];
-        }
-
-        // experienced by‑catch proportion on the current ground
-        experienced_bycatch_prop_on_fgrounds.at(idx_node_r) =
-            totDiscThisEvent / (totLandThisEvent + totDiscThisEvent);
-
-        // experienced by‑catch on avoided stocks (if any)
-        experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r) =
-            totAvoiStksDiscThisEvent /
-            (totAvoiStksLandThisEvent + totAvoiStksDiscThisEvent);
-
-        // update node‑level cumulative catches/discards all pop pooled
-        get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
-        get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
-
-        // compute and store the discard‑to‑total ratio
-        double discratio = get_loc()->get_cumdiscards() /
-            (get_loc()->get_cumdiscards() + get_loc()->get_cumcatches());
-        discratio = (discratio > 0.0) ? discratio : 0.0;
-        get_loc()->set_cumdiscardsratio(discratio);
-
-        // optional realtime‑closure logic 
-        if (is_realtime_closure &&
-            experienced_bycatch_prop_on_fgrounds.at(idx_node_r) > 0.8) {
-            get_loc()->setBannedMetier(get_metier()->get_name());
-            // Uncomment if you also want to ban vessel size / nation:
-            // get_loc()->setBannedVsize(get_length_class());
-            // get_loc()->setBannedNation(get_nationality_idx());
-        }
-
-
-        // read out the accumulation that will be exported in loglike.dat (see exportLogLike () and output_fileformats.md)
-        this->set_catch_pop_at_szgroup(catch_pop_at_szgroup);
-
-        // add the metier for this ping
-        this->idx_used_metiers_this_trip.push_back(this->get_metier()->get_name());
-
-
-        // diagnostic output 
-        outc(cout << "cumcatch_fgrounds this node is "
-            << cumcatch_fgrounds.at(idx_node_r) << "\n");
-        outc(cout << "cumdiscard_fgrounds is "
-            << cumdiscard_fgrounds.at(idx_node_r) << "\n");
-    }
-
+  
     
 
     void Vessel::do_catch(const DynAllocOptions & dyn_alloc_sce,
@@ -4168,10 +4103,10 @@ bool Vessel::maybe_close_ground(int groundIdx,
                     cr);
             }
 
-            //  std::cout << "[Pop: " << popIdx << "] "
-            //      << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
-            //  std::cout << "[Pop: " << popIdx << "] "
-            //      << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
+              std::cout << "[Pop: " << popIdx << "] "
+                  << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
+              std::cout << "[Pop: " << popIdx << "] "
+                  << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
 
             //  for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
             //      std::cout << "[Pop: " << popIdx << "] "

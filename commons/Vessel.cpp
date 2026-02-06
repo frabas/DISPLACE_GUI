@@ -4103,10 +4103,10 @@ bool Vessel::maybe_close_ground(int groundIdx,
                     cr);
             }
 
-              std::cout << "[Pop: " << popIdx << "] "
-                  << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
-              std::cout << "[Pop: " << popIdx << "] "
-                  << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
+            //  std::cout << "[Pop: " << popIdx << "] "
+            //      << "cr.totalLandings: " << std::fixed << std::setprecision(4) << cr.totalLandings << std::endl;
+            //  std::cout << "[Pop: " << popIdx << "] "
+            //      << "cr.totalDiscards: " << std::fixed << std::setprecision(4) << cr.totalDiscards << std::endl;
 
             //  for (size_t sz = 0; sz < cr.landings.size(); ++sz) {
             //      std::cout << "[Pop: " << popIdx << "] "

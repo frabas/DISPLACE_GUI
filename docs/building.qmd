@@ -1,8 +1,5 @@
----
-title: "Building with CMake"
----
 
-# Building with CMake {#sec-building}
+# Building with CMake [only if you want to compile DISPLACE] {#sec-building}
 
 ## What is CMake?
 

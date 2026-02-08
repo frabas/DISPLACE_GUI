@@ -56,27 +56,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -189,7 +169,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./building.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Building with CMake</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Building with CMake [only if you want to compile DISPLACE]</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -212,7 +192,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routines.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -233,7 +213,13 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#why-such-a-model" id="toc-why-such-a-model" class="nav-link" data-scroll-target="#why-such-a-model">1. Why such a model?</a></li>
+  <li><a href="#core-components" id="toc-core-components" class="nav-link" data-scroll-target="#core-components">2. Core components</a></li>
+  <li><a href="#what-can-displace-tell-us" id="toc-what-can-displace-tell-us" class="nav-link" data-scroll-target="#what-can-displace-tell-us">3. What can DISPLACE tell us?</a></li>
+  <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">4. Real world applications</a></li>
+  <li><a href="#take-away" id="toc-take-away" class="nav-link" data-scroll-target="#take-away">5. Take away</a></li>
+  <li><a href="#california-app" id="toc-california-app" class="nav-link" data-scroll-target="#california-app">7. California app</a>
   <ul class="collapse">
   <li><a href="#working-environment" id="toc-working-environment" class="nav-link" data-scroll-target="#working-environment">Working environment</a></li>
   <li><a href="#quick-setup-run" id="toc-quick-setup-run" class="nav-link" data-scroll-target="#quick-setup-run">Quick Setup &amp; Run</a></li>
@@ -263,7 +249,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">Last Updated on February 06, 2026</p>
+      <p class="date">Last Updated on February 08, 2026</p>
     </div>
   </div>
   
@@ -277,12 +263,40 @@ div.csl-indent {
 
 <section id="introduction" class="level1 unnumbered">
 <h1 class="unnumbered">Introduction</h1>
-<p>DISPLACE is an agent-based, spatially explicit bioeconomic modeling framework that represents individual fishing vessels as agents whose behavior is influenced by historical fishing behavior and spatial resource availability. The model captures how vessels adjust their fishing activity (i.e., when, where, what, and how to fish) in response to spatial, temporal, management, and economic constraints. The spatial domain of the model is represented by a network of nodes, where the extent is based on historical fishing locations. The model integrates three main modules (i.e., biological, fleet, and economic), which can be customized based on data availability. DISPLACE relies on fisheries-dependent data such as Vessel Monitoring Systems (VMS) and landing receipts to guide spatial fishing patterns, catch, and effort, resulting in realistic simulations of fishing behavior. The biological module includes species-specific life history traits and population dynamics, while the fleet and economic modules include vessel-specific characteristics (e.g., size, gear, fuel capacity) and economic parameters (e.g., fuel prices, ex-vessel values, labor costs). DISPLACE has the ability to model the redistribution of fishing effort at various disaggregated levels—from individual vessels to individual ports or individual gears— allowing for the assessment of distributional impacts of OSW development (<span class="citation" data-cites="bastardie2014displace">Bastardie, Nielsen, and Miethe (<a href="#ref-bastardie2014displace" role="doc-biblioref">2014</a>)</span>).</p>
+<p>DISPLACE, a cutting edge, agent based modelling platform that helps scientists, managers and stakeholders evaluate how fisheries respond to spatial marine planning decisions.</p>
+</section>
+<section id="why-such-a-model" class="level1">
+<h1>1. Why such a model?</h1>
+<p>Traditional fishery assessments often treat the ocean as a uniform backdrop, ignoring where vessels actually operate and how they react to closures, wind farms or other sea uses. DISPLACE fills that gap by coupling high resolution biological dynamics with individual vessel decision making in both time and space. This bi directional link is rare in the literature but essential for realistic impact assessmentseuropa.eu.</p>
+</section>
+<section id="core-components" class="level1">
+<h1>2. Core components</h1>
+<p>Component What it does Example output Fish stock module Simulates growth, recruitment and mortality of target species at a fine spatial grid. Seasonal biomass maps for cod, herring, etc. Vessel behavior module Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints. Effort displacement routes when a Marine Protected Area is introduced. Economic module Calculates revenues, costs, fuel use and profit margins for each fleet/metier. Changes in fleet income under different spatial scenarios. Cross sector layer Allows inclusion of other sea uses—offshore wind, shipping lanes, aquaculture—to see how they compete for space. Assessment of effort loss when a wind farm array occupies a productive ground. All modules run on a spatio temporal grid that can be tailored—from basin wide (North Sea, Baltic) to local (Northern Adriatic) scalesdisplace-project.org.</p>
+</section>
+<section id="what-can-displace-tell-us" class="level1">
+<h1>3. What can DISPLACE tell us?</h1>
+<ol type="1">
+<li>Ecological impact – predicts how closures affect stock biomass and fishing mortality.</li>
+<li>Economic outcome – quantifies revenue shifts, fuel consumption and CO₂ emissions for each fleet.</li>
+<li>Effort displacement – visualises new routes vessels take when excluded zones appear, helping planners anticipate “leakage” effects.</li>
+<li>Multi sector trade offs – evaluates whether a wind farm placement harms fisheries more than it benefits renewable energy goals. These outputs feed directly into Marine Spatial Planning (MSP) processes, giving policymakers evidence based options rather than guesswork.</li>
+</ol>
+</section>
+<section id="real-world-applications" class="level1">
+<h1>4. Real world applications</h1>
+<p>DISPLACE has already been applied to several European seas—Adriatic, Ionian, Black, Baltic and Celtic—testing scenarios ranging from demersal stock protection to coexistence with offshore wind farms. In the northern Adriatic, the model helped identify spatial arrangements that protect high value demersal stocks while allowing sustainable fishing effort to persist.</p>
+</section>
+<section id="take-away" class="level1">
+<h1>5. Take away</h1>
+<p>• DISPLACE bridges biology and economics at a granular spatial scale, something most legacy models lack. • It supports transparent, scenario based decision making, crucial for balancing food security, livelihoods and emerging marine industries. • By visualising effort displacement, it reveals hidden costs and opportunities that would otherwise remain invisible. In short, DISPLACE equips us with a quantitative “what if” laboratory for the ocean, enabling smarter, more resilient fisheries management in an increasingly crowded seascape</p>
+</section>
+<section id="california-app" class="level1">
+<h1>7. California app</h1>
 <p>UCSB used DISPLACE to evaluate the potential impacts of California’s Offshore Wind energy development lease areas on the DTS fisheries operating off the coast of California. This notebook summarizes the requirements, inputs, outputs, and processes for running DISPLACE and the associated R routines. Separate documentation about DISPLACE can be found on the <a href="https://displace-project.org/blog/">project website</a>.</p>
 <p>This repository includes an application example based on this Californian study. It does not use actual vessel or fisheries data, but rather example data that do not reflect any confidential fishing information. This allows for a complete test run of the parametrization and model, and provides an opportunity to become familiar with the processes and different model components.</p>
 <section id="working-environment" class="level2">
 <h2 class="anchored" data-anchor-id="working-environment">Working environment</h2>
-<p>The current project uses DISPLACE version 1.3.5 on Windows 11. You can download the installer <a href="https://displace-project.org/blog/download/">here</a>. The R routines run on R version 4.5.0 (on any platform or operating system). All required R packages are detailed in <code>r/config.R</code>.</p>
+<p>The current project uses DISPLACE version 1.5.8 on Windows 11. You can download the installer <a href="https://displace-project.org/blog/download/">here</a>. The R routines run on R version 4.5.0 (on any platform or operating system). All required R packages are detailed in <code>r/config.R</code>.</p>
 <p>The <a href="https://github.com/emlab-ucsb/DISPLACE_California">repository</a> contains all the scripts required to prepare input data in the DISPLACE format, along with scripts for basic processing of outputs in the <code>r</code> and <code>routines</code> folders. It also includes example data in the <code>raw_inputs</code> folder, which serve as reference for data contents and structure when building a DISPLACE application.</p>
 <p>The <code>processed_inputs</code> folder is initially empty and is automatically populated when running the routines with <code>r/functions_routines.R</code>. To explore DISPLACE results, you will need to manually move the model output files into the <code>outputs</code> folder so they can be read by <code>r/functions_outputs.R</code>.</p>
 <pre><code>DISPLACE_California
@@ -306,11 +320,6 @@ div.csl-indent {
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-bastardie2014displace" class="csl-entry" role="listitem">
-Bastardie, Francois, J Rasmus Nielsen, and Tanja Miethe. 2014. <span>“DISPLACE: A Dynamic, Individual-Based Model for Spatial Fishing Planning and Effort Displacement—Integrating Underlying Fish Population Models.”</span> <em>Canadian Journal of Fisheries and Aquatic Sciences</em> 71 (3): 366–86.
-</div>
-</div>
 </section>
 </section>
 
@@ -777,42 +786,70 @@ Bastardie, Francois, J Rasmus Nielsen, and Tanja Miethe. 2014. <span>“DISPLACE
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction {.unnumbered}</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>DISPLACE is an agent-based, spatially explicit bioeconomic modeling framework that represents individual fishing vessels as agents whose behavior is influenced by historical fishing behavior and spatial resource availability. The model captures how vessels adjust their fishing activity (i.e., when, where, what, and how to fish) in response to spatial, temporal, management, and economic constraints. The spatial domain of the model is represented by a network of nodes, where the extent is based on historical fishing locations. The model integrates three main modules (i.e., biological, fleet, and economic), which can be customized based on data availability. DISPLACE relies on fisheries-dependent data such as Vessel Monitoring Systems (VMS) and landing receipts to guide spatial fishing patterns, catch, and effort, resulting in realistic simulations of fishing behavior. The biological module includes species-specific life history traits and population dynamics, while the fleet and economic modules include vessel-specific characteristics (e.g., size, gear, fuel capacity) and economic parameters (e.g., fuel prices, ex-vessel values, labor costs). DISPLACE has the ability to model the redistribution of fishing effort at various disaggregated levels—from individual vessels to individual ports or individual gears— allowing for the assessment of distributional impacts of OSW development (@bastardie2014displace).</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> DISPLACE, a cutting edge, agent based modelling platform that helps scientists, managers and stakeholders evaluate how fisheries respond to spatial marine planning decisions.</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>UCSB used DISPLACE to evaluate the potential impacts of California’s Offshore Wind energy development lease areas on the DTS fisheries operating off the coast of California. This notebook summarizes the requirements, inputs, outputs, and processes for running DISPLACE and the associated R routines. Separate documentation about DISPLACE can be found on the <span class="co">[</span><span class="ot">project website</span><span class="co">](https://displace-project.org/blog/)</span>.</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>This repository includes an application example based on this Californian study. It does not use actual vessel or fisheries data, but rather example data that do not reflect any confidential fishing information. This allows for a complete test run of the parametrization and model, and provides an opportunity to become familiar with the processes and different model components.</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working environment</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>The current project uses DISPLACE version 1.3.5 on Windows 11. You can download the installer <span class="co">[</span><span class="ot">here</span><span class="co">](https://displace-project.org/blog/download/)</span>. The R routines run on R version 4.5.0 (on any platform or operating system). All required R packages are detailed in <span class="in">`r/config.R`</span>.</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">repository</span><span class="co">](https://github.com/emlab-ucsb/DISPLACE_California)</span> contains all the scripts required to prepare input data in the DISPLACE format, along with scripts for basic processing of outputs in the <span class="in">`r`</span> and <span class="in">`routines`</span> folders. It also includes example data in the <span class="in">`raw_inputs`</span> folder, which serve as reference for data contents and structure when building a DISPLACE application.  </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>The <span class="in">`processed_inputs`</span> folder is initially empty and is automatically populated when running the routines with <span class="in">`r/functions_routines.R`</span>. To explore DISPLACE results, you will need to manually move the model output files into the <span class="in">`outputs`</span> folder so they can be read by <span class="in">`r/functions_outputs.R`</span>.</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="in">DISPLACE_California</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ docs</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ qmd</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ raw_inputs</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ processed_inputs</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ outputs</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ routines</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ r</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick Setup &amp; Run </span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>For a quick execution and model run to test whether it can run on your machine, execute:  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. Why such a model?</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>Traditional fishery assessments often treat the ocean as a uniform backdrop, ignoring where vessels actually operate and how they react to closures, wind farms or other sea uses. DISPLACE fills that gap by coupling high resolution biological dynamics with individual vessel decision making in both time and space. This bi directional link is rare in the literature but essential for realistic impact assessmentseuropa.eu.</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. Core components</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>Component   What it does    Example output</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>Fish stock module   Simulates growth, recruitment and mortality of target species at a fine spatial grid.   Seasonal biomass maps for cod, herring, etc.</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>Vessel behavior module  Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints.   Effort displacement routes when a Marine Protected Area is introduced.</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>Economic module Calculates revenues, costs, fuel use and profit margins for each fleet/metier.  Changes in fleet income under different spatial scenarios.</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>Cross sector layer  Allows inclusion of other sea uses—offshore wind, shipping lanes, aquaculture—to see how they compete for space.    Assessment of effort loss when a wind farm array occupies a productive ground.</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>All modules run on a spatio temporal grid that can be tailored—from basin wide (North Sea, Baltic) to local (Northern Adriatic) scalesdisplace-project.org.</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. What can DISPLACE tell us?</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Ecological impact – predicts how closures affect stock biomass and fishing mortality.</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Economic outcome – quantifies revenue shifts, fuel consumption and CO₂ emissions for each fleet.</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Effort displacement – visualises new routes vessels take when excluded zones appear, helping planners anticipate “leakage” effects.</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Multi sector trade offs – evaluates whether a wind farm placement harms fisheries more than it benefits renewable energy goals.</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>These outputs feed directly into Marine Spatial Planning (MSP) processes, giving policymakers evidence based options rather than guesswork.</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Real world applications</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>DISPLACE has already been applied to several European seas—Adriatic, Ionian, Black, Baltic and Celtic—testing scenarios ranging from demersal stock protection to coexistence with offshore wind farms. In the northern Adriatic, the model helped identify spatial arrangements that protect high value demersal stocks while allowing sustainable fishing effort to persist.</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu"># 5. Take away</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>•   DISPLACE bridges biology and economics at a granular spatial scale, something most legacy models lack.</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>•   It supports transparent, scenario based decision making, crucial for balancing food security, livelihoods and emerging marine industries.</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>•   By visualising effort displacement, it reveals hidden costs and opportunities that would otherwise remain invisible.</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>In short, DISPLACE equips us with a quantitative “what if” laboratory for the ocean, enabling smarter, more resilient fisheries management in an increasingly crowded seascape</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = TRUE, eval = FALSE}</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"r/functions_routines.R"</span>))</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>Before executing, make sure to update the installer directory in the <span class="in">`directory`</span> parameter of the <span class="in">`generate_dis_run_files`</span> function in <span class="in">`functions_routines.R`</span>. Running this script will populate the <span class="in">`processed_inputs`</span> folder, whose contents then need to be moved to the machine where DISPLACE is run. This must be a Windows machine, and the inputs must be located in <span class="in">`C:/`</span>. You should also create a folder named <span class="in">`DISPLACE_outputs`</span> in <span class="in">`C:/`</span>, where the outputs will be stored.  </span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>We recommend reviewing the entire repository to understand the inputs and processes in more detail before executing.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu"># 7. California app</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>UCSB used DISPLACE to evaluate the potential impacts of California’s Offshore Wind energy development lease areas on the DTS fisheries operating off the coast of California. This notebook summarizes the requirements, inputs, outputs, and processes for running DISPLACE and the associated R routines. Separate documentation about DISPLACE can be found on the <span class="co">[</span><span class="ot">project website</span><span class="co">](https://displace-project.org/blog/)</span>.</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>This repository includes an application example based on this Californian study. It does not use actual vessel or fisheries data, but rather example data that do not reflect any confidential fishing information. This allows for a complete test run of the parametrization and model, and provides an opportunity to become familiar with the processes and different model components.</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working environment</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>The current project uses DISPLACE version 1.5.8 on Windows 11. You can download the installer <span class="co">[</span><span class="ot">here</span><span class="co">](https://displace-project.org/blog/download/)</span>. The R routines run on R version 4.5.0 (on any platform or operating system). All required R packages are detailed in <span class="in">`r/config.R`</span>.</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">repository</span><span class="co">](https://github.com/emlab-ucsb/DISPLACE_California)</span> contains all the scripts required to prepare input data in the DISPLACE format, along with scripts for basic processing of outputs in the <span class="in">`r`</span> and <span class="in">`routines`</span> folders. It also includes example data in the <span class="in">`raw_inputs`</span> folder, which serve as reference for data contents and structure when building a DISPLACE application.  </span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>The <span class="in">`processed_inputs`</span> folder is initially empty and is automatically populated when running the routines with <span class="in">`r/functions_routines.R`</span>. To explore DISPLACE results, you will need to manually move the model output files into the <span class="in">`outputs`</span> folder so they can be read by <span class="in">`r/functions_outputs.R`</span>.</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="in">DISPLACE_California</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ docs</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ qmd</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ raw_inputs</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ processed_inputs</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ outputs</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ routines</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="in">  |__ r</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick Setup &amp; Run </span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>For a quick execution and model run to test whether it can run on your machine, execute:  </span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = TRUE, eval = FALSE}</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"r/functions_routines.R"</span>))</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>Before executing, make sure to update the installer directory in the <span class="in">`directory`</span> parameter of the <span class="in">`generate_dis_run_files`</span> function in <span class="in">`functions_routines.R`</span>. Running this script will populate the <span class="in">`processed_inputs`</span> folder, whose contents then need to be moved to the machine where DISPLACE is run. This must be a Windows machine, and the inputs must be located in <span class="in">`C:/`</span>. You should also create a folder named <span class="in">`DISPLACE_outputs`</span> in <span class="in">`C:/`</span>, where the outputs will be stored.  </span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>We recommend reviewing the entire repository to understand the inputs and processes in more detail before executing.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

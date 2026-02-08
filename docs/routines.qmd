@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# R routines {#sec-routines}
+# R routines for building input files {#sec-routines}
 
 ```{r, echo = FALSE, results = FALSE, message = FALSE, warning = FALSE, cache = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE, cache = FALSE)

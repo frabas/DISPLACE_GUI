@@ -2,6 +2,11 @@
 title: "Running DISPLACE"
 ---
 
+# Running DISPLACE via the Grahpical User Interface(GUI) {#sec-running}
+
+Once the software is installed, a DISPLACE simulation can be run ater loading a scenario .dat file via Menu>Load, then clisk Start in the GUI
+The DISPLACE simulator is then launched on this particular scenario. 
+
 # Running DISPLACE Simulator {#sec-running}
 
 This chapter describes the command-line options available when running the DISPLACE simulator.

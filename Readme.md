@@ -1,18 +1,15 @@
 
-This branch is a copy of master commit b37cac9, created on 08/04/2021. I will implement the following changes, all realted to SSM assumptions:
-
-- beta formula in main.cpp around l1082 (change the forcing DONE AND CORRECTED WEIRD INDEXING< TO BE PROOFREAD)
-- background mortality in Node.cpp around l1461 (change the forcing DONE)
-- predkernel formula main.cpp around l1085 (update DONE)
-
-
 
 Find your way with DISPLACE
 ======
 
-> **📚 New Documentation System Available!**  
+For DISPLACE users and possibly interested persons to contribute, see [DISPLACE documentation](https://frabas.github.io/DISPLACE_GUI/)
+
+> **📚 New Documentation System Available for DISPLACE developers!**  
 > We've created a comprehensive Quarto-based documentation system that makes it easy to expand and contribute documentation.  
 > **See [DOCUMENTATION.md](DOCUMENTATION.md) for the new documentation guide** or explore the `docs/` directory directly.
+
+Further below is some initial documentation.
 
 ## Summary
 - [What is for?](#what-is-for)
@@ -114,7 +111,7 @@ Any missing package should be automatically installed.
 [compiling on MacOSX deprecated)](docs/Building.MacOSX)
 
 
-## DISPLACE doxygen documentation
+## DISPLACE doxygen documentation [DEPRECATED]
 
 Can be found [here](https://frabas.github.io/DISPLACE_GUI/doxygen/doc/html/index.html)
 

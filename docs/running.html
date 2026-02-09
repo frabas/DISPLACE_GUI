@@ -163,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Quick Start</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Quick Start [to compile DISPLACE]</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-running" id="toc-sec-running" class="nav-link active" data-scroll-target="#sec-running"><span class="header-section-number">4</span> Running DISPLACE via the Grahpical User Interface(GUI)</a></li>
+  <li><a href="#sec-running" id="toc-sec-running" class="nav-link active" data-scroll-target="#sec-running"><span class="header-section-number">4</span> Running DISPLACE via the Graphical User Interface(GUI)</a></li>
   <li><a href="#sec-running" id="toc-sec-running" class="nav-link" data-scroll-target="#sec-running"><span class="header-section-number">5</span> Running DISPLACE Simulator</a>
   <ul class="collapse">
   <li><a href="#command-line-options" id="toc-command-line-options" class="nav-link" data-scroll-target="#command-line-options"><span class="header-section-number">5.1</span> Command-Line Options</a>
@@ -254,12 +254,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="sec-running" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Running DISPLACE via the Grahpical User Interface(GUI)</h1>
-<p>Once the software is installed, a DISPLACE simulation can be run ater loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.</p>
+<h1 data-number="4"><span class="header-section-number">4</span> Running DISPLACE via the Graphical User Interface(GUI)</h1>
+<p>Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.</p>
 </section>
 <section id="sec-running" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Running DISPLACE Simulator</h1>
-<p>This chapter describes the command-line options available when running the DISPLACE simulator.</p>
+<p>The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to launch a row of simulations</p>
 <section id="command-line-options" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="command-line-options"><span class="header-section-number">5.1</span> Command-Line Options</h2>
 <p>The DISPLACE simulator accepts various command-line arguments to configure its behavior:</p>
@@ -320,15 +320,15 @@ Number of simulation steps to run.
 </dd>
 <dt><code>-p 0</code></dt>
 <dd>
-Parameter p (documentation needed).
+Parameter p (deprecated).
 </dd>
 <dt><code>-e 1</code></dt>
 <dd>
-Parameter e (documentation needed).
+Parameter e (deprecated).
 </dd>
 <dt><code>--huge 1</code></dt>
 <dd>
-Enables huge simulation mode.
+Enables huge export simulation mode.
 </dd>
 <dt><code>-v 0</code></dt>
 <dd>
@@ -844,14 +844,14 @@ Number of threads to use for parallel execution.
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Running DISPLACE"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running DISPLACE via the Grahpical User Interface(GUI) {#sec-running}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running DISPLACE via the Graphical User Interface(GUI) {#sec-running}</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Once the software is installed, a DISPLACE simulation can be run ater loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>The DISPLACE simulator is then launched on this particular scenario. </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running DISPLACE Simulator {#sec-running}</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>This chapter describes the command-line options available when running the DISPLACE simulator.</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to launch a row of simulations</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Command-Line Options</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
@@ -892,13 +892,13 @@ Number of threads to use for parallel execution.
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>: Number of simulation steps to run.</span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="in">`-p 0`</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>: Parameter p (documentation needed).</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>: Parameter p (deprecated).</span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="in">`-e 1`</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>: Parameter e (documentation needed).</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>: Parameter e (deprecated).</span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">`--huge 1`</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>: Enables huge simulation mode.</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>: Enables huge export simulation mode.</span>
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="in">`-v 0`</span></span>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>: Verbosity level for output messages (0 = minimal).</span>

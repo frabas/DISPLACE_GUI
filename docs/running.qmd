@@ -2,14 +2,14 @@
 title: "Running DISPLACE"
 ---
 
-# Running DISPLACE via the Grahpical User Interface(GUI) {#sec-running}
+# Running DISPLACE via the Graphical User Interface(GUI) {#sec-running}
 
-Once the software is installed, a DISPLACE simulation can be run ater loading a scenario .dat file via Menu>Load, then clisk Start in the GUI
+Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu>Load, then clisk Start in the GUI
 The DISPLACE simulator is then launched on this particular scenario. 
 
 # Running DISPLACE Simulator {#sec-running}
 
-This chapter describes the command-line options available when running the DISPLACE simulator.
+The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI>scheduler.exe for example to launch a row of simulations
 
 ## Command-Line Options
 
@@ -50,13 +50,13 @@ The DISPLACE simulator accepts various command-line arguments to configure its b
 : Number of simulation steps to run.
 
 `-p 0`
-: Parameter p (documentation needed).
+: Parameter p (deprecated).
 
 `-e 1`
-: Parameter e (documentation needed).
+: Parameter e (deprecated).
 
 `--huge 1`
-: Enables huge simulation mode.
+: Enables huge export simulation mode.
 
 `-v 0`
 : Verbosity level for output messages (0 = minimal).

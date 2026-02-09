@@ -24,10 +24,10 @@ These outputs feed directly into Marine Spatial Planning (MSP) processes, giving
 DISPLACE has already been applied to several European seas—Adriatic, Ionian, Black, Baltic and Celtic—testing scenarios ranging from demersal stock protection to coexistence with offshore wind farms. In the northern Adriatic, the model helped identify spatial arrangements that protect high value demersal stocks while allowing sustainable fishing effort to persist.
 
 # 5. Take away
-•	DISPLACE bridges biology and economics at a granular spatial scale, something most legacy models lack.
-•	It supports transparent, scenario based decision making, crucial for balancing food security, livelihoods and emerging marine industries.
-•	By visualising effort displacement, it reveals hidden costs and opportunities that would otherwise remain invisible.
-In short, DISPLACE equips us with a quantitative “what if” laboratory for the ocean, enabling smarter, more resilient fisheries management in an increasingly crowded seascape
+1.	DISPLACE bridges biology and economics at a granular spatial scale, something most legacy models lack.
+2.	It supports transparent, scenario based decision making, crucial for balancing food security, livelihoods and emerging marine industries.
+3.	By visualising effort displacement, it reveals hidden costs and opportunities that would otherwise remain invisible.
+In short, DISPLACE equips us with a quantitative “what if” laboratory for the seas, enabling smarter, more resilient fisheries management in an increasingly crowded seascape
 
 # 7. California app
 UCSB used DISPLACE to evaluate the potential impacts of California’s Offshore Wind energy development lease areas on the DTS fisheries operating off the coast of California. This notebook summarizes the requirements, inputs, outputs, and processes for running DISPLACE and the associated R routines. Separate documentation about DISPLACE can be found on the [project website](https://displace-project.org/blog/).

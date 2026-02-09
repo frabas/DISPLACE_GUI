@@ -3,4 +3,3 @@
 **/*.quarto_ipynb
 /docs/
 *_files/
-*.html

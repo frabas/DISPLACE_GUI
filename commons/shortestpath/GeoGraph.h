@@ -1,6 +1,3 @@
-//
-// Created by Federico Fuga on 11/07/18.
-//
 
 #ifndef GEOGRAPH_H
 #define GEOGRAPH_H
@@ -32,7 +29,7 @@ public:
     using edge = std::pair<int, int>;
 
     Graph graph;
-    WeightMap weightmap = get(boost::edge_weight, graph);
+    WeightMap weightmap = boost::get(boost::edge_weight, graph);
     std::vector<location> locations;
 
     std::mt19937 randomGenerator = std::mt19937(time(0));

@@ -200,6 +200,7 @@ Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 [Run]
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}; Check: not IsVCRedistInstalled
+; migrate to C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\v143 ?
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
 
 [Code]

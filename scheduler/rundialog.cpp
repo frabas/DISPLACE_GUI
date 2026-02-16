@@ -56,9 +56,13 @@ void RunDialog::on_cmdBrowseModel_clicked()
 
 bool RunDialog::parsePathParts(const QString &path, QString &basepath, QString &inputname, QString &outputname)
 {
-    QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    //QRegularExpression regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+    static const QRegularExpression regexp(
+        R"(^(.*)/simusspe_([^/]+)/([^/]+)\.dat$)"
+    );
+
     auto match = regexp.match(path);
-    if (match.hasMatch()) {
+    if (!match.hasMatch()) {
         return false;
     }
 

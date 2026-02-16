@@ -1,8 +1,9 @@
 {
-  "version": 2,
+  "version": 4,
+  "defaultConfigurePreset": "Release",
   "configurePresets": [
     {
-      "name": "vcpkg",
+      "name": "proj-vcpkg",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {

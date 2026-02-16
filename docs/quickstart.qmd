@@ -1,10 +1,12 @@
 ---
-title: "Quick Start [to compile DISPLACE]"
+title: "Compile DISPLACE with CMake [Optional]"
 ---
 
 # Quick Start {#sec-quickstart}
 
-This guide helps you set up a development environment and build Displace on Windows (primary), with notes for Linux and macOS. The project uses CMake and vcpkg in manifest mode.
+This guide helps you set up a development environment and build DISPLACE on Windows (primary), with notes for Linux and macOS. The project uses CMake and vcpkg in manifest mode.
+"[CMake](https://cmake.org) is an open-source, cross-platform family of tools designed to build, test and package software"
+To build, simply create an out-of-tree folder, and launch cmake specifying the path of the main CMakeLists.txt file.
 
 ## Prerequisites
 

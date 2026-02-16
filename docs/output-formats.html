@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Output File Formats – DISPLACE Documentation</title>
+<title>4&nbsp; Output File Formats – DISPLACE Documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routines.html">User Guide</a></li><li class="breadcrumb-item"><a href="./output-formats.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Output File Formats</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routines.html">User Guide</a></li><li class="breadcrumb-item"><a href="./output-formats.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Output File Formats</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -162,19 +162,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Quick Start [to compile DISPLACE]</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./building.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Building with CMake [only if you want to compile DISPLACE]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Compile DISPLACE with CMake [Optional]</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./running.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></span></a>
   </div>
 </li>
       </ul>
@@ -191,13 +185,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routines.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-formats.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Output File Formats</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Output File Formats</span></span></a>
   </div>
 </li>
       </ul>
@@ -212,43 +206,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-output-formats" id="toc-sec-output-formats" class="nav-link active" data-scroll-target="#sec-output-formats"><span class="header-section-number">6</span> Output File Formats</a>
+  <li><a href="#sec-output-formats" id="toc-sec-output-formats" class="nav-link active" data-scroll-target="#sec-output-formats"><span class="header-section-number">5</span> Output File Formats</a>
   <ul class="collapse">
-  <li><a href="#formats-of-output-files-written-in-displace_outputs" id="toc-formats-of-output-files-written-in-displace_outputs" class="nav-link" data-scroll-target="#formats-of-output-files-written-in-displace_outputs"><span class="header-section-number">6.1</span> Formats of output files written in /DISPLACE_outputs</a></li>
+  <li><a href="#formats-of-output-files-written-in-displace_outputs" id="toc-formats-of-output-files-written-in-displace_outputs" class="nav-link" data-scroll-target="#formats-of-output-files-written-in-displace_outputs"><span class="header-section-number">5.1</span> Formats of output files written in /DISPLACE_outputs</a></li>
   </ul></li>
-  <li><a href="#vmslike_.dat" id="toc-vmslike_.dat" class="nav-link" data-scroll-target="#vmslike_.dat"><span class="header-section-number">7</span> vmslike_*.dat</a></li>
-  <li><a href="#vmslikefpingsonly_.dat" id="toc-vmslikefpingsonly_.dat" class="nav-link" data-scroll-target="#vmslikefpingsonly_.dat"><span class="header-section-number">8</span> vmslikefpingsonly_*.dat</a></li>
-  <li><a href="#popstats_.dat" id="toc-popstats_.dat" class="nav-link" data-scroll-target="#popstats_.dat"><span class="header-section-number">9</span> popstats_*.dat</a></li>
-  <li><a href="#popdyn_annual_indic_.dat" id="toc-popdyn_annual_indic_.dat" class="nav-link" data-scroll-target="#popdyn_annual_indic_.dat"><span class="header-section-number">10</span> popdyn_annual_indic_*.dat</a></li>
-  <li><a href="#benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" id="toc-benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" class="nav-link" data-scroll-target="#benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat"><span class="header-section-number">11</span> benthosnodes_tot_biomasses_<em>.dat or benthosnodes_tot_numbers_</em>.dat</a></li>
-  <li><a href="#popnodes_start_.dat" id="toc-popnodes_start_.dat" class="nav-link" data-scroll-target="#popnodes_start_.dat"><span class="header-section-number">12</span> popnodes_start_*.dat</a></li>
-  <li><a href="#popnodes_inc_.dat" id="toc-popnodes_inc_.dat" class="nav-link" data-scroll-target="#popnodes_inc_.dat"><span class="header-section-number">13</span> popnodes_inc_*.dat</a></li>
-  <li><a href="#popnodes_impact_.dat" id="toc-popnodes_impact_.dat" class="nav-link" data-scroll-target="#popnodes_impact_.dat"><span class="header-section-number">14</span> popnodes_impact_*.dat</a></li>
-  <li><a href="#popnodes_cumulcatches_per_pop_.dat" id="toc-popnodes_cumulcatches_per_pop_.dat" class="nav-link" data-scroll-target="#popnodes_cumulcatches_per_pop_.dat"><span class="header-section-number">15</span> popnodes_cumulcatches_per_pop_*.dat</a></li>
-  <li><a href="#popnodes_cumftime_.dat" id="toc-popnodes_cumftime_.dat" class="nav-link" data-scroll-target="#popnodes_cumftime_.dat"><span class="header-section-number">16</span> popnodes_cumftime_*.dat</a></li>
-  <li><a href="#popnodes_cumsweptarea_.dat" id="toc-popnodes_cumsweptarea_.dat" class="nav-link" data-scroll-target="#popnodes_cumsweptarea_.dat"><span class="header-section-number">17</span> popnodes_cumsweptarea_*.dat</a></li>
-  <li><a href="#popnodes_cumcatches_.dat" id="toc-popnodes_cumcatches_.dat" class="nav-link" data-scroll-target="#popnodes_cumcatches_.dat"><span class="header-section-number">18</span> popnodes_cumcatches_*.dat</a></li>
-  <li><a href="#popnodes_cumdiscards_.dat" id="toc-popnodes_cumdiscards_.dat" class="nav-link" data-scroll-target="#popnodes_cumdiscards_.dat"><span class="header-section-number">19</span> popnodes_cumdiscards_*.dat</a></li>
-  <li><a href="#popnodes_cumcatches_with_threshold_.dat" id="toc-popnodes_cumcatches_with_threshold_.dat" class="nav-link" data-scroll-target="#popnodes_cumcatches_with_threshold_.dat"><span class="header-section-number">20</span> popnodes_cumcatches_with_threshold_*.dat</a></li>
-  <li><a href="#popnodes_tariffs_.dat" id="toc-popnodes_tariffs_.dat" class="nav-link" data-scroll-target="#popnodes_tariffs_.dat"><span class="header-section-number">21</span> popnodes_tariffs_*.dat</a></li>
-  <li><a href="#tripcatchesperszgroup_.dat" id="toc-tripcatchesperszgroup_.dat" class="nav-link" data-scroll-target="#tripcatchesperszgroup_.dat"><span class="header-section-number">22</span> tripcatchesperszgroup_*.dat</a></li>
-  <li><a href="#export_individual_tac_.dat" id="toc-export_individual_tac_.dat" class="nav-link" data-scroll-target="#export_individual_tac_.dat"><span class="header-section-number">23</span> export_individual_tac_*.dat</a></li>
-  <li><a href="#loglike_.dat" id="toc-loglike_.dat" class="nav-link" data-scroll-target="#loglike_.dat"><span class="header-section-number">24</span> loglike_*.dat</a></li>
-  <li><a href="#fishfarmlogs_.dat" id="toc-fishfarmlogs_.dat" class="nav-link" data-scroll-target="#fishfarmlogs_.dat"><span class="header-section-number">25</span> fishfarmlogs_*.dat</a></li>
-  <li><a href="#shipslogs_.dat" id="toc-shipslogs_.dat" class="nav-link" data-scroll-target="#shipslogs_.dat"><span class="header-section-number">26</span> shipslogs_*.dat</a></li>
-  <li><a href="#windmillslogs_.dat" id="toc-windmillslogs_.dat" class="nav-link" data-scroll-target="#windmillslogs_.dat"><span class="header-section-number">27</span> windmillslogs_*.dat</a></li>
-  <li><a href="#lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" id="toc-lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" class="nav-link" data-scroll-target="#lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines"><span class="header-section-number">28</span> lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)</a></li>
-  <li><a href="#average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" id="toc-average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" class="nav-link" data-scroll-target="#average_cumftime_layer.txt-obtained-with-postprocessing-r-routines"><span class="header-section-number">29</span> average_cumftime_layer.txt (obtained with postprocessing R routines)</a></li>
-  <li><a href="#name-of-the-app_simu1_out.db" id="toc-name-of-the-app_simu1_out.db" class="nav-link" data-scroll-target="#name-of-the-app_simu1_out.db"><span class="header-section-number">30</span> (name of the app)_simu1_out.db</a></li>
+  <li><a href="#vmslike_.dat" id="toc-vmslike_.dat" class="nav-link" data-scroll-target="#vmslike_.dat"><span class="header-section-number">6</span> vmslike_*.dat</a></li>
+  <li><a href="#vmslikefpingsonly_.dat" id="toc-vmslikefpingsonly_.dat" class="nav-link" data-scroll-target="#vmslikefpingsonly_.dat"><span class="header-section-number">7</span> vmslikefpingsonly_*.dat</a></li>
+  <li><a href="#popstats_.dat" id="toc-popstats_.dat" class="nav-link" data-scroll-target="#popstats_.dat"><span class="header-section-number">8</span> popstats_*.dat</a></li>
+  <li><a href="#popdyn_annual_indic_.dat" id="toc-popdyn_annual_indic_.dat" class="nav-link" data-scroll-target="#popdyn_annual_indic_.dat"><span class="header-section-number">9</span> popdyn_annual_indic_*.dat</a></li>
+  <li><a href="#benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" id="toc-benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" class="nav-link" data-scroll-target="#benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat"><span class="header-section-number">10</span> benthosnodes_tot_biomasses_<em>.dat or benthosnodes_tot_numbers_</em>.dat</a></li>
+  <li><a href="#popnodes_start_.dat" id="toc-popnodes_start_.dat" class="nav-link" data-scroll-target="#popnodes_start_.dat"><span class="header-section-number">11</span> popnodes_start_*.dat</a></li>
+  <li><a href="#popnodes_inc_.dat" id="toc-popnodes_inc_.dat" class="nav-link" data-scroll-target="#popnodes_inc_.dat"><span class="header-section-number">12</span> popnodes_inc_*.dat</a></li>
+  <li><a href="#popnodes_impact_.dat" id="toc-popnodes_impact_.dat" class="nav-link" data-scroll-target="#popnodes_impact_.dat"><span class="header-section-number">13</span> popnodes_impact_*.dat</a></li>
+  <li><a href="#popnodes_cumulcatches_per_pop_.dat" id="toc-popnodes_cumulcatches_per_pop_.dat" class="nav-link" data-scroll-target="#popnodes_cumulcatches_per_pop_.dat"><span class="header-section-number">14</span> popnodes_cumulcatches_per_pop_*.dat</a></li>
+  <li><a href="#popnodes_cumftime_.dat" id="toc-popnodes_cumftime_.dat" class="nav-link" data-scroll-target="#popnodes_cumftime_.dat"><span class="header-section-number">15</span> popnodes_cumftime_*.dat</a></li>
+  <li><a href="#popnodes_cumsweptarea_.dat" id="toc-popnodes_cumsweptarea_.dat" class="nav-link" data-scroll-target="#popnodes_cumsweptarea_.dat"><span class="header-section-number">16</span> popnodes_cumsweptarea_*.dat</a></li>
+  <li><a href="#popnodes_cumcatches_.dat" id="toc-popnodes_cumcatches_.dat" class="nav-link" data-scroll-target="#popnodes_cumcatches_.dat"><span class="header-section-number">17</span> popnodes_cumcatches_*.dat</a></li>
+  <li><a href="#popnodes_cumdiscards_.dat" id="toc-popnodes_cumdiscards_.dat" class="nav-link" data-scroll-target="#popnodes_cumdiscards_.dat"><span class="header-section-number">18</span> popnodes_cumdiscards_*.dat</a></li>
+  <li><a href="#popnodes_cumcatches_with_threshold_.dat" id="toc-popnodes_cumcatches_with_threshold_.dat" class="nav-link" data-scroll-target="#popnodes_cumcatches_with_threshold_.dat"><span class="header-section-number">19</span> popnodes_cumcatches_with_threshold_*.dat</a></li>
+  <li><a href="#popnodes_tariffs_.dat" id="toc-popnodes_tariffs_.dat" class="nav-link" data-scroll-target="#popnodes_tariffs_.dat"><span class="header-section-number">20</span> popnodes_tariffs_*.dat</a></li>
+  <li><a href="#tripcatchesperszgroup_.dat" id="toc-tripcatchesperszgroup_.dat" class="nav-link" data-scroll-target="#tripcatchesperszgroup_.dat"><span class="header-section-number">21</span> tripcatchesperszgroup_*.dat</a></li>
+  <li><a href="#export_individual_tac_.dat" id="toc-export_individual_tac_.dat" class="nav-link" data-scroll-target="#export_individual_tac_.dat"><span class="header-section-number">22</span> export_individual_tac_*.dat</a></li>
+  <li><a href="#loglike_.dat" id="toc-loglike_.dat" class="nav-link" data-scroll-target="#loglike_.dat"><span class="header-section-number">23</span> loglike_*.dat</a></li>
+  <li><a href="#fishfarmlogs_.dat" id="toc-fishfarmlogs_.dat" class="nav-link" data-scroll-target="#fishfarmlogs_.dat"><span class="header-section-number">24</span> fishfarmlogs_*.dat</a></li>
+  <li><a href="#shipslogs_.dat" id="toc-shipslogs_.dat" class="nav-link" data-scroll-target="#shipslogs_.dat"><span class="header-section-number">25</span> shipslogs_*.dat</a></li>
+  <li><a href="#windmillslogs_.dat" id="toc-windmillslogs_.dat" class="nav-link" data-scroll-target="#windmillslogs_.dat"><span class="header-section-number">26</span> windmillslogs_*.dat</a></li>
+  <li><a href="#lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" id="toc-lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" class="nav-link" data-scroll-target="#lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines"><span class="header-section-number">27</span> lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)</a></li>
+  <li><a href="#average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" id="toc-average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" class="nav-link" data-scroll-target="#average_cumftime_layer.txt-obtained-with-postprocessing-r-routines"><span class="header-section-number">28</span> average_cumftime_layer.txt (obtained with postprocessing R routines)</a></li>
+  <li><a href="#name-of-the-app_simu1_out.db" id="toc-name-of-the-app_simu1_out.db" class="nav-link" data-scroll-target="#name-of-the-app_simu1_out.db"><span class="header-section-number">29</span> (name of the app)_simu1_out.db</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routines.html">User Guide</a></li><li class="breadcrumb-item"><a href="./output-formats.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Output File Formats</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routines.html">User Guide</a></li><li class="breadcrumb-item"><a href="./output-formats.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Output File Formats</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Output File Formats</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Output File Formats</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -265,108 +259,108 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sec-output-formats" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Output File Formats</h1>
-<section id="formats-of-output-files-written-in-displace_outputs" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="formats-of-output-files-written-in-displace_outputs"><span class="header-section-number">6.1</span> Formats of output files written in /DISPLACE_outputs</h2>
+<section id="sec-output-formats" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Output File Formats</h1>
+<section id="formats-of-output-files-written-in-displace_outputs" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="formats-of-output-files-written-in-displace_outputs"><span class="header-section-number">5.1</span> Formats of output files written in /DISPLACE_outputs</h2>
 <p>Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/</p>
 </section>
 </section>
-<section id="vmslike_.dat" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> vmslike_*.dat</h1>
+<section id="vmslike_.dat" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> vmslike_*.dat</h1>
 <p>tstep / name / tstep_dep / x / y / course / cum_fuel / state</p>
 </section>
-<section id="vmslikefpingsonly_.dat" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> vmslikefpingsonly_*.dat</h1>
+<section id="vmslikefpingsonly_.dat" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> vmslikefpingsonly_*.dat</h1>
 <p>tstep / vessel name / start trip tstep / lon / lat/nodeid / course / cumfuelcons/ pop / catches (i.e.&nbsp;landings+ discards, in weight) szgroup 0 / szgroup 1 /… / 13</p>
 </section>
-<section id="popstats_.dat" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> popstats_*.dat</h1>
+<section id="popstats_.dat" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> popstats_*.dat</h1>
 <p>tstep / stock/ N at szgroup (in thousands, for 14 szgrp)/ W at szgroup / SSB at size group N are in thousands of individuals, W and SSB are in kg</p>
 </section>
-<section id="popdyn_annual_indic_.dat" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> popdyn_annual_indic_*.dat</h1>
+<section id="popdyn_annual_indic_.dat" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> popdyn_annual_indic_*.dat</h1>
 <p>tstep / stock / oth mult / cpue mult / fbar / tot landings / tot discards / SSB / N at age / F at age /W at age / M at age</p>
 </section>
-<section id="benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> benthosnodes_tot_biomasses_<em>.dat or benthosnodes_tot_numbers_</em>.dat</h1>
+<section id="benthosnodes_tot_biomasses_.dat-or-benthosnodes_tot_numbers_.dat" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> benthosnodes_tot_biomasses_<em>.dat or benthosnodes_tot_numbers_</em>.dat</h1>
 <p>Func gr id/ tstep / node / long / lat / number this func group id /biomass this func group id/ mean weight this func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K this funcgr</p>
 </section>
-<section id="popnodes_start_.dat" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> popnodes_start_*.dat</h1>
+<section id="popnodes_start_.dat" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> popnodes_start_*.dat</h1>
 <p>tstep / node / long / lat / tot N sp0 / tot W sp0/ tot N sp1 / tot W sp1…</p>
 </section>
-<section id="popnodes_inc_.dat" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> popnodes_inc_*.dat</h1>
+<section id="popnodes_inc_.dat" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> popnodes_inc_*.dat</h1>
 <p>tstep / node / long / lat / tot N sp0 / tot W sp0/ tot N sp1 / tot W sp1…</p>
 </section>
-<section id="popnodes_impact_.dat" class="level1" data-number="14">
-<h1 data-number="14"><span class="header-section-number">14</span> popnodes_impact_*.dat</h1>
+<section id="popnodes_impact_.dat" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> popnodes_impact_*.dat</h1>
 <p>pop / tstep / node_idx / long / lat / impact_on_pop</p>
 </section>
-<section id="popnodes_cumulcatches_per_pop_.dat" class="level1" data-number="15">
-<h1 data-number="15"><span class="header-section-number">15</span> popnodes_cumulcatches_per_pop_*.dat</h1>
+<section id="popnodes_cumulcatches_per_pop_.dat" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> popnodes_cumulcatches_per_pop_*.dat</h1>
 <p>pop / tstep / node_idx / long / lat / cumcatches (actually landings)</p>
 </section>
-<section id="popnodes_cumftime_.dat" class="level1" data-number="16">
-<h1 data-number="16"><span class="header-section-number">16</span> popnodes_cumftime_*.dat</h1>
+<section id="popnodes_cumftime_.dat" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> popnodes_cumftime_*.dat</h1>
 <p>tstep / node / long / lat / cumftime</p>
 </section>
-<section id="popnodes_cumsweptarea_.dat" class="level1" data-number="17">
-<h1 data-number="17"><span class="header-section-number">17</span> popnodes_cumsweptarea_*.dat</h1>
+<section id="popnodes_cumsweptarea_.dat" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> popnodes_cumsweptarea_*.dat</h1>
 <p>tstep / node / long / lat / cumsweptarea / subsurfacecumsweptarea</p>
 </section>
-<section id="popnodes_cumcatches_.dat" class="level1" data-number="18">
-<h1 data-number="18"><span class="header-section-number">18</span> popnodes_cumcatches_*.dat</h1>
+<section id="popnodes_cumcatches_.dat" class="level1" data-number="17">
+<h1 data-number="17"><span class="header-section-number">17</span> popnodes_cumcatches_*.dat</h1>
 <p>tstep / node_idx / long / lat / cumcatches (landings only; unless discard ban)</p>
 </section>
-<section id="popnodes_cumdiscards_.dat" class="level1" data-number="19">
-<h1 data-number="19"><span class="header-section-number">19</span> popnodes_cumdiscards_*.dat</h1>
+<section id="popnodes_cumdiscards_.dat" class="level1" data-number="18">
+<h1 data-number="18"><span class="header-section-number">18</span> popnodes_cumdiscards_*.dat</h1>
 <p>tstep / node_idx / long / lat / cumdiscards</p>
 </section>
-<section id="popnodes_cumcatches_with_threshold_.dat" class="level1" data-number="20">
-<h1 data-number="20"><span class="header-section-number">20</span> popnodes_cumcatches_with_threshold_*.dat</h1>
+<section id="popnodes_cumcatches_with_threshold_.dat" class="level1" data-number="19">
+<h1 data-number="19"><span class="header-section-number">19</span> popnodes_cumcatches_with_threshold_*.dat</h1>
 <p>tstep / node_idx / long / lat / cumcatches / threshold in percent</p>
 </section>
-<section id="popnodes_tariffs_.dat" class="level1" data-number="21">
-<h1 data-number="21"><span class="header-section-number">21</span> popnodes_tariffs_*.dat</h1>
+<section id="popnodes_tariffs_.dat" class="level1" data-number="20">
+<h1 data-number="20"><span class="header-section-number">20</span> popnodes_tariffs_*.dat</h1>
 <p>tstep / node / long / lat / tariffs</p>
 </section>
-<section id="tripcatchesperszgroup_.dat" class="level1" data-number="22">
-<h1 data-number="22"><span class="header-section-number">22</span> tripcatchesperszgroup_*.dat</h1>
+<section id="tripcatchesperszgroup_.dat" class="level1" data-number="21">
+<h1 data-number="21"><span class="header-section-number">21</span> tripcatchesperszgroup_*.dat</h1>
 <p>tstep / vessel name / departure tstep / popid / catches (landings only; unless discard ban) szgroup 0 / szgroup 1 /… / 13</p>
 </section>
-<section id="export_individual_tac_.dat" class="level1" data-number="23">
-<h1 data-number="23"><span class="header-section-number">23</span> export_individual_tac_*.dat</h1>
+<section id="export_individual_tac_.dat" class="level1" data-number="22">
+<h1 data-number="22"><span class="header-section-number">22</span> export_individual_tac_*.dat</h1>
 <p>tstep / vesselid / pop / a remaining quota this pop / amount discarded if remaining is 0</p>
 </section>
-<section id="loglike_.dat" class="level1" data-number="24">
-<h1 data-number="24"><span class="header-section-number">24</span> loglike_*.dat</h1>
+<section id="loglike_.dat" class="level1" data-number="23">
+<h1 data-number="23"><span class="header-section-number">23</span> loglike_*.dat</h1>
 <p>0 tstep_dep 1 tstep Current tstep 2 reason_to_go_back 3 cum_steam 4 loc-&gt;nodeidx (Harbour?) 5 idx 6 name 7 timeatsea 8 cumfulecons 9 travel_dist_this_trip 10xN cumul sz per pop(1..N) (i.e.&nbsp;landings only!) freq_metiers revenue revenue_from_av_prices revenue_explicit_from_av_prices fuelcost gav gav2 // gav handling energy cost only sweptarea // from EU FP7 BENTHIS parameterisation revenuepersweptarea GVA // gva handling all costs (but need a deeper parameterisation) GVAPerRevenue LabourSurplus GrossProfit NetProfit NetProfitMargin GVAPerFTE RoFTA BER CRBER NetPresentValue numTrips</p>
 <p>e.g.&nbsp;adding headers in R to the loglike data table: colnames (loglike) &lt;- c(‘tstep_dep’, ‘tstep_arr’, ‘reason_back’,‘cumsteaming’, ‘idx_node’, ‘idx_vessel’, ‘VE_REF’, ‘timeatsea’, ‘fuelcons’, ‘traveled_dist’, paste(‘pop.’, 0:(general$nbpops-1), sep=’‘), “freq_metiers”, “revenue”, “rev_from_av_prices”, “rev_explicit_from_av_prices”, “fuelcost”, “vpuf”, “gav”, “gradva”, “sweptr”, “revpersweptarea”, paste(’disc.’, explicit_pops, sep=’’), “GVA”, “GVAPerRevenue”, “LabourSurplus”, “GrossProfit”, “NetProfit”, “NetProfitMargin”, “GVAPerFTE”, “RoFTA”, “BER”, “CRBER”, “NetPresentValue”, “numTrips”)</p>
 </section>
-<section id="fishfarmlogs_.dat" class="level1" data-number="25">
-<h1 data-number="25"><span class="header-section-number">25</span> fishfarmlogs_*.dat</h1>
+<section id="fishfarmlogs_.dat" class="level1" data-number="24">
+<h1 data-number="24"><span class="header-section-number">24</span> fishfarmlogs_*.dat</h1>
 <p>tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit /</p>
 </section>
-<section id="shipslogs_.dat" class="level1" data-number="26">
-<h1 data-number="26"><span class="header-section-number">26</span> shipslogs_*.dat</h1>
+<section id="shipslogs_.dat" class="level1" data-number="25">
+<h1 data-number="25"><span class="header-section-number">25</span> shipslogs_*.dat</h1>
 <p>tstep / node / long / lat /shiptype / shipid / nb_units / fuel_use_h / NOx_emission_gperkW / SOx_emission_percentpertotalfuelmass / GHG_emission_gperkW / PME_emission_gperkW / fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission</p>
 </section>
-<section id="windmillslogs_.dat" class="level1" data-number="27">
-<h1 data-number="27"><span class="header-section-number">27</span> windmillslogs_*.dat</h1>
+<section id="windmillslogs_.dat" class="level1" data-number="26">
+<h1 data-number="26"><span class="header-section-number">26</span> windmillslogs_*.dat</h1>
 <p>tstep / node / long / lat / windfarmtype / windfarmid / kWh / kW_production</p>
 </section>
-<section id="lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" class="level1" data-number="28">
-<h1 data-number="28"><span class="header-section-number">28</span> lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)</h1>
+<section id="lst_loglike_weight_agg_sce.rdata-obtained-with-postprocessing-r-routines" class="level1" data-number="27">
+<h1 data-number="27"><span class="header-section-number">27</span> lst_loglike_weight_agg_sce*.RData (obtained with postprocessing R routines)</h1>
 <p>year.month / pop.0/ pop.1/ pop.2 /…/ disc.0/disc.1/disc.2/…/effort/cumsteaming/nbtrip/bwtrip/fuelcons/ revenue/rev_from_av_prices/sweptr/revpersweptarea/fuelcost/gav/gradva/totland/totland_explicit/ totland_implicit/rev_explicit_from_av_prices /av_effort/av_bwtrip/traveled_dist/ vpuf/vapuf/ disc_rate_0 disc_rate_1/disc_rate_2/…/av_vapuf_month</p>
 </section>
-<section id="average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" class="level1" data-number="29">
-<h1 data-number="29"><span class="header-section-number">29</span> average_cumftime_layer.txt (obtained with postprocessing R routines)</h1>
+<section id="average_cumftime_layer.txt-obtained-with-postprocessing-r-routines" class="level1" data-number="28">
+<h1 data-number="28"><span class="header-section-number">28</span> average_cumftime_layer.txt (obtained with postprocessing R routines)</h1>
 <pre><code>etc.</code></pre>
 </section>
-<section id="name-of-the-app_simu1_out.db" class="level1" data-number="30">
-<h1 data-number="30"><span class="header-section-number">30</span> (name of the app)_simu1_out.db</h1>
+<section id="name-of-the-app_simu1_out.db" class="level1" data-number="29">
+<h1 data-number="29"><span class="header-section-number">29</span> (name of the app)_simu1_out.db</h1>
 <p>A SQlite database gathers several tables (including the data in listed text files above) which can be read by DISPLACE itself, or scrutinized with a SQL Browser e.g.&nbsp;the “DB Browser for SQlite” software</p>
 
 
@@ -829,7 +823,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./routines.html" class="pagination-link" aria-label="R routines for building input files">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

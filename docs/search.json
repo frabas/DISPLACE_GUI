@@ -32,232 +32,199 @@
   {
     "objectID": "quickstart.html",
     "href": "quickstart.html",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "",
-    "text": "2 Quick Start\nThis guide helps you set up a development environment and build Displace on Windows (primary), with notes for Linux and macOS. The project uses CMake and vcpkg in manifest mode.",
+    "text": "2 Quick Start\nThis guide helps you set up a development environment and build DISPLACE on Windows (primary), with notes for Linux and macOS. The project uses CMake and vcpkg in manifest mode. “CMake is an open-source, cross-platform family of tools designed to build, test and package software” To build, simply create an out-of-tree folder, and launch cmake specifying the path of the main CMakeLists.txt file.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#prerequisites",
     "href": "quickstart.html#prerequisites",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.1 Prerequisites",
     "text": "2.1 Prerequisites\n\nCMake ≥ 3.5 (recommended: latest stable)\nA C++17 compiler\n\nWindows: MSVC (Visual Studio 2022)\nLinux: GCC ≥ 9 or Clang ≥ 10\nmacOS: AppleClang (Xcode command line tools)\n\nGit\nQt 6.8.x (see “External dependencies: Qt6”)",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#project-dependencies",
     "href": "quickstart.html#project-dependencies",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.2 Project dependencies",
     "text": "2.2 Project dependencies\nFrom CMake modules: - Boost (components: date_time, filesystem, system, thread, program_options, log, unit_test_framework) - GeographicLib - GDAL (minimum 1.11; some modules require newer GDAL, e.g., 2.20) - Qt6 6.8 (modules: Core, Widgets, Concurrent, Sql, Xml, PrintSupport, Network) — when GUI is enabled - CGAL — when GUI is enabled - Sparsepp - msqlitecpp (via overlay port)\nFrom vcpkg manifest (vcpkg.json): - gdal - boost-geometry - plus any additional ports declared in the manifest\nNotes: - The project defines BOOST_ALL_NO_LIB to avoid auto-linking on MSVC. - An overlay port is provided for msqlitecpp under vcpkg-overlays/.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#vcpkg-manifest-mode-installation",
     "href": "quickstart.html#vcpkg-manifest-mode-installation",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.3 vcpkg (manifest mode) – installation",
     "text": "2.3 vcpkg (manifest mode) – installation\n\nClone vcpkg:\n\nWindows (PowerShell/CMD):\ngit clone https://github.com/microsoft/vcpkg %USERPROFILE%\\vcpkg\n%USERPROFILE%\\vcpkg\\bootstrap-vcpkg.bat\nLinux/macOS (bash):\ngit clone https://github.com/microsoft/vcpkg ~/vcpkg\n~/vcpkg/bootstrap-vcpkg.sh\n\nSet VCPKG_ROOT env var (optional but convenient):\n\nWindows:\nsetx VCPKG_ROOT \"%USERPROFILE%\\vcpkg\"\nLinux/macOS:\necho 'export VCPKG_ROOT=\"$HOME/vcpkg\"' &gt;&gt; ~/.bashrc\n\nToolchain path (used by CMake):\n\n%VCPKG_ROOT%\\scripts\\buildsystems\\vcpkg.cmake (Windows)\n$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake (Linux/macOS)\n\n\n\nNote:\nThe repository includes vcpkg-configuration.json and vcpkg.json (manifest mode). However, top-level CMakeLists.txt currently sets: - VCPKG_MANIFEST_INSTALL OFF This disables auto-install during configure. See next section for how to install dependencies manually or override this setting.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#generate-and-install-dependencies-manifest-mode",
     "href": "quickstart.html#generate-and-install-dependencies-manifest-mode",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.4 Generate and install dependencies (manifest mode)",
     "text": "2.4 Generate and install dependencies (manifest mode)\n\nImportant Note:\nIf you already have a vcpkg export of the dependencies (see “Using exported vcpkg dependencies”), you do not need to generate/install them again. Just point CMake/vcpkg to the exported installed directory as described below. Follow the steps in this section only when an export is not available or is incomplete/outdated.\n\n\n2.4.1 Option A — Manual install (recommended with the current CMake default):\n\nOpen a shell in the project root (where vcpkg.json is).\nChoose a triplet (Windows: x64-windows; Linux: x64-linux; macOS: x64-osx).\nIf you rely on overlay ports (e.g., msqlitecpp), ensure overlays are picked up via vcpkg-configuration.json. If needed, add: sh     --overlay-ports=./vcpkg-overlays\nInstall:\n\nWindows:\n%VCPKG_ROOT%\\vcpkg.exe install --triplet x64-windows\nLinux/macOS:\n$VCPKG_ROOT/vcpkg install --triplet x64-linux   # or x64-osx\n\n\n\n\n2.4.2 Option B — Enable auto-install during CMake configure:\n\nPass VCPKG_MANIFEST_INSTALL=ON in your CMake configure step:\n  -DVCPKG_MANIFEST_INSTALL=ON",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#external-dependencies-qt6",
     "href": "quickstart.html#external-dependencies-qt6",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.5 External dependencies: Qt6",
     "text": "2.5 External dependencies: Qt6\nDisplace requires Qt 6.8.x with these modules: - Core - Widgets - Concurrent - Sql - Xml - PrintSupport - Network\nYou have two options:\n\nInstall Qt from the Qt online installer (recommended on Windows):\n\n\nInstall Qt 6.8.x for your compiler (e.g., MSVC 2022).\nSet CMAKE_PREFIX_PATH to the Qt 6.8 installation, e.g.:\n\nWindows (PowerShell/CMD):\n-DCMAKE_PREFIX_PATH=\"C:/Qt/6.8.0/msvc2022_64\"\nLinux:\n-DCMAKE_PREFIX_PATH=\"/opt/Qt/6.8.0/gcc_64\"\nmacOS:\n-DCMAKE_PREFIX_PATH=\"~/Qt/6.8.0/macos\"\n\n\n\nInstall Qt via vcpkg (advanced; ensure the triplet and Qt platform plugins are correct):\n\n\nAdd/enable Qt6 packages in vcpkg.json and run vcpkg install.\nMake sure the Qt6 platform plugin (e.g., windows, xcb, cocoa) is available at runtime.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#configure-and-build",
     "href": "quickstart.html#configure-and-build",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.6 Configure and build",
     "text": "2.6 Configure and build\nWindows (MSVC, x64-windows):\ncmake -S . -B build ^\n-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\\scripts\\buildsystems\\vcpkg.cmake ^\n-DVCPKG_MANIFEST_INSTALL=OFF ^\n-DCMAKE_PREFIX_PATH=\"C:/Qt/6.8.0/msvc2022_64\" ^\n-DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release\nLinux (GCC/Clang, x64-linux):\n\ncmake -S . -B build \\\n-DCMAKE_TOOLCHAIN_FILE=\"$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake\" \\\n-DVCPKG_MANIFEST_INSTALL=OFF \\\n-DCMAKE_PREFIX_PATH=\"/opt/Qt/6.8.0/gcc_64\" \\\n-DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release\nmacOS (AppleClang, x64-osx or arm64-osx):\ncmake -S . -B build \\\n-DCMAKE_TOOLCHAIN_FILE=\"$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake\" \\\n-DVCPKG_MANIFEST_INSTALL=OFF \\\n-DCMAKE_PREFIX_PATH=\"~/Qt/6.8.0/macos\" \\\n-DCMAKE_BUILD_TYPE=Release\ncmake --build build --config Release",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#notes",
     "href": "quickstart.html#notes",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.7 Notes:",
     "text": "2.7 Notes:\n\nIf you want CMake to auto-install missing manifest dependencies, set:\n  -DVCPKG_MANIFEST_INSTALL=ON\nIf overlays are not picked automatically, add:\n  -DVCPKG_OVERLAY_PORTS=\"%CD%\\vcpkg-overlays\"   # Windows\n  -DVCPKG_OVERLAY_PORTS=\"$PWD/vcpkg-overlays\"  # Linux/macOS",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#configure-and-build-with-a-cmakeuserpresets-under-msvc-2026",
     "href": "quickstart.html#configure-and-build-with-a-cmakeuserpresets-under-msvc-2026",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.8 Configure and build with a CMakeUserPresets under MSVC 2026",
     "text": "2.8 Configure and build with a CMakeUserPresets under MSVC 2026\nFor Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make CMake building automatically with the MSVC. This file would include, as an example:\n{\n  \"version\": 2,\n  \"defaultConfigurePreset\": \"Release\",\n  \"configurePresets\": [\n    {\n      \"name\": \"defaultBase\",\n      \"inherits\": \"vcpkg\",\n      \"binaryDir\": \"${sourceDir}/build\",\n      \"toolset\": \"v143\",   // forces MSVC 19.44+  \n      \"environment\": {\n        \"CMAKE_BUILD_TYPE\": \"Release\",\n        \"VCPKG_ROOT\": \"C:\\\\Users\\\\fbas\\\\vcpkg\"\n      },\n\n      \"cacheVariables\": {\n        \"CMAKE_TOOLCHAIN_FILE\": \"$env{VCPKG_ROOT}\\\\scripts\\\\buildsystems\\\\vcpkg.cmake\",\n        \"CMAKE_PREFIX_PATH\": \"C:/Qt6/6.8.3/msvc2022_64\"\n      },\n      \"autoGenerate\": true\n\n    },\n    {\n      \"name\": \"RelDebug\",\n      \"inherits\": \"defaultBase\",\n      \"binaryDir\": \"${sourceDir}/build/RelDebug\",\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"RelWithDebInfo\"\n      }\n\n    },\n    {\n      \"name\": \"Release\",\n      \"inherits\": \"defaultBase\", \n      \"binaryDir\": \"${sourceDir}/build/Release\",\n\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"Release\"\n      }\n\n    },\n    {\n      \"name\": \"Debug\",\n      \"inherits\": \"defaultBase\",\n      \"binaryDir\": \"${sourceDir}/build/Debug\",\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"Debug\"\n      }\n\n    }\n  ]\n}",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#using-exported-vcpkg-dependencies",
     "href": "quickstart.html#using-exported-vcpkg-dependencies",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.9 Using exported vcpkg dependencies",
     "text": "2.9 Using exported vcpkg dependencies\nIf you received dependencies as a vcpkg export (e.g., created with vcpkg export --raw), you can build without accessing vcpkg registries:\n\nExtract the export archive somewhere. It should contain an installed/ layout. The best location is C:\\vcpkg\\, so that no changes are required to the vcpkg toolchain file. NOTE: the root directory in the archive is named vcpkg-export-something, just rename it to vcpkg.\nPoint CMake/vcpkg to the exported “installed” directory:\n\nSet the environment variable or CMake cache entry:\n-DVCPKG_INSTALLED_DIR=\"path/to/export/installed\"\n-DVCPKG_FEATURE_FLAGS=manifests\nStill pass the toolchain file:\n-DCMAKE_TOOLCHAIN_FILE=\".../vcpkg.cmake\"\n\nConfigure and build as usual. vcpkg will resolve packages from the exported “installed” tree and avoid network access.\n\nIf the export was produced as a NuGet package (--nuget), restore it into a local folder and pass -DVCPKG_INSTALLED_DIR to that restored layout.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "quickstart.html#tips",
     "href": "quickstart.html#tips",
-    "title": "1  Quick Start [to compile DISPLACE]",
+    "title": "1  Compile DISPLACE with CMake [Optional]",
     "section": "2.10 Tips",
     "text": "2.10 Tips\n\nPreferred triplets:\n\nWindows: x64-windows\nLinux: x64-linux\nmacOS: x64-osx (or arm64-osx on Apple Silicon)\n\nEnsure your Qt6 version matches the required 6.8.x indicated by CMake find_package(Qt6 6.8 ...).\nFor GDAL, if you hit API mismatches, use a version ≥ 2.20 where required by components that explicitly request it.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
-    ]
-  },
-  {
-    "objectID": "building.html",
-    "href": "building.html",
-    "title": "2  Building with CMake [only if you want to compile DISPLACE]",
-    "section": "",
-    "text": "2.1 What is CMake?\n“CMake is an open-source, cross-platform family of tools designed to build, test and package software”",
-    "crumbs": [
-      "Getting Started",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Building with CMake [only if you want to compile DISPLACE]</span>"
-    ]
-  },
-  {
-    "objectID": "building.html#building",
-    "href": "building.html#building",
-    "title": "2  Building with CMake [only if you want to compile DISPLACE]",
-    "section": "2.2 Building",
-    "text": "2.2 Building\nTo build, simply create an out-of-tree folder, and launch cmake specifying the path of the main CMakeLists.txt file:\n\n2.2.1 Linux\n$ cd displace\n$ mkdir build\n$ cd build\n$ cmake ..\n\n\n2.2.2 Windows\nYou can use the cmake GUI to select the building directory and the root of the project.",
-    "crumbs": [
-      "Getting Started",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Building with CMake [only if you want to compile DISPLACE]</span>"
-    ]
-  },
-  {
-    "objectID": "building.html#building-with-out-of-system-tree-libraries",
-    "href": "building.html#building-with-out-of-system-tree-libraries",
-    "title": "2  Building with CMake [only if you want to compile DISPLACE]",
-    "section": "2.3 Building with Out-of-system-tree libraries",
-    "text": "2.3 Building with Out-of-system-tree libraries\nIf the dependent libraries are installed out of the system tree (for example, because your distribution don’t provide a proper package, or you want to compile with a different version, or in Windows), you may instruct CMake to search for the library in the correct directory.\nFor GeographicLib, use -DGeographicLib_DIR=\ncmake \n    -DGeographicLib_DIR=/opt/GeographicLib-1.49/install/usr/local/lib/cmake/GeographicLib \n\n2.3.1 Specifying QT paths\nIf cmake can’t find the right path to a package, or you want to select a different version of the package, you can pass some variable on the command line.\nThis happens with Qt when they are installed in a non-system path, on Windows and on linux when you install a non packaged version of the library.\nFor Qt, pass the CMAKE_PREFIX_PATH variable with the path to the lib/cmake folder of your installation. If Qt has been installed in /opt/Qt/5.10.1, for example, specify:\n$ cmake -DCMAKE_PREFIX_PATH=/opt/Qt/5.10.1/gcc_64/lib/cmake/\nIn Windows, from the GUI, create a variable in the cache and put the path (see next section).\n\n\n2.3.2 Windows compilation: inform the IDE for where to find CMake and the DISPLACE SDK\nFirst install Qt 5.15.5 https://www.qt.io/download and QtCreator that comes with.\nAlternatively, install JetBrains CLion, but the smooth edition of ui files will require QtCreator anyway.\nBut remember to set et up CLion in Menu&gt;File&gt; settings For amd64 architecture because we are working in 64bits.\n\n\n\nalt text\n\n\nInstall CMake on your computer.\nUnzip the Displace sdk e.g. vcpkg-export-20181211-212458.7z (build with https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017, see Building.md, you will found the sdk on the DISPLACE_releaseon google drive https://drive.google.com/drive/folders/0B7xTkBu0-QI5bnIxS3c4dy0tSUU ) imperatively in C:\\ and rename the folder for “vcpkg”\nOpen the DISPLACE project e.g. in QtCreator or CLion with the CMakeList.txt file\nConfigure CMake by adding a arg variable, for example:\nCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake\nAlso erase in the Release output folder or the cmake CMakeCache.txt and the subfolder CMakeFiles in the Release folder if something goes wrong.\nIn QtCreator:\n\n\n\nalt text\n\n\nIn CLion:\n\n\n\nalt text\n\n\nClear or reset cache and re-run CMake\nCompile DISPLACE_GUI\nSet the Run on displacegui and run!\n(If CLion, Run displace first to Build it with CMake)\non Windows, possibly check PATH for e.g. C:\\Qt\\5.12.0\\msvc2017_64\\bin that should be in PATH",
-    "crumbs": [
-      "Getting Started",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Building with CMake [only if you want to compile DISPLACE]</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Compile DISPLACE with CMake [Optional]</span>"
     ]
   },
   {
     "objectID": "running.html",
     "href": "running.html",
-    "title": "3  Running DISPLACE",
+    "title": "2  Running DISPLACE",
     "section": "",
-    "text": "4 Running DISPLACE via the Graphical User Interface(GUI)\nOnce the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.",
+    "text": "3 Running DISPLACE via the Graphical User Interface(GUI)\nOnce the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Running DISPLACE</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"
     ]
   },
   {
     "objectID": "running.html#command-line-options",
     "href": "running.html#command-line-options",
-    "title": "3  Running DISPLACE",
-    "section": "5.1 Command-Line Options",
-    "text": "5.1 Command-Line Options\nThe DISPLACE simulator accepts various command-line arguments to configure its behavior:\n\n5.1.1 Database Options\n\n--indb baseline.db\n\nReads the data from the specified database file.\n\n\n\n\n5.1.2 Output Options\n\n--outdir C:\n\nSpecifies the path where output folders will be created.\n\n--disable-sqlite\n\nDisables output to SQLite database.\n\n\n\n\n5.1.3 Working Directory\n\n-a C:\\...\\DISPLACE_input_minitest\n\nSpecifies the working directory (basepath) where input files are located.\n\n\n\n\n5.1.4 Scenario Configuration\n\n-f \"fake\"\n\nSpecifies the first scenario parameter.\n\n--f2 \"baseline\"\n\nSpecifies the second scenario parameter (baseline scenario name).\n\n-s \"simu1\"\n\nSets the simulation name or seed number.\n\n\n\n\n5.1.5 Simulation Parameters\n\n-i 8761\n\nNumber of simulation steps to run.\n\n-p 0\n\nParameter p (deprecated).\n\n-e 1\n\nParameter e (deprecated).\n\n--huge 1\n\nEnables huge export simulation mode.\n\n-v 0\n\nVerbosity level for output messages (0 = minimal).\n\n-V 1\n\nAlternative verbosity level flag.\n\n\n\n\n5.1.6 Performance Options\n\n--num_threads 4\n\nNumber of threads to use for parallel execution.",
+    "title": "2  Running DISPLACE",
+    "section": "4.1 Command-Line Options",
+    "text": "4.1 Command-Line Options\nThe DISPLACE simulator accepts various command-line arguments to configure its behavior:\n\n4.1.1 Database Options\n\n--indb baseline.db\n\nReads the data from the specified database file.\n\n\n\n\n4.1.2 Output Options\n\n--outdir C:\n\nSpecifies the path where output folders will be created.\n\n--disable-sqlite\n\nDisables output to SQLite database.\n\n\n\n\n4.1.3 Working Directory\n\n-a C:\\...\\DISPLACE_input_minitest\n\nSpecifies the working directory (basepath) where input files are located.\n\n\n\n\n4.1.4 Scenario Configuration\n\n-f \"fake\"\n\nSpecifies the first scenario parameter.\n\n--f2 \"baseline\"\n\nSpecifies the second scenario parameter (baseline scenario name).\n\n-s \"simu1\"\n\nSets the simulation name or seed number.\n\n\n\n\n4.1.5 Simulation Parameters\n\n-i 8761\n\nNumber of simulation steps to run.\n\n-p 0\n\nParameter p (deprecated).\n\n-e 1\n\nParameter e (deprecated).\n\n--huge 1\n\nEnables huge export simulation mode.\n\n-v 0\n\nVerbosity level for output messages (0 = minimal).\n\n-V 1\n\nAlternative verbosity level flag.\n\n\n\n\n4.1.6 Performance Options\n\n--num_threads 4\n\nNumber of threads to use for parallel execution.",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Running DISPLACE</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"
     ]
   },
   {
     "objectID": "running.html#example-usage",
     "href": "running.html#example-usage",
-    "title": "3  Running DISPLACE",
-    "section": "5.2 Example Usage",
-    "text": "5.2 Example Usage\n# Basic simulation run\ndisplace --indb baseline.db \\\n  --outdir C:\\outputs \\\n  -a C:\\DISPLACE_input_minitest \\\n  -f \"fake\" \\\n  --f2 \"baseline\" \\\n  -s \"simu1\" \\\n  -i 8761 \\\n  --num_threads 4",
+    "title": "2  Running DISPLACE",
+    "section": "4.2 Example Usage",
+    "text": "4.2 Example Usage\n# Basic simulation run\ndisplace --indb baseline.db \\\n  --outdir C:\\outputs \\\n  -a C:\\DISPLACE_input_minitest \\\n  -f \"fake\" \\\n  --f2 \"baseline\" \\\n  -s \"simu1\" \\\n  -i 8761 \\\n  --num_threads 4",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Running DISPLACE</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"
     ]
   },
   {
     "objectID": "running.html#see-also",
     "href": "running.html#see-also",
-    "title": "3  Running DISPLACE",
-    "section": "5.3 See Also",
-    "text": "5.3 See Also\n\nChapter 2 for installation and setup\nChapter 2 for build instructions\nChapter 6 for understanding simulation outputs",
+    "title": "2  Running DISPLACE",
+    "section": "4.3 See Also",
+    "text": "4.3 See Also\n\nChapter 2 for installation and setup\n?sec-building for build instructions\nChapter 5 for understanding simulation outputs",
     "crumbs": [
       "Getting Started",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Running DISPLACE</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"
     ]
   },
   {
     "objectID": "routines.html",
     "href": "routines.html",
-    "title": "4  R routines for building input files",
+    "title": "3  R routines for building input files",
     "section": "",
     "text": "DISPLACE requires input files in a specific format for the modeling framework to read them correctly. The previous sections described the contents and structure of the raw inputs, which must then be transformed to meet these requirements. In this section, we walk through the R routines needed to adapt the inputs.\nThe required DISPLACE inputs depend on the type of analysis being performed and the model modules being used. While other DISPLACE applications make use of additional routines to prepare such inputs (see the complete routines repository from François et al.), here we only include those relevant to our case study. These are divided into two main groups: routines for preparing data for the populations model and routines for preparing data for the fleet model. Additional routines are included to prepare the remaining data needed to run DISPLACE.\nIn this repository, the routines are located in the routines folder, and the code to execute them sequentially can be found in r/functions_routines.R. Here we use R 4.5.0, and the packages included in r/config.R. Be aware that as describerd in some of the previous sections, some model inputs are hardcoded within this routines, so modify the code as needed for your case study.\nRoutines for the population inputs located in raw_inputs/POPULATIONS are:\n\n01_GeneratePopulationsFeatures.R\n\n02_GeneratePopulationsConfigFiles.R\n\n03_RunPopulationsConfigFiles.R\n\n04_GeneratePopulationsPreferencesPerSpeciesMatrix.R\n\n05_GeneratePopulationsVariousFiles.R\n\nRoutines for the fleet inputs in raw_inputs/FISHERIES are:\n\n06_GenerateVesselsConfigFiles.R\n\n07_RunVesselsConfigFiles.R\n\n08_GenerateVesselsEconomicsFile.R\n\n09_GenerateOtherCatchesOnNodes.R\n\n10_GenerateMetiersSelectivityPerStockFiles.R\n\n11_GenerateMetiersVariousFiles.R\n\nThe routine 09_GenerateOtherCatchesOnNodes.R assigns additional fixed catches to the nodes beyond those of our modeled fleet. For instance, if other nations or fleets not explicitly characterized in the model exert fishing pressure on the populations defined in the analysis, the catch from these can be indicated in the file OTHER/othercatchespercountry.csv as fixed removals (in tonnes per year). While recruits are proportionally assigned based on coverage and density from SDM inputs, this routine assigns other catches evenly across the species’ coverage area, without accounting for species density. The routine can, however, be updated to weight other catches according to species distribution.\nAdditional routines required to run DISPLACE are:\n\n12_GenerateHarboursFiles.R: Prepares harbour files, including stock prices and fuel prices. Currently, the routine assigns the same prices across all ports, but it can be updated to reflect port-specific prices.\n13_GenerateShippingFiles.R: Although we do not use this module (which models traffic lanes used by other vessels that might influence fishing vessel behavior), DISPLACE still requires two files with dummy data in the raw_inputs/SHIPPING folder and corresponding processed inputs, so the model can run even without using this feature.\n14_GenerateFishfarmsFiles.R: Similarly, fish farm locations and features (defined by coordinates and size) can be included to condition vessel navigation and fishing. For this case study, we use dummy data in raw_inputs/FISHFARMS to allow DISPLACE to run, though this feature is not used in the analysis.\n15_GenerateWindmillsFiles.R: Allows input of specific turbine distributions or single turbine positions. Dummy data are included in raw_inputs/WINDMILLS for this case study.\n16_GenerateFirmsFiles.R: We do not use the firms feature. The input file in raw_inputs/FIRMS is populated with dummy data solely to satisfy DISPLACE requirements.\n17_GenerateSimulationsConfigFiles.R: An important step, as it generates all files required to inform DISPLACE about the parameterization, characteristics, and inputs needed to execute a run. These files are stored in processed_inputs/simusspe_california_example after running all routines.\n18_GenerateBenthosLandscapeOnNodes.R: DISPLACE includes an optional benthic module designed to evaluate fishing impacts on benthic habitats. This module is deactivated in our project, and the file in raw_inputs/HABITATS is filled with dummy data solely to prevent DISPLACE from crashing.\n\nThe execution of r/functions_routines.R runs these routines sequentially and generates the contents of the processed_inputs folder (initially empty in this repository). To create its contents, simply execute this script.\n\nsource(here::here(\"r/functions_routines.R\"))\n\nIn addition to running the routines, functions_routines.R also:\n\nUpdates config.dat to indicate the implicitly defined species.\n\nUpdates the baseline.dat file to set the baseline scenario using the closer_port feature, ensuring vessels return to the closest port among those historically fished (as part of our case study parametrization; this may differ depending on the application of DISPLACE).\n\nThe script also includes the function generate_dis_run_files, which defines the .bat and .dsf files needed to run DISPLACE without using the GUI. This function allows the user to specify:\n\nThe base directory for outputs.\n\nThe scenario being run.\n\nThe replicate name\nThe number of replicates.\nThe number of years analyzed.\nThe number of years for which data are stored. By default, DISPLACE only saves 1 year of VMS-like data, but it can be set to save 7 or 10 years of simulated data.\n\nThe number of threads to run the model, depending on the machine’s cores.\n\nOnce all processed inputs are generated (this can be done in Windows, macOS, or Linux using R), DISPLACE can be run from a Windows machine either via the GUI or by double-clicking the generated .bat file.",
     "crumbs": [
       "User Guide",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R routines for building input files</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>R routines for building input files</span>"
     ]
   },
   {
     "objectID": "output-formats.html",
     "href": "output-formats.html",
-    "title": "5  Output File Formats",
+    "title": "4  Output File Formats",
     "section": "",
-    "text": "6 Output File Formats",
+    "text": "5 Output File Formats",
     "crumbs": [
       "User Guide",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Output File Formats</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Output File Formats</span>"
     ]
   },
   {
     "objectID": "output-formats.html#formats-of-output-files-written-in-displace_outputs",
     "href": "output-formats.html#formats-of-output-files-written-in-displace_outputs",
-    "title": "5  Output File Formats",
-    "section": "6.1 Formats of output files written in /DISPLACE_outputs",
-    "text": "6.1 Formats of output files written in /DISPLACE_outputs\nPath: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/",
+    "title": "4  Output File Formats",
+    "section": "5.1 Formats of output files written in /DISPLACE_outputs",
+    "text": "5.1 Formats of output files written in /DISPLACE_outputs\nPath: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/",
     "crumbs": [
       "User Guide",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Output File Formats</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Output File Formats</span>"
     ]
   }
 ]

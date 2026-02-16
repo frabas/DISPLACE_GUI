@@ -4,12 +4,12 @@ title: "Running DISPLACE"
 
 # Running DISPLACE via the Graphical User Interface(GUI) {#sec-running}
 
-Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu>Load, then clisk Start in the GUI
+Once the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu>Load, then clisk Start in the GUI
 The DISPLACE simulator is then launched on this particular scenario. 
 
 # Running DISPLACE Simulator {#sec-running}
 
-The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI>scheduler.exe for example to launch a row of simulations
+The simulator can be lauched also via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI>scheduler.exe for example to generate the batch file that will launch a row of simulations
 
 ## Command-Line Options
 

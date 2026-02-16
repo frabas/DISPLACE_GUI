@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Running DISPLACE – DISPLACE Documentation</title>
+<title>2&nbsp; Running DISPLACE – DISPLACE Documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./routines.html" rel="next">
-<link href="./building.html" rel="prev">
+<link href="./quickstart.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quickstart.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./running.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quickstart.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./running.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -163,19 +163,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Quick Start [to compile DISPLACE]</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./building.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Building with CMake [only if you want to compile DISPLACE]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Compile DISPLACE with CMake [Optional]</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./running.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></span></a>
   </div>
 </li>
       </ul>
@@ -192,13 +186,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routines.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-formats.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Output File Formats</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Output File Formats</span></span></a>
   </div>
 </li>
       </ul>
@@ -213,20 +207,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-running" id="toc-sec-running" class="nav-link active" data-scroll-target="#sec-running"><span class="header-section-number">4</span> Running DISPLACE via the Graphical User Interface(GUI)</a></li>
-  <li><a href="#sec-running" id="toc-sec-running" class="nav-link" data-scroll-target="#sec-running"><span class="header-section-number">5</span> Running DISPLACE Simulator</a>
+  <li><a href="#sec-running" id="toc-sec-running" class="nav-link active" data-scroll-target="#sec-running"><span class="header-section-number">3</span> Running DISPLACE via the Graphical User Interface(GUI)</a></li>
+  <li><a href="#sec-running" id="toc-sec-running" class="nav-link" data-scroll-target="#sec-running"><span class="header-section-number">4</span> Running DISPLACE Simulator</a>
   <ul class="collapse">
-  <li><a href="#command-line-options" id="toc-command-line-options" class="nav-link" data-scroll-target="#command-line-options"><span class="header-section-number">5.1</span> Command-Line Options</a>
+  <li><a href="#command-line-options" id="toc-command-line-options" class="nav-link" data-scroll-target="#command-line-options"><span class="header-section-number">4.1</span> Command-Line Options</a>
   <ul class="collapse">
-  <li><a href="#database-options" id="toc-database-options" class="nav-link" data-scroll-target="#database-options"><span class="header-section-number">5.1.1</span> Database Options</a></li>
-  <li><a href="#output-options" id="toc-output-options" class="nav-link" data-scroll-target="#output-options"><span class="header-section-number">5.1.2</span> Output Options</a></li>
-  <li><a href="#working-directory" id="toc-working-directory" class="nav-link" data-scroll-target="#working-directory"><span class="header-section-number">5.1.3</span> Working Directory</a></li>
-  <li><a href="#scenario-configuration" id="toc-scenario-configuration" class="nav-link" data-scroll-target="#scenario-configuration"><span class="header-section-number">5.1.4</span> Scenario Configuration</a></li>
-  <li><a href="#simulation-parameters" id="toc-simulation-parameters" class="nav-link" data-scroll-target="#simulation-parameters"><span class="header-section-number">5.1.5</span> Simulation Parameters</a></li>
-  <li><a href="#performance-options" id="toc-performance-options" class="nav-link" data-scroll-target="#performance-options"><span class="header-section-number">5.1.6</span> Performance Options</a></li>
+  <li><a href="#database-options" id="toc-database-options" class="nav-link" data-scroll-target="#database-options"><span class="header-section-number">4.1.1</span> Database Options</a></li>
+  <li><a href="#output-options" id="toc-output-options" class="nav-link" data-scroll-target="#output-options"><span class="header-section-number">4.1.2</span> Output Options</a></li>
+  <li><a href="#working-directory" id="toc-working-directory" class="nav-link" data-scroll-target="#working-directory"><span class="header-section-number">4.1.3</span> Working Directory</a></li>
+  <li><a href="#scenario-configuration" id="toc-scenario-configuration" class="nav-link" data-scroll-target="#scenario-configuration"><span class="header-section-number">4.1.4</span> Scenario Configuration</a></li>
+  <li><a href="#simulation-parameters" id="toc-simulation-parameters" class="nav-link" data-scroll-target="#simulation-parameters"><span class="header-section-number">4.1.5</span> Simulation Parameters</a></li>
+  <li><a href="#performance-options" id="toc-performance-options" class="nav-link" data-scroll-target="#performance-options"><span class="header-section-number">4.1.6</span> Performance Options</a></li>
   </ul></li>
-  <li><a href="#example-usage" id="toc-example-usage" class="nav-link" data-scroll-target="#example-usage"><span class="header-section-number">5.2</span> Example Usage</a></li>
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">5.3</span> See Also</a></li>
+  <li><a href="#example-usage" id="toc-example-usage" class="nav-link" data-scroll-target="#example-usage"><span class="header-section-number">4.2</span> Example Usage</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">4.3</span> See Also</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -234,9 +228,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quickstart.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./running.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quickstart.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./running.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Running DISPLACE</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -253,18 +247,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sec-running" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Running DISPLACE via the Graphical User Interface(GUI)</h1>
-<p>Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.</p>
+<section id="sec-running" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Running DISPLACE via the Graphical User Interface(GUI)</h1>
+<p>Once the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.</p>
 </section>
-<section id="sec-running" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Running DISPLACE Simulator</h1>
-<p>The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to launch a row of simulations</p>
-<section id="command-line-options" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="command-line-options"><span class="header-section-number">5.1</span> Command-Line Options</h2>
+<section id="sec-running" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Running DISPLACE Simulator</h1>
+<p>The simulator can be lauched also via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to generate the batch file that will launch a row of simulations</p>
+<section id="command-line-options" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="command-line-options"><span class="header-section-number">4.1</span> Command-Line Options</h2>
 <p>The DISPLACE simulator accepts various command-line arguments to configure its behavior:</p>
-<section id="database-options" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="database-options"><span class="header-section-number">5.1.1</span> Database Options</h3>
+<section id="database-options" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="database-options"><span class="header-section-number">4.1.1</span> Database Options</h3>
 <dl>
 <dt><code>--indb baseline.db</code></dt>
 <dd>
@@ -272,8 +266,8 @@ Reads the data from the specified database file.
 </dd>
 </dl>
 </section>
-<section id="output-options" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="output-options"><span class="header-section-number">5.1.2</span> Output Options</h3>
+<section id="output-options" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="output-options"><span class="header-section-number">4.1.2</span> Output Options</h3>
 <dl>
 <dt><code>--outdir C:</code></dt>
 <dd>
@@ -285,8 +279,8 @@ Disables output to SQLite database.
 </dd>
 </dl>
 </section>
-<section id="working-directory" class="level3" data-number="5.1.3">
-<h3 data-number="5.1.3" class="anchored" data-anchor-id="working-directory"><span class="header-section-number">5.1.3</span> Working Directory</h3>
+<section id="working-directory" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="working-directory"><span class="header-section-number">4.1.3</span> Working Directory</h3>
 <dl>
 <dt><code>-a C:\...\DISPLACE_input_minitest</code></dt>
 <dd>
@@ -294,8 +288,8 @@ Specifies the working directory (basepath) where input files are located.
 </dd>
 </dl>
 </section>
-<section id="scenario-configuration" class="level3" data-number="5.1.4">
-<h3 data-number="5.1.4" class="anchored" data-anchor-id="scenario-configuration"><span class="header-section-number">5.1.4</span> Scenario Configuration</h3>
+<section id="scenario-configuration" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="scenario-configuration"><span class="header-section-number">4.1.4</span> Scenario Configuration</h3>
 <dl>
 <dt><code>-f "fake"</code></dt>
 <dd>
@@ -311,8 +305,8 @@ Sets the simulation name or seed number.
 </dd>
 </dl>
 </section>
-<section id="simulation-parameters" class="level3" data-number="5.1.5">
-<h3 data-number="5.1.5" class="anchored" data-anchor-id="simulation-parameters"><span class="header-section-number">5.1.5</span> Simulation Parameters</h3>
+<section id="simulation-parameters" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="simulation-parameters"><span class="header-section-number">4.1.5</span> Simulation Parameters</h3>
 <dl>
 <dt><code>-i 8761</code></dt>
 <dd>
@@ -340,8 +334,8 @@ Alternative verbosity level flag.
 </dd>
 </dl>
 </section>
-<section id="performance-options" class="level3" data-number="5.1.6">
-<h3 data-number="5.1.6" class="anchored" data-anchor-id="performance-options"><span class="header-section-number">5.1.6</span> Performance Options</h3>
+<section id="performance-options" class="level3" data-number="4.1.6">
+<h3 data-number="4.1.6" class="anchored" data-anchor-id="performance-options"><span class="header-section-number">4.1.6</span> Performance Options</h3>
 <dl>
 <dt><code>--num_threads 4</code></dt>
 <dd>
@@ -350,8 +344,8 @@ Number of threads to use for parallel execution.
 </dl>
 </section>
 </section>
-<section id="example-usage" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="example-usage"><span class="header-section-number">5.2</span> Example Usage</h2>
+<section id="example-usage" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="example-usage"><span class="header-section-number">4.2</span> Example Usage</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic simulation run</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">displace</span> <span class="at">--indb</span> baseline.db <span class="dt">\</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outdir</span> C:<span class="dt">\o</span>utputs <span class="dt">\</span></span>
@@ -362,12 +356,12 @@ Number of threads to use for parallel execution.
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-i</span> 8761 <span class="dt">\</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--num_threads</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="see-also" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="see-also"><span class="header-section-number">5.3</span> See Also</h2>
+<section id="see-also" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="see-also"><span class="header-section-number">4.3</span> See Also</h2>
 <ul>
 <li><a href="quickstart.html" class="quarto-xref"><span>Chapter 2</span></a> for installation and setup</li>
-<li><a href="building.html" class="quarto-xref"><span>Chapter 2</span></a> for build instructions</li>
-<li><a href="output-formats.html" class="quarto-xref"><span>Chapter 6</span></a> for understanding simulation outputs</li>
+<li><span class="quarto-unresolved-ref">?sec-building</span> for build instructions</li>
+<li><a href="output-formats.html" class="quarto-xref"><span>Chapter 5</span></a> for understanding simulation outputs</li>
 </ul>
 
 
@@ -830,13 +824,13 @@ Number of threads to use for parallel execution.
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./building.html" class="pagination-link" aria-label="Building with CMake [only if you want to compile DISPLACE]">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Building with CMake [only if you want to compile DISPLACE]</span></span>
+      <a href="./quickstart.html" class="pagination-link" aria-label="Compile DISPLACE with CMake [Optional]">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Compile DISPLACE with CMake [Optional]</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./routines.html" class="pagination-link" aria-label="R routines for building input files">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R routines for building input files</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -846,12 +840,12 @@ Number of threads to use for parallel execution.
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running DISPLACE via the Graphical User Interface(GUI) {#sec-running}</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Once the software is installed, a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Once the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>The DISPLACE simulator is then launched on this particular scenario. </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># Running DISPLACE Simulator {#sec-running}</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>The simulator can be lauched via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to launch a row of simulations</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>The simulator can be lauched also via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI&gt;scheduler.exe for example to generate the batch file that will launch a row of simulations</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Command-Line Options</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>

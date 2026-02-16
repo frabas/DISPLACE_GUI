@@ -12,7 +12,6 @@ book:
     - part: "Getting Started"
       chapters:
         - quickstart.qmd
-        - building.qmd
         - running.qmd
     - part: "User Guide"
       chapters:

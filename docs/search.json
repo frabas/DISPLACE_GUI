@@ -155,7 +155,7 @@
     "href": "running.html",
     "title": "2  Running DISPLACE",
     "section": "",
-    "text": "3 Running DISPLACE via the Graphical User Interface(GUI)\nOnce the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then clisk Start in the GUI The DISPLACE simulator is then launched on this particular scenario.",
+    "text": "3 Running DISPLACE via the Graphical User Interface(GUI)\nOnce the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu&gt;Load, then click Start in the GUI The DISPLACE simulator is then launched on this particular scenario.\nFor example:",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"
@@ -188,7 +188,7 @@
     "href": "running.html#see-also",
     "title": "2  Running DISPLACE",
     "section": "4.3 See Also",
-    "text": "4.3 See Also\n\nChapter 2 for installation and setup\n?sec-building for build instructions\nChapter 5 for understanding simulation outputs",
+    "text": "4.3 See Also\n\nChapter 2 for compilation and setup\nChapter 5 for understanding simulation outputs",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Running DISPLACE</span>"

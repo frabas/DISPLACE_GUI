@@ -6,12 +6,17 @@
 Traditional fishery assessments often treat the ocean as a uniform backdrop, ignoring where vessels actually operate and how they react to closures, wind farms or other sea uses. DISPLACE fills that gap by coupling high resolution biological dynamics with individual vessel decision making in both time and space. This bi directional link is rare in the literature but essential for realistic impact assessmentseuropa.eu.
 
 # 2. Core components
-Component	What it does	Example output
-Fish stock module	Simulates growth, recruitment and mortality of target species at a fine spatial grid.	Seasonal biomass maps for cod, herring, etc.
-Vessel behavior module	Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints.	Effort displacement routes when a Marine Protected Area is introduced.
-Economic module	Calculates revenues, costs, fuel use and profit margins for each fleet/metier.	Changes in fleet income under different spatial scenarios.
-Cross sector layer	Allows inclusion of other sea uses—offshore wind, shipping lanes, aquaculture—to see how they compete for space.	Assessment of effort loss when a wind farm array occupies a productive ground.
-All modules run on a spatio temporal grid that can be tailored—from basin wide (North Sea, Baltic) to local (Northern Adriatic) scalesdisplace-project.org.
+|Component|What it does|Example output|
+
+|Fish stock module|Simulates growth, recruitment and mortality of target species at a fine spatial grid|Seasonal biomass maps for cod, herring, etc.|
+
+|Vessel behavior module|Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints.|Effort displacement routes when a Marine Protected Area is introduced.|
+
+|Economic module|Calculates revenues, costs, fuel use and profit margins for each fleet/metier.|Changes in fleet income under different spatial scenarios.|
+
+|Cross sector layer|Allows inclusion of other sea uses—offshore wind, shipping lanes, aquaculture—to see how they compete for space|	Assessment of effort loss when a wind farm array occupies a productive ground.|
+
+All modules run on a spatio temporal grid that can be tailored—from basin wide (North Sea, Baltic) to local (Northern Adriatic) scales, see www.displace-project.org.
 
 # 3. What can DISPLACE tell us?
 1.	Ecological impact – predicts how closures affect stock biomass and fishing mortality.

@@ -397,60 +397,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.8" class="anchored" data-anchor-id="configure-and-build-with-a-cmakeuserpresets-under-msvc-2026"><span class="header-section-number">2.8</span> Configure and build with a CMakeUserPresets under MSVC 2026</h2>
 <p>For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make CMake building automatically with the MSVC. This file would include, as an example:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"version"</span><span class="ex">:</span> 2,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"defaultConfigurePreset"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"configurePresets"</span><span class="ex">:</span> [</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"vcpkg"</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build"</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toolset"</span><span class="ex">:</span> <span class="st">"v143"</span>,   // forces MSVC 19.44+  </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">"environment"</span><span class="ex">:</span> {</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"VCPKG_ROOT"</span><span class="ex">:</span> <span class="st">"C:</span><span class="dt">\\</span><span class="st">Users</span><span class="dt">\\</span><span class="st">fbas</span><span class="dt">\\</span><span class="st">vcpkg"</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_TOOLCHAIN_FILE"</span><span class="ex">:</span> <span class="st">"</span><span class="va">$env</span><span class="st">{VCPKG_ROOT}</span><span class="dt">\\</span><span class="st">scripts</span><span class="dt">\\</span><span class="st">buildsystems</span><span class="dt">\\</span><span class="st">vcpkg.cmake"</span>,</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_PREFIX_PATH"</span><span class="ex">:</span> <span class="st">"C:/Qt6/6.8.3/msvc2022_64"</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">"autoGenerate"</span><span class="ex">:</span> true</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"RelDebug"</span>,</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/RelDebug"</span>,</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"RelWithDebInfo"</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>, </span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Release"</span>,</span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span></span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Debug"</span>,</span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Debug"</span>,</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Debug"</span></span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  <span class="ex">]</span></span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"version"</span><span class="ex">:</span> 4,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"configurePresets"</span><span class="ex">:</span> [</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"proj-vcpkg"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toolset"</span><span class="ex">:</span> <span class="st">"v143"</span>, // forces MSVC 19.44+  </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">"environment"</span><span class="ex">:</span> {</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"VCPKG_ROOT"</span><span class="ex">:</span> <span class="st">"C:</span><span class="dt">\\</span><span class="st">Users</span><span class="dt">\\</span><span class="st">fbas</span><span class="dt">\\</span><span class="st">vcpkg"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">"autoGenerate"</span><span class="ex">:</span> true,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_TOOLCHAIN_FILE"</span><span class="ex">:</span> <span class="st">"</span><span class="va">$env</span><span class="st">{VCPKG_ROOT}</span><span class="dt">\\</span><span class="st">scripts</span><span class="dt">\\</span><span class="st">buildsystems</span><span class="dt">\\</span><span class="st">vcpkg.cmake"</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_PREFIX_PATH"</span><span class="ex">:</span> <span class="st">"C:/Qt6/6.8.3/msvc2022_64"</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"RelDebug"</span>,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/RelDebug"</span>,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"RelWithDebInfo"</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>, </span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Release"</span>,</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Debug"</span>,</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Debug"</span>,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Debug"</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="ex">]</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="using-exported-vcpkg-dependencies" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="using-exported-vcpkg-dependencies"><span class="header-section-number">2.9</span> Using exported vcpkg dependencies</h2>
@@ -1149,94 +1147,92 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-195"><a href="#cb19-195" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-196"><a href="#cb19-196" aria-hidden="true" tabindex="-1"></a><span class="in">```sh</span></span>
 <span id="cb19-197"><a href="#cb19-197" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a>  <span class="st">"version"</span><span class="ex">:</span> 2,</span>
-<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>  <span class="st">"defaultConfigurePreset"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>  <span class="st">"configurePresets"</span><span class="ex">:</span> [</span>
-<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"vcpkg"</span>,</span>
-<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build"</span>,</span>
-<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toolset"</span><span class="ex">:</span> <span class="st">"v143"</span>,   // forces MSVC 19.44+  </span>
-<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a>      <span class="st">"environment"</span><span class="ex">:</span> {</span>
-<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>        <span class="st">"VCPKG_ROOT"</span><span class="ex">:</span> <span class="st">"C:</span><span class="dt">\\</span><span class="st">Users</span><span class="dt">\\</span><span class="st">fbas</span><span class="dt">\\</span><span class="st">vcpkg"</span></span>
-<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
-<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_TOOLCHAIN_FILE"</span><span class="ex">:</span> <span class="st">"</span><span class="va">$env</span><span class="st">{VCPKG_ROOT}</span><span class="dt">\\</span><span class="st">scripts</span><span class="dt">\\</span><span class="st">buildsystems</span><span class="dt">\\</span><span class="st">vcpkg.cmake"</span>,</span>
-<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_PREFIX_PATH"</span><span class="ex">:</span> <span class="st">"C:/Qt6/6.8.3/msvc2022_64"</span></span>
-<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
-<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>      <span class="st">"autoGenerate"</span><span class="ex">:</span> true</span>
-<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"RelDebug"</span>,</span>
-<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/RelDebug"</span>,</span>
-<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"RelWithDebInfo"</span></span>
-<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
-<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>, </span>
-<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Release"</span>,</span>
-<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span></span>
-<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
-<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
-<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Debug"</span>,</span>
-<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
-<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Debug"</span>,</span>
-<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
-<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Debug"</span></span>
-<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
-<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
-<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a>  <span class="ex">]</span></span>
-<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a>  <span class="st">"version"</span><span class="ex">:</span> 4,</span>
+<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>  <span class="st">"configurePresets"</span><span class="ex">:</span> [</span>
+<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"proj-vcpkg"</span>,</span>
+<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build"</span>,</span>
+<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toolset"</span><span class="ex">:</span> <span class="st">"v143"</span>, // forces MSVC 19.44+  </span>
+<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a>      <span class="st">"environment"</span><span class="ex">:</span> {</span>
+<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
+<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>        <span class="st">"VCPKG_ROOT"</span><span class="ex">:</span> <span class="st">"C:</span><span class="dt">\\</span><span class="st">Users</span><span class="dt">\\</span><span class="st">fbas</span><span class="dt">\\</span><span class="st">vcpkg"</span></span>
+<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>      <span class="ex">},</span></span>
+<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>      <span class="st">"autoGenerate"</span><span class="ex">:</span> true,</span>
+<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_TOOLCHAIN_FILE"</span><span class="ex">:</span> <span class="st">"</span><span class="va">$env</span><span class="st">{VCPKG_ROOT}</span><span class="dt">\\</span><span class="st">scripts</span><span class="dt">\\</span><span class="st">buildsystems</span><span class="dt">\\</span><span class="st">vcpkg.cmake"</span>,</span>
+<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_PREFIX_PATH"</span><span class="ex">:</span> <span class="st">"C:/Qt6/6.8.3/msvc2022_64"</span></span>
+<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"RelDebug"</span>,</span>
+<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/RelDebug"</span>,</span>
+<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"RelWithDebInfo"</span></span>
+<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Release"</span>,</span>
+<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>, </span>
+<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Release"</span>,</span>
+<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Release"</span></span>
+<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a>    <span class="ex">},</span></span>
+<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a>    <span class="kw">{</span></span>
+<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="ex">:</span> <span class="st">"Debug"</span>,</span>
+<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inherits"</span><span class="ex">:</span> <span class="st">"defaultBase"</span>,</span>
+<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>      <span class="st">"binaryDir"</span><span class="ex">:</span> <span class="st">"</span><span class="va">${sourceDir}</span><span class="st">/build/Debug"</span>,</span>
+<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>      <span class="st">"cacheVariables"</span><span class="ex">:</span> {</span>
+<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CMAKE_BUILD_TYPE"</span><span class="ex">:</span> <span class="st">"Debug"</span></span>
+<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a>      <span class="kw">}</span></span>
+<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a>  <span class="ex">]</span></span>
+<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using exported vcpkg dependencies</span></span>
 <span id="cb19-254"><a href="#cb19-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using exported vcpkg dependencies</span></span>
+<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a>If you received dependencies as a vcpkg export (e.g., created with <span class="in">`vcpkg export --raw`</span>), you can build without accessing vcpkg registries:</span>
 <span id="cb19-256"><a href="#cb19-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a>If you received dependencies as a vcpkg export (e.g., created with <span class="in">`vcpkg export --raw`</span>), you can build without accessing vcpkg registries:</span>
-<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-259"><a href="#cb19-259" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Extract the export archive somewhere. It should contain an <span class="in">`installed/`</span> layout. The best location is <span class="in">`C:\vcpkg\`</span>, so</span>
-<span id="cb19-260"><a href="#cb19-260" aria-hidden="true" tabindex="-1"></a>that no changes are required to the vcpkg toolchain file.</span>
-<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a>NOTE: the root directory in the archive is named <span class="in">`vcpkg-export-something`</span>, just rename it to <span class="in">`vcpkg`</span>.</span>
-<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Point CMake/vcpkg to the exported “installed” directory:</span>
-<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Set the environment variable or CMake cache entry:</span>
-<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a>     <span class="in">```</span></span>
-<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a><span class="in">     -DVCPKG_INSTALLED_DIR="path/to/export/installed"</span></span>
-<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a><span class="in">     -DVCPKG_FEATURE_FLAGS=manifests</span></span>
-<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a><span class="in">     ```</span></span>
-<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Still pass the toolchain file:</span>
-<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a>     <span class="in">```</span></span>
-<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a><span class="in">     -DCMAKE_TOOLCHAIN_FILE=".../vcpkg.cmake"</span></span>
-<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a><span class="in">     ```</span></span>
+<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Extract the export archive somewhere. It should contain an <span class="in">`installed/`</span> layout. The best location is <span class="in">`C:\vcpkg\`</span>, so</span>
+<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a>that no changes are required to the vcpkg toolchain file.</span>
+<span id="cb19-259"><a href="#cb19-259" aria-hidden="true" tabindex="-1"></a>NOTE: the root directory in the archive is named <span class="in">`vcpkg-export-something`</span>, just rename it to <span class="in">`vcpkg`</span>.</span>
+<span id="cb19-260"><a href="#cb19-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Point CMake/vcpkg to the exported “installed” directory:</span>
+<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Set the environment variable or CMake cache entry:</span>
+<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a>     <span class="in">```</span></span>
+<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a><span class="in">     -DVCPKG_INSTALLED_DIR="path/to/export/installed"</span></span>
+<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a><span class="in">     -DVCPKG_FEATURE_FLAGS=manifests</span></span>
+<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a><span class="in">     ```</span></span>
+<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Still pass the toolchain file:</span>
+<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a>     <span class="in">```</span></span>
+<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a><span class="in">     -DCMAKE_TOOLCHAIN_FILE=".../vcpkg.cmake"</span></span>
+<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a><span class="in">     ```</span></span>
+<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Configure and build as usual. vcpkg will resolve packages from the exported “installed” tree and avoid network access.</span>
 <span id="cb19-273"><a href="#cb19-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Configure and build as usual. vcpkg will resolve packages from the exported “installed” tree and avoid network access.</span>
+<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a>If the export was produced as a NuGet package (<span class="in">`--nuget`</span>), restore it into a local folder and pass <span class="in">`-DVCPKG_INSTALLED_DIR`</span> to that restored layout.</span>
 <span id="cb19-275"><a href="#cb19-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a>If the export was produced as a NuGet package (<span class="in">`--nuget`</span>), restore it into a local folder and pass <span class="in">`-DVCPKG_INSTALLED_DIR`</span> to that restored layout.</span>
+<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tips</span></span>
 <span id="cb19-277"><a href="#cb19-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tips</span></span>
-<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Preferred triplets:</span>
-<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Windows: x64-windows</span>
-<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Linux: x64-linux</span>
-<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>macOS: x64-osx (or arm64-osx on Apple Silicon)</span>
-<span id="cb19-284"><a href="#cb19-284" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ensure your Qt6 version matches the required 6.8.x indicated by CMake <span class="in">`find_package(Qt6 6.8 ...)`</span>.</span>
-<span id="cb19-285"><a href="#cb19-285" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For GDAL, if you hit API mismatches, use a version ≥ 2.20 where required by components that explicitly request it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Preferred triplets:</span>
+<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Windows: x64-windows</span>
+<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Linux: x64-linux</span>
+<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>macOS: x64-osx (or arm64-osx on Apple Silicon)</span>
+<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ensure your Qt6 version matches the required 6.8.x indicated by CMake <span class="in">`find_package(Qt6 6.8 ...)`</span>.</span>
+<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For GDAL, if you hit API mismatches, use a version ≥ 2.20 where required by components that explicitly request it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

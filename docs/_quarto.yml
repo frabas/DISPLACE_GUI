@@ -4,7 +4,7 @@ project:
 
 book:
   title: "DISPLACE Documentation"
-  author: Francois Bastardie (DTU) with UCSB
+  author: Francois Bastardie (DTU) & UCSB
   date: last-modified
   date-format: "[Last Updated on] MMMM DD, YYYY"
   chapters:

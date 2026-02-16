@@ -4,8 +4,14 @@ title: "Running DISPLACE"
 
 # Running DISPLACE via the Graphical User Interface(GUI) {#sec-running}
 
-Once the software is installed (find installers on the Drive or on the Github DISPLACE_GUI project page), a DISPLACE simulation can be run after loading a scenario .dat file via Menu>Load, then click Start in the GUI
-The DISPLACE simulator is then launched on this particular scenario. 
+To install on Windows, run the installer (.exe) and follow the on-screen instructions. There are no prerequisites for Windows, and the application should work out of the box.
+Once the software is installed (find installers on the Drive or on the [DISPLACE GUI GitHub](https://github.com/frabas/DISPLACE_GUI/releases/) or [DISPLACE_GUI project page](https://displace-project.org/blog/download/)), a DISPLACE simulation can be run after loading a scenario .dat file via Menu>Load (using for example the minimal test dataset that is stored in a [public repository](https://github.com/frabas/DISPLACE_input_minitest)), then click Start in the GUI
+The DISPLACE simulator is then launched on this particular scenario.
+ 
+
+# Running DISPLACE Simulator {#sec-running}
+
+The simulator can be lauched also via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI>scheduler.exe for example to generate the batch file that will launch a row of simulations.
 
 For example:
 ```sh
@@ -15,10 +21,6 @@ start /w C:\displace.exe -a C:\DISPLACE_input_myfish -f "myfish" -f2 "scebaselin
 
 PAUSE
 ```
-
-# Running DISPLACE Simulator {#sec-running}
-
-The simulator can be lauched also via a command line. This chapter describes the command-line options available when running the DISPLACE simulator. A batch file with some command lines can also be built from the GUI>scheduler.exe for example to generate the batch file that will launch a row of simulations.
 
 ## Command-Line Options
 

@@ -118,11 +118,22 @@
     ]
   },
   {
+    "objectID": "quickstart.html#configure-and-build-with-a-cmakeuserpresets-under-msvc-2026",
+    "href": "quickstart.html#configure-and-build-with-a-cmakeuserpresets-under-msvc-2026",
+    "title": "1  Quick Start [to compile DISPLACE]",
+    "section": "2.8 Configure and build with a CMakeUserPresets under MSVC 2026",
+    "text": "2.8 Configure and build with a CMakeUserPresets under MSVC 2026\nFor Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make CMake building automatically with the MSVC. This file would include, as an example:\n{\n  \"version\": 2,\n  \"defaultConfigurePreset\": \"Release\",\n  \"configurePresets\": [\n    {\n      \"name\": \"defaultBase\",\n      \"inherits\": \"vcpkg\",\n      \"binaryDir\": \"${sourceDir}/build\",\n      \"toolset\": \"v143\",   // forces MSVC 19.44+  \n      \"environment\": {\n        \"CMAKE_BUILD_TYPE\": \"Release\",\n        \"VCPKG_ROOT\": \"C:\\\\Users\\\\fbas\\\\vcpkg\"\n      },\n\n      \"cacheVariables\": {\n        \"CMAKE_TOOLCHAIN_FILE\": \"$env{VCPKG_ROOT}\\\\scripts\\\\buildsystems\\\\vcpkg.cmake\",\n        \"CMAKE_PREFIX_PATH\": \"C:/Qt6/6.8.3/msvc2022_64\"\n      },\n      \"autoGenerate\": true\n\n    },\n    {\n      \"name\": \"RelDebug\",\n      \"inherits\": \"defaultBase\",\n      \"binaryDir\": \"${sourceDir}/build/RelDebug\",\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"RelWithDebInfo\"\n      }\n\n    },\n    {\n      \"name\": \"Release\",\n      \"inherits\": \"defaultBase\", \n      \"binaryDir\": \"${sourceDir}/build/Release\",\n\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"Release\"\n      }\n\n    },\n    {\n      \"name\": \"Debug\",\n      \"inherits\": \"defaultBase\",\n      \"binaryDir\": \"${sourceDir}/build/Debug\",\n      \"cacheVariables\": {\n        \"CMAKE_BUILD_TYPE\": \"Debug\"\n      }\n\n    }\n  ]\n}",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
+    ]
+  },
+  {
     "objectID": "quickstart.html#using-exported-vcpkg-dependencies",
     "href": "quickstart.html#using-exported-vcpkg-dependencies",
     "title": "1  Quick Start [to compile DISPLACE]",
-    "section": "2.8 Using exported vcpkg dependencies",
-    "text": "2.8 Using exported vcpkg dependencies\nIf you received dependencies as a vcpkg export (e.g., created with vcpkg export --raw), you can build without accessing vcpkg registries:\n\nExtract the export archive somewhere. It should contain an installed/ layout. The best location is C:\\vcpkg\\, so that no changes are required to the vcpkg toolchain file. NOTE: the root directory in the archive is named vcpkg-export-something, just rename it to vcpkg.\nPoint CMake/vcpkg to the exported “installed” directory:\n\nSet the environment variable or CMake cache entry:\n-DVCPKG_INSTALLED_DIR=\"path/to/export/installed\"\n-DVCPKG_FEATURE_FLAGS=manifests\nStill pass the toolchain file:\n-DCMAKE_TOOLCHAIN_FILE=\".../vcpkg.cmake\"\n\nConfigure and build as usual. vcpkg will resolve packages from the exported “installed” tree and avoid network access.\n\nIf the export was produced as a NuGet package (--nuget), restore it into a local folder and pass -DVCPKG_INSTALLED_DIR to that restored layout.",
+    "section": "2.9 Using exported vcpkg dependencies",
+    "text": "2.9 Using exported vcpkg dependencies\nIf you received dependencies as a vcpkg export (e.g., created with vcpkg export --raw), you can build without accessing vcpkg registries:\n\nExtract the export archive somewhere. It should contain an installed/ layout. The best location is C:\\vcpkg\\, so that no changes are required to the vcpkg toolchain file. NOTE: the root directory in the archive is named vcpkg-export-something, just rename it to vcpkg.\nPoint CMake/vcpkg to the exported “installed” directory:\n\nSet the environment variable or CMake cache entry:\n-DVCPKG_INSTALLED_DIR=\"path/to/export/installed\"\n-DVCPKG_FEATURE_FLAGS=manifests\nStill pass the toolchain file:\n-DCMAKE_TOOLCHAIN_FILE=\".../vcpkg.cmake\"\n\nConfigure and build as usual. vcpkg will resolve packages from the exported “installed” tree and avoid network access.\n\nIf the export was produced as a NuGet package (--nuget), restore it into a local folder and pass -DVCPKG_INSTALLED_DIR to that restored layout.",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"
@@ -132,8 +143,8 @@
     "objectID": "quickstart.html#tips",
     "href": "quickstart.html#tips",
     "title": "1  Quick Start [to compile DISPLACE]",
-    "section": "2.9 Tips",
-    "text": "2.9 Tips\n\nPreferred triplets:\n\nWindows: x64-windows\nLinux: x64-linux\nmacOS: x64-osx (or arm64-osx on Apple Silicon)\n\nEnsure your Qt6 version matches the required 6.8.x indicated by CMake find_package(Qt6 6.8 ...).\nFor GDAL, if you hit API mismatches, use a version ≥ 2.20 where required by components that explicitly request it.",
+    "section": "2.10 Tips",
+    "text": "2.10 Tips\n\nPreferred triplets:\n\nWindows: x64-windows\nLinux: x64-linux\nmacOS: x64-osx (or arm64-osx on Apple Silicon)\n\nEnsure your Qt6 version matches the required 6.8.x indicated by CMake find_package(Qt6 6.8 ...).\nFor GDAL, if you hit API mismatches, use a version ≥ 2.20 where required by components that explicitly request it.",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Quick Start [to compile DISPLACE]</span>"

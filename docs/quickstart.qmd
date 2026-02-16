@@ -187,6 +187,69 @@ Notes:
     -DVCPKG_OVERLAY_PORTS="$PWD/vcpkg-overlays"  # Linux/macOS
   ```
 
+## Configure and build with a CMakeUserPresets under MSVC 2026 
+
+For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make CMake building automatically with the MSVC. This file would include, as an example:
+
+```sh
+{
+  "version": 2,
+  "defaultConfigurePreset": "Release",
+  "configurePresets": [
+    {
+      "name": "defaultBase",
+      "inherits": "vcpkg",
+      "binaryDir": "${sourceDir}/build",
+	  "toolset": "v143",   // forces MSVC 19.44+  
+      "environment": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_ROOT": "C:\\Users\\fbas\\vcpkg"
+      },
+
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}\\scripts\\buildsystems\\vcpkg.cmake",
+        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64"
+      },
+	  "autoGenerate": true
+
+    },
+    {
+      "name": "RelDebug",
+      "inherits": "defaultBase",
+      "binaryDir": "${sourceDir}/build/RelDebug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+
+    },
+    {
+      "name": "Release",
+      "inherits": "defaultBase", 
+      "binaryDir": "${sourceDir}/build/Release",
+
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+
+    },
+    {
+      "name": "Debug",
+      "inherits": "defaultBase",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+
+    }
+  ]
+}
+
+
+
+    
+```
+
+
 ## Using exported vcpkg dependencies
 
 If you received dependencies as a vcpkg export (e.g., created with `vcpkg export --raw`), you can build without accessing vcpkg registries:

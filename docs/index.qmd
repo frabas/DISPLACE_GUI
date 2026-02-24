@@ -3,15 +3,23 @@
  DISPLACE, a cutting edge, agent based modelling platform that helps scientists, managers and stakeholders evaluate how fisheries respond to spatial marine planning decisions.
 
 # 1. Why such a model?
-Traditional fishery assessments often treat the ocean as a uniform backdrop, ignoring where vessels actually operate and how they react to closures, wind farms or other sea uses. DISPLACE fills that gap by coupling high resolution biological dynamics with individual vessel decision making in both time and space. This bi directional link is rare in the literature but essential for realistic impact assessmentseuropa.eu.
+Traditional fishery assessments often treat the ocean as a uniform backdrop, ignoring where vessels actually operate and how they react to closures, wind farms or other sea uses. DISPLACE fills that gap by coupling high resolution biological dynamics with individual vessel decision making in both time and space. This bi directional link is rare in the literature but essential for realistic impact assessments.
+
+DISPLACE is an acronym for Dynamic Individual vessel based Spatial Planning and Effort Displacement. It emphasizes that the model works at the level of individual fishing vessels, simulating their day to day decisions and how those decisions shift when spatial measures (e.g., marine protected areas, offshore wind farms, gear restrictions) are introduced. This vessel focused approach enables detailed estimates of effort redistribution, catch changes, and economic impacts, which are then used for risk assessment and policy evaluation in European marine spatial planning and ecosystem based fisheries management contexts.
+
+|Component|Meaning|
+|---------|------------------------------------------|
+|Dynamic|The model runs forward in time, updating vessel behaviour each simulated day.|
+|Individual vessel based|Each fishing vessel (or fleet segment) is represented as a separate agent with its own characteristics and decision rules.|
+|Spatial Planning|The model evaluates how spatial management measures (MPAs, wind farm zones, gear restrictions, etc.) reshape where vessels fish.|
+|Effort Displacement|It quantifies how fishing effort moves away from restricted areas and the resulting changes in catch, revenue, and ecological impact.|
+
 
 # 2. Core components
 |Component|What it does|Example output|
-
-|Fish stock module|Simulates growth, recruitment and mortality of target species at a fine spatial grid|Seasonal biomass maps for cod, herring, etc.|
-
-|Vessel behavior module|Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints.|Effort displacement routes when a Marine Protected Area is introduced.|
-
+|---------|---------------------|------------------------------|
+|Population dynamics module|Mortality of target species at a fine spatial grid|Seasonal biomass maps for cod, herring, etc.|
+|Vessel dynamics behavior module|Each vessel decides where, when and how much effort to apply, based on profitability, gear limits and regulatory constraints.|Effort displacement routes when a Marine Protected Area is introduced.|
 |Economic module|Calculates revenues, costs, fuel use and profit margins for each fleet/metier.|Changes in fleet income under different spatial scenarios.|
 
 |Cross sector layer|Allows inclusion of other sea uses—offshore wind, shipping lanes, aquaculture—to see how they compete for space|	Assessment of effort loss when a wind farm array occupies a productive ground.|

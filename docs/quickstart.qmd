@@ -191,17 +191,17 @@ Notes:
 
 ## Configure and build with a CMakeUserPresets under MSVC 2026 
 
-For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make CMake building automatically with the MSVC. This file would include, as an example:
+For Windows under MSVC (2026), a CMakeUserPresets.json (besides the CMakePresets.json) can also be used to make CMake building automatically with the MSVC. This file would include, as an example:
 
 ```sh
 {
-  "version": 4,
+  "version": 7,
   "configurePresets": [
     {
       "name": "defaultBase",
       "inherits": "proj-vcpkg",
       "binaryDir": "${sourceDir}/build",
-      "toolset": "v143", // forces MSVC 19.44+  
+      "toolset": "v143",   
       "environment": {
         "CMAKE_BUILD_TYPE": "Release",
         "VCPKG_ROOT": "C:\\Users\\fbas\\vcpkg"
@@ -209,7 +209,8 @@ For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make 
       "autoGenerate": true,
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}\\scripts\\buildsystems\\vcpkg.cmake",
-        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64"
+        "CMAKE_PREFIX_PATH": "C:/Qt6/6.8.3/msvc2022_64",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
 
     },
@@ -224,7 +225,7 @@ For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make 
     },
     {
       "name": "Release",
-      "inherits": "defaultBase", 
+      "inherits": "defaultBase",
       "binaryDir": "${sourceDir}/build/Release",
 
       "cacheVariables": {
@@ -243,7 +244,6 @@ For Windows under MSVC (2026), a CMakeUserPresets.json can also be used to make 
     }
   ]
 }
-
 
 
     

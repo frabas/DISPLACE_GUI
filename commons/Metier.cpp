@@ -35,7 +35,8 @@ double _gear_width_b,
 string _gear_width_model,
 multimap<int, double> _loss_after_1_passage,
 vector<int> _metier_target_stocks,
-vector<int> _metier_suitable_seabottomtypes)
+vector<int> _metier_suitable_seabottomtypes,
+double fuel_reduction_multiplier)
 {
     name=_name;
     type=_type;
@@ -184,6 +185,12 @@ string Metier::get_gear_width_model()
 {
 
 	return(gear_width_model);
+}
+
+double Metier::get_fuel_reduction_multiplier()
+{
+
+    return(fuel_reduction_multiplier);
 }
 
 

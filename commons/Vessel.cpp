@@ -2820,10 +2820,11 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
 
         // update
+        double fuel_multiplier = get_metier()->get_fuel_reduction_multiplier();
         if(returning_to_harbour)
-        {
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+        {   
+            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning() * fuel_multiplier) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
              // cout << "while returning, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
@@ -2836,8 +2837,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
         else
         {
-            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
-            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		
+            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming() * get_metier()->get_fuel_reduction_multiplier()* fuel_multiplier) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
             // cout << "while steaming, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
@@ -2994,11 +2995,12 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         double actual_speed = this->get_speed(); // for now actusl speed is the same as the max speed. so the litre_fuel will be max cons... TODO: change it.
         double litre_fuel = fuel_per_h_scaling_a * pow(actual_speed, 3); // cubic law
 
+        double fuel_multiplier = get_metier()->get_fuel_reduction_multiplier();
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << "\n");
-            set_cumfuelcons( get_cumfuelcons() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
-            set_consotogetthere( get_consotogetthere() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+            set_cumfuelcons( get_cumfuelcons() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
+            set_consotogetthere( get_consotogetthere() + (litre_fuel*PING_RATE*get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
             // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
@@ -3012,8 +3014,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         else
         {
             dout(cout << "steaming to" << "\n");
-            set_cumfuelcons(get_cumfuelcons() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
-            set_consotogetthere(get_consotogetthere() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()));
+            set_cumfuelcons(get_cumfuelcons() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()* fuel_multiplier));
+            set_consotogetthere(get_consotogetthere() + (litre_fuel * PING_RATE * get_mult_fuelcons_when_steaming()* fuel_multiplier));
             set_cumsteaming(get_cumsteaming() + PING_RATE);
             set_timeatsea(get_timeatsea() + PING_RATE);
             // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;

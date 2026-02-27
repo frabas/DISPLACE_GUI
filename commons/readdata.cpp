@@ -1768,6 +1768,39 @@ read_discardratio_limits(string a_semester, string folder_name_parameterization,
 }
 
 
+map<int, double>
+read_fuel_reduction_multipliers(int nbmets, string folder_name_parameterization, string inputfolder, string fleetsce)
+{
+
+    string filename =
+        inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_fuel_reduction_multiplier_fleetsce" +
+        fleetsce + ".dat";
+
+    ifstream fuel_reduction_multipliers_file;
+    fuel_reduction_multipliers_file.open(filename.c_str());
+    if (fuel_reduction_multipliers_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        //exit(-1);
+        // back compatibility: if not informed then fill out with 1 
+        map<int, double> fuel_reduction_multipliers;
+        for (int i = 0; i < static_cast<int>(nbmets); ++i) {
+            fuel_reduction_multipliers.emplace(i, 1.0);
+        }
+        return(fuel_reduction_multipliers);
+
+    }
+
+    map<int, double> fuel_reduction_multipliers;
+    fill_map_from_specifications_i_d(fuel_reduction_multipliers_file, fuel_reduction_multipliers, folder_name_parameterization);
+    fuel_reduction_multipliers_file.close();
+
+    return (fuel_reduction_multipliers);
+}
+
+
+
 multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 

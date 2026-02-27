@@ -522,14 +522,16 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                             //trawling (type 1)
                             cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
                                              litre_fuel * PING_RATE *
-                                          model->vessels()[index_v]->get_mult_fuelcons_when_fishing();
+                                          model->vessels()[index_v]->get_mult_fuelcons_when_fishing() * 
+                                             model->vessels()[index_v]->get_metier()->get_fuel_reduction_multiplier();
                             outc(cout << "fuel cons for trawlers (metier "
                                       << model->vessels()[index_v]->get_metier()->get_name() << ")" << "\n");
                         } else {
                             // gillnetting, seining (type 2)
                             cumfuelcons = model->vessels()[index_v]->get_cumfuelcons() +
                                             litre_fuel * PING_RATE *
-                                          model->vessels()[index_v]->get_mult_fuelcons_when_inactive();
+                                          model->vessels()[index_v]->get_mult_fuelcons_when_inactive() * 
+                                         model->vessels()[index_v]->get_metier()->get_fuel_reduction_multiplier();
                             outc(cout << "fuel cons for gillnetters or seiners (metier "
                                       << model->vessels()[index_v]->get_metier()->get_name() << ")" << "\n");
                         }

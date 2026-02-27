@@ -123,6 +123,32 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
 
     LoadedData loadedData;
 
+    cout << "read metier gear width a parameters....ok? " << "\n";
+    map<int, double> metiers_gear_widths_param_a = read_gear_widths_param_a(p->folder_name_parameterization,
+        p->inputfolder);
+    cout << "read metier gear width b parameters....ok? " << "\n";
+    map<int, double> metiers_gear_widths_param_b = read_gear_widths_param_b(p->folder_name_parameterization,
+        p->inputfolder);
+    cout << "read metier gear width model type parameters....ok? " << "\n";
+    map<int, string> metiers_gear_widths_model_type = read_gear_widths_model_type(p->folder_name_parameterization,
+        p->inputfolder);
+
+
+    // get the name of the metiers
+    // copy only unique elements into name_metiers
+    cout << "retrieve the metier names.... " << "\n";
+    vector<int> name_metiers;
+    for (multimap<int, double>::iterator iter = metiers_gear_widths_param_a.begin();
+        iter != metiers_gear_widths_param_a.end();
+        iter = metiers_gear_widths_param_a.upper_bound(iter->first)) {
+        name_metiers.push_back(iter->first);
+        outc(cout << "metier " << iter->first << "\n");
+    }
+    cout << "nb metiers: " << name_metiers.size() << "\n";
+    cout
+        << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! "
+        << "\n";
+
     //input data, metier characteristics: selectivty ogives, beta per pop
     cout << "check whether all metiers informed in the following parameters files... " << "\n";
     cout << "read metier betas parameters....ok? " << "\n";
@@ -132,6 +158,13 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     multimap<int, double> discards_rate_limits = read_discardratio_limits(paramsForLoad.sparam3,
                                                                           p->folder_name_parameterization,
                                                                           p->inputfolder);
+    
+    cout << "read fuel_reduction_plan multiplier parameters....ok? " << "\n";
+    map<int, double> fuel_reduction_multipliers = read_fuel_reduction_multipliers(name_metiers.size(),
+                                                                          p->folder_name_parameterization,
+                                                                          p->inputfolder,
+                                                                          model().scenario().fleetsce);
+
     cout << "read is_avoided_stocks parameters....ok? " << "\n";
     multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(paramsForLoad.sparam3,
                                                                    p->folder_name_parameterization,
@@ -147,33 +180,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
             p->inputfolder);
     cout << "read fspeed parameters....ok? " << "\n";
     map<int, double> metiers_fspeed = read_metiers_fspeed(p->folder_name_parameterization, p->inputfolder);
-    cout << "read metier gear width a parameters....ok? " << "\n";
-    map<int, double> metiers_gear_widths_param_a = read_gear_widths_param_a(p->folder_name_parameterization,
-                                                                            p->inputfolder);
-    cout << "read metier gear width b parameters....ok? " << "\n";
-    map<int, double> metiers_gear_widths_param_b = read_gear_widths_param_b(p->folder_name_parameterization,
-                                                                            p->inputfolder);
-    cout << "read metier gear width model type parameters....ok? " << "\n";
-    map<int, string> metiers_gear_widths_model_type = read_gear_widths_model_type(p->folder_name_parameterization,
-                                                                                  p->inputfolder);
-
-  
-    // get the name of the metiers
-    // copy only unique elements into name_metiers
-    cout << "retrieve the metier names.... " << "\n";
-    vector<int> name_metiers;
-    for (multimap<int, double>::iterator iter = metiers_gear_widths_param_a.begin();
-         iter != metiers_gear_widths_param_a.end();
-         iter = metiers_gear_widths_param_a.upper_bound(iter->first)) {
-        name_metiers.push_back(iter->first);
-        outc(cout << "metier " << iter->first << "\n");
-    }
-    cout << "nb metiers: " << name_metiers.size() << "\n";
-    cout
-            << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! "
-            << "\n";
-
-
+   
 
 
 
@@ -185,6 +192,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     vector<double> met_gear_widths_param_b(name_metiers.size());
     vector<string> met_gear_widths_model_type(name_metiers.size());
     vector<double> met_percent_revenue_completenesses(name_metiers.size());
+    vector<double> met_fuel_reduction_multipliers(name_metiers.size());
     vector<vector<double> > vect_of_metier_betas_vovd(name_metiers.size(), vector<double>(paramsForLoad.iparam1));
     vector<vector<double> > vect_of_discardratio_limits_vovd(name_metiers.size(),
                                                              vector<double>(paramsForLoad.iparam1));
@@ -207,6 +215,8 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
         met_gear_widths_param_b.at(i) = metiers_gear_widths_param_b[i];
         met_gear_widths_model_type.at(i) = metiers_gear_widths_model_type[i];
         met_percent_revenue_completenesses.at(i) = percent_revenue_completenesses[i];
+
+        met_fuel_reduction_multipliers.at(i) = fuel_reduction_multipliers[i];
 
         vect_of_metier_betas_vovd.at(i) = find_entries_i_d(metiers_betas, metier_name);
         cout << "Read metier_betas this met " << i << "\n";
@@ -275,6 +285,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     loadedData.vectdparam2 = met_speeds;
     loadedData.vectdparam3 = met_gear_widths_param_a;
     loadedData.vectdparam4 = met_gear_widths_param_b;
+    loadedData.vectdparam5 = met_fuel_reduction_multipliers;
     loadedData.vectsparam1 = met_gear_widths_model_type;
     loadedData.vectmmapidparam1 = vect_of_loss_after_1_passage_mmapid;
     loadedData.vovi3 = vect_of_the_metier_target_stocks_vovi;
@@ -314,7 +325,9 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
                                     loadedData.vectsparam1.at(i),
                                     loadedData.vectmmapidparam1.at(i),
                                     loadedData.vovi3.at(i),
-                                    loadedData.vovi4.at(i));
+                                    loadedData.vovi4.at(i),
+                                    loadedData.vectdparam5.at(i)
+                                    );
 
             cout << "Create metier " << i << "...done" << "\n";
 

@@ -27,6 +27,7 @@ public:
         double fspeed;
         double gear_width_a;
         double gear_width_b;
+        double fuel_reduction_multiplier;
         string gear_width_model;
         std::multimap<int, double> loss_after_1_passage;
         std::vector<int> metier_target_stocks;

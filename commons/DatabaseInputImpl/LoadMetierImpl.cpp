@@ -43,8 +43,8 @@ void DatabaseModelLoader::loadMetiers(int year, int month, int quarter, int seme
          metierData->gear_width_model,
          metierData->loss_after_1_passage,
          metierData->metier_target_stocks,
-         metierData->metier_suitable_seabottomtypes
-        );
+         metierData->metier_suitable_seabottomtypes,
+         metierData->fuel_reduction_multiplier);
         metiersToAdd.push_back(m);
     }
 

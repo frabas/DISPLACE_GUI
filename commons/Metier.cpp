@@ -36,7 +36,7 @@ string _gear_width_model,
 multimap<int, double> _loss_after_1_passage,
 vector<int> _metier_target_stocks,
 vector<int> _metier_suitable_seabottomtypes,
-double fuel_reduction_multiplier)
+double _fuel_reduction_multiplier)
 {
     name=_name;
     type=_type;
@@ -57,6 +57,7 @@ double fuel_reduction_multiplier)
     metier_target_stocks=_metier_target_stocks;
     metier_suitable_seabottomtypes=_metier_suitable_seabottomtypes;
     met_multiplier_on_arbitary_breaks_for_tariff = 1;
+    fuel_reduction_multiplier = _fuel_reduction_multiplier;
  
   
 }

@@ -2093,6 +2093,7 @@ int app_main(int argc, char const* argv[])
                                     simModel->is_oth_land_per_metier(),
                                     export_vmslike,
                                     scenario.freq_do_growth,
+                                    scenario.freq_redispatch_the_pop,
                                     simModel->initWeightPerSzgroup(),
                                     simModel->species_interactions_mortality_proportion_matrix(),
                                     simModel->populations(),

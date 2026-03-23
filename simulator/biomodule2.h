@@ -96,6 +96,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           bool is_oth_land_per_metier,
                           int export_vmslike,
                           int freq_do_growth,
+                          int freq_redispatch_the_pop,
                           const multimap<int,double> &init_weight_per_szgroup,
                           const vector<vector <double> > &species_interactions_mortality_proportion_matrix,
                           vector<Population* >& populations,

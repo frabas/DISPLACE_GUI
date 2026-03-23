@@ -135,6 +135,7 @@ bool applyBiologicalModule2(int tstep, int a_month_i, int a_quarter_i, int a_yea
                           bool is_oth_land_per_metier,
                           int export_vmslike,
                           int freq_do_growth,
+                          int freq_redispatch_the_pop,
                           const multimap<int, double> &init_weight_per_szgroup,
                           const vector<vector <double> >&species_interactions_mortality_proportion_matrix,
                           vector<Population* >& populations,
@@ -1116,6 +1117,52 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                 // at the very end, then re-dispatch over nodes to re-dispatch the recruits over the nodes....
                 try {
+                    
+                   // if (freq_redispatch_the_pop < 0 || freq_redispatch_the_pop > 4) {
+
+                        const std::vector<Node*>& node_list = populations.at(sp)->get_list_nodes();   // already a vector of pointers
+                        const size_t n_nodes = node_list.size();
+
+
+                        // version >1.6.0. Account for carrying on the local depletion effect in the avai 
+                        // avoiding a distribute_N() event triggered by the do_growth that applied so far a tacit redistribution  
+                        for (int n = 0; n < node_list.size(); n++)
+                        {
+
+                            //std::vector<double>& init_avai_pops =
+                            //    populations.at(sp)->get_availability(node_list.at(n)->get_idx_node()); // search in avail_cache
+                            // Print initial values
+                            //std::cout << "[DEBUG] Initial avai_pops for node " << node_list.at(n)->get_idx_node()
+                            //    << ", species " << sp << ":" << std::endl;
+                            //for (unsigned int sz = 0; sz < init_avai_pops.size(); sz++) {
+                            //    std::cout << "  sz=" << sz << ": " << init_avai_pops[sz] << std::endl;
+                            //}
+
+                            vector <double> newNs = node_list.at(n)->get_Ns_pops_at_szgroup(sp);
+                            std::vector<double> new_avai_pops(a_tot_N_at_szgroup.size(), 0);
+                            for (unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+                                if (a_tot_N_at_szgroup[sz] != 0)
+                                {
+                                    double val = (newNs[sz]) / (a_tot_N_at_szgroup[sz]);
+                                    new_avai_pops.at(sz) = val;
+                                }
+
+                            // Print new values before setting
+                            //std::cout << "[DEBUG] New avai_pops for node " << node_list.at(n)->get_idx_node()
+                            //    << ", species " << sp << ":" << std::endl;
+                            //for (unsigned int sz = 0; sz < new_avai_pops.size(); sz++) {
+                            //    std::cout << "  sz=" << sz << ": " << new_avai_pops[sz];
+                            //    if (sz < init_avai_pops.size()) {
+                            //        double diff = new_avai_pops[sz] - init_avai_pops[sz];
+                            //        std::cout << " (diff: " << diff << ")";
+                            //    }
+                            //    std::cout << std::endl;
+                            //}
+
+                            populations.at(sp)->set_node_availability(node_list.at(n), new_avai_pops);
+                        }
+
+                    
                     populations.at(sp)->distribute_N();
                   } catch (runtime_error &) {
                       cout << "Fail in distribute_N" << "\n";

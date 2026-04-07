@@ -1126,26 +1126,41 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                         // version >1.6.0. Account for carrying on the local depletion effect in the avai 
                         // avoiding a distribute_N() event triggered by the do_growth that applied so far a tacit redistribution  
+                        std::vector<double> accumulated_Ns(a_tot_N_at_szgroup.size(), 0);
+                        vector <double> newNs;
+                        for (int n = 0; n < node_list.size(); n++)
+                        {
+                            newNs = node_list.at(n)->get_Ns_pops_at_szgroup(sp);
+                            // Accumulate newNs across all nodes
+                            for (unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+                            {
+                                accumulated_Ns[sz] += newNs[sz];
+                            }
+                        }
+
                         for (int n = 0; n < node_list.size(); n++)
                         {
 
                             //std::vector<double>& init_avai_pops =
                             //    populations.at(sp)->get_availability(node_list.at(n)->get_idx_node()); // search in avail_cache
-                            // Print initial values
+                            //// Print initial values
                             //std::cout << "[DEBUG] Initial avai_pops for node " << node_list.at(n)->get_idx_node()
                             //    << ", species " << sp << ":" << std::endl;
                             //for (unsigned int sz = 0; sz < init_avai_pops.size(); sz++) {
                             //    std::cout << "  sz=" << sz << ": " << init_avai_pops[sz] << std::endl;
                             //}
 
-                            vector <double> newNs = node_list.at(n)->get_Ns_pops_at_szgroup(sp);
                             std::vector<double> new_avai_pops(a_tot_N_at_szgroup.size(), 0);
+                            newNs = node_list.at(n)->get_Ns_pops_at_szgroup(sp);
                             for (unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
                                 if (a_tot_N_at_szgroup[sz] != 0)
                                 {
-                                    double val = (newNs[sz]) / (a_tot_N_at_szgroup[sz]);
+                                    double val = (newNs[sz]) / (accumulated_Ns[sz]);
                                     new_avai_pops.at(sz) = val;
                                 }
+
+
+                            
 
                             // Print new values before setting
                             //std::cout << "[DEBUG] New avai_pops for node " << node_list.at(n)->get_idx_node()
@@ -1161,8 +1176,31 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                             populations.at(sp)->set_node_availability(node_list.at(n), new_avai_pops);
                         }
+                        
+                        // After the second node loop, verify that proportions sum to 1 across nodes for each size group
+                        //std::cout << "[DEBUG] Verification: Sum of new_avai_pops across nodes for each size group:" << std::endl;
+                        //bool all_match = true;
 
-                    
+                        //for (unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+                        //{
+                        //    double sum_across_nodes = 0.0;
+                        //    for (int n = 0; n < node_list.size(); n++)
+                        //    {
+                        //        // Get the availability that was just set
+                        //        std::vector<double> node_avai = populations.at(sp)->get_availability(node_list.at(n)->get_idx_node());
+                        //        sum_across_nodes += node_avai[sz];
+                        //    }
+
+                        //    double diff = sum_across_nodes - 1.0;
+                        //    std::cout << "  sz=" << sz << ": sum=" << sum_across_nodes
+                        //        << ", diff_from_1=" << diff << std::endl;
+
+                        //}
+
+                  
+
+
+                    // PROCEED WITH distribute_N...
                     populations.at(sp)->distribute_N();
                   } catch (runtime_error &) {
                       cout << "Fail in distribute_N" << "\n";

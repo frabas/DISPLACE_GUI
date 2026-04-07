@@ -1153,7 +1153,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             std::vector<double> new_avai_pops(a_tot_N_at_szgroup.size(), 0);
                             newNs = node_list.at(n)->get_Ns_pops_at_szgroup(sp);
                             for (unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
-                                if (a_tot_N_at_szgroup[sz] != 0)
+                                if (accumulated_Ns[sz] != 0)
                                 {
                                     double val = (newNs[sz]) / (accumulated_Ns[sz]);
                                     new_avai_pops.at(sz) = val;

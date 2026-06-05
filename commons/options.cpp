@@ -128,6 +128,7 @@ PopSceOptions::PopSceOptions()
     O(mMap, stochasticGrowth);
     O(mMap,massiveMortalityEvent20perY1);
     O(mMap, massiveMortalityEvent20perY5);
+    O(mMap, scalingFactorSzSpectraM2is005);
     O(mMap,diffuseNutrients);
     O(mMap,noHyperstability);
     O(mMap, static_avai_2);

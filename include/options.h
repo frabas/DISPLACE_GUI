@@ -180,6 +180,7 @@ enum Pop_Sce {
     stochasticGrowth,
     massiveMortalityEvent20perY1,
     massiveMortalityEvent20perY5,
+    scalingFactorSzSpectraM2is005,
     diffuseNutrients,
     noHyperstability,
     static_avai_2,

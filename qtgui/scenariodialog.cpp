@@ -87,6 +87,7 @@ static const char *dyn_pop_options[] = {
     "stochasticGrowth",
     "massiveMortalityEvent20perY1",
     "massiveMortalityEvent20perY5",
+    "scalingFactorSzSpectraM2is005",
     "lgnbCoupling",
     "biolsceOnStaticAvai",
     "diffuseNutrients",

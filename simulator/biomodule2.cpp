@@ -865,6 +865,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                       try {
                           double a_scaling = 1e4; //default
                           if (namefolderinput=="NorthSea") a_scaling = 0.005; // (based on predation on sprat)
+                          if (dyn_pop_sce.option(Options::scalingFactorSzSpectraM2is005))
+                          {
+                              a_scaling = 0.005; 
+                          }
+                          // caution about hardcoding here:
+                          if(namefolderinput == "DNK" && populations.at(sp)->get_name()==44) a_scaling = 0.0005; // correct for a far too large M2 on baltic sprat because being eaten by anybody
                           a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp,
                                                                                                            tstep,
                                                                                                            Ws_at_szgroup,

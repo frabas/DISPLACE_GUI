@@ -556,8 +556,9 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         glob_mutex.lock();
                       
                         // cancel last count that was supposed to be a fishing event...
-                        model->vessels()[index_v]->set_timeatsea(
-                            model->vessels()[index_v]->get_timeatsea() - PING_RATE);
+                        //remove in V >1.6.4
+                        //model->vessels()[index_v]->set_timeatsea(
+                        //    model->vessels()[index_v]->get_timeatsea() - PING_RATE);
 
                         model->vessels()[index_v]->choose_a_port_and_then_return(
                             *model,

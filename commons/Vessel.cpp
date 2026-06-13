@@ -2468,7 +2468,7 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
            // cout << "vessel " << this->get_name() << " evaluation gets back " << value << "\n";
         } else {
-            throw std::runtime_error("Unsupported variable evaulation requested.");
+            throw std::runtime_error("Unsupported variable evaluation requested.");
         }
 
         bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));

@@ -187,7 +187,8 @@ int will_stop=0; // see Options::DEBUG_TAC
 
                  popstats << setprecision(6) << fixed;
 
-                    dout(cout  << "write down the N...");
+                 
+                 dout(cout  << "write down the N...");
                     // get total N from summing up N over nodes
                     populations.at(sp)->aggregate_N();
                     // tstep / pop / tot N at szgroup
@@ -207,7 +208,7 @@ int will_stop=0; // see Options::DEBUG_TAC
                         popstats  << W_per_szgroup.at(sz)  << " " ;
                     }
 
-
+                 
                     // ... / SSB_per_szgroup
                     dout(cout  << "write down the SSB...");
                     populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
@@ -260,8 +261,7 @@ int will_stop=0; // see Options::DEBUG_TAC
 
 
 
-
-
+   
 
             // EXPORT INITIAL BENTHOS STATS
             if(dyn_pop_sce.option(Options::modelBenthosInN))
@@ -299,8 +299,7 @@ int will_stop=0; // see Options::DEBUG_TAC
 
 
 
-
-
+   
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!//
 //!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -323,11 +322,23 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     {
         
         // a check
-        if (sp == 2) {
-            cout << " " << "\n";
-            cout << "-----------------------------------------" << "\n";
-            cout << "start of pop model" << "\n";
+        if (sp == 3) {
+          //  cout << " " << "\n";
+          //  cout << "-----------------------------------------" << "\n";
+            vector <double>tot_N_at_szgroup = populations.at(sp)->get_tot_N_at_szgroup();
+          //  cout << "Total N at size group:" << endl;
+          //  for (size_t i = 0; i < tot_N_at_szgroup.size(); ++i) {
+          //      cout << "[" << i << "] = " << tot_N_at_szgroup[i] << endl;
+          //  }
+          //  double total_sum = std::accumulate(tot_N_at_szgroup.begin(),
+          //      tot_N_at_szgroup.end(), 0.0);
+          //  cout << "Sum of tot_N_at_szgroup: " << total_sum << endl;
+          //  cout << " " << "\n";
+          //  cout << "-----------------------------------------" << "\n";
+          //  cout << "start of pop model" << "\n";
+         //   cout << "IN--" << "\n";
             populations.at(sp)->aggregate_N_display_for_check();
+         //   cout << "OUT--" << "\n";
         }
         
         outc(cout << "...pop " << sp << "\n";)
@@ -441,7 +452,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 }
             }
 
-
+           
 
             // loop over nodes of this pop and apply oth_land for this node on it
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
@@ -494,6 +505,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     oth_land_this_pop_this_node.at(n)= oth_land_this_pop_this_node.at(n) *a_rnorm;
                 }
 
+             
                 dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node().toIndex()
                     << ": " << oth_land_this_pop_this_node.at(n) << "\n");
                 if(oth_land_this_pop_this_node.at(n) !=0)
@@ -655,7 +667,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node.at(n) << "\n");
 
                      
-
+                     
                         // then, collect and accumulate tot_C_at_szgroup
                         a_oth_catch_per_szgroup = a_list_nodes.at(n)->get_last_oth_catch_pops_at_szgroup(name_pop);
                         a_oth_disc_per_szgroup = a_list_nodes.at(n)->get_last_oth_disc_pops_at_szgroup(name_pop);
@@ -689,12 +701,24 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
             }
 
-            if (sp == 2) {
+            /*
+                if (sp == 3) {
+                cout << " " << "\n";
+                cout << "-----------------------------------------" << "\n";
+                vector <double>tot_N_at_szgroup = populations.at(name_pop)->get_tot_N_at_szgroup();
+                cout << "Total N at size group:" << endl;
+                for (size_t i = 0; i < tot_N_at_szgroup.size(); ++i) {
+                    cout << "[" << i << "] = " << tot_N_at_szgroup[i] << endl;
+                }
+                double total_sum = std::accumulate(tot_N_at_szgroup.begin(),
+                    tot_N_at_szgroup.end(), 0.0);
+                cout << "Sum of tot_N_at_szgroup: " << total_sum << endl;
                 cout << " " << "\n";
                 cout << "-----------------------------------------" << "\n";
                 cout << "just after oth_land() " << "\n";
                 populations.at(sp)->aggregate_N_display_for_check();
             }
+            */
 
 
             dout(cout  << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << "\n");
@@ -786,6 +810,23 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
           
             dout(cout  << "\n");
 
+            // a check
+            /*if (sp == 3) {
+                cout << "Total N at size group:" << endl;
+                vector <double>tot_N_at_szgroup = populations.at(sp)->get_tot_N_at_szgroup();
+                for (size_t i = 0; i < tot_N_at_szgroup.size(); ++i) {
+                    cout << "[" << i << "] = " << tot_N_at_szgroup[i] << endl;
+                }
+                double total_sum = std::accumulate(tot_N_at_szgroup.begin(),
+                    tot_N_at_szgroup.end(), 0.0);
+                cout << "Sum of tot_N_at_szgroup: " << total_sum << endl;
+                cout << " " << "\n";
+                cout << "-----------------------------------------" << "\n";
+                cout << "just before the true aggregate_N()" << "\n";
+                populations.at(sp)->aggregate_N_display_for_check();
+            }
+            */
+
             // At the aggregated population scale,
             // first, sum up the N over node and overwrite tot_N_at_szgroup....
             try {
@@ -798,12 +839,22 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             
 
             // a check
-            if (sp == 2) {
+            /*
+            if (sp == 3) {
+                cout << "Total N at size group:" << endl;
+                vector <double>tot_N_at_szgroup = populations.at(sp)->get_tot_N_at_szgroup();
+                for (size_t i = 0; i < tot_N_at_szgroup.size(); ++i) {
+                    cout << "[" << i << "] = " << tot_N_at_szgroup[i] << endl;
+                }
+                double total_sum = std::accumulate(tot_N_at_szgroup.begin(),
+                    tot_N_at_szgroup.end(), 0.0);
+                cout << "Sum of tot_N_at_szgroup: " << total_sum << endl;
                 cout << " " << "\n";
                 cout << "-----------------------------------------" << "\n";
                 cout << "just after the true aggregate_N()" << "\n";
                 populations.at(sp)->aggregate_N_display_for_check();
             }
+            */
 
             // then, compute F_at_age from F_at_szgroup as -log(N(t)/N(t-1))
             // knowing the ALK i.e.  prop szgroup in each age

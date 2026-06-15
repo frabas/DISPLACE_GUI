@@ -2003,7 +2003,7 @@ int app_main(int argc, char const* argv[])
         }
 
 #ifdef PROFILE
-            mLoopProfile.start();
+        mLoopProfile.start();
 #endif
 
         dout(cout << "\n");
@@ -2027,7 +2027,7 @@ int app_main(int argc, char const* argv[])
         //----------------------------------------//
         //----------------------------------------//
 
-
+     
 
         if (!applyBiologicalModule2(simModel->timestep(),
                                     simModel->month(),
@@ -2978,6 +2978,25 @@ int app_main(int argc, char const* argv[])
      //       cout << "COUCOU THERE!! 8762" << "\n";
      //   }
 
+     /*   if (simModel->timestep() == 100) {
+            cout << " " << "\n";
+            cout << "-----------------------------------------" << "\n";
+            vector <double>tot_N_at_szgroup = simModel->populations().at(3)->get_tot_N_at_szgroup();
+            cout << "Total N at size group:" << endl;
+            for (size_t i = 0; i < tot_N_at_szgroup.size(); ++i) {
+                cout << "[" << i << "] = " << tot_N_at_szgroup[i] << endl;
+            }
+            double total_sum = std::accumulate(tot_N_at_szgroup.begin(),
+                tot_N_at_szgroup.end(), 0.0);
+            cout << "Sum of tot_N_at_szgroup: " << total_sum << endl;
+            cout << " " << "\n";
+            cout << "-----------------------------------------" << "\n";
+            cout << "before apply oth catches model" << "\n";
+            cout << "IN--" << "\n";
+            simModel->populations().at(3)->aggregate_N_display_for_check();
+            cout << "OUT--" << "\n";
+        }
+        */
 
         ///------------------------------///
         ///------------------------------///

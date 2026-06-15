@@ -1870,12 +1870,13 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
                 else
                 {
                     // finally, impact the N
-                    new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
                     if (removals_per_szgroup[szgroup] < 0)
                     {
                         cout << "Negative removals detected in oth_land! in removals_per_szgroup[szgroup] ...set to 0!" << "\n";
                         removals_per_szgroup[szgroup] = 0;
                     }
+                    new_Ns_at_szgroup_pop[szgroup] = Ns_at_szgroup_pop[szgroup] - removals_per_szgroup[szgroup];
+
 
                                  // reverse back to get the landings only
 //if(name_pop==2 && this->get_idx_node().toIndex()==19290) cout << "2 new_Ns_at_szgroup_pop[" << szgroup<< "] is " << new_Ns_at_szgroup_pop[szgroup] << "\n";

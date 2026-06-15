@@ -3686,8 +3686,18 @@ void Vessel::handle_explicit_population(
         populations.at(popIdx)->get_avai5_beta(),
         populations.at(popIdx)->get_avai7_beta()
     };
-    for (size_t i = 0; i < avaiPops.size(); ++i)
-        avaiBeta += selBeta[i] * avaiPops[i] * 1000.0 * m.selectivity[popIdx][selSz[i]];
+    for (size_t i = 0; i < avaiPops.size(); ++i) {
+        double contribution = selBeta[i] * avaiPops[i] * 1000.0 * m.selectivity[popIdx][selSz[i]];
+        //std::cout << "i=" << i
+        //    << " | selBeta[" << i << "]=" << selBeta[i]
+        //    << " | avaiPops[" << i << "]=" << avaiPops[i]
+        //    << " | selSz[" << i << "]=" << selSz[i]
+        //    << " | selectivity=" << m.selectivity[popIdx][selSz[i]]
+        //    << " | contribution=" << contribution
+        //    << " | avaiBeta (running)=" << (avaiBeta + contribution)
+        //    << std::endl;
+        avaiBeta += contribution;
+    }
 
     double catchPotential = std::exp(
         v.betas_per_pop[popIdx] +
@@ -3698,8 +3708,13 @@ void Vessel::handle_explicit_population(
    
     double totCatchWeight = std::min(totAvail, catchPotential);
     
-   // std::cout << "[Pop: " << popIdx << "] "
-   //     << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << std::endl;
+    std::cout << "[Pop: " << popIdx << "] "
+        << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << 
+        " given totAvail is " << totAvail <<
+        " given vessel beta is " << v.betas_per_pop[popIdx] <<
+         " given metier beta is " << m.betas_per_pop[popIdx] << 
+         " given habitat beta is " << h.betas_per_pop[popIdx] <<
+        " given avaiBeta is " << avaiBeta << std::endl;
     
     double discardFactor = std::min(
         m.discardratio_limits[popIdx],
@@ -3779,7 +3794,7 @@ void Vessel::handle_explicit_population(
             //cout << "Ns[sz] is " << Ns[sz] << "\n";
             //cout << "removals[sz] is " << removals[sz] << "\n";
             //cout << "Negative Ns detected in do_catch() newNs! ...set to 0!" << "\n";
-            removals[sz] = newNs[sz];
+            removals[sz] = Ns[sz];
             newNs[sz] = 0;
         }
 

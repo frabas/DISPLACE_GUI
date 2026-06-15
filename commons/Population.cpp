@@ -1445,7 +1445,7 @@ void Population::distribute_N()
 
 }
 
-
+/*
 void Population::aggregate_N()
 {
 
@@ -1497,6 +1497,102 @@ void Population::aggregate_N()
     dout(cout<< "END aggregate_N()" << "\n");
     dout(cout<< "\n");
 }
+*/
+
+
+void Population::aggregate_N()
+{
+    dout(cout << "\n");
+    dout(cout << "BEGIN aggregate_N(): aggregate from nodes for the pop " << name << "\n");
+
+    // temporary objects
+    vector<double> agg_Ns_at_szgroup;
+
+   /*
+    // Calculate initial sum across all nodes (before aggregation)
+    double initial_sum = 0.0;
+    for (unsigned int idx = 0; idx < list_nodes.size(); idx++)
+    {
+        const vector<double>& Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+        for (size_t i = 0; i < Ns_this_node.size(); i++)
+        {
+            if (!isnan(Ns_this_node.at(i)))
+            {
+                initial_sum += Ns_this_node.at(i);
+            }
+        }
+    }
+
+    cout << "Initial sum of N across all nodes: " << initial_sum << "\n";
+    */
+
+
+    // Loop over nodes specific to this pop
+    for (unsigned int idx = 0; idx < list_nodes.size(); idx++)
+    {
+        // init with the first node
+        if (idx == 0)
+        {
+            agg_Ns_at_szgroup = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+        }
+        else
+        {
+            // get the Ns on this node and add to the agg
+            const vector<double>& Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+            for (unsigned int i = 0; i < agg_Ns_at_szgroup.size(); i++)
+            {
+                if (!isnan(Ns_this_node.at(i)))
+                    agg_Ns_at_szgroup.at(i) = agg_Ns_at_szgroup.at(i) + Ns_this_node.at(i);
+            }
+        }
+    }
+
+    // set the new tot Ns for this specific pop in the vector tot_N_at_szgroup of the pop
+    this->set_tot_N_at_szgroup(agg_Ns_at_szgroup);
+
+    /*
+    // Calculate final sum from aggregated result
+    double final_sum = 0.0;
+    for (size_t i = 0; i < agg_Ns_at_szgroup.size(); i++)
+    {
+        if (!isnan(agg_Ns_at_szgroup.at(i)))
+        {
+            final_sum += agg_Ns_at_szgroup.at(i);
+        }
+    }
+
+    cout << "Final sum of N after aggregation: " << final_sum << "\n";
+
+    // Check conservation with epsilon tolerance for floating-point
+    double diff = std::abs(initial_sum - final_sum);
+    double relative_diff = (initial_sum > 0.0) ? (diff / initial_sum) : 0.0;
+
+    cout << "Difference: " << diff << "\n";
+    cout << "Relative difference: " << relative_diff << "\n";
+
+    // Conservative threshold (adjust as needed)
+    const double epsilon = 1e-9;
+
+    if (diff > epsilon && relative_diff > 1e-6)
+    {
+        cout << "WARNING: N conservation in aggregate_N() check FAILED!\n";
+        cout << "Expected: " << initial_sum << ", Got: " << final_sum << "\n";
+        cout << "This may indicate data loss or numerical issues.\n";
+    }
+    else
+    {
+        cout << "N conservation check PASSED.\n";
+    }
+    */
+
+
+    dout(cout << "\n");
+    dout(cout << "END aggregate_N()" << "\n");
+    dout(cout << "\n");
+}
+
+
+
 
 
 void Population::aggregate_N_display_for_check()

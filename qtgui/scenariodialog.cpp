@@ -39,6 +39,7 @@ static const char *dyn_alloc_options[] = {
     "focus_on_high_profit_grounds" ,
     "closer_grounds",
     "closer_port",
+    "fuelprice_minus20percent",
     "fuelprice_plus20percent",
     "reduced_speed_10percent",
     "increased_speed_20percent",

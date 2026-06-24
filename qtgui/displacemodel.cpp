@@ -2351,6 +2351,10 @@ bool DisplaceModel::loadNodes()
 
             // read fuel price (vessel size dependent for the time being)
             double a_muliplier_on_fuel_price = 1.0;
+            if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fuelprice_minus20percent"))
+            {
+                a_muliplier_on_fuel_price = 0.8;
+            }
             if (binary_search(dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fuelprice_plus20percent"))
             {
                 a_muliplier_on_fuel_price = 1.2;

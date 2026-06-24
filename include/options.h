@@ -97,6 +97,7 @@ enum Dyn_Alloc {
     //area_closure, // [DEPRECATED]
     area_monthly_closure,
     closed_to_others_as_well,
+    fuelprice_minus20percent,
     fuelprice_plus20percent,
     fuelprice_plus50percent,
     fuelprice_plus100percent,

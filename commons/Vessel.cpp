@@ -3708,13 +3708,13 @@ void Vessel::handle_explicit_population(
    
     double totCatchWeight = std::min(totAvail, catchPotential);
     
-    std::cout << "[Pop: " << popIdx << "] "
-        << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << 
-        " given totAvail is " << totAvail <<
-        " given vessel beta is " << v.betas_per_pop[popIdx] <<
-         " given metier beta is " << m.betas_per_pop[popIdx] << 
-         " given habitat beta is " << h.betas_per_pop[popIdx] <<
-        " given avaiBeta is " << avaiBeta << std::endl;
+    //std::cout << "[Pop: " << popIdx << "] "
+    //    << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << 
+    //    " given totAvail is " << totAvail <<
+    //    " given vessel beta is " << v.betas_per_pop[popIdx] <<
+    //     " given metier beta is " << m.betas_per_pop[popIdx] << 
+    //     " given habitat beta is " << h.betas_per_pop[popIdx] <<
+    //    " given avaiBeta is " << avaiBeta << std::endl;
     
     double discardFactor = std::min(
         m.discardratio_limits[popIdx],
@@ -4205,8 +4205,9 @@ bool Vessel::maybe_close_ground(int groundIdx,
                 (totAvoiStksLandThisEvent + totAvoiStksDiscThisEvent);
 
             // update node‑level cumulative catches/discards all pop pooled
-            get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
-            get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
+            // removed for >=1.6.6: double counting.....
+            //get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
+            //get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
 
             // compute and store the discard‑to‑total ratio
             double discratio = get_loc()->get_cumdiscards() /

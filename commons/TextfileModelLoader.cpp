@@ -532,6 +532,10 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
 
             // read fuel price (vessel size dependent for the time being)
             double a_multiplier_on_fuelprices = 1.0;
+            if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_minus20percent))
+            {
+                a_multiplier_on_fuelprices = 0.8;
+            }
             if (model().scenario().dyn_alloc_sce.option(Options::fuelprice_plus20percent))
             {
                 a_multiplier_on_fuelprices = 1.2;

@@ -39,6 +39,7 @@ extern int COMMONSSHARED_EXPORT verbosity;
 
 
 #include <map>
+#include <sstream>
 #include <string>
 #include <stdexcept>
 #include <iostream>

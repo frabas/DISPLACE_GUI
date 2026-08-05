@@ -1417,6 +1417,14 @@ bool fill_from_vessels_specifications(
        ---------------------------------------------------------- */
     while (std::getline(in, line)) {
         ++line_no;
+       
+        std::cerr << "Line " << line_no << " bytes=" << line.size() << " back=" << (line.empty() ? 'X' : line.back()) << "\n";
+
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+        if (line.empty()) continue;  // Handle CRLF-only empty lines
+        
         // Trim leading/trailing whitespace (manual, no boost)
         const char* beg = line.c_str();
         while (*beg && std::isspace(static_cast<unsigned char>(*beg))) ++beg;
@@ -1425,8 +1433,9 @@ bool fill_from_vessels_specifications(
         if (beg == end) continue;               // empty line
 
         // Split into fields – returns pointers into the original line buffer
-        auto fields = split_fields(std::string(beg, end), '|');
-
+        std::string trimmed(beg, end);              // ← named variable, stays alive
+        auto fields = split_fields(trimmed, '|');   
+        
         if (fields.size() < 22) {
             std::cerr << "Line " << line_no << ": missing fields (found "
                 << fields.size() << ")\n";

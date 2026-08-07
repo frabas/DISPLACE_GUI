@@ -6784,7 +6784,9 @@ void Vessel::alloc_on_closer_grounds(const SimModel& simModel,
 
 
 
-void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
+void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers, 
+                                          vector<Node* >& nodes,
+                                          const DynAllocOptions& dyn_alloc_sce){
 
     // caution: the likely metier is deduced from the proba of fishing grounds
     // we might imagine to deduce it from market incentive, etc. instead
@@ -6800,6 +6802,63 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     if(grds.size()==0)
     {
         cout << " DEBUG !! " << this->get_name() << " is likely missing vessel in fgrounds.dat " << "\n";
+    }
+
+
+    if (dyn_alloc_sce.option(Options::area_monthly_closure))
+    {
+        const auto& poss_met = this->get_possible_metiers();
+        const auto& freq_poss_met = this->get_freq_possible_metiers();
+
+        const auto& fgrounds = this->get_fgrounds();
+
+        for (size_t i = 0; i < fgrounds.size(); i++)
+        {
+            const auto& ground = fgrounds.at(i);
+
+            size_t nodeIdx = ground.toIndex();
+
+            // Bounds check for node index
+            if (nodeIdx >= nodes.size())
+            {
+                std::cerr << "ERROR: ground.toIndex()=" << nodeIdx
+                    << " >= nodes.size()=" << nodes.size() << " (ground idx=" << i << ")\n";
+                continue;
+            }
+
+            // Pre-check ban conditions that don't depend on metier
+            bool is_vsize_banned = nodes[nodeIdx]->isVsizeBanned(this->get_length_class());
+            bool is_nation_banned = nodes[nodeIdx]->isNationBanned(0) ||
+                nodes[nodeIdx]->isNationBanned(this->get_nationality_idx());
+
+            auto metiers_on_grd = find_entries(poss_met, ground);
+            auto freq_metiers_on_grd = find_entries(freq_poss_met, ground);
+
+            bool any_metier_banned = false;
+
+            // Loop over all possible metiers on this ground
+            for (size_t m = 0; m < metiers_on_grd.size(); m++)
+            {
+                int met_idx = metiers_on_grd.at(m);
+
+                bool is_ground_banned =
+                    nodes[nodeIdx]->isMetierBanned(met_idx) &&
+                    is_vsize_banned &&
+                    is_nation_banned;
+
+                if (is_ground_banned)
+                {
+                    any_metier_banned = true;
+                    break;  // No need to check further — one ban is enough to penalise
+                }
+            }
+
+            // Penalise the ground if visit is banned for at least one possible metier
+            if (any_metier_banned)
+            {
+                set_spe_freq_fground(static_cast<int>(i), 1e-8);
+            }
+        }
     }
 
 
@@ -8820,7 +8879,8 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                 (nodes.at(grds.at(n).toIndex())->isNationBanned(0) || nodes.at(grds.at(n).toIndex())->isNationBanned(this->get_nationality_idx()))
                )
             { 
-                    freq_grds.at(n) = 1e-8; // to avoid removing if nb of grounds outside is 0
+                   // freq_grds.at(n) = 1e-8; // to avoid removing if nb of grounds outside is 0
+                 freq_grds.at(n) = 0.0; //
                 // but potential non-compliance if all grounds are in the closed areas....
                 // therefore put 0.0 in the last leaf if this is not the wished behaviour...
             }
@@ -8830,7 +8890,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
 
     // then re-scale to 1
     for(unsigned int n=0; n<grds.size(); n++)
-    {
+    { 
         freq_grds.at(n)= freq_grds.at(n)/cumul;
     }
    

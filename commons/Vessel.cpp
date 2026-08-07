@@ -2649,12 +2649,12 @@ void Vessel::prepare_metier_mask(const DynAllocOptions& dyn_alloc_sce)
     }
     else
     {
-        // No restriction → every ground is allowed → fill with 1's.
+        // No restriction: every ground is allowed: fill with 1's.
         const std::size_t n = this->get_fgrounds().size();
         mask.assign(n, static_cast<char>(1));    // allocate n elements, all = 1
     }
 
-    // 3️⃣  Store the result in the class member (move, no copy)
+    // Store the result in the class member (move, no copy)
     this->metier_mask = std::move(mask);
 }
 
@@ -6004,11 +6004,9 @@ void Vessel::clear_cumcatch_and_cumeffort_per_trip(const DynAllocOptions& dyn_al
 
 void Vessel::clear_cumeffort_per_yearquarter()
 {
-    auto the_grds = this->get_fgrounds();
-    for (unsigned int n = 0; n < the_grds.size(); n++)
+    for (size_t n = 0; n < cumeffort_per_yearquarter_per_fgrounds.size(); n++)
     {
         cumeffort_per_yearquarter_per_fgrounds.at(n) = 0;
-
     }
 }
 
@@ -8263,6 +8261,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
             this->set_spe_freq_fgrounds(freq_grds); // change for later
             freq_grds_in_closure.clear();
             grds_in_closure.clear();
+            this->prepare_metier_mask(dyn_alloc_sce);
             for (int i = 0; i < grds.size(); ++i)
             {
                 if (nodes.at(grds.at(i).toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
@@ -8292,7 +8291,7 @@ types::NodeId Vessel::should_i_choose_this_ground(const SimModel& simModel,
                     freq_possible_metiers_from_harbours.insert(
                         std::make_pair(grds.at(gr), 1.0));
                 }
-               int nbmets = cumeffort_per_trip_per_fgrounds_per_met.at(0).size();
+               int nbmets = simModel.config().nbmets;
                int nbpops = simModel.config().nbpops;
                this->set_experienced_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned
                this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(vector <double>(grds.size(), 0));// re-dimensioned

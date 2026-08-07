@@ -2288,7 +2288,7 @@ int app_main(int argc, char const* argv[])
 
         }
 
-
+        
         // RE-READ DATA FOR EVENT => change of quarter
         if (simModel->timestep() > 2000 && simModel->calendar().isFirstDayOfQuarter(simModel->timestep()))
             //   if(simModel->timestep()==3 || simModel->timestep()==4) // use this to start from another quarter if test...
@@ -2308,6 +2308,7 @@ int app_main(int argc, char const* argv[])
                         throw std::runtime_error("this went wrong with compute_experiencedcpue_fgrounds_per_yearquarter_per_pop: quitting");
                     };
                 }
+                
                 //vector<vector<vector<double> > > dd = vessel->get_experiencedcpue_fgrounds_per_yearquarter_per_pop();
                 vessel->clear_cumeffort_per_yearquarter();
             }
@@ -2319,9 +2320,10 @@ int app_main(int argc, char const* argv[])
             // RE-read general vessel features: do not forget to clear the vectors!
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
-
+          
             modelLoader->loadVessels(a_year, simModel->month(), simModel->quarter(), simModel->semester(), selected_vessels_only);
 
+           
             // RE-read for metiers
             cout << "re-read metiers..." << "\n";
             modelLoader->loadMetiers(a_year, simModel->month(), simModel->quarter(), simModel->semester());
@@ -2329,7 +2331,7 @@ int app_main(int argc, char const* argv[])
         } // END RE-READ DATA FOR VESSEL AND METIER...
 
 
-
+        
 
         int redispatch_the_pop = 0;
         switch (scenario.freq_redispatch_the_pop) {
@@ -2396,7 +2398,6 @@ int app_main(int argc, char const* argv[])
             */
 
         }                         // END RE-READ DATA FOR POP...
-
 
 
         //----------------------------------------//

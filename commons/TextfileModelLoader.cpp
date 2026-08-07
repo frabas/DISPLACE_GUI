@@ -339,6 +339,152 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
     }
 
 
+
+//  One-time size validation against graph_coord_x
+    const size_t expected = graph_coord_x.size();
+    bool mismatch = false;
+
+    if (graph_coord_y.size() != expected) {
+        std::cerr << "ERROR: graph_coord_y size " << graph_coord_y.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_coord_harbour.size() != expected) {
+        std::cerr << "ERROR: graph_coord_harbour size " << graph_coord_harbour.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_code_area.size() != expected) {
+        std::cerr << "ERROR: graph_point_code_area size " << graph_point_code_area.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (model().graph_point_code_landscape().size() != expected) {
+        std::cerr << "ERROR: graph_point_code_landscape size " << model().graph_point_code_landscape().size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_landscape_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_landscape_norm size " << graph_point_landscape_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_landscape_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_landscape_alpha size " << graph_point_landscape_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_wind.size() != expected) {
+        std::cerr << "ERROR: graph_point_wind size " << graph_point_wind.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_wind_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_wind_norm size " << graph_point_wind_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_wind_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_wind_alpha size " << graph_point_wind_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_sst.size() != expected) {
+        std::cerr << "ERROR: graph_point_sst size " << graph_point_sst.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_sst_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_sst_norm size " << graph_point_sst_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_sst_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_sst_alpha size " << graph_point_sst_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_salinity.size() != expected) {
+        std::cerr << "ERROR: graph_point_salinity size " << graph_point_salinity.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_salinity_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_salinity_norm size " << graph_point_salinity_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_salinity_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_salinity_alpha size " << graph_point_salinity_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Nitrogen.size() != expected) {
+        std::cerr << "ERROR: graph_point_Nitrogen size " << graph_point_Nitrogen.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Nitrogen_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_Nitrogen_norm size " << graph_point_Nitrogen_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Nitrogen_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_Nitrogen_alpha size " << graph_point_Nitrogen_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Phosphorus.size() != expected) {
+        std::cerr << "ERROR: graph_point_Phosphorus size " << graph_point_Phosphorus.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Phosphorus_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_Phosphorus_norm size " << graph_point_Phosphorus_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Phosphorus_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_Phosphorus_alpha size " << graph_point_Phosphorus_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Oxygen.size() != expected) {
+        std::cerr << "ERROR: graph_point_Oxygen size " << graph_point_Oxygen.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Oxygen_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_Oxygen_norm size " << graph_point_Oxygen_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_Oxygen_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_Oxygen_alpha size " << graph_point_Oxygen_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_DissolvedCarbon.size() != expected) {
+        std::cerr << "ERROR: graph_point_DissolvedCarbon size " << graph_point_DissolvedCarbon.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_DissolvedCarbon_norm.size() != expected) {
+        std::cerr << "ERROR: graph_point_DissolvedCarbon_norm size " << graph_point_DissolvedCarbon_norm.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_DissolvedCarbon_alpha.size() != expected) {
+        std::cerr << "ERROR: graph_point_DissolvedCarbon_alpha size " << graph_point_DissolvedCarbon_alpha.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_bathymetry.size() != expected) {
+        std::cerr << "ERROR: graph_point_bathymetry size " << graph_point_bathymetry.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_shippingdensity.size() != expected) {
+        std::cerr << "ERROR: graph_point_shippingdensity size " << graph_point_shippingdensity.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_siltfraction.size() != expected) {
+        std::cerr << "ERROR: graph_point_siltfraction size " << graph_point_siltfraction.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_icesrectanglecode.size() != expected) {
+        std::cerr << "ERROR: graph_point_icesrectanglecode size " << graph_point_icesrectanglecode.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_benthos_biomass.size() != expected) {
+        std::cerr << "ERROR: graph_point_benthos_biomass size " << graph_point_benthos_biomass.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+    if (graph_point_benthos_number.size() != expected) {
+        std::cerr << "ERROR: graph_point_benthos_number size " << graph_point_benthos_number.size() << " != expected " << expected << "\n";
+        mismatch = true;
+    }
+
+    if (mismatch) {
+        throw std::out_of_range(
+            "One or more vectors have unexpected size (expected " + std::to_string(expected) + ")"
+        );
+    }
+   
+
+
     auto const &dyn_pop_sce = model().scenario().dyn_pop_sce;
 
     // overwriting for GRAPH ENVT FORCING VARIABLES
@@ -625,6 +771,9 @@ bool TextfileModelLoader::loadNodesAndGraphsDataImpl()
                       nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
                       nodes[i]->get_is_harbour() << " " << "\n");
         } else {
+
+
+
             nodes[i] = (new Node(types::NodeId(i),
                                  graph_coord_x[i],
                                  graph_coord_y[i],

@@ -822,8 +822,9 @@ public:
     );
 
     void which_metier_should_i_go_for(std::vector<Metier *> &metiers,
-                                      const DynAllocOptions& dyn_alloc_sce, 
-                                      std::vector<Node*>& nodes);
+                                      std::vector<Node*>& nodes, 
+                                      const DynAllocOptions& dyn_alloc_sce
+                                      );
 
     //yes:1; no=0
     int should_i_go_fishing(int tstep, 

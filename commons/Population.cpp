@@ -120,7 +120,8 @@ Population::Population(int a_name,
         tot_N_at_szgroup_just_after_redistribution.push_back(0);
 		tot_N_at_szgroup_month_minus_1.push_back(0);
 		tot_N_at_szgroup_year_minus_1.push_back(0);
-		fecundity_at_szgroup.push_back(0);
+        tot_N_at_szgroup_year_0.push_back(0);
+        fecundity_at_szgroup.push_back(0);
 		weight_at_szgroup.push_back(0);
 		comcat_at_szgroup.push_back(0);
 		maturity_at_szgroup.push_back(0);
@@ -200,6 +201,8 @@ Population::Population(int a_name,
 	// ...then fill in with start pop also for minus 1
 								 // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup_year_minus_1(init_tot_N_at_szgroup);
+
+    this->set_tot_N_at_szgroup_year_0(init_tot_N_at_szgroup);
 
 	// ...then fill in with start pop
 	// CALIB: if decreased then smaller fish then higher F because numbers of fish for a given TAC increased....
@@ -494,6 +497,11 @@ const vector<double>& Population::get_tot_N_at_szgroup_month_minus_1() const
 const vector<double>& Population::get_tot_N_at_szgroup_year_minus_1() const
 {
 	return(tot_N_at_szgroup_year_minus_1);
+}
+
+const vector<double>& Population::get_tot_N_at_szgroup_year_0() const
+{
+    return(tot_N_at_szgroup_year_0);
 }
 
 const vector<double>& Population::get_a_tot_N_at_szgroup_before_applying_M() const
@@ -872,6 +880,12 @@ void Population::set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_
 void Population::set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1)
 {
 	tot_N_at_szgroup_year_minus_1 =_N_at_szgroup_year_minus_1;
+
+}
+
+void Population::set_tot_N_at_szgroup_year_0(const vector<double>& _N_at_szgroup_year_0)
+{
+    tot_N_at_szgroup_year_0 = _N_at_szgroup_year_0;
 
 }
 

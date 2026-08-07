@@ -983,26 +983,31 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                 // apply only at the beginning of the year (this is maybe not always relevant...)
-                if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+               // if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                 {
                 
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << "\n");
                     // compute the cpue_multiplier
                     // at the beginning of the year as N(y)/N(y-1)
                     double sum_N_year_minus_1 = 0;
+                    double sum_N_year_0 = 0;
                     double sum_N_start_current_year = 0;
                     vector <double> N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
                     vector <double> N_at_szgroup_year_minus_1=populations.at(sp)->get_tot_N_at_szgroup_year_minus_1();
+                    vector <double> N_at_szgroup_year_0 = populations.at(sp)->get_tot_N_at_szgroup_year_0();
                     for(unsigned int sz=0; sz<N_at_szgroup.size(); sz++)
                     {
                         sum_N_start_current_year+=N_at_szgroup.at(sz);
                         sum_N_year_minus_1+=N_at_szgroup_year_minus_1.at(sz);
+                        sum_N_year_0 += N_at_szgroup_year_0.at(sz);
                     }
 
                     //  see Harley et al 2001 Canadian Journal for the hyperstability b param (CPUE=qN_t^b)
                     double a_hyperstability_param = populations.at(sp)->get_hyperstability_param();
                     if(dyn_pop_sce.option(Options::noHyperstability)) a_hyperstability_param=1.0;
-                    populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, a_hyperstability_param));
+                    //populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, a_hyperstability_param));
+                    // >v1.7.0:
+                    populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year / sum_N_year_0, a_hyperstability_param));
                     // e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 
                     dout(cout << "the cpue_multiplier is " << populations.at(sp)->get_cpue_multiplier() << "\n");

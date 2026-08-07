@@ -1418,7 +1418,7 @@ bool fill_from_vessels_specifications(
     while (std::getline(in, line)) {
         ++line_no;
        
-        std::cerr << "Line " << line_no << " bytes=" << line.size() << " back=" << (line.empty() ? 'X' : line.back()) << "\n";
+      //  std::cerr << "Line " << line_no << " bytes=" << line.size() << " back=" << (line.empty() ? 'X' : line.back()) << "\n";
 
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();

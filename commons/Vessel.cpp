@@ -3778,23 +3778,20 @@ void Vessel::handle_explicit_population(
 
     int a_count = 0;
     vector <double> newNs = Ns;
+    vector <double> cumul_removals_at_szgroup_pop = this->get_loc()->get_removals_pops_at_szgroup(popIdx);
     for (size_t sz = 0; sz < Ns.size(); ++sz) {
         // finally, impact the N...
   
-        // add the preexisting removals (from other vessels) on this node for this szgroup
-        vector <double> cumul_removals_at_szgroup_pop = this->get_loc()->get_removals_pops_at_szgroup(popIdx);
-        removals[sz] += cumul_removals_at_szgroup_pop[sz];
-
         // apply to pop N
-        newNs[sz] = Ns[sz] - removals[sz];
+        double current_removal = std::min(removals[sz], Ns[sz]);
+        newNs[sz] = Ns[sz] - current_removal;
+        // add the preexisting removals (from other vessels) on this node for this szgroup
+        cumul_removals_at_szgroup_pop[sz] += current_removal;
 
+        // should never not happen but check anyway:
         if (newNs[sz] < 0)
         {
-            //cout << "for popIdx " << popIdx << " and " << " sz " << sz << "\n";
-            //cout << "Ns[sz] is " << Ns[sz] << "\n";
-            //cout << "removals[sz] is " << removals[sz] << "\n";
-            //cout << "Negative Ns detected in do_catch() newNs! ...set to 0!" << "\n";
-            removals[sz] = Ns[sz];
+            cout << "Negative Ns detected in do_catch() newNs! ...set to 0!" << "\n";
             newNs[sz] = 0;
         }
 
@@ -3805,7 +3802,7 @@ void Vessel::handle_explicit_population(
         // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
         // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
         // REACTIVATION ON THE 07-05-2025:
-        if (sz == selSz.at(a_count) && totN[sz] != 0 && (removals[sz] < totN[sz]))
+        if (sz == selSz.at(a_count) && totN[sz] != 0 && (current_removal < totN[sz]))
         {
             double val = (newNs[sz]) / (totN[sz]);
             new_avai_pops.at(a_count) = val;
@@ -3826,7 +3823,7 @@ void Vessel::handle_explicit_population(
 
     // a new removals cumul on this node
     // i.e. the preexisting removals from oth vessels + from this vessel
-    this->get_loc()->set_removals_pops_at_szgroup(popIdx, removals);
+    this->get_loc()->set_removals_pops_at_szgroup(popIdx, cumul_removals_at_szgroup_pop);
     // Update the avai and keep the avai and cache consistent:
     // REACTIVATION ON THE 07-05-2025:
     populations.at(popIdx)->set_node_availability(this->get_loc(), new_avai_pops);

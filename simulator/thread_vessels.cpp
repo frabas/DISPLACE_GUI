@@ -251,7 +251,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         // ***************make a probable decision*************************
                         dout(cout << model->vessels()[index_v]->get_name() << " which_metier_should_i_go_for? "
                                   << "\n");
-                        model->vessels()[index_v]->which_metier_should_i_go_for(model->metiers());
+                        model->vessels()[index_v]->which_metier_should_i_go_for(model->metiers(), model->nodes(), model->scenario().dyn_alloc_sce);
                         dout(cout << model->vessels()[index_v]->get_name() << " should go for metier "
                                   << model->vessels()[index_v]->get_metier()->get_name() << "\n");
 

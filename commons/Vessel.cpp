@@ -3802,10 +3802,11 @@ void Vessel::handle_explicit_population(
         // let the avai drift from the initial value...caution: avai do not sum to 1 any more after the first extraction event
         // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
         // REACTIVATION ON THE 07-05-2025:
-        if (sz == selSz.at(a_count) && totN[sz] != 0 && (current_removal < totN[sz]))
+        const bool isSelected = std::find(selSz.begin(), selSz.end(), static_cast<int>(sz)) != selSz.end();
+        if (isSelected && totN[sz] != 0 && (current_removal < totN[sz]))
         {
             double val = (newNs[sz]) / (totN[sz]);
-            new_avai_pops.at(a_count) = val;
+            new_avai_pops.at(sz) = val;
         } //=> feedback on both pop full avai and selected avai
         
        

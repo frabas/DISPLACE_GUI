@@ -983,7 +983,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                 // apply only at the beginning of the year (this is maybe not always relevant...)
-               // if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+                if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                 {
                 
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << "\n");
@@ -1006,8 +1006,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     double a_hyperstability_param = populations.at(sp)->get_hyperstability_param();
                     if(dyn_pop_sce.option(Options::noHyperstability)) a_hyperstability_param=1.0;
                     //populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, a_hyperstability_param));
-                    // >v1.7.0:
-                    populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year / sum_N_year_0, a_hyperstability_param));
+                    // >v1.7.1:
+                    const double relativeAbundance = (sum_N_year_0 > 0.0) ? (sum_N_start_current_year / sum_N_year_0) : 1.0;
+                    const double abundanceFactor = std::pow(std::max(0.0, relativeAbundance), a_hyperstability_param);
+                    populations.at(sp)->set_cpue_multiplier(populations.at(sp)->get_calib_cpue_multiplier()*abundanceFactor);
                     // e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 
                     dout(cout << "the cpue_multiplier is " << populations.at(sp)->get_cpue_multiplier() << "\n");

@@ -174,7 +174,8 @@ Population::Population(int a_name,
     // look at the config.dat for calibration values
 
 								 // set to 1 the first year
-	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
+    calib_cpue_multiplier=a_calib_cpue_multiplier;
+    this->set_cpue_multiplier(a_calib_cpue_multiplier);
 
 	// ...then fill in with start pop
     dout(cout << "set the overall N_at_szgroup..." << name << "\n");
@@ -445,11 +446,15 @@ double Population::get_avai5_beta() const
 }
 
 
-double Population::get_cpue_multiplier() const
+double Population::get_calib_cpue_multiplier() const
 {
-	return(cpue_multiplier);
+	return(calib_cpue_multiplier);
 }
 
+double Population::get_cpue_multiplier() const
+{
+    return(cpue_multiplier);
+}
 
 double Population::get_avai7_beta() const
 {

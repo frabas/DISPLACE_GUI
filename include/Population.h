@@ -120,7 +120,8 @@ class  Population
     double get_avai7_beta() const;
 
     double get_cpue_multiplier() const;
-        const vector<double>& get_tot_N_at_szgroup() const;
+    double get_calib_cpue_multiplier() const;
+    const vector<double>& get_tot_N_at_szgroup() const;
         const vector<double>& get_tot_C_at_szgroup() const;
         const vector<double>& get_tot_D_at_szgroup() const;
         const vector<double>& get_true_tot_N_at_szgroup() const;
@@ -302,7 +303,8 @@ class  Population
 		double avai5_beta;		 //
 		double avai7_beta;		 //
 		double cpue_multiplier;	 //
-								 //
+        double calib_cpue_multiplier=1.0;	 //
+        //
 		vector<double> tot_N_at_szgroup;
                                  //
         vector<double> tot_C_at_szgroup;

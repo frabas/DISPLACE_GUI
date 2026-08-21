@@ -361,11 +361,11 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     ss << fixed << setprecision(0) << logbook.tstepdep << " "
        << setprecision(0) << logbook.tstep << " "
        << setprecision(0) << logbook.rtbb << " "
-       << setprecision(0) << logbook.cumstm << " "
+       << setprecision(1) << logbook.cumstm << " "
        << setprecision(0) << logbook.node << " "
        << setprecision(0) << logbook.idx << " "
        << setprecision(0) << name << " "
-       << setprecision(0) << logbook.timeatsea << " "
+       << setprecision(1) << logbook.timeatsea << " "
        << setprecision(0) << logbook.cumfcons << " "
        << setprecision(0) << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)

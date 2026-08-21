@@ -2786,6 +2786,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         cout << "DEBUG !! " << "\n";
     }
 
+    double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
+
     if(roadmap.size()==1)
     {
 
@@ -2823,14 +2825,14 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         double fuel_multiplier = get_metier()->get_fuel_reduction_multiplier();
         if(returning_to_harbour)
         {   
-            double time_to_cover_the_distance = dist_next_node/ (get_speed()*NAUTIC);
+            double time_to_cover_the_distance = dist_traveled / (get_speed()*NAUTIC);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()* time_to_cover_the_distance * get_mult_fuelcons_when_returning() * fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
             set_timeatsea(get_timeatsea() + time_to_cover_the_distance);
              // cout << "while returning, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
             //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_next_node);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
             //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
             //    get_traveled_dist_this_trip() + dist_next_node << endl;
             set_state(2);
@@ -2838,14 +2840,14 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
         else
         {
-            double time_to_cover_the_distance = dist_next_node / (get_speed() * NAUTIC);
+            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_steaming() * get_metier()->get_fuel_reduction_multiplier()* fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_steaming()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
             set_timeatsea(get_timeatsea() + time_to_cover_the_distance);
             // cout << "while steaming, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
            //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_next_node);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
            // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
            //     get_traveled_dist_this_trip() + dist_next_node << endl;
             set_state(2);
@@ -2867,7 +2869,6 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         next_y= nodes[(*pos).toIndex()]->get_y();
         dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << "\n");
         double dist_next_node = dist(x, y, next_x, next_y);
-        double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
         //this->set_distprevpos(dist_next_node) ;
         this->set_distprevpos(0) ;
         double b = bearing (x, y, next_x, next_y);
@@ -2928,6 +2929,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     roadmap.pop_front();
                     pos= roadmap.begin();
                     set_distprevpos(dist_next_node);
+                    dist_traveled = dist_next_node;
                     set_state(2);
                     flag = true;
                     break;
@@ -2939,6 +2941,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
                     this->set_xy(xy[0], xy[1]);
                     set_distprevpos(dist_for_one_ping) ;
+                    dist_traveled = dist_for_one_ping;
                     set_state(2);
                     flag = true;
                  
@@ -3001,7 +3004,9 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << "\n");
-            double time_to_cover_the_distance = dist_next_node / (get_speed() * NAUTIC);
+            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
+            //cout << "RETURNING: dist_traveled is: " << dist_traveled << endl;
+            //cout << "RETURNING: time_to_cover_the_distance is: " << time_to_cover_the_distance << endl;
             set_cumfuelcons( get_cumfuelcons() + (litre_fuel* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (litre_fuel* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
@@ -3009,7 +3014,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
             if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
             //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + get_distprevpos());
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
            // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
            //     get_traveled_dist_this_trip() + get_distprevpos() << endl;
             set_state(2);
@@ -3017,7 +3022,9 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         else
         {
             dout(cout << "steaming to" << "\n");
-            double time_to_cover_the_distance = dist_next_node / (get_speed() * NAUTIC);
+            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
+            //cout << "STEAMING TO: dist_traveled is: " << dist_traveled << endl;
+            //cout << "STEAMING TO: time_to_cover_the_distance is: " << time_to_cover_the_distance << endl;
             set_cumfuelcons(get_cumfuelcons() + (litre_fuel * time_to_cover_the_distance * get_mult_fuelcons_when_steaming()* fuel_multiplier));
             set_consotogetthere(get_consotogetthere() + (litre_fuel * time_to_cover_the_distance * get_mult_fuelcons_when_steaming()* fuel_multiplier));
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
@@ -3025,7 +3032,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;
         if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
         //set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + get_distprevpos());
+        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
         //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
         //    get_traveled_dist_this_trip() + get_distprevpos() << endl;
         set_state(2);

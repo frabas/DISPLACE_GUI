@@ -366,6 +366,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                 if (!stop_fishing) {
                     freshly_departed_from_port = 0;
                     outc(cout << "OK, I´LL CONTINUE FISHING on "<< model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() <<"!" << "\n");
+                    //cout << "OK, I´LL CONTINUE FISHING on " << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << "!" << "\n";
                     //if((model->vessels()[index_v]->get_name())=="POL023600922") cout  << model->vessels()[index_v]->get_name() <<  "OK, I´LL CONTINUE FISHING!" << "\n";
 
                     // ***************make a decision************************************
@@ -386,6 +387,7 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     int is_not_possible_to_change = 0;
                     if ((shall_I_change_to_another_ground || force_another_ground)) {
                         outc(cout << "CHANGE OF GROUND, FISHERS! " << "\n");
+                        //cout << "CHANGE OF GROUND, FISHERS! " << "\n";
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " CHANGE OF GROUND, FISHERS! " << "\n";
                         is_not_possible_to_change = model->vessels()[index_v]->choose_another_ground_and_go_fishing(
                                 *model,
@@ -400,9 +402,14 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                         outc(cout << "GOOD JOB, FISHERS! WE ARE NOW ON GROUND: " << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << "\n");
                         //if((model->vessels()[index_v]->get_name())=="FIN000020014") cout  << model->vessels()[index_v]->get_name() <<  " GOOD JOB, FISHERS! " << "\n";
                         if (!model->vessels()[index_v]->get_roadmap().empty()) {
-                            outc(cout << "THE NEW GROUND IS A BIT FAR...WE WILL NEED MORE THAN ONE PING TIME TO REACH IT...THE ROADMAP IS NOT EMPTY YET")
+                            outc(cout << "THE NEW GROUND IS A BIT FAR...WE WILL NEED MORE THAN ONE PING TIME TO REACH IT...THE ROADMAP IS NOT EMPTY YET" << "\n")
                                 roadmap_empty = false;
-                        }                  
+                        } else{
+							// start fishing immediately on this new ground, if it is not too far away (i.e. if roadmap is empty)
+							//TODO: TEST
+                            outc(cout << "THE NEW GROUND IS CLOSE ENOUGH...WE WILL START FISHING IMMEDIATELY ON THIS NEW GROUND" << "\n");
+								roadmap_empty = true;
+                        }                
                     }
                     // ***************implement a decision************************************
                     if (!(is_not_possible_to_change && force_another_ground) && roadmap_empty)
@@ -410,6 +417,8 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
                     {
                         outc(cout << "hey, I am fishing on "
                                   << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << "\n");
+                        //cout << "hey, I am fishing on "
+                        //    << model->vessels()[index_v]->get_loc()->get_idx_node().toIndex() << "\n";
                         {
                             dout(cout << "please, check your mail! :" << model->vessels()[index_v]->read_message()
                                       << "\n");

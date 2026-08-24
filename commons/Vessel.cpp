@@ -2786,7 +2786,10 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         cout << "DEBUG !! " << "\n";
     }
 
-    double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
+    double dist_left_to_travel = this->get_speed() * PING_RATE * NAUTIC;
+    double max_dist_traveled = dist_left_to_travel;
+    double actual_distance_traveled = 0;
+
 
     if(roadmap.size()==1)
     {
@@ -2797,9 +2800,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
               <<  " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex()
                 << " " << nodes[(*pos).toIndex()]->get_x() << " " << nodes[(*pos).toIndex()]->get_y()  << "\n");
 
-        double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
         double dist_next_node = dist(this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-        if(dist_for_one_ping > dist_next_node)
+        if(max_dist_traveled > dist_next_node)
         {
             dout(cout  << "YES: JUMP!!" << "\n");
             this->move_to(nodes[(*pos).toIndex()]);
@@ -2809,14 +2811,16 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             y = next_y;
             roadmap.erase(pos);
             set_distprevpos(dist_next_node) ;
+            actual_distance_traveled = dist_next_node;
         }
         else
         {
             dout(cout  << "NO: APPROACH!!" << "\n");
             double b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-            vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
+            vector<double> xy = destB(this->get_x(), this->get_y(), b, max_dist_traveled);
             this->set_xy(xy[0], xy[1]);
-            set_distprevpos(dist_for_one_ping) ;
+            set_distprevpos(max_dist_traveled) ;
+            actual_distance_traveled = max_dist_traveled;
             //if(dist!=dist) {} // c++ trick for like testing for is.nan
 
         }
@@ -2825,14 +2829,14 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         double fuel_multiplier = get_metier()->get_fuel_reduction_multiplier();
         if(returning_to_harbour)
         {   
-            double time_to_cover_the_distance = dist_traveled / (get_speed()*NAUTIC);
+            double time_to_cover_the_distance = dist_left_to_travel / (get_speed()*NAUTIC);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()* time_to_cover_the_distance * get_mult_fuelcons_when_returning() * fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
             set_timeatsea(get_timeatsea() + time_to_cover_the_distance);
              // cout << "while returning, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
             //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_left_to_travel);
             //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
             //    get_traveled_dist_this_trip() + dist_next_node << endl;
             set_state(2);
@@ -2840,14 +2844,14 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         }
         else
         {
-            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
+            double time_to_cover_the_distance = dist_left_to_travel / (get_speed() * NAUTIC);
             set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_steaming() * get_metier()->get_fuel_reduction_multiplier()* fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (get_fuelcons()* time_to_cover_the_distance *get_mult_fuelcons_when_steaming()* fuel_multiplier) ) ;
             set_cumsteaming(get_cumsteaming() + time_to_cover_the_distance);
             set_timeatsea(get_timeatsea() + time_to_cover_the_distance);
             // cout << "while steaming, and jumping, timeatsea is now uptaded to: " << get_timeatsea() << endl;
            //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_left_to_travel);
            // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
            //     get_traveled_dist_this_trip() + dist_next_node << endl;
             set_state(2);
@@ -2877,23 +2881,28 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         dout(cout  << "START BEARING " << this->get_course() <<"\n");
 
         dout(cout << "distance to next node (before moving): " << dist_next_node
-             << ", dist to be traveled: " << dist_traveled  << "\n");
+             << ", dist to be traveled: " << dist_left_to_travel << "\n");
+        //cout << "distance to next node (before moving): " << dist_next_node
+        //    << ", dist to be traveled: " << dist_left_to_travel << "\n";
 
-        double dist_sauv;		 // required to get the remaining dist
-        while(dist_traveled > dist_next_node)
+        while(dist_left_to_travel > dist_next_node)
         {
             next_x= nodes[(*pos).toIndex()]->get_x();
             next_y= nodes[(*pos).toIndex()]->get_y();
-            double dist_next_node = dist(x, y, next_x, next_y);
-            dist_sauv = dist_traveled;
-            set_distprevpos(get_distprevpos() + min(dist_next_node, dist_traveled));
-            dist_traveled = dist_traveled - dist_next_node;
-            dout(cout  << "dist_traveled  " << dist_traveled << "\n");
+            dist_next_node = dist(x, y, next_x, next_y);
+            set_distprevpos(get_distprevpos() + min(dist_next_node, dist_left_to_travel));
+            dist_left_to_travel = dist_left_to_travel - dist_next_node;
+            actual_distance_traveled += dist_next_node;
+            dout(cout  << "dist_left_to_travel  " << dist_left_to_travel << "\n");
+            //cout << "dist_left_to_travel decreased to " << dist_left_to_travel << "\n";
+            //cout << "actual_distance_traveled is " << actual_distance_traveled << "\n";
             // system("pause");
-            if(dist_traveled <=0.0)
+            if(dist_left_to_travel <=0.0 || actual_distance_traveled>= max_dist_traveled)
             {
                 // restitute
-                dist_traveled = dist_sauv;
+                actual_distance_traveled = max_dist_traveled;
+                dist_left_to_travel = 0.0;
+                //cout << "actual_distance_traveled is restituted at: " << actual_distance_traveled << "\n";
                 break;
             }
             // change the current node
@@ -2913,9 +2922,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             }
             else
             {
-                double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
                 double dist_next_node = dist(this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-                if(dist_for_one_ping > dist_next_node)
+                if(max_dist_traveled > dist_next_node)
                 {
 
                     dout(cout  << "YES: JUMP TO THE FINAL NODE" << "\n");
@@ -2929,7 +2937,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     roadmap.pop_front();
                     pos= roadmap.begin();
                     set_distprevpos(dist_next_node);
-                    dist_traveled = dist_next_node;
+                    actual_distance_traveled += dist_next_node;
+                    cout << "here the actual_distance_traveled is: " << actual_distance_traveled << "\n";
                     set_state(2);
                     flag = true;
                     break;
@@ -2938,10 +2947,10 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                 {
                     dout(cout  << "NO: APPROACH THE FINAL NODE" << "\n");
                     b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
-                    vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
+                    vector<double> xy = destB(this->get_x(), this->get_y(), b, max_dist_traveled);
                     this->set_xy(xy[0], xy[1]);
-                    set_distprevpos(dist_for_one_ping) ;
-                    dist_traveled = dist_for_one_ping;
+                    set_distprevpos(max_dist_traveled) ;
+                    actual_distance_traveled = max_dist_traveled;
                     set_state(2);
                     flag = true;
                  
@@ -2949,7 +2958,11 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
 
             }
 
-        }						 // end while
+        }	// end while
+        
+    
+            
+            
 
         if(!flag)
         {
@@ -2968,12 +2981,17 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             */
 
             dout(cout  << "END BEARING " <<  this->get_course() <<"\n");
-            vector<double> xy = destB(x, y, course, dist_traveled);
+            vector<double> xy = destB(x, y, course, dist_left_to_travel);
             this->set_xy(xy[0], xy[1]);
-            set_distprevpos(get_distprevpos() + dist_traveled);
+            set_distprevpos(get_distprevpos() + dist_left_to_travel);
             set_state(2);
             dout(cout  << "vessel in x " << this->get_x() << " y " << this->get_y()  << "\n");
             
+            // check 
+            //cout << "actual_distance_traveled+dist_left_to_travel is: " << actual_distance_traveled + dist_left_to_travel << "\n";
+            //cout << "max_dist_traveled is: " << max_dist_traveled << "\n";
+            //=> should be equal at this point of the code...
+
 
             if (is_fishing_credits && (a_tstep % 2))
             {
@@ -3004,8 +3022,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         if(returning_to_harbour)
         {
             dout(cout  << "returning" << "\n");
-            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
-            //cout << "RETURNING: dist_traveled is: " << dist_traveled << endl;
+            double time_to_cover_the_distance = (actual_distance_traveled + dist_left_to_travel) / (get_speed() * NAUTIC);
+            //cout << "RETURNING: actual_distance_traveled + dist_left_to_travel is: " << actual_distance_traveled + dist_left_to_travel << endl;
             //cout << "RETURNING: time_to_cover_the_distance is: " << time_to_cover_the_distance << endl;
             set_cumfuelcons( get_cumfuelcons() + (litre_fuel* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
             set_consotogetthere( get_consotogetthere() + (litre_fuel* time_to_cover_the_distance *get_mult_fuelcons_when_returning()* fuel_multiplier) ) ;
@@ -3014,7 +3032,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
             if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
             //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled);
            // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
            //     get_traveled_dist_this_trip() + get_distprevpos() << endl;
             set_state(2);
@@ -3022,8 +3040,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
         else
         {
             dout(cout << "steaming to" << "\n");
-            double time_to_cover_the_distance = dist_traveled / (get_speed() * NAUTIC);
-            //cout << "STEAMING TO: dist_traveled is: " << dist_traveled << endl;
+            double time_to_cover_the_distance = (actual_distance_traveled+ +dist_left_to_travel) / (get_speed() * NAUTIC);
+            //cout << "STEAMING TO: actual_distance_traveled + dist_left_to_travel is: " << actual_distance_traveled + dist_left_to_travel << endl;
             //cout << "STEAMING TO: time_to_cover_the_distance is: " << time_to_cover_the_distance << endl;
             set_cumfuelcons(get_cumfuelcons() + (litre_fuel * time_to_cover_the_distance * get_mult_fuelcons_when_steaming()* fuel_multiplier));
             set_consotogetthere(get_consotogetthere() + (litre_fuel * time_to_cover_the_distance * get_mult_fuelcons_when_steaming()* fuel_multiplier));
@@ -3032,7 +3050,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;
         if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
         //set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + dist_traveled);
+        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled);
         //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
         //    get_traveled_dist_this_trip() + get_distprevpos() << endl;
         set_state(2);
@@ -7662,6 +7680,15 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
         // no path found: assume the vessel stucks at its current location
     } else{
         this->set_roadmap(path);
+        // check roadmap
+        /*cout << "CHECK 1 change ground. new roadmap to new ground is: ";
+        list<types::NodeId> lst = this->get_roadmap();
+        for (auto pos = lst.begin(); pos != lst.end(); pos++)
+        {
+            cout << (*pos).toIndex() << " ";
+        }
+        cout << "\n";
+        */
     }
 
 
@@ -7691,7 +7718,8 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     */
 
 
-    outc(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << "\n");
+    outc(cout  << "We change from "<< from.toIndex() << " to target this new ground: " << next_ground.toIndex() << "\n");
+    //cout << "We change from " << from.toIndex() << " to target this new ground: " << next_ground.toIndex() << "\n";
 
     // for this vessel, select the metier specific to this particular fishing ground
     // according to the observed frequency in data
@@ -7717,14 +7745,13 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     
  
     // check roadmap
-    /*
-    outc(cout << "new roadmap to new ground is: ");
+    /*cout << "new roadmap to new ground is: ";
     list<types::NodeId> lst = this->get_roadmap();
     for (auto pos = lst.begin(); pos != lst.end(); pos++)
     {
-        outc(cout << (*pos).toIndex() << " ");
+        cout << (*pos).toIndex() << " ";
     }
-    outc(cout << "\n");
+    cout << "\n";
     */
 
     // find.next.pt.on.the.graph()

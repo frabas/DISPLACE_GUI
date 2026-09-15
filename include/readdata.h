@@ -340,6 +340,9 @@ read_discardratio_limits(string a_semester, string folder_name_parameterization,
 map<int, double>
 read_fuel_reduction_multipliers(int nbmets, string folder_name_parameterization, string inputfolder, string fleetsce);
 
+map<int, double>
+read_catchrate_multipliers(int nbmets, string folder_name_parameterization, string inputfolder, string fleetsce);
+
 multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder);
 
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder);

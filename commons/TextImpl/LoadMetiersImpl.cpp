@@ -164,6 +164,11 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
                                                                           p->folder_name_parameterization,
                                                                           p->inputfolder,
                                                                           model().scenario().fleetsce);
+    cout << "read catchrate multiplier parameters....ok? " << "\n";
+    map<int, double> catchrate_multipliers = read_catchrate_multipliers(name_metiers.size(),
+                                                                          p->folder_name_parameterization,
+                                                                          p->inputfolder,
+                                                                          model().scenario().fleetsce);
 
     cout << "read is_avoided_stocks parameters....ok? " << "\n";
     multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(paramsForLoad.sparam3,
@@ -193,6 +198,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     vector<string> met_gear_widths_model_type(name_metiers.size());
     vector<double> met_percent_revenue_completenesses(name_metiers.size());
     vector<double> met_fuel_reduction_multipliers(name_metiers.size());
+    vector<double> met_catchrate_multipliers(name_metiers.size());
     vector<vector<double> > vect_of_metier_betas_vovd(name_metiers.size(), vector<double>(paramsForLoad.iparam1));
     vector<vector<double> > vect_of_discardratio_limits_vovd(name_metiers.size(),
                                                              vector<double>(paramsForLoad.iparam1));
@@ -217,6 +223,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
         met_percent_revenue_completenesses.at(i) = percent_revenue_completenesses[i];
 
         met_fuel_reduction_multipliers.at(i) = fuel_reduction_multipliers[i];
+        met_catchrate_multipliers.at(i) = catchrate_multipliers[i];
 
         vect_of_metier_betas_vovd.at(i) = find_entries_i_d(metiers_betas, metier_name);
         cout << "Read metier_betas this met " << i << "\n";
@@ -286,6 +293,7 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
     loadedData.vectdparam3 = met_gear_widths_param_a;
     loadedData.vectdparam4 = met_gear_widths_param_b;
     loadedData.vectdparam5 = met_fuel_reduction_multipliers;
+    loadedData.vectdparam6 = met_catchrate_multipliers;
     loadedData.vectsparam1 = met_gear_widths_model_type;
     loadedData.vectmmapidparam1 = vect_of_loss_after_1_passage_mmapid;
     loadedData.vovi3 = vect_of_the_metier_target_stocks_vovi;
@@ -326,7 +334,8 @@ void TextfileModelLoader::loadMetiers(int year, int month, int quarter, int seme
                                     loadedData.vectmmapidparam1.at(i),
                                     loadedData.vovi3.at(i),
                                     loadedData.vovi4.at(i),
-                                    loadedData.vectdparam5.at(i)
+                                    loadedData.vectdparam5.at(i),
+                                    loadedData.vectdparam6.at(i)
                                     );
 
             cout << "Create metier " << i << "...done" << "\n";

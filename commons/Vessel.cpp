@@ -2938,7 +2938,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
                     pos= roadmap.begin();
                     set_distprevpos(dist_next_node);
                     actual_distance_traveled += dist_next_node;
-                    cout << "here the actual_distance_traveled is: " << actual_distance_traveled << "\n";
+                    //cout << "here the actual_distance_traveled is: " << actual_distance_traveled << "\n";
                     set_state(2);
                     flag = true;
                     break;
@@ -3032,7 +3032,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while returning, timeatsea is now uptaded to: " << get_timeatsea() << endl;
             if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
             //set_traveled_dist_this_trip(get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled);
+            set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled + dist_left_to_travel);
            // cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
            //     get_traveled_dist_this_trip() + get_distprevpos() << endl;
             set_state(2);
@@ -3050,7 +3050,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
             // cout << "while steaming, timeatsea is now uptaded to: " << get_timeatsea() << endl;
         if(get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_to_cover_the_distance);
         //set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC);
-        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled);
+        set_traveled_dist_this_trip(get_traveled_dist_this_trip() + actual_distance_traveled + dist_left_to_travel);
         //cout << "compare previous " << get_traveled_dist_this_trip() + this->get_speed() * time_to_cover_the_distance * NAUTIC << " to " <<
         //    get_traveled_dist_this_trip() + get_distprevpos() << endl;
         set_state(2);
@@ -3728,7 +3728,7 @@ void Vessel::handle_explicit_population(
         v.betas_per_pop[popIdx] +
         m.betas_per_pop[popIdx] +
         h.betas_per_pop[popIdx] +
-        avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * tech_creeping_multiplier;
+        avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() * tech_creeping_multiplier;
 
    
     double totCatchWeight = std::min(totAvail, catchPotential);
@@ -3944,8 +3944,9 @@ void Vessel::handle_implicit_population(
     // Draw a gamma variate (C++17 does not have a standard gamma RNG,
     // so we use the classic acceptance‑rejection implementation
     // `rgamma(shape, scale)`).
+    
     double cpue = rgamma(shape, scale) *
-        populations.at(popIdx)->get_cpue_multiplier() *
+        populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() *
         tech_creeping_multiplier;   // technology creep factor
     outc(cout << "implicit: pop " << popIdx
         << " (name " << populations.at(popIdx)->get_name() << ")"

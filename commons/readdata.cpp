@@ -59,6 +59,37 @@ void open_file_error(string filename)
     throw std::runtime_error(error_msg);
 }
 
+
+map<int, double>
+read_catchrate_multipliers(int nbmets, string folder_name_parameterization, string inputfolder, string fleetsce)
+{
+
+    string filename =
+        inputfolder + "/metierspe_" + folder_name_parameterization + "/metier_catchrate_multiplier_fleetsce" +
+        fleetsce + ".dat";
+
+    ifstream catchrate_multipliers_file;
+    catchrate_multipliers_file.open(filename.c_str());
+    if (catchrate_multipliers_file.fail()) {
+        string error_msg = "error opening file " + filename;
+        cout << error_msg << "\n";
+
+        // back compatibility: if not informed then fill out with 1
+        map<int, double> catchrate_multipliers;
+        for (int i = 0; i < static_cast<int>(nbmets); ++i) {
+            catchrate_multipliers.emplace(i, 1.0);
+        }
+        return(catchrate_multipliers);
+
+    }
+
+    map<int, double> catchrate_multipliers;
+    fill_map_from_specifications_i_d(catchrate_multipliers_file, catchrate_multipliers, folder_name_parameterization);
+    catchrate_multipliers_file.close();
+
+    return (catchrate_multipliers);
+}
+
 /**
 read the settings for the siums given the case study
 @param the vectors to be filled in, ...

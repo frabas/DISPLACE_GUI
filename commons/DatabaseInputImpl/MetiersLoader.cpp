@@ -227,6 +227,11 @@ namespace {
             data.fuel_reduction_multiplier = val; // should be a single double
         }
 
+        static void loadCatchrateMultiplier(MetiersLoader::MetierData& data, int, int, double val)
+        {
+            data.catchrate_multiplier = val; // should be a single double
+        }
+
         static void loadGearWidthModel(MetiersLoader::MetierData& data, int, int, double val)
         {
             data.gear_width_model = val; // should be a single string: TODO!!!
@@ -246,6 +251,7 @@ namespace {
                 dispatcher.insert(m("GearWidthA", &MetiersLoaderDataDispatcher::loadGearWidthA));
                 dispatcher.insert(m("GearWidthB", &MetiersLoaderDataDispatcher::loadGearWidthB));
                 dispatcher.insert(m("FuelReductionMultiplier", &MetiersLoaderDataDispatcher::loadFuelReductionMultiplier));
+                dispatcher.insert(m("CatchrateMultiplier", &MetiersLoaderDataDispatcher::loadCatchrateMultiplier));
                 dispatcher.insert(m("GearWidthModel", &MetiersLoaderDataDispatcher::loadGearWidthModel));
                 dispatcher.insert(m("DepletionOnHab", &MetiersLoaderDataDispatcher::loadDepletionOnHab)); // to find in MetiersParametersWithLandscape
                 dispatcher.insert(m("TargetStock", &MetiersLoaderDataDispatcher::loadTargetStock)); 

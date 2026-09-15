@@ -51,6 +51,7 @@ class  Metier
         vector<int> metier_suitable_seabottomtypes;
         double met_multiplier_on_arbitary_breaks_for_tariff;
         double fuel_reduction_multiplier;
+        double catchrate_multiplier;
 
 
 	public:
@@ -70,7 +71,8 @@ class  Metier
             multimap<int, double> loss_after_1_passage,
             vector<int> _metier_target_stocks,
             vector<int> _metier_suitable_seabottomtypes,
-            double fuel_reduction_multiplier);
+            double fuel_reduction_multiplier,
+            double catchrate_multiplier);
 		~Metier();
 		int get_name();
         void set_name(int name);
@@ -94,6 +96,7 @@ class  Metier
         vector<int> get_mls_cat_per_pop();
         double get_met_multiplier_on_arbitary_breaks_for_tariff();
         double  get_fuel_reduction_multiplier();
+        double  get_catchrate_multiplier();
         void set_betas_per_pop(vector<double> metier_betas_per_pop);
         void set_discardratio_limits(vector<double> metier_discardratio_limits);
         void set_is_avoided_stocks(vector<int> metier_is_avoided_stocks);

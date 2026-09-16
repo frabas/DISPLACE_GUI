@@ -3524,6 +3524,11 @@ void Vessel::apply_tac_logic(size_t popIdx,
 
             double allowed_so_far = std::min({ allowed_so_far_all, allowed_so_far_this_nation, allowed_so_far_vessel_length_class });
         
+            if (so_far < allowed_so_far) {
+                cout << "Global TAC NOT exceeded for pop " << popIdx
+                    << ". So far = " << so_far / 1000.0
+                    << " t, allowed = " << allowed_so_far / 1000.0 << "\n";
+            }
 
             if (so_far > allowed_so_far) {
                 // ---- EXCEEDED GLOBAL QUOTA ------------------------------------------------
@@ -3531,6 +3536,11 @@ void Vessel::apply_tac_logic(size_t popIdx,
                     << ". So far = " << so_far / 1000.0
                     << " t, allowed = " << allowed_so_far / 1000.0
                     << " t. Discarding excess.\n");
+
+                cout << "Global TAC exceeded for pop " << popIdx
+                    << ". So far = " << so_far / 1000.0
+                    << " t, allowed = " << allowed_so_far / 1000.0
+                    << " t. Discarding excess.\n";
 
                 // Mark the population as “choked” for this vessel.
                 set_is_choked(static_cast<int>(popIdx), 1);
@@ -3733,17 +3743,23 @@ void Vessel::handle_explicit_population(
    
     double totCatchWeight = std::min(totAvail, catchPotential);
     
-    //std::cout << "[Pop: " << popIdx << "] "
-    //    << "totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight << 
-    //    " given totAvail is " << totAvail <<
-    //    " given vessel beta is " << v.betas_per_pop[popIdx] <<
-    //     " given metier beta is " << m.betas_per_pop[popIdx] << 
-    //     " given habitat beta is " << h.betas_per_pop[popIdx] <<
-    //    " given avaiBeta is " << avaiBeta << std::endl;
-    
+    if (popIdx == 21) {
+        std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] " 
+        << "metier catch rate multiplier is: " << std::fixed << std::setprecision(4) << this->get_metier()->get_catchrate_multiplier() 
+        << " catchPotential: " << std::fixed << std::setprecision(4) << catchPotential 
+        << " totCatchWeight: " << std::fixed << std::setprecision(4) << totCatchWeight <<
+        " given totAvail is " << totAvail <<
+        " given vessel beta is " << v.betas_per_pop[popIdx] <<
+         " given metier beta is " << m.betas_per_pop[popIdx] << 
+         " given habitat beta is " << h.betas_per_pop[popIdx] <<
+        " given avaiBeta is " << avaiBeta << std::endl;
+    }
+
+	// force low discard, otherwise discard ratio is totDiscForMLS / totLandForMLS
     double discardFactor = std::min(
         m.discardratio_limits[popIdx],
         (totDiscForMLS > 0.0) ? (totDiscForMLS / totLandForMLS) : 0.05);
+
 
     // ------------------------------------------------------------------
     // 4️  Disaggregate catch & discard across size groups
@@ -3753,13 +3769,35 @@ void Vessel::handle_explicit_population(
         if (availBio[sz] <= 0.0) {
             cr.landings[sz] = 0.0;
             cr.discards[sz] = 0.0;
-                continue;
+          //  std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] " << "[Met: " << this->get_metier()->get_name() << "] " <<
+          //       "[Node:" << this->get_loc()->get_idx_node() << "] : no avail biomass kg here for this sz!" << endl;
+          //      std::cout << "given that sz:" << sz << " Ns[sz]: " << Ns[sz] << " wz[sz]: " << wsz[sz] << " and m.selectivity[popIdx][sz] : " << m.selectivity[popIdx][sz] << endl;
+            continue;
         }
+
+         // std::cout << "[Pop: " << popIdx << "] "
+         //     << "availBio[sz]: " << std::fixed << std::setprecision(4) << availBio[sz] << std::endl;
+         // std::cout << "[Pop: " << popIdx << "] "
+         //     << "totLandForMLS: " << std::fixed << std::setprecision(4) << totLandForMLS << std::endl;
 
         // allocation key (proportion of the total available biomass)
         double key = (sz >= static_cast<size_t>(mlsCat))
             ? (availBio[sz] / totLandForMLS) : 0.0;
         allocKey[sz] = key;
+
+        if (popIdx == 21) {
+            bool allow = sz >= static_cast<size_t>(mlsCat);
+            std::cout << "[Pop: " << popIdx << "] "
+                << "MLS allows landings?: " << std::fixed << std::setprecision(4) << allow << std::endl;
+            std::cout << "[Pop: " << popIdx << "] "
+                << "key is: " << std::fixed << std::setprecision(4) << key << std::endl;
+            std::cout << "[Pop: " << popIdx << "] "
+                << "totCatchWeight is: " << std::fixed << std::setprecision(4) << totCatchWeight << std::endl;
+                std::cout << "[Pop: " << popIdx << "] " 
+                << "totCatchWeight*key is: " << std::fixed << std::setprecision(4) << totCatchWeight*key << std::endl;
+                std::cout << "[Pop: " << popIdx << "] "
+                << "discards: totCatchWeight * (1.0 - key) * discardFactor is: " << std::fixed << std::setprecision(4) << totCatchWeight * (1.0 - key) * discardFactor << std::endl;
+        }
 
         // landings & discards (weight)
         cr.landings[sz] = totCatchWeight * key;

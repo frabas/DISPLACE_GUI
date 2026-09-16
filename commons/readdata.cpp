@@ -65,7 +65,7 @@ read_catchrate_multipliers(int nbmets, string folder_name_parameterization, stri
 {
 
     string filename =
-        inputfolder + "/metierspe_" + folder_name_parameterization + "/metier_catchrate_multiplier_fleetsce" +
+        inputfolder + "/metiersspe_" + folder_name_parameterization + "/metier_catchrate_multiplier_fleetsce" +
         fleetsce + ".dat";
 
     ifstream catchrate_multipliers_file;

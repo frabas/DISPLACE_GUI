@@ -3309,6 +3309,7 @@ void Vessel::apply_tac_logic(size_t popIdx,
     std::vector<Population*> const& populations,
     CatchResult& cr,
     bool is_tacs,
+    bool is_discard_ban,
     bool is_individual_vessel_quotas,
     bool is_grouped_tacs,
     int a_month,
@@ -3329,7 +3330,7 @@ void Vessel::apply_tac_logic(size_t popIdx,
        ------------------------------------------------------------- */
 
        // -----------------------------------------------------------------
-       // 1️⃣  Gather the current quota values (if any)
+       // 1️  Gather the current quota values (if any)
        // -----------------------------------------------------------------
     double global_quota = 0.0;               // GT
     int    individual_quota = 0;             // IQ (in tonnes)
@@ -3388,9 +3389,19 @@ void Vessel::apply_tac_logic(size_t popIdx,
     // -----------------------------------------------------------------
     // 2️  Compute the *total* catch weight for this population
     // -----------------------------------------------------------------
-    double total_catch_weight = std::accumulate(cr.catchWeight.begin(),
-        cr.catchWeight.end(),
-        0.0);
+    double total_catch_weight = 0;
+    if (is_discard_ban) {
+        total_catch_weight = std::accumulate(cr.catchWeight.begin(), cr.catchWeight.end(), 0.0);
+        // => also counts discards against the quotas...
+    }
+    else {
+        total_catch_weight = std::accumulate(cr.landings.begin(), cr.landings.end(), 0.0);
+    }
+
+    //if (popIdx == 21) {
+    //    cout << "total_catch_weight for pop " << popIdx
+    //        << " is " << total_catch_weight << "kg" << "\n";
+    //}
 
     // -----------------------------------------------------------------
     // 3️  Apply the quota logic
@@ -3524,11 +3535,12 @@ void Vessel::apply_tac_logic(size_t popIdx,
 
             double allowed_so_far = std::min({ allowed_so_far_all, allowed_so_far_this_nation, allowed_so_far_vessel_length_class });
         
-            if (so_far < allowed_so_far) {
-                cout << "Global TAC NOT exceeded for pop " << popIdx
-                    << ". So far = " << so_far / 1000.0
-                    << " t, allowed = " << allowed_so_far / 1000.0 << "\n";
-            }
+           // if (popIdx==21 && so_far < allowed_so_far) {
+           //     cout << "Global TAC NOT exceeded for pop " << popIdx
+           //         << ". So far = " << so_far / 1000.0
+           //         << " t, allowed all = " << allowed_so_far_all / 1000.0 <<  " t, allowed this vessel nation = " << allowed_so_far_this_nation / 1000.0
+           //          << " t, allowed this vessel length_class = " << allowed_so_far_vessel_length_class / 1000.0 << "\n";
+           // }
 
             if (so_far > allowed_so_far) {
                 // ---- EXCEEDED GLOBAL QUOTA ------------------------------------------------
@@ -3537,10 +3549,10 @@ void Vessel::apply_tac_logic(size_t popIdx,
                     << " t, allowed = " << allowed_so_far / 1000.0
                     << " t. Discarding excess.\n");
 
-                cout << "Global TAC exceeded for pop " << popIdx
-                    << ". So far = " << so_far / 1000.0
-                    << " t, allowed = " << allowed_so_far / 1000.0
-                    << " t. Discarding excess.\n";
+               // if (popIdx == 21) cout << "Global TAC exceeded for pop " << popIdx
+               //     << ". So far = " << so_far / 1000.0
+               //     << " t, allowed = " << allowed_so_far / 1000.0
+               //     << " t. Discarding excess.\n";
 
                 // Mark the population as “choked” for this vessel.
                 set_is_choked(static_cast<int>(popIdx), 1);
@@ -3657,8 +3669,8 @@ void Vessel::handle_explicit_population(
     int a_month,
     int a_quarter,
     bool is_tacs,
-    bool is_individual_vessel_quotas,
     bool is_discard_ban,
+    bool is_individual_vessel_quotas,
     bool is_grouped_tacs,
     double tech_creeping_multiplier,
     bool is_fishing_credits,
@@ -3743,6 +3755,7 @@ void Vessel::handle_explicit_population(
    
     double totCatchWeight = std::min(totAvail, catchPotential);
     
+    /*
     if (popIdx == 21) {
         std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] " 
         << "metier catch rate multiplier is: " << std::fixed << std::setprecision(4) << this->get_metier()->get_catchrate_multiplier() 
@@ -3754,6 +3767,7 @@ void Vessel::handle_explicit_population(
          " given habitat beta is " << h.betas_per_pop[popIdx] <<
         " given avaiBeta is " << avaiBeta << std::endl;
     }
+    */
 
 	// force low discard, otherwise discard ratio is totDiscForMLS / totLandForMLS
     double discardFactor = std::min(
@@ -3785,7 +3799,7 @@ void Vessel::handle_explicit_population(
             ? (availBio[sz] / totLandForMLS) : 0.0;
         allocKey[sz] = key;
 
-        if (popIdx == 21) {
+      /*  if (popIdx == 21) {
             bool allow = sz >= static_cast<size_t>(mlsCat);
             std::cout << "[Pop: " << popIdx << "] "
                 << "MLS allows landings?: " << std::fixed << std::setprecision(4) << allow << std::endl;
@@ -3798,6 +3812,7 @@ void Vessel::handle_explicit_population(
                 std::cout << "[Pop: " << popIdx << "] "
                 << "discards: totCatchWeight * (1.0 - key) * discardFactor is: " << std::fixed << std::setprecision(4) << totCatchWeight * (1.0 - key) * discardFactor << std::endl;
         }
+        */
 
         // landings & discards (weight)
         cr.landings[sz] = totCatchWeight * key;
@@ -3902,7 +3917,7 @@ void Vessel::handle_explicit_population(
     // ------------------------------------------------------------------
     // 6 Apply quota / TAC logic (individual, global, grouped)
     // ------------------------------------------------------------------
-    apply_tac_logic(popIdx, populations, cr, is_tacs,
+    apply_tac_logic(popIdx, populations, cr, is_tacs, is_discard_ban,
         is_individual_vessel_quotas,
         is_grouped_tacs,
         a_month, tstep,
@@ -3938,13 +3953,18 @@ void Vessel::handle_implicit_population(
     int a_quarter,
     double tech_creeping_multiplier,
     bool is_tacs,
+    bool is_discard_ban,
     bool is_individual_vessel_quotas,
     bool is_grouped_tacs,
     std::ofstream& export_individual_tacs,
     std::vector<int> const& implicit_pops,
     CatchResult& cr)
 {
-   // ------------------------------------------------------------------
+   
+    //if (popIdx == 21) std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] "
+    //    << "[Met: " << this->get_metier()->get_name() <<"] " << "...calculate catch for this implicit stock" << "\n";
+
+    // ------------------------------------------------------------------
     // 0 Quick‑reject if the pop is not present on this node
     // ------------------------------------------------------------------
     int popName = populations.at(popIdx)->get_name();
@@ -3990,6 +4010,9 @@ void Vessel::handle_implicit_population(
         << " (name " << populations.at(popIdx)->get_name() << ")"
         << " cpue = " << cpue << "\n");
 
+    //if (popIdx == 21) std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] "
+    //    << "[Met: " << this->get_metier()->get_name() << "] " << "..cpue is: " <<  cpue << "\n";
+
     // -------------------------------------------------------------
     //   3 Store the result in the catch matrices (size‑group 0 only)
     //   ------------------------------------------------------------- //
@@ -4006,15 +4029,21 @@ void Vessel::handle_implicit_population(
     cr.totalLandings += weight;
     cr.totalDiscards += 0.0;
 
+    // total catch weight per size group
+    cr.catchWeight[0] = cr.landings[0] + cr.discards[0];
+
     // store catch for this vessel
     catch_pop_at_szgroup[popIdx][0] += weight;   // landings (weight) accumulated over the trip
     discards_pop_at_szgroup[popIdx][0] += 0;       //  no discards for implicit
     ping_catch_pop_at_szgroup[popIdx][0] = weight + 0; // ...this ping only
 
+    // if (popIdx == 21) std::cout << "[Pop: " << popIdx << "] " << "[Vid: " << this->get_name() << "] "
+    //    << "[Met: " << this->get_metier()->get_name() << "] " << "..catch is: " << cr.catchWeight[0]  <<"\n";
+
     // ------------------------------------------------------------------
     // 4 Apply quota / TAC logic (individual, global, grouped)
     // ------------------------------------------------------------------
-    apply_tac_logic(popIdx, populations, cr, is_tacs,
+    apply_tac_logic(popIdx, populations, cr, is_tacs, is_discard_ban,
         is_individual_vessel_quotas,
         is_grouped_tacs,
         a_month, tstep,
@@ -4169,7 +4198,7 @@ bool Vessel::maybe_close_ground(int groundIdx,
             if (isImplicit) {
                 handle_implicit_population(popIdx, populations, sweep, dyn_alloc_sce,
                     tstep, a_month, a_quarter, tech_creeping_multiplier,
-                    is_tacs, is_individual_vessel_quotas, is_grouped_tacs,
+                    is_tacs, is_discard_ban, is_individual_vessel_quotas, is_grouped_tacs,
                     export_individual_tacs,
                     implicit_pops,
                     cr);
@@ -4178,8 +4207,8 @@ bool Vessel::maybe_close_ground(int groundIdx,
                 handle_explicit_population(popIdx, populations, vdat, mdat, hdat,
                     sweep, loss_per_func, graph_res,
                     dyn_alloc_sce, nodes, tstep, a_month, a_quarter,
-                    is_tacs, is_individual_vessel_quotas,
-                    is_discard_ban, is_grouped_tacs,
+                    is_tacs, is_discard_ban, is_individual_vessel_quotas,
+                    is_grouped_tacs,
                     tech_creeping_multiplier,
                     is_fishing_credits, export_individual_tacs,
                     implicit_pops,

@@ -1,11 +1,9 @@
-//
-// Created by happycactus on 1/10/20.
-//
 
 #include "SimModel.h"
 #include "comstructs.h"
 #include "Calendar.h"
 #include "shortestpath/GeoGraph.h"
+#include "Population.h"
 
 struct SimModel::Impl {
     std::string namesimu;
@@ -465,6 +463,7 @@ void SimModel::initRandom(std::string const &namesimu)
 
     // convert the remaining text to an integer
     int a_seed = atoi(str.c_str());
+    reseed_population_shuffle(static_cast<unsigned int>(a_seed));
 
     // print the result
     std::cout << "The random seed is set to: " << a_seed << "\n";

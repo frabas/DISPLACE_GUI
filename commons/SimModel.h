@@ -54,6 +54,7 @@ public:
 
     void initRandom(std::string const &namesimu);
 
+
     void setConfig(std::unique_ptr<displace::commons::Config> config);
 
     void setCalendar(std::unique_ptr<Calendar> calendar);

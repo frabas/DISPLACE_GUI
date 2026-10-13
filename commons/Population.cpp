@@ -30,6 +30,11 @@
 static std::random_device rd;
 static std::mt19937 g(rd());
 
+void reseed_population_shuffle(unsigned int seed)
+ {
+ g.seed(seed);
+ }
+
 
 
 Population::Population(int a_name,

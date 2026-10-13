@@ -47,6 +47,11 @@ struct NodeIdHash {
 using CoeffMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash >;
 using AvailMap = std::unordered_map<types::NodeId, std::vector<double>, NodeIdHash >;
 
+// reseeds the generator used by
+       // Population::diffuse_N_from_field(). Called from SimModel::initRandom().
+void reseed_population_shuffle(unsigned int seed);
+
+
 class  Population
 {
 	public:
@@ -390,6 +395,7 @@ class  Population
         double oth_land_multiplier; // init at 1. Will change according to the next TAC.
         double tot_N_at_age0;
 
+       
         // -----------------------------------------------------------------         
         // New helper used only by diffuse_N_from_field (private)
         // -----------------------------------------------------------------

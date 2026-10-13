@@ -1934,7 +1934,7 @@ void Node::apply_oth_land(int name_pop, int MLS_cat, double &oth_land_this_pop_t
             }
             else
             {
-                new_Ns_at_szgroup_pop[szgroup]=0;
+                new_Ns_at_szgroup_pop[szgroup]= Ns_at_szgroup_pop[szgroup];
                 removals_per_szgroup[szgroup]=0;
                 new_removals_at_szgroup_pop[szgroup]=cumul_removals_at_szgroup_pop[szgroup]+removals_per_szgroup[szgroup];
 

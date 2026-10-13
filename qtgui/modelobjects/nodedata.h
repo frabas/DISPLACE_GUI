@@ -111,8 +111,8 @@ public:
     double get_y() const { return mNode->get_y(); }
     int get_harbour() const { return mNode->get_harbour(); }
     bool get_is_harbour() const { return mNode->get_is_harbour(); }
-    int get_cumftime() const { return mNode->get_cumftime(); }
-    void set_cumftime(int i) { mNode->set_cumftime(i); }
+    double get_cumftime() const { return mNode->get_cumftime(); }
+    void set_cumftime(double i) { mNode->set_cumftime(i); }
     double get_cumsweptarea() const { return mNode->get_cumsweptarea(); }
     void set_cumsweptarea(int i) { mNode->set_cumsweptarea(i); }
     double get_cumsubsurfacesweptarea() const { return mNode->get_cumsubsurfacesweptarea(); }

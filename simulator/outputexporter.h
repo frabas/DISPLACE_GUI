@@ -21,6 +21,9 @@ class OutputExporter
 
     bool useSql = true;
     bool usePlainText = true;
+    // grounds_by_port: append the trip port and the departure port to each loglike line
+    bool exportTripPort = false;
+    bool segmentedVmsLike = false; //  timestep-accounting
     std::shared_ptr<SQLiteOutputStorage> mSqlDb;
 public:
     OutputExporter(const std::string &basepath, const std::string &namesimu);
@@ -43,6 +46,15 @@ public:
 
     void setUsePlainText(bool pt)
     { usePlainText = pt; }
+
+    void setExportTripPort(bool tp)
+    {
+        exportTripPort = tp;
+    }
+    
+    // timestep-accounting: one vmslike row per segment, with seg, hours, km
+    void setSegmentedVmsLike(bool s)
+       { segmentedVmsLike = s; }
 
     void setSQLiteDb(std::shared_ptr<SQLiteOutputStorage> db)
     { mSqlDb = db; }

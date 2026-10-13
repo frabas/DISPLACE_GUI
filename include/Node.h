@@ -280,7 +280,7 @@ class  Node
         const vector<vector<double >>& get_cumeffort_per_pop_per_met_this_month();
         const vector<vector<double >>& get_cpue_per_pop_per_met_this_month();
         const vector<double>& get_cumdiscards_per_pop ();
-        int get_cumftime() const;
+        double get_cumftime() const;
         double get_cumsweptarea() const;
         double get_cumsubsurfacesweptarea() const;
         double get_cumcatches() const;
@@ -308,7 +308,7 @@ class  Node
         void set_cpue_per_pop_per_met_this_month(int name_pop, int name_met, double val);
         void set_cumdiscards_per_pop(int name_pop, double val);
         void set_vid(int val);
-        void set_cumftime(int tot);
+        void set_cumftime(double tot);
         void set_cumsweptarea(double tot);
         void set_cumsubsurfacesweptarea(double tot);
         void set_cumcatches(double tot);
@@ -316,7 +316,7 @@ class  Node
         void set_cumdiscards(double tot);
         void set_cumdiscardsratio(double rat);
         void set_nbchoked(double val);
-        void add_to_cumftime(int delta_time);
+        void add_to_cumftime(double delta_time);
         void add_to_cumsweptarea(double sweptarea);
         void add_to_cumsubsurfacesweptarea(double subsurfacesweptarea);
         void add_to_sweptarea(int sweptarea);
@@ -511,7 +511,7 @@ private:
         double benthos_biomass_K;
         double benthos_number_K;
         bool is_harbour;
-		int cumftime;
+		double cumftime;
         double cumsweptarea;
         double cumsubsurfacesweptarea;
         double cumcatches;

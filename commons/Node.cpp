@@ -764,7 +764,7 @@ vector<int> Node::get_vid ()
 }
 
 
-int Node::get_cumftime () const
+double Node::get_cumftime () const
 {
 	return(cumftime);
 }
@@ -865,7 +865,7 @@ void Node::set_vid (int val)
     vid.push_back(val);
 }
 
-void Node::set_cumftime(int tot)
+void Node::set_cumftime(double tot)
 {
     cumftime = tot;
 }
@@ -915,7 +915,7 @@ void Node::set_xy(double xval, double yval)
 
 
 
-void Node::add_to_cumftime(int delta_time)
+void Node::add_to_cumftime(double delta_time)
 {
     lock();
 	cumftime+=delta_time;
@@ -2117,9 +2117,12 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-    if(cumftime>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
-		" " << this->get_x() << " " << this->get_y() << " " <<
-		cumftime << " " <<  "\n";
+    if (cumftime > 1e-6) {
+        popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " " <<
+            " " << this->get_x() << " " << this->get_y() << " ";
+        if (cumftime == std::floor(cumftime)) popnodes << (long long)cumftime; else popnodes << cumftime;
+        popnodes << " " << "\n";
+    }
 
 }
 

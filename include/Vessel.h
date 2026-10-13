@@ -935,5 +935,44 @@ public:
     static std::vector<std::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
 
     static std::string nationalityFromName(const std::string &name);
+
+
+    //timestep - accounting(dyn_alloc option timestep_accounting) :
+    // a step is a 1 h time budget that the vessel spends on several actions
+    // (moving, fishing, deciding) instead of one action per step. Unused with
+    // the option off, so upstream behaviour is unchanged.
+    struct TimeSegment {
+        int state;          // 1 fishing, 2 steaming (as get_state())
+        double hours;       // duration of the segment
+        double km;          // distance moved in the segment
+        double x, y, course, cumfuel; // vessel at the end of the segment
+        
+    };
+    double get_time_carry() const { return m_time_carry; }
+    void set_time_carry(double h) { m_time_carry = h; }
+    bool get_defer_move() const { return m_defer_move; }
+    bool get_fish_without_deciding() const { return m_fish_without_deciding; }
+    void set_fish_without_deciding(bool f) { m_fish_without_deciding = f; }
+    void set_defer_move(bool d) { m_defer_move = d; }
+    double get_fishing_fraction() const { return m_fishing_fraction; }
+    void set_fishing_fraction(double f) { m_fishing_fraction = f; }
+    const std::vector<TimeSegment> &get_segments() const { return m_segments; }
+    void clear_segments() { m_segments.clear(); }
+    void add_segment(int a_state, double hours, double km)
+        { m_segments.push_back(TimeSegment{ a_state, hours, km, x, y, course, cumfuelcons }); }
+    // Moves along the roadmap for at most `hours`; charges exactly the time and
+    // distance covered; sets `arrived` when the roadmap is completed. Returns
+    // the hours used. Caller holds the vessel lock.
+    double move_within(std::vector<Node*> &nodes, int a_tstep, bool is_fishing_credits,
+        double hours, bool& arrived);
+private:
+    double m_time_carry = 0.0;       // unused part of earlier steps (h), reset after a trip
+    bool m_defer_move = false;       // choose_*_and_go_fishing set the roadmap but do not move
+    bool m_fish_without_deciding = false; // reached a ground just changed to: next fishing action without decisions
+    double m_fishing_fraction = 1.0; // hours fished in this action (partial_fishing)
+    std::vector<TimeSegment> m_segments; // this step's segments, for vmslike
+
+
+
 };
 #endif							 // VESSEL_H

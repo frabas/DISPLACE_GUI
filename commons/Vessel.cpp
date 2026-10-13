@@ -3065,6 +3065,78 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes, int a_
     // }
 }
 
+//timestep accounting: move along the roadmap for at most `hours`.
+// Unlike find_next_point_on_the_graph_unlocked(), which always charges a full
+// step (or more, on the step that reaches the end of the roadmap), this charges
+// exactly the distance covered and the time it took, so the rest of the step
+// is left to the caller for the next action. The vessel passes through nodes
+// as long as the budget allows and then approaches the next node.
+double Vessel::move_within(vector<Node*> &nodes, int a_tstep, bool is_fishing_credits, double hours, bool& arrived)
+    {
+    arrived = false;
+    if (roadmap.empty() || hours <= 0.0) return 0.0;
+    
+    bool returning_to_harbour = nodes[roadmap.back().toIndex()]->get_is_harbour();
+    double kmh = get_speed() * NAUTIC;
+    if (!(kmh > 0.0)) return 0.0; // no speed: no move (and no 0/0)
+    double budget = hours * kmh; // km
+    double covered = 0.0;
+    const double snap_km = 1e-6; // a node this close is reached (float rounding of the budget)
+    
+        while (!roadmap.empty()) {
+        Node * nxt = nodes[roadmap.front().toIndex()];
+        double d = dist(x, y, nxt->get_x(), nxt->get_y());
+        if (d != d) d = 0.0; // NaN guard on coincident points
+        if (d > 0.0) course = bearing(x, y, nxt->get_x(), nxt->get_y());
+        if (d <= budget + snap_km) {
+            this->move_to(nxt);
+            next_x = nxt->get_x();
+            next_y = nxt->get_y();
+            x = next_x;
+            y = next_y;
+            roadmap.pop_front();
+            double dd = std::min(d, budget); // never charge more than the budget
+            budget -= dd;
+            covered += dd;
+            
+        }
+        else {
+            vector<double> xy = destB(x, y, course, budget);
+            this->set_xy(xy[0], xy[1]);
+            covered += budget;
+            budget = 0.0;
+            break;
+            
+        }
+        
+    }
+    arrived = roadmap.empty();
+    
+    double time_used = covered / kmh;
+    double fuel_multiplier = get_metier()->get_fuel_reduction_multiplier();
+    double mult = returning_to_harbour ? get_mult_fuelcons_when_returning() : get_mult_fuelcons_when_steaming();
+    set_cumfuelcons(get_cumfuelcons() + get_fuelcons() * time_used * mult * fuel_multiplier);
+    set_consotogetthere(get_consotogetthere() + get_fuelcons() * time_used * mult * fuel_multiplier);
+    set_cumsteaming(get_cumsteaming() + time_used);
+    set_timeatsea(get_timeatsea() + time_used);
+    if (get_hasfishedatleastonce()) set_timeatseasincefirstcatch(get_timeatseasincefirstcatch() + time_used);
+    set_traveled_dist_this_trip(get_traveled_dist_this_trip() + covered);
+    set_distprevpos(covered);
+    set_state(2);
+    
+        if (is_fishing_credits && !arrived && (a_tstep % 2)) {
+                // as upstream: pay the tariff every two steps, also when steaming
+            double tariff_this_cell = this->get_loc()->get_tariffs().at(this->get_metier()->get_name()) *
+            this->get_metier()->get_met_multiplier_on_arbitary_breaks_for_tariff();
+            vector<double> fishing_credits = this->get_fishing_credits();
+            fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell;
+            this->set_fishing_credits(fishing_credits);
+        
+        }
+    
+        this->add_segment(2, time_used, covered);
+    return time_used;
+    }
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -3251,11 +3323,11 @@ Vessel::SweptAreaInfo Vessel::compute_swept_area(const VesselStaticData & v,
 
     // swept area depends on metier type (trawler vs. static gear)
     if (get_metier()->get_metier_type() == 1) {          // trawlers
-        s.swept_area = s.gear_width * PING_RATE * NAUTIC * m.fspeed;
+        s.swept_area = s.gear_width * (PING_RATE* m_fishing_fraction) * NAUTIC * m.fspeed;
         s.subsurf_area = s.swept_area * 0.329;           // penetration factor (Eigaard et al. 2016)
     }
     else {                                            // seiners / gillnets
-        s.swept_area = M_PI * std::pow(s.gear_width / (2.0 * M_PI), 2);
+        s.swept_area = M_PI * std::pow(s.gear_width / (2.0 * M_PI), 2) * m_fishing_fraction;
         s.subsurf_area = s.swept_area * 0.01;
     }
     return s;
@@ -3755,7 +3827,8 @@ void Vessel::handle_explicit_population(
         v.betas_per_pop[popIdx] +
         m.betas_per_pop[popIdx] +
         h.betas_per_pop[popIdx] +
-        avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() * tech_creeping_multiplier;
+        avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() * tech_creeping_multiplier 
+          * m_fishing_fraction; // timestep-accounting: partial_fishing (1 otherwise)
 
    
     double totCatchWeight = std::min(totAvail, catchPotential);
@@ -4026,7 +4099,7 @@ void Vessel::handle_implicit_population(
        //   discards_pop_at_szgroup[pop][sz]
        //   ping_catch_pop_at_szgroup[pop][sz]
        // For implicit stocks we only use the first size group (index 0).
-    double weight = cpue * PING_RATE;            // kg caught during this ping
+    double weight = cpue * PING_RATE * m_fishing_fraction;            // kg caught during this ping
 
     // cumul
     cr.landings[0] += weight;
@@ -4254,7 +4327,7 @@ bool Vessel::maybe_close_ground(int groundIdx,
             get_loc()->add_to_cumdiscards_per_pop(cr.totalDiscards, popIdx);
             int met = this->get_metier()->get_name();
             get_loc()->add_to_cumcatches_per_pop_per_met_this_month(cr.totalLandings, popIdx, met);
-            get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, popIdx, met);
+            get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE * m_fishing_fraction, popIdx, met);
             get_loc()->compute_cpue_per_pop_per_met_this_month(popIdx, met); // i.e. cumcatch/cumeffort
 
      
@@ -5375,7 +5448,7 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                     this->get_loc()->add_to_cumcatches_per_pop_this_month(a_cumul_weight_this_pop_this_vessel, pop);
                     this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(a_cumul_weight_this_pop_this_vessel,
                     pop, met);
-                    this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, pop, met);
+                    this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE* m_fishing_fraction, pop, met);
                     this->get_loc()->compute_cpue_per_pop_per_met_this_month(pop, met); // i.e. cumcatch/cumeffort
                
                     // catches
@@ -5675,18 +5748,18 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                 }
                 this->cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
                 // effort
-                this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
+                this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                    this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE;
+                    this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
                 }
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet) || dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                    this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
+                    this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE * m_fishing_fraction;
                 }
                 // contribute to accumulated catches on this node
                 this->get_loc()->add_to_cumcatches_per_pop(catch_pop_at_szgroup[pop][0], pop);
                 this->get_loc()->add_to_cumcatches_per_pop_this_month(catch_pop_at_szgroup[pop][0], pop);
                 this->get_loc()->add_to_cumcatches_per_pop_per_met_this_month(catch_pop_at_szgroup[pop][0], pop, met);
-                this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE, pop, met);
+                this->get_loc()->add_to_cumeffort_per_pop_per_met_this_month(PING_RATE * m_fishing_fraction, pop, met);
                 this->get_loc()->compute_cpue_per_pop_per_met_this_month(pop, met);
                 this->get_loc()->add_to_cumdiscards_per_pop(discards_pop_at_szgroup[pop][0], pop);
             }
@@ -7397,7 +7470,9 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         if (dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
 
         // then, call to find.next.pt.on.the.graph()
-        this-> find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
+        //timestep accounting: the caller moves within its time budget
+        if (!m_defer_move)
+           this-> find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
 
         // decide on the rest duration for the next time (drawn from a gamma law)
         double calib=1;
@@ -7831,7 +7906,9 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     */
 
     // find.next.pt.on.the.graph()
-    this->find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
+     //timestep accounting: the caller moves within its time budget
+    if (!m_defer_move)
+       this->find_next_point_on_the_graph_unlocked(nodes, tstep, is_fishing_credits);
     unlock();
 return 0;
 }
@@ -8080,6 +8157,8 @@ void Vessel::reinit_after_a_trip(const DynAllocOptions& dyn_alloc_sce)
     this-> set_traveled_dist_this_trip(0);
     this-> set_natio(true);
     this->set_tstep_dep(0);
+    this->m_time_carry = 0;  // timestep accounting
+    this->m_fish_without_deciding = false;
     this->reset_message();
     //this->set_reason_to_go_back(0);
     outc(cout << "reinit after a trip...OK" << "\n");

@@ -734,6 +734,8 @@ int app_main(int argc, char const* argv[])
 
     std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
     OutputExporter::instance().setUseSqlite(enable_sqlite_out);
+    // OutputExporter::instance().setExportTripPort(scenario.dyn_alloc_sce.option(Options::grounds_by_port)); // TO BE IMPLEMENTED
+    OutputExporter::instance().setSegmentedVmsLike(enable_sqlite_out);
 
     try {
         if (enable_sqlite_out) {

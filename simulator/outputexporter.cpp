@@ -43,6 +43,38 @@ void OutputExporter::exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel)
 {
     std::unique_lock<std::mutex> locker(glob_mutex);
 
+    // timestep - accounting: one row per segment of the step(its own
+            // state and end position), plus seg, hours and km. A step without a
+            // segment (vessel stuck, or the departure row at tstep 0) is one row with
+            // hours and km 0.
+        if (segmentedVmsLike) {
+        const auto& segs = vessel->get_segments();
+        if (segs.empty()) {
+            mVmsLike << tstep << " " << vessel->get_name() << " " << vessel->get_tstep_dep() << " "
+                << setprecision(3) << fixed << vessel->get_x() << " "
+                << setprecision(3) << fixed << vessel->get_y() << " "
+                << setprecision(0) << fixed << vessel->get_course() << " "
+                << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
+                << vessel->get_state() << " 1 "
+                << setprecision(4) << fixed << 0.0 << " " << setprecision(3) << fixed << 0.0 << " \n";
+            
+        }
+        for (size_t i = 0; i < segs.size(); ++i) {
+            mVmsLike << tstep << " " << vessel->get_name() << " " << vessel->get_tstep_dep() << " "
+                << setprecision(3) << fixed << segs[i].x << " "
+                << setprecision(3) << fixed << segs[i].y << " "
+                << setprecision(0) << fixed << segs[i].course << " "
+                << setprecision(0) << fixed << segs[i].cumfuel << " "
+                << segs[i].state << " " << (i + 1) << " "
+                << setprecision(4) << fixed << segs[i].hours << " "
+                << setprecision(3) << fixed << segs[i].km << " \n";
+            
+        }
+         return;
+        
+    }
+    
+
     mVmsLike << tstep << " "
                 //<< vessels[ index_v ]->get_idx() << " "
              << vessel->get_name() << " "

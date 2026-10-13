@@ -78,6 +78,7 @@ void OutputQueueManager::start()
 {
     std::unique_lock<std::mutex> locker(mMutex);
     UNUSED(locker);
+    if (mType == Binary && !ipcQueue) ipcQueue.reset(new IpcQueue());
     mThread = std::thread( [this]() { thread(); });
 }
 
@@ -128,7 +129,7 @@ void OutputQueueManager::thread()
                 } else if (len > 0) {
                     IpcMessageTypes t = msg->getType();
                     //                std::cout << "** Sending message type " << t << " length: " << len << "\n";
-                    ipcQueue.push(t,buffer, len);
+                    ipcQueue->push(t,buffer, len);
                 }
                 break;
             }

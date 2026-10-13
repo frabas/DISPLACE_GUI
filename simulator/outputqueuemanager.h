@@ -80,7 +80,11 @@ private:
 
     std::queue<std::shared_ptr<OutputMessage> > mQueue;
 
-    IpcQueue ipcQueue;
+    // Created in start() only for the Binary (GUI) protocol: constructing an
+    // IpcQueue opens or creates the machine-wide shared memory "OutQueue", which
+    // a headless run never uses.
+    std::unique_ptr<IpcQueue> ipcQueue;
+
     enum ProtocolType { TextWithStdOut, Binary, None } mType;
 
     std::ostream &mOutStream;        ///< File descriptor for socket/pipe (Binary protocol)

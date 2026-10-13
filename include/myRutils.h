@@ -25,10 +25,133 @@
 #include <m_constants.h>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include <cmath>
 
 using namespace std;
+
+// source: adapted from Rmath
+// e,g, http://svn.r-project.org/R/trunk/src/nmath/standalone/sunif.c
+// TO DO: use a standalone compiled version of Rmath would be better...
+void revsort(double* a, int* ib, int n);
+// in random.c
+void ProbSampleReplace(int n, double* p, int* perm, int nans, int* ans);
+double unif_rand(void);
+
+// ------------------------------------------------------------------
+// Build the cumulative sampling table for do_sample().
+//
+// Probabilities are normalised by their total, sorted into descending
+// order, then accumulated into a cumulative distribution. Kept as a
+// separate pure function so it can be cached (see sample_table()).
+// The construction order matches the original inline code exactly
+// (same summation order, same std::sort, same accumulation), so the
+// table is bit-for-bit identical to what do_sample() used to build
+// every call and the unif_rand() stream is unaffected.
+// ------------------------------------------------------------------
+template <typename I>
+std::vector<std::tuple<I, double> >
+make_sample_table(int nval, const std::vector<I>& val, const std::vector<double>& proba)
+{
+    using Rec = std::tuple<I, double>;
+    class RecGreater {
+    public:
+        bool operator () (const Rec& v1, const Rec& v2) const {
+            return std::get<1>(v1) > std::get<1>(v2);
+        }
+    };
+
+    double total = 0.0;
+    for (auto pr : proba) {
+        total += pr;
+    }
+
+    vector<Rec> prb;
+    for (int i = 0; i < (int)val.size(); ++i) {
+        prb.push_back(std::make_pair(val[i], proba[i] / total));
+    }
+
+    // sort the probabilities into descending order
+    std::sort(prb.begin(), prb.end(), RecGreater());
+
+    // compute cumulative probabilities
+    for (int i = 1; i < nval; i++) {
+        std::get<1>(prb[i]) += std::get<1>(prb[i - 1]);
+    }
+
+    return prb;
+}
+
+// ------------------------------------------------------------------
+// Cumulative table lookup with caching.
+//
+// Most do_sample() calls repeat the exact same (val, proba) inputs --
+// a vessel's grounds entries only change at a reload
+// or a closure  use a cache to avoid rebuilding (sum + sort + accumulate)
+// on every call. The cache is keyed by the full vector contents, so
+// a hit is exact equality by construction: no hashing, no memcmp,
+// no collision handling. Cache is never invalidated because keys
+// carry their inputs.
+// ------------------------------------------------------------------
+template <typename I>
+const std::vector<std::tuple<I, double> >&
+sample_table(int nval, const std::vector<I>& val, const std::vector<double>& proba)
+{
+    using Table = std::vector<std::tuple<I, double> >;
+    using Key = std::pair<std::vector<I>, std::vector<double> >;
+
+    static thread_local std::map<Key, Table> cache;
+
+    Key key(val, proba);
+    auto it = cache.find(key);
+    if (it != cache.end())
+        return it->second;
+
+    return cache.emplace(std::move(key),
+        make_sample_table(nval, val, proba)).first->second;
+}
+
+template <typename I>
+std::vector<I> do_sample(int n, int nval, const std::vector<I>& val, const std::vector<double>& proba)
+{
+    using Rec = std::tuple<I, double>;
+
+    if (val.size() == 0 || proba.size() == 0 || nval == 0)
+        return vector<I>();
+
+    if (nval != (int)val.size() || nval != (int)proba.size())
+        throw std::invalid_argument("do_sample requires nval == val.size() == proba.size()");
+
+    const vector<Rec>& prb = sample_table<I>(nval, val, proba);
+
+    vector<I> res;
+    res.reserve(n);
+
+    int nans = n;
+
+    double rU;
+    int nm1 = nval - 1;
+
+    // compute the sample //
+    for (int i = 0; i < nans; i++)
+    {
+        rU = unif_rand();
+        int j;
+        for (j = 0; j < nm1; j++)
+        {
+            if (rU <= std::get<1>(prb[j]))
+                break;
+        }
+        res.push_back(std::get<0>(prb[j]));
+    }
+    return res;
+}
+
+
+
+
+/*
 
 // source: adapted from Rmath
 // e,g, http://svn.r-project.org/R/trunk/src/nmath/standalone/sunif.c
@@ -74,15 +197,15 @@ std::vector<I> do_sample( int n, int nval, const std::vector<I> &val, const std:
     double rU;
     int nm1 = nval - 1;
 
-    /* sort the probabilities into descending order */
+    // sort the probabilities into descending order //
     std::sort(prb.begin(), prb.end(), RecGreater());
 
-    /* compute cumulative probabilities */
+    // compute cumulative probabilities //
     for (int i = 1 ; i < nval; i++) {
         std::get<1>(prb[i]) += std::get<1>(prb[i - 1]);
     }
 
-    /* compute the sample */
+    // compute the sample //
     for (int i = 0; i < nans; i++)
     {
         rU = unif_rand();
@@ -96,6 +219,7 @@ std::vector<I> do_sample( int n, int nval, const std::vector<I> &val, const std:
     }
     return res;
 }
+*/
 
 //svn.r-project.org/R/trunk/src/nmath/
 void set_seed(unsigned int i1, unsigned int i2);
@@ -195,5 +319,7 @@ inline int is_pt_lying_on_segment (double x1, double x2, double x3, double y1, d
     }
 
 }
+
+
 
 #endif // COMMONS_MYRUTILS_H

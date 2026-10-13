@@ -169,7 +169,7 @@ static void manage_ship(SimModel &model, int idx_v)
 }
 
 
-// ADDITIONAL OPTION TOWARD A REFACTORING >v1.8.0 - timestep - accounting(dyn_alloc option timestep_accounting).
+// timestep - accounting (not used if dyn_alloc option old_timestep_accounting).
 //
 // Upstream gives a vessel one action per 1 h step: a move charges the time it
 // took, but a vessel that reaches its destination mid-step waits out the rest
@@ -928,10 +928,10 @@ static void manage_vessel(std::shared_ptr<SimModel> model, int idx_v,
     if (!is_exited) {
 
         // timestep-accounting: the step as a time budget (see above)
-        if (model->scenario().dyn_alloc_sce.option(Options::timestep_accounting)) {
+        if (!model->scenario().dyn_alloc_sce.option(Options::old_timestep_accounting)) {
             manage_vessel_timebudget(model, index_v, listVesselIdForLogLikeToExport,
                 listVesselIdForTripCatchPopPerSzgroupExport);
-    
+            //=> DEFAULT v1.8.0
         }
         else {
 

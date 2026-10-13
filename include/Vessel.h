@@ -937,7 +937,7 @@ public:
     static std::string nationalityFromName(const std::string &name);
 
 
-    //timestep - accounting(dyn_alloc option timestep_accounting) :
+    //timestep - accounting:
     // a step is a 1 h time budget that the vessel spends on several actions
     // (moving, fishing, deciding) instead of one action per step. Unused with
     // the option off, so upstream behaviour is unchanged.

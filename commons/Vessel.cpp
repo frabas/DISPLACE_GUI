@@ -3682,7 +3682,12 @@ void Vessel::handle_explicit_population(
     // 0️  Quick‑reject if the pop is not present on this node
     // ------------------------------------------------------------------
     int popName = populations.at(popIdx)->get_name();
-    if (!node_contains_pop(popName)) return;   // helper 
+    // out-of-range-implicit: on an out-of-range node (code_area 10)
+    // the stock is caught from the vessel's cpue whether or not it is listed
+    // on the node (as DISPLACE 1.5.0 did, do_catch_v150)
+    bool out_of_range = dyn_alloc_sce.option(Options::out_of_range_implicit) &&
+    this->get_loc()->get_code_area() == 10;
+    if (!out_of_range && !node_contains_pop(popName)) return;   // helper
 
     // ------------------------------------------------------------------
     // 1️  Pull node‑specific biological state
@@ -4195,7 +4200,10 @@ bool Vessel::maybe_close_ground(int groundIdx,
                 implicit_pops.end(),
                 pop->get_name());
 
-            if (isImplicit) {
+            bool outOfRange = dyn_alloc_sce.option(Options::out_of_range_implicit) &&
+                +this->get_loc()->get_code_area() == 10;
+
+            if (isImplicit || outOfRange) {
                 handle_implicit_population(popIdx, populations, sweep, dyn_alloc_sce,
                     tstep, a_month, a_quarter, tech_creeping_multiplier,
                     is_tacs, is_discard_ban, is_individual_vessel_quotas, is_grouped_tacs,
@@ -9056,7 +9064,8 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
             shall_I_change_to_another_ground_because_of_StartFishing_dtree=true &&
                     this->get_fgrounds().size()>2 &&
                     this->get_nbfpingspertrip() > 1 &&
-                    this->get_loc()->get_code_area()!=10;
+                       (this->get_loc()->get_code_area() != 10 ||
+                        simModel.scenario().dyn_alloc_sce.option(Options::out_of_range_implicit)); // out-of-range-implicit;
 
         }
 
@@ -9080,10 +9089,11 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
        //SHALL I CHANGE GROUND ?
         if(unif_rand()<the_value) {
 
-            shall_I_change_to_another_ground_because_of_ChangeGround_dtree=true &&  // yes...
-                    this->get_fgrounds().size()>2 &&  //...unless...
-                    this->get_nbfpingspertrip() > 1 &&
-                    this->get_loc()->get_code_area()!=10;
+            shall_I_change_to_another_ground_because_of_ChangeGround_dtree = true &&  // yes...
+                this->get_fgrounds().size() > 2 &&  //...unless...
+                this->get_nbfpingspertrip() > 1 &&
+                (this->get_loc()->get_code_area() != 10 ||
+                    simModel.scenario().dyn_alloc_sce.option(Options::out_of_range_implicit));
 
         }
         else
@@ -9111,9 +9121,9 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
         shall_I_change_to_another_ground = a_vect[0] &&
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
-                this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
+                (this->get_loc()->get_code_area() != 10 ||
+                    simModel.scenario().dyn_alloc_sce.option(Options::out_of_range_implicit)); // out-of-range-implicit
 
-        
         //shall_I_change_to_another_ground = true; /////overruling: CAUTION!
 
 

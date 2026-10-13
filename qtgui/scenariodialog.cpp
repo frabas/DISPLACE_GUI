@@ -70,6 +70,7 @@ static const char *dyn_alloc_options[] = {
     "aSingleMetierPerTrip",
     "unlimitedTankCap",
     "unlimitedCarryCap",
+    "out_of_range_implicit",
 
 
 };

@@ -153,6 +153,7 @@ enum Dyn_Alloc {
     aSingleMetierPerTrip,
     unlimitedTankCap,
     unlimitedCarryCap,
+    out_of_range_implicit,
 
 
     Dyn_Alloc_last

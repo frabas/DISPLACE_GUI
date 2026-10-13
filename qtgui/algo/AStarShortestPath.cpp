@@ -48,7 +48,7 @@ public:
         while (locations.size() <= node) {
             locations.push_back(location{});
         }
-        locations[node] = {x, y};
+        locations[node] = {y, x};
     }
 
     bool addEdge(int node_from, int node_to, cost weight)
@@ -57,7 +57,7 @@ public:
         bool inserted;
 
         std::tie(e, inserted) = add_edge(node_from, node_to, graph);
-        weightmap[e] = weight;
+        weightmap[e] = weight*1000; // the A* heuristic expect weight in meters
 
 //   std::cout << "Addedge: " << node_from << " to " << node_to << " w " << weight << " => " << inserted << "\n";
 
@@ -143,7 +143,7 @@ struct AStarShortestPath::Impl {
         bool found = false;
 
         std::vector<MyGeoGraph::Graph::vertex_descriptor> p(graph.numNodes());
-        std::vector<MyGeoGraph::cost> d(graph.numEdges());
+        std::vector<MyGeoGraph::cost> d(graph.numNodes());
         try {
             // call astar named parameter interface
             astar_search_tree

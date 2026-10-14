@@ -73,6 +73,7 @@ static const char *dyn_alloc_options[] = {
     "out_of_range_implicit",
     "old_timestep_accounting",
     "partial_fishing",
+    "grounds_by_port",
 
 
 };

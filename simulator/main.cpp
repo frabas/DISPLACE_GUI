@@ -734,8 +734,8 @@ int app_main(int argc, char const* argv[])
 
     std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
     OutputExporter::instance().setUseSqlite(enable_sqlite_out);
-    // OutputExporter::instance().setExportTripPort(scenario.dyn_alloc_sce.option(Options::grounds_by_port)); // TO BE IMPLEMENTED
-    OutputExporter::instance().setSegmentedVmsLike(enable_sqlite_out);
+    OutputExporter::instance().setExportTripPort(scenario.dyn_alloc_sce.option(Options::grounds_by_port)); 
+    OutputExporter::instance().setSegmentedVmsLike(true);
 
     try {
         if (enable_sqlite_out) {
@@ -2873,7 +2873,9 @@ int app_main(int argc, char const* argv[])
         // random permutation
 
         lock();
-        random_shuffle(ve.begin(), ve.end());
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(ve.begin(), ve.end(), g);
         unlock();
 
         // check that departure is done from harbours that are

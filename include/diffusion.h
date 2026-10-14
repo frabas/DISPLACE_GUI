@@ -38,6 +38,11 @@
 
 #include <boost/foreach.hpp>
 
+#include <algorithm>
+#include <random>
+
+
+
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 

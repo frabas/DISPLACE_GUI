@@ -425,7 +425,18 @@ void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const
     ss << setprecision(3) << logbook.CRBER << " " ;
     ss << setprecision(0) << logbook.NetPresentValue << " " ;
     ss << setprecision(0) << logbook.numTrips << " " ;
-
+    if (exportTripPort)
+    {
+        // grounds_by_port: trip_port = node of the port whose grounds this trip
+        // fished (-1 if the vessel used the baseline draws), then dep_port = node
+        // the trip departed from
+        auto node_or_minus1 = [&ss](types::NodeId n) {
+           if (n == types::special::InvalidNodeId) ss << -1 << " ";
+           else ss << n.toIndex() << " ";
+        };
+        node_or_minus1(v->get_trip_port());
+        node_or_minus1(v->get_trip_dep_port());
+    }
     ss  << " " << "\n";
 
     std::unique_lock<std::mutex> l(glob_mutex);

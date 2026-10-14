@@ -156,6 +156,7 @@ enum Dyn_Alloc {
     out_of_range_implicit,
     old_timestep_accounting, // timestep-accounting: a step is a 1 h budget spent on several actions, vmslike in segments
     partial_fishing,  // timestep-accounting: fishing in fractions of an hour 
+    grounds_by_port, 
 
     Dyn_Alloc_last
 };

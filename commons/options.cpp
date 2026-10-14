@@ -98,6 +98,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, out_of_range_implicit);
     O(mMap, old_timestep_accounting);
     O(mMap, partial_fishing);
+    O(mMap, grounds_by_port);
 
   
 

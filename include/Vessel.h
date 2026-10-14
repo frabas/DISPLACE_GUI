@@ -64,7 +64,17 @@ public:
     using ValuePerFgroundPerPop = std::vector<std::vector<double> >;
     using CumEffortPerTripPerFgroundsPerMet = std::vector<std::vector<double> >;
 
-   
+    // dyn_alloc_sce option grounds_by_port: fishing grounds tagged with the port
+    // they are fished from (vesselsspe_*/<vid>_fgrounds_harbours_quarter*.dat).
+    // A trip draws one port P, fishes only P's entries and returns to P.
+    struct PortGroundEntry {
+        types::NodeId ground;
+        int metier;
+        types::NodeId harbour;
+        double weight;        // normalised within its harbour: sums to 1 per harbour
+        double vessel_share;  // weight over the vessel's total: sums to 1 per vessel
+    };
+    
 
 
 private:
@@ -157,6 +167,14 @@ private:
 		int state;
 		int tstep_dep;
         types::NodeId previous_harbour_idx = types::special::InvalidNodeId;
+
+        // grounds_by_port: see PortGroundEntry above
+        std::vector<PortGroundEntry> port_grounds;
+        types::NodeId trip_port = types::special::InvalidNodeId;
+        // node the current/last trip departed from (previous_harbour_idx is reset
+        // to 0 at every quarterly reload, so it cannot serve as a record)
+        types::NodeId trip_dep_port = types::special::InvalidNodeId;
+
 
         double lastTrip_revenues;
         double lastTrip_explicit_revenues;
@@ -395,6 +413,19 @@ public:
         void unlock() { mutex.unlock(); }
 
         std::vector<char> metier_mask;
+
+        // dyn_alloc_sce option grounds_by_port: see PortGroundEntry above
+        void set_port_grounds(const std::vector<PortGroundEntry> &entries);
+        const std::vector<PortGroundEntry> &get_port_grounds() const { return port_grounds; }
+        bool has_port_grounds() const { return !port_grounds.empty(); }
+        types::NodeId get_trip_port() const { return trip_port; }
+        void set_trip_port(types::NodeId p) { trip_port = p; }
+        types::NodeId get_trip_dep_port() const { return trip_dep_port; }
+               // indices into get_port_grounds() of the entries of port p
+        std::vector<int> port_ground_entries_of(types::NodeId p) const;
+                // is this entry's ground closed to its metier for this vessel (area_monthly_closure)?
+        bool is_port_ground_banned(const PortGroundEntry & e, const vector<Node*> &nodes) const;
+        
 
 		int get_idx () const;
         std::string get_name () const;

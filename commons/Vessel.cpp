@@ -2658,6 +2658,50 @@ void Vessel::prepare_metier_mask(const DynAllocOptions& dyn_alloc_sce)
     this->metier_mask = std::move(mask);
 }
 
+//----------------------------------------------------------------------------------------------
+// grounds_by_port: port-tagged fishing grounds
+//----------------------------------------------------------------------------------------------
+
+void Vessel::set_port_grounds(const std::vector<PortGroundEntry> &entries)
+ {
+        // entries arrive with raw weights (e.g. hours); normalise them within each
+        // harbour (used to draw a ground once the trip port is known) and over the
+        // whole vessel (used to draw the trip port and its first ground jointly)
+        port_grounds = entries;
+    double total = 0.0;
+    std::map<types::NodeId, double> per_port;
+    for (const auto& e : port_grounds) {
+        total += e.weight;
+        per_port[e.harbour] += e.weight;
+    }
+    for (auto& e : port_grounds) {
+        e.vessel_share = total > 0 ? e.weight / total : 0.0;
+        e.weight = per_port[e.harbour] > 0 ? e.weight / per_port[e.harbour] : 0.0;
+    }
+ }
+
+
+std::vector<int> Vessel::port_ground_entries_of(types::NodeId p) const
+{
+    std::vector<int> idx;
+    for (size_t i = 0; i < port_grounds.size(); ++i) {
+        if (port_grounds[i].harbour == p) idx.push_back(static_cast<int>(i));
+    }
+  return idx;  
+}
+
+bool Vessel::is_port_ground_banned(const PortGroundEntry & e, const vector<Node*> &nodes) const
+{
+        // same rule as the per-ground checks under area_monthly_closure,
+        // but with the entry's own metier
+        const Node * n = nodes.at(e.ground.toIndex());
+        return n->isMetierBanned(e.metier) &&
+               n->isVsizeBanned(this->get_length_class()) &&
+               (n->isNationBanned(0) || n->isNationBanned(this->get_nationality_idx()));
+}
+
+
+
 
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
@@ -6966,6 +7010,37 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers,
     // caution: the likely metier is deduced from the proba of fishing grounds
     // we might imagine to deduce it from market incentive, etc. instead
 
+    // grounds_by_port: draw one port-tagged entry with probability = its share of
+    // the vessel's weight, i.e. the trip port P with P's share and then one of
+    // P's entries by weight; the trip will fish P's grounds and return to P.
+    // Entries closed to their metier are penalised as banned grounds are below.
+        if (dyn_alloc_sce.option(Options::grounds_by_port))
+        {
+        this->set_trip_port(types::special::InvalidNodeId);
+        if (this->has_port_grounds())
+             {
+            const auto& entries = this->get_port_grounds();
+            std::vector<int> idx(entries.size());
+            std::vector<double> w(entries.size());
+            for (size_t i = 0; i < entries.size(); ++i)
+                {
+                idx[i] = static_cast<int>(i);
+                w[i] = entries[i].vessel_share;
+                if (dyn_alloc_sce.option(Options::area_monthly_closure) &&
+                    this->is_port_ground_banned(entries[i], nodes))
+                    {
+                    w[i] = 1e-8;
+                    }
+                }
+            int e = do_sample(1, static_cast<int>(idx.size()), idx, w).at(0);
+            this->set_trip_port(entries.at(e).harbour);
+            this->set_metier(metiers.at(entries.at(e).metier));
+            return;
+            }
+        }
+
+
+
     //1. draw a ground according to freq
     const auto &grds = this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
@@ -7140,8 +7215,60 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
     // choose the ground, dyn sce. vs. baseline
     types::NodeId ground = types::special::InvalidNodeId;
 
+    // grounds_by_port: only the entries of the trip port drawn in
+    // which_metier_should_i_go_for() are candidates; this replaces the ChooseGround
+    // dtree and the frequency-reshaping options for this vessel
+    std::vector<int> port_entries;
+    bool by_port = dyn_alloc_sce.option(Options::grounds_by_port) && this->has_port_grounds();
+    if (by_port)
+    {
+        port_entries = this->port_ground_entries_of(this->get_trip_port());
+        by_port = !port_entries.empty();
+    }
 
-    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
+
+    if (by_port)
+    {
+        const auto& entries = this->get_port_grounds();
+        vector<double> w(port_entries.size());
+        for (size_t k = 0; k < port_entries.size(); ++k)
+        {
+            const auto& e = entries.at(port_entries[k]);
+            w[k] = e.weight;
+            // area_monthly_closure: same open-days rule as for the vessel's grounds
+                // below, applied with the entry's own metier
+                if (dyn_alloc_sce.option(Options::area_monthly_closure) &&
+                    this->is_port_ground_banned(e, nodes))
+                {
+                double nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(e.metier);
+                double nbOpenedDays = 31 - nodes.at(e.ground.toIndex())->getNbOfDaysClosed(e.metier);
+                if (nbDaysSpent >= nbOpenedDays) w[k] = 1e-8;
+                }
+                        // aSingleMetierPerTrip: keep the metier chosen for this trip
+                if (dyn_alloc_sce.option(Options::aSingleMetierPerTrip) &&
+                    e.metier != this->get_metier()->get_name())
+                {
+                    w[k] = 0.0;
+                }
+            
+        }
+            double sum_probas = 0.0;
+        for (double x : w) sum_probas += x;
+        if (sum_probas < 1e-5)
+             {
+            return(1); // do_nothing: every entry of this port is closed
+            }
+        
+            int k = do_sample(1, static_cast<int>(port_entries.size()), port_entries, w).at(0);
+        if (dyn_alloc_sce.option(Options::PickUpTheMostFrequentGroundEachTime))
+             {
+            k = port_entries.at(max_element(w.begin(), w.end()) - w.begin());
+            }
+        ground = entries.at(k).ground;
+        this->set_metier(metiers.at(entries.at(k).metier));
+     }
+     else if (use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)) 
+     {
 
         outc(cout << " should i choose this ground" << "\n");
         ground=this->should_i_choose_this_ground(simModel,
@@ -7387,6 +7514,7 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
     //auto from = this->get_loc()->get_idx_node();
     types::NodeId from = this->get_loc()->get_idx_node();
     this->set_previous_harbour_idx(from);
+    this->trip_dep_port = from;   // grounds_by_port logbook: dep_port
 
     PathShop curr_path_shop;
 
@@ -7490,16 +7618,20 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
         // for this vessel, select the metier specific to this particular fishing ground
         // according to the observed frequency in data
         // (NOTE THAT, FINALLY, THE METIER CAN BE DIFFERENT FROM THE ONE FROM which_metier_should_i_go_for() )
-        const auto &poss_met        = this->get_possible_metiers();
-        const auto &freq_poss_met= this->get_freq_possible_metiers();
-        auto metiers_on_grd      = find_entries( poss_met, ground );
-        auto freq_metiers_on_grd = find_entries( freq_poss_met, ground );
-        // need to convert in array, see myRutils.cpp
-        if(metiers_on_grd.size()!=0)
+        // grounds_by_port: the metier is the drawn entry's, already set above
+        if (!by_port)
         {
-            //cout << "do_sample 4" << "\n";
-            vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
-            this->set_metier(  metiers[ a_met.at(0) ]  );
+            const auto &poss_met        = this->get_possible_metiers();
+            const auto &freq_poss_met= this->get_freq_possible_metiers();
+            auto metiers_on_grd      = find_entries( poss_met, ground );
+            auto freq_metiers_on_grd = find_entries( freq_poss_met, ground );
+            // need to convert in array, see myRutils.cpp
+            if (metiers_on_grd.size() != 0)
+            {
+               //cout << "do_sample 4" << "\n";
+               vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
+               this->set_metier(metiers[a_met.at(0)]);
+            }
         }
         else
         {
@@ -7549,7 +7681,41 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     bool finally_I_should_go_for_the_closest=false;
     // => in case of area_closure: provoke oscillation at the border if the 2nd closest is inside a closed area
 
-    const auto &grds = this->get_fgrounds();
+     // grounds_by_port: the next ground is searched among the trip port's grounds only.
+     // Under area_monthly_closure an entry is left out once the month's open days
+     // for its own metier are used, as in choose_a_ground_and_go_fishing(): the
+     // checks below use the current metier, but the metier on the new ground is
+     // drawn among the port's entries there, which may be another one.
+     std::vector<types::NodeId> port_grds;
+     std::vector<int> port_entries;
+     bool by_port = dyn_alloc_sce.option(Options::grounds_by_port) && this->has_port_grounds();
+     if (by_port)
+     {
+         std::vector<int> all_entries = this->port_ground_entries_of(this->get_trip_port());
+         by_port = !all_entries.empty();
+         for (int k : all_entries)
+         {
+             const auto& e = this->get_port_grounds().at(k);
+             if (dyn_alloc_sce.option(Options::area_monthly_closure) &&
+                 this->is_port_ground_banned(e, nodes) &&
+                 this->getDaysSpentInRestrictedAreaThisMonth(e.metier) >=
+                 31 - nodes.at(e.ground.toIndex())->getNbOfDaysClosed(e.metier))
+                  {
+                 continue;
+                  }
+              port_entries.push_back(k);
+             if (find(port_grds.begin(), port_grds.end(), e.ground) == port_grds.end()) port_grds.push_back(e.ground);
+         }
+          if (by_port && port_grds.empty())
+              {
+             unlock();
+             return 1; // every ground of the trip port is closed: no possible change
+             }
+     }
+
+     const auto& grds = by_port ? port_grds : this->get_fgrounds();
+
+
     //int current_grd = this->get_loc()->get_idx_node();
     //  if(grds.size()>2)
     //  {
@@ -7681,7 +7847,10 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     vector <bool> a_vect;
     a_vect.push_back(true);
     a_vect.push_back(false);
-    random_shuffle(a_vect.begin(),a_vect.end());
+    //random_shuffle(a_vect.begin(),a_vect.end()); // depracted in C++17, use std::shuffle instead
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(a_vect.begin(), a_vect.end(), g);
 
     if(a_vect[0])
     {
@@ -7874,23 +8043,48 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
 
     // for this vessel, select the metier specific to this particular fishing ground
     // according to the observed frequency in data
-    const auto &poss_met        = this->get_possible_metiers();
-    const auto &freq_poss_met= this->get_freq_possible_metiers();
-    auto metiers_on_grd      = find_entries( poss_met, next_ground );
-    auto freq_metiers_on_grd = find_entries( freq_poss_met, next_ground );
-    // need to convert in array, see myRutils.cpp
-
-    if(metiers_on_grd.size()!=0)
-    {
-        //cout << "do_sample 5" << "\n";
-        vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
-        this->set_metier(  metiers[ a_met[0] ]  );
-    }
+    if (by_port)
+     {
+        // grounds_by_port: among the trip port's entries on this ground, by weight
+        std::vector<int> mets;
+        std::vector<double> w;
+        for (int k : port_entries)
+             {
+            const auto& e = this->get_port_grounds().at(k);
+            if (e.ground == next_ground)
+                 {
+                mets.push_back(e.metier);
+                w.push_back(e.weight);
+                }
+             }
+            if (!mets.empty())
+             {
+            vector<int> a_met = do_sample(1, static_cast<int>(mets.size()), mets, w);
+            this->set_metier(metiers.at(a_met[0]));
+            }
+     }
     else
     {
-        this->set_metier(  metiers[ 0 ]  );   // a dangerous fix
+
+        const auto& poss_met = this->get_possible_metiers();
+        const auto& freq_poss_met = this->get_freq_possible_metiers();
+        auto metiers_on_grd = find_entries(poss_met, next_ground);
+        auto freq_metiers_on_grd = find_entries(freq_poss_met, next_ground);
+        // need to convert in array, see myRutils.cpp
+
+        if (metiers_on_grd.size() != 0)
+        {
+            //cout << "do_sample 5" << "\n";
+            vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
+            this->set_metier(metiers[a_met[0]]);
+        }
+
+        else
+        {
+            this->set_metier(metiers[0]);   // a dangerous fix
+        }
+
     }
-    
     bool is_fishing_credits = false;
     if (dyn_alloc_sce.option(Options::fishing_credits)) is_fishing_credits = true;
     
@@ -7975,8 +8169,15 @@ void Vessel::choose_a_port_and_then_return(const SimModel& simModel,
     // the 'arr' node will either be the closest port, or the more frequent port:
     types::NodeId arr;
 
+    //*************************grounds_by_port**********************//
+    if (dyn_alloc_sce.option(Options::grounds_by_port) &&
+        this->get_trip_port() != types::special::InvalidNodeId)
+         {
+                // land where the fished grounds belong: trips run A -> grounds of B -> B
+            arr = this->get_trip_port();
+         }
+    else if (dyn_alloc_sce.option(Options::closer_port))
     //*************************closer_port**************************//
-    if (dyn_alloc_sce.option(Options::closer_port))			 // dyn sce.
     {
         
         // TO REMOVE: because USELESS and misleading:
@@ -9196,7 +9397,13 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
         a_vect.push_back(false);
         a_vect.push_back(false);
         a_vect.push_back(false);
-        random_shuffle(a_vect.begin(),a_vect.end());
+        
+        //random_shuffle (a_vect.begin(), a_vect.end() ); // depracted in C++17, use std::shuffle instead
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(a_vect.begin(), a_vect.end(), g);
+
+
         shall_I_change_to_another_ground = a_vect[0] &&
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&

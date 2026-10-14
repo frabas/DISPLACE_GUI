@@ -195,9 +195,94 @@ struct VesselsData {
     double double30;
     multimap<int, double> mmapidparam_init_weight_per_szgroup;
     vector<vector<double> > vovd_species_interactions_mortality_proportion_matrix;
+    // grounds_by_port: raw entries of <vid>_fgrounds_harbours_quarter<N>.dat, per vessel
+    std::vector<std::vector<Vessel::PortGroundEntry> > port_grounds;
 };
 
 }
+
+// grounds_by_port: read vesselsspe_<fname>/<vid>_fgrounds_harbours_quarter<N>.dat.
+// One heading line, then whitespace-separated rows "pt_graph metier harbour weight".
+// Returns false if the file does not exist (the vessel then keeps the baseline
+// ground and port draws); a malformed row is an error.
+bool read_fgrounds_harbours(const std::string & a_quarter, const std::string & a_vessel,
+    const std::string & fname, const std::string & folder,
+    std::vector<Vessel::PortGroundEntry> &entries)
+{
+    entries.clear();
+    std::string filename = folder + "/vesselsspe_" + fname + "/" + a_vessel +
+        "_fgrounds_harbours_quarter" + a_quarter + ".dat";
+    std::ifstream in(filename.c_str());
+    if (in.fail()) return false;
+    
+    std::string line;
+    std::getline(in, line); // eat the heading
+    int linenum = 1;
+    while (std::getline(in, line)) {
+        ++linenum;
+        if (line.find_first_not_of(" \t\r") == std::string::npos) continue;
+        std::istringstream ss(line);
+        long node, metier, harbour;
+        double weight;
+        if (!(ss >> node >> metier >> harbour >> weight)) {
+            std::stringstream er;
+            er << "grounds_by_port: cannot parse line " << linenum << " of " << filename
+                << " (expected: pt_graph metier harbour weight)";
+            throw std::runtime_error(er.str());
+            
+        }
+        if (node < 0 || node > 65534 || harbour < 0 || harbour > 65534) {
+            std::stringstream er;
+            er << "grounds_by_port: node index out of range on line " << linenum << " of " << filename;
+            throw std::runtime_error(er.str());
+            
+        }
+        Vessel::PortGroundEntry e;
+        e.ground = types::NodeId(static_cast<uint16_t>(node));
+        e.metier = static_cast<int>(metier);
+        e.harbour = types::NodeId(static_cast<uint16_t>(harbour));
+        e.weight = weight;
+        e.vessel_share = 0.0;
+        entries.push_back(e);
+    }
+    return true;
+}
+
+
+// grounds_by_port: keep the entries the simulator can use for this vessel and
+// quarter. A ground must be one of the vessel's fgrounds (its per-node catch rates
+// and the per-ground bookkeeping are indexed on them), the metier must exist, the
+// harbour must be a harbour node of the graph, and the weight must be positive.
+std::vector<Vessel::PortGroundEntry> checked_port_grounds(const SimModel & model, const std::string & vid,
+    const std::string & quarter,
+    const std::vector<types::NodeId> &fgrounds,
+    const std::vector<Vessel::PortGroundEntry> &raw)
+{
+    std::set<types::NodeId> grds(fgrounds.begin(), fgrounds.end());
+    std::vector<Vessel::PortGroundEntry> ok;
+    int not_a_ground = 0, bad_metier = 0, not_a_harbour = 0, bad_weight = 0;
+    for (const auto& e : raw) {
+        if (!grds.count(e.ground)) { ++not_a_ground; continue; }
+        if (e.metier < 0 || e.metier >= model.config().nbmets) { ++bad_metier; continue; }
+        if (e.harbour.toIndex() >= model.nodes().size() ||
+            !model.nodes().at(e.harbour.toIndex())->get_is_harbour()) {
+            ++not_a_harbour; continue;
+        }
+        if (!(e.weight > 0) || !std::isfinite(e.weight)) { ++bad_weight; continue; }
+        ok.push_back(e);
+        
+    }
+    if (not_a_ground + bad_metier + not_a_harbour + bad_weight > 0) {
+        std::cout << "grounds_by_port: " << vid << " quarter " << quarter << ": dropped "
+            << not_a_ground << " entries whose ground is not in vesselsspe_fgrounds, "
+            << bad_metier << " with a metier outside 0.." << model.config().nbmets - 1 << ", "
+            << not_a_harbour << " whose harbour is not a harbour node, "
+            << bad_weight << " with a weight <= 0; kept " << ok.size() << "\n";
+        
+    }
+    return ok;
+}
+
 
 static
 VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester, std::string fname, std::string folder, int selected_vessels_only)
@@ -379,6 +464,26 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
     }
 
     cout << "a data load loop over vessel..ok " << "\n";
+
+
+    // grounds_by_port: port-tagged grounds, one file per vessel and quarter
+    loadedData.port_grounds.resize(vesselids.size());
+    if (model.scenario().dyn_alloc_sce.option(Options::grounds_by_port)) {
+        int found = 0;
+        for (unsigned int i = 0; i < vesselids.size(); i++) {
+            if (read_fgrounds_harbours(quarterString, vesselids[i], fname, folder,
+                loadedData.port_grounds.at(i))) {
+                ++found;
+
+            }            
+        }
+        cout << "grounds_by_port: read " << found << " of " << vesselids.size()
+            << " <vid>_fgrounds_harbours_quarter" << quarterString << ".dat files; vessels without one"
+            << " keep the baseline ground and port draws this quarter" << "\n";
+        
+    }
+    
+
 
     outc(cout << "export back the loaded vessel data to simulator.cpp " << "\n");
 
@@ -662,6 +767,11 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             vessels[i]->set_fishing_credits(spe_fishing_credits);
         }
 
+        if (model.scenario().dyn_alloc_sce.option(Options::grounds_by_port)) {
+            vessels[i]->set_port_grounds(checked_port_grounds(model, vname, quarterString, spe_fgrounds,
+                loadedDataVessels.port_grounds.at(i)));
+            
+        }
 
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
         if (model.is_tacs()) {
@@ -683,6 +793,29 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
                   << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << "\n");
 
     }
+
+
+    if (model.scenario().dyn_alloc_sce.option(Options::grounds_by_port)) {
+        int with = 0;
+        for (auto v : vessels) if (v->has_port_grounds()) ++with;
+        cout << "grounds_by_port: " << with << " of " << vessels.size()
+             << " vessels draw their trip port and grounds from port-tagged entries" << "\n";
+                // these reshape or replace the vessel-wide ground/port frequencies, which
+                    // vessels with port-tagged entries do not use
+            const auto& o = model.scenario().dyn_alloc_sce;
+        if (o.option(Options::closer_grounds) || o.option(Options::closer_port) ||
+            o.option(Options::focus_on_high_previous_cpue) ||
+            o.option(Options::focus_on_high_profit_grounds) ||
+            o.option(Options::fuelprice_plus20percent) ||
+            o.option(Options::shared_harbour_knowledge)) {
+            cout << "grounds_by_port: WARNING closer_grounds, closer_port, focus_on_high_previous_cpue, "
+                 << "focus_on_high_profit_grounds, fuelprice_plus20percent and shared_harbour_knowledge "
+                 << "have no effect on vessels with port-tagged entries" << "\n";
+            
+        }
+        
+    }
+
 
     model.setVessels(vessels);
 }
@@ -813,6 +946,11 @@ void reloadVessels(SimModel &model, std::string fname, std::string folder, int m
         vessel->set_spe_freq_possible_metiers(freq_possible_metiers);
         vessel->updateCalendar(loadedDataVessels.vectcalendar1.at(v));
 
+        if (model.scenario().dyn_alloc_sce.option(Options::grounds_by_port)) {
+                        // a vessel at sea keeps its trip port and returns to it
+                vessel->set_port_grounds(checked_port_grounds(model, vesselids.at(v), quarterString, spe_fgrounds,
+                    loadedDataVessels.port_grounds.at(v)));   
+        }
 
         // ...also for the particular cpue_nodes_species element
         dout(cout << "re-set vessels step2..." << "\n");

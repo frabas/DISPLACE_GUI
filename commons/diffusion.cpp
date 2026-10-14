@@ -21,6 +21,8 @@
 
 #include <diffusion.h>
 
+#include <seeded_shuffle.h>
+
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
@@ -82,9 +84,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
         list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
         }
 	 //random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() ); // depracted in C++17, use std::shuffle instead
-     std::random_device rd;
-     std::mt19937 g(rd());
-     std::shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end(), g);
+     seeded_shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end());
 
 
      for (int n=0; n<list_of_nodes_idx.size(); ++n)
@@ -160,9 +160,7 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
        }
     //random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() ); // depracted in C++17, use std::shuffle instead
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end(), g);
+    seeded_shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end());
 
     for (int n=0; n<list_of_nodes_idx.size(); ++n)
        {
@@ -242,9 +240,7 @@ bool diffuse_Benthos_in_every_directions(vector<Node*>&list_of_nodes, adjacency_
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
        }
     //random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() ); // depracted in C++17, use std::shuffle instead
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end(), g);
+    seeded_shuffle(list_of_nodes_idx.begin(), list_of_nodes_idx.end());
 
     for (int n=0; n<list_of_nodes_idx.size(); ++n)
        {

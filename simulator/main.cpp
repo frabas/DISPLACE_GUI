@@ -267,6 +267,8 @@ std::shared_ptr<sql::Storage> indb;
 #include <messages/noipc.h>
 #endif
 
+#include <seeded_shuffle.h>
+
 static size_t numStepTransactions = 200;
 
 //vector <double> dist_to_ports;
@@ -2873,9 +2875,7 @@ int app_main(int argc, char const* argv[])
         // random permutation
 
         lock();
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle(ve.begin(), ve.end(), g);
+        seeded_shuffle(ve.begin(), ve.end());
         unlock();
 
         // check that departure is done from harbours that are

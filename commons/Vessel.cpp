@@ -55,7 +55,7 @@
 #include <stdexcept>
 
 #include <VesselDebugHelper.h>
-
+#include <seeded_shuffle.h>
 
 
 std::mutex aStarMutex;
@@ -3803,7 +3803,7 @@ void Vessel::handle_explicit_population(
     // on the node (as DISPLACE 1.5.0 did, do_catch_v150)
     bool out_of_range = dyn_alloc_sce.option(Options::out_of_range_implicit) &&
     this->get_loc()->get_code_area() == 10;
-    if (!out_of_range && !node_contains_pop(popName)) return;   // helper
+    if (!node_contains_pop(popName)) return;   // helper
 
     // ------------------------------------------------------------------
     // 1️  Pull node‑specific biological state
@@ -4090,7 +4090,13 @@ void Vessel::handle_implicit_population(
     // 0 Quick‑reject if the pop is not present on this node
     // ------------------------------------------------------------------
     int popName = populations.at(popIdx)->get_name();
-    if (!node_contains_pop(popName)) return;   // helper 
+    // out-of-range-implicit: on an out-of-range node (code_area 10)
+    // the stock is caught from the vessel's cpue whether or not it is listed
+    // on the node (as DISPLACE 1.5.0 did, do_catch_v150). maybe_close_ground()
+    // sends every stock on such nodes here, never to handle_explicit_population()
+    bool out_of_range = dyn_alloc_sce.option(Options::out_of_range_implicit) &&
+    this->get_loc()->get_code_area() == 10;
+    if (!out_of_range && !node_contains_pop(popName)) return;   // helper 
 
     // -------------------------------------------------------------
     //   1 Locate the node index (relative to the vessel’s ground list)
@@ -4388,12 +4394,12 @@ bool Vessel::maybe_close_ground(int groundIdx,
                     popIdx) += cr.totalLandings;
             }
             // effort
-            this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
+            this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
             if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE;
+                this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
             }
             if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet) || dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
+                this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE * m_fishing_fraction;
             }
 
 
@@ -5509,12 +5515,12 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                                 pop) += a_cumul_weight_this_pop_this_vessel;
                     }
                     // effort
-                    this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE;
+                    this->cumeffort_per_trip_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
                     if (dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                        this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE;
+                        this->cumeffort_per_yearquarter_per_fgrounds.at(idx_node_r) += PING_RATE * m_fishing_fraction;
                     }                 
                     if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet) || dyn_alloc_sce.option(Options::experiencedCPUEsPerYearQuarter)) {
-                        this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE;
+                        this->cumeffort_per_trip_per_fgrounds_per_met.at(idx_node_r).at(met) += PING_RATE * m_fishing_fraction;
                     }
                
                     // cumul to later compute the proportion of discard to potentially influence future decision-making
@@ -5708,7 +5714,7 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                 {
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << "\n");
-                    a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
+                    a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE*m_fishing_fraction;
                     this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
                                                       remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
@@ -5727,16 +5733,16 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
             if(cpue!=0)
             {
                 // ON THIS NODE, cpue per hour, see the R code
-                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE; // cumul this vessel over the trip
-                ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE;
+                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE*m_fishing_fraction; // cumul this vessel over the trip
+                ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE*m_fishing_fraction;
                 discards_pop_at_szgroup[pop][0] = 0;
 
-                landings_per_szgroup.at(0)=cpue*PING_RATE; // this event only
+                landings_per_szgroup.at(0)=cpue*PING_RATE*m_fishing_fraction; // this event only
                 discards_per_szgroup.at(0)=0; // no assumption made here
 
                 double so_far=0.0;
                 so_far = (populations.at(pop)->get_landings_so_far()) +
-                        cpue*PING_RATE;
+                        cpue*PING_RATE*m_fishing_fraction;
                 // "real-time" update, accounting for this last bit of catches
                 populations.at(pop)->set_landings_so_far(so_far);
 
@@ -5752,14 +5758,14 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                     //    std::cout << it->first << " " << it->second << " " << "\n";
                     //}
                     if (sof.find(a_nation) == sof.end()) cout << "debug "<< a_nation << ": check for inconsistent 3 - letters naming for nations between e.g.vessel names and relative_stability nations" << "\n";
-                    so_far_this_nation = sof.at(a_nation) + cpue * PING_RATE;
+                    so_far_this_nation = sof.at(a_nation) + cpue * PING_RATE * m_fishing_fraction;
                     populations.at(pop)->set_landings_so_far_this_nation(a_nation, so_far_this_nation);
 
                     int a_length_class = this->get_length_class();
                     double so_far_this_vessel_length_class = 0.0;
                     so_far_this_vessel_length_class =
                             populations.at(pop)->get_landings_so_far_per_vessel_length_class().at(a_length_class) +
-                            cpue * PING_RATE;
+                            cpue * PING_RATE * m_fishing_fraction;
                     populations.at(pop)->set_landings_so_far_this_vessel_length_class(a_length_class,
                                                                                       so_far_this_vessel_length_class);
 
@@ -5773,13 +5779,13 @@ void Vessel::do_catch_v150(const DynAllocOptions& dyn_alloc_sce,
                 // update dynamic trip-based cumul for this node
                 // catches
                 int met = this->get_metier()->get_name();
-                this->cumcatch_fgrounds.at(idx_node_r) += cpue * PING_RATE;
+                this->cumcatch_fgrounds.at(idx_node_r) += cpue * PING_RATE * m_fishing_fraction;
                 this->cumdiscard_fgrounds.at(idx_node_r) += 0;
                 // catches per pop
-                this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue * PING_RATE;
+                this->cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue * PING_RATE * m_fishing_fraction;
                 if (dyn_alloc_sce.option(Options::experiencedCPUEsPerMet)) {
                     auto v = cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop);
-                    v += cpue * PING_RATE;
+                    v += cpue * PING_RATE * m_fishing_fraction;
                     if (std::abs(v) >= 1e-6) {
                         cumcatch_fgrounds_per_met_per_pop(idx_node_r, met, pop) = v;
                     }
@@ -7632,10 +7638,12 @@ bool Vessel::choose_a_ground_and_go_fishing(const SimModel& simModel,
                vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
                this->set_metier(metiers[a_met.at(0)]);
             }
-        }
-        else
-        {
-            this->set_metier(  metiers[ 0 ]  ); // dangerous fix
+             // grounds_by_port: this else belongs to the metier check, inside
+             // !by_port; with by_port the metier was drawn with the ground above
+             else
+             {
+                this->set_metier(metiers[0]); // dangerous fix
+             }
         }
         //random_shuffle(metiers_on_grd.begin(),metiers_on_grd.end()); // random permutation i.e. equal frequency of occurence
         //this->set_metier(  metiers[ metiers_on_grd[0] ]  );
@@ -7848,9 +7856,7 @@ int Vessel::choose_another_ground_and_go_fishing(const SimModel& simModel,
     a_vect.push_back(true);
     a_vect.push_back(false);
     //random_shuffle(a_vect.begin(),a_vect.end()); // depracted in C++17, use std::shuffle instead
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(a_vect.begin(), a_vect.end(), g);
+    seeded_shuffle(a_vect.begin(), a_vect.end());
 
     if(a_vect[0])
     {
@@ -9399,9 +9405,7 @@ int Vessel::should_i_change_ground(const SimModel& simModel,
         a_vect.push_back(false);
         
         //random_shuffle (a_vect.begin(), a_vect.end() ); // depracted in C++17, use std::shuffle instead
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle(a_vect.begin(), a_vect.end(), g);
+        seeded_shuffle(a_vect.begin(), a_vect.end());
 
 
         shall_I_change_to_another_ground = a_vect[0] &&

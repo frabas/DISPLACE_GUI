@@ -1,6 +1,4 @@
-//
-// Created by Federico Fuga on 11/07/18.
-//
+
 
 #include "GeoGraph.h"
 
@@ -14,7 +12,7 @@ void GeoGraph::addNode(int node, float x, float y)
     while (locations.size() <= node) {
         locations.push_back(location{});
     }
-    locations[node] = {x, y};
+    locations[node] = {y, x};
 }
 
 bool GeoGraph::addEdge(int node_from, int node_to, GeoGraph::cost weight)

@@ -57,7 +57,7 @@ public:
         bool inserted;
 
         std::tie(e, inserted) = add_edge(node_from, node_to, graph);
-        weightmap[e] = weight*1000; // the A* heuristic expect weight in meters
+        weightmap[e] = weight; 
 
 //   std::cout << "Addedge: " << node_from << " to " << node_to << " w " << weight << " => " << inserted << "\n";
 
@@ -91,7 +91,7 @@ public:
     {
         double d;
         geod.Inverse(m_location[m_goal].y, m_location[m_goal].x, m_location[u].y, m_location[u].x, d);
-        return d;
+        return d /1000; // ...returns meters while edge weight are in km expected
     }
 
 private:

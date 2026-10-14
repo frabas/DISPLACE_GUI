@@ -1,6 +1,4 @@
-//
-// Created by Federico Fuga on 11/07/18.
-//
+
 
 #include "AStarShortestPathFinder.h"
 #include "GeographicLib/Geodesic.hpp"
@@ -28,7 +26,7 @@ public:
     {
         double d;
         geod.Inverse(m_location[m_goal].y, m_location[m_goal].x, m_location[u].y, m_location[u].x, d);
-        return d;
+        return d /1000;
     }
 private:
     LocMap m_location;

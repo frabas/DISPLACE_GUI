@@ -176,6 +176,9 @@ private:
         types::NodeId trip_dep_port = types::special::InvalidNodeId;
         // trip-time-cap: see set_max_trip_hours()
         double max_trip_hours = -1.0;
+        // row-catch-rates: (metier, harbour node, pop) -> kg per hour
+        std::map<std::tuple<int, int, int>, double> row_catch_rates;
+
 
 
         double lastTrip_revenues;
@@ -434,6 +437,16 @@ public:
                 // is this entry's ground closed to its metier for this vessel (area_monthly_closure)?
         bool is_port_ground_banned(const PortGroundEntry & e, const vector<Node*> &nodes) const;
         
+        
+        //row-catch-rates (dyn_alloc option catch_rate_by_row): catch rates (kg per fishing hour) per metier, harbour and pop, from
+        // vesselsspe_*/<vid>_catchrates_per_metier_harbour.dat. The rate of the
+        // trip's metier and trip port replaces the vessel's: the gamma scale of
+        // implicit stocks (and of stocks on out-of-range nodes) and exp(vessel beta + metier beta) of explicit stocks.
+        void set_row_catch_rates(const std::map<std::tuple<int, int, int>, double> &rates) { row_catch_rates = rates; }
+        bool has_row_catch_rates() const { return !row_catch_rates.empty(); }
+                // the rate of the current metier and trip port for pop; false if none
+        bool get_row_catch_rate(int popIdx, double& rate);
+
 
 		int get_idx () const;
         std::string get_name () const;

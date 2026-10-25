@@ -9,6 +9,7 @@
 #include "TextfileModelLoader.h"
 #include "Impl.h"
 #include "Population.h"
+#include "Vessel.h"
 #include "SimModel.h"
 #include "idtypeshelpers.h"
 

@@ -317,6 +317,41 @@ bool read_vessels_max_trip_hours(const std::string & fname, const std::string & 
 
 
 
+// row-catch-rates: read vesselsspe_<fname>/<vid>_catchrates_per_metier_harbour.dat.
+// One heading line, then rows "metier harbour pop kg_h" (harbour = node index,
+// pop = population index). Returns false if the file does not exist (the vessel
+// then keeps its vessel-wide rates); a malformed row is an error.
+bool read_catchrates_per_metier_harbour(const std::string & a_vessel, const std::string & fname,
+    const std::string & folder, int nbpops, std::map<std::tuple<int, int, int>, double> &rates)
+     {
+    rates.clear();
+    std::string filename = folder + "/vesselsspe_" + fname + "/" + a_vessel + "_catchrates_per_metier_harbour.dat";
+    std::ifstream in(filename.c_str());
+    if (in.fail()) return false;
+    std::string line;
+    std::getline(in, line); // heading
+    int linenum = 1;
+    while (std::getline(in, line)) {
+        ++linenum;
+        if (line.find_first_not_of(" \t\r") == std::string::npos) continue;
+        std::istringstream ss(line);
+        long metier, harbour, pop;
+        double kg_h;
+        if (!(ss >> metier >> harbour >> pop >> kg_h) || pop < 0 || pop >= nbpops ||
+            !(kg_h >= 0) || !std::isfinite(kg_h)) {
+            std::stringstream er;
+            er << "catch_rate_by_row: cannot use line " << linenum << " of " << filename
+                 << " (expected: metier harbour pop kg_h, pop in 0.." << nbpops - 1 << ", kg_h >= 0)";
+            throw std::runtime_error(er.str());
+            
+        }
+        rates[std::make_tuple(static_cast<int>(metier), static_cast<int>(harbour), static_cast<int>(pop))] = kg_h;
+    }
+return true;
+}
+
+
+
 
 static
 VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester, std::string fname, std::string folder, int selected_vessels_only)
@@ -499,6 +534,7 @@ VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester,
 
     cout << "a data load loop over vessel..ok " << "\n";
 
+    
 
     // grounds_by_port: port-tagged grounds, one file per vessel and quarter
     loadedData.port_grounds.resize(vesselids.size());
@@ -807,6 +843,18 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
             
         }
 
+        //row-catch-rates: rates per metier and harbour, read once
+        // (they do not change with the quarter, and the vessel keeps them)
+        if (model.scenario().dyn_alloc_sce.option(Options::catch_rate_by_row)) {
+           std::map<std::tuple<int, int, int>, double> rates;
+           if (read_catchrates_per_metier_harbour(vname, fname, folder, static_cast<int>(model.populations().size()), rates)) {
+                vessels[i]->set_row_catch_rates(rates);
+                
+            }    
+        }
+        
+
+
         // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
         if (model.is_tacs()) {
             for (unsigned int sp = 0; sp < model.populations().size(); sp++) {
@@ -828,7 +876,15 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
 
     }
 
+    if (model.scenario().dyn_alloc_sce.option(Options::catch_rate_by_row)) {
+        int with_rates = 0;
+        for (auto v : vessels) if (v->has_row_catch_rates()) ++with_rates;
+        cout << "catch_rate_by_row: " << with_rates << " of " << vessels.size()
+             << " vessels read <vid>_catchrates_per_metier_harbour.dat" << "\n";
+        
+    }
 
+           
     if (model.scenario().dyn_alloc_sce.option(Options::grounds_by_port)) {
         int with = 0;
         for (auto v : vessels) if (v->has_port_grounds()) ++with;

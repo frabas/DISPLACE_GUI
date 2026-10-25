@@ -100,6 +100,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap, old_timestep_accounting);
     O(mMap, partial_fishing);
     O(mMap, grounds_by_port);
+    O(mMap, catch_rate_by_row);
 
   
 

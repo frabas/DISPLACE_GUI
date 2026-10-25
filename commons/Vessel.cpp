@@ -2680,6 +2680,20 @@ void Vessel::set_port_grounds(const std::vector<PortGroundEntry> &entries)
     }
  }
 
+// row-catch-rates: the rate of the current metier and trip port for
+// pop (kg per fishing hour); false if the vessel has no such row (then the
+// caller keeps the vessel-wide rate).
+bool Vessel::get_row_catch_rate(int popIdx, double& rate)
+ {
+    if (row_catch_rates.empty()) return false;
+    if (this->get_metier() == nullptr || trip_port == types::special::InvalidNodeId) return false;
+    auto it = row_catch_rates.find(std::make_tuple(this->get_metier()->get_name(),
+        static_cast<int>(trip_port.toIndex()), popIdx));
+    if (it == row_catch_rates.end()) return false;
+    rate = it->second;
+return true;
+}
+
 
 std::vector<int> Vessel::port_ground_entries_of(types::NodeId p) const
 {
@@ -3874,7 +3888,15 @@ void Vessel::handle_explicit_population(
         avaiBeta) * populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() * tech_creeping_multiplier 
           * m_fishing_fraction; // timestep-accounting: partial_fishing (1 otherwise)
 
-   
+    // row-catch-rates: the trip's vessel-metier-port rate in place of exp(vessel beta + metier beta); habitat and availability effects kept
+    double rowRate = 0.0;
+    if (dyn_alloc_sce.option(Options::catch_rate_by_row) && this->get_row_catch_rate(static_cast<int>(popIdx), rowRate)) 
+    {
+        catchPotential = rowRate + std::exp(h.betas_per_pop[popIdx] + avaiBeta) *
+            populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() *
+            tech_creeping_multiplier * m_fishing_fraction;        
+    }
+
     double totCatchWeight = std::min(totAvail, catchPotential);
     
     /*
@@ -4121,12 +4143,23 @@ void Vessel::handle_implicit_population(
 
         // Guard against negative parameters (can happen if the
         // vessel is not supposed to fish this stock on this node).
-        if (shape < 0.0 || scale < 0.0) {
+        if (shape < 0.0 || scale < 0.0) 
+        {
             shape = 1.0;
             scale = 1.0;
         }
     }
 
+        // row-catch-rates: the trip's vessel-metier-port rate as the mean
+        // (shape 1, scale = rate), as the per-node values are built from the vessel rate
+        double rowRate = 0.0;
+        if (dyn_alloc_sce.option(Options::catch_rate_by_row) && this->get_row_catch_rate(static_cast<int>(popIdx), rowRate))
+        {
+            shape = 1.0;
+            scale = rowRate;
+          
+        }
+   
     // Draw a gamma variate (C++17 does not have a standard gamma RNG,
     // so we use the classic acceptance‑rejection implementation
     // `rgamma(shape, scale)`).

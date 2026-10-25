@@ -197,6 +197,8 @@ struct LoadedData {
     double double30;
     multimap<int, double> mmapidparam_init_weight_per_szgroup;
     vector<vector<double> > vovd_species_interactions_mortality_proportion_matrix;
+    // grounds_by_port: raw entries of <vid>_fgrounds_harbours_quarter<N>.dat, per vessel
+    std::vector<std::vector<Vessel::PortGroundEntry> > port_grounds;
 };
 }
 

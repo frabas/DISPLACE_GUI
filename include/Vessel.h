@@ -174,6 +174,8 @@ private:
         // node the current/last trip departed from (previous_harbour_idx is reset
         // to 0 at every quarterly reload, so it cannot serve as a record)
         types::NodeId trip_dep_port = types::special::InvalidNodeId;
+        // trip-time-cap: see set_max_trip_hours()
+        double max_trip_hours = -1.0;
 
 
         double lastTrip_revenues;
@@ -413,6 +415,12 @@ public:
         void unlock() { mutex.unlock(); }
 
         std::vector<char> metier_mask;
+
+        // trip-time-cap (dyn_alloc option trip_time_cap): hours at sea
+        // after which the vessel stops fishing and returns (time at sea +
+        // steaming to the nearest port >= cap; reason_to_go_back 5); <= 0: none
+        void set_max_trip_hours(double h) { max_trip_hours = h; }
+        double get_max_trip_hours() const { return max_trip_hours; }
 
         // dyn_alloc_sce option grounds_by_port: see PortGroundEntry above
         void set_port_grounds(const std::vector<PortGroundEntry> &entries);

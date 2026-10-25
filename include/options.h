@@ -153,6 +153,7 @@ enum Dyn_Alloc {
     aSingleMetierPerTrip,
     unlimitedTankCap,
     unlimitedCarryCap,
+    trip_time_cap,
     out_of_range_implicit,
     old_timestep_accounting, // timestep-accounting: a step is a 1 h budget spent on several actions, vmslike in segments
     partial_fishing,  // timestep-accounting: fishing in fractions of an hour 

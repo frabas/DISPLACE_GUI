@@ -284,6 +284,40 @@ std::vector<Vessel::PortGroundEntry> checked_port_grounds(const SimModel & model
 }
 
 
+// trip - time - cap: read vesselsspe_<fname> / vessels_max_trip_hours.dat
+// (heading line, then "VE_REF hours"). Returns false if there is no file; a
+// malformed line is an error.
+bool read_vessels_max_trip_hours(const std::string & fname, const std::string & folder,
+    std::map<std::string, double> &caps)
+     {
+    caps.clear();
+    std::string filename = folder + "/vesselsspe_" + fname + "/vessels_max_trip_hours.dat";
+    std::ifstream in(filename.c_str());
+    if (in.fail()) return false;
+    std::string line;
+    std::getline(in, line); // heading
+    int linenum = 1;
+    while (std::getline(in, line)) {
+        ++linenum;
+        if (line.find_first_not_of(" \t\r") == std::string::npos) continue;
+        std::istringstream ss(line);
+        std::string vid;
+        double h;
+        if (!(ss >> vid >> h) || !std::isfinite(h) || h <= 0) {
+            std::stringstream er;
+            er << "trip_time_cap: cannot use line " << linenum << " of " << filename
+               << " (expected: VE_REF hours, hours > 0)";
+            throw std::runtime_error(er.str());
+        }
+        caps[vid] = h;
+        
+    }
+ return true;
+}
+
+
+
+
 static
 VesselsData loadLocalData(SimModel &model, int month, int quarter, int semester, std::string fname, std::string folder, int selected_vessels_only)
 {
@@ -815,6 +849,23 @@ void loadVessels(SimModel &model, std::string fname, std::string folder, int mon
         }
         
     }
+
+    //  trip-time-cap
+    if (model.scenario().dyn_alloc_sce.option(Options::trip_time_cap))
+    {
+      std::map<std::string, double> caps;
+      int with_cap = 0;
+        if (read_vessels_max_trip_hours(fname, folder, caps)) {
+          for (auto v : vessels) {
+            auto it = caps.find(v->get_name());
+            if (it != caps.end()) { v->set_max_trip_hours(it->second); ++with_cap; }
+            }
+        }
+        cout << "trip_time_cap: " << with_cap << " of " << vessels.size()
+             << " vessels have a cap in vessels_max_trip_hours.dat" << "\n";
+        
+    }
+    
 
 
     model.setVessels(vessels);

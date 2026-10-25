@@ -9564,8 +9564,20 @@ int Vessel::should_i_stop_fishing(const SimModel& simModel,
             this->set_reason_to_go_back(3);
         }
 
+       // trip-time-cap: go back when the time at sea plus the steaming
+       // to the nearest port reaches the vessel's cap (observed trip durations)
+       bool flag4 = true;
+       if (dyn_alloc_sce.option(Options::trip_time_cap) && this->get_max_trip_hours() > 0)
+       {
+          vector<double> d_ports = compute_distance_fgrounds_on_the_fly(nodes, this->get_loc()->get_idx_node(), this->get_harbours());
+          double back_h = d_ports.empty() ? 0.0 :  *min_element(d_ports.begin(), d_ports.end()) / (this->get_speed() * NAUTIC);
+          flag4 = this->get_timeatsea() + back_h < this->get_max_trip_hours();
+          if (!flag4) this->set_reason_to_go_back(5);
+       }
+        
+
         int stop_fishing =1;
-        if(flag1 && flag2 && flag3) stop_fishing =0;
+        if(flag1 && flag2 && flag3 && flag4) stop_fishing =0;
 
         unlock();
         return(stop_fishing);

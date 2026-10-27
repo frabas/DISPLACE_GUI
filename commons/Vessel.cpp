@@ -3892,7 +3892,7 @@ void Vessel::handle_explicit_population(
     double rowRate = 0.0;
     if (dyn_alloc_sce.option(Options::catch_rate_by_row) && this->get_row_catch_rate(static_cast<int>(popIdx), rowRate)) 
     {
-        catchPotential = rowRate + std::exp(h.betas_per_pop[popIdx] + avaiBeta) *
+        catchPotential = rowRate * std::exp(h.betas_per_pop[popIdx] + avaiBeta) *
             populations.at(popIdx)->get_cpue_multiplier() * this->get_metier()->get_catchrate_multiplier() *
             tech_creeping_multiplier * m_fishing_fraction;        
     }

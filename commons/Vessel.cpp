@@ -6836,91 +6836,49 @@ void Vessel::alloc_while_saving_fuel(const SimModel& simModel,
         double dg2= distance_fgrounds.at(id2);
         double dg3= distance_fgrounds.at(id3);
 
-        double departure=1000;	 // init
-        // init
-        double min_departure=1000;
-        // give the portion of the total (i.e. 1) on which we play with.
-        double max_proba = round((pg1+pg2+pg3)*100);
-        double expected_conso= (pg1*dg1*conso_per_nm)+(pg2*dg2*conso_per_nm)+(pg3*dg3*conso_per_nm);
+        double expected_conso = (pg1 * dg1 * conso_per_nm) + (pg2 * dg2 * conso_per_nm) + (pg3 * dg3 * conso_per_nm);
 
-        // the targeted conso is:
-        double new_conso = expected_conso * (1- (percent_increase_fuel_price/100));
-
-        dout(cout  << "the expected_conso is " <<expected_conso << "the new_conso is " << new_conso  <<  " the max_proba is " << max_proba << "\n");
-
-        // brute search along range of probas.
-        // using a varying threshold to account for larger (defined as 5% of the conso)
-        double threshold_to_break=new_conso*0.01;
-        double p1 = 0, p2 = 0, p3 = 0;
-        int a_max = max_proba+1;
-        for(int i=0; i< a_max; i++)
-        {
-            for(int j=0; j< a_max; j++)
-            {
-                for(int k=0; k< a_max; k++)
-                {
-                    p1 = i*0.01;
-                    p2 = j*0.01;
-                    p3 = k*0.01;
-                    //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << "\n";
-                    if((p1+p2+p3)==(max_proba/100))
-                    {
-                        departure = abs( ((p1 * dg1 *conso_per_nm) + (p2 * dg2 *conso_per_nm) + (p3 * dg3 *conso_per_nm)) -  new_conso );
-                        if(departure <min_departure) min_departure=departure;
-                        dout(cout  << departure << "\n");
-                    }
-                    // early stop
-                    if(departure <threshold_to_break) break;
-                }
-                if(departure <threshold_to_break) break;
-            }
-            if(departure <threshold_to_break) break;
+        // --- guards for degenerate cases ---------------------------------
+        if (!(expected_conso > 0.0) || percent_increase_fuel_price >= 100.0) {
+            dout(cout << "fuel saving impossible for this occurrence!\n");
+            // handle failure here (early return, or skip the update below)
         }
 
-        // repeat with less constraint if failed.
-        // no solution found, so...
-        if(departure >threshold_to_break)
-        {
-            // search for less saving by decreasing the saving to 20-10 = 10%
-            threshold_to_break=new_conso*0.1;
-            for(int i=0; i< a_max; i++)
-            {
-                for(int j=0; j< a_max; j++)
-                {
-                    for(int k=0; k< a_max; k++)
-                    {
-                        p1 = i*0.01;
-                        p2 = j*0.01;
-                        p3 = k*0.01;
-                        //cout << "(p1+p2+p3) " << (p1+p2+p3) << " and max_proba " << max_proba << "\n";
-                        if((p1+p2+p3)==(max_proba/100))
-                        {
-                            departure = abs( ((p1 * dg1 *conso_per_nm) + (p2 * dg2 *conso_per_nm) + (p3 * dg3 *conso_per_nm)) -  new_conso );
-                            if(departure <min_departure) min_departure=departure;
-                            dout(cout  << departure << "\n");
-                        }
-                        // early stop
-                        if(departure <threshold_to_break) break;
-                    }
-                    if(departure <threshold_to_break) break;
-                }
-                if(departure <threshold_to_break) break;
+        double new_conso = expected_conso * (1.0 - percent_increase_fuel_price / 100.0);
+        const int M = static_cast<int>(std::lround((pg1 + pg2 + pg3) * 100.0));
+
+        // --- single exhaustive search (k is forced by the constraint) ----
+        double best_dep = std::numeric_limits<double>::infinity();
+        int bi = 0, bj = 0, bk = 0;
+
+        for (int i = 0; i <= M; ++i) {
+            for (int j = 0; i + j <= M; ++j) {
+                int k = M - i - j;                      // guarantees p1+p2+p3 = M/100
+                double dep = std::fabs((i * dg1 + j * dg2 + k * dg3) * 0.01 * conso_per_nm
+                    - new_conso);
+                if (dep < best_dep) { best_dep = dep; bi = i; bj = j; bk = k; }
             }
         }
+
+        // --- classify------------------------
+        double strict = new_conso * 0.01;   // 1% tolerance
+        double relaxed = new_conso * 0.10;   // 10% tolerance, your fallback
 
         // then fill in with the new probas for these 3 grounds.
-        vector <double>  new_freq_per_fgrounds=freq_grds;
+        vector <double>  new_freq_per_fgrounds = freq_grds;
 
-        if(departure <threshold_to_break)
-        {
-            new_freq_per_fgrounds.at(id1)=p1;
-            new_freq_per_fgrounds.at(id2)=p2;
-            new_freq_per_fgrounds.at(id3)=p3;
-            dout(cout  << "after: p1 is " <<p1 << " p2 is " << p2 << " p3 is " << p3 << "\n");
+        if (best_dep < relaxed) {
+            double p1 = bi * 0.01, p2 = bj * 0.01, p3 = bk * 0.01;
+            std::vector<double> new_freq_per_fgrounds = freq_grds;
+            new_freq_per_fgrounds.at(id1) = p1;
+            new_freq_per_fgrounds.at(id2) = p2;
+            new_freq_per_fgrounds.at(id3) = p3;
+            dout(cout << "after: p1=" << p1 << " p2=" << p2 << " p3=" << p3
+                << (best_dep < strict ? " (strict)\n" : " (relaxed)\n"));
         }
-        else
-        {
-            dout(cout  << "fuel saving impossible for this occurrence! min_departure is " << min_departure << "\n");
+        else {
+            dout(cout << "fuel saving impossible for this occurrence!"
+                << " best departure is " << best_dep << "\n");
         }
 
         // then rescale to sum to 1 because of the rounding approx.
